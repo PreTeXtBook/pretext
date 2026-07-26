@@ -2045,6 +2045,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+<!-- Third-party annotation of the HTML output.  Default is "none".  -->
+<!-- Only "hypothesis" (Hypothes.is) is supported at present.        -->
+<xsl:variable name="html-annotation">
+    <xsl:apply-templates select="$publisher-attribute-options/html/annotation/pi:pub-attribute[@name='platform']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-activate-hypothesis" select="$html-annotation = 'hypothesis'" />
+
 <!-- Scratch ActiveCode Window -->
 <!-- Pop-up a window for testing program code.  So "calculator-like" but we      -->
 <!-- reserve the word "calculator" for the hand-held type (even if more modern). -->
@@ -3718,6 +3725,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <calculator>
             <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
         </calculator>
+        <annotation>
+            <pi:pub-attribute name="platform" default="none" options="hypothesis" legacy-stringparam="html.annotation"/>
+        </annotation>
         <css>
             <pi:pub-attribute name="palette" freeform="yes"/>
         </css>
@@ -4230,6 +4240,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Deprecated 2026-06-07, but still respected -->
 <xsl:param name="debug.project.number" select="''" />
+
+<!-- DEPRECATED: 2026-07-25  In favor of          -->
+<!-- html/annotation/@platform  in publisher file -->
+<xsl:param name="html.annotation" select="''" />
 
 <!-- ###################################### -->
 <!-- Parameter Deprecation Warning Messages -->
@@ -4887,6 +4901,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="date-string" select="'2026-06-07'" />
         <xsl:with-param name="message" select="'the  debug.project.number  parameter has been replaced by the  numbering/projects/@distinct  entry in the publisher file.  We will attempt to honor your intent.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($debug.project.number != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-07-25  HTML annotation platform controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2026-07-25'" />
+        <xsl:with-param name="message" select="'the  html.annotation  parameter has been replaced by the  html/annotation/@platform  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.annotation != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>

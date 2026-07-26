@@ -143,10 +143,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Annotation -->
-<xsl:param name="html.annotation" select="''" />
-<xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
-
 <!-- Should we build the SCORM manifest file? -->
 <xsl:param name="html.scorm" select="'no'" />
 <!-- b-host-scorm is true when building a SCORM package  -->

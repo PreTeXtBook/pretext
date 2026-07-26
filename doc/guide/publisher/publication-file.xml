@@ -568,6 +568,23 @@
             </ul>The default is <c>none</c>.  See <xref ref="online-embedded-calculator"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-annotation">
+            <title>HTML Annotation</title>
+            <idx><h>annotation</h><h>embedded in <init>HTML</init></h></idx>
+            <idx><h>Hypothes.is</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/annotation</cline>
+            </cd>element has the following attribute:<ul>
+                <li>
+                    <p><attr>platform</attr>: enables a third-party web-annotation service on every page.  Possible values are:<ul>
+                        <li><c>hypothesis</c>: the <url href="https://web.hypothes.is/" visual="hypothes.is"/> annotation service.</li>
+                        <li><c>none</c></li>
+                    </ul></p>
+                </li>
+            </ul>The default is <c>none</c>.  See <xref ref="online-html-annotation"/> for more.</p>
+        </subsection>
+
         <subsection xml:id="online-favicon">
             <title>HTML Favicon</title>
             <idx>favicon</idx>

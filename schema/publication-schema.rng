@@ -713,6 +713,9 @@
           <ref name="Analytics"/>
         </optional>
         <optional>
+          <ref name="Annotation"/>
+        </optional>
+        <optional>
           <ref name="Asymptote"/>
         </optional>
         <optional>
@@ -776,6 +779,18 @@
       </optional>
       <optional>
         <attribute name="statcounter-security"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Annotation">
+    <element name="annotation">
+      <optional>
+        <attribute name="platform">
+          <choice>
+            <value>hypothesis</value>
+            <value>none</value>
+          </choice>
+        </attribute>
       </optional>
     </element>
   </define>

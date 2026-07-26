@@ -224,6 +224,7 @@
                     attribute short-answer-responses { "graded" | "always" }?,
                     (
                         Analytics? &
+                        Annotation? &
                         Asymptote? &
                         Baseurl? &
                         Calculator? &
@@ -249,6 +250,11 @@
                     attribute google-gst { text }?,
                     attribute statcounter-project { text }?,
                     attribute statcounter-security { text }?
+                }
+
+            Annotation =
+                element annotation {
+                    attribute platform { "hypothesis" | "none" }?
                 }
 
             Baseurl =
