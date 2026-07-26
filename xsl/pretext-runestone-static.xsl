@@ -743,7 +743,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <ul>
                             <xsl:for-each select="premise">
                                 <li>
-                                    <xsl:copy-of select="."/>
+                                    <xsl:apply-templates select="." mode="cardsort-sol-copy"/>
                                 </li>
                             </xsl:for-each>
                         </ul>
@@ -777,7 +777,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <!-- the test for adjacency -->
                             <xsl:if test="contains($the-ref-fenced, $response-xmlid-fenced)">
                                 <li>
-                                    <xsl:copy-of select="."/>
+                                    <xsl:apply-templates select="." mode="cardsort-sol-copy"/>
                                 </li>
                             </xsl:if>
                         </xsl:for-each>
