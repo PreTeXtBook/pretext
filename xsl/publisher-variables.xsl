@@ -1684,6 +1684,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="numbering-footnotes" select="number($numbering-footnotes-entered)"/>
 
+<!-- The "legacy" consultations of a deprecated "docinfo" analog, -->
+<!-- here and for inline exercises just below, are ripe for       -->
+<!-- deletion, certainly during any comprehensive "docinfo" work  -->
 <xsl:variable name="numbering-figures-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'figures'"/>
@@ -1712,7 +1715,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A block group may run on its own counter.  When its publisher -->
 <!-- switch is absent, the deprecated source is honored, then the  -->
-<!-- default.  Warnings live with the other deprecations.          -->
+<!-- default.  Warnings live with the other deprecations.  The two -->
+<!-- deprecated "docinfo" consultations are ripe for deletion,     -->
+<!-- certainly during any comprehensive "docinfo" work.            -->
 <xsl:variable name="b-number-figure-distinct"      select="($publication/numbering/figures/@distinct = 'yes') or (not($publication/numbering/figures/@distinct) and boolean($version-docinfo/numbering/figures))"/>
 <xsl:variable name="b-number-project-distinct"     select="($publication/numbering/projects/@distinct = 'yes') or (not($publication/numbering/projects/@distinct) and ($debug.project.number = ''))"/>
 <xsl:variable name="b-number-exercise-distinct"    select="($publication/numbering/exercises/@distinct = 'yes') or (not($publication/numbering/exercises/@distinct) and boolean($version-docinfo/numbering/exercises))"/>
