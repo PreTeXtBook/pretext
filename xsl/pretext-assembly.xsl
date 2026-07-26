@@ -519,6 +519,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Also, note that this tree is useful for certain tasks, like      -->
 <!-- validation, or reporting values of publisher variables, without  -->
 <!-- regard to the subsequent passes.                                 -->
+<!-- The version tree is the earliest assembly product a publisher   -->
+<!-- variable may consult (structure can differ by version).  The    -->
+<!-- passes up to, and including, "version" must never consult a     -->
+<!-- variable defined from this tree — that is a circular reference, -->
+<!-- detected only at runtime.  The "crossing point" facts in        -->
+<!-- publisher-variables.xsl enumerate the consumers.                -->
 <xsl:variable name="version-root" select="$version/pretext"/>
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>

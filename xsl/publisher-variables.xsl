@@ -105,6 +105,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as an empty string -->
 <xsl:variable name="chunk-level-entered" select="string($chunks)"/>
 
+<!-- ############################# -->
+<!-- Structure of the Version Tree -->
+<!-- ############################# -->
+
+<!-- Some defaults below depend on the document's structure, which     -->
+<!-- can differ by version, so they consult the assembly "version"     -->
+<!-- pass via $version-root.  Later assembly passes depend on those    -->
+<!-- variables in turn; the dependencies stay acyclic because the      -->
+<!-- passes up to, and including, "version" never consult a            -->
+<!-- structure-dependent variable.  The facts below are the crossing   -->
+<!-- point: the only place a publisher variable consults               -->
+<!-- $version-root, so the structure-dependent population is easy to   -->
+<!-- enumerate.  (Exception: deprecated "docinfo" consultations,       -->
+<!-- marked where they occur, which will disappear with them.)         -->
+
+<!-- the document type is the element being converted -->
+<xsl:variable name="version-doc-type" select="local-name($version-document-root)"/>
+
+<!-- N.B. consumers disagree on which section-like elements make an  -->
+<!-- article "sectioned": numbering counts "worksheet", chunking     -->
+<!-- does not, and the table of contents also counts "handout".      -->
+<!-- The facts preserve those historical memberships.                -->
+<!-- TODO: harmonize the memberships — a deliberate,                 -->
+<!-- behavior-changing design decision, deferred                     -->
+<xsl:variable name="version-has-parts"           select="boolean($version-root/book/part)"/>
+<xsl:variable name="version-book-chapters"       select="boolean($version-root/book/part/chapter|$version-root/book/chapter)"/>
+<xsl:variable name="version-book-sections"       select="boolean($version-root/book/part/chapter/section|$version-root/book/chapter/section)"/>
+<xsl:variable name="version-article-sections"    select="boolean($version-root/article/section)"/>
+<xsl:variable name="version-article-worksheets"  select="boolean($version-root/article/worksheet)"/>
+<xsl:variable name="version-article-handouts"    select="boolean($version-root/article/handout)"/>
+<xsl:variable name="version-article-subsections" select="boolean($version-root/article/section/subsection)"/>
+
 <!-- A book must have a chapter              -->
 <!-- An article need not have a section      -->
 <!-- This gets replaced in -latex stylehseet -->
@@ -114,16 +146,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default-pub-variable">
     <xsl:choose>
         <!-- defaults purely by structure, not by output format -->
-        <xsl:when test="$version-root/book/part/chapter/section">3</xsl:when>
-        <xsl:when test="$version-root/book/part/chapter">2</xsl:when>
-        <xsl:when test="$version-root/book/chapter/section">2</xsl:when>
-        <xsl:when test="$version-root/book/chapter">1</xsl:when>
-        <xsl:when test="$version-root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$version-root/article/section|$version-root/article/worksheet|$version-root/article/handout">1</xsl:when>
-        <xsl:when test="$version-root/article">0</xsl:when>
-        <xsl:when test="$version-root/slideshow">0</xsl:when>
-        <xsl:when test="$version-root/letter">0</xsl:when>
-        <xsl:when test="$version-root/memo">0</xsl:when>
+        <xsl:when test="$version-has-parts and $version-book-sections">3</xsl:when>
+        <xsl:when test="$version-has-parts and $version-book-chapters">2</xsl:when>
+        <xsl:when test="$version-book-sections">2</xsl:when>
+        <xsl:when test="$version-book-chapters">1</xsl:when>
+        <xsl:when test="$version-article-subsections">2</xsl:when>
+        <xsl:when test="$version-article-sections or $version-article-worksheets or $version-article-handouts">1</xsl:when>
+        <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:   Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
@@ -1481,13 +1513,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the default, and also an error-check upper-limit         -->
     <xsl:variable name="max-feasible">
         <xsl:choose>
-            <xsl:when test="$version-root/book/part">5</xsl:when>
-            <xsl:when test="$version-root/book">4</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">3</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:when test="$version-has-parts">5</xsl:when>
+            <xsl:when test="$version-doc-type = 'book'">4</xsl:when>
+            <xsl:when test="$version-article-sections or $version-article-worksheets">3</xsl:when>
+            <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a maximum division level defined</xsl:message>
             </xsl:otherwise>
@@ -1546,13 +1578,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="default-numbering-level">
     <xsl:variable name="document-type-level">
         <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:when test="$version-has-parts">3</xsl:when>
+            <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
+            <xsl:when test="$version-article-sections or $version-article-worksheets">1</xsl:when>
+            <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a default numbering level defined</xsl:message>
             </xsl:otherwise>
@@ -1717,7 +1749,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- no parts, just record as absent,  -->
         <!-- but warn of ill-advised attempts  -->
-        <xsl:when test="not($version-root/book/part)">
+        <xsl:when test="not($version-has-parts)">
             <xsl:choose>
                 <xsl:when test="$publication/numbering/divisions/@part-structure">
                     <xsl:message>PTX:FALLBACK: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
@@ -2713,13 +2745,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$chunk-level-entered != ''">
             <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
-        <xsl:when test="$version-root/book/part">3</xsl:when>
-        <xsl:when test="$version-root/book">2</xsl:when>
-        <xsl:when test="$version-root/article/section">1</xsl:when>
-        <xsl:when test="$version-root/article">0</xsl:when>
-        <xsl:when test="$version-root/slideshow">0</xsl:when>
-        <xsl:when test="$version-root/letter">0</xsl:when>
-        <xsl:when test="$version-root/memo">0</xsl:when>
+        <xsl:when test="$version-has-parts">3</xsl:when>
+        <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
+        <xsl:when test="$version-article-sections">1</xsl:when>
+        <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:   HTML chunk level not determined</xsl:message>
         </xsl:otherwise>
