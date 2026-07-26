@@ -105,6 +105,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as an empty string -->
 <xsl:variable name="chunk-level-entered" select="string($chunks)"/>
 
+<!-- ############################# -->
+<!-- Structure of the Version Tree -->
+<!-- ############################# -->
+
+<!-- Some defaults below depend on the document's structure, which     -->
+<!-- can differ by version, so they consult the assembly "version"     -->
+<!-- pass via $version-root.  Later assembly passes depend on those    -->
+<!-- variables in turn; the dependencies stay acyclic because the      -->
+<!-- passes up to, and including, "version" never consult a            -->
+<!-- structure-dependent variable.  The facts below are the crossing   -->
+<!-- point: the only place a publisher variable consults               -->
+<!-- $version-root, so the structure-dependent population is easy to   -->
+<!-- enumerate.  (Exception: deprecated "docinfo" consultations,       -->
+<!-- marked where they occur, which will disappear with them.)         -->
+
+<!-- the document type is the element being converted -->
+<xsl:variable name="version-doc-type" select="local-name($version-document-root)"/>
+
+<!-- N.B. consumers disagree on which section-like elements make an  -->
+<!-- article "sectioned": numbering counts "worksheet", chunking     -->
+<!-- does not, and the table of contents also counts "handout".      -->
+<!-- The facts preserve those historical memberships.                -->
+<!-- TODO: harmonize the memberships — a deliberate,                 -->
+<!-- behavior-changing design decision, deferred                     -->
+<xsl:variable name="version-has-parts"           select="boolean($version-root/book/part)"/>
+<xsl:variable name="version-book-chapters"       select="boolean($version-root/book/part/chapter|$version-root/book/chapter)"/>
+<xsl:variable name="version-book-sections"       select="boolean($version-root/book/part/chapter/section|$version-root/book/chapter/section)"/>
+<xsl:variable name="version-article-sections"    select="boolean($version-root/article/section)"/>
+<xsl:variable name="version-article-worksheets"  select="boolean($version-root/article/worksheet)"/>
+<xsl:variable name="version-article-handouts"    select="boolean($version-root/article/handout)"/>
+<xsl:variable name="version-article-subsections" select="boolean($version-root/article/section/subsection)"/>
+
 <!-- A book must have a chapter              -->
 <!-- An article need not have a section      -->
 <!-- This gets replaced in -latex stylehseet -->
@@ -114,16 +146,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="common/tableofcontents/pi:pub-attribute[@name='level']" mode="get-default-pub-variable">
     <xsl:choose>
         <!-- defaults purely by structure, not by output format -->
-        <xsl:when test="$version-root/book/part/chapter/section">3</xsl:when>
-        <xsl:when test="$version-root/book/part/chapter">2</xsl:when>
-        <xsl:when test="$version-root/book/chapter/section">2</xsl:when>
-        <xsl:when test="$version-root/book/chapter">1</xsl:when>
-        <xsl:when test="$version-root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$version-root/article/section|$version-root/article/worksheet|$version-root/article/handout">1</xsl:when>
-        <xsl:when test="$version-root/article">0</xsl:when>
-        <xsl:when test="$version-root/slideshow">0</xsl:when>
-        <xsl:when test="$version-root/letter">0</xsl:when>
-        <xsl:when test="$version-root/memo">0</xsl:when>
+        <xsl:when test="$version-has-parts and $version-book-sections">3</xsl:when>
+        <xsl:when test="$version-has-parts and $version-book-chapters">2</xsl:when>
+        <xsl:when test="$version-book-sections">2</xsl:when>
+        <xsl:when test="$version-book-chapters">1</xsl:when>
+        <xsl:when test="$version-article-subsections">2</xsl:when>
+        <xsl:when test="$version-article-sections or $version-article-worksheets or $version-article-handouts">1</xsl:when>
+        <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:   Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
@@ -1481,13 +1513,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the default, and also an error-check upper-limit         -->
     <xsl:variable name="max-feasible">
         <xsl:choose>
-            <xsl:when test="$version-root/book/part">5</xsl:when>
-            <xsl:when test="$version-root/book">4</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">3</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:when test="$version-has-parts">5</xsl:when>
+            <xsl:when test="$version-doc-type = 'book'">4</xsl:when>
+            <xsl:when test="$version-article-sections or $version-article-worksheets">3</xsl:when>
+            <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a maximum division level defined</xsl:message>
             </xsl:otherwise>
@@ -1537,402 +1569,155 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameterized by (a) publisher file entry, (b) old        -->
 <!-- deprecated stringparam (or docinfo coming soon),          -->
 <!-- (c) string for messages (e.g. "footnotes").               -->
-<!-- EZ: make one "default" variable, since they all look identical -->
-
-<!-- User-supplied Numbering for Theorems, etc    -->
-<!-- Respect switch, or provide sensible defaults -->
-<xsl:variable name="numbering-blocks-entered">
-    <xsl:variable name="default-blocks">
+<!-- The numbered-object families (blocks, projects, equations,   -->
+<!-- footnotes, figures, inline exercises, open problems) share   -->
+<!-- one default numbering level: set by the document type, and   -->
+<!-- never more than the division depth the publisher elected     -->
+<!-- ($numbering-maxlevel), so an unconfigured document always    -->
+<!-- has a conforming value.                                      -->
+<xsl:variable name="default-numbering-level">
+    <xsl:variable name="document-type-level">
         <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:when test="$version-has-parts">3</xsl:when>
+            <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
+            <xsl:when test="$version-article-sections or $version-article-worksheets">1</xsl:when>
+            <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+            <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
             <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default block numbering level defined</xsl:message>
+                <xsl:message>PTX:BUG: a document type needs a default numbering level defined</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="candidate-blocks">
+    <xsl:choose>
+        <xsl:when test="$document-type-level > $numbering-maxlevel">
+            <xsl:value-of select="$numbering-maxlevel"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$document-type-level"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Resolve one family's numbering level: the publisher file's  -->
+<!-- entry, else a legacy analog (a string parameter, or in some -->
+<!-- cases a "docinfo" attribute), else the shared default.  An  -->
+<!-- authored value must be numeric, non-negative, and no more   -->
+<!-- than $numbering-maxlevel; the default conforms by           -->
+<!-- construction, so only an authored value can provoke a       -->
+<!-- message.                                                    -->
+<xsl:template name="numbering-level">
+    <xsl:param name="family"/>
+    <xsl:param name="entered"/>
+    <xsl:param name="legacy" select="''"/>
+    <xsl:variable name="candidate">
         <xsl:choose>
             <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/blocks/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/blocks/@level"/>
+            <xsl:when test="$entered">
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for blocks given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-blocks"/>
+                    <xsl:when test="not(number($entered) = number($entered)) or ($entered &lt; 0)">
+                        <xsl:message>PTX:FALLBACK:   numbering level for <xsl:value-of select="$family"/> given in the publisher file ("<xsl:value-of select="$entered"/>") is not a number or is negative.  The default value ("<xsl:value-of select="$default-numbering-level"/>") will be used instead</xsl:message>
+                        <xsl:value-of select="$default-numbering-level"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/blocks/@level"/>
+                        <xsl:value-of select="$entered"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            <!-- respect deprecated analog -->
-            <xsl:when test="$numbering.theorems.level != ''">
-                <xsl:value-of select="$numbering.theorems.level" />
+            <!-- respect a legacy analog -->
+            <xsl:when test="$legacy != ''">
+                <xsl:value-of select="$legacy"/>
             </xsl:when>
-            <!-- use a default -->
+            <!-- use the conforming default, no message possible -->
             <xsl:otherwise>
-                <xsl:value-of select="$default-blocks"/>
+                <xsl:value-of select="$default-numbering-level"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- check $candidate-blocks against upper bound, $numbering-maxlevel -->
+    <!-- an authored candidate may exceed the upper bound, $numbering-maxlevel -->
     <xsl:choose>
-        <xsl:when test="$candidate-blocks > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for blocks ("<xsl:value-of select="$candidate-blocks"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-blocks"/>
+        <xsl:when test="$candidate > $numbering-maxlevel">
+            <xsl:message>PTX:FALLBACK:   numbering level set for <xsl:value-of select="$family"/> ("<xsl:value-of select="$candidate"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value ("<xsl:value-of select="$default-numbering-level"/>") will be used instead</xsl:message>
+            <xsl:value-of select="$default-numbering-level"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$candidate-blocks"/>
+            <xsl:value-of select="$candidate"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:variable name="numbering-blocks-entered">
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'blocks'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/blocks/@level"/>
+        <xsl:with-param name="legacy" select="$numbering.theorems.level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-blocks" select="number($numbering-blocks-entered)"/>
 
-<!-- User-supplied Numbering for Projects, etc    -->
-<!-- Respect switch, or provide sensible defaults -->
-<!-- PROJECT-LIKE -->
-<!-- NB: this should become elective, more like the -->
-<!-- schemes for inline exercises and figure-like.  -->
 <xsl:variable name="numbering-projects-entered">
-    <xsl:variable name="default-projects">
-        <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default project level defined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="candidate-projects">
-        <xsl:choose>
-            <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/projects/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/projects/@level"/>
-                <xsl:choose>
-                    <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for projects given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-projects"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/projects/@level"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- respect deprecated analog -->
-            <xsl:when test="$numbering.projects.level != ''">
-                <xsl:value-of select="$numbering.projects.level" />
-            </xsl:when>
-            <!-- use a default -->
-            <xsl:otherwise>
-                <xsl:value-of select="$default-projects"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- check $candidate-projects against upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate-projects > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for projects ("<xsl:value-of select="$candidate-projects"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-projects"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-projects"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'projects'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/projects/@level"/>
+        <xsl:with-param name="legacy" select="$numbering.projects.level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-projects" select="number($numbering-projects-entered)"/>
 
-<!-- User-supplied Numbering for Equations        -->
-<!-- Respect switch, or provide sensible defaults -->
 <xsl:variable name="numbering-equations-entered">
-    <xsl:variable name="default-equations">
-        <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default equation project level defined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="candidate-equations">
-        <xsl:choose>
-            <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/equations/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/equations/@level"/>
-                <xsl:choose>
-                    <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for equations given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-equations"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/equations/@level"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- respect deprecated analog -->
-            <xsl:when test="$numbering.equations.level != ''">
-                <xsl:value-of select="$numbering.equations.level" />
-            </xsl:when>
-            <!-- use a default -->
-            <xsl:otherwise>
-                <xsl:value-of select="$default-equations"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- check $candidate-equations against upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate-equations > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for equations ("<xsl:value-of select="$candidate-equations"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-equations"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-equations"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'equations'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/equations/@level"/>
+        <xsl:with-param name="legacy" select="$numbering.equations.level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-equations" select="number($numbering-equations-entered)"/>
 
-<!-- User-supplied Numbering for Footnotes        -->
-<!-- Respect switch, or provide sensible defaults -->
 <xsl:variable name="numbering-footnotes-entered">
-    <xsl:variable name="default-footnotes">
-        <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default footnote project level defined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="candidate-footnotes">
-        <xsl:choose>
-            <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/footnotes/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/footnotes/@level"/>
-                <xsl:choose>
-                    <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for footnotes given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-footnotes"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/footnotes/@level"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- respect deprecated analog -->
-            <xsl:when test="$numbering.footnotes.level != ''">
-                <xsl:value-of select="$numbering.footnotes.level" />
-            </xsl:when>
-            <!-- use a default -->
-            <xsl:otherwise>
-                <xsl:value-of select="$default-footnotes"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- check $candidate-footnotes against upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate-footnotes > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for footnotes ("<xsl:value-of select="$candidate-footnotes"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-footnotes"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-footnotes"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'footnotes'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/footnotes/@level"/>
+        <xsl:with-param name="legacy" select="$numbering.footnotes.level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-footnotes" select="number($numbering-footnotes-entered)"/>
 
-<!-- User-supplied Numbering for Figure-Like      -->
-<!-- Respect switch, or provide sensible defaults -->
+<!-- The "legacy" consultations of a deprecated "docinfo" analog, -->
+<!-- here and for inline exercises just below, are ripe for       -->
+<!-- deletion, certainly during any comprehensive "docinfo" work  -->
 <xsl:variable name="numbering-figures-entered">
-    <xsl:variable name="default-figures">
-        <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default figure level defined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="candidate-figures">
-        <xsl:choose>
-            <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/figures/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/figures/@level"/>
-                <xsl:choose>
-                    <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for figures given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-figures"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/figures/@level"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- otherwise honor a deprecated docinfo level (assembled tree); warned elsewhere -->
-            <xsl:when test="$version-docinfo/numbering/figures/@level">
-                <xsl:value-of select="$version-docinfo/numbering/figures/@level"/>
-            </xsl:when>
-            <!-- use a default -->
-            <xsl:otherwise>
-                <xsl:value-of select="$default-figures"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- check $candidate-figures against upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate-figures > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for figures ("<xsl:value-of select="$candidate-figures"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-figures"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-figures"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'figures'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/figures/@level"/>
+        <xsl:with-param name="legacy" select="$version-docinfo/numbering/figures/@level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-figures" select="number($numbering-figures-entered)"/>
 
-<!-- User-supplied Numbering for Inline Exercises -->
-<!-- Respect switch, or provide sensible defaults -->
 <xsl:variable name="numbering-exercises-entered">
-    <xsl:variable name="default-exercises">
-        <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default inline exercise level defined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="candidate-exercises">
-        <xsl:choose>
-            <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/exercises/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/exercises/@level"/>
-                <xsl:choose>
-                    <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for inline exercises given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-exercises"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/exercises/@level"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- otherwise honor a deprecated docinfo level (assembled tree); warned elsewhere -->
-            <xsl:when test="$version-docinfo/numbering/exercises/@level">
-                <xsl:value-of select="$version-docinfo/numbering/exercises/@level"/>
-            </xsl:when>
-            <!-- use a default -->
-            <xsl:otherwise>
-                <xsl:value-of select="$default-exercises"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- check $candidate-exercises against upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate-exercises > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for inline exercises ("<xsl:value-of select="$candidate-exercises"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-exercises"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-exercises"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'inline exercises'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/exercises/@level"/>
+        <xsl:with-param name="legacy" select="$version-docinfo/numbering/exercises/@level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-exercises" select="number($numbering-exercises-entered)"/>
 
-<!-- User-supplied Numbering for Open Problems    -->
-<!-- Respect switch, or provide sensible defaults -->
 <xsl:variable name="numbering-openproblems-entered">
-    <xsl:variable name="default-openproblems">
-        <xsl:choose>
-            <xsl:when test="$version-root/book/part">3</xsl:when>
-            <xsl:when test="$version-root/book">2</xsl:when>
-            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-            <xsl:when test="$version-root/article">0</xsl:when>
-            <xsl:when test="$version-root/slideshow">0</xsl:when>
-            <xsl:when test="$version-root/letter">0</xsl:when>
-            <xsl:when test="$version-root/memo">0</xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG: a document type needs a default open problem level defined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="candidate-openproblems">
-        <xsl:choose>
-            <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/openproblems/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/openproblems/@level"/>
-                <xsl:choose>
-                    <!-- NaN does not equal *anything*, so tests if a number -->
-                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for open problems given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$default-openproblems"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/openproblems/@level"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- use a default -->
-            <xsl:otherwise>
-                <xsl:value-of select="$default-openproblems"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- check $candidate-openproblems against upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate-openproblems > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for open problems ("<xsl:value-of select="$candidate-openproblems"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-openproblems"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-openproblems"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="numbering-level">
+        <xsl:with-param name="family" select="'open problems'"/>
+        <xsl:with-param name="entered" select="$publication/numbering/openproblems/@level"/>
+    </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-openproblems" select="number($numbering-openproblems-entered)"/>
 
 <!-- A block group may run on its own counter.  When its publisher -->
 <!-- switch is absent, the deprecated source is honored, then the  -->
-<!-- default.  Warnings live with the other deprecations.          -->
+<!-- default.  Warnings live with the other deprecations.  The two -->
+<!-- deprecated "docinfo" consultations are ripe for deletion,     -->
+<!-- certainly during any comprehensive "docinfo" work.            -->
 <xsl:variable name="b-number-figure-distinct"      select="($publication/numbering/figures/@distinct = 'yes') or (not($publication/numbering/figures/@distinct) and boolean($version-docinfo/numbering/figures))"/>
 <xsl:variable name="b-number-project-distinct"     select="($publication/numbering/projects/@distinct = 'yes') or (not($publication/numbering/projects/@distinct) and ($debug.project.number = ''))"/>
 <xsl:variable name="b-number-exercise-distinct"    select="($publication/numbering/exercises/@distinct = 'yes') or (not($publication/numbering/exercises/@distinct) and boolean($version-docinfo/numbering/exercises))"/>
@@ -1969,7 +1754,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- no parts, just record as absent,  -->
         <!-- but warn of ill-advised attempts  -->
-        <xsl:when test="not($version-root/book/part)">
+        <xsl:when test="not($version-has-parts)">
             <xsl:choose>
                 <xsl:when test="$publication/numbering/divisions/@part-structure">
                     <xsl:message>PTX:FALLBACK: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
@@ -2965,13 +2750,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$chunk-level-entered != ''">
             <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
-        <xsl:when test="$version-root/book/part">3</xsl:when>
-        <xsl:when test="$version-root/book">2</xsl:when>
-        <xsl:when test="$version-root/article/section">1</xsl:when>
-        <xsl:when test="$version-root/article">0</xsl:when>
-        <xsl:when test="$version-root/slideshow">0</xsl:when>
-        <xsl:when test="$version-root/letter">0</xsl:when>
-        <xsl:when test="$version-root/memo">0</xsl:when>
+        <xsl:when test="$version-has-parts">3</xsl:when>
+        <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
+        <xsl:when test="$version-article-sections">1</xsl:when>
+        <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+        <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:   HTML chunk level not determined</xsl:message>
         </xsl:otherwise>
