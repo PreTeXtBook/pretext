@@ -1946,7 +1946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The directories of knowls that are targets of references.  Most,   -->
-<!-- but not all, filenames are based on the "visible-id" template,     -->
+<!-- but not all, filenames are based on the "unique-id" template,      -->
 <!-- but this is organized so alternate naming conventions can be used. -->
 <!-- The file extension is *.html so recognized as OK by Moodle, etc    -->
 <xsl:template match="*" mode="knowl-filename">
@@ -1963,15 +1963,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$origin = 'index'">
             <xsl:text>index/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:when>
         <xsl:when test="$origin = 'list-of'">
             <xsl:text>list-of/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:when>
         <xsl:when test="$origin = 'notation'">
             <xsl:text>notation/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:when>
         <!-- put a "location-report" template here to debug a bad knowl file -->
         <!-- (the file, or a reference to it) that lacks a subdirectory      -->
@@ -6803,7 +6803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Utility template so "aria-describedby" values are consistent -->
 <xsl:template match="image|interactive[@platform|@desmos|@calcplot3d|@circuitjs|@iframe]" mode="describedby-id">
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>-description</xsl:text>
 </xsl:template>
 
@@ -8590,9 +8590,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The @id attribute of an HTML element is critical.      -->
-<!-- We supply the "visible-id".                            -->
+<!-- We supply the "unique-id".                             -->
 <xsl:template match="*" mode="html-id">
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
 </xsl:template>
 
 <!-- And a convenience template to make an id attribute.  -->
@@ -8613,9 +8613,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is banned in Javascript, so we make a "no-dash" version,       -->
 <!-- by replacing a hyphen by a double-underscore.                  -->
 <!-- NB: This runs some non-zero probability of breaking uniqueness -->
-<xsl:template match="*" mode="visible-id-no-dash">
+<xsl:template match="*" mode="unique-id-no-dash">
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="." mode="unique-id" />
     </xsl:variable>
     <xsl:value-of select="str:replace($the-id, '-', '__')" />
 </xsl:template>
@@ -10397,7 +10397,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ensure identifier does not lead with a digit, so "ggb_". -->
     <xsl:variable name="applet-name">
         <xsl:text>ggb_</xsl:text>
-        <xsl:apply-templates select="." mode="visible-id-no-dash" />
+        <xsl:apply-templates select="." mode="unique-id-no-dash" />
     </xsl:variable>
     <!-- And a Javascript identifier for the parameters -->
     <xsl:variable name="applet-parameters">
@@ -10417,7 +10417,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- And an HTML unique identifier -->
     <xsl:variable name="applet-container">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="." mode="unique-id" />
         <xsl:text>-container</xsl:text>
     </xsl:variable>
     <!-- Javascript API for loading GeoGebra                               -->
@@ -10597,7 +10597,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
   <!-- the div that jsxgraph will take over -->
   <xsl:element name="div">
       <xsl:attribute name="id">
-          <xsl:apply-templates select="." mode="visible-id" />
+          <xsl:apply-templates select="." mode="unique-id" />
       </xsl:attribute>
       <xsl:attribute name="class">
           <xsl:text>jxgbox</xsl:text>
@@ -10613,7 +10613,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </xsl:attribute>
               <!-- Put the board in the appropriate container. -->
               <xsl:attribute name="container">
-                  <xsl:apply-templates select="." mode="visible-id" />
+                  <xsl:apply-templates select="." mode="unique-id" />
               </xsl:attribute>
               <xsl:if test="@boundingbox">
                   <xsl:attribute name="boundingbox">
@@ -10643,7 +10643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </xsl:attribute>
               <xsl:text>function parseJessie(code) {&#xa;</xsl:text>
               <xsl:text>  let board = JXG.JSXGraph.initBoard('</xsl:text>
-              <xsl:apply-templates select="." mode="visible-id" />
+              <xsl:apply-templates select="." mode="unique-id" />
               <xsl:text>', {</xsl:text>
               <xsl:if test="@boundingbox">
                   <xsl:text>boundingbox:[</xsl:text>
@@ -11011,7 +11011,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:attribute>
         <xsl:attribute name="class">
             <xsl:text>jxgbox</xsl:text>
@@ -11665,7 +11665,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:variable name="filename">
         <!-- do not use "containing-filename" may be different -->
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="." mode="unique-id" />
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">

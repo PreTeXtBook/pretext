@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- processed into a trace by the  pretext/pretext  script. -->
 <!-- It produces text output, with one line per program:     -->
 <!--                                                         -->
-<!--     visible-id, language, source                        -->
+<!--     unique-id, language, source                         -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -57,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Constructs a block of text for trace output                       -->
 <!-- Each of the following as its own line:                            -->
-<!--   visible-id                                                      -->
+<!--   unique-id                                                       -->
 <!--   runestone-id                                                    -->
 <!--   trace filename                                                  -->
 <!--   language                                                        -->
@@ -66,7 +66,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Followed by 1 line per checkpoint question                        -->
 <!-- Block ends with blank line (double newline)                       -->
 <xsl:template match="program[@interactive = 'codelens']" mode="extraction">
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="runestone-id"/>
     <xsl:text>&#xa;</xsl:text>

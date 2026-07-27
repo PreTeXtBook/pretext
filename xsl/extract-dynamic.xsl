@@ -69,7 +69,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercise/setup indicates the exercise will     -->
 <!-- require Runestone and javascript to generate   -->
 <!-- the content.                                   -->
-<!-- Stylesheet output is text, with "visible-id"   -->
+<!-- Stylesheet output is text, with "unique-id"    -->
 <!-- of each exercise, one per line, to be captured -->
 <!-- captured in a text file to guide snapshotting  -->
 <!-- Make the standalone page for each exercise     -->

@@ -51,7 +51,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="exercise-style" select="'dynamic'"/>
 
 <!-- @preview indicates custom image is present    -->
-<!-- Stylesheet output is text, with "visible-id"  -->
+<!-- Stylesheet output is text, with "unique-id"   -->
 <!-- of each interactive, one per line, to be      -->
 <!-- captured in a text file to guide snapshotting -->
 <!-- Make the iframe and standalone page for each  -->
@@ -60,7 +60,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in pretext-html.xsl.  Results are HTML files  -->
 <!-- (despite this stylesheet having text output). -->
 <xsl:template match="interactive[not(@preview)]" mode="extraction">
-    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>&#xa;</xsl:text>
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
     <!-- The standalone page has its own masthead h1, so headings inside   -->

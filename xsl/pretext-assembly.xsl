@@ -204,7 +204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dependencies.  In almost every rational use, the "-common"     -->
 <!-- stylesheet is imported by a conversion, so it is easy to       -->
 <!-- miss these dependencies.  An example in 2022-06 was the use    -->
-<!-- of the "visible-id" template to coordinate construction and    -->
+<!-- of the "unique-id" template to coordinate construction and     -->
 <!-- insertion of WeBWorK problems with an intervening trip to a    -->
 <!-- WW server.  The "pretext-enhanced-source.xsl" stylesheet is    -->
 <!-- one place where "-common" does not creep in.  Use of a modal   -->
@@ -3609,7 +3609,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- before @unique-id, and the @label values created here are     -->
 <!-- read by that final @unique-id stamp.                          -->
 
-<!-- The "visible-id" template switched to prefer @label,         -->
+<!-- Reader-facing identification switched to prefer @label,      -->
 <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
 <!-- authored (crafted) identifier strings, we copy the old over  -->
 <!-- into the new.  This preserves identifiers in output          -->
@@ -4591,15 +4591,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     construct unique-id.                                               -->
 
 <!-- NB: we believe the @assembly-id will equal the @unique-id    -->
-<!-- ("visible-id" template) for objects at the level of blocks,  -->
+<!-- ("unique-id" template) for objects at the level of blocks,   -->
 <!-- and certainly for any object replaced by a different static  -->
 <!-- representation.  But for generated objects, e.g. QR codes,   -->
 <!-- it would be best if the generation process used the          -->
 <!-- "assembly-id" template for guranteed consistency.  This *is* -->
 <!-- being done for "datafile" but is technical debt otherwise.   -->
 
-<!-- [Ed. this once prefaced the "visible-id-early" template, a weak  -->
-<!-- forerunner of the "assembly-id" template.  But the commentary    -->
+<!-- [Ed. this once prefaced an early, weak forerunner of the         -->
+<!-- "assembly-id" template.  But the commentary                      -->
 <!-- is still good, so we have preserved it here.]                    -->
 <!-- This template produces identification that happens early in the  -->
 <!-- passes this stylesheet executes.  The idea is that some elements -->
@@ -4724,7 +4724,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
 

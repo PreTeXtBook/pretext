@@ -1020,7 +1020,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to coordinate text and manually inserted tactile versions.     -->
 <xsl:template match="image" mode="block-title">
     <xsl:text>Image: </xsl:text>
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>.</xsl:text>
 </xsl:template>
 

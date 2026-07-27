@@ -592,7 +592,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="m|md[mrow]">
     <xsl:choose>
         <xsl:when test="$b-reveal-embedded-math">
-            <!-- NB: math-representation file writes with "visible-id" -->
+            <!-- NB: math-representation file writes with "unique-id" -->
             <xsl:variable name="id">
                 <xsl:apply-templates select="." mode="unique-id"/>
             </xsl:variable>

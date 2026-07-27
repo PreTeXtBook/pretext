@@ -2469,7 +2469,7 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:value-of select="$file-extension" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
@@ -2481,7 +2481,7 @@ Book (with parts), "section" at level 3
 
 <!-- Context URL                                                   -->
 <!-- URL for an element on its containing HTML page.               -->
-<!-- Produces: baseurl + containing-filename + "#" + visible-id    -->
+<!-- Produces: baseurl + containing-filename + "#" + unique-id     -->
 <!-- Empty when no baseurl is configured.                          -->
 <!-- NB: requires $chunk-level and $file-extension to be set       -->
 <!-- correctly for HTML output (as in extract-qrcode.xsl).         -->
@@ -2490,7 +2490,7 @@ Book (with parts), "section" at level 3
         <xsl:value-of select="$baseurl"/>
         <xsl:apply-templates select="." mode="containing-filename"/>
         <xsl:text>#</xsl:text>
-        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:if>
 </xsl:template>
 
@@ -3708,23 +3708,15 @@ Book (with parts), "section" at level 3
 <!-- Identifiers and Labels -->
 <!-- ###################### -->
 
-<!-- Identifiers are in flux, as of 2023-03-30.  The "unique-id" is    -->
-<!-- an attribute built during the descent of the tree during the      -->
-<!-- pre-processor/assembly phase.  As such, it is fast and ugly.      -->
-<!-- Do not let a reader catch sight of it in output ever, beacuase it -->
-<!-- is ugly, and because it is not really permanant.  That is what    -->
-<!-- "visible-id" is for.  But constructing "visible-id" is very slow  -->
-<!-- (we hope to speed htat up as well).  So we are transitioning to   -->
-<!-- the "unique-id" wherever possible, but with careful testing.      -->
+<!-- The "unique-id" is an attribute built during the descent of the -->
+<!-- tree in the assembly phase, so it is fast to construct and fast -->
+<!-- to read back.  It appears in filenames and URLs when an author  -->
+<!-- has not provided a stable name (an authored "@label" is always  -->
+<!-- preferred for anything a reader manages or shares), and it is   -->
+<!-- not permanent: editing a document can renumber it.  A former    -->
+<!-- "visible-id" getter, once a slow reader-facing construction,    -->
+<!-- became an alias of this one and was then retired.               -->
 <xsl:template match="*" mode="unique-id">
-    <xsl:value-of select="@unique-id"/>
-</xsl:template>
-
-<!-- These strings are used for items an author must manage              -->
-<!-- (image files) or that a reader will interact with (shared URLs)     -->
-<!-- Since items like filenames and URLs are sometimes shared across     -->
-<!-- conversions (or extractions) this template is in -common            -->
-<xsl:template match="*" mode="visible-id">
     <xsl:value-of select="@unique-id"/>
 </xsl:template>
 
@@ -3745,7 +3737,7 @@ Book (with parts), "section" at level 3
         <!-- @xml:id value was used to form the filename of an image described -->
         <!-- by source code (or a default was provided, like image-37).        -->
         <xsl:when test="parent::image">
-            <xsl:apply-templates select="parent::image" mode="visible-id"/>
+            <xsl:apply-templates select="parent::image" mode="unique-id"/>
         </xsl:when>
         <!-- Well-formed PTX source means we never reach the "otherwise" -->
         <xsl:otherwise>
@@ -3761,7 +3753,7 @@ Book (with parts), "section" at level 3
     <xsl:choose>
         <!-- Determine if @label is authored or generated for backwrd compatibility -->
         <xsl:when test="not(@authored-label)">
-            <xsl:apply-templates select="." mode="visible-id"/>
+            <xsl:apply-templates select="." mode="unique-id"/>
             <xsl:message>PTX:WARNING:  you are encouraged to place a @label attribute on every "prefigure" element.  Otherwise, associated image files will have unreliable filenames.</xsl:message>
         </xsl:when>
         <!-- this @label is now guaranteed to be authored -->
@@ -3874,7 +3866,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Need a unique filename for codelens traces                                -->
-<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- unique-id can change if an xml:id is added to program for other reasons   -->
 <!-- Can't vary with build target (so no runestone-id)                         -->
 <!-- Should generally mirror rs-id but without prefix                          -->
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">

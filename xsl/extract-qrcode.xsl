@@ -88,7 +88,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- representations, and by the Python script when       -->
     <!-- generating QR code images.                           -->
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>
     <exsl:document href="{$the-id}-url.xml" method="xml">
         <pi:qrcode-urls>
