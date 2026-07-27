@@ -1382,7 +1382,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- no error means to proceed with copy -->
         <xsl:when test="$error-message-for-copy = ''">
             <xsl:copy>
-                <xsl:attribute name="copied-from">
+                <xsl:attribute name="pi:copied-from">
                     <xsl:value-of select="@copy"/>
                 </xsl:attribute>
                 <!-- Duplicate attributes, but remove the @copy attribute -->
@@ -3691,7 +3691,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- alone, as it might be relevant for future features.        -->
         <xsl:choose>
             <xsl:when test="@xml:lang = $locales">
-                <xsl:attribute name="locale-lang">
+                <xsl:attribute name="pi:locale-lang">
                     <xsl:value-of select="@xml:lang"/>
                 </xsl:attribute>
             </xsl:when>
@@ -3699,7 +3699,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="xml:lang">
                     <xsl:text>en-US</xsl:text>
                 </xsl:attribute>
-                <xsl:attribute name="locale-lang">
+                <xsl:attribute name="pi:locale-lang">
                     <xsl:text>en-US</xsl:text>
                 </xsl:attribute>
             </xsl:when>
@@ -3789,14 +3789,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Languages -->
 <!-- ######### -->
 
-<!-- The variable $locales is a node-set of all the locales which have    -->
-<!-- supported localization files.  A comparison of an @xml:lang (string) -->
-<!-- with $locales (node-set) will be true if the attribute value is a    -->
-<!-- string value of one of the nodes in the node-set.  So it is easy to  -->
-<!-- create a boolean value for localization support.                     -->
-<!-- The recording of language support in @locale-lang attributes is part -->
-<!-- of the "labels" pass, since both jobs are simple attribute additions -->
-<!-- and do not deserve separate passes through the entire source.        -->
+<!-- The variable $locales is a node-set of all the locales which have       -->
+<!-- supported localization files.  A comparison of an @xml:lang (string)    -->
+<!-- with $locales (node-set) will be true if the attribute value is a       -->
+<!-- string value of one of the nodes in the node-set.  So it is easy to     -->
+<!-- create a boolean value for localization support.                        -->
+<!-- The recording of language support in @pi:locale-lang attributes is part -->
+<!-- of the "labels" pass, since both jobs are simple attribute additions    -->
+<!-- and do not deserve separate passes through the entire source.           -->
 <xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
 
 <!-- ######### -->

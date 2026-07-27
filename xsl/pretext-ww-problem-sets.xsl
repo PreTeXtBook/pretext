@@ -155,6 +155,11 @@
 </xsl:template>
 
 <!-- For copied problems move to the problem that was copied -->
+<!-- NB: this @copied-from is a plain attribute, not a "pi"  -->
+<!-- namespace stamp: it arrives via the representations     -->
+<!-- file, an interchange format written by the Python       -->
+<!-- routines, and is promoted onto "webwork" elements when  -->
+<!-- the representations merge into the tree.                -->
 <xsl:template match="webwork[@copied-from]" mode="relative-filename">
     <xsl:variable name="copied-from" select="@copied-from"/>
     <xsl:apply-templates select="$document-root//webwork[@xml:id=$copied-from]" mode="relative-filename"/>

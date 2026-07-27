@@ -3296,7 +3296,7 @@ Book (with parts), "section" at level 3
 <!-- At any given point in processing, we may want   -->
 <!-- to know which language is in effect. We look    -->
 <!-- up the tree for the "closest" indication of a   -->
-<!-- language for localization. The  @locale-lang    -->
+<!-- language for localization. The  @pi:locale-lang -->
 <!-- attribute is set by the -assembly  stylesheet,  -->
 <!-- and guarantees the language is supported by an  -->
 <!-- extant localization file. Result is a           -->
@@ -3309,7 +3309,7 @@ Book (with parts), "section" at level 3
 <!--    $localizations/locale[@language = $lang]     -->
 
 <xsl:template match="*" mode="ambient-language">
-    <xsl:value-of select="ancestor-or-self::*[@locale-lang][1]/@locale-lang"/>
+    <xsl:value-of select="ancestor-or-self::*[@pi:locale-lang][1]/@pi:locale-lang"/>
 </xsl:template>
 
 <!-- Language direction -->

@@ -192,10 +192,13 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
-        <!-- 1b. if this problem is a copy, record what it was copied from         -->
-        <xsl:if test="@copied-from">
+        <!-- 1b. if this problem is a copy, record what it was copied from.        -->
+        <!-- The source is the tree stamp, in the internal namespace; the copy is  -->
+        <!-- a plain attribute, since this file is an interchange format read by   -->
+        <!-- the Python routines, which know it as "copied-from".                  -->
+        <xsl:if test="@pi:copied-from">
             <xsl:attribute name="copied-from">
-                <xsl:value-of select="id(@copied-from)/../@pi:assembly-id"/>
+                <xsl:value-of select="id(@pi:copied-from)/../@pi:assembly-id"/>
             </xsl:attribute>
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->
