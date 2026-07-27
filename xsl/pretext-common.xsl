@@ -11357,7 +11357,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$docinfo/numbering/figures | $docinfo/numbering/exercises&quot;" />
         <xsl:with-param name="date-string" select="'2026-06-07'" />
-        <xsl:with-param name="message" select="'distinct numbering of figure-like and inline exercise blocks has been replaced by the &quot;numbering/figures&quot; and &quot;numbering/exercises&quot; entries in the publisher file.  We will attempt to honor your intent.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
+        <xsl:with-param name="message" select="'distinct numbering of figure-like and inline exercise blocks has been replaced by the &quot;numbering/figures&quot; and &quot;numbering/exercises&quot; entries in the publisher file, and the &quot;docinfo&quot; form is now ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-25  once deprecated named lists to be captioned lists -->
@@ -11415,7 +11415,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$docinfo/numbering/division/@part&quot;" />
         <xsl:with-param name="date-string" select="'2021-02-14'" />
-        <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
+        <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file, and is now ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2021-03-17  deprecate worksheet/pagebreak in favor of worksheet/page -->
