@@ -2355,6 +2355,9 @@
   </define>
   <define name="Caption">
     <element name="caption">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <ref name="TextLong"/>
     </element>
   </define>
@@ -3959,6 +3962,9 @@
   </define>
   <define name="Attribution">
     <element name="attribution">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <choice>
         <ref name="TextLong"/>
         <oneOrMore>
@@ -3978,11 +3984,17 @@
   </define>
   <define name="Title">
     <element name="title">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <ref name="TextLong"/>
     </element>
   </define>
   <define name="LinedTitle">
     <element name="title">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <oneOrMore>
         <ref name="LongLine"/>
       </oneOrMore>
@@ -3990,11 +4002,17 @@
   </define>
   <define name="Subtitle">
     <element name="subtitle">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <ref name="TextLong"/>
     </element>
   </define>
   <define name="LinedSubtitle">
     <element name="subtitle">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <oneOrMore>
         <ref name="LongLine"/>
       </oneOrMore>
@@ -4002,16 +4020,25 @@
   </define>
   <define name="ShortTitle">
     <element name="shorttitle">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <ref name="TextShort"/>
     </element>
   </define>
   <define name="PlainTitle">
     <element name="plaintitle">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <text/>
     </element>
   </define>
   <define name="Creator">
     <element name="creator">
+      <optional>
+        <ref name="Component"/>
+      </optional>
       <ref name="TextShort"/>
     </element>
   </define>

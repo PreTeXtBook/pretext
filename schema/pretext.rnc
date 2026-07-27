@@ -849,7 +849,7 @@
                 }
             
             Caption =
-                element caption {TextLong}
+                element caption {Component?, TextLong}
             Landscape =
                 attribute landscape {"yes" | "no"}
             Figure =
@@ -1522,6 +1522,7 @@
             
             Attribution =
                 element attribution {
+                    Component?,
                     (TextLong | LongLine+)
                 }
             
@@ -1532,19 +1533,19 @@
             Component =
                 attribute component {text}
             Title =
-                element title {TextLong}
+                element title {Component?, TextLong}
             LinedTitle =
-                element title {LongLine+}
+                element title {Component?, LongLine+}
             Subtitle =
-                element subtitle {TextLong}
+                element subtitle {Component?, TextLong}
             LinedSubtitle =
-                element subtitle {LongLine+}
+                element subtitle {Component?, LongLine+}
             ShortTitle =
-                element shorttitle {TextShort}
+                element shorttitle {Component?, TextShort}
             PlainTitle =
-                element plaintitle {text}
+                element plaintitle {Component?, text}
             Creator =
-                element creator {TextShort}
+                element creator {Component?, TextShort}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
