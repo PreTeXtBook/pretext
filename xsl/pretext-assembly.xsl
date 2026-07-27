@@ -1505,7 +1505,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
         <xsl:if test="not(self::task)">
-            <xsl:attribute name="exercise-customization">
+            <xsl:attribute name="pi:exercise-customization">
                 <xsl:choose>
                     <xsl:when test="&PROJECT-FILTER;">
                         <xsl:text>project</xsl:text>
@@ -1535,7 +1535,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These "interactivity types" are meant for Runestone-enabled  -->
 <!-- interactive exercises and projects                           -->
 <xsl:template match="*" mode="exercise-interactive-attribute">
-    <xsl:attribute name="exercise-interactive">
+    <xsl:attribute name="pi:exercise-interactive">
         <xsl:choose>
             <!-- This is defensive, so statement//var below does not -->
             <!-- match for WeBWorK.                                  -->
@@ -1555,14 +1555,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="stack">
                 <xsl:text>stack</xsl:text>
             </xsl:when>
-            <!-- @runestone was once used to signify a Runestone exercise given  -->
-            <!-- just by raw HTML.  The  @exercise-interactive  value uses was,  -->
-            <!-- appropriately, "htmlhack".  We now replace it with an old-time, -->
-            <!-- static PreTeXt style (dumb) exercise.  Changing the value here  -->
-            <!-- is a quick way to nullify activity in later passes.   See below -->
-            <!-- where the "repair" phase removes the  @runestone  attribute and -->
-            <!-- creates the (dumb) exercise, in order to understand more fully. -->
-            <!-- The commit with these changes might also help. (2025-11-04)     -->
+            <!-- @runestone was once used to signify a Runestone exercise given    -->
+            <!-- just by raw HTML.  The  @pi:exercise-interactive  value uses was, -->
+            <!-- appropriately, "htmlhack".  We now replace it with an old-time,   -->
+            <!-- static PreTeXt style (dumb) exercise.  Changing the value here    -->
+            <!-- is a quick way to nullify activity in later passes.   See below   -->
+            <!-- where the "repair" phase removes the  @runestone  attribute and   -->
+            <!-- creates the (dumb) exercise, in order to understand more fully.   -->
+            <!-- The commit with these changes might also help. (2025-11-04)       -->
             <xsl:when test="@runestone">
                 <xsl:text>static</xsl:text>
             </xsl:when>
@@ -1829,15 +1829,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The pattern grammar does not permit variable references, so the      -->
 <!-- list of Runestone interactivity types is a literal, fenced string    -->
 <!-- repeated for each element that can carry one.  Match exactly         -->
-<!-- whenever  @exercise-interactive  is one of the fenced values.        -->
+<!-- whenever  @pi:exercise-interactive  is one of the fenced values.     -->
 <!-- NB: also consulted in Runestone manifest creation.                   -->
 
-<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]" mode="representations">
+<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]" mode="representations">
     <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
@@ -1847,7 +1847,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- for use naturally by most conversions -->
             <xsl:when test="$exercise-style = 'static'">
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
@@ -1864,18 +1864,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- assembling for dynamic exercises, and not hosting on Runestone, go instead  -->
 <!-- with the static version.  We have three scenarios, handled with variations. -->
 <!-- Note that these matches have been carved out from the above massive match.  -->
-<xsl:template match="exercise[(@exercise-interactive = 'select')]
-                   | project[(@exercise-interactive = 'select')]
-                   | activity[(@exercise-interactive = 'select')]
-                   | exploration[(@exercise-interactive = 'select')]
-                   | investigation[(@exercise-interactive = 'select')]
-                   | task[(@exercise-interactive = 'select')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'select')]
+                   | project[(@pi:exercise-interactive = 'select')]
+                   | activity[(@pi:exercise-interactive = 'select')]
+                   | exploration[(@pi:exercise-interactive = 'select')]
+                   | investigation[(@pi:exercise-interactive = 'select')]
+                   | task[(@pi:exercise-interactive = 'select')]" mode="representations">
     <xsl:copy>
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static')">
                 <xsl:apply-templates select="@*" mode="representations"/>
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
@@ -1885,7 +1885,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="($exercise-style = 'dynamic') and not($b-host-runestone)">
                 <xsl:apply-templates select="@*" mode="representations"/>
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
@@ -1901,18 +1901,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- dual copy (not copy-of) -->
 
-<xsl:template match="exercise[(@exercise-interactive = 'dual')]
-                   | project[(@exercise-interactive = 'dual')]
-                   | activity[(@exercise-interactive = 'dual')]
-                   | exploration[(@exercise-interactive = 'dual')]
-                   | investigation[(@exercise-interactive = 'dual')]
-                   | task[(@exercise-interactive = 'dual')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'dual')]
+                   | project[(@pi:exercise-interactive = 'dual')]
+                   | activity[(@pi:exercise-interactive = 'dual')]
+                   | exploration[(@pi:exercise-interactive = 'dual')]
+                   | investigation[(@pi:exercise-interactive = 'dual')]
+                   | task[(@pi:exercise-interactive = 'dual')]" mode="representations">
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static')">
                 <!-- make a "static" classification, over-writing a "dual" -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- copy overall title and idx, METADATA-FILTER feels too broad  -->
@@ -1929,8 +1929,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Static (non-interactive) -->
-<!-- @exercise-interactive = 'static' needs no adjustments -->
+<!-- Static (non-interactive)                                 -->
+<!-- @pi:exercise-interactive = 'static' needs no adjustments -->
 
 <!-- Mine webwork-reps for relevant application -->
 
@@ -1942,11 +1942,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- static, and dynamic (HTML) employment, via modal templates.       -->
 <!-- During extraction, the "webwork" child is left intact.            -->
 <!-- NB: including "task" though this may not be supported.            -->
-<xsl:template match="exercise[(@exercise-interactive = 'webwork')]
-                   | project[(@exercise-interactive = 'webwork')]
-                   | activity[(@exercise-interactive = 'webwork')]
-                   | exploration[(@exercise-interactive = 'webwork')]
-                   | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'webwork')]
+                   | project[(@pi:exercise-interactive = 'webwork')]
+                   | activity[(@pi:exercise-interactive = 'webwork')]
+                   | exploration[(@pi:exercise-interactive = 'webwork')]
+                   | investigation[(@pi:exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
         <!-- During extraction, pass through the exercise with its    -->
         <!-- "webwork" child intact for the extraction stylesheet     -->
@@ -2027,7 +2027,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:when test="$exercise-style = 'static'">
                             <xsl:copy>
                                 <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
-                                <xsl:attribute name="exercise-interactive">
+                                <xsl:attribute name="pi:exercise-interactive">
                                     <xsl:text>static</xsl:text>
                                 </xsl:attribute>
                                 <xsl:apply-templates select="$exercise-with-reps/node()" mode="webwork-rep-to-static"/>
@@ -2274,11 +2274,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
 <!-- format, for any conversion to a static format to use.         -->
 <!-- NB: very similar to STACK template below                      -->
-<xsl:template match="exercise[(@exercise-interactive = 'myopenmath')]
-                   | project[(@exercise-interactive = 'myopenmath')]
-                   | activity[(@exercise-interactive = 'myopenmath')]
-                   | exploration[(@exercise-interactive = 'myopenmath')]
-                   | investigation[(@exercise-interactive = 'myopenmath')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'myopenmath')]
+                   | project[(@pi:exercise-interactive = 'myopenmath')]
+                   | activity[(@pi:exercise-interactive = 'myopenmath')]
+                   | exploration[(@pi:exercise-interactive = 'myopenmath')]
+                   | investigation[(@pi:exercise-interactive = 'myopenmath')]" mode="representations">
     <!-- duplicate the exercise/project -->
     <xsl:copy>
         <!-- and preserve attributes on the exercise/project -->
@@ -2287,7 +2287,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- locate the static representation in a file, generated independently -->
@@ -2300,7 +2300,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="myopenmath/@problem"/>
                     <xsl:text>.xml</xsl:text>
                 </xsl:variable>
-                <!-- "myopenmath" child guaranteed by @exercise-interactive value -->
+                <!-- "myopenmath" child guaranteed by @pi:exercise-interactive value -->
                 <xsl:variable name="mom-static-rep" select="document($filename, $original)/myopenmath"/>
                 <!-- duplicate metadata first -->
                 <xsl:apply-templates select="title|idx" mode="representations"/>
@@ -2334,11 +2334,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
 <!-- format, for any conversion to a static format to use.         -->
 <!-- NB: very similar to MyOpenMath template above                 -->
-<xsl:template match="exercise[(@exercise-interactive = 'stack')]
-                   | project[(@exercise-interactive = 'stack')]
-                   | activity[(@exercise-interactive = 'stack')]
-                   | exploration[(@exercise-interactive = 'stack')]
-                   | investigation[(@exercise-interactive = 'stack')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'stack')]
+                   | project[(@pi:exercise-interactive = 'stack')]
+                   | activity[(@pi:exercise-interactive = 'stack')]
+                   | exploration[(@pi:exercise-interactive = 'stack')]
+                   | investigation[(@pi:exercise-interactive = 'stack')]" mode="representations">
     <!-- duplicate the exercise/project -->
     <xsl:copy>
         <!-- and preserve attributes on the exercise/project -->
@@ -2347,7 +2347,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- locate the static representation in a file, generated independently -->
@@ -3077,11 +3077,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- 2025-08-15: Ensure that interactives all have a @interactive-platform -->
-<!-- that identifies their basic type                                      -->
+<!-- 2025-08-15: Ensure that interactives all have a @pi:interactive-platform -->
+<!-- that identifies their basic type                                         -->
 <xsl:template match="interactive" mode="repair">
     <xsl:copy>
-        <xsl:attribute name="interactive-platform">
+        <xsl:attribute name="pi:interactive-platform">
             <xsl:choose>
                 <xsl:when test="@platform">
                     <xsl:value-of select="@platform"/>
@@ -4638,21 +4638,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="audio|video|interactive|image
                    | datafile
                    | exercise/stack
-                   | exercise[@exercise-interactive='fillin' and setup]
-                   | project[@exercise-interactive='fillin' and setup]
-                   | activity[@exercise-interactive='fillin' and setup]
-                   | exploration[@exercise-interactive='fillin' and setup]
-                   | investigation[@exercise-interactive='fillin' and setup]
-                   | exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | project[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | exercise//task[@exercise-interactive='fillin' and setup]
-                   | project//task[@exercise-interactive='fillin' and setup]
-                   | activity//task[@exercise-interactive='fillin' and setup]
-                   | exploration//task[@exercise-interactive='fillin' and setup]
-                   | investigation//task[@exercise-interactive='fillin' and setup]" mode="assembly-id">
+                   | exercise[@pi:exercise-interactive='fillin' and setup]
+                   | project[@pi:exercise-interactive='fillin' and setup]
+                   | activity[@pi:exercise-interactive='fillin' and setup]
+                   | exploration[@pi:exercise-interactive='fillin' and setup]
+                   | investigation[@pi:exercise-interactive='fillin' and setup]
+                   | exercise[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | project[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | activity[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | exploration[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | investigation[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | exercise//task[@pi:exercise-interactive='fillin' and setup]
+                   | project//task[@pi:exercise-interactive='fillin' and setup]
+                   | activity//task[@pi:exercise-interactive='fillin' and setup]
+                   | exploration//task[@pi:exercise-interactive='fillin' and setup]
+                   | investigation//task[@pi:exercise-interactive='fillin' and setup]" mode="assembly-id">
     <xsl:value-of select="@pi:assembly-id"/>
 </xsl:template>
 
@@ -4661,7 +4661,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect--</xsl:text>
         <xsl:value-of select="name()"/>
         <xsl:text>.</xsl:text>
-        <xsl:value-of select="@exercise-interactive"/>
+        <xsl:value-of select="@pi:exercise-interactive"/>
         <xsl:text>.</xsl:text>
         <xsl:value-of select="@pi:assembly-id"/>
     </xsl:message>
@@ -4707,21 +4707,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
-                   | project[@exercise-interactive='fillin' and setup]
-                   | activity[@exercise-interactive='fillin' and setup]
-                   | exploration[@exercise-interactive='fillin' and setup]
-                   | investigation[@exercise-interactive='fillin' and setup]"
+<xsl:template match="exercise[@pi:exercise-interactive='fillin' and setup]
+                   | project[@pi:exercise-interactive='fillin' and setup]
+                   | activity[@pi:exercise-interactive='fillin' and setup]
+                   | exploration[@pi:exercise-interactive='fillin' and setup]
+                   | investigation[@pi:exercise-interactive='fillin' and setup]"
                    mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | project[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | activity[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | exploration[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | investigation[.//task/@exercise-interactive='fillin' and .//task/setup]"
+<xsl:template match="exercise[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | project[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | activity[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | exploration[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | investigation[.//task/@pi:exercise-interactive='fillin' and .//task/setup]"
                    mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>

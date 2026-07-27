@@ -4531,7 +4531,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="self::task">project</xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="./@exercise-customization"/>
+                <xsl:value-of select="./@pi:exercise-customization"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>

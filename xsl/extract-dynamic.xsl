@@ -84,16 +84,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
-                    | project[@exercise-interactive='fillin' and setup]
-                    | activity[@exercise-interactive='fillin' and setup]
-                    | exploration[@exercise-interactive='fillin' and setup]
-                    | investigation[@exercise-interactive='fillin' and setup]
-                    | exercise//task[@exercise-interactive='fillin' and setup]
-                    | project//task[@exercise-interactive='fillin' and setup]
-                    | activity//task[@exercise-interactive='fillin' and setup]
-                    | exploration//task[@exercise-interactive='fillin' and setup]
-                    | investigation//task[@exercise-interactive='fillin' and setup]"
+<xsl:template match="exercise[@pi:exercise-interactive='fillin' and setup]
+                    | project[@pi:exercise-interactive='fillin' and setup]
+                    | activity[@pi:exercise-interactive='fillin' and setup]
+                    | exploration[@pi:exercise-interactive='fillin' and setup]
+                    | investigation[@pi:exercise-interactive='fillin' and setup]
+                    | exercise//task[@pi:exercise-interactive='fillin' and setup]
+                    | project//task[@pi:exercise-interactive='fillin' and setup]
+                    | activity//task[@pi:exercise-interactive='fillin' and setup]
+                    | exploration//task[@pi:exercise-interactive='fillin' and setup]
+                    | investigation//task[@pi:exercise-interactive='fillin' and setup]"
                     mode="extraction">
     <xsl:text>,&#xa;</xsl:text>
     <xsl:text>{</xsl:text>

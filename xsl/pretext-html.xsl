@@ -3953,9 +3953,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- *  Never for a "worksheet" - too messy for printing           -->
             <!-- *  Not hitting PROJECT-LIKE here, see elsewhere               -->
             <xsl:variable name="b-tabbed-tasks" select="
-                (@exercise-customization = 'divisional' and $b-html-tabbed-tasks-divisional) or
-                (@exercise-customization = 'inline' and $b-html-tabbed-tasks-inline) or
-                (@exercise-customization = 'reading' and $b-html-tabbed-tasks-reading)"/>
+                (@pi:exercise-customization = 'divisional' and $b-html-tabbed-tasks-divisional) or
+                (@pi:exercise-customization = 'inline' and $b-html-tabbed-tasks-inline) or
+                (@pi:exercise-customization = 'reading' and $b-html-tabbed-tasks-reading)"/>
             <xsl:choose>
                 <xsl:when test="$b-tabbed-tasks">
                     <!-- Use tabbed viewer from Runestone Components -->
@@ -4099,7 +4099,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- be presented by a "tabbed" interface from Runestone  -->
             <!-- components. Note: this test is simpler than for  -->
             <!-- "exercise" since we know we have a PROJECT-LIKE and  -->
-            <!-- do not need to consult @exercise-customization. -->
+            <!-- do not need to consult @pi:exercise-customization.   -->
             <xsl:choose>
                 <xsl:when test="$b-html-tabbed-tasks-project">
                     <!-- Use tabbed viewer from Runestone Components -->
@@ -4553,7 +4553,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Largely a Runestone/database operation referencing -->
 <!-- existing questions supplied by the manifest,       -->
 <!-- so we go straight to an HTML version               -->
-<xsl:template match="*[@exercise-interactive = 'select']" mode="exercise-components">
+<xsl:template match="*[@pi:exercise-interactive = 'select']" mode="exercise-components">
     <xsl:apply-templates select="." mode="runestone-to-interactive"/>
 </xsl:template>
 
@@ -4569,17 +4569,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "runestone-to-interactive" templates will combine a   -->
 <!-- "regular" PreTeXt statement together with some additional -->
 <!-- interactive material to make a hybrid "statement"         -->
-<xsl:template match="*[(@exercise-interactive = 'truefalse') or
-                       (@exercise-interactive = 'multiplechoice') or
-                       (@exercise-interactive = 'parson') or
-                       (@exercise-interactive = 'parson-horizontal') or
-                       (@exercise-interactive = 'cardsort') or
-                       (@exercise-interactive = 'matching') or
-                       (@exercise-interactive = 'clickablearea') or
-                       (@exercise-interactive = 'fillin-basic') or
-                       (@exercise-interactive = 'coding') or
-                       (@exercise-interactive = 'dual') or
-                       (@exercise-interactive = 'shortanswer')]" mode="exercise-components">
+<xsl:template match="*[(@pi:exercise-interactive = 'truefalse') or
+                       (@pi:exercise-interactive = 'multiplechoice') or
+                       (@pi:exercise-interactive = 'parson') or
+                       (@pi:exercise-interactive = 'parson-horizontal') or
+                       (@pi:exercise-interactive = 'cardsort') or
+                       (@pi:exercise-interactive = 'matching') or
+                       (@pi:exercise-interactive = 'clickablearea') or
+                       (@pi:exercise-interactive = 'fillin-basic') or
+                       (@pi:exercise-interactive = 'coding') or
+                       (@pi:exercise-interactive = 'dual') or
+                       (@pi:exercise-interactive = 'shortanswer')]" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="heading-level"/>
@@ -4603,7 +4603,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Dynamic fillin is broken out separately because the test for -->
 <!-- correctness as well as feedback is dynamically chosen.       -->
-<xsl:template match="*[@exercise-interactive = 'fillin']" mode="exercise-components">
+<xsl:template match="*[@pi:exercise-interactive = 'fillin']" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="heading-level"/>
@@ -8885,7 +8885,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
 <xsl:template match="fillin[not(parent::m or parent::mrow)]">
     <xsl:choose>
-        <xsl:when test="ancestor::statement/../@exercise-interactive='fillin'">
+        <xsl:when test="ancestor::statement/../@pi:exercise-interactive='fillin'">
             <xsl:apply-imports />
         </xsl:when>
         <xsl:otherwise>
@@ -9874,7 +9874,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We want to recognize an "interactive" authored  -->
      <!-- in an "exercise" (or similar) which originated -->
      <!-- from a "dual" dynamic/static exercise.         -->
-    <xsl:variable name="b-in-dual-exercise" select="ancestor::*[@exercise-interactive = 'dual']"/>
+    <xsl:variable name="b-in-dual-exercise" select="ancestor::*[@pi:exercise-interactive = 'dual']"/>
     <xsl:choose>
         <!-- A DoenetML interactive lives two lives.  Plain 'ol PreTeXt,  -->
         <!-- supported by a Doenet CDN for its interactivity.  But when   -->
@@ -10932,7 +10932,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="interactive" mode="get-resize-behavior">
-    <xsl:variable name="platform" select="@interactive-platform"/>
+    <xsl:variable name="platform" select="@pi:interactive-platform"/>
     <xsl:choose>
         <xsl:when test="@resize-behavior != ''">
             <xsl:value-of select="@resize-behavior"/>

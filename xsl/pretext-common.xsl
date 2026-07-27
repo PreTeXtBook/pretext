@@ -5667,7 +5667,7 @@ Book (with parts), "section" at level 3
         <xsl:choose>
             <xsl:when test="self::task">project</xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="./@exercise-customization"/>
+                <xsl:value-of select="./@pi:exercise-customization"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -7427,7 +7427,7 @@ Book (with parts), "section" at level 3
 
 <!-- For a parsons, use @language, default parsons language, or default -->
 <!-- programming language in that order of preference.                  -->
-<xsl:template match="*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
+<xsl:template match="*[@pi:exercise-interactive = 'parson' or @pi:exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
     <xsl:choose>
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
@@ -7443,7 +7443,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of ActiveCode name comes out -->
-<xsl:template match="program|*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="active-language">
+<xsl:template match="program|*[@pi:exercise-interactive = 'parson' or @pi:exercise-interactive = 'parson-horizontal']" mode="active-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>

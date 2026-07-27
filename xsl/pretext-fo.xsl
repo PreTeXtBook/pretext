@@ -1058,13 +1058,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- An exercise or project run-in heading.  The assembly stamps    -->
-<!-- "@exercise-customization" with the exercise's category; the     -->
+<!-- "@pi:exercise-customization" with the exercise's category; the  -->
 <!-- divisional kinds (divisional, worksheet, reading) show a bare   -->
 <!-- serial number, while an inline exercise or a project carries    -->
 <!-- the full type-name and number.                                  -->
 <xsl:template match="*" mode="exercise-heading">
     <xsl:choose>
-        <xsl:when test="@exercise-customization = 'inline' or @exercise-customization = 'project'">
+        <xsl:when test="@pi:exercise-customization = 'inline' or @pi:exercise-customization = 'project'">
             <xsl:apply-templates select="." mode="heading-full"/>
         </xsl:when>
         <xsl:otherwise>
