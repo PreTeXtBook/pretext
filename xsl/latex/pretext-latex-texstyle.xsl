@@ -493,7 +493,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:choose>
         <xsl:when test="@arg = 'unique-id'">
-            <xsl:value-of select="$ptx-node/@unique-id"/>
+            <xsl:value-of select="$ptx-node/@pi:unique-id"/>
         </xsl:when>
         <xsl:when test="@arg = 'ordinal'">
             <xsl:apply-templates select="$ptx-node" mode="texstyle-number"/>
@@ -511,7 +511,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>[</xsl:text>
         <xsl:choose>
             <xsl:when test="@opt = 'unique-id'">
-                <xsl:value-of select="$ptx-node/@unique-id"/>
+                <xsl:value-of select="$ptx-node/@pi:unique-id"/>
             </xsl:when>
             <xsl:when test="@arg = 'ordinal'">
                 <xsl:apply-templates select="$ptx-node" mode="texstyle-number"/>
@@ -523,7 +523,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:choose>
             <xsl:when test="@arg = 'unique-id'">
-                <xsl:value-of select="$ptx-node/@unique-id"/>
+                <xsl:value-of select="$ptx-node/@pi:unique-id"/>
             </xsl:when>
             <xsl:when test="@arg = 'ordinal'">
                 <xsl:apply-templates select="$ptx-node" mode="texstyle-number"/>

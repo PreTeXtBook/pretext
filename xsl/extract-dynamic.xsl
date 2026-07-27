@@ -23,9 +23,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dynamic content. Create a standalone page for each.  -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
+    exclude-result-prefixes="pi"
     extension-element-prefixes="exsl"
 >
 
@@ -69,7 +71,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercise/setup indicates the exercise will     -->
 <!-- require Runestone and javascript to generate   -->
 <!-- the content.                                   -->
-<!-- Stylesheet output is text, with "visible-id"   -->
+<!-- Stylesheet output is text, with "unique-id"    -->
 <!-- of each exercise, one per line, to be captured -->
 <!-- captured in a text file to guide snapshotting  -->
 <!-- Make the standalone page for each exercise     -->
@@ -82,21 +84,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
-                    | project[@exercise-interactive='fillin' and setup]
-                    | activity[@exercise-interactive='fillin' and setup]
-                    | exploration[@exercise-interactive='fillin' and setup]
-                    | investigation[@exercise-interactive='fillin' and setup]
-                    | exercise//task[@exercise-interactive='fillin' and setup]
-                    | project//task[@exercise-interactive='fillin' and setup]
-                    | activity//task[@exercise-interactive='fillin' and setup]
-                    | exploration//task[@exercise-interactive='fillin' and setup]
-                    | investigation//task[@exercise-interactive='fillin' and setup]"
+<xsl:template match="exercise[@pi:exercise-interactive='fillin' and setup]
+                    | project[@pi:exercise-interactive='fillin' and setup]
+                    | activity[@pi:exercise-interactive='fillin' and setup]
+                    | exploration[@pi:exercise-interactive='fillin' and setup]
+                    | investigation[@pi:exercise-interactive='fillin' and setup]
+                    | exercise//task[@pi:exercise-interactive='fillin' and setup]
+                    | project//task[@pi:exercise-interactive='fillin' and setup]
+                    | activity//task[@pi:exercise-interactive='fillin' and setup]
+                    | exploration//task[@pi:exercise-interactive='fillin' and setup]
+                    | investigation//task[@pi:exercise-interactive='fillin' and setup]"
                     mode="extraction">
     <xsl:text>,&#xa;</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:text>  "exercise_id": "</xsl:text>
-    <!-- Key the round trip on @assembly-id, the early identifier the   -->
+    <!-- Key the round trip on @pi:assembly-id, the early identifier the-->
     <!-- substitution pass reads back.  @label only exists for labeled  -->
     <!-- exercises, so it would miss unlabeled exercises and tasks.      -->
     <xsl:apply-templates select="." mode="assembly-id" />

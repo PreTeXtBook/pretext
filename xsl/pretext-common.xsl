@@ -186,7 +186,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
-<!-- w/, w/o parts induces variants -->
+<!-- w/, w/o parts induces variants                                   -->
+<!-- NB: computed from the *assembled* root; the version-tree analog, -->
+<!-- $version-has-parts in publisher-variables.xsl, is the            -->
+<!-- pre-assembly fact — same concept, deliberately distinct name.    -->
 <xsl:variable name="b-has-parts" select="boolean($root/book/part)" />
 
 <!-- File extensions can be set globally for a conversion, -->
@@ -2469,7 +2472,7 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
             <xsl:value-of select="$file-extension" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
@@ -2481,7 +2484,7 @@ Book (with parts), "section" at level 3
 
 <!-- Context URL                                                   -->
 <!-- URL for an element on its containing HTML page.               -->
-<!-- Produces: baseurl + containing-filename + "#" + visible-id    -->
+<!-- Produces: baseurl + containing-filename + "#" + unique-id     -->
 <!-- Empty when no baseurl is configured.                          -->
 <!-- NB: requires $chunk-level and $file-extension to be set       -->
 <!-- correctly for HTML output (as in extract-qrcode.xsl).         -->
@@ -2490,7 +2493,7 @@ Book (with parts), "section" at level 3
         <xsl:value-of select="$baseurl"/>
         <xsl:apply-templates select="." mode="containing-filename"/>
         <xsl:text>#</xsl:text>
-        <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:if>
 </xsl:template>
 
@@ -3293,7 +3296,7 @@ Book (with parts), "section" at level 3
 <!-- At any given point in processing, we may want   -->
 <!-- to know which language is in effect. We look    -->
 <!-- up the tree for the "closest" indication of a   -->
-<!-- language for localization. The  @locale-lang    -->
+<!-- language for localization. The  @pi:locale-lang -->
 <!-- attribute is set by the -assembly  stylesheet,  -->
 <!-- and guarantees the language is supported by an  -->
 <!-- extant localization file. Result is a           -->
@@ -3306,7 +3309,7 @@ Book (with parts), "section" at level 3
 <!--    $localizations/locale[@language = $lang]     -->
 
 <xsl:template match="*" mode="ambient-language">
-    <xsl:value-of select="ancestor-or-self::*[@locale-lang][1]/@locale-lang"/>
+    <xsl:value-of select="ancestor-or-self::*[@pi:locale-lang][1]/@pi:locale-lang"/>
 </xsl:template>
 
 <!-- Language direction -->
@@ -3708,24 +3711,16 @@ Book (with parts), "section" at level 3
 <!-- Identifiers and Labels -->
 <!-- ###################### -->
 
-<!-- Identifiers are in flux, as of 2023-03-30.  The "unique-id" is    -->
-<!-- an attribute built during the descent of the tree during the      -->
-<!-- pre-processor/assembly phase.  As such, it is fast and ugly.      -->
-<!-- Do not let a reader catch sight of it in output ever, beacuase it -->
-<!-- is ugly, and because it is not really permanant.  That is what    -->
-<!-- "visible-id" is for.  But constructing "visible-id" is very slow  -->
-<!-- (we hope to speed htat up as well).  So we are transitioning to   -->
-<!-- the "unique-id" wherever possible, but with careful testing.      -->
+<!-- The "unique-id" is an attribute built during the descent of the -->
+<!-- tree in the assembly phase, so it is fast to construct and fast -->
+<!-- to read back.  It appears in filenames and URLs when an author  -->
+<!-- has not provided a stable name (an authored "@label" is always  -->
+<!-- preferred for anything a reader manages or shares), and it is   -->
+<!-- not permanent: editing a document can renumber it.  A former    -->
+<!-- "visible-id" getter, once a slow reader-facing construction,    -->
+<!-- became an alias of this one and was then retired.               -->
 <xsl:template match="*" mode="unique-id">
-    <xsl:value-of select="@unique-id"/>
-</xsl:template>
-
-<!-- These strings are used for items an author must manage              -->
-<!-- (image files) or that a reader will interact with (shared URLs)     -->
-<!-- Since items like filenames and URLs are sometimes shared across     -->
-<!-- conversions (or extractions) this template is in -common            -->
-<xsl:template match="*" mode="visible-id">
-    <xsl:value-of select="@unique-id"/>
+    <xsl:value-of select="@pi:unique-id"/>
 </xsl:template>
 
 <!-- An image described by source code, using languages Asymptote,     -->
@@ -3745,7 +3740,7 @@ Book (with parts), "section" at level 3
         <!-- @xml:id value was used to form the filename of an image described -->
         <!-- by source code (or a default was provided, like image-37).        -->
         <xsl:when test="parent::image">
-            <xsl:apply-templates select="parent::image" mode="visible-id"/>
+            <xsl:apply-templates select="parent::image" mode="unique-id"/>
         </xsl:when>
         <!-- Well-formed PTX source means we never reach the "otherwise" -->
         <xsl:otherwise>
@@ -3760,8 +3755,8 @@ Book (with parts), "section" at level 3
 <xsl:template match="pf:prefigure" mode="image-source-basename">
     <xsl:choose>
         <!-- Determine if @label is authored or generated for backwrd compatibility -->
-        <xsl:when test="not(@authored-label)">
-            <xsl:apply-templates select="." mode="visible-id"/>
+        <xsl:when test="not(@pi:authored-label)">
+            <xsl:apply-templates select="." mode="unique-id"/>
             <xsl:message>PTX:WARNING:  you are encouraged to place a @label attribute on every "prefigure" element.  Otherwise, associated image files will have unreliable filenames.</xsl:message>
         </xsl:when>
         <!-- this @label is now guaranteed to be authored -->
@@ -3784,21 +3779,21 @@ Book (with parts), "section" at level 3
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
 <xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']|interactive[@iframe]" mode="runestone-id">
-    <!-- With no @xml:id and no @label we realize the author has not given    -->
-    <!-- any thought to a (semi-)peersistent identifire for the Runestone     -->
-    <!-- database.  So we call that out as an error.  And we do not even      -->
-    <!-- attempt to fallback to an automatically generated string, which      -->
-    <!-- would be malleable over time and editing.                            -->
-    <!-- As part of backwards-compatibility, we copy old @xml:id values into  -->
-    <!-- fresh @label.  But have an internal  @authored-label attribute whose -->
-    <!-- absence alerts us to the copying, which is now not best practice.    -->
+    <!-- With no @xml:id and no @label we realize the author has not given       -->
+    <!-- any thought to a (semi-)peersistent identifire for the Runestone        -->
+    <!-- database.  So we call that out as an error.  And we do not even         -->
+    <!-- attempt to fallback to an automatically generated string, which         -->
+    <!-- would be malleable over time and editing.                               -->
+    <!-- As part of backwards-compatibility, we copy old @xml:id values into     -->
+    <!-- fresh @label.  But have an internal  @pi:authored-label attribute whose -->
+    <!-- absence alerts us to the copying, which is now not best practice.       -->
     <xsl:choose>
-         <!-- 2024-02-20: neuter thse warnings.  Somehow, it seems @authored-label -->
-         <!-- is not very reliable.  Were added in commit 29a42dc689cd772a         -->
-        <!--  -->
+         <!-- 2024-02-20: neuter thse warnings.  Somehow, it seems @pi:authored-label -->
+         <!-- is not very reliable.  Were added in commit 29a42dc689cd772a            -->
+        <!--                                                                          -->
         <xsl:when test="true()"/>
         <!--  -->
-        <xsl:when test="$b-host-runestone and not(@xml:id) and not(@authored-label)">
+        <xsl:when test="$b-host-runestone and not(@xml:id) and not(@pi:authored-label)">
             <xsl:message>
                 <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
@@ -3812,7 +3807,7 @@ Book (with parts), "section" at level 3
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
-        <xsl:when test="$b-host-runestone and not(@authored-label)">
+        <xsl:when test="$b-host-runestone and not(@pi:authored-label)">
             <xsl:message>
                 <xsl:text>PTX:FALLBACK:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
@@ -3874,7 +3869,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Need a unique filename for codelens traces                                -->
-<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- unique-id can change if an xml:id is added to program for other reasons   -->
 <!-- Can't vary with build target (so no runestone-id)                         -->
 <!-- Should generally mirror rs-id but without prefix                          -->
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">
@@ -3882,10 +3877,10 @@ Book (with parts), "section" at level 3
         <!-- If part of exercise-like, use that label, otherwise own                -->
         <!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync   -->
         <xsl:when test="parent::exercise|parent::task|parent::project|parent::activity|parent::exploration|parent::investigation">
-            <xsl:value-of select="../@unique-id"/>
+            <xsl:value-of select="../@pi:unique-id"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="@unique-id"/>
+            <xsl:value-of select="@pi:unique-id"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>.js</xsl:text>
@@ -3968,8 +3963,8 @@ Book (with parts), "section" at level 3
     <xsl:param name="to" />
     <xsl:variable name="format-code">
         <xsl:choose>
-            <xsl:when test="self::node()[@format-code]">
-                <xsl:value-of select="./@format-code" />
+            <xsl:when test="self::node()[@pi:format-code]">
+                <xsl:value-of select="./@pi:format-code" />
             </xsl:when>
             <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
@@ -3986,7 +3981,7 @@ Book (with parts), "section" at level 3
             <xsl:otherwise><xsl:value-of select="$to" /></xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="original-marker-suffix" select="./@marker-suffix" />
+    <xsl:variable name="original-marker-suffix" select="./@pi:marker-suffix" />
     <xsl:variable name="marker-suffix">
         <xsl:choose>
             <!-- Strip out any trailing dot from the marker format. -->
@@ -4000,12 +3995,12 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <xsl:call-template name="formatted-case-cycle">
         <xsl:with-param name="from">
-            <xsl:value-of select="./@marker-prefix" />
+            <xsl:value-of select="./@pi:marker-prefix" />
             <xsl:number value="$adjusted-from" format="{$format-code}" />
             <xsl:value-of select="$marker-suffix" />
         </xsl:with-param>
         <xsl:with-param name="to">
-            <xsl:value-of select="./@marker-prefix" />
+            <xsl:value-of select="./@pi:marker-prefix" />
             <xsl:number value="$adjusted-to" format="{$format-code}" />
             <xsl:value-of select="$marker-suffix" />
         </xsl:with-param>
@@ -5672,7 +5667,7 @@ Book (with parts), "section" at level 3
         <xsl:choose>
             <xsl:when test="self::task">project</xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="./@exercise-customization"/>
+                <xsl:value-of select="./@pi:exercise-customization"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -7432,7 +7427,7 @@ Book (with parts), "section" at level 3
 
 <!-- For a parsons, use @language, default parsons language, or default -->
 <!-- programming language in that order of preference.                  -->
-<xsl:template match="*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
+<xsl:template match="*[@pi:exercise-interactive = 'parson' or @pi:exercise-interactive = 'parson-horizontal']" mode="get-programming-language">
     <xsl:choose>
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
@@ -7448,7 +7443,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of ActiveCode name comes out -->
-<xsl:template match="program|*[@exercise-interactive = 'parson' or @exercise-interactive = 'parson-horizontal']" mode="active-language">
+<xsl:template match="program|*[@pi:exercise-interactive = 'parson' or @pi:exercise-interactive = 'parson-horizontal']" mode="active-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
@@ -8652,11 +8647,7 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<!-- NB: "men" is historical.  This element gets repaired  -->
-<!-- to a one-line "md" but the target is found in the     -->
-<!-- original source and is identified as an "men" element, -->
-<!-- which really *should not* be not on this list.         -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|men|md|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|md|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
@@ -8672,15 +8663,15 @@ Book (with parts), "section" at level 3
         <!-- test/check initial ref of the list -->
         <xsl:otherwise>
             <xsl:variable name="initial" select="substring-before($ref-list, ' ')" />
-            <!-- Look up the ref in all relevant "documents":          -->
-            <!-- the original source, and private solution file.       -->
-            <!-- Count the number of successes, hoping it will be 1.   -->
-            <!-- Long-term, this check should be performed in a second -->
-            <!-- pass on a completely assembled source, so the id()    -->
-            <!-- function does not need to survey multiple documents.  -->
+            <!-- Look up the ref in the assembled tree: private        -->
+            <!-- solutions are merged and versions are resolved, so    -->
+            <!-- this is the truthful universe of targets — a ref to   -->
+            <!-- content excluded by the version in play is a genuine  -->
+            <!-- failure here, and the lookup never needs to survey    -->
+            <!-- more than one document.                               -->
             <xsl:variable name="hits">
-                <!-- always do a context shift to $original -->
-                <xsl:for-each select="$original">
+                <!-- a context shift, so id() searches the assembled tree -->
+                <xsl:for-each select="$root">
                     <xsl:if test="id($initial)">
                         <xsl:text>X</xsl:text>
                         <xsl:variable name="target" select="id($initial)"/>
@@ -11366,7 +11357,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$docinfo/numbering/figures | $docinfo/numbering/exercises&quot;" />
         <xsl:with-param name="date-string" select="'2026-06-07'" />
-        <xsl:with-param name="message" select="'distinct numbering of figure-like and inline exercise blocks has been replaced by the &quot;numbering/figures&quot; and &quot;numbering/exercises&quot; entries in the publisher file.  We will attempt to honor your intent.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
+        <xsl:with-param name="message" select="'distinct numbering of figure-like and inline exercise blocks has been replaced by the &quot;numbering/figures&quot; and &quot;numbering/exercises&quot; entries in the publisher file, and the &quot;docinfo&quot; form is now ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-25  once deprecated named lists to be captioned lists -->
@@ -11424,7 +11415,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$docinfo/numbering/division/@part&quot;" />
         <xsl:with-param name="date-string" select="'2021-02-14'" />
-        <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
+        <xsl:with-param name="message" select="'docinfo/numbering/division/@part has been replaced by the  numbering/divisions/@part-structure  entry in the publisher file, and is now ignored.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2021-03-17  deprecate worksheet/pagebreak in favor of worksheet/page -->

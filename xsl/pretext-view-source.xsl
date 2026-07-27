@@ -33,8 +33,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- xmlns="http://www.w3.org/1999/xhtml"               -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
+    exclude-result-prefixes="pi"
     extension-element-prefixes="exsl"
 >
 
@@ -66,7 +68,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- their source.  So at the last minute, while creating text versions -->
 <!-- of source material, we kill it.  Any similar leakage could be      -->
 <!-- handled the same way.                                              -->
-<xsl:template match="@original-id" mode="xml-to-string"/>
+<xsl:template match="@pi:original-id" mode="xml-to-string"/>
 
 
 <!-- N.B.: the -assembly stylesheet first construct a "version" which   -->
@@ -92,11 +94,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-view-source and not($b-banned)">
         <!-- Part 1: Serialize the source -->
         <!-- Save off the id of the element being annotated -->
-        <xsl:variable name="the-element-id" select="@original-id"/>
+        <xsl:variable name="the-element-id" select="@pi:original-id"/>
         <!-- Locate the element with the same id, but in a very early -->
         <!-- pass of the assembly stylesheet, so with as little (no?) -->
         <!-- extraneous manufactured markup as possible.              -->
-        <xsl:variable name="original-element" select="$original-labeled//*[@original-id = $the-element-id]"/>
+        <xsl:variable name="original-element" select="$original-labeled//*[@pi:original-id = $the-element-id]"/>
         <!-- Just for convenience, capture highly sanitized text      -->
         <!-- version of the XML source within a variable.             -->
         <!--                                                          -->

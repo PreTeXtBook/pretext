@@ -1946,7 +1946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The directories of knowls that are targets of references.  Most,   -->
-<!-- but not all, filenames are based on the "visible-id" template,     -->
+<!-- but not all, filenames are based on the "unique-id" template,      -->
 <!-- but this is organized so alternate naming conventions can be used. -->
 <!-- The file extension is *.html so recognized as OK by Moodle, etc    -->
 <xsl:template match="*" mode="knowl-filename">
@@ -1963,15 +1963,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$origin = 'index'">
             <xsl:text>index/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:when>
         <xsl:when test="$origin = 'list-of'">
             <xsl:text>list-of/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:when>
         <xsl:when test="$origin = 'notation'">
             <xsl:text>notation/</xsl:text>
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:when>
         <!-- put a "location-report" template here to debug a bad knowl file -->
         <!-- (the file, or a reference to it) that lacks a subdirectory      -->
@@ -3953,9 +3953,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- *  Never for a "worksheet" - too messy for printing           -->
             <!-- *  Not hitting PROJECT-LIKE here, see elsewhere               -->
             <xsl:variable name="b-tabbed-tasks" select="
-                (@exercise-customization = 'divisional' and $b-html-tabbed-tasks-divisional) or
-                (@exercise-customization = 'inline' and $b-html-tabbed-tasks-inline) or
-                (@exercise-customization = 'reading' and $b-html-tabbed-tasks-reading)"/>
+                (@pi:exercise-customization = 'divisional' and $b-html-tabbed-tasks-divisional) or
+                (@pi:exercise-customization = 'inline' and $b-html-tabbed-tasks-inline) or
+                (@pi:exercise-customization = 'reading' and $b-html-tabbed-tasks-reading)"/>
             <xsl:choose>
                 <xsl:when test="$b-tabbed-tasks">
                     <!-- Use tabbed viewer from Runestone Components -->
@@ -4099,7 +4099,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- be presented by a "tabbed" interface from Runestone  -->
             <!-- components. Note: this test is simpler than for  -->
             <!-- "exercise" since we know we have a PROJECT-LIKE and  -->
-            <!-- do not need to consult @exercise-customization. -->
+            <!-- do not need to consult @pi:exercise-customization.   -->
             <xsl:choose>
                 <xsl:when test="$b-html-tabbed-tasks-project">
                     <!-- Use tabbed viewer from Runestone Components -->
@@ -4553,7 +4553,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Largely a Runestone/database operation referencing -->
 <!-- existing questions supplied by the manifest,       -->
 <!-- so we go straight to an HTML version               -->
-<xsl:template match="*[@exercise-interactive = 'select']" mode="exercise-components">
+<xsl:template match="*[@pi:exercise-interactive = 'select']" mode="exercise-components">
     <xsl:apply-templates select="." mode="runestone-to-interactive"/>
 </xsl:template>
 
@@ -4569,17 +4569,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "runestone-to-interactive" templates will combine a   -->
 <!-- "regular" PreTeXt statement together with some additional -->
 <!-- interactive material to make a hybrid "statement"         -->
-<xsl:template match="*[(@exercise-interactive = 'truefalse') or
-                       (@exercise-interactive = 'multiplechoice') or
-                       (@exercise-interactive = 'parson') or
-                       (@exercise-interactive = 'parson-horizontal') or
-                       (@exercise-interactive = 'cardsort') or
-                       (@exercise-interactive = 'matching') or
-                       (@exercise-interactive = 'clickablearea') or
-                       (@exercise-interactive = 'fillin-basic') or
-                       (@exercise-interactive = 'coding') or
-                       (@exercise-interactive = 'dual') or
-                       (@exercise-interactive = 'shortanswer')]" mode="exercise-components">
+<xsl:template match="*[(@pi:exercise-interactive = 'truefalse') or
+                       (@pi:exercise-interactive = 'multiplechoice') or
+                       (@pi:exercise-interactive = 'parson') or
+                       (@pi:exercise-interactive = 'parson-horizontal') or
+                       (@pi:exercise-interactive = 'cardsort') or
+                       (@pi:exercise-interactive = 'matching') or
+                       (@pi:exercise-interactive = 'clickablearea') or
+                       (@pi:exercise-interactive = 'fillin-basic') or
+                       (@pi:exercise-interactive = 'coding') or
+                       (@pi:exercise-interactive = 'dual') or
+                       (@pi:exercise-interactive = 'shortanswer')]" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="heading-level"/>
@@ -4603,7 +4603,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Dynamic fillin is broken out separately because the test for -->
 <!-- correctness as well as feedback is dynamically chosen.       -->
-<xsl:template match="*[@exercise-interactive = 'fillin']" mode="exercise-components">
+<xsl:template match="*[@pi:exercise-interactive = 'fillin']" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="heading-level"/>
@@ -6088,7 +6088,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utility templates to translate PTX              -->
 <!-- enumeration style to HTML list-style-type       -->
 <xsl:template match="ol|ol-marker" mode="html-list-class">
-    <xsl:variable name="mbx-format-code" select="./@format-code" />
+    <xsl:variable name="mbx-format-code" select="./@pi:format-code" />
     <xsl:choose>
         <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
@@ -6129,7 +6129,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="mbx-format-code">
         <xsl:choose>
             <xsl:when test="self::ol">
-                <xsl:value-of select="./@format-code" />
+                <xsl:value-of select="./@pi:format-code" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="format-code" />
@@ -6181,7 +6181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each >
 </xsl:template>
 
-<xsl:template match="ol[not(@marker) and @format-code = 'a' and @ordered-list-level = '1']" mode="ol-marker-class">
+<xsl:template match="ol[not(@marker) and @pi:format-code = 'a' and @pi:ordered-list-level = '1']" mode="ol-marker-class">
     <xsl:text>lower-alpha-level-1</xsl:text>
 </xsl:template>
 
@@ -6189,10 +6189,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol[@marker]" mode="ol-markers">
     <xsl:element name="ol-marker">
-        <xsl:copy-of select="@format-code"/>
+        <xsl:copy-of select="@pi:format-code"/>
         <xsl:copy-of select="@marker"/>
-        <xsl:copy-of select="@marker-prefix"/>
-        <xsl:copy-of select="@marker-suffix"/>
+        <xsl:copy-of select="@pi:marker-prefix"/>
+        <xsl:copy-of select="@pi:marker-suffix"/>
         <xsl:attribute name="classname">
             <xsl:text>ol-marker-</xsl:text>
             <xsl:value-of select="position()" />
@@ -6206,11 +6206,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>ol.</xsl:text>
     <xsl:value-of select="./@classname"/>
     <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
-    <xsl:value-of select="./@marker-prefix" />
+    <xsl:value-of select="./@pi:marker-prefix" />
     <xsl:text>&quot;counter(list-item,</xsl:text>
     <xsl:apply-templates select="." mode="html-list-class" />
     <xsl:text>)&quot;</xsl:text>
-    <xsl:value-of select="./@marker-suffix" />
+    <xsl:value-of select="./@pi:marker-suffix" />
     <xsl:text> &quot;; }&#xa;</xsl:text>
 </xsl:template>
 
@@ -6748,7 +6748,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="latex-image">
                 <xsl:apply-templates select="$image-svg-xml/svg:svg/*" mode="svg-unique-ids">
                     <xsl:with-param name="svg-unique-id">
-                        <xsl:value-of select="@unique-id"/>
+                        <xsl:value-of select="@pi:unique-id"/>
                     </xsl:with-param>
                 </xsl:apply-templates>
             </xsl:when>
@@ -6803,7 +6803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Utility template so "aria-describedby" values are consistent -->
 <xsl:template match="image|interactive[@platform|@desmos|@calcplot3d|@circuitjs|@iframe]" mode="describedby-id">
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>-description</xsl:text>
 </xsl:template>
 
@@ -8590,9 +8590,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The @id attribute of an HTML element is critical.      -->
-<!-- We supply the "visible-id".                            -->
+<!-- We supply the "unique-id".                             -->
 <xsl:template match="*" mode="html-id">
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
 </xsl:template>
 
 <!-- And a convenience template to make an id attribute.  -->
@@ -8613,9 +8613,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is banned in Javascript, so we make a "no-dash" version,       -->
 <!-- by replacing a hyphen by a double-underscore.                  -->
 <!-- NB: This runs some non-zero probability of breaking uniqueness -->
-<xsl:template match="*" mode="visible-id-no-dash">
+<xsl:template match="*" mode="unique-id-no-dash">
     <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="." mode="unique-id" />
     </xsl:variable>
     <xsl:value-of select="str:replace($the-id, '-', '__')" />
 </xsl:template>
@@ -8885,7 +8885,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
 <xsl:template match="fillin[not(parent::m or parent::mrow)]">
     <xsl:choose>
-        <xsl:when test="ancestor::statement/../@exercise-interactive='fillin'">
+        <xsl:when test="ancestor::statement/../@pi:exercise-interactive='fillin'">
             <xsl:apply-imports />
         </xsl:when>
         <xsl:otherwise>
@@ -9874,7 +9874,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We want to recognize an "interactive" authored  -->
      <!-- in an "exercise" (or similar) which originated -->
      <!-- from a "dual" dynamic/static exercise.         -->
-    <xsl:variable name="b-in-dual-exercise" select="ancestor::*[@exercise-interactive = 'dual']"/>
+    <xsl:variable name="b-in-dual-exercise" select="ancestor::*[@pi:exercise-interactive = 'dual']"/>
     <xsl:choose>
         <!-- A DoenetML interactive lives two lives.  Plain 'ol PreTeXt,  -->
         <!-- supported by a Doenet CDN for its interactivity.  But when   -->
@@ -10329,11 +10329,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </canvas>
 </xsl:template>
 
-<!-- HTML Code -->
-<!-- Simply create deep-copy of HTML elements -->
-<!-- TODO: should this be a div, with width and height? -->
+<!-- HTML Code                                                  -->
+<!-- Simply create deep-copy of HTML elements                   -->
+<!-- TODO: should this be a div, with width and height?         -->
+<!-- Authored HTML goes into the page verbatim.  But a plain    -->
+<!-- "xsl:copy-of" materializes every namespace in scope at the -->
+<!-- source location as a declaration on the copy: the source   -->
+<!-- file's own declarations (such as XInclude) and any         -->
+<!-- namespace employed by the assembly machinery.  So instead  -->
+<!-- we rebuild each element, which carries along only the      -->
+<!-- namespaces actually in use.                                -->
 <xsl:template match="slate[@surface = 'html']">
-    <xsl:copy-of select="*" />
+    <xsl:apply-templates select="*" mode="copy-authored-html"/>
+</xsl:template>
+
+<!-- Attributes in the internal namespace are the assembly's     -->
+<!-- identification stamps, not the author's work, so they stay  -->
+<!-- out of the copy.                                            -->
+<xsl:template match="*" mode="copy-authored-html">
+    <xsl:element name="{name()}" namespace="{namespace-uri()}">
+        <xsl:copy-of select="@*[namespace-uri(.) != 'http://pretextbook.org/2020/pretext/internal']"/>
+        <xsl:apply-templates select="node()" mode="copy-authored-html"/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="text()|comment()|processing-instruction()" mode="copy-authored-html">
+    <xsl:copy/>
 </xsl:template>
 
 <!-- Similar to the "div" surface, but with class information -->
@@ -10397,7 +10418,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ensure identifier does not lead with a digit, so "ggb_". -->
     <xsl:variable name="applet-name">
         <xsl:text>ggb_</xsl:text>
-        <xsl:apply-templates select="." mode="visible-id-no-dash" />
+        <xsl:apply-templates select="." mode="unique-id-no-dash" />
     </xsl:variable>
     <!-- And a Javascript identifier for the parameters -->
     <xsl:variable name="applet-parameters">
@@ -10417,7 +10438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- And an HTML unique identifier -->
     <xsl:variable name="applet-container">
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="." mode="unique-id" />
         <xsl:text>-container</xsl:text>
     </xsl:variable>
     <!-- Javascript API for loading GeoGebra                               -->
@@ -10597,7 +10618,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
   <!-- the div that jsxgraph will take over -->
   <xsl:element name="div">
       <xsl:attribute name="id">
-          <xsl:apply-templates select="." mode="visible-id" />
+          <xsl:apply-templates select="." mode="unique-id" />
       </xsl:attribute>
       <xsl:attribute name="class">
           <xsl:text>jxgbox</xsl:text>
@@ -10613,7 +10634,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </xsl:attribute>
               <!-- Put the board in the appropriate container. -->
               <xsl:attribute name="container">
-                  <xsl:apply-templates select="." mode="visible-id" />
+                  <xsl:apply-templates select="." mode="unique-id" />
               </xsl:attribute>
               <xsl:if test="@boundingbox">
                   <xsl:attribute name="boundingbox">
@@ -10643,7 +10664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </xsl:attribute>
               <xsl:text>function parseJessie(code) {&#xa;</xsl:text>
               <xsl:text>  let board = JXG.JSXGraph.initBoard('</xsl:text>
-              <xsl:apply-templates select="." mode="visible-id" />
+              <xsl:apply-templates select="." mode="unique-id" />
               <xsl:text>', {</xsl:text>
               <xsl:if test="@boundingbox">
                   <xsl:text>boundingbox:[</xsl:text>
@@ -10911,7 +10932,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="interactive" mode="get-resize-behavior">
-    <xsl:variable name="platform" select="@interactive-platform"/>
+    <xsl:variable name="platform" select="@pi:interactive-platform"/>
     <xsl:choose>
         <xsl:when test="@resize-behavior != ''">
             <xsl:value-of select="@resize-behavior"/>
@@ -11011,7 +11032,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="visible-id" />
+            <xsl:apply-templates select="." mode="unique-id" />
         </xsl:attribute>
         <xsl:attribute name="class">
             <xsl:text>jxgbox</xsl:text>
@@ -11119,10 +11140,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (or PROJECT-LIKE).  So in this case (only) we place    -->
     <!-- an id value on the  div.exercise-wrapper that is       -->
     <!-- derived from the parent.  Otherwise, we use the        -->
-    <!-- parent @assembly-id with a "-ww-inner" suffix.         -->
+    <!-- parent @pi:assembly-id with a "-ww-inner" suffix.      -->
     <!-- The suffix ensures the inner wrapper's DOM id is       -->
     <!-- distinct from the enclosing "exercise" article's       -->
-    <!-- id (which also holds the @assembly-id value).          -->
+    <!-- id (which also holds the @pi:assembly-id value).       -->
     <!-- Without the suffix, JavaScript (handleWW) would        -->
     <!-- look up the inner id with getElementById and find      -->
     <!-- the outer "exercise" article instead.                  -->
@@ -11133,7 +11154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>-ww-rs</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="concat(@assembly-id, '-ww-inner')"/>
+                <xsl:value-of select="concat(@pi:assembly-id, '-ww-inner')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -11281,7 +11302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build the iframe -->
     <!-- mimicking Mike Gage's blog post -->
-    <iframe name="{concat(@assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
+    <iframe name="{concat(@pi:assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
@@ -11665,7 +11686,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <xsl:variable name="filename">
         <!-- do not use "containing-filename" may be different -->
-        <xsl:apply-templates select="." mode="visible-id" />
+        <xsl:apply-templates select="." mode="unique-id" />
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
@@ -12985,7 +13006,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <!-- copy id of this li for use in customization pass -->
             <xsl:attribute name="uid">
-                <xsl:value-of select="@unique-id"/>
+                <xsl:value-of select="@pi:unique-id"/>
             </xsl:attribute>
             <div class="toc-title-box">
                 <a href="{$the-url}" class="internal">
@@ -13019,7 +13040,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
     <!-- copy id of this li for use in customization pass, will remove there -->
     <xsl:attribute name="uid">
-        <xsl:value-of select="@unique-id"/>
+        <xsl:value-of select="@pi:unique-id"/>
     </xsl:attribute>
     <div class="toc-title-box">
         <a href="{$the-url}" class="internal">
@@ -13047,7 +13068,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="toc-contents" select="exsl:node-set($toc-contents-rtf)"/>
 
     <!-- get the unique id of the current page -->
-    <xsl:variable name="uid" select="@unique-id"/>
+    <xsl:variable name="uid" select="@pi:unique-id"/>
     <!-- use that to find the ToC node for that page -->
     <xsl:variable name="this-page-node" select="$toc-contents//*[@uid = $uid]"/>
     <!-- ancestor list will allow us to identify when we are in the path to the page -->

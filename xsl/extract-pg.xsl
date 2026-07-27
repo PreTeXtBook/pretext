@@ -40,7 +40,7 @@
 <!-- data for how PG should be processed. This tree will be used by        -->
 <!-- pretext.py in conjuction with some form of renderer (webwork2, local  -->
 <!-- PG, or the standalone renderer) to write, for each webwork exercise,  -->
-<!-- a file of representations of that problem (named by @assembly-id).    -->
+<!-- a file of representations of that problem (named by @pi:assembly-id). -->
 
 <!-- The top of the ephemeral XML tree has some global attributes.         -->
 
@@ -60,7 +60,7 @@
 
 <!-- The pretext/pretext script (-c webwork) uses all this to write, for   -->
 <!-- each webwork exercise, an XML file of representations of that problem -->
-<!-- (named by @assembly-id). The script must be re-run whenever the       -->
+<!-- (named by @pi:assembly-id). The script must be re-run whenever the    -->
 <!-- author source for a webwork exercise, a .pg file, or some             -->
 <!-- configuration changes.                                                -->
 
@@ -175,7 +175,7 @@
 
 <xsl:template match="webwork[@source|statement|task|text()]" mode="extraction">
     <xsl:variable name="problem">
-        <xsl:value-of select="../@assembly-id"/>
+        <xsl:value-of select="../@pi:assembly-id"/>
     </xsl:variable>
     <problem>
         <xsl:attribute name="id">
@@ -192,10 +192,13 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
-        <!-- 1b. if this problem is a copy, record what it was copied from         -->
-        <xsl:if test="@copied-from">
+        <!-- 1b. if this problem is a copy, record what it was copied from.        -->
+        <!-- The source is the tree stamp, in the internal namespace; the copy is  -->
+        <!-- a plain attribute, since this file is an interchange format read by   -->
+        <!-- the Python routines, which know it as "copied-from".                  -->
+        <xsl:if test="@pi:copied-from">
             <xsl:attribute name="copied-from">
-                <xsl:value-of select="id(@copied-from)/../@assembly-id"/>
+                <xsl:value-of select="id(@pi:copied-from)/../@pi:assembly-id"/>
             </xsl:attribute>
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->

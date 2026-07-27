@@ -5,10 +5,11 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl date str"
+    extension-element-prefixes="pi exsl date str"
 >
 
 <xsl:variable name="b-include-postContent" select="true()"/>
@@ -18,12 +19,12 @@
 <!-- ==================================================== -->
 
 <!-- Convert fillin tag to an input element on the page -->
-<xsl:template match="exercise[@exercise-interactive='fillin']//fillin
-                     | project[@exercise-interactive='fillin']//fillin
-                     | activity[@exercise-interactive='fillin']//fillin
-                     | exploration[@exercise-interactive='fillin']//fillin
-                     | investigation[@exercise-interactive='fillin']//fillin
-                     | task[@exercise-interactive='fillin']//fillin">
+<xsl:template match="exercise[@pi:exercise-interactive='fillin']//fillin
+                     | project[@pi:exercise-interactive='fillin']//fillin
+                     | activity[@pi:exercise-interactive='fillin']//fillin
+                     | exploration[@pi:exercise-interactive='fillin']//fillin
+                     | investigation[@pi:exercise-interactive='fillin']//fillin
+                     | task[@pi:exercise-interactive='fillin']//fillin">
     <xsl:param name="b-human-readable" />
     <xsl:variable name="parent-id">
         <xsl:apply-templates select="ancestor::exercise" mode="html-id" />
@@ -61,12 +62,12 @@
 <!-- The HTML will contain this JSON and Runestone extracts it -->
 <!-- and inserts it into the HTML page via JS.                 -->
 <!-- ========================================================= -->
-<xsl:template match="exercise[@exercise-interactive='fillin']
-                     | project[@exercise-interactive='fillin']
-                     | activity[@exercise-interactive='fillin']
-                     | exploration[@exercise-interactive='fillin']
-                     | investigation[@exercise-interactive='fillin']
-                     | task[@exercise-interactive='fillin']" mode="runestone-to-interactive">
+<xsl:template match="exercise[@pi:exercise-interactive='fillin']
+                     | project[@pi:exercise-interactive='fillin']
+                     | activity[@pi:exercise-interactive='fillin']
+                     | exploration[@pi:exercise-interactive='fillin']
+                     | investigation[@pi:exercise-interactive='fillin']
+                     | task[@pi:exercise-interactive='fillin']" mode="runestone-to-interactive">
     <xsl:variable name="b-is-dynamic" select="boolean(./setup)"/>
     <div class="ptx-runestone-container">
         <div class="runestone">

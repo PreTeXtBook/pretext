@@ -295,7 +295,7 @@
 <!-- and they are going into their own files.  So it seems the    -->
 <!-- right thing to do, while making minimal changes elsewhere.   -->
 <xsl:template match="chapter/conclusion|chapter/outcomes[preceding-sibling::section]" mode="containing-filename">
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>.xhtml</xsl:text>
 </xsl:template>
 
@@ -1564,7 +1564,7 @@
 
 <!-- Pluck SVGs from the file full of them, with matching IDs -->
 <xsl:template match="m|md[mrow]">
-    <!-- NB: math-representation file writes with "visible-id" -->
+    <!-- NB: math-representation file writes with "unique-id" -->
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>

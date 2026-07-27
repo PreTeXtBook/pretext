@@ -155,6 +155,11 @@
 </xsl:template>
 
 <!-- For copied problems move to the problem that was copied -->
+<!-- NB: this @copied-from is a plain attribute, not a "pi"  -->
+<!-- namespace stamp: it arrives via the representations     -->
+<!-- file, an interchange format written by the Python       -->
+<!-- routines, and is promoted onto "webwork" elements when  -->
+<!-- the representations merge into the tree.                -->
 <xsl:template match="webwork[@copied-from]" mode="relative-filename">
     <xsl:variable name="copied-from" select="@copied-from"/>
     <xsl:apply-templates select="$document-root//webwork[@xml:id=$copied-from]" mode="relative-filename"/>
@@ -370,7 +375,7 @@
         </xsl:text><xsl:choose><xsl:when test="$document-root//frontmatter/colophon/website"><xsl:text>
         TEXT(MODES(
             TeX =>"\noindent This assignment contains exercises from </xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text> of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>.",
-            HTML=>"This assignment contains exercises from ".htmlLink(qq!</xsl:text><xsl:apply-templates select="$document-root//frontmatter/colophon/website/url/@href" /><xsl:text>/</xsl:text><xsl:apply-templates select="." mode="visible-id" /><xsl:text>.html!,"</xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text>")." of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>."
+            HTML=>"This assignment contains exercises from ".htmlLink(qq!</xsl:text><xsl:apply-templates select="$document-root//frontmatter/colophon/website/url/@href" /><xsl:text>/</xsl:text><xsl:apply-templates select="." mode="unique-id" /><xsl:text>.html!,"</xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text>")." of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>."
         ));
         </xsl:text></xsl:when><xsl:otherwise><xsl:text>
         TEXT("This assignment contains exercises from </xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text> of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>.");

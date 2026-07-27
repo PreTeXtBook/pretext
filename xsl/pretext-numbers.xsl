@@ -49,22 +49,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######################## -->
 
 <!-- Given a block element, produce its structure number prefix      -->
-<!-- by reading the pre-computed @block-struct from the nearest      -->
+<!-- by reading the pre-computed @pi:block-struct from the nearest   -->
 <!-- ancestor division, then truncating or padding to the configured -->
-<!-- number of levels.  The @block-struct chain already excludes     -->
+<!-- number of levels.  The @pi:block-struct chain already excludes  -->
 <!-- parts (they are squelched in assembly), so when parts are       -->
 <!-- present the caller's $levels (which counts from "part" depth)   -->
 <!-- must be reduced by one to match the shorter chain.              -->
 <xsl:template name="block-structure-number">
     <xsl:param name="levels"/>
     <xsl:variable name="raw-struct"
-        select="ancestor::*[@block-struct][1]/@block-struct"/>
-    <!-- The @block-struct chain already excludes parts, so when  -->
-    <!-- parts are present the $levels count (which includes the -->
-    <!-- part depth) must be reduced by one.  But only for       -->
-    <!-- blocks actually inside a part or backmatter — blocks    -->
-    <!-- in frontmatter have no part ancestor and should use     -->
-    <!-- $levels unmodified.                                     -->
+        select="ancestor::*[@pi:block-struct][1]/@pi:block-struct"/>
+    <!-- The @pi:block-struct chain already excludes parts, so when -->
+    <!-- parts are present the $levels count (which includes the    -->
+    <!-- part depth) must be reduced by one.  But only for          -->
+    <!-- blocks actually inside a part or backmatter — blocks       -->
+    <!-- in frontmatter have no part ancestor and should use        -->
+    <!-- $levels unmodified.                                        -->
     <xsl:variable name="effective-levels">
         <xsl:choose>
             <xsl:when test="not($parts = 'absent') and ancestor::*[self::part or self::backmatter]">
@@ -150,12 +150,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="old-level">
         <xsl:apply-templates select="." mode="level"/>
     </xsl:variable>
-    <xsl:if test="not($old-level = @level)">
+    <xsl:if test="not($old-level = @pi:level)">
         <xsl:message>PTX:BUG:  development bug, new level does not match old level for "<xsl:value-of select="local-name(.)"/>"</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <!-- actual value here, above is debugging -->
-    <xsl:value-of select="@level"/>
+    <xsl:value-of select="@pi:level"/>
 </xsl:template>
 
 <xsl:template match="*" mode="new-level">
@@ -217,12 +217,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="backmatter/references" mode="serial-number" />
 <xsl:template match="backmatter/glossary" mode="serial-number" />
 
-<!-- Serial number of a block: read the @serial that the assembly -->
-<!-- "serial-stamp" pass stamped.  That pass decides, from the    -->
-<!-- publication "@distinct" switches, whether a group shares the -->
-<!-- overall blocks counter or runs on its own distinct counter.  -->
+<!-- Serial number of a block: read the @pi:serial that the assembly -->
+<!-- "serial-stamp" pass stamped.  That pass decides, from the       -->
+<!-- publication "@distinct" switches, whether a group shares the    -->
+<!-- overall blocks counter or runs on its own distinct counter.     -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|&OPENPROBLEM-LIKE;|exercise" mode="serial-number">
-    <xsl:value-of select="@serial"/>
+    <xsl:value-of select="@pi:serial"/>
 </xsl:template>
 
 <!-- Proofs may be numbered (for cross-reference knowls) -->
@@ -231,12 +231,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Serial Numbers: Equations                                          -->
-<!-- The assembly equation-serial pass stamps @serial on every numbered -->
-<!-- <mrow>; here we just read it back.  Scope rules and pad/truncate   -->
-<!-- behaviour live in the assembly pass.                               -->
+<!-- Serial Numbers: Equations                                             -->
+<!-- The assembly equation-serial pass stamps @pi:serial on every numbered -->
+<!-- <mrow>; here we just read it back.  Scope rules and pad/truncate      -->
+<!-- behaviour live in the assembly pass.                                  -->
 <xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-number">
-    <xsl:value-of select="@serial"/>
+    <xsl:value-of select="@pi:serial"/>
 </xsl:template>
 
 <!-- An authored bare "md" may carry an @xml:id, and so may be cross-referenced. -->
@@ -323,12 +323,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Serial Numbers: Footnotes -->
-<!-- We determine the appropriate subtree to count within -->
-<!-- given the document root and the configured depth     -->
-<!-- @serial is stamped on every fn during assembly; here we read it back. -->
+<!-- Serial Numbers: Footnotes                                                -->
+<!-- We determine the appropriate subtree to count within                     -->
+<!-- given the document root and the configured depth                         -->
+<!-- @pi:serial is stamped on every fn during assembly; here we read it back. -->
 <xsl:template match="fn" mode="serial-number">
-    <xsl:value-of select="@serial"/>
+    <xsl:value-of select="@pi:serial"/>
 </xsl:template>
 
 <!-- Serial Numbers: Subfigures, Subtables, Sublisting-->
@@ -363,7 +363,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- First, the number of a list item within its own ordered list.  This -->
 <!-- trades on the PTX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
-    <xsl:variable name="code" select="../@format-code" />
+    <xsl:variable name="code" select="../@pi:format-code" />
     <xsl:number format="{$code}" />
 </xsl:template>
 
@@ -525,10 +525,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number count="stage" from="static" />
 </xsl:template>
 
-<!-- OPENPROBLEM-LIKE are blocks: their serial number is read from @serial,  -->
-<!-- alongside the other block families above.  Their structure number      -->
-<!-- follows the figure/project pattern: the open-problem level when they    -->
-<!-- run on a distinct counter, otherwise the shared "blocks" level.         -->
+<!-- OPENPROBLEM-LIKE are blocks: their serial number is read from @pi:serial, -->
+<!-- alongside the other block families above.  Their structure number         -->
+<!-- follows the figure/project pattern: the open-problem level when they      -->
+<!-- run on a distinct counter, otherwise the shared "blocks" level.           -->
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="structure-number">
     <xsl:variable name="openproblem-levels">
         <xsl:choose>
@@ -583,7 +583,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions" mode="structure-number">
-    <xsl:value-of select="@struct"/>
+    <xsl:value-of select="@pi:struct"/>
 </xsl:template>
 
 <!-- Structure Numbers: Specialized Divisions -->
@@ -598,7 +598,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$is-numbered = 'true'">
-            <xsl:value-of select="@struct"/>
+            <xsl:value-of select="@pi:struct"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="parent::*" mode="structure-number" />
@@ -863,7 +863,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$relative-level > $numbering-maxlevel" />
         <xsl:otherwise>
-            <xsl:value-of select="@serial"/>
+            <xsl:value-of select="@pi:serial"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -881,7 +881,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <xsl:when test="$relative-level > $numbering-maxlevel" />
                 <xsl:otherwise>
-                    <xsl:value-of select="@serial"/>
+                    <xsl:value-of select="@pi:serial"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>

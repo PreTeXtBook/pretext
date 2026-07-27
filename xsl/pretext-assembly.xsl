@@ -112,89 +112,89 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content, which may generally just produce a lot of text.      -->
 <!-- Which is no good, say as an attribute value.                  -->
 
-<!-- This stylesheet runs as a chain of full-tree passes.  Each    -->
-<!-- pass is a modal traversal that copies the previous tree and   -->
-<!-- alters only the elements it cares about, yielding a new       -->
-<!-- tree.  The new tree is built as a result tree fragment and    -->
-<!-- immediately turned into a real node-set with                  -->
-<!-- exsl:node-set(), so the next pass can walk it.  The chain is  -->
-<!-- wired in "The Assembly Pipeline" section as a sequence of     -->
-<!-- variables ($version, $assembly, ...); that sequence, not the  -->
-<!-- order of templates in this file, is the authoritative pass    -->
-<!-- order.                                                        -->
-<!--                                                               -->
-<!-- Most passes are the identity for almost every node.  The      -->
-<!-- low-priority identity templates that make each pass a         -->
-<!-- faithful copy by default are collected in "Source Assembly    -->
-<!-- Infrastructure"; the section for a pass then overrides them   -->
-<!-- (one section per pass, below, in execution order) for just    -->
-<!-- the handful of elements that pass transforms.                 -->
-<!--                                                               -->
-<!-- The passes, in the order they run (the identifier in          -->
-<!-- parentheses is the node-set each one produces):               -->
-<!--                                                               -->
-<!--    1. private-solutions   ($private-solutions)                -->
-<!--         Splice in an external file of instructor solutions.   -->
-<!--         Identity, and skipped, when no such file is named.    -->
-<!--    2. version             ($version)                          -->
-<!--         Resolve "version" and "custom" elements, *removing*   -->
-<!--         excluded content.  Result should be valid PreTeXt.    -->
-<!--    3. id-attribute        ($original-labeled)  @original-id   -->
-<!--         First of three identification stamps (see below).     -->
-<!--    4. assembly            ($assembly)                         -->
-<!--         *Add* computed content: the assembled bibliography,   -->
-<!--         copied WeBWorK problems, matching/card-sort pieces.   -->
-<!--    5. exercise            ($exercise)                         -->
-<!--         Tag each exercise with its kind (inline, divisional,  -->
-<!--         worksheet, ...) for later decisions.                  -->
-<!--    6. id-attribute        ($assembly-label)    @assembly-id   -->
-<!--         Second stamp: the early id passes coordinate on.      -->
-<!--    7. dynamic-substitution ($dynamic)                         -->
-<!--         Splice computed answers into fill-in-the-blank and    -->
-<!--         kindred dynamic exercises.  Skipped when none exist.  -->
-<!--    8. representations     ($representations)                  -->
-<!--         Render interactive exercises as static or dynamic     -->
-<!--         equivalents, per $exercise-style.                     -->
-<!--    9. repair              ($repair)                           -->
-<!--         *Change* source: fix deprecated constructions and     -->
-<!--         apply conveniences, for a canonical tree.             -->
-<!--   10. enrichment          ($enrichment)                       -->
-<!--         *Add* generated material, e.g. a GeoGebra preview     -->
-<!--         or visual text for a bare url.                        -->
-<!--   11. labels              ($labels)                           -->
-<!--         Promote an authored @xml:id to @label and record      -->
-<!--         localization support.  See "Labels".                  -->
-<!--   12. id-attribute        ($identification)    @unique-id     -->
-<!--         Third stamp: the final id conversions consume.        -->
-<!--   13. augment             ($augment)                          -->
-<!--         Annotate divisions with @level (and ordered lists     -->
-<!--         with @ordered-list-level), as numbering needs.        -->
-<!--   14. serial-stamp        ($serial-stamp)                     -->
-<!--         Stamp @serial on every numbered item.  See            -->
-<!--         "Numbering".                                          -->
-<!--                                                               -->
-<!-- After the chain, $root, $docinfo, $document-root and          -->
-<!-- $bibinfo are derived from the final tree for the conversion   -->
-<!-- stylesheets that import this one.                             -->
-<!--                                                               -->
-<!-- Three identifiers, one mechanism.  The id-attribute pass      -->
-<!-- runs three times (passes 3, 6, 12), each stamping one         -->
-<!-- attribute by a deterministic depth-first walk: @original-id   -->
-<!-- (authored structure), @assembly-id (early, so passes can      -->
-<!-- coordinate before filenames exist) and @unique-id (the final  -->
-<!-- identifier).  The three agree element-for-element only        -->
-<!-- because no intervening pass reorders siblings; that           -->
-<!-- invariant is stated in full at "Structural Contract for       -->
-<!-- Identification Passes" and checked, when assembly.debug is    -->
-<!-- set, by the id-coherence-check.                               -->
-<!--                                                               -->
-<!-- Two-pass extraction and substitution.  A few constructs       -->
-<!-- (fill-in-the-blank answers, WeBWorK, MOM, ...) need an        -->
-<!-- external round trip: this stylesheet first emits a tree that  -->
-<!-- drives the trip, then on a later run reads the results back.  -->
-<!-- The $b-extracting-* switches that select that mode are        -->
-<!-- described at "Controlling Two-Pass Extraction and             -->
-<!-- Substitution".                                                -->
+<!-- This stylesheet runs as a chain of full-tree passes.  Each      -->
+<!-- pass is a modal traversal that copies the previous tree and     -->
+<!-- alters only the elements it cares about, yielding a new         -->
+<!-- tree.  The new tree is built as a result tree fragment and      -->
+<!-- immediately turned into a real node-set with                    -->
+<!-- exsl:node-set(), so the next pass can walk it.  The chain is    -->
+<!-- wired in "The Assembly Pipeline" section as a sequence of       -->
+<!-- variables ($version, $assembly, ...); that sequence, not the    -->
+<!-- order of templates in this file, is the authoritative pass      -->
+<!-- order.                                                          -->
+<!--                                                                 -->
+<!-- Most passes are the identity for almost every node.  The        -->
+<!-- low-priority identity templates that make each pass a           -->
+<!-- faithful copy by default are collected in "Source Assembly      -->
+<!-- Infrastructure"; the section for a pass then overrides them     -->
+<!-- (one section per pass, below, in execution order) for just      -->
+<!-- the handful of elements that pass transforms.                   -->
+<!--                                                                 -->
+<!-- The passes, in the order they run (the identifier in            -->
+<!-- parentheses is the node-set each one produces):                 -->
+<!--                                                                 -->
+<!--    1. private-solutions   ($private-solutions)                  -->
+<!--         Splice in an external file of instructor solutions.     -->
+<!--         Identity, and skipped, when no such file is named.      -->
+<!--    2. version             ($version)                            -->
+<!--         Resolve "version" and "custom" elements, *removing*     -->
+<!--         excluded content.  Result should be valid PreTeXt.      -->
+<!--    3. id-attribute        ($original-labeled)  @pi:original-id  -->
+<!--         First of three identification stamps (see below).       -->
+<!--    4. assembly            ($assembly)                           -->
+<!--         *Add* computed content: the assembled bibliography,     -->
+<!--         copied WeBWorK problems, matching/card-sort pieces.     -->
+<!--    5. exercise            ($exercise)                           -->
+<!--         Tag each exercise with its kind (inline, divisional,    -->
+<!--         worksheet, ...) for later decisions.                    -->
+<!--    6. id-attribute        ($assembly-label)    @pi:assembly-id  -->
+<!--         Second stamp: the early id passes coordinate on.        -->
+<!--    7. dynamic-substitution ($dynamic)                           -->
+<!--         Splice computed answers into fill-in-the-blank and      -->
+<!--         kindred dynamic exercises.  Skipped when none exist.    -->
+<!--    8. representations     ($representations)                    -->
+<!--         Render interactive exercises as static or dynamic       -->
+<!--         equivalents, per $exercise-style.                       -->
+<!--    9. repair              ($repair)                             -->
+<!--         *Change* source: fix deprecated constructions and       -->
+<!--         apply conveniences, for a canonical tree.               -->
+<!--   10. enrichment          ($enrichment)                         -->
+<!--         *Add* generated material, e.g. a GeoGebra preview       -->
+<!--         or visual text for a bare url.                          -->
+<!--   11. labels              ($labels)                             -->
+<!--         Promote an authored @xml:id to @label and record        -->
+<!--         localization support.  See "Labels".                    -->
+<!--   12. id-attribute        ($identification)    @pi:unique-id    -->
+<!--         Third stamp: the final id conversions consume.          -->
+<!--   13. augment             ($augment)                            -->
+<!--         Annotate divisions with @pi:level (and ordered lists    -->
+<!--         with @pi:ordered-list-level), as numbering needs.       -->
+<!--   14. serial-stamp        ($serial-stamp)                       -->
+<!--         Stamp @pi:serial on every numbered item.  See           -->
+<!--         "Numbering".                                            -->
+<!--                                                                 -->
+<!-- After the chain, $root, $docinfo, $document-root and            -->
+<!-- $bibinfo are derived from the final tree for the conversion     -->
+<!-- stylesheets that import this one.                               -->
+<!--                                                                 -->
+<!-- Three identifiers, one mechanism.  The id-attribute pass        -->
+<!-- runs three times (passes 3, 6, 12), each stamping one           -->
+<!-- attribute by a deterministic depth-first walk: @pi:original-id  -->
+<!-- (authored structure), @pi:assembly-id (early, so passes can     -->
+<!-- coordinate before filenames exist) and @pi:unique-id (the final -->
+<!-- identifier).  The three agree element-for-element only          -->
+<!-- because no intervening pass reorders siblings; that             -->
+<!-- invariant is stated in full at "Structural Contract for         -->
+<!-- Identification Passes" and checked, when assembly.debug is      -->
+<!-- set, by the id-coherence-check.                                 -->
+<!--                                                                 -->
+<!-- Two-pass extraction and substitution.  A few constructs         -->
+<!-- (fill-in-the-blank answers, WeBWorK, MOM, ...) need an          -->
+<!-- external round trip: this stylesheet first emits a tree that    -->
+<!-- drives the trip, then on a later run reads the results back.    -->
+<!-- The $b-extracting-* switches that select that mode are          -->
+<!-- described at "Controlling Two-Pass Extraction and               -->
+<!-- Substitution".                                                  -->
 
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
@@ -204,7 +204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dependencies.  In almost every rational use, the "-common"     -->
 <!-- stylesheet is imported by a conversion, so it is easy to       -->
 <!-- miss these dependencies.  An example in 2022-06 was the use    -->
-<!-- of the "visible-id" template to coordinate construction and    -->
+<!-- of the "unique-id" template to coordinate construction and     -->
 <!-- insertion of WeBWorK problems with an intervening trip to a    -->
 <!-- WW server.  The "pretext-enhanced-source.xsl" stylesheet is    -->
 <!-- one place where "-common" does not creep in.  Use of a modal   -->
@@ -232,7 +232,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sometimes we only want to stop at an intermediate tree.  For example, -->
 <!-- we may convert only to a "version" (valid PreTeXt) via resolution of  -->
 <!-- version support and customizations, or stop at the tree that has      -->
-<!-- @assembly-id attributes but has not yet loaded exercise components.   -->
+<!-- @pi:assembly-id attributes but has not yet loaded exercise components.-->
 <!-- We control this with internal variables, not documented as author or  -->
 <!-- publisher features.  When we stop this early, "exercise-style" is     -->
 <!-- irrelevant.                                                           -->
@@ -241,9 +241,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="assembly.version-only" select="''"/>
 <xsl:param name="assembly.assembly-id-only" select="''"/>
 
-<!-- Set to 'yes' to enable diagnostic checks, such as   -->
-<!-- verifying coherence of @assembly-id and @unique-id. -->
-<!-- Not documented as an author or publisher feature.   -->
+<!-- Set to 'yes' to enable diagnostic checks, such as         -->
+<!-- verifying coherence of @pi:assembly-id and @pi:unique-id. -->
+<!-- Not documented as an author or publisher feature.         -->
 <xsl:param name="assembly.debug" select="''"/>
 <xsl:variable name="b-assembly-debug" select="$assembly.debug = 'yes'"/>
 
@@ -349,16 +349,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
 
-<!-- When building duplicates, we have occasion -->
-<!-- to inspect the original in various places  -->
-<!-- We do not know if we have "fixed" the      -->
-<!-- deprecated overall element, so need to     -->
-<!-- try both.  For example, this variable is   -->
-<!-- employed by the warnings and deprecation   -->
-<!-- messages that result from analyzing an     -->
-<!-- author's source, since we may "repair"     -->
-<!-- some of them later, so we have to catch    -->
-<!-- them early. -->
+<!-- When building duplicates, we have occasion                     -->
+<!-- to inspect the original in various places                      -->
+<!-- We do not know if we have "fixed" the                          -->
+<!-- deprecated overall element, so need to                         -->
+<!-- try both.  For example, this variable is                       -->
+<!-- employed by the warnings and deprecation                       -->
+<!-- messages that result from analyzing an                         -->
+<!-- author's source, since we may "repair"                         -->
+<!-- some of them later, so we have to catch                        -->
+<!-- them early.                                                    -->
+<!-- The author's source, as parsed.  Kept for duties genuinely     -->
+<!-- about the source document: resolving relative filenames via    -->
+<!-- the second argument of the document() function, and            -->
+<!-- warnings/views that inspect exactly what the author wrote      -->
+<!-- ("generic-warnings", view-source).  Checks and lookups against -->
+<!-- the document's *content* belong on the assembled tree, $root,  -->
+<!-- where private solutions are merged and versions are resolved.  -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
 <!-- These modal templates duplicate the source exactly for each -->
@@ -551,6 +558,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-version-only"/>
         <!-- build on "version" to add original id's -->
         <xsl:otherwise>
+            <!-- Duplicate identifiers are an authoring error, so the checks -->
+            <!-- run on the version tree: private solutions are merged by    -->
+            <!-- now (authored content in companion files), while version    -->
+            <!-- resolution has already discarded the deliberate duplicates  -->
+            <!-- that multi-version source may carry.  Later phases          -->
+            <!-- manufacture copies of authored content (e.g. static         -->
+            <!-- representations of interactive exercises), and those must   -->
+            <!-- not be blamed on the author.                                -->
+            <xsl:call-template name="duplication-check-xmlid">
+                <xsl:with-param name="nodes" select="$version//*[@xml:id]"/>
+                <xsl:with-param name="purpose" select="'authored'"/>
+            </xsl:call-template>
+            <xsl:call-template name="duplication-check-label">
+                <xsl:with-param name="nodes" select="$version//*[@label]"/>
+                <xsl:with-param name="purpose" select="'authored'"/>
+            </xsl:call-template>
+            <!-- checks are done, now add the "original-id" identification -->
             <xsl:apply-templates select="$version" mode="id-attribute">
                 <!-- $parent-id defaults to 'root' in template -->
                 <xsl:with-param name="attr-name" select="'original-id'"/>
@@ -586,16 +610,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly-label" select="exsl:node-set($assembly-label-rtf)"/>
 
-<!-- Make static substitutions for dynamic exercises.  This runs AFTER  -->
-<!-- the @assembly-id stamp because the substitution round trip keys on  -->
-<!-- @assembly-id: extract-dynamic.xsl writes it as the exercise_id, and -->
-<!-- the lookup below reads it.  @assembly-id is the early identifier    -->
-<!-- both ends can compute consistently (the authored @label would only  -->
-<!-- match for labeled exercises, missing unlabeled ones and tasks).     -->
-<!-- The pass only acts on the elements enumerated in this presence      -->
-<!-- test (see the "dynamic-substitution" templates); without any of     -->
-<!-- them it is the identity, so we skip the full-tree copy.  NB: a      -->
-<!-- new template in the mode must be reflected in this test.            -->
+<!-- Make static substitutions for dynamic exercises.  This runs AFTER      -->
+<!-- the @pi:assembly-id stamp because the substitution round trip keys on  -->
+<!-- @pi:assembly-id: extract-dynamic.xsl writes it as the exercise_id, and -->
+<!-- the lookup below reads it.  @pi:assembly-id is the early identifier    -->
+<!-- both ends can compute consistently (the authored @label would only     -->
+<!-- match for labeled exercises, missing unlabeled ones and tasks).        -->
+<!-- The pass only acts on the elements enumerated in this presence         -->
+<!-- test (see the "dynamic-substitution" templates); without any of        -->
+<!-- them it is the identity, so we skip the full-tree copy.  NB: a         -->
+<!-- new template in the mode must be reflected in this test.               -->
 <xsl:variable name="b-has-dynamic-markup" select="boolean($assembly-label//setup | $assembly-label//numcmp | $assembly-label//strcmp | $assembly-label//jscmp | $assembly-label//mathcmp | $assembly-label//logic | $assembly-label//fillin[@ansobj] | $assembly-label//eval[@obj])"/>
 <xsl:variable name="dynamic-rtf">
     <xsl:if test="$b-has-dynamic-markup">
@@ -606,7 +630,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="representations-rtf">
     <xsl:choose>
-        <!-- short-circuit to stop after adding @assembly-id -->
+        <!-- short-circuit to stop after adding @pi:assembly-id -->
         <xsl:when test="$b-assembly-id-only"/>
         <xsl:otherwise>
             <xsl:apply-templates select="$dynamic" mode="representations"/>
@@ -635,18 +659,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- out of the "identification" pass, so is located here.  Perhaps -->
 <!-- it can/should move earlier, maybe not.                         -->
 <xsl:variable name="labels-rtf">
-    <!-- pass in all elements with authored @xml:id -->
-    <!-- to look for authored duplicates            -->
-    <xsl:call-template name="duplication-check-xmlid">
-        <xsl:with-param name="nodes" select="$enrichment//*[@xml:id]"/>
-        <xsl:with-param name="purpose" select="'authored'"/>
-    </xsl:call-template>
-    <!-- pass in all elements with authored @label -->
-    <!-- to look for authored duplicates           -->
-    <xsl:call-template name="duplication-check-label">
-        <xsl:with-param name="nodes" select="$enrichment//*[@label]"/>
-        <xsl:with-param name="purpose" select="'authored'"/>
-    </xsl:call-template>
     <xsl:apply-templates select="$enrichment" mode="labels"/>
 </xsl:variable>
 <xsl:variable name="labels" select="exsl:node-set($labels-rtf)"/>
@@ -899,10 +911,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This section is the id-attribute pass.  One mechanism (the    -->
 <!-- "id-attribute" templates below) is applied three times by     -->
-<!-- the chain (passes 3, 6 and 12), stamping @original-id,        -->
-<!-- @assembly-id and @unique-id in turn.  The "labels" pass       -->
+<!-- the chain (passes 3, 6 and 12), stamping @pi:original-id,     -->
+<!-- @pi:assembly-id and @pi:unique-id in turn.  The "labels" pass -->
 <!-- runs between the second and third of these (see "Labels"),    -->
-<!-- and the @label values it creates are what the @unique-id      -->
+<!-- and the @label values it creates are what the @pi:unique-id   -->
 <!-- stamp reads here.  The contract that follows is what lets     -->
 <!-- the three stampings agree element-for-element.                -->
 
@@ -920,11 +932,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template is applied three times, producing three   -->
 <!-- attributes on every element:                            -->
 <!--                                                         -->
-<!--   @original-id                                          -->
+<!--   @pi:original-id                                       -->
 <!--       after "version", before any additions             -->
-<!--   @assembly-id                                          -->
+<!--   @pi:assembly-id                                       -->
 <!--       after "exercise", before "representations"        -->
-<!--   @unique-id                                            -->
+<!--   @pi:unique-id                                         -->
 <!--       after "labels", the final structural form         -->
 <!--                                                         -->
 <!-- The architecture relies on one critical invariant:      -->
@@ -977,7 +989,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <!-- duplicate all attributes -->
         <xsl:apply-templates select="@*" mode="id-attribute"/>
-        <!-- * Strategy is much like @original-id but maybe needs as much care            -->
+        <!-- * Strategy is much like @pi:original-id but maybe needs as much care         -->
         <!-- * Element counts are used to reflect document tree structure                 -->
         <!-- * Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2).    -->
         <!-- * Separators are therefore hyphens                                           -->
@@ -1009,7 +1021,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:attribute name="{$attr-name}">
+        <xsl:attribute name="pi:{$attr-name}">
             <xsl:value-of select="$new-id"/>
         </xsl:attribute>
         <!-- recurse -->
@@ -1028,23 +1040,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Diagnostic: verify @assembly-id equals @unique-id for  -->
-<!-- every element that carries both.  A mismatch indicates -->
-<!-- a structural change between the two ID-stamping passes -->
-<!-- that violates the identification contract documented   -->
-<!-- near the top of this stylesheet.  Gated by the         -->
-<!-- assembly.debug parameter; does nothing when off.       -->
+<!-- Diagnostic: verify @pi:assembly-id equals @pi:unique-id for -->
+<!-- every element that carries both.  A mismatch indicates      -->
+<!-- a structural change between the two ID-stamping passes      -->
+<!-- that violates the identification contract documented        -->
+<!-- near the top of this stylesheet.  Gated by the              -->
+<!-- assembly.debug parameter; does nothing when off.            -->
 
 <xsl:template match="node()|@*" mode="id-coherence-check">
     <xsl:if test="$b-assembly-debug">
-        <xsl:for-each select=".//*[@assembly-id and @unique-id and not(@assembly-id = @unique-id)]">
+        <xsl:for-each select=".//*[@pi:assembly-id and @pi:unique-id and not(@pi:assembly-id = @pi:unique-id)]">
             <xsl:message>
-                <xsl:text>PTX:DEBUG:  @assembly-id / @unique-id mismatch on &lt;</xsl:text>
+                <xsl:text>PTX:DEBUG:  @pi:assembly-id / @pi:unique-id mismatch on &lt;</xsl:text>
                 <xsl:value-of select="local-name()"/>
                 <xsl:text>&gt;: assembly-id="</xsl:text>
-                <xsl:value-of select="@assembly-id"/>
+                <xsl:value-of select="@pi:assembly-id"/>
                 <xsl:text>" unique-id="</xsl:text>
-                <xsl:value-of select="@unique-id"/>
+                <xsl:value-of select="@pi:unique-id"/>
                 <xsl:text>"</xsl:text>
             </xsl:message>
         </xsl:for-each>
@@ -1290,7 +1302,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- a candidate for replacement  -->
         <xsl:otherwise>
             <xsl:variable name="the-xref-id">
-                <xsl:value-of select="@original-id"/>
+                <xsl:value-of select="@pi:original-id"/>
             </xsl:variable>
             <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
             <xsl:copy-of select="$matched-citation"/>
@@ -1370,7 +1382,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- no error means to proceed with copy -->
         <xsl:when test="$error-message-for-copy = ''">
             <xsl:copy>
-                <xsl:attribute name="copied-from">
+                <xsl:attribute name="pi:copied-from">
                     <xsl:value-of select="@copy"/>
                 </xsl:attribute>
                 <!-- Duplicate attributes, but remove the @copy attribute -->
@@ -1493,7 +1505,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
         <xsl:if test="not(self::task)">
-            <xsl:attribute name="exercise-customization">
+            <xsl:attribute name="pi:exercise-customization">
                 <xsl:choose>
                     <xsl:when test="&PROJECT-FILTER;">
                         <xsl:text>project</xsl:text>
@@ -1523,7 +1535,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These "interactivity types" are meant for Runestone-enabled  -->
 <!-- interactive exercises and projects                           -->
 <xsl:template match="*" mode="exercise-interactive-attribute">
-    <xsl:attribute name="exercise-interactive">
+    <xsl:attribute name="pi:exercise-interactive">
         <xsl:choose>
             <!-- This is defensive, so statement//var below does not -->
             <!-- match for WeBWorK.                                  -->
@@ -1543,14 +1555,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="stack">
                 <xsl:text>stack</xsl:text>
             </xsl:when>
-            <!-- @runestone was once used to signify a Runestone exercise given  -->
-            <!-- just by raw HTML.  The  @exercise-interactive  value uses was,  -->
-            <!-- appropriately, "htmlhack".  We now replace it with an old-time, -->
-            <!-- static PreTeXt style (dumb) exercise.  Changing the value here  -->
-            <!-- is a quick way to nullify activity in later passes.   See below -->
-            <!-- where the "repair" phase removes the  @runestone  attribute and -->
-            <!-- creates the (dumb) exercise, in order to understand more fully. -->
-            <!-- The commit with these changes might also help. (2025-11-04)     -->
+            <!-- @runestone was once used to signify a Runestone exercise given    -->
+            <!-- just by raw HTML.  The  @pi:exercise-interactive  value uses was, -->
+            <!-- appropriately, "htmlhack".  We now replace it with an old-time,   -->
+            <!-- static PreTeXt style (dumb) exercise.  Changing the value here    -->
+            <!-- is a quick way to nullify activity in later passes.   See below   -->
+            <!-- where the "repair" phase removes the  @runestone  attribute and   -->
+            <!-- creates the (dumb) exercise, in order to understand more fully.   -->
+            <!-- The commit with these changes might also help. (2025-11-04)       -->
             <xsl:when test="@runestone">
                 <xsl:text>static</xsl:text>
             </xsl:when>
@@ -1716,9 +1728,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <!-- The substitutions file is keyed by @assembly-id, which     -->
-            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
-            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
+            <!-- The substitutions file is keyed by @pi:assembly-id, which      -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass      -->
+            <!-- runs after the @pi:assembly-id stamp, so the owner carries it. -->
             <xsl:variable name="owner" select="ancestor::statement/.."/>
             <xsl:variable name="parent-id">
                 <xsl:apply-templates select="$owner" mode="assembly-id"/>
@@ -1747,9 +1759,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <!-- The substitutions file is keyed by @assembly-id, which     -->
-            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
-            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
+            <!-- The substitutions file is keyed by @pi:assembly-id, which      -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass      -->
+            <!-- runs after the @pi:assembly-id stamp, so the owner carries it. -->
             <xsl:variable name="owner" select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/.."/>
             <xsl:variable name="parent-id">
                <xsl:apply-templates select="$owner" mode="assembly-id"/>
@@ -1817,15 +1829,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The pattern grammar does not permit variable references, so the      -->
 <!-- list of Runestone interactivity types is a literal, fenced string    -->
 <!-- repeated for each element that can carry one.  Match exactly         -->
-<!-- whenever  @exercise-interactive  is one of the fenced values.        -->
+<!-- whenever  @pi:exercise-interactive  is one of the fenced values.     -->
 <!-- NB: also consulted in Runestone manifest creation.                   -->
 
-<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
-                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]" mode="representations">
+<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]
+                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @pi:exercise-interactive, '|'))]" mode="representations">
     <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
@@ -1835,7 +1847,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- for use naturally by most conversions -->
             <xsl:when test="$exercise-style = 'static'">
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
@@ -1852,18 +1864,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- assembling for dynamic exercises, and not hosting on Runestone, go instead  -->
 <!-- with the static version.  We have three scenarios, handled with variations. -->
 <!-- Note that these matches have been carved out from the above massive match.  -->
-<xsl:template match="exercise[(@exercise-interactive = 'select')]
-                   | project[(@exercise-interactive = 'select')]
-                   | activity[(@exercise-interactive = 'select')]
-                   | exploration[(@exercise-interactive = 'select')]
-                   | investigation[(@exercise-interactive = 'select')]
-                   | task[(@exercise-interactive = 'select')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'select')]
+                   | project[(@pi:exercise-interactive = 'select')]
+                   | activity[(@pi:exercise-interactive = 'select')]
+                   | exploration[(@pi:exercise-interactive = 'select')]
+                   | investigation[(@pi:exercise-interactive = 'select')]
+                   | task[(@pi:exercise-interactive = 'select')]" mode="representations">
     <xsl:copy>
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static')">
                 <xsl:apply-templates select="@*" mode="representations"/>
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
@@ -1873,7 +1885,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="($exercise-style = 'dynamic') and not($b-host-runestone)">
                 <xsl:apply-templates select="@*" mode="representations"/>
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
@@ -1889,18 +1901,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- dual copy (not copy-of) -->
 
-<xsl:template match="exercise[(@exercise-interactive = 'dual')]
-                   | project[(@exercise-interactive = 'dual')]
-                   | activity[(@exercise-interactive = 'dual')]
-                   | exploration[(@exercise-interactive = 'dual')]
-                   | investigation[(@exercise-interactive = 'dual')]
-                   | task[(@exercise-interactive = 'dual')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'dual')]
+                   | project[(@pi:exercise-interactive = 'dual')]
+                   | activity[(@pi:exercise-interactive = 'dual')]
+                   | exploration[(@pi:exercise-interactive = 'dual')]
+                   | investigation[(@pi:exercise-interactive = 'dual')]
+                   | task[(@pi:exercise-interactive = 'dual')]" mode="representations">
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static')">
                 <!-- make a "static" classification, over-writing a "dual" -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- copy overall title and idx, METADATA-FILTER feels too broad  -->
@@ -1917,24 +1929,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Static (non-interactive) -->
-<!-- @exercise-interactive = 'static' needs no adjustments -->
+<!-- Static (non-interactive)                                 -->
+<!-- @pi:exercise-interactive = 'static' needs no adjustments -->
 
 <!-- Mine webwork-reps for relevant application -->
 
 <!-- WeBWorK exercises retain a "webwork" child element through the    -->
 <!-- pipeline.  Here in the representations pass, we look up the       -->
 <!-- corresponding "webwork-reps" from the representations file using  -->
-<!-- the parent exercise's @assembly-id, and substitute it in place    -->
+<!-- the parent exercise's @pi:assembly-id, and substitute it in place -->
 <!-- of the "webwork" element.  We then split three ways, for PGML,    -->
 <!-- static, and dynamic (HTML) employment, via modal templates.       -->
 <!-- During extraction, the "webwork" child is left intact.            -->
 <!-- NB: including "task" though this may not be supported.            -->
-<xsl:template match="exercise[(@exercise-interactive = 'webwork')]
-                   | project[(@exercise-interactive = 'webwork')]
-                   | activity[(@exercise-interactive = 'webwork')]
-                   | exploration[(@exercise-interactive = 'webwork')]
-                   | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'webwork')]
+                   | project[(@pi:exercise-interactive = 'webwork')]
+                   | activity[(@pi:exercise-interactive = 'webwork')]
+                   | exploration[(@pi:exercise-interactive = 'webwork')]
+                   | investigation[(@pi:exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
         <!-- During extraction, pass through the exercise with its    -->
         <!-- "webwork" child intact for the extraction stylesheet     -->
@@ -1946,9 +1958,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- Load the per-exercise representation file for this    -->
-            <!-- exercise, identified by its @assembly-id.             -->
+            <!-- exercise, identified by its @pi:assembly-id.          -->
             <xsl:variable name="webwork-rep-uri"
-                select="concat($webwork-representations-dir, @assembly-id, '.xml')"/>
+                select="concat($webwork-representations-dir, @pi:assembly-id, '.xml')"/>
             <xsl:variable name="the-webwork-rep"
                 select="document($webwork-rep-uri, $original)/webwork-reps"/>
             <xsl:choose>
@@ -1960,14 +1972,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @assembly-id "<xsl:value-of select="@assembly-id"/>" will be empty.</xsl:message>
+                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>" will be empty.</xsl:message>
                 </xsl:when>
                 <!-- This should only fail if the file is missing or stale.  Repeatedly. -->
                 <xsl:when test="not($the-webwork-rep)">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
+                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- The representation file may record a server failure   -->
@@ -1977,7 +1989,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- but warn the author so the failure does not go        -->
                     <!-- unnoticed in later builds.                            -->
                     <xsl:if test="$the-webwork-rep/static/@failure">
-                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @assembly-id "<xsl:value-of select="@assembly-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
+                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
                     </xsl:if>
                     <!-- Build a temporary exercise with "webwork-reps" from the  -->
                     <!-- representations file substituted in place of "webwork".   -->
@@ -2015,7 +2027,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:when test="$exercise-style = 'static'">
                             <xsl:copy>
                                 <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
-                                <xsl:attribute name="exercise-interactive">
+                                <xsl:attribute name="pi:exercise-interactive">
                                     <xsl:text>static</xsl:text>
                                 </xsl:attribute>
                                 <xsl:apply-templates select="$exercise-with-reps/node()" mode="webwork-rep-to-static"/>
@@ -2262,11 +2274,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
 <!-- format, for any conversion to a static format to use.         -->
 <!-- NB: very similar to STACK template below                      -->
-<xsl:template match="exercise[(@exercise-interactive = 'myopenmath')]
-                   | project[(@exercise-interactive = 'myopenmath')]
-                   | activity[(@exercise-interactive = 'myopenmath')]
-                   | exploration[(@exercise-interactive = 'myopenmath')]
-                   | investigation[(@exercise-interactive = 'myopenmath')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'myopenmath')]
+                   | project[(@pi:exercise-interactive = 'myopenmath')]
+                   | activity[(@pi:exercise-interactive = 'myopenmath')]
+                   | exploration[(@pi:exercise-interactive = 'myopenmath')]
+                   | investigation[(@pi:exercise-interactive = 'myopenmath')]" mode="representations">
     <!-- duplicate the exercise/project -->
     <xsl:copy>
         <!-- and preserve attributes on the exercise/project -->
@@ -2275,7 +2287,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- locate the static representation in a file, generated independently -->
@@ -2288,7 +2300,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="myopenmath/@problem"/>
                     <xsl:text>.xml</xsl:text>
                 </xsl:variable>
-                <!-- "myopenmath" child guaranteed by @exercise-interactive value -->
+                <!-- "myopenmath" child guaranteed by @pi:exercise-interactive value -->
                 <xsl:variable name="mom-static-rep" select="document($filename, $original)/myopenmath"/>
                 <!-- duplicate metadata first -->
                 <xsl:apply-templates select="title|idx" mode="representations"/>
@@ -2322,11 +2334,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
 <!-- format, for any conversion to a static format to use.         -->
 <!-- NB: very similar to MyOpenMath template above                 -->
-<xsl:template match="exercise[(@exercise-interactive = 'stack')]
-                   | project[(@exercise-interactive = 'stack')]
-                   | activity[(@exercise-interactive = 'stack')]
-                   | exploration[(@exercise-interactive = 'stack')]
-                   | investigation[(@exercise-interactive = 'stack')]" mode="representations">
+<xsl:template match="exercise[(@pi:exercise-interactive = 'stack')]
+                   | project[(@pi:exercise-interactive = 'stack')]
+                   | activity[(@pi:exercise-interactive = 'stack')]
+                   | exploration[(@pi:exercise-interactive = 'stack')]
+                   | investigation[(@pi:exercise-interactive = 'stack')]" mode="representations">
     <!-- duplicate the exercise/project -->
     <xsl:copy>
         <!-- and preserve attributes on the exercise/project -->
@@ -2335,7 +2347,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
                 <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
+                <xsl:attribute name="pi:exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- locate the static representation in a file, generated independently -->
@@ -2416,7 +2428,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Read pre-computed URLs from sidecar file -->
             <!-- But not if doing an extraction           -->
             <xsl:variable name="url-file"
-                select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
+                select="document(concat($generated-directory-source, 'qrcode/', @pi:assembly-id, '-url.xml'), $original)"/>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <!-- copy over @xml:id, which may be in use by -->
@@ -3065,11 +3077,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- 2025-08-15: Ensure that interactives all have a @interactive-platform -->
-<!-- that identifies their basic type                                      -->
+<!-- 2025-08-15: Ensure that interactives all have a @pi:interactive-platform -->
+<!-- that identifies their basic type                                         -->
 <xsl:template match="interactive" mode="repair">
     <xsl:copy>
-        <xsl:attribute name="interactive-platform">
+        <xsl:attribute name="pi:interactive-platform">
             <xsl:choose>
                 <xsl:when test="@platform">
                     <xsl:value-of select="@platform"/>
@@ -3575,8 +3587,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- done with attributes, copy the content -->
         <xsl:apply-templates select="node()" mode="enrichment"/>
         <slate>
+            <!-- A manufactured "slate" carries a genuine @xml:id (not a  -->
+            <!-- pi: stamp): the interactive machinery locates slates by  -->
+            <!-- id, and the derived name keeps it stable and             -->
+            <!-- collision-free.                                          -->
             <xsl:attribute name="xml:id">
-                <xsl:value-of select="@assembly-id"/>
+                <xsl:value-of select="@pi:assembly-id"/>
                 <xsl:text>-ggb-slate</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="surface">
@@ -3605,11 +3621,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "labels" pass (pass 11).  It promotes an authored         -->
 <!-- @xml:id to @label and records localization support.  It is    -->
 <!-- deliberately separate from the id-attribute mechanism in      -->
-<!-- "Identification": it runs after @assembly-id is stamped and   -->
-<!-- before @unique-id, and the @label values created here are     -->
-<!-- read by that final @unique-id stamp.                          -->
+<!-- "Identification": it runs after @pi:assembly-id is stamped and-->
+<!-- before @pi:unique-id, and the @label values created here are  -->
+<!-- read by that final @pi:unique-id stamp.                       -->
 
-<!-- The "visible-id" template switched to prefer @label,         -->
+<!-- Reader-facing identification switched to prefer @label,      -->
 <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
 <!-- authored (crafted) identifier strings, we copy the old over  -->
 <!-- into the new.  This preserves identifiers in output          -->
@@ -3665,7 +3681,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- So we drop an (empty) attribute as a boolean indicator.     -->
         <!-- This form will simplify checks later at "run-time".         -->
         <xsl:if test="@label">
-            <xsl:attribute name="authored-label"/>
+            <xsl:attribute name="pi:authored-label"/>
         </xsl:if>
         <!-- A supported @xml:lang is recorded in an internal attribute -->
         <!-- for use by localizations.  The root element is the         -->
@@ -3675,7 +3691,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- alone, as it might be relevant for future features.        -->
         <xsl:choose>
             <xsl:when test="@xml:lang = $locales">
-                <xsl:attribute name="locale-lang">
+                <xsl:attribute name="pi:locale-lang">
                     <xsl:value-of select="@xml:lang"/>
                 </xsl:attribute>
             </xsl:when>
@@ -3683,7 +3699,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="xml:lang">
                     <xsl:text>en-US</xsl:text>
                 </xsl:attribute>
-                <xsl:attribute name="locale-lang">
+                <xsl:attribute name="pi:locale-lang">
                     <xsl:text>en-US</xsl:text>
                 </xsl:attribute>
             </xsl:when>
@@ -3773,43 +3789,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Languages -->
 <!-- ######### -->
 
-<!-- The variable $locales is a node-set of all the locales which have    -->
-<!-- supported localization files.  A comparison of an @xml:lang (string) -->
-<!-- with $locales (node-set) will be true if the attribute value is a    -->
-<!-- string value of one of the nodes in the node-set.  So it is easy to  -->
-<!-- create a boolean value for localization support.                     -->
-<!-- The recording of language support in @locale-lang attributes is part -->
-<!-- of the "labels" pass, since both jobs are simple attribute additions -->
-<!-- and do not deserve separate passes through the entire source.        -->
+<!-- The variable $locales is a node-set of all the locales which have       -->
+<!-- supported localization files.  A comparison of an @xml:lang (string)    -->
+<!-- with $locales (node-set) will be true if the attribute value is a       -->
+<!-- string value of one of the nodes in the node-set.  So it is easy to     -->
+<!-- create a boolean value for localization support.                        -->
+<!-- The recording of language support in @pi:locale-lang attributes is part -->
+<!-- of the "labels" pass, since both jobs are simple attribute additions    -->
+<!-- and do not deserve separate passes through the entire source.           -->
 <xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
 
 <!-- ######### -->
 <!-- Numbering -->
 <!-- ######### -->
 
-<!-- We use the "augment" pass to compute, and add, partially naïve        -->
-<!-- information about numbers of objects, to be interpreted later by      -->
-<!-- templates in the "-common" stylesheet.  By "naïve" we mean that       -->
-<!-- these routines may depend on publisher variables (e.g. specification  -->
-<!-- of roots of subtrees for serial numbers of blocks) but do not depend  -->
-<!-- on subtlties of numbering (such as the structured/unstructured        -->
-<!-- division dichotomy), which are addressed in the "-common" stylesheet. -->
-<!-- In this way, this information could be interpreted in new ways by     -->
-<!-- additional conversions.                                               -->
-<!--                                                                       -->
-<!-- The manufactured @struct attribute is the (naïve) hierarchical number -->
-<!-- of the *container* of an element, known as the "structure number"     -->
-<!-- of an element.  The @serial attribute is the computed serial number   -->
-<!-- of the element, known as the "serial number".  Typically combining    -->
-<!-- these two attributes forms teh number of an element.  As many         -->
-<!-- practical subtleties about these numbers is delayed until their       -->
-<!-- interpretation by templates in the "-common" stylesheet.              -->
+<!-- We use the "augment" pass to compute, and add, partially naïve           -->
+<!-- information about numbers of objects, to be interpreted later by         -->
+<!-- templates in the "-common" stylesheet.  By "naïve" we mean that          -->
+<!-- these routines may depend on publisher variables (e.g. specification     -->
+<!-- of roots of subtrees for serial numbers of blocks) but do not depend     -->
+<!-- on subtlties of numbering (such as the structured/unstructured           -->
+<!-- division dichotomy), which are addressed in the "-common" stylesheet.    -->
+<!-- In this way, this information could be interpreted in new ways by        -->
+<!-- additional conversions.                                                  -->
+<!--                                                                          -->
+<!-- The manufactured @pi:struct attribute is the (naïve) hierarchical number -->
+<!-- of the *container* of an element, known as the "structure number"        -->
+<!-- of an element.  The @pi:serial attribute is the computed serial number   -->
+<!-- of the element, known as the "serial number".  Typically combining       -->
+<!-- these two attributes forms teh number of an element.  As many            -->
+<!-- practical subtleties about these numbers is delayed until their          -->
+<!-- interpretation by templates in the "-common" stylesheet.                 -->
 
 <!-- For every type of division, everywhere, the "division-serial-number"   -->
 <!-- modal template will return a count of preceding peers at that level.   -->
-<!-- The @struct attribute is the structure number of the *parent*          -->
+<!-- The @pi:struct attribute is the structure number of the *parent*       -->
 <!-- (container), which seems odd here, but fits the general scheme better. -->
-<!-- The @level attribute is helpful, and trvislly to compute here.         -->
+<!-- The @pi:level attribute is helpful, and trvislly to compute here.      -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
@@ -3835,7 +3851,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- blocks inside them use the parent division's chain.  -->
             <!-- Specialized divisions are leaves of the division     -->
             <!-- tree, so this does not affect any descendant         -->
-            <!-- division's @struct.                                  -->
+            <!-- division's @pi:struct.                               -->
             <xsl:when test="&SPECIALIZED-DIVISION-FILTER;">
                 <xsl:variable name="is-numbered">
                     <xsl:apply-templates select="." mode="is-specialized-own-number"/>
@@ -3874,20 +3890,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:copy>
-        <xsl:attribute name="struct">
+        <xsl:attribute name="pi:struct">
             <xsl:value-of select="$parent-struct"/>
         </xsl:attribute>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:value-of select="$the-serial"/>
         </xsl:attribute>
-        <xsl:attribute name="level">
+        <xsl:attribute name="pi:level">
             <xsl:value-of select="$next-level"/>
         </xsl:attribute>
         <!-- Full structure chain including this division's       -->
         <!-- contribution.  Decorative specialized divisions are  -->
         <!-- transparent (pass through parent's chain).  Used by  -->
         <!-- block elements to compute their structure numbers.   -->
-        <xsl:attribute name="block-struct">
+        <xsl:attribute name="pi:block-struct">
             <xsl:value-of select="$new-struct"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -3903,7 +3919,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A level-0 numbering scheme counts continuously from the root.    -->
 <xsl:template match="book|article|slideshow|letter|memo" mode="augment">
     <xsl:copy>
-        <xsl:attribute name="level">
+        <xsl:attribute name="pi:level">
             <xsl:text>0</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -3936,7 +3952,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we only add a level (not necessary?) -->
     <!-- and just pass along structure number -->
     <xsl:copy>
-        <xsl:attribute name="level">
+        <xsl:attribute name="pi:level">
             <xsl:value-of select="$next-level"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -4023,16 +4039,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:copy>
-        <xsl:attribute name="ordered-list-level">
+        <xsl:attribute name="pi:ordered-list-level">
             <xsl:value-of select="$ordered-list-level"/>
         </xsl:attribute>
-        <xsl:attribute name="format-code">
+        <xsl:attribute name="pi:format-code">
             <xsl:value-of select="$format-code"/>
         </xsl:attribute>
-        <xsl:attribute name="marker-prefix">
+        <xsl:attribute name="pi:marker-prefix">
             <xsl:value-of select="$marker-prefix"/>
         </xsl:attribute>
-        <xsl:attribute name="marker-suffix">
+        <xsl:attribute name="pi:marker-suffix">
             <xsl:value-of select="$marker-suffix"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -4045,7 +4061,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Serial Stamp Pass     -->
 <!-- ##################### -->
 
-<!-- Stamps @serial during assembly, in one depth-first walk.  Each   -->
+<!-- Stamps @pi:serial during assembly, in one depth-first walk.  Each-->
 <!-- numbered family (equations and footnotes) is threaded as a       -->
 <!-- node-set: its items in the current counting scope, and each item -->
 <!-- is stamped with its position in that node-set.  How a scope is   -->
@@ -4066,7 +4082,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the current scope) and hands its children the "next" one, built     -->
 <!-- from the inherited node-set:                                           -->
 
-<!--     $b-open = not($nodes) and ($b-terminal or @level >= LEVEL)         -->
+<!--     $b-open = not($nodes) and ($b-terminal or @pi:level >= LEVEL)      -->
 <!--     $next   = $nodes | self::*[$b-open]//ITEMS                         -->
 
 <!-- This is three cases.  Already in a scope ($nodes non-empty): $b-open   -->
@@ -4104,13 +4120,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- children are specialized divisions is wrongly deemed terminal and   -->
     <!-- pools their blocks into one scope instead of one scope apiece.      -->
     <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface|exercises|worksheet|handout|reading-questions|references|glossary|solutions)"/>
-    <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@level &gt;= $numbering-equations))"/>
-    <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
-    <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@level &gt;= $numbering-blocks))"/>
-    <xsl:variable name="b-open-figure"      select="$b-number-figure-distinct      and not($figure-nodes)      and ($b-terminal or (@level &gt;= $numbering-figures))"/>
-    <xsl:variable name="b-open-project"     select="$b-number-project-distinct     and not($project-nodes)     and ($b-terminal or (@level &gt;= $numbering-projects))"/>
-    <xsl:variable name="b-open-exercise"    select="$b-number-exercise-distinct    and not($exercise-nodes)    and ($b-terminal or (@level &gt;= $numbering-exercises))"/>
-    <xsl:variable name="b-open-openproblem" select="$b-number-openproblem-distinct and not($openproblem-nodes) and ($b-terminal or (@level &gt;= $numbering-openproblems))"/>
+    <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@pi:level &gt;= $numbering-equations))"/>
+    <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@pi:level &gt;= $numbering-footnotes))"/>
+    <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@pi:level &gt;= $numbering-blocks))"/>
+    <xsl:variable name="b-open-figure"      select="$b-number-figure-distinct      and not($figure-nodes)      and ($b-terminal or (@pi:level &gt;= $numbering-figures))"/>
+    <xsl:variable name="b-open-project"     select="$b-number-project-distinct     and not($project-nodes)     and ($b-terminal or (@pi:level &gt;= $numbering-projects))"/>
+    <xsl:variable name="b-open-exercise"    select="$b-number-exercise-distinct    and not($exercise-nodes)    and ($b-terminal or (@pi:level &gt;= $numbering-exercises))"/>
+    <xsl:variable name="b-open-openproblem" select="$b-number-openproblem-distinct and not($openproblem-nodes) and ($b-terminal or (@pi:level &gt;= $numbering-openproblems))"/>
     <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
     <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
     <!-- The shared "blocks" pool also gathers figure-likes, projects,  -->
@@ -4178,8 +4194,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Numbered mrow.  Stamp @serial with the position within the -->
-<!-- inherited node-set.                                        -->
+<!-- Numbered mrow.  Stamp @pi:serial with the position within the -->
+<!-- inherited node-set.                                           -->
 <xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
@@ -4189,7 +4205,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$eq-nodes"/>
             </xsl:apply-templates>
@@ -4206,8 +4222,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Every fn is numbered.  Stamp @serial with the position -->
-<!-- within the inherited footnote node-set.                -->
+<!-- Every fn is numbered.  Stamp @pi:serial with the position -->
+<!-- within the inherited footnote node-set.                   -->
 <xsl:template match="fn" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
@@ -4217,7 +4233,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$fn-nodes"/>
             </xsl:apply-templates>
@@ -4236,7 +4252,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Block stamps: serial from the group's distinct counter, else the shared "blocks". -->
 <!-- A subnumbered side-by-side panel is not a "top" figure, so it falls to the         -->
-<!-- catch-all (no @serial) and earns a letter downstream instead.                      -->
+<!-- catch-all (no @pi:serial) and earns a letter downstream instead.                   -->
 
 <!-- Fundamental blocks always share the "blocks" counter. -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="serial-stamp">
@@ -4248,7 +4264,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$blocks-nodes"/>
             </xsl:apply-templates>
@@ -4275,7 +4291,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$project-nodes[$b-number-project-distinct] | $blocks-nodes[not($b-number-project-distinct)]"/>
             </xsl:apply-templates>
@@ -4302,7 +4318,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$figure-nodes[$b-number-figure-distinct] | $blocks-nodes[not($b-number-figure-distinct)]"/>
             </xsl:apply-templates>
@@ -4329,7 +4345,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$exercise-nodes[$b-number-exercise-distinct] | $blocks-nodes[not($b-number-exercise-distinct)]"/>
             </xsl:apply-templates>
@@ -4356,7 +4372,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$openproblem-nodes[$b-number-openproblem-distinct] | $blocks-nodes[not($b-number-openproblem-distinct)]"/>
             </xsl:apply-templates>
@@ -4564,8 +4580,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########### -->
 
 <!-- Some maniulations of source require stable identification *before*     -->
-<!-- we assign @unique-id values for general use in the very late           -->
-<!-- "identification" phase.  This is a role for the "@assembly-id" which   -->
+<!-- we assign @pi:unique-id values for general use in the very late        -->
+<!-- "identification" phase.  This is a role for the "@pi:assembly-id" which-->
 <!-- is formed after the author's source has been versioned, customized,    -->
 <!-- repaired, but before replacements. It should suffice for "big" objects -->
 <!-- which are unlikely to change much (other than going away in a version) -->
@@ -4590,16 +4606,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
 
-<!-- NB: we believe the @assembly-id will equal the @unique-id    -->
-<!-- ("visible-id" template) for objects at the level of blocks,  -->
-<!-- and certainly for any object replaced by a different static  -->
-<!-- representation.  But for generated objects, e.g. QR codes,   -->
-<!-- it would be best if the generation process used the          -->
-<!-- "assembly-id" template for guranteed consistency.  This *is* -->
-<!-- being done for "datafile" but is technical debt otherwise.   -->
+<!-- NB: we believe the @pi:assembly-id will equal the @pi:unique-id -->
+<!-- ("unique-id" template) for objects at the level of blocks,      -->
+<!-- and certainly for any object replaced by a different static     -->
+<!-- representation.  But for generated objects, e.g. QR codes,      -->
+<!-- it would be best if the generation process used the             -->
+<!-- "assembly-id" template for guranteed consistency.  This *is*    -->
+<!-- being done for "datafile" but is technical debt otherwise.      -->
 
-<!-- [Ed. this once prefaced the "visible-id-early" template, a weak  -->
-<!-- forerunner of the "assembly-id" template.  But the commentary    -->
+<!-- [Ed. this once prefaced an early, weak forerunner of the         -->
+<!-- "assembly-id" template.  But the commentary                      -->
 <!-- is still good, so we have preserved it here.]                    -->
 <!-- This template produces identification that happens early in the  -->
 <!-- passes this stylesheet executes.  The idea is that some elements -->
@@ -4612,44 +4628,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
 
-<xsl:template match="audio|video|interactive|image" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
-                   | project[@exercise-interactive='fillin' and setup]
-                   | activity[@exercise-interactive='fillin' and setup]
-                   | exploration[@exercise-interactive='fillin' and setup]
-                   | investigation[@exercise-interactive='fillin' and setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-<xsl:template match="exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | project[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-<!-- A fill-in "task" is the "owner" that the dynamic-substitution lookup -->
-<!-- keys on, so it too must report its "@assembly-id" (matching the      -->
-<!-- "exercise//task" extraction in extract-dynamic.xsl).                 -->
-<xsl:template match="exercise//task[@exercise-interactive='fillin' and setup]
-                   | project//task[@exercise-interactive='fillin' and setup]
-                   | activity//task[@exercise-interactive='fillin' and setup]
-                   | exploration//task[@exercise-interactive='fillin' and setup]
-                   | investigation//task[@exercise-interactive='fillin' and setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="datafile" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="exercise/stack" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
+<!-- Every element carrying an "@pi:assembly-id" stamp reports it  -->
+<!-- through this single template.  The match list is deliberately -->
+<!-- explicit — media and images, data files, STACK problems, and  -->
+<!-- the fill-in dynamic-substitution owners (the exercise-like    -->
+<!-- elements, or a "task" they contain, whichever holds "setup")  -->
+<!-- — so the BUG fallback below can catch an unexpected           -->
+<!-- application.                                                  -->
+<xsl:template match="audio|video|interactive|image
+                   | datafile
+                   | exercise/stack
+                   | exercise[@pi:exercise-interactive='fillin' and setup]
+                   | project[@pi:exercise-interactive='fillin' and setup]
+                   | activity[@pi:exercise-interactive='fillin' and setup]
+                   | exploration[@pi:exercise-interactive='fillin' and setup]
+                   | investigation[@pi:exercise-interactive='fillin' and setup]
+                   | exercise[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | project[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | activity[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | exploration[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | investigation[.//task and .//task/@pi:exercise-interactive='fillin' and .//setup]
+                   | exercise//task[@pi:exercise-interactive='fillin' and setup]
+                   | project//task[@pi:exercise-interactive='fillin' and setup]
+                   | activity//task[@pi:exercise-interactive='fillin' and setup]
+                   | exploration//task[@pi:exercise-interactive='fillin' and setup]
+                   | investigation//task[@pi:exercise-interactive='fillin' and setup]" mode="assembly-id">
+    <xsl:value-of select="@pi:assembly-id"/>
 </xsl:template>
 
 <xsl:template match="*" mode="assembly-id">
@@ -4657,9 +4661,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect--</xsl:text>
         <xsl:value-of select="name()"/>
         <xsl:text>.</xsl:text>
-        <xsl:value-of select="@exercise-interactive"/>
+        <xsl:value-of select="@pi:exercise-interactive"/>
         <xsl:text>.</xsl:text>
-        <xsl:value-of select="@assembly-id"/>
+        <xsl:value-of select="@pi:assembly-id"/>
     </xsl:message>
     <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
 </xsl:template>
@@ -4703,28 +4707,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
-                   | project[@exercise-interactive='fillin' and setup]
-                   | activity[@exercise-interactive='fillin' and setup]
-                   | exploration[@exercise-interactive='fillin' and setup]
-                   | investigation[@exercise-interactive='fillin' and setup]"
+<xsl:template match="exercise[@pi:exercise-interactive='fillin' and setup]
+                   | project[@pi:exercise-interactive='fillin' and setup]
+                   | activity[@pi:exercise-interactive='fillin' and setup]
+                   | exploration[@pi:exercise-interactive='fillin' and setup]
+                   | investigation[@pi:exercise-interactive='fillin' and setup]"
                    mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | project[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | activity[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | exploration[.//task/@exercise-interactive='fillin' and .//task/setup]
-                   | investigation[.//task/@exercise-interactive='fillin' and .//task/setup]"
+<xsl:template match="exercise[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | project[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | activity[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | exploration[.//task/@pi:exercise-interactive='fillin' and .//task/setup]
+                   | investigation[.//task/@pi:exercise-interactive='fillin' and .//task/setup]"
                    mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
+    <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
 
