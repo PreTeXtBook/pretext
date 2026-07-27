@@ -10692,6 +10692,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" text="global"/></p></li>
                 <li><p>A range of sections, hand-named to be plural: Sections<nbsp/><xref first="section-sage-cells" last="section-cross-referencing" text="global"/></p></li>
                 <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" text="global"/></p></li>
+                <li><p>A range with custom text, which replaces the entire range, endpoints, separator, and any brackets (compare with the previous item): <xref first="biblio-judson-AATA" last="biblio-lay-article" text="custom">a pair of consecutive references</xref></p></li>
                 <!-- <li><p>: <xref ref=""/></p></li> -->
             </ul></p>
 

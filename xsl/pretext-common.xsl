@@ -8398,32 +8398,50 @@ Book (with parts), "section" at level 3
             <!-- brackets and detail before link manufacture  -->
             <!-- Content passes with @first, not with @second -->
             <xsl:variable name="b-is-biblio-target" select="boolean($target-one/self::biblio)" />
-            <!-- Compose two text parts with an ndash, perhaps wrappped -->
+            <!-- Compose two text parts with an ndash, perhaps wrapped. -->
+            <!-- But custom text replaces the entire composition, so no -->
+            <!-- endpoint texts, no ndash, and no bibliography brackets -->
+            <!-- (matching their suppression for a single citation with -->
+            <!-- custom text).                                          -->
             <xsl:variable name="text">
                 <xsl:if test="parent::mrow">
                     <xsl:text>\text{</xsl:text>
                 </xsl:if>
-                <xsl:if test="$b-is-biblio-target">
-                    <xsl:text>[</xsl:text>
-                </xsl:if>
-                <xsl:apply-templates select="." mode="xref-text" >
-                    <xsl:with-param name="target" select="$target-one" />
-                    <xsl:with-param name="text-style" select="$text-style-one" />
-                    <!-- pass content as an RTF, test vs. empty string, use copy-of -->
-                    <xsl:with-param name="custom-text">
-                        <xsl:apply-templates/>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-                <xsl:call-template name="character">
-                    <xsl:with-param name="name" select="'ndash'"/>
-                </xsl:call-template>
-                <xsl:apply-templates select="." mode="xref-text" >
-                    <xsl:with-param name="target" select="$target-two" />
-                    <xsl:with-param name="text-style" select="$text-style-two" />
-                </xsl:apply-templates>
-                <xsl:if test="$b-is-biblio-target">
-                    <xsl:text>]</xsl:text>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$text-style-one = 'custom'">
+                        <xsl:apply-templates select="." mode="xref-text" >
+                            <xsl:with-param name="target" select="$target-one" />
+                            <xsl:with-param name="text-style" select="$text-style-one" />
+                            <!-- pass content as an RTF, test vs. empty string, use copy-of -->
+                            <xsl:with-param name="custom-text">
+                                <xsl:apply-templates/>
+                            </xsl:with-param>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$b-is-biblio-target">
+                            <xsl:text>[</xsl:text>
+                        </xsl:if>
+                        <xsl:apply-templates select="." mode="xref-text" >
+                            <xsl:with-param name="target" select="$target-one" />
+                            <xsl:with-param name="text-style" select="$text-style-one" />
+                            <!-- pass content as an RTF, test vs. empty string, use copy-of -->
+                            <xsl:with-param name="custom-text">
+                                <xsl:apply-templates/>
+                            </xsl:with-param>
+                        </xsl:apply-templates>
+                        <xsl:call-template name="character">
+                            <xsl:with-param name="name" select="'ndash'"/>
+                        </xsl:call-template>
+                        <xsl:apply-templates select="." mode="xref-text" >
+                            <xsl:with-param name="target" select="$target-two" />
+                            <xsl:with-param name="text-style" select="$text-style-two" />
+                        </xsl:apply-templates>
+                        <xsl:if test="$b-is-biblio-target">
+                            <xsl:text>]</xsl:text>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:if test="parent::mrow">
                     <xsl:text>}</xsl:text>
                 </xsl:if>
