@@ -1076,9 +1076,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $biblios in -common, and then mined for matches not   -->
 <!-- explicitly present?                                   -->
 <xsl:template match="backmatter/references[@source]" mode="assembly">
-    <!-- Grab the list, filename is relative to the -->
-    <!-- "document" holding "references" (original) -->
-    <xsl:variable name="biblios" select="document(@source, .)"/>
+    <!-- Grab the list.  The filename is relative to the authored -->
+    <!-- document, so the lookup anchors on $original: the context -->
+    <!-- node lives in a constructed tree, which has no base URI   -->
+    <xsl:variable name="biblios" select="document(@source, $original)"/>
     <!-- Copy the "references" element (could be literal, but maybe not in "text" output mode) -->
     <xsl:copy>
         <!-- @source attribute not needed in enhanced source -->
