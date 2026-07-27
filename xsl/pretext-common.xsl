@@ -3720,7 +3720,7 @@ Book (with parts), "section" at level 3
 <!-- "visible-id" getter, once a slow reader-facing construction,    -->
 <!-- became an alias of this one and was then retired.               -->
 <xsl:template match="*" mode="unique-id">
-    <xsl:value-of select="@unique-id"/>
+    <xsl:value-of select="@pi:unique-id"/>
 </xsl:template>
 
 <!-- An image described by source code, using languages Asymptote,     -->
@@ -3755,7 +3755,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="pf:prefigure" mode="image-source-basename">
     <xsl:choose>
         <!-- Determine if @label is authored or generated for backwrd compatibility -->
-        <xsl:when test="not(@authored-label)">
+        <xsl:when test="not(@pi:authored-label)">
             <xsl:apply-templates select="." mode="unique-id"/>
             <xsl:message>PTX:WARNING:  you are encouraged to place a @label attribute on every "prefigure" element.  Otherwise, associated image files will have unreliable filenames.</xsl:message>
         </xsl:when>
@@ -3779,21 +3779,21 @@ Book (with parts), "section" at level 3
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
 <xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']|interactive[@iframe]" mode="runestone-id">
-    <!-- With no @xml:id and no @label we realize the author has not given    -->
-    <!-- any thought to a (semi-)peersistent identifire for the Runestone     -->
-    <!-- database.  So we call that out as an error.  And we do not even      -->
-    <!-- attempt to fallback to an automatically generated string, which      -->
-    <!-- would be malleable over time and editing.                            -->
-    <!-- As part of backwards-compatibility, we copy old @xml:id values into  -->
-    <!-- fresh @label.  But have an internal  @authored-label attribute whose -->
-    <!-- absence alerts us to the copying, which is now not best practice.    -->
+    <!-- With no @xml:id and no @label we realize the author has not given       -->
+    <!-- any thought to a (semi-)peersistent identifire for the Runestone        -->
+    <!-- database.  So we call that out as an error.  And we do not even         -->
+    <!-- attempt to fallback to an automatically generated string, which         -->
+    <!-- would be malleable over time and editing.                               -->
+    <!-- As part of backwards-compatibility, we copy old @xml:id values into     -->
+    <!-- fresh @label.  But have an internal  @pi:authored-label attribute whose -->
+    <!-- absence alerts us to the copying, which is now not best practice.       -->
     <xsl:choose>
-         <!-- 2024-02-20: neuter thse warnings.  Somehow, it seems @authored-label -->
-         <!-- is not very reliable.  Were added in commit 29a42dc689cd772a         -->
-        <!--  -->
+         <!-- 2024-02-20: neuter thse warnings.  Somehow, it seems @pi:authored-label -->
+         <!-- is not very reliable.  Were added in commit 29a42dc689cd772a            -->
+        <!--                                                                          -->
         <xsl:when test="true()"/>
         <!--  -->
-        <xsl:when test="$b-host-runestone and not(@xml:id) and not(@authored-label)">
+        <xsl:when test="$b-host-runestone and not(@xml:id) and not(@pi:authored-label)">
             <xsl:message>
                 <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
@@ -3807,7 +3807,7 @@ Book (with parts), "section" at level 3
             </xsl:message>
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
-        <xsl:when test="$b-host-runestone and not(@authored-label)">
+        <xsl:when test="$b-host-runestone and not(@pi:authored-label)">
             <xsl:message>
                 <xsl:text>PTX:FALLBACK:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
@@ -3877,10 +3877,10 @@ Book (with parts), "section" at level 3
         <!-- If part of exercise-like, use that label, otherwise own                -->
         <!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync   -->
         <xsl:when test="parent::exercise|parent::task|parent::project|parent::activity|parent::exploration|parent::investigation">
-            <xsl:value-of select="../@unique-id"/>
+            <xsl:value-of select="../@pi:unique-id"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="@unique-id"/>
+            <xsl:value-of select="@pi:unique-id"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>.js</xsl:text>

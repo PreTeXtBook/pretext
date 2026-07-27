@@ -23,9 +23,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dynamic content. Create a standalone page for each.  -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
+    exclude-result-prefixes="pi"
     extension-element-prefixes="exsl"
 >
 
@@ -96,7 +98,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,&#xa;</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:text>  "exercise_id": "</xsl:text>
-    <!-- Key the round trip on @assembly-id, the early identifier the   -->
+    <!-- Key the round trip on @pi:assembly-id, the early identifier the-->
     <!-- substitution pass reads back.  @label only exists for labeled  -->
     <!-- exercises, so it would miss unlabeled exercises and tasks.      -->
     <xsl:apply-templates select="." mode="assembly-id" />

@@ -1399,7 +1399,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK problem representations are formed by Python routines  -->
 <!-- in the   pretext.py  module that communicates with a WeBWorK   -->
 <!-- server.  One file per exercise is written into this directory, -->
-<!-- named by the exercise's @assembly-id.  This variable is only   -->
+<!-- named by the exercise's @pi:assembly-id.  This variable is only-->
 <!-- relevant for consumption of WW representations into output.    -->
 <!-- Keep this variable silent since it may not be necessary.       -->
 <xsl:variable name="webwork-representations-dir">

@@ -112,89 +112,89 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content, which may generally just produce a lot of text.      -->
 <!-- Which is no good, say as an attribute value.                  -->
 
-<!-- This stylesheet runs as a chain of full-tree passes.  Each    -->
-<!-- pass is a modal traversal that copies the previous tree and   -->
-<!-- alters only the elements it cares about, yielding a new       -->
-<!-- tree.  The new tree is built as a result tree fragment and    -->
-<!-- immediately turned into a real node-set with                  -->
-<!-- exsl:node-set(), so the next pass can walk it.  The chain is  -->
-<!-- wired in "The Assembly Pipeline" section as a sequence of     -->
-<!-- variables ($version, $assembly, ...); that sequence, not the  -->
-<!-- order of templates in this file, is the authoritative pass    -->
-<!-- order.                                                        -->
-<!--                                                               -->
-<!-- Most passes are the identity for almost every node.  The      -->
-<!-- low-priority identity templates that make each pass a         -->
-<!-- faithful copy by default are collected in "Source Assembly    -->
-<!-- Infrastructure"; the section for a pass then overrides them   -->
-<!-- (one section per pass, below, in execution order) for just    -->
-<!-- the handful of elements that pass transforms.                 -->
-<!--                                                               -->
-<!-- The passes, in the order they run (the identifier in          -->
-<!-- parentheses is the node-set each one produces):               -->
-<!--                                                               -->
-<!--    1. private-solutions   ($private-solutions)                -->
-<!--         Splice in an external file of instructor solutions.   -->
-<!--         Identity, and skipped, when no such file is named.    -->
-<!--    2. version             ($version)                          -->
-<!--         Resolve "version" and "custom" elements, *removing*   -->
-<!--         excluded content.  Result should be valid PreTeXt.    -->
-<!--    3. id-attribute        ($original-labeled)  @original-id   -->
-<!--         First of three identification stamps (see below).     -->
-<!--    4. assembly            ($assembly)                         -->
-<!--         *Add* computed content: the assembled bibliography,   -->
-<!--         copied WeBWorK problems, matching/card-sort pieces.   -->
-<!--    5. exercise            ($exercise)                         -->
-<!--         Tag each exercise with its kind (inline, divisional,  -->
-<!--         worksheet, ...) for later decisions.                  -->
-<!--    6. id-attribute        ($assembly-label)    @assembly-id   -->
-<!--         Second stamp: the early id passes coordinate on.      -->
-<!--    7. dynamic-substitution ($dynamic)                         -->
-<!--         Splice computed answers into fill-in-the-blank and    -->
-<!--         kindred dynamic exercises.  Skipped when none exist.  -->
-<!--    8. representations     ($representations)                  -->
-<!--         Render interactive exercises as static or dynamic     -->
-<!--         equivalents, per $exercise-style.                     -->
-<!--    9. repair              ($repair)                           -->
-<!--         *Change* source: fix deprecated constructions and     -->
-<!--         apply conveniences, for a canonical tree.             -->
-<!--   10. enrichment          ($enrichment)                       -->
-<!--         *Add* generated material, e.g. a GeoGebra preview     -->
-<!--         or visual text for a bare url.                        -->
-<!--   11. labels              ($labels)                           -->
-<!--         Promote an authored @xml:id to @label and record      -->
-<!--         localization support.  See "Labels".                  -->
-<!--   12. id-attribute        ($identification)    @unique-id     -->
-<!--         Third stamp: the final id conversions consume.        -->
-<!--   13. augment             ($augment)                          -->
-<!--         Annotate divisions with @level (and ordered lists     -->
-<!--         with @ordered-list-level), as numbering needs.        -->
-<!--   14. serial-stamp        ($serial-stamp)                     -->
-<!--         Stamp @serial on every numbered item.  See            -->
-<!--         "Numbering".                                          -->
-<!--                                                               -->
-<!-- After the chain, $root, $docinfo, $document-root and          -->
-<!-- $bibinfo are derived from the final tree for the conversion   -->
-<!-- stylesheets that import this one.                             -->
-<!--                                                               -->
-<!-- Three identifiers, one mechanism.  The id-attribute pass      -->
-<!-- runs three times (passes 3, 6, 12), each stamping one         -->
-<!-- attribute by a deterministic depth-first walk: @original-id   -->
-<!-- (authored structure), @assembly-id (early, so passes can      -->
-<!-- coordinate before filenames exist) and @unique-id (the final  -->
-<!-- identifier).  The three agree element-for-element only        -->
-<!-- because no intervening pass reorders siblings; that           -->
-<!-- invariant is stated in full at "Structural Contract for       -->
-<!-- Identification Passes" and checked, when assembly.debug is    -->
-<!-- set, by the id-coherence-check.                               -->
-<!--                                                               -->
-<!-- Two-pass extraction and substitution.  A few constructs       -->
-<!-- (fill-in-the-blank answers, WeBWorK, MOM, ...) need an        -->
-<!-- external round trip: this stylesheet first emits a tree that  -->
-<!-- drives the trip, then on a later run reads the results back.  -->
-<!-- The $b-extracting-* switches that select that mode are        -->
-<!-- described at "Controlling Two-Pass Extraction and             -->
-<!-- Substitution".                                                -->
+<!-- This stylesheet runs as a chain of full-tree passes.  Each      -->
+<!-- pass is a modal traversal that copies the previous tree and     -->
+<!-- alters only the elements it cares about, yielding a new         -->
+<!-- tree.  The new tree is built as a result tree fragment and      -->
+<!-- immediately turned into a real node-set with                    -->
+<!-- exsl:node-set(), so the next pass can walk it.  The chain is    -->
+<!-- wired in "The Assembly Pipeline" section as a sequence of       -->
+<!-- variables ($version, $assembly, ...); that sequence, not the    -->
+<!-- order of templates in this file, is the authoritative pass      -->
+<!-- order.                                                          -->
+<!--                                                                 -->
+<!-- Most passes are the identity for almost every node.  The        -->
+<!-- low-priority identity templates that make each pass a           -->
+<!-- faithful copy by default are collected in "Source Assembly      -->
+<!-- Infrastructure"; the section for a pass then overrides them     -->
+<!-- (one section per pass, below, in execution order) for just      -->
+<!-- the handful of elements that pass transforms.                   -->
+<!--                                                                 -->
+<!-- The passes, in the order they run (the identifier in            -->
+<!-- parentheses is the node-set each one produces):                 -->
+<!--                                                                 -->
+<!--    1. private-solutions   ($private-solutions)                  -->
+<!--         Splice in an external file of instructor solutions.     -->
+<!--         Identity, and skipped, when no such file is named.      -->
+<!--    2. version             ($version)                            -->
+<!--         Resolve "version" and "custom" elements, *removing*     -->
+<!--         excluded content.  Result should be valid PreTeXt.      -->
+<!--    3. id-attribute        ($original-labeled)  @pi:original-id  -->
+<!--         First of three identification stamps (see below).       -->
+<!--    4. assembly            ($assembly)                           -->
+<!--         *Add* computed content: the assembled bibliography,     -->
+<!--         copied WeBWorK problems, matching/card-sort pieces.     -->
+<!--    5. exercise            ($exercise)                           -->
+<!--         Tag each exercise with its kind (inline, divisional,    -->
+<!--         worksheet, ...) for later decisions.                    -->
+<!--    6. id-attribute        ($assembly-label)    @pi:assembly-id  -->
+<!--         Second stamp: the early id passes coordinate on.        -->
+<!--    7. dynamic-substitution ($dynamic)                           -->
+<!--         Splice computed answers into fill-in-the-blank and      -->
+<!--         kindred dynamic exercises.  Skipped when none exist.    -->
+<!--    8. representations     ($representations)                    -->
+<!--         Render interactive exercises as static or dynamic       -->
+<!--         equivalents, per $exercise-style.                       -->
+<!--    9. repair              ($repair)                             -->
+<!--         *Change* source: fix deprecated constructions and       -->
+<!--         apply conveniences, for a canonical tree.               -->
+<!--   10. enrichment          ($enrichment)                         -->
+<!--         *Add* generated material, e.g. a GeoGebra preview       -->
+<!--         or visual text for a bare url.                          -->
+<!--   11. labels              ($labels)                             -->
+<!--         Promote an authored @xml:id to @label and record        -->
+<!--         localization support.  See "Labels".                    -->
+<!--   12. id-attribute        ($identification)    @pi:unique-id    -->
+<!--         Third stamp: the final id conversions consume.          -->
+<!--   13. augment             ($augment)                            -->
+<!--         Annotate divisions with @level (and ordered lists       -->
+<!--         with @ordered-list-level), as numbering needs.          -->
+<!--   14. serial-stamp        ($serial-stamp)                       -->
+<!--         Stamp @serial on every numbered item.  See              -->
+<!--         "Numbering".                                            -->
+<!--                                                                 -->
+<!-- After the chain, $root, $docinfo, $document-root and            -->
+<!-- $bibinfo are derived from the final tree for the conversion     -->
+<!-- stylesheets that import this one.                               -->
+<!--                                                                 -->
+<!-- Three identifiers, one mechanism.  The id-attribute pass        -->
+<!-- runs three times (passes 3, 6, 12), each stamping one           -->
+<!-- attribute by a deterministic depth-first walk: @pi:original-id  -->
+<!-- (authored structure), @pi:assembly-id (early, so passes can     -->
+<!-- coordinate before filenames exist) and @pi:unique-id (the final -->
+<!-- identifier).  The three agree element-for-element only          -->
+<!-- because no intervening pass reorders siblings; that             -->
+<!-- invariant is stated in full at "Structural Contract for         -->
+<!-- Identification Passes" and checked, when assembly.debug is      -->
+<!-- set, by the id-coherence-check.                                 -->
+<!--                                                                 -->
+<!-- Two-pass extraction and substitution.  A few constructs         -->
+<!-- (fill-in-the-blank answers, WeBWorK, MOM, ...) need an          -->
+<!-- external round trip: this stylesheet first emits a tree that    -->
+<!-- drives the trip, then on a later run reads the results back.    -->
+<!-- The $b-extracting-* switches that select that mode are          -->
+<!-- described at "Controlling Two-Pass Extraction and               -->
+<!-- Substitution".                                                  -->
 
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
@@ -232,7 +232,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sometimes we only want to stop at an intermediate tree.  For example, -->
 <!-- we may convert only to a "version" (valid PreTeXt) via resolution of  -->
 <!-- version support and customizations, or stop at the tree that has      -->
-<!-- @assembly-id attributes but has not yet loaded exercise components.   -->
+<!-- @pi:assembly-id attributes but has not yet loaded exercise components.-->
 <!-- We control this with internal variables, not documented as author or  -->
 <!-- publisher features.  When we stop this early, "exercise-style" is     -->
 <!-- irrelevant.                                                           -->
@@ -241,9 +241,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="assembly.version-only" select="''"/>
 <xsl:param name="assembly.assembly-id-only" select="''"/>
 
-<!-- Set to 'yes' to enable diagnostic checks, such as   -->
-<!-- verifying coherence of @assembly-id and @unique-id. -->
-<!-- Not documented as an author or publisher feature.   -->
+<!-- Set to 'yes' to enable diagnostic checks, such as         -->
+<!-- verifying coherence of @pi:assembly-id and @pi:unique-id. -->
+<!-- Not documented as an author or publisher feature.         -->
 <xsl:param name="assembly.debug" select="''"/>
 <xsl:variable name="b-assembly-debug" select="$assembly.debug = 'yes'"/>
 
@@ -610,16 +610,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly-label" select="exsl:node-set($assembly-label-rtf)"/>
 
-<!-- Make static substitutions for dynamic exercises.  This runs AFTER  -->
-<!-- the @assembly-id stamp because the substitution round trip keys on  -->
-<!-- @assembly-id: extract-dynamic.xsl writes it as the exercise_id, and -->
-<!-- the lookup below reads it.  @assembly-id is the early identifier    -->
-<!-- both ends can compute consistently (the authored @label would only  -->
-<!-- match for labeled exercises, missing unlabeled ones and tasks).     -->
-<!-- The pass only acts on the elements enumerated in this presence      -->
-<!-- test (see the "dynamic-substitution" templates); without any of     -->
-<!-- them it is the identity, so we skip the full-tree copy.  NB: a      -->
-<!-- new template in the mode must be reflected in this test.            -->
+<!-- Make static substitutions for dynamic exercises.  This runs AFTER      -->
+<!-- the @pi:assembly-id stamp because the substitution round trip keys on  -->
+<!-- @pi:assembly-id: extract-dynamic.xsl writes it as the exercise_id, and -->
+<!-- the lookup below reads it.  @pi:assembly-id is the early identifier    -->
+<!-- both ends can compute consistently (the authored @label would only     -->
+<!-- match for labeled exercises, missing unlabeled ones and tasks).        -->
+<!-- The pass only acts on the elements enumerated in this presence         -->
+<!-- test (see the "dynamic-substitution" templates); without any of        -->
+<!-- them it is the identity, so we skip the full-tree copy.  NB: a         -->
+<!-- new template in the mode must be reflected in this test.               -->
 <xsl:variable name="b-has-dynamic-markup" select="boolean($assembly-label//setup | $assembly-label//numcmp | $assembly-label//strcmp | $assembly-label//jscmp | $assembly-label//mathcmp | $assembly-label//logic | $assembly-label//fillin[@ansobj] | $assembly-label//eval[@obj])"/>
 <xsl:variable name="dynamic-rtf">
     <xsl:if test="$b-has-dynamic-markup">
@@ -630,7 +630,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="representations-rtf">
     <xsl:choose>
-        <!-- short-circuit to stop after adding @assembly-id -->
+        <!-- short-circuit to stop after adding @pi:assembly-id -->
         <xsl:when test="$b-assembly-id-only"/>
         <xsl:otherwise>
             <xsl:apply-templates select="$dynamic" mode="representations"/>
@@ -911,10 +911,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This section is the id-attribute pass.  One mechanism (the    -->
 <!-- "id-attribute" templates below) is applied three times by     -->
-<!-- the chain (passes 3, 6 and 12), stamping @original-id,        -->
-<!-- @assembly-id and @unique-id in turn.  The "labels" pass       -->
+<!-- the chain (passes 3, 6 and 12), stamping @pi:original-id,     -->
+<!-- @pi:assembly-id and @pi:unique-id in turn.  The "labels" pass -->
 <!-- runs between the second and third of these (see "Labels"),    -->
-<!-- and the @label values it creates are what the @unique-id      -->
+<!-- and the @label values it creates are what the @pi:unique-id   -->
 <!-- stamp reads here.  The contract that follows is what lets     -->
 <!-- the three stampings agree element-for-element.                -->
 
@@ -932,11 +932,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template is applied three times, producing three   -->
 <!-- attributes on every element:                            -->
 <!--                                                         -->
-<!--   @original-id                                          -->
+<!--   @pi:original-id                                       -->
 <!--       after "version", before any additions             -->
-<!--   @assembly-id                                          -->
+<!--   @pi:assembly-id                                       -->
 <!--       after "exercise", before "representations"        -->
-<!--   @unique-id                                            -->
+<!--   @pi:unique-id                                         -->
 <!--       after "labels", the final structural form         -->
 <!--                                                         -->
 <!-- The architecture relies on one critical invariant:      -->
@@ -989,7 +989,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <!-- duplicate all attributes -->
         <xsl:apply-templates select="@*" mode="id-attribute"/>
-        <!-- * Strategy is much like @original-id but maybe needs as much care            -->
+        <!-- * Strategy is much like @pi:original-id but maybe needs as much care         -->
         <!-- * Element counts are used to reflect document tree structure                 -->
         <!-- * Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2).    -->
         <!-- * Separators are therefore hyphens                                           -->
@@ -1021,7 +1021,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:attribute name="{$attr-name}">
+        <xsl:attribute name="pi:{$attr-name}">
             <xsl:value-of select="$new-id"/>
         </xsl:attribute>
         <!-- recurse -->
@@ -1040,23 +1040,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Diagnostic: verify @assembly-id equals @unique-id for  -->
-<!-- every element that carries both.  A mismatch indicates -->
-<!-- a structural change between the two ID-stamping passes -->
-<!-- that violates the identification contract documented   -->
-<!-- near the top of this stylesheet.  Gated by the         -->
-<!-- assembly.debug parameter; does nothing when off.       -->
+<!-- Diagnostic: verify @pi:assembly-id equals @pi:unique-id for -->
+<!-- every element that carries both.  A mismatch indicates      -->
+<!-- a structural change between the two ID-stamping passes      -->
+<!-- that violates the identification contract documented        -->
+<!-- near the top of this stylesheet.  Gated by the              -->
+<!-- assembly.debug parameter; does nothing when off.            -->
 
 <xsl:template match="node()|@*" mode="id-coherence-check">
     <xsl:if test="$b-assembly-debug">
-        <xsl:for-each select=".//*[@assembly-id and @unique-id and not(@assembly-id = @unique-id)]">
+        <xsl:for-each select=".//*[@pi:assembly-id and @pi:unique-id and not(@pi:assembly-id = @pi:unique-id)]">
             <xsl:message>
-                <xsl:text>PTX:DEBUG:  @assembly-id / @unique-id mismatch on &lt;</xsl:text>
+                <xsl:text>PTX:DEBUG:  @pi:assembly-id / @pi:unique-id mismatch on &lt;</xsl:text>
                 <xsl:value-of select="local-name()"/>
                 <xsl:text>&gt;: assembly-id="</xsl:text>
-                <xsl:value-of select="@assembly-id"/>
+                <xsl:value-of select="@pi:assembly-id"/>
                 <xsl:text>" unique-id="</xsl:text>
-                <xsl:value-of select="@unique-id"/>
+                <xsl:value-of select="@pi:unique-id"/>
                 <xsl:text>"</xsl:text>
             </xsl:message>
         </xsl:for-each>
@@ -1302,7 +1302,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- a candidate for replacement  -->
         <xsl:otherwise>
             <xsl:variable name="the-xref-id">
-                <xsl:value-of select="@original-id"/>
+                <xsl:value-of select="@pi:original-id"/>
             </xsl:variable>
             <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
             <xsl:copy-of select="$matched-citation"/>
@@ -1728,9 +1728,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <!-- The substitutions file is keyed by @assembly-id, which     -->
-            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
-            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
+            <!-- The substitutions file is keyed by @pi:assembly-id, which      -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass      -->
+            <!-- runs after the @pi:assembly-id stamp, so the owner carries it. -->
             <xsl:variable name="owner" select="ancestor::statement/.."/>
             <xsl:variable name="parent-id">
                 <xsl:apply-templates select="$owner" mode="assembly-id"/>
@@ -1759,9 +1759,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <!-- The substitutions file is keyed by @assembly-id, which     -->
-            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
-            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
+            <!-- The substitutions file is keyed by @pi:assembly-id, which      -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass      -->
+            <!-- runs after the @pi:assembly-id stamp, so the owner carries it. -->
             <xsl:variable name="owner" select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/.."/>
             <xsl:variable name="parent-id">
                <xsl:apply-templates select="$owner" mode="assembly-id"/>
@@ -1937,7 +1937,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK exercises retain a "webwork" child element through the    -->
 <!-- pipeline.  Here in the representations pass, we look up the       -->
 <!-- corresponding "webwork-reps" from the representations file using  -->
-<!-- the parent exercise's @assembly-id, and substitute it in place    -->
+<!-- the parent exercise's @pi:assembly-id, and substitute it in place -->
 <!-- of the "webwork" element.  We then split three ways, for PGML,    -->
 <!-- static, and dynamic (HTML) employment, via modal templates.       -->
 <!-- During extraction, the "webwork" child is left intact.            -->
@@ -1958,9 +1958,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- Load the per-exercise representation file for this    -->
-            <!-- exercise, identified by its @assembly-id.             -->
+            <!-- exercise, identified by its @pi:assembly-id.          -->
             <xsl:variable name="webwork-rep-uri"
-                select="concat($webwork-representations-dir, @assembly-id, '.xml')"/>
+                select="concat($webwork-representations-dir, @pi:assembly-id, '.xml')"/>
             <xsl:variable name="the-webwork-rep"
                 select="document($webwork-rep-uri, $original)/webwork-reps"/>
             <xsl:choose>
@@ -1972,14 +1972,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @assembly-id "<xsl:value-of select="@assembly-id"/>" will be empty.</xsl:message>
+                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>" will be empty.</xsl:message>
                 </xsl:when>
                 <!-- This should only fail if the file is missing or stale.  Repeatedly. -->
                 <xsl:when test="not($the-webwork-rep)">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
+                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- The representation file may record a server failure   -->
@@ -1989,7 +1989,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- but warn the author so the failure does not go        -->
                     <!-- unnoticed in later builds.                            -->
                     <xsl:if test="$the-webwork-rep/static/@failure">
-                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @assembly-id "<xsl:value-of select="@assembly-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
+                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
                     </xsl:if>
                     <!-- Build a temporary exercise with "webwork-reps" from the  -->
                     <!-- representations file substituted in place of "webwork".   -->
@@ -2428,7 +2428,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Read pre-computed URLs from sidecar file -->
             <!-- But not if doing an extraction           -->
             <xsl:variable name="url-file"
-                select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
+                select="document(concat($generated-directory-source, 'qrcode/', @pi:assembly-id, '-url.xml'), $original)"/>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <!-- copy over @xml:id, which may be in use by -->
@@ -3587,8 +3587,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- done with attributes, copy the content -->
         <xsl:apply-templates select="node()" mode="enrichment"/>
         <slate>
+            <!-- A manufactured "slate" carries a genuine @xml:id (not a  -->
+            <!-- pi: stamp): the interactive machinery locates slates by  -->
+            <!-- id, and the derived name keeps it stable and             -->
+            <!-- collision-free.                                          -->
             <xsl:attribute name="xml:id">
-                <xsl:value-of select="@assembly-id"/>
+                <xsl:value-of select="@pi:assembly-id"/>
                 <xsl:text>-ggb-slate</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="surface">
@@ -3617,9 +3621,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "labels" pass (pass 11).  It promotes an authored         -->
 <!-- @xml:id to @label and records localization support.  It is    -->
 <!-- deliberately separate from the id-attribute mechanism in      -->
-<!-- "Identification": it runs after @assembly-id is stamped and   -->
-<!-- before @unique-id, and the @label values created here are     -->
-<!-- read by that final @unique-id stamp.                          -->
+<!-- "Identification": it runs after @pi:assembly-id is stamped and-->
+<!-- before @pi:unique-id, and the @label values created here are  -->
+<!-- read by that final @pi:unique-id stamp.                       -->
 
 <!-- Reader-facing identification switched to prefer @label,      -->
 <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
@@ -3677,7 +3681,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- So we drop an (empty) attribute as a boolean indicator.     -->
         <!-- This form will simplify checks later at "run-time".         -->
         <xsl:if test="@label">
-            <xsl:attribute name="authored-label"/>
+            <xsl:attribute name="pi:authored-label"/>
         </xsl:if>
         <!-- A supported @xml:lang is recorded in an internal attribute -->
         <!-- for use by localizations.  The root element is the         -->
@@ -4576,8 +4580,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########### -->
 
 <!-- Some maniulations of source require stable identification *before*     -->
-<!-- we assign @unique-id values for general use in the very late           -->
-<!-- "identification" phase.  This is a role for the "@assembly-id" which   -->
+<!-- we assign @pi:unique-id values for general use in the very late        -->
+<!-- "identification" phase.  This is a role for the "@pi:assembly-id" which-->
 <!-- is formed after the author's source has been versioned, customized,    -->
 <!-- repaired, but before replacements. It should suffice for "big" objects -->
 <!-- which are unlikely to change much (other than going away in a version) -->
@@ -4602,13 +4606,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
 
-<!-- NB: we believe the @assembly-id will equal the @unique-id    -->
-<!-- ("unique-id" template) for objects at the level of blocks,   -->
-<!-- and certainly for any object replaced by a different static  -->
-<!-- representation.  But for generated objects, e.g. QR codes,   -->
-<!-- it would be best if the generation process used the          -->
-<!-- "assembly-id" template for guranteed consistency.  This *is* -->
-<!-- being done for "datafile" but is technical debt otherwise.   -->
+<!-- NB: we believe the @pi:assembly-id will equal the @pi:unique-id -->
+<!-- ("unique-id" template) for objects at the level of blocks,      -->
+<!-- and certainly for any object replaced by a different static     -->
+<!-- representation.  But for generated objects, e.g. QR codes,      -->
+<!-- it would be best if the generation process used the             -->
+<!-- "assembly-id" template for guranteed consistency.  This *is*    -->
+<!-- being done for "datafile" but is technical debt otherwise.      -->
 
 <!-- [Ed. this once prefaced an early, weak forerunner of the         -->
 <!-- "assembly-id" template.  But the commentary                      -->
@@ -4624,7 +4628,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
 
-<!-- Every element carrying an "@assembly-id" stamp reports it     -->
+<!-- Every element carrying an "@pi:assembly-id" stamp reports it  -->
 <!-- through this single template.  The match list is deliberately -->
 <!-- explicit — media and images, data files, STACK problems, and  -->
 <!-- the fill-in dynamic-substitution owners (the exercise-like    -->
@@ -4649,7 +4653,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | activity//task[@exercise-interactive='fillin' and setup]
                    | exploration//task[@exercise-interactive='fillin' and setup]
                    | investigation//task[@exercise-interactive='fillin' and setup]" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
+    <xsl:value-of select="@pi:assembly-id"/>
 </xsl:template>
 
 <xsl:template match="*" mode="assembly-id">
@@ -4659,7 +4663,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>.</xsl:text>
         <xsl:value-of select="@exercise-interactive"/>
         <xsl:text>.</xsl:text>
-        <xsl:value-of select="@assembly-id"/>
+        <xsl:value-of select="@pi:assembly-id"/>
     </xsl:message>
     <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
 </xsl:template>

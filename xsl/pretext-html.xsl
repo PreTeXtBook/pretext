@@ -6748,7 +6748,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="latex-image">
                 <xsl:apply-templates select="$image-svg-xml/svg:svg/*" mode="svg-unique-ids">
                     <xsl:with-param name="svg-unique-id">
-                        <xsl:value-of select="@unique-id"/>
+                        <xsl:value-of select="@pi:unique-id"/>
                     </xsl:with-param>
                 </xsl:apply-templates>
             </xsl:when>
@@ -10343,9 +10343,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="copy-authored-html"/>
 </xsl:template>
 
+<!-- Attributes in the internal namespace are the assembly's     -->
+<!-- identification stamps, not the author's work, so they stay  -->
+<!-- out of the copy.                                            -->
 <xsl:template match="*" mode="copy-authored-html">
     <xsl:element name="{name()}" namespace="{namespace-uri()}">
-        <xsl:copy-of select="@*"/>
+        <xsl:copy-of select="@*[namespace-uri(.) != 'http://pretextbook.org/2020/pretext/internal']"/>
         <xsl:apply-templates select="node()" mode="copy-authored-html"/>
     </xsl:element>
 </xsl:template>
@@ -11137,10 +11140,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (or PROJECT-LIKE).  So in this case (only) we place    -->
     <!-- an id value on the  div.exercise-wrapper that is       -->
     <!-- derived from the parent.  Otherwise, we use the        -->
-    <!-- parent @assembly-id with a "-ww-inner" suffix.         -->
+    <!-- parent @pi:assembly-id with a "-ww-inner" suffix.      -->
     <!-- The suffix ensures the inner wrapper's DOM id is       -->
     <!-- distinct from the enclosing "exercise" article's       -->
-    <!-- id (which also holds the @assembly-id value).          -->
+    <!-- id (which also holds the @pi:assembly-id value).       -->
     <!-- Without the suffix, JavaScript (handleWW) would        -->
     <!-- look up the inner id with getElementById and find      -->
     <!-- the outer "exercise" article instead.                  -->
@@ -11151,7 +11154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>-ww-rs</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="concat(@assembly-id, '-ww-inner')"/>
+                <xsl:value-of select="concat(@pi:assembly-id, '-ww-inner')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -11299,7 +11302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build the iframe -->
     <!-- mimicking Mike Gage's blog post -->
-    <iframe name="{concat(@assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
+    <iframe name="{concat(@pi:assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
@@ -13003,7 +13006,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <!-- copy id of this li for use in customization pass -->
             <xsl:attribute name="uid">
-                <xsl:value-of select="@unique-id"/>
+                <xsl:value-of select="@pi:unique-id"/>
             </xsl:attribute>
             <div class="toc-title-box">
                 <a href="{$the-url}" class="internal">
@@ -13037,7 +13040,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
     <!-- copy id of this li for use in customization pass, will remove there -->
     <xsl:attribute name="uid">
-        <xsl:value-of select="@unique-id"/>
+        <xsl:value-of select="@pi:unique-id"/>
     </xsl:attribute>
     <div class="toc-title-box">
         <a href="{$the-url}" class="internal">
@@ -13065,7 +13068,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="toc-contents" select="exsl:node-set($toc-contents-rtf)"/>
 
     <!-- get the unique id of the current page -->
-    <xsl:variable name="uid" select="@unique-id"/>
+    <xsl:variable name="uid" select="@pi:unique-id"/>
     <!-- use that to find the ToC node for that page -->
     <xsl:variable name="this-page-node" select="$toc-contents//*[@uid = $uid]"/>
     <!-- ancestor list will allow us to identify when we are in the path to the page -->
