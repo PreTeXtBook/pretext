@@ -1,26 +1,26 @@
-<xml>
+<xml version="1">
   <dynamic-substitution id="fillin-random-simple">
-    <eval-subst obj="myNum">7</eval-subst>
-    <eval-subst obj="mySquare">49</eval-subst>
+    <eval-subst obj="myNum"><latex>7</latex><plain>7</plain></eval-subst>
+    <eval-subst obj="mySquare"><latex>49</latex><plain>49</plain></eval-subst>
   </dynamic-substitution>
   <dynamic-substitution id="fillin-math-solve-equation">
-    <eval-subst obj="theFunction">-2 x-6</eval-subst>
-    <eval-subst obj="theAnswer">-3</eval-subst>
-    <eval-subst obj="b">-6</eval-subst>
-    <eval-subst obj="negB">6</eval-subst>
-    <eval-subst obj="m">-2</eval-subst>
+    <eval-subst obj="theFunction"><latex>-2 x-6</latex><plain>-2*x+-6</plain></eval-subst>
+    <eval-subst obj="theAnswer"><latex>-3</latex><plain>-3</plain></eval-subst>
+    <eval-subst obj="b"><latex>-6</latex><plain>-6</plain></eval-subst>
+    <eval-subst obj="negB"><latex>6</latex><plain>6</plain></eval-subst>
+    <eval-subst obj="m"><latex>-2</latex><plain>-2</plain></eval-subst>
   </dynamic-substitution>
   <dynamic-substitution id="fillin-math-find-derivatives">
-    <eval-subst obj="formula">-1 x^{5}-10</eval-subst>
-    <eval-subst obj="correctD1">-\left(5 x^{4}\right)</eval-subst>
-    <eval-subst obj="correctD2">-\left(20 x^{3}\right)</eval-subst>
-    <eval-subst obj="b">-10</eval-subst>
-    <eval-subst obj="n">5</eval-subst>
-    <eval-subst obj="nm1">4</eval-subst>
+    <eval-subst obj="formula"><latex>-1 x^{5}-10</latex><plain>-1*x^5+-10</plain></eval-subst>
+    <eval-subst obj="correctD1"><latex>-\left(5 x^{4}\right)</latex><plain>-5*x^4</plain></eval-subst>
+    <eval-subst obj="correctD2"><latex>-\left(20 x^{3}\right)</latex><plain>-20*x^3</plain></eval-subst>
+    <eval-subst obj="b"><latex>-10</latex><plain>-10</plain></eval-subst>
+    <eval-subst obj="n"><latex>5</latex><plain>5</plain></eval-subst>
+    <eval-subst obj="nm1"><latex>4</latex><plain>4</plain></eval-subst>
   </dynamic-substitution>
   <dynamic-substitution id="fillin-math-decompose-function">
-    <eval-subst obj="composition">4 \left(-x-3\right)^{3}+5</eval-subst>
-    <eval-subst obj="outerFormula">4 x^{3}+5</eval-subst>
-    <eval-subst obj="innerFormula">-x-3</eval-subst>
+    <eval-subst obj="composition"><latex>4 \left(-x-3\right)^{3}+5</latex><plain>4*(-x+-3)^3+5</plain></eval-subst>
+    <eval-subst obj="outerFormula"><latex>4 x^{3}+5</latex><plain>4*x^3+5</plain></eval-subst>
+    <eval-subst obj="innerFormula"><latex>-x-3</latex><plain>-x+-3</plain></eval-subst>
   </dynamic-substitution>
 </xml>

@@ -1,17 +1,27 @@
-<xml>
+<xml version="1">
   <dynamic-substitution id="dynamic-fitb-simple-formula">
-    <eval-subst obj="x1">-5</eval-subst>
-    <eval-subst obj="x2">-2</eval-subst>
-    <eval-subst obj="x3">2</eval-subst>
-    <eval-subst obj="y0">5</eval-subst>
-    <eval-subst obj="cubic">-\frac{1}{4} \left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst>
-    <eval-subst obj="base_cubic">\left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst>
-    <eval-subst obj="base_yint">-20</eval-subst>
-    <eval-subst obj="A">-\frac{1}{4}</eval-subst>
+    <eval-subst obj="x1"><latex>-5</latex><plain>-5</plain></eval-subst>
+    <eval-subst obj="x2"><latex>-2</latex><plain>-2</plain></eval-subst>
+    <eval-subst obj="x3"><latex>2</latex><plain>2</plain></eval-subst>
+    <eval-subst obj="y0"><latex>5</latex><plain>5</plain></eval-subst>
+    <eval-subst obj="cubic"><latex>-\frac{1}{4} \left(x+5\right) \left(x+2\right) \left(x-2\right)</latex><plain>(-1/4)*(x+5)*(x+2)*(x-2)</plain></eval-subst>
+    <eval-subst obj="base_cubic"><latex>\left(x+5\right) \left(x+2\right) \left(x-2\right)</latex><plain>(x+5)*(x+2)*(x-2)</plain></eval-subst>
+    <eval-subst obj="base_yint"><latex>-20</latex><plain>-20</plain></eval-subst>
+    <eval-subst obj="A"><latex>-\frac{1}{4}</latex><plain>-1/4</plain></eval-subst>
   </dynamic-substitution>
   <dynamic-substitution id="function-decomposition">
-    <eval-subst obj="composition">4 \left(-x-3\right)^{3}+5</eval-subst>
-    <eval-subst obj="outerFormula">4 x^{3}+5</eval-subst>
-    <eval-subst obj="innerFormula">-1 x-3</eval-subst>
+    <eval-subst obj="composition"><latex>4 \left(-x-3\right)^{3}+5</latex><plain>4*(-x+-3)^3+5</plain></eval-subst>
+    <eval-subst obj="outerFormula"><latex>4 x^{3}+5</latex><plain>4*x^3+5</plain></eval-subst>
+    <eval-subst obj="innerFormula"><latex>-1 x-3</latex><plain>-1*x+-3</plain></eval-subst>
+  </dynamic-substitution>
+  <dynamic-substitution id="find-row-echelon">
+    <eval-subst obj="baseMatrix"><latex>\begin{bmatrix}
+-5 &amp; 12 &amp; 75 \\
+-3 &amp; 7 &amp; 44 \\
+-32 &amp; 77 &amp; 481\end{bmatrix}</latex><plain>[[-5, 12, 75], [-3, 7, 44], [-32, 77, 481]]</plain></eval-subst>
+    <eval-subst obj="rrefMatrix"><latex>\begin{bmatrix}
+1 &amp; 0 &amp; -3 \\
+0 &amp; 1 &amp; 5 \\
+0 &amp; 0 &amp; 0\end{bmatrix}</latex><plain>[[1, 0, -3], [0, 1, 5], [0, 0, 0]]</plain></eval-subst>
   </dynamic-substitution>
 </xml>
