@@ -10329,11 +10329,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </canvas>
 </xsl:template>
 
-<!-- HTML Code -->
-<!-- Simply create deep-copy of HTML elements -->
-<!-- TODO: should this be a div, with width and height? -->
+<!-- HTML Code                                                  -->
+<!-- Simply create deep-copy of HTML elements                   -->
+<!-- TODO: should this be a div, with width and height?         -->
+<!-- Authored HTML goes into the page verbatim.  But a plain    -->
+<!-- "xsl:copy-of" materializes every namespace in scope at the -->
+<!-- source location as a declaration on the copy: the source   -->
+<!-- file's own declarations (such as XInclude) and any         -->
+<!-- namespace employed by the assembly machinery.  So instead  -->
+<!-- we rebuild each element, which carries along only the      -->
+<!-- namespaces actually in use.                                -->
 <xsl:template match="slate[@surface = 'html']">
-    <xsl:copy-of select="*" />
+    <xsl:apply-templates select="*" mode="copy-authored-html"/>
+</xsl:template>
+
+<xsl:template match="*" mode="copy-authored-html">
+    <xsl:element name="{name()}" namespace="{namespace-uri()}">
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates select="node()" mode="copy-authored-html"/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="text()|comment()|processing-instruction()" mode="copy-authored-html">
+    <xsl:copy/>
 </xsl:template>
 
 <!-- Similar to the "div" surface, but with class information -->
