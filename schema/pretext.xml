@@ -3609,6 +3609,7 @@
             <code>
             DocInfo =
                 element docinfo {
+                    Component?,
                     XMLLang?,
                     Configuration+
                 }

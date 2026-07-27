@@ -5230,6 +5230,9 @@
   <define name="DocInfo">
     <element name="docinfo">
       <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
         <ref name="XMLLang"/>
       </optional>
       <oneOrMore>
