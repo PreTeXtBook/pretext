@@ -551,6 +551,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-version-only"/>
         <!-- build on "version" to add original id's -->
         <xsl:otherwise>
+            <!-- Duplicate identifiers are an authoring error, so the checks -->
+            <!-- run on the version tree: private solutions are merged by    -->
+            <!-- now (authored content in companion files), while version    -->
+            <!-- resolution has already discarded the deliberate duplicates  -->
+            <!-- that multi-version source may carry.  Later phases          -->
+            <!-- manufacture copies of authored content (e.g. static         -->
+            <!-- representations of interactive exercises), and those must   -->
+            <!-- not be blamed on the author.                                -->
+            <xsl:call-template name="duplication-check-xmlid">
+                <xsl:with-param name="nodes" select="$version//*[@xml:id]"/>
+                <xsl:with-param name="purpose" select="'authored'"/>
+            </xsl:call-template>
+            <xsl:call-template name="duplication-check-label">
+                <xsl:with-param name="nodes" select="$version//*[@label]"/>
+                <xsl:with-param name="purpose" select="'authored'"/>
+            </xsl:call-template>
+            <!-- checks are done, now add the "original-id" identification -->
             <xsl:apply-templates select="$version" mode="id-attribute">
                 <!-- $parent-id defaults to 'root' in template -->
                 <xsl:with-param name="attr-name" select="'original-id'"/>
@@ -635,18 +652,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- out of the "identification" pass, so is located here.  Perhaps -->
 <!-- it can/should move earlier, maybe not.                         -->
 <xsl:variable name="labels-rtf">
-    <!-- pass in all elements with authored @xml:id -->
-    <!-- to look for authored duplicates            -->
-    <xsl:call-template name="duplication-check-xmlid">
-        <xsl:with-param name="nodes" select="$enrichment//*[@xml:id]"/>
-        <xsl:with-param name="purpose" select="'authored'"/>
-    </xsl:call-template>
-    <!-- pass in all elements with authored @label -->
-    <!-- to look for authored duplicates           -->
-    <xsl:call-template name="duplication-check-label">
-        <xsl:with-param name="nodes" select="$enrichment//*[@label]"/>
-        <xsl:with-param name="purpose" select="'authored'"/>
-    </xsl:call-template>
     <xsl:apply-templates select="$enrichment" mode="labels"/>
 </xsl:variable>
 <xsl:variable name="labels" select="exsl:node-set($labels-rtf)"/>
