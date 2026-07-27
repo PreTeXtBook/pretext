@@ -4612,43 +4612,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
 
-<xsl:template match="audio|video|interactive|image" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
+<!-- Every element carrying an "@assembly-id" stamp reports it     -->
+<!-- through this single template.  The match list is deliberately -->
+<!-- explicit — media and images, data files, STACK problems, and  -->
+<!-- the fill-in dynamic-substitution owners (the exercise-like    -->
+<!-- elements, or a "task" they contain, whichever holds "setup")  -->
+<!-- — so the BUG fallback below can catch an unexpected           -->
+<!-- application.                                                  -->
+<xsl:template match="audio|video|interactive|image
+                   | datafile
+                   | exercise/stack
+                   | exercise[@exercise-interactive='fillin' and setup]
                    | project[@exercise-interactive='fillin' and setup]
                    | activity[@exercise-interactive='fillin' and setup]
                    | exploration[@exercise-interactive='fillin' and setup]
-                   | investigation[@exercise-interactive='fillin' and setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-<xsl:template match="exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | investigation[@exercise-interactive='fillin' and setup]
+                   | exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
                    | project[.//task and .//task/@exercise-interactive='fillin' and .//setup]
                    | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
                    | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-<!-- A fill-in "task" is the "owner" that the dynamic-substitution lookup -->
-<!-- keys on, so it too must report its "@assembly-id" (matching the      -->
-<!-- "exercise//task" extraction in extract-dynamic.xsl).                 -->
-<xsl:template match="exercise//task[@exercise-interactive='fillin' and setup]
+                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | exercise//task[@exercise-interactive='fillin' and setup]
                    | project//task[@exercise-interactive='fillin' and setup]
                    | activity//task[@exercise-interactive='fillin' and setup]
                    | exploration//task[@exercise-interactive='fillin' and setup]
-                   | investigation//task[@exercise-interactive='fillin' and setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="datafile" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="exercise/stack" mode="assembly-id">
+                   | investigation//task[@exercise-interactive='fillin' and setup]" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
