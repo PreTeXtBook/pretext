@@ -167,10 +167,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   12. id-attribute        ($identification)    @pi:unique-id    -->
 <!--         Third stamp: the final id conversions consume.          -->
 <!--   13. augment             ($augment)                            -->
-<!--         Annotate divisions with @level (and ordered lists       -->
+<!--         Annotate divisions with @pi:level (and ordered lists    -->
 <!--         with @ordered-list-level), as numbering needs.          -->
 <!--   14. serial-stamp        ($serial-stamp)                       -->
-<!--         Stamp @serial on every numbered item.  See              -->
+<!--         Stamp @pi:serial on every numbered item.  See           -->
 <!--         "Numbering".                                            -->
 <!--                                                                 -->
 <!-- After the chain, $root, $docinfo, $document-root and            -->
@@ -3803,29 +3803,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Numbering -->
 <!-- ######### -->
 
-<!-- We use the "augment" pass to compute, and add, partially naïve        -->
-<!-- information about numbers of objects, to be interpreted later by      -->
-<!-- templates in the "-common" stylesheet.  By "naïve" we mean that       -->
-<!-- these routines may depend on publisher variables (e.g. specification  -->
-<!-- of roots of subtrees for serial numbers of blocks) but do not depend  -->
-<!-- on subtlties of numbering (such as the structured/unstructured        -->
-<!-- division dichotomy), which are addressed in the "-common" stylesheet. -->
-<!-- In this way, this information could be interpreted in new ways by     -->
-<!-- additional conversions.                                               -->
-<!--                                                                       -->
-<!-- The manufactured @struct attribute is the (naïve) hierarchical number -->
-<!-- of the *container* of an element, known as the "structure number"     -->
-<!-- of an element.  The @serial attribute is the computed serial number   -->
-<!-- of the element, known as the "serial number".  Typically combining    -->
-<!-- these two attributes forms teh number of an element.  As many         -->
-<!-- practical subtleties about these numbers is delayed until their       -->
-<!-- interpretation by templates in the "-common" stylesheet.              -->
+<!-- We use the "augment" pass to compute, and add, partially naïve           -->
+<!-- information about numbers of objects, to be interpreted later by         -->
+<!-- templates in the "-common" stylesheet.  By "naïve" we mean that          -->
+<!-- these routines may depend on publisher variables (e.g. specification     -->
+<!-- of roots of subtrees for serial numbers of blocks) but do not depend     -->
+<!-- on subtlties of numbering (such as the structured/unstructured           -->
+<!-- division dichotomy), which are addressed in the "-common" stylesheet.    -->
+<!-- In this way, this information could be interpreted in new ways by        -->
+<!-- additional conversions.                                                  -->
+<!--                                                                          -->
+<!-- The manufactured @pi:struct attribute is the (naïve) hierarchical number -->
+<!-- of the *container* of an element, known as the "structure number"        -->
+<!-- of an element.  The @pi:serial attribute is the computed serial number   -->
+<!-- of the element, known as the "serial number".  Typically combining       -->
+<!-- these two attributes forms teh number of an element.  As many            -->
+<!-- practical subtleties about these numbers is delayed until their          -->
+<!-- interpretation by templates in the "-common" stylesheet.                 -->
 
 <!-- For every type of division, everywhere, the "division-serial-number"   -->
 <!-- modal template will return a count of preceding peers at that level.   -->
-<!-- The @struct attribute is the structure number of the *parent*          -->
+<!-- The @pi:struct attribute is the structure number of the *parent*       -->
 <!-- (container), which seems odd here, but fits the general scheme better. -->
-<!-- The @level attribute is helpful, and trvislly to compute here.         -->
+<!-- The @pi:level attribute is helpful, and trvislly to compute here.      -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
@@ -3851,7 +3851,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- blocks inside them use the parent division's chain.  -->
             <!-- Specialized divisions are leaves of the division     -->
             <!-- tree, so this does not affect any descendant         -->
-            <!-- division's @struct.                                  -->
+            <!-- division's @pi:struct.                               -->
             <xsl:when test="&SPECIALIZED-DIVISION-FILTER;">
                 <xsl:variable name="is-numbered">
                     <xsl:apply-templates select="." mode="is-specialized-own-number"/>
@@ -3890,20 +3890,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:copy>
-        <xsl:attribute name="struct">
+        <xsl:attribute name="pi:struct">
             <xsl:value-of select="$parent-struct"/>
         </xsl:attribute>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:value-of select="$the-serial"/>
         </xsl:attribute>
-        <xsl:attribute name="level">
+        <xsl:attribute name="pi:level">
             <xsl:value-of select="$next-level"/>
         </xsl:attribute>
         <!-- Full structure chain including this division's       -->
         <!-- contribution.  Decorative specialized divisions are  -->
         <!-- transparent (pass through parent's chain).  Used by  -->
         <!-- block elements to compute their structure numbers.   -->
-        <xsl:attribute name="block-struct">
+        <xsl:attribute name="pi:block-struct">
             <xsl:value-of select="$new-struct"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -3919,7 +3919,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A level-0 numbering scheme counts continuously from the root.    -->
 <xsl:template match="book|article|slideshow|letter|memo" mode="augment">
     <xsl:copy>
-        <xsl:attribute name="level">
+        <xsl:attribute name="pi:level">
             <xsl:text>0</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -3952,7 +3952,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we only add a level (not necessary?) -->
     <!-- and just pass along structure number -->
     <xsl:copy>
-        <xsl:attribute name="level">
+        <xsl:attribute name="pi:level">
             <xsl:value-of select="$next-level"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
@@ -4061,7 +4061,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Serial Stamp Pass     -->
 <!-- ##################### -->
 
-<!-- Stamps @serial during assembly, in one depth-first walk.  Each   -->
+<!-- Stamps @pi:serial during assembly, in one depth-first walk.  Each-->
 <!-- numbered family (equations and footnotes) is threaded as a       -->
 <!-- node-set: its items in the current counting scope, and each item -->
 <!-- is stamped with its position in that node-set.  How a scope is   -->
@@ -4082,7 +4082,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the current scope) and hands its children the "next" one, built     -->
 <!-- from the inherited node-set:                                           -->
 
-<!--     $b-open = not($nodes) and ($b-terminal or @level >= LEVEL)         -->
+<!--     $b-open = not($nodes) and ($b-terminal or @pi:level >= LEVEL)      -->
 <!--     $next   = $nodes | self::*[$b-open]//ITEMS                         -->
 
 <!-- This is three cases.  Already in a scope ($nodes non-empty): $b-open   -->
@@ -4120,13 +4120,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- children are specialized divisions is wrongly deemed terminal and   -->
     <!-- pools their blocks into one scope instead of one scope apiece.      -->
     <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface|exercises|worksheet|handout|reading-questions|references|glossary|solutions)"/>
-    <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@level &gt;= $numbering-equations))"/>
-    <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
-    <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@level &gt;= $numbering-blocks))"/>
-    <xsl:variable name="b-open-figure"      select="$b-number-figure-distinct      and not($figure-nodes)      and ($b-terminal or (@level &gt;= $numbering-figures))"/>
-    <xsl:variable name="b-open-project"     select="$b-number-project-distinct     and not($project-nodes)     and ($b-terminal or (@level &gt;= $numbering-projects))"/>
-    <xsl:variable name="b-open-exercise"    select="$b-number-exercise-distinct    and not($exercise-nodes)    and ($b-terminal or (@level &gt;= $numbering-exercises))"/>
-    <xsl:variable name="b-open-openproblem" select="$b-number-openproblem-distinct and not($openproblem-nodes) and ($b-terminal or (@level &gt;= $numbering-openproblems))"/>
+    <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@pi:level &gt;= $numbering-equations))"/>
+    <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@pi:level &gt;= $numbering-footnotes))"/>
+    <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@pi:level &gt;= $numbering-blocks))"/>
+    <xsl:variable name="b-open-figure"      select="$b-number-figure-distinct      and not($figure-nodes)      and ($b-terminal or (@pi:level &gt;= $numbering-figures))"/>
+    <xsl:variable name="b-open-project"     select="$b-number-project-distinct     and not($project-nodes)     and ($b-terminal or (@pi:level &gt;= $numbering-projects))"/>
+    <xsl:variable name="b-open-exercise"    select="$b-number-exercise-distinct    and not($exercise-nodes)    and ($b-terminal or (@pi:level &gt;= $numbering-exercises))"/>
+    <xsl:variable name="b-open-openproblem" select="$b-number-openproblem-distinct and not($openproblem-nodes) and ($b-terminal or (@pi:level &gt;= $numbering-openproblems))"/>
     <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
     <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
     <!-- The shared "blocks" pool also gathers figure-likes, projects,  -->
@@ -4194,8 +4194,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Numbered mrow.  Stamp @serial with the position within the -->
-<!-- inherited node-set.                                        -->
+<!-- Numbered mrow.  Stamp @pi:serial with the position within the -->
+<!-- inherited node-set.                                           -->
 <xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
@@ -4205,7 +4205,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$eq-nodes"/>
             </xsl:apply-templates>
@@ -4222,8 +4222,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Every fn is numbered.  Stamp @serial with the position -->
-<!-- within the inherited footnote node-set.                -->
+<!-- Every fn is numbered.  Stamp @pi:serial with the position -->
+<!-- within the inherited footnote node-set.                   -->
 <xsl:template match="fn" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
@@ -4233,7 +4233,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$fn-nodes"/>
             </xsl:apply-templates>
@@ -4252,7 +4252,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Block stamps: serial from the group's distinct counter, else the shared "blocks". -->
 <!-- A subnumbered side-by-side panel is not a "top" figure, so it falls to the         -->
-<!-- catch-all (no @serial) and earns a letter downstream instead.                      -->
+<!-- catch-all (no @pi:serial) and earns a letter downstream instead.                   -->
 
 <!-- Fundamental blocks always share the "blocks" counter. -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="serial-stamp">
@@ -4264,7 +4264,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$blocks-nodes"/>
             </xsl:apply-templates>
@@ -4291,7 +4291,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$project-nodes[$b-number-project-distinct] | $blocks-nodes[not($b-number-project-distinct)]"/>
             </xsl:apply-templates>
@@ -4318,7 +4318,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$figure-nodes[$b-number-figure-distinct] | $blocks-nodes[not($b-number-figure-distinct)]"/>
             </xsl:apply-templates>
@@ -4345,7 +4345,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$exercise-nodes[$b-number-exercise-distinct] | $blocks-nodes[not($b-number-exercise-distinct)]"/>
             </xsl:apply-templates>
@@ -4372,7 +4372,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
-        <xsl:attribute name="serial">
+        <xsl:attribute name="pi:serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$openproblem-nodes[$b-number-openproblem-distinct] | $blocks-nodes[not($b-number-openproblem-distinct)]"/>
             </xsl:apply-templates>
