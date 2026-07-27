@@ -186,7 +186,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
-<!-- w/, w/o parts induces variants -->
+<!-- w/, w/o parts induces variants                                   -->
+<!-- NB: computed from the *assembled* root; the version-tree analog, -->
+<!-- $version-has-parts in publisher-variables.xsl, is the            -->
+<!-- pre-assembly fact — same concept, deliberately distinct name.    -->
 <xsl:variable name="b-has-parts" select="boolean($root/book/part)" />
 
 <!-- File extensions can be set globally for a conversion, -->
@@ -8644,11 +8647,7 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<!-- NB: "men" is historical.  This element gets repaired  -->
-<!-- to a one-line "md" but the target is found in the     -->
-<!-- original source and is identified as an "men" element, -->
-<!-- which really *should not* be not on this list.         -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|men|md|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|md|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
@@ -8664,15 +8663,15 @@ Book (with parts), "section" at level 3
         <!-- test/check initial ref of the list -->
         <xsl:otherwise>
             <xsl:variable name="initial" select="substring-before($ref-list, ' ')" />
-            <!-- Look up the ref in all relevant "documents":          -->
-            <!-- the original source, and private solution file.       -->
-            <!-- Count the number of successes, hoping it will be 1.   -->
-            <!-- Long-term, this check should be performed in a second -->
-            <!-- pass on a completely assembled source, so the id()    -->
-            <!-- function does not need to survey multiple documents.  -->
+            <!-- Look up the ref in the assembled tree: private        -->
+            <!-- solutions are merged and versions are resolved, so    -->
+            <!-- this is the truthful universe of targets — a ref to   -->
+            <!-- content excluded by the version in play is a genuine  -->
+            <!-- failure here, and the lookup never needs to survey    -->
+            <!-- more than one document.                               -->
             <xsl:variable name="hits">
-                <!-- always do a context shift to $original -->
-                <xsl:for-each select="$original">
+                <!-- a context shift, so id() searches the assembled tree -->
+                <xsl:for-each select="$root">
                     <xsl:if test="id($initial)">
                         <xsl:text>X</xsl:text>
                         <xsl:variable name="target" select="id($initial)"/>

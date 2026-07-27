@@ -349,16 +349,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
 
-<!-- When building duplicates, we have occasion -->
-<!-- to inspect the original in various places  -->
-<!-- We do not know if we have "fixed" the      -->
-<!-- deprecated overall element, so need to     -->
-<!-- try both.  For example, this variable is   -->
-<!-- employed by the warnings and deprecation   -->
-<!-- messages that result from analyzing an     -->
-<!-- author's source, since we may "repair"     -->
-<!-- some of them later, so we have to catch    -->
-<!-- them early. -->
+<!-- When building duplicates, we have occasion                     -->
+<!-- to inspect the original in various places                      -->
+<!-- We do not know if we have "fixed" the                          -->
+<!-- deprecated overall element, so need to                         -->
+<!-- try both.  For example, this variable is                       -->
+<!-- employed by the warnings and deprecation                       -->
+<!-- messages that result from analyzing an                         -->
+<!-- author's source, since we may "repair"                         -->
+<!-- some of them later, so we have to catch                        -->
+<!-- them early.                                                    -->
+<!-- The author's source, as parsed.  Kept for duties genuinely     -->
+<!-- about the source document: resolving relative filenames via    -->
+<!-- the second argument of the document() function, and            -->
+<!-- warnings/views that inspect exactly what the author wrote      -->
+<!-- ("generic-warnings", view-source).  Checks and lookups against -->
+<!-- the document's *content* belong on the assembled tree, $root,  -->
+<!-- where private solutions are merged and versions are resolved.  -->
 <xsl:variable name="original" select="/mathbook|/pretext"/>
 
 <!-- These modal templates duplicate the source exactly for each -->
