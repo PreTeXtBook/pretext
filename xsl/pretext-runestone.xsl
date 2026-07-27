@@ -3037,7 +3037,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- frequently point to other Runestone components in the database. -->
 <!--   * Authors point in their source with @xml:id                  -->
 <!--     values in a space- or comma- separated list                 -->
-<!--   * We locate the targets in the orginal source                 -->
+<!--   * We locate the targets in the assembled tree, where a        -->
+<!--     database id (a @label) exists even when only an @xml:id     -->
+<!--     was authored (a backward-compatibility promotion)           -->
 <!--   * Compute the Runestone database id                           -->
 <!--   * Return a list (varying separator) to use in Runestone HTML. -->
 <xsl:template name="runestone-targets">
@@ -3053,7 +3055,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="."/>
         </xsl:variable>
         <!-- context shift so  id()  functions properly -->
-        <xsl:for-each select="$original">
+        <xsl:for-each select="$root">
             <xsl:variable name="target" select="id($the-id)"/>
             <xsl:if test="not($target)">
                 <xsl:message>PTX:ERROR:   an @xml:id value "<xsl:value-of select="$the-id"/>" was used to specify a runestone component but no item with that id exists.</xsl:message>
