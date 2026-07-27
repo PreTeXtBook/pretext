@@ -3963,8 +3963,8 @@ Book (with parts), "section" at level 3
     <xsl:param name="to" />
     <xsl:variable name="format-code">
         <xsl:choose>
-            <xsl:when test="self::node()[@format-code]">
-                <xsl:value-of select="./@format-code" />
+            <xsl:when test="self::node()[@pi:format-code]">
+                <xsl:value-of select="./@pi:format-code" />
             </xsl:when>
             <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
@@ -3981,7 +3981,7 @@ Book (with parts), "section" at level 3
             <xsl:otherwise><xsl:value-of select="$to" /></xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="original-marker-suffix" select="./@marker-suffix" />
+    <xsl:variable name="original-marker-suffix" select="./@pi:marker-suffix" />
     <xsl:variable name="marker-suffix">
         <xsl:choose>
             <!-- Strip out any trailing dot from the marker format. -->
@@ -3995,12 +3995,12 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <xsl:call-template name="formatted-case-cycle">
         <xsl:with-param name="from">
-            <xsl:value-of select="./@marker-prefix" />
+            <xsl:value-of select="./@pi:marker-prefix" />
             <xsl:number value="$adjusted-from" format="{$format-code}" />
             <xsl:value-of select="$marker-suffix" />
         </xsl:with-param>
         <xsl:with-param name="to">
-            <xsl:value-of select="./@marker-prefix" />
+            <xsl:value-of select="./@pi:marker-prefix" />
             <xsl:number value="$adjusted-to" format="{$format-code}" />
             <xsl:value-of select="$marker-suffix" />
         </xsl:with-param>

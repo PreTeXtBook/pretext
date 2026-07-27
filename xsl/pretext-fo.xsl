@@ -2017,23 +2017,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:list-item>
 </xsl:template>
 
-<!-- The assembly stylesheet stamps every "ol" with @format-code  -->
+<!-- The assembly stylesheet stamps each "ol" with @pi:format-code-->
 <!-- ('1', 'a', 'A', 'i', 'I', or '0' for a zero-based list), and -->
-<!-- with @marker-prefix and @marker-suffix adornments, all       -->
+<!-- with @pi:marker-prefix and @pi:marker-suffix adornments, all -->
 <!-- deconstructed from any authored @marker.                     -->
 <xsl:template match="ol/li" mode="list-label">
     <xsl:variable name="the-position" select="count(preceding-sibling::li) + 1"/>
-    <xsl:value-of select="parent::ol/@marker-prefix"/>
+    <xsl:value-of select="parent::ol/@pi:marker-prefix"/>
     <xsl:choose>
         <!-- a zero-based list counts from zero, in arabic numerals -->
-        <xsl:when test="parent::ol/@format-code = '0'">
+        <xsl:when test="parent::ol/@pi:format-code = '0'">
             <xsl:number value="$the-position - 1" format="1"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:number value="$the-position" format="{parent::ol/@format-code}"/>
+            <xsl:number value="$the-position" format="{parent::ol/@pi:format-code}"/>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:value-of select="parent::ol/@marker-suffix"/>
+    <xsl:value-of select="parent::ol/@pi:marker-suffix"/>
 </xsl:template>
 
 <!-- Bullets via the "format-code" machinery of pretext-common.xsl, -->

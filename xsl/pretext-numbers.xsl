@@ -363,7 +363,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- First, the number of a list item within its own ordered list.  This -->
 <!-- trades on the PTX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
-    <xsl:variable name="code" select="../@format-code" />
+    <xsl:variable name="code" select="../@pi:format-code" />
     <xsl:number format="{$code}" />
 </xsl:template>
 

@@ -168,7 +168,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--         Third stamp: the final id conversions consume.          -->
 <!--   13. augment             ($augment)                            -->
 <!--         Annotate divisions with @pi:level (and ordered lists    -->
-<!--         with @ordered-list-level), as numbering needs.          -->
+<!--         with @pi:ordered-list-level), as numbering needs.       -->
 <!--   14. serial-stamp        ($serial-stamp)                       -->
 <!--         Stamp @pi:serial on every numbered item.  See           -->
 <!--         "Numbering".                                            -->
@@ -4039,16 +4039,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:copy>
-        <xsl:attribute name="ordered-list-level">
+        <xsl:attribute name="pi:ordered-list-level">
             <xsl:value-of select="$ordered-list-level"/>
         </xsl:attribute>
-        <xsl:attribute name="format-code">
+        <xsl:attribute name="pi:format-code">
             <xsl:value-of select="$format-code"/>
         </xsl:attribute>
-        <xsl:attribute name="marker-prefix">
+        <xsl:attribute name="pi:marker-prefix">
             <xsl:value-of select="$marker-prefix"/>
         </xsl:attribute>
-        <xsl:attribute name="marker-suffix">
+        <xsl:attribute name="pi:marker-suffix">
             <xsl:value-of select="$marker-suffix"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">

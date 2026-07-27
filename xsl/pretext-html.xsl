@@ -6088,7 +6088,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utility templates to translate PTX              -->
 <!-- enumeration style to HTML list-style-type       -->
 <xsl:template match="ol|ol-marker" mode="html-list-class">
-    <xsl:variable name="mbx-format-code" select="./@format-code" />
+    <xsl:variable name="mbx-format-code" select="./@pi:format-code" />
     <xsl:choose>
         <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
@@ -6129,7 +6129,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="mbx-format-code">
         <xsl:choose>
             <xsl:when test="self::ol">
-                <xsl:value-of select="./@format-code" />
+                <xsl:value-of select="./@pi:format-code" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="format-code" />
@@ -6181,7 +6181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each >
 </xsl:template>
 
-<xsl:template match="ol[not(@marker) and @format-code = 'a' and @ordered-list-level = '1']" mode="ol-marker-class">
+<xsl:template match="ol[not(@marker) and @pi:format-code = 'a' and @pi:ordered-list-level = '1']" mode="ol-marker-class">
     <xsl:text>lower-alpha-level-1</xsl:text>
 </xsl:template>
 
@@ -6189,10 +6189,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol[@marker]" mode="ol-markers">
     <xsl:element name="ol-marker">
-        <xsl:copy-of select="@format-code"/>
+        <xsl:copy-of select="@pi:format-code"/>
         <xsl:copy-of select="@marker"/>
-        <xsl:copy-of select="@marker-prefix"/>
-        <xsl:copy-of select="@marker-suffix"/>
+        <xsl:copy-of select="@pi:marker-prefix"/>
+        <xsl:copy-of select="@pi:marker-suffix"/>
         <xsl:attribute name="classname">
             <xsl:text>ol-marker-</xsl:text>
             <xsl:value-of select="position()" />
@@ -6206,11 +6206,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>ol.</xsl:text>
     <xsl:value-of select="./@classname"/>
     <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
-    <xsl:value-of select="./@marker-prefix" />
+    <xsl:value-of select="./@pi:marker-prefix" />
     <xsl:text>&quot;counter(list-item,</xsl:text>
     <xsl:apply-templates select="." mode="html-list-class" />
     <xsl:text>)&quot;</xsl:text>
-    <xsl:value-of select="./@marker-suffix" />
+    <xsl:value-of select="./@pi:marker-suffix" />
     <xsl:text> &quot;; }&#xa;</xsl:text>
 </xsl:template>
 
