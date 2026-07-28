@@ -455,7 +455,7 @@ def _git_symbolic_to_hash(symbolic):
     # e.g. .git/refs/heads/master
     commit_filename = os.path.join(repo, '.git', 'refs', 'heads', symbolic)
     try:
-        with open(commit_filename, 'r') as f:
+        with open(commit_filename, 'r', encoding="utf-8") as f:
             # always a commit hash in hex
             # strip a trailing newline (OK assumption?)
             return f.readline()[:-1]
@@ -481,7 +481,7 @@ def get_git_head():
     # .git/refs/heads/master
     branch_filename = os.path.join(repo, '.git', 'HEAD')
     try:
-        with open(branch_filename, 'r') as f:
+        with open(branch_filename, 'r', encoding="utf-8") as f:
             # strip a trailing newline (OK assumption?)
             head = f.readline()[:-1]
     except Exception as e:
@@ -948,7 +948,7 @@ def get_publisher_variable_report(xml_source, pub_file, params):
 
     # parse file into a dictionary
     variables = {}
-    with open(temp_file, 'r') as f:
+    with open(temp_file, 'r', encoding="utf-8") as f:
         for line in f:
             parts = line.split()
             # careful: value could be empty string,
