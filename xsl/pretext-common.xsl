@@ -6410,7 +6410,7 @@ Book (with parts), "section" at level 3
 <!-- Printout Margins -->
 <!-- ################ -->
 
-<xsl:template match="worksheet|handout" mode="printout-margin">
+<xsl:template match="&PRINTOUT;" mode="printout-margin">
     <xsl:param name="author-side"/>
     <xsl:param name="publisher-side"/>
     <xsl:choose>

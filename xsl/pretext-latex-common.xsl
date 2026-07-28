@@ -3971,7 +3971,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::handout|self::index)"/>
 
     <!-- change geometry if worksheet or handout should be formatted -->
-    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+    <xsl:if test="(&PRINTOUT-FILTER;) and $b-latex-worksheet-formatted">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
@@ -4076,7 +4076,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the four margins, in units LaTeX understands (such as -->
 <!-- cm, in, pt).  This only produces text, so could go in -->
 <!-- -common, but is also only useful for LaTeX output.    -->
-<xsl:template match="worksheet|handout" mode="new-geometry">
+<xsl:template match="&PRINTOUT;" mode="new-geometry">
     <!-- Four similar "choose" effect hierarchy/priority -->
     <!-- NB: a publisher string parameter to      -->
     <!-- *really* override (worksheet.left, etc.) -->
@@ -4117,7 +4117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- possibly numberless -->
     <xsl:apply-templates select="." mode="division-environment-name-suffix" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+    <xsl:if test="(&PRINTOUT-FILTER;) and $b-latex-worksheet-formatted">
         <!-- \restoregeometry includes a \clearpage -->
         <xsl:text>\restoregeometry&#xa;</xsl:text>
     </xsl:if>

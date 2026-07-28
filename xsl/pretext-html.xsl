@@ -1009,7 +1009,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full" />
     </span>
     <!-- add print preview button for printouts -->
-    <xsl:if test="(self::worksheet or self::handout)">
+    <xsl:if test="(&PRINTOUT-FILTER;)">
         <xsl:apply-templates select="." mode="standalone-printout-links"/>
     </xsl:if>
 </xsl:template>
@@ -1019,7 +1019,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- print previews.  A simple button with printer icon that reloads -->
 <!-- the page with a url parameter that tells javascript to switch   -->
 <!-- to printout css and format all the pages and workspace.         -->
-<xsl:template match="worksheet|handout" mode="standalone-printout-links">
+<xsl:template match="&PRINTOUT;" mode="standalone-printout-links">
     <xsl:variable name="printout-id">
         <xsl:apply-templates select="." mode="html-id"/>
     </xsl:variable>
@@ -14692,7 +14692,7 @@ TODO:
 <!-- We put page-margins-attributes only on printout sections -->
 <xsl:template match="*" mode="page-margins-attribute"/>
 
-<xsl:template match="worksheet|handout" mode="page-margins-attribute">
+<xsl:template match="&PRINTOUT;" mode="page-margins-attribute">
     <xsl:attribute name="data-margins">
         <!-- A space-separated list for top, right, bottom, and left margins -->
         <xsl:apply-templates select="." mode="printout-margin">
@@ -14720,7 +14720,7 @@ TODO:
 <!-- Add data-* attributes for headers and footers -->
 <xsl:template match="*" mode="page-header-footer-attributes"/>
 
-<xsl:template match="worksheet|handout" mode="page-header-footer-attributes">
+<xsl:template match="&PRINTOUT;" mode="page-header-footer-attributes">
     <xsl:if test="not($ws-header-first-left = '')">
         <xsl:attribute name="data-header-first-left">
             <xsl:value-of select="normalize-space($ws-header-first-left)"/>
