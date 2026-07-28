@@ -592,7 +592,7 @@ function createQuestionBlocks() {
     const qname = questionblock.dataset.qname || "";
     questionblock.id = questionPrefix + "boundary";
     questionblock.innerHTML = `
-      <div class="collapsiblecontent" id="${questionPrefix}stack">
+      <form onsubmit="return false;" class="collapsiblecontent" id="${questionPrefix}stack">
         <div class="vstack gap-3 ms-3 col-lg-8">
           <div id="${questionPrefix}errors"></div>
           <div id="${questionPrefix}stackapi_qtext" class="col-lg-8" style="display:none">
@@ -622,7 +622,7 @@ function createQuestionBlocks() {
             class="btn btn-primary"
             value="Show new example question"/>
         </div>
-      </div>`;
+      </form>`;
   }
 }
 
