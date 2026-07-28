@@ -3787,12 +3787,14 @@ Book (with parts), "section" at level 3
     <!-- As part of backwards-compatibility, we copy old @xml:id values into     -->
     <!-- fresh @label.  But have an internal  @pi:authored-label attribute whose -->
     <!-- absence alerts us to the copying, which is now not best practice.       -->
+    <!-- These messages were disabled 2024-02-20 as unreliable.  The cause       -->
+    <!-- was a pointer to another component resolving against the authored       -->
+    <!-- source, where the @pi:authored-label stamp does not exist; that is      -->
+    <!-- repaired, so the messages return.  A plain static code listing is       -->
+    <!-- the one element reaching here that legitimately has no database         -->
+    <!-- identity and needs none, so it is exempt.                               -->
     <xsl:choose>
-         <!-- 2024-02-20: neuter thse warnings.  Somehow, it seems @pi:authored-label -->
-         <!-- is not very reliable.  Were added in commit 29a42dc689cd772a            -->
-        <!--                                                                          -->
-        <xsl:when test="true()"/>
-        <!--  -->
+        <xsl:when test="self::program and not(@interactive = 'activecode' or @interactive = 'codelens')"/>
         <xsl:when test="$b-host-runestone and not(@xml:id) and not(@pi:authored-label)">
             <xsl:message>
                 <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>

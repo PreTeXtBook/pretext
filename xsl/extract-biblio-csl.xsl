@@ -296,8 +296,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="the-ref">
                 <xsl:value-of select="."/>
             </xsl:variable>
-            <!-- context switch so id() function works -->
-            <xsl:for-each select="$original">
+            <!-- context switch so id() function works; the assembled  -->
+            <!-- tree, so content excluded by the version in play does -->
+            <!-- not validate a citation                               -->
+            <xsl:for-each select="$root">
                 <xsl:variable name="target" select="id($the-ref)"/>
                 <!-- vet each @ref value, only backmatter is considered -->
                 <xsl:if test="$target/self::biblio/parent::references/parent::backmatter">

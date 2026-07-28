@@ -104,7 +104,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-c">
             <title>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
-            <program xml:id="c-hello-world" interactive='activecode' language="c">
+            <program xml:id="c-hello-world" label="c-hello-world" interactive='activecode' language="c">
                 <code>
                 #include &lt;stdio.h&gt;
 
@@ -120,7 +120,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-java">
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
-            <program xml:id="java-hello-world" interactive='activecode' language="java">
+            <program xml:id="java-hello-world" label="java-hello-world" interactive='activecode' language="java">
                 <code>
                 public class HelloWorld {
                     public static void main(String[] args) {
@@ -135,7 +135,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-javascript">
             <title>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></title>
-            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript">
+            <program xml:id="javascript-hello-world" label="javascript-hello-world" interactive='activecode' language="javascript">
                 <code>
                 document.write('Hello, world!');
                 </code>
@@ -188,7 +188,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-octave">
             <title>A simple Octave program</title>
-            <program xml:id="octave-simple" interactive='activecode' language="octave">
+            <program xml:id="octave-simple" label="octave-simple" interactive='activecode' language="octave">
                 <code>
                 x = 2 + 2
                 printf("%d\n", x)
@@ -200,7 +200,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-kotlin">
             <title>A simple Kotlin program</title>
-            <program xml:id="kotlin-hello-world" interactive='activecode' language="kotlin">
+            <program xml:id="kotlin-hello-world" label="kotlin-hello-world" interactive='activecode' language="kotlin">
                 <code>
                 fun main() {
                     println("Hello, world!!")
@@ -213,7 +213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-mistake-pascal">
             <title>A Pascal program that cannot be interactive on Runestone</title>
-            <program xml:id="pascal-mistake" interactive='activecode' language="pascal">
+            <program xml:id="pascal-mistake" label="pascal-mistake" interactive='activecode' language="pascal">
                 <code>
                 program HelloWorld;
                 begin
@@ -306,7 +306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-activecode-java-flags">
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</title>
-            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
+            <program xml:id="java-hello-world-flags" label="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
                 <code>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
@@ -330,7 +330,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>This program also makes use of <attr>autorun</attr> to execute on page load and the <attr>codelens</attr>to disable the codelens feature.</p>
 
-        <exercise xml:id="exercise-python-including">
+        <exercise xml:id="exercise-python-including" label="exercise-python-including">
             <title>A Python program, including another</title>
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
@@ -361,7 +361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>This program also makes use of <attr>hidecode</attr> to initially keep the code hidden and <attr>download</attr> to enable a file download of the program (that includes all the included code).</p>
 
-        <exercise xml:id="exercise-python-including-two">
+        <exercise xml:id="exercise-python-including-two" label="exercise-python-including-two">
             <title>A Python program, including two others</title>
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
@@ -390,7 +390,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Here is an activecode with <attr>language</attr> set to <c>sql</c> uses the <attr>database</attr> to load a SQLite database file.</p>
 
-        <exercise xml:id="exercise-sql-using-db">
+        <exercise xml:id="exercise-sql-using-db" label="exercise-sql-using-db">
             <title>An SQL program that uses an SQLite database file</title>
             <statement>
                 <p>Select all the columns of all the rows in the <c>test</c> database table.</p>
@@ -684,7 +684,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </answer>
         </exercise>
 
-        <activity xml:id="coding-exercise-partial-two">
+        <activity xml:id="coding-exercise-partial-two" label="coding-exercise-partial-two">
             <title>Activity Coding Exercise</title>
 
             <statement>
@@ -5334,7 +5334,7 @@ TEST_CASE( "Test the add function" ) {
         <p>And a final paragraph in the section, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
     </section>
 
-    <worksheet groupwork="yes" groupsize="2" xml:id="worksheet-groupwork">
+    <worksheet groupwork="yes" groupsize="2" xml:id="worksheet-groupwork" label="worksheet-groupwork">
         <title>A <q>Group Work</q> Worksheet</title>
 
         <p>This is a <tag>worksheet</tag> which has a <attr>groupwork</attr> attribute set to <c>yes</c>, along with a <attr>label</attr> attribute to assist with the Runestone database.  Note, you can also set a <attr>groupsize</attr> attribute.  When hosted on Runestone, the exercises within will be available for a group of students to submit together.</p>
@@ -5540,7 +5540,7 @@ TEST_CASE( "Test the add function" ) {
 
         <!-- 2025-11-05: Donated by Matt Boelkins from Active Calculus  -->
         <!-- where it has @xml:id "doenet-interactive-exercise-1-1-1" -->
-        <exercise>
+        <exercise xml:id="doenet-average-velocity" label="doenet-average-velocity">
             <title>Finding the average velocity of a moving object from data (dual, Doenet)</title>
             <dynamic>
                 <statement>
@@ -5701,7 +5701,7 @@ TEST_CASE( "Test the add function" ) {
             </static>
         </exercise>
 
-        <exercise>
+        <exercise xml:id="opendsa-list-insertion" label="opendsa-list-insertion">
             <title>OpenDSA List Insertion (Dual)</title>
             <dynamic>
                 <statement>

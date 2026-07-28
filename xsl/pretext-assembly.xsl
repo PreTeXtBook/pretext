@@ -1076,9 +1076,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $biblios in -common, and then mined for matches not   -->
 <!-- explicitly present?                                   -->
 <xsl:template match="backmatter/references[@source]" mode="assembly">
-    <!-- Grab the list, filename is relative to the -->
-    <!-- "document" holding "references" (original) -->
-    <xsl:variable name="biblios" select="document(@source, .)"/>
+    <!-- Grab the list.  The filename is relative to the authored -->
+    <!-- document, so the lookup anchors on $original: the context -->
+    <!-- node lives in a constructed tree, which has no base URI   -->
+    <xsl:variable name="biblios" select="document(@source, $original)"/>
     <!-- Copy the "references" element (could be literal, but maybe not in "text" output mode) -->
     <xsl:copy>
         <!-- @source attribute not needed in enhanced source -->
@@ -1089,9 +1090,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:for-each select="$biblios/pretext-biblios/biblio">
             <xsl:variable name="the-id" select="@xml:id"/>
             <xsl:message>PTX:DEBUG: @xml:id of &lt;biblio&gt; in bibliography file: <xsl:value-of select="$the-id"/></xsl:message>
-            <!-- Building duplicate, so look at $original for    -->
-            <!-- "xref" pointing to the current context "biblio" -->
-            <xsl:if test="$original//xref[@ref = $the-id]">
+            <!-- Building duplicate, so look in this pass's input  -->
+            <!-- tree (the version in play) for an "xref" pointing -->
+            <!-- to the current context "biblio"                   -->
+            <xsl:if test="$original-labeled//xref[@ref = $the-id]">
                 <xsl:message>PTX:DEBUG:  Located this &lt;biblio&gt; cited in original source</xsl:message>
                 <xsl:apply-templates select="." mode="assembly"/>
             </xsl:if>
@@ -1272,17 +1274,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:variable name="first-ref">
                     <xsl:value-of select="$tokenized-refs[1]"/>
                 </xsl:variable>
-                <!-- context switch -->
-                <xsl:for-each select="$original">
-                    <xsl:choose>
-                        <xsl:when test="id($first-ref)/self::biblio/parent::references/parent::backmatter">
-                            <xsl:text>yes</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>no</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
+                <!-- The context "xref" sits in this pass's input tree, so -->
+                <!-- id() searches exactly the version in play             -->
+                <xsl:choose>
+                    <xsl:when test="id($first-ref)/self::biblio/parent::references/parent::backmatter">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>no</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
