@@ -92,8 +92,13 @@ function vle_get_question_boundary(element) {
     return null;
 }
 
-function vle_get_element(id) {
-    return document.getElementById(id);
+// confined to the question's boundary, so one question's iframes can't
+// reach into another question's (or the page's) DOM via change-content/
+// get-content/toggle-visibility
+function vle_get_element(id, boundaryId) {
+    const scope = boundaryId ? document.getElementById(boundaryId) : null;
+    if (!scope) return null;
+    return scope.querySelector('#' + CSS.escape(id));
 }
 
 // find the actual input/textarea/select for a STACK input name, scoped to
@@ -335,7 +340,7 @@ window.addEventListener("message", (e) => {
         break;
 
     case 'toggle-visibility':
-        element = vle_get_element(msg.target);
+        element = vle_get_element(msg.target, boundaryId);
         if (element === null) {
             e.source.postMessage(JSON.stringify({
                 version: 'STACK-JS:1.0.0', type: 'error',
@@ -349,7 +354,7 @@ window.addEventListener("message", (e) => {
 
     case 'change-content':
         // iframe wants to replace the contents of some element on the page
-        element = vle_get_element(msg.target);
+        element = vle_get_element(msg.target, boundaryId);
         if (element === null) {
             response.type = 'error';
             response.msg = 'Failed to find element: "' + msg.target + '"';
@@ -363,7 +368,7 @@ window.addEventListener("message", (e) => {
 
     case 'get-content':
         // iframe is asking what's currently in some element
-        element = vle_get_element(msg.target);
+        element = vle_get_element(msg.target, boundaryId);
         response.type = 'xfer-content';
         response.tgt = IFRAME_RAW_ID[key];
         response.target = msg.target;
