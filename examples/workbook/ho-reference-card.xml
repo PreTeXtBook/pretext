@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--********************************************************************
+Copyright 2026 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<handout label="handout-reference-card">
+  <title>Reference Card for Vectors</title>
+    <introduction>
+        <p>A handout is a printout without the course identification of a worksheet.  Distribute this one alongside the activities, as something to keep.</p>
+    </introduction>
+    <page>
+        <definition>
+            <title>Dot Product</title>
+            <statement>
+                <p>For vectors <m>{\vec u} = (u_1, u_2)</m> and <m>{\vec v} = (v_1, v_2)</m>, the <term>dot product</term> is
+                <md>
+                    <mrow>{\vec u}\cdot{\vec v} \amp = u_1v_1 + u_2v_2\text{.}</mrow>
+                </md></p>
+            </statement>
+        </definition>
+
+        <definition>
+            <title>Length</title>
+            <statement>
+                <p>The <term>length</term> of a vector is the square root of its dot product with itself,
+                <md>
+                    <mrow>\lVert{\vec v}\rVert \amp = \sqrt{{\vec v}\cdot{\vec v}}\text{.}</mrow>
+                </md></p>
+            </statement>
+        </definition>
+
+        <example workspace="1.5in">
+            <title>Room to Work</title>
+            <statement>
+                <p>Compute the length of <m>{\vec v} = (3, 4)</m>, using the space below.</p>
+            </statement>
+        </example>
+    </page>
+    <conclusion>
+        <p>Bring this card to every meeting.</p>
+    </conclusion>
+</handout>

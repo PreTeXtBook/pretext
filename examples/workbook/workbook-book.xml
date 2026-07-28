@@ -159,10 +159,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </frontmatter>
 
         <chapter xml:id="ch-triplet">
-          <title>Four Worksheets</title>
+          <title>Worksheets and a Handout</title>
+            <introduction xml:id="introduction-ch-triplet" label="introduction-ch-triplet">
+                <p>A chapter of printouts may open with an introduction, and it may interleave <tag>worksheet</tag> and <tag>handout</tag> in any order.</p>
+            </introduction>
             <xi:include href="ws-geometric-prelude.xml" />
             <xi:include href="ws-networks.xml" />
+            <xi:include href="ho-reference-card.xml" />
             <xi:include href="ws-testing.xml" />
+            <conclusion xml:id="conclusion-ch-triplet" label="conclusion-ch-triplet">
+                <p>The next chapter has no introduction or conclusion.</p>
+            </conclusion>
           </chapter>
           <chapter xml:id="ch-duo">
             <title>Two Worksheet Chapter</title>

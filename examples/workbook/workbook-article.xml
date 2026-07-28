@@ -161,10 +161,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             is not yet available for articles.  Send requests.
              -->
         </frontmatter>
+        <introduction xml:id="introduction-workbook" label="introduction-workbook">
+            <p>A workbook is a collection of printouts<mdash/><tag>worksheet</tag> and <tag>handout</tag><mdash/>with no traditional divisions at all.  They may come in any order, interleaved with one another, and an introduction like this one (or a concluding division) is optional.</p>
+        </introduction>
         <xi:include href="ws-geometric-prelude.xml" />
         <xi:include href="ws-networks.xml" />
+        <xi:include href="ho-reference-card.xml" />
         <xi:include href="ws-testing.xml" />
         <xi:include href="ws-dot-products.xml" />
         <xi:include href="ws-activity-with-task.xml" />
+        <conclusion xml:id="conclusion-workbook" label="conclusion-workbook">
+            <p>That is the end of the activities.</p>
+        </conclusion>
       </article>
 </pretext>
