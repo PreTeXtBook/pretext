@@ -610,7 +610,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- material following a formatted printout begins a fresh page; -->
     <!-- a conclusion, when present, carries that break itself         -->
-    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted and not(conclusion)">
+    <xsl:if test="(&PRINTOUT-FILTER;) and $b-latex-worksheet-formatted and not(conclusion)">
         <fo:block break-after="page"/>
     </xsl:if>
 </xsl:template>
@@ -764,7 +764,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@xml:id = str:tokenize($latex-pagebreaks-string)">
             <xsl:text>page</xsl:text>
         </xsl:when>
-        <xsl:when test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+        <xsl:when test="(&PRINTOUT-FILTER;) and $b-latex-worksheet-formatted">
             <xsl:text>page</xsl:text>
         </xsl:when>
     </xsl:choose>

@@ -37,6 +37,11 @@
 
 <!ENTITY SPECIALIZED-DIVISION "exercises|worksheet|handout|reading-questions|references|glossary|solutions">
 
+<!-- A "printout" is a specialized division whose content is laid out  -->
+<!-- for printing, with workspace for a reader to write.  A collection -->
+<!-- of nothing but printouts is a "workbook".                         -->
+<!ENTITY PRINTOUT "worksheet|handout">
+
 <!-- "Division companions" are the non-structural companions of a      -->
 <!-- structured traditional division: they may earn their own page    -->
 <!-- (and links) when their parent is realized as a summary page in   -->
@@ -51,6 +56,8 @@
 <!ENTITY TRADITIONAL-DIVISION-FILTER "self::book or self::article or self::part or self::chapter or self::section or self::subsection or self::subsubsection or self::appendix">
 
 <!ENTITY SPECIALIZED-DIVISION-FILTER "self::exercises or self::worksheet or self::handout or self::reading-questions or self::references or self::glossary or self::solutions">
+
+<!ENTITY PRINTOUT-FILTER "self::worksheet or self::handout">
 
 <!ENTITY DIVISION-COMPANION-FILTER "self::introduction or self::conclusion or self::objectives or self::outcomes">
 
