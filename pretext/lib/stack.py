@@ -279,7 +279,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     # location of external directory for STACK files
     generated_dir, external_dir = common.get_managed_directories(xml_source, pub_file)
 
-    with open(source_filename, "r") as source_file:
+    with open(source_filename, "r", encoding="utf-8") as source_file:
         for source in source_file:
 
             # source is the  stack/@source  attribute
@@ -301,7 +301,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
 
             # Open STACK XML file, send to server, unravel JSON response into
             # a text version of the static PreTeXt XML question
-            question_data = open(stack_file).read()
+            question_data = open(stack_file, encoding="utf-8").read()
             # JSON blob for STACK API server request
             # TODO: accomodate per-question seed somehow (interrogate XML?)
             request_data = {"questionDefinition": question_data, "seed": None}

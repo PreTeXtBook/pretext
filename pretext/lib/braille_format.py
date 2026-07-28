@@ -892,6 +892,6 @@ def parse_segments(xml_simple, out_file, page_format):
     if page_format == 'emboss':
         front.advance_page()
 
-    with open(out_file, "w") as brf_file:
+    with open(out_file, "w", encoding="utf-8") as brf_file:
         brf_file.write(front.get_brf())
         brf_file.write(body.get_brf())

@@ -232,7 +232,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format, math_cr
     mj_option = "--" + mj_var
     mj_tag = "mj-" + mj_var
     mjpage_cmd = node_exec_cmd + [mjsre_page, mj_option, mjinput]
-    with open(mjoutput, "w") as outfile:
+    with open(mjoutput, "w", encoding="utf-8") as outfile:
         subprocess.run(mjpage_cmd, stdout=outfile)
 
     # the 'mjpage' executable converts spaces inside of a LaTeX
@@ -503,7 +503,7 @@ def individual_asymptote_conversion(asydiagram, outform, method, asy_cli, asyver
         subprocess.call(asy_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     if method == "server":
         log.debug("asymptote server query {}".format(alberta))
-        with open(asydiagram) as f:
+        with open(asydiagram, encoding="utf-8") as f:
             # protect against Unicode (in comments?)
             data = f.read().encode("utf-8")
             response = requests.post(url=alberta, data=data)
@@ -771,7 +771,7 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
                 log.info("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 with fitz.Document(latex_image_pdf) as doc:
                     svg = doc.load_page(0).get_svg_image()
-                with open(latex_image_svg, "w") as f:
+                with open(latex_image_svg, "w", encoding="utf-8") as f:
                     f.write(svg)
 
                 if not os.path.exists(latex_image_svg):
@@ -860,7 +860,7 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     text_info  = '<pi:text-file xmlns:pi="http://pretextbook.org/2020/pretext/internal">{}</pi:text-file>'
 
     # read lines, one-per-binary
-    with open(the_files, "r") as datafile_list:
+    with open(the_files, "r", encoding="utf-8") as datafile_list:
         dfs = datafile_list.readlines()
     for df in dfs:
         visible_id, file_type, relative_path = df.split()
@@ -914,7 +914,7 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # "straight" ASCII.  The XML header says "UTF-8", which
         # is not a problem?
         out_filename = os.path.join(dest_dir, visible_id + '.xml')
-        with open(out_filename, "w") as f:
+        with open(out_filename, "w", encoding="utf-8") as f:
             f.write(__xml_header)
             f.write(xml_representation)
 
@@ -975,7 +975,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.debug("Program sources for traces temporarily in {}".format(code_filename))
     common.xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
     # get trace file contents minus trailing blank line
-    with open(code_filename, "r") as code_file:
+    with open(code_filename, "r", encoding="utf-8") as code_file:
         contents = code_file.read().rstrip()
 
     if contents == "":
@@ -1082,7 +1082,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             script_template = textwrap.dedent(script_template)
             trace = script_template.format(runestone_id, trace.rstrip())
             trace_file = os.path.join(dest_dir, trace_filename)
-            with open(trace_file, "w") as f:
+            with open(trace_file, "w", encoding="utf-8") as f:
                 f.write(trace)
 
 
@@ -1609,7 +1609,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.debug("YouTube id list temporarily in {}".format(id_filename))
     common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
-    with open(id_filename, "r") as id_file:
+    with open(id_filename, "r", encoding="utf-8") as id_file:
         # read lines, but only lines that are comma delimited
         thumbs = [t.strip() for t in id_file.readlines() if "," in t]
 
@@ -1779,7 +1779,7 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
             "layout": mermaid_layout_engine
         }
         mmd_config_file = os.path.join(tmp_dir, "mermaid-config.json")
-        with open(mmd_config_file, 'w') as config_file:
+        with open(mmd_config_file, 'w', encoding="utf-8") as config_file:
             json.dump(mmd_config, config_file, indent=4)
         log.debug("Mermaid configuration file: {}".format(mmd_config_file))
         # mmdc switches output on the filename extension; there is nothing
@@ -1963,7 +1963,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     # list of ids *and* produce a pile of files (the "standalone") pages
     common.xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
     # read the list of interactive identifiers just generated
-    with open(id_filename, "r") as id_file:
+    with open(id_filename, "r", encoding="utf-8") as id_file:
         interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Copy in external resources (e.g., js code)
@@ -2143,7 +2143,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     if not (os.path.isdir(images_dir)):
         os.mkdir(images_dir)
     # "run" an assignment for the list of problem numbers
-    with open(id_filename, "r") as id_file:
+    with open(id_filename, "r", encoding="utf-8") as id_file:
         # read lines, skipping blank lines
         problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
 
@@ -2599,7 +2599,7 @@ def _split_brf(filename):
             else:
                 out_filename = f"backmatter_{self.number}.brf"
 
-            with open(out_filename,'w') as g:
+            with open(out_filename,'w', encoding="utf-8") as g:
                 g.writelines(self.body)
 
     def is_chapter_name(line):
@@ -2843,10 +2843,10 @@ def _split_brf(filename):
             # Now everything was written except the TOC front matter and backmatter
             # if we were not splitting
 
-            with open("frontmatter.brf",'w') as g:
+            with open("frontmatter.brf",'w', encoding="utf-8") as g:
                 g.writelines(front_matter)
             if back_matter != []:
-                with open("backmatter.brf",'w') as g:
+                with open("backmatter.brf",'w', encoding="utf-8") as g:
                     g.writelines(back_matter)
 
             # TODO: add debug message listing all the chapters?
@@ -3107,7 +3107,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
                     title_ASCII, subtitle_ASCII, author_ASCII
                 )
             cover_tex_file = os.path.join(tmp_dir, "cover.tex")
-            with open(cover_tex_file, "w") as tex:
+            with open(cover_tex_file, "w", encoding="utf-8") as tex:
                 tex.write(cover_tex)
             latex_cmd = tex_executable_cmd + ["-interaction=batchmode", cover_tex_file]
             cover_pdf_file = os.path.join(tmp_dir, "cover.pdf")
@@ -3738,7 +3738,7 @@ def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
             os.remove(services_build_path)
             # write the services_record XML file for potential
             # version checking with a caching implementation
-            services_record = open(services_record_build_path, 'w')
+            services_record = open(services_record_build_path, 'w', encoding="utf-8")
             services_record.write(services_xml)
             services_record.close()
         except Exception as e:
@@ -3796,7 +3796,7 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
     log.info("Using prebuilt CSS theme: " + theme_name + " with options: " + str(theme_opts))
 
     # copy src -> dest with modifications
-    with open(src, 'r') as theme_file:
+    with open(src, 'r', encoding="utf-8") as theme_file:
         filedata = theme_file.read()
 
         # modify file so that it points to the map file theme.css.map
@@ -3819,7 +3819,7 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
             filedata += "}"
 
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        with open(dest, 'w+') as file:
+        with open(dest, 'w+', encoding="utf-8") as file:
             file.write(filedata)
 
     # map file copied to theme.css.map
@@ -4102,7 +4102,7 @@ def _inline_reveal_resources(html_file, local_dir, reveal_root):
             )
         return text
 
-    with open(html_file, "r") as page_file:
+    with open(html_file, "r", encoding="utf-8") as page_file:
         page = page_file.read()
 
     # every stylesheet "link", whatever its attribute order
@@ -4123,7 +4123,7 @@ def _inline_reveal_resources(html_file, local_dir, reveal_root):
             css = embed_css_urls(response.text, response.url)
         else:
             # local stylesheet, staged in the build directory
-            with open(os.path.join(local_dir, href), "r") as css_file:
+            with open(os.path.join(local_dir, href), "r", encoding="utf-8") as css_file:
                 css = css_file.read()
         page = page.replace(tag, "<style>\n{}\n</style>".format(guard(css, "style")))
 
@@ -4134,13 +4134,13 @@ def _inline_reveal_resources(html_file, local_dir, reveal_root):
             js = fetch(src).text
         elif not src.startswith(("http:", "https:", "//")):
             # local script, staged in the build directory
-            with open(os.path.join(local_dir, src), "r") as js_file:
+            with open(os.path.join(local_dir, src), "r", encoding="utf-8") as js_file:
                 js = js_file.read()
         else:
             continue
         page = page.replace(tag, "<script>\n{}\n</script>".format(guard(js, "script")))
 
-    with open(html_file, "w") as page_file:
+    with open(html_file, "w", encoding="utf-8") as page_file:
         page_file.write(page)
 
 
@@ -4180,10 +4180,10 @@ def revealjs(
     # copy CSS
     css_src = os.path.join(common.get_ptx_path(), "css", "dist", "pretext-reveal.css")
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css", "pretext-reveal.css")
-    with open(css_src, 'r') as theme_file:
+    with open(css_src, 'r', encoding="utf-8") as theme_file:
         filedata = theme_file.read()
         os.makedirs(os.path.dirname(css_dest), exist_ok=True)
-        with open(css_dest, 'w+') as file:
+        with open(css_dest, 'w+', encoding="utf-8") as file:
             file.write(filedata)
 
     # The publication file may elect embedded mathematics: every "m"
@@ -4450,7 +4450,7 @@ def _latex_compile(latex_cmd, log_file, source_name, max_passes=10, capture_outp
     pass_count = 1
     while (result.returncode == 0
            and os.path.isfile(log_file)
-           and "Rerun to get" in open(log_file).read()
+           and "Rerun to get" in open(log_file, encoding="utf-8", errors="replace").read()
            and pass_count < max_passes):
         log.info("Rerunning LaTeX for {} (pass {})".format(source_name, pass_count + 1))
         result = subprocess.run(latex_cmd, **run_kwargs)
@@ -5309,7 +5309,7 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     opening = {}
     for elt in b_elements:
         opening[elt.sourceline] = elt
-    with open(assembled_source) as f:
+    with open(assembled_source, encoding="utf-8") as f:
         source_lines = f.readlines()
 
     # fresh schema from the PreTeXt distribution, in XML syntax
@@ -5332,7 +5332,8 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
         jing_exec_cmd = common.get_executable_cmd("jing")
         full_cmd = jing_exec_cmd + [schema_filename, assembled_source]
         log.debug("jing command: {}".format(" ".join(full_cmd)))
-        result = subprocess.run(full_cmd, capture_output=True, text=True)
+        result = subprocess.run(full_cmd, capture_output=True, text=True,
+                                encoding="utf-8", errors="replace")
         # jing exits 0 when the document is valid, 1 when messages result
         if result.returncode == 0:
             log.info("the source validates with no schema errors")
@@ -5351,7 +5352,7 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     plus_scratch = os.path.join(tmp_dir, "validation-plus.txt")
     params = {"single.line.output": "yes"}
     common.xsltproc(plus_xsl, assembled_source, plus_scratch, None, params)
-    with open(plus_scratch, "r") as f:
+    with open(plus_scratch, "r", encoding="utf-8") as f:
         plus_messages = [line.strip() for line in f if line.startswith("PTX:")]
 
     # helpers for locating a message's element in tree "B"
@@ -5505,7 +5506,7 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     if not terse and not plus_messages:
         report.extend(["(no messages)", ""])
 
-    with open(reportname, "w") as f:
+    with open(reportname, "w", encoding="utf-8") as f:
         f.write("\n".join(report))
 
     if jing_messages:
@@ -5672,7 +5673,7 @@ def python_module_versions():
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "requirements.txt"
     )
     try:
-        with open(requirements, "r") as requirements_file:
+        with open(requirements, "r", encoding="utf-8") as requirements_file:
             lines = requirements_file.readlines()
     except OSError:
         return "unable to read {}".format(requirements)
