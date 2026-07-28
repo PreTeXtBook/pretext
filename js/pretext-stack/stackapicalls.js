@@ -450,7 +450,7 @@ function download(filename, fileid, qfile, qname, qprefix, seed) {
         link.setAttribute('download', filename);
         link.click();
       } catch (e) {
-        document.getElementById('errors').innerText = http.responseText;
+        document.getElementById(qprefix + 'errors').innerText = http.responseText;
       }
     }
   };
