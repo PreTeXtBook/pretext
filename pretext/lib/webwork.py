@@ -643,16 +643,15 @@ def webwork_to_xml(
                 tgzfile = tarfile.open(destination_image_file)
                 tgzfile.extractall(os.path.join(ww_images_dir))
                 tgzfile.close()
-                # template for error message(s)
-                msg = "{} did not contain a .{} file"
                 # attempt to recover four file formats, with warnings
                 for ext in ["tex", "pdf", "svg", "png"]:
                     try:
-                        os.rename(
+                        os.replace(
                             os.path.join(ww_images_dir, "image.{}".format(ext)),
                             os.path.join(ww_images_dir, ptx_image_name + ".{}".format(ext)),
                         )
                     except:
+                        msg = "{} did not contain a .{} file"
                         log.warning(msg.format(destination_image_file, ext))
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
