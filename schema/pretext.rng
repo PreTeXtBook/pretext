@@ -5607,7 +5607,9 @@
       <optional>
         <attribute name="xml:lang"/>
       </optional>
-      <text/>
+      <data type="token">
+        <param name="minLength">1</param>
+      </data>
     </element>
   </define>
   <define name="Configuration" combine="choice">

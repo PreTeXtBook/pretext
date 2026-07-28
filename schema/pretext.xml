@@ -3985,7 +3985,7 @@
                 element rename {
                     attribute element {text},
                     attribute xml:lang {text}?,
-                    text
+                    xsd:token { minLength = "1" }
                 }
             </code>
         </fragment>
