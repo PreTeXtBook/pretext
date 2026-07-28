@@ -14566,7 +14566,9 @@ TODO:
                 </a>
             </xsl:when>
             <xsl:otherwise>
+                <span id="logo-link" class="logo-link">
                     <img src="{$location}" alt="Logo image"/>
+                </span>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
