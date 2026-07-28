@@ -19,7 +19,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? & ReadingQuestions? & Exercises? &
+                            (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
@@ -59,7 +59,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? & ReadingQuestions? & Exercises? &
+                            (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
@@ -81,7 +81,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? &ReadingQuestions? & Exercises? &
+                            (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
@@ -103,7 +103,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? & ReadingQuestions? & Exercises? &
+                            (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
@@ -123,7 +123,7 @@
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs)+,
-                    (Printout? & ReadingQuestions? & Exercises? &
+                    (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                      Solutions? & References? & Glossary?),
                     Outcomes?
                 }
@@ -135,7 +135,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (Printout? & ReadingQuestions? & Exercises? &
+                            (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
@@ -157,7 +157,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (Printout? & ReadingQuestions? & Exercises? &
+                            (Worksheet? & Handout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
@@ -441,9 +441,19 @@
                     (Outcomes? & ConclusionDivision?)
                 }
 
-            # Printout currently just means a Worksheet, but could be extended later.
+            # Main handout definition
+            Handout =
+                element handout {
+                    PrintoutAttributes,
+                    MetaDataAltTitleOptional,
+                    (Objectives? & IntroductionDivision?),
+                    (Page+ | PrintoutBlock+),
+                    (Outcomes? & ConclusionDivision?)
+                }
+
+            # A printout is a worksheet or a handout
             Printout =
-                Worksheet
+                Worksheet | Handout
             
             BlockText =
                 Paragraph | BlockQuote | Preformatted |

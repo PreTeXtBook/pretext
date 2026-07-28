@@ -65,7 +65,10 @@
           </oneOrMore>
           <interleave>
             <optional>
-              <ref name="Printout"/>
+              <ref name="Worksheet"/>
+            </optional>
+            <optional>
+              <ref name="Handout"/>
             </optional>
             <optional>
               <ref name="ReadingQuestions"/>
@@ -186,7 +189,10 @@
           </oneOrMore>
           <interleave>
             <optional>
-              <ref name="Printout"/>
+              <ref name="Worksheet"/>
+            </optional>
+            <optional>
+              <ref name="Handout"/>
             </optional>
             <optional>
               <ref name="ReadingQuestions"/>
@@ -263,7 +269,10 @@
           </oneOrMore>
           <interleave>
             <optional>
-              <ref name="Printout"/>
+              <ref name="Worksheet"/>
+            </optional>
+            <optional>
+              <ref name="Handout"/>
             </optional>
             <optional>
               <ref name="ReadingQuestions"/>
@@ -340,7 +349,10 @@
           </oneOrMore>
           <interleave>
             <optional>
-              <ref name="Printout"/>
+              <ref name="Worksheet"/>
+            </optional>
+            <optional>
+              <ref name="Handout"/>
             </optional>
             <optional>
               <ref name="ReadingQuestions"/>
@@ -415,7 +427,10 @@
       </oneOrMore>
       <interleave>
         <optional>
-          <ref name="Printout"/>
+          <ref name="Worksheet"/>
+        </optional>
+        <optional>
+          <ref name="Handout"/>
         </optional>
         <optional>
           <ref name="ReadingQuestions"/>
@@ -458,7 +473,10 @@
           </oneOrMore>
           <interleave>
             <optional>
-              <ref name="Printout"/>
+              <ref name="Worksheet"/>
+            </optional>
+            <optional>
+              <ref name="Handout"/>
             </optional>
             <optional>
               <ref name="ReadingQuestions"/>
@@ -536,7 +554,10 @@
           </oneOrMore>
           <interleave>
             <optional>
-              <ref name="Printout"/>
+              <ref name="Worksheet"/>
+            </optional>
+            <optional>
+              <ref name="Handout"/>
             </optional>
             <optional>
               <ref name="ReadingQuestions"/>
@@ -1258,9 +1279,43 @@
       </interleave>
     </element>
   </define>
-  <!-- Printout currently just means a Worksheet, but could be extended later. -->
+  <!-- Main handout definition -->
+  <define name="Handout">
+    <element name="handout">
+      <ref name="PrintoutAttributes"/>
+      <ref name="MetaDataAltTitleOptional"/>
+      <interleave>
+        <optional>
+          <ref name="Objectives"/>
+        </optional>
+        <optional>
+          <ref name="IntroductionDivision"/>
+        </optional>
+      </interleave>
+      <choice>
+        <oneOrMore>
+          <ref name="Page"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="PrintoutBlock"/>
+        </oneOrMore>
+      </choice>
+      <interleave>
+        <optional>
+          <ref name="Outcomes"/>
+        </optional>
+        <optional>
+          <ref name="ConclusionDivision"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <!-- A printout is a worksheet or a handout -->
   <define name="Printout">
-    <ref name="Worksheet"/>
+    <choice>
+      <ref name="Worksheet"/>
+      <ref name="Handout"/>
+    </choice>
   </define>
   <define name="BlockText">
     <choice>

@@ -113,7 +113,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
+                            (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
@@ -168,7 +168,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
+                            (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
@@ -190,7 +190,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? &amp;ReadingQuestions? &amp; Exercises? &amp;
+                            (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
@@ -212,7 +212,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
+                            (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
@@ -232,7 +232,7 @@
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs)+,
-                    (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
+                    (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                      Solutions? &amp; References? &amp; Glossary?),
                     Outcomes?
                 }
@@ -244,7 +244,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
+                            (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
@@ -266,7 +266,7 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
+                            (Worksheet? &amp; Handout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
@@ -407,11 +407,15 @@
     <section>
         <title>Printout Divisions</title>
 
-        <p>A printout division (currently only a <tag>worksheet</tag>) is a specialized division, allowing for some additional control of spacing and page delineation, to allow for workspace.</p>
+        <p>A printout division (a <tag>worksheet</tag> or a <tag>handout</tag>) is a specialized division, allowing for some additional control of spacing and page delineation, to allow for workspace.</p>
 
         <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that hold the content or just the content itself.</p>
 
         <p>The contents of a printout can include the same blocks as a division, namely BlockDivision, plus the <tag>paragraphs</tag> division.</p>
+
+        <p>A <tag>handout</tag> is very similar to a <tag>worksheet</tag>, differing only in the absence of the course-identification attributes.  Many of the blocks a printout may contain (theorems, definitions, examples, projects, exercises, tasks, proofs) accept a <attr>workspace</attr> attribute.  It is treated as a hint: respected inside a printout, and ignored elsewhere (which the validation-plus stylesheet will point out).</p>
+
+        <p>A structured division may hold any number of printouts, in any order, interleaved with one another and with the traditional divisions<mdash/>which is how a <q>workbook</q> of printouts is authored.  An unstructured division admits at most one of each, so <c>Worksheet</c> and <c>Handout</c> appear separately there rather than through <c>Printout</c>.</p>
         <fragment xml:id="printout">
             <title>Printout</title>
             <code>
@@ -443,27 +447,6 @@
                     (Outcomes? &amp; ConclusionDivision?)
                 }
 
-            # Printout currently just means a Worksheet, but could be extended later.
-            Printout =
-                Worksheet
-            </code>
-        </fragment>
-    </section>
-
-    <section>
-        <title>Handouts (experimental)</title>
-
-        <p>A handout is a specialized division very similar to a worksheet, allowing for some additional control of spacing, to allow for workspace.</p>
-
-        <p>The attributes on a handout include margin information to control layout, just like worksheets.  Also like worksheets, a handout can contain either a number of <tag>page</tag> elements that hold the content or just the content itself.</p>
-
-        <p>The contents of a handout can include the same blocks as a division, namely BlockDivision.  Many of these blocks (theorems, definitions, examples, projects, exercises, tasks, proofs) can get a <attr>workspace</attr> attribute.  It is treated as a hint: respected inside a printout, and ignored elsewhere (which the validation-plus stylesheet will point out).</p>
-
-        <p>Note: when handouts moves to the stable schema, we will need to go to every division and for the option of an unstructured division, include Worksheet and Handout as separate elements so an unstructured division can have one of each.</p>
-
-        <fragment xml:id="handout">
-            <title>Handouts (experimental)</title>
-            <code>
             # Main handout definition
             Handout =
                 element handout {
@@ -473,9 +456,10 @@
                     (Page+ | PrintoutBlock+),
                     (Outcomes? &amp; ConclusionDivision?)
                 }
-            # Add Handout to Printout options
-            Printout |=
-                Handout
+
+            # A printout is a worksheet or a handout
+            Printout =
+                Worksheet | Handout
             </code>
         </fragment>
     </section>
@@ -3956,7 +3940,6 @@
             <fragref ref="docinfo-dev"/>
             <fragref ref="proof-like"/>
             <fragref ref="figure-dev"/>
-            <fragref ref="handout"/>
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="exercise-dev"/>
