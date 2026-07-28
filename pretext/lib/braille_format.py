@@ -665,7 +665,7 @@ class PageComposer:
             emit("7" * self.layout.text_width(position, 0))
         elif blk.box == "nemeth":
             emit(translate_print(NEMETH_OPEN))
-            emit('')
+            #emit('')
 
         for child in blk.xml.xpath("segment|block"):
             if child.tag == "segment":
@@ -702,7 +702,7 @@ class PageComposer:
         if blk.box == "standard":
             emit("g" * self.layout.text_width(position, 0))
         elif blk.box == "nemeth":
-            emit('')
+            #emit('')
             close_brf = NEMETH_CLOSE
             if blk.punctuation:
                 close_brf += blk.punctuation
