@@ -123,18 +123,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the document type is the element being converted -->
 <xsl:variable name="version-doc-type" select="local-name($version-document-root)"/>
 
-<!-- N.B. consumers disagree on which section-like elements make an  -->
-<!-- article "sectioned": numbering counts "worksheet", chunking     -->
-<!-- does not, and the table of contents also counts "handout".      -->
-<!-- The facts preserve those historical memberships.                -->
-<!-- TODO: harmonize the memberships — a deliberate,                 -->
-<!-- behavior-changing design decision, deferred                     -->
+<!-- An article is "sectioned" for every structure-driven default    -->
+<!-- below when it has a "section", a "worksheet", or a "handout":   -->
+<!-- the three are peers at the same level, so a workbook of         -->
+<!-- printouts numbers and chunks as a sectioned article does.       -->
 <xsl:variable name="version-has-parts"           select="boolean($version-root/book/part)"/>
 <xsl:variable name="version-book-chapters"       select="boolean($version-root/book/part/chapter|$version-root/book/chapter)"/>
 <xsl:variable name="version-book-sections"       select="boolean($version-root/book/part/chapter/section|$version-root/book/chapter/section)"/>
 <xsl:variable name="version-article-sections"    select="boolean($version-root/article/section)"/>
-<xsl:variable name="version-article-worksheets"  select="boolean($version-root/article/worksheet)"/>
-<xsl:variable name="version-article-handouts"    select="boolean($version-root/article/handout)"/>
+<xsl:variable name="version-article-printouts"   select="boolean($version-root/article/worksheet|$version-root/article/handout)"/>
 <xsl:variable name="version-article-subsections" select="boolean($version-root/article/section/subsection)"/>
 
 <!-- A book must have a chapter              -->
@@ -151,7 +148,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-book-sections">2</xsl:when>
         <xsl:when test="$version-book-chapters">1</xsl:when>
         <xsl:when test="$version-article-subsections">2</xsl:when>
-        <xsl:when test="$version-article-sections or $version-article-worksheets or $version-article-handouts">1</xsl:when>
+        <xsl:when test="$version-article-sections or $version-article-printouts">1</xsl:when>
         <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
         <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
         <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
@@ -1515,7 +1512,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="$version-has-parts">5</xsl:when>
             <xsl:when test="$version-doc-type = 'book'">4</xsl:when>
-            <xsl:when test="$version-article-sections or $version-article-worksheets">3</xsl:when>
+            <xsl:when test="$version-article-sections or $version-article-printouts">3</xsl:when>
             <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
             <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
             <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
@@ -1580,7 +1577,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="$version-has-parts">3</xsl:when>
             <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
-            <xsl:when test="$version-article-sections or $version-article-worksheets">1</xsl:when>
+            <xsl:when test="$version-article-sections or $version-article-printouts">1</xsl:when>
             <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
             <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
             <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
@@ -2731,7 +2728,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$version-has-parts">3</xsl:when>
         <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
-        <xsl:when test="$version-article-sections">1</xsl:when>
+        <xsl:when test="$version-article-sections or $version-article-printouts">1</xsl:when>
         <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
         <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
         <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
