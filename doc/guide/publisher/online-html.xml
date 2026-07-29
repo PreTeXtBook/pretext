@@ -182,6 +182,15 @@
     </section>
 
     <section>
+        <title>Copying Mathematics</title>
+        <idx>copy</idx>
+
+        <p>A reader can copy a piece of mathematics out of the <init>HTML</init> version and into another document.  Right-click (or control-click) on any mathematics to bring up MathJax's contextual menu.  Under <q>Show Math As</q> you can choose <q>MathML Code</q>, which is suitable for a word processor, or <q>Original Form</q>, which is the underlying <latex/> source.  The <q>Copy to Clipboard</q> submenu offers the same two choices as a direct copy.  To place mathematics into a leading commercial word-processor, copy the <init>MathML</init> and then use its <q>Paste Special</q> command, pasting as <q>Unformatted Text</q>.  To reuse the mathematics in <latex/> source instead, copy the original form<mdash/>bearing in mind that it may contain the document's custom <latex/> macros (defined in <tag>docinfo</tag>), which are only meaningful alongside their definitions.</p>
+
+        <p>As with permalinks, this is worth making known to your readers, perhaps in a preface.</p>
+    </section>
+
+    <section>
         <title>Lists</title>
 
         <p>Lists with several columns are rendered in row-major order, as of 2018-02-28.  In other words, the first list items (<tag>li</tag>) in your source will populate the first row.</p>
