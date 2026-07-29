@@ -1,5 +1,5 @@
 ## ********************************************************************* ##
-## Copyright 2015-7                                                      ##
+## Copyright (C) 2015-2026                                               ##
 ## Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             ##
 ##                                                                       ##
 ## This file is part of PreTeXt.                                         ##
