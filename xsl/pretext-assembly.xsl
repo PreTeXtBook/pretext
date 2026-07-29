@@ -418,6 +418,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- The highest format version of the substitutions file this stylesheet  -->
+<!-- knows how to read.  Version 1 is the form in which an "eval-subst"    -->
+<!-- carries "latex" and "plain" children.  Files written before that      -->
+<!-- distinction existed carry no @version and hold text directly; they    -->
+<!-- are read as version 0 by the fallback in "dynamic-representation".    -->
+<xsl:variable name="dynamic-substitutions-format" select="1"/>
+
+<!-- The root of this pass, which runs once, and so is where a check on    -->
+<!-- the substitutions file as a whole belongs rather than at each of the  -->
+<!-- individual lookups.  Without this the file would be read by a         -->
+<!-- stylesheet older than the script that wrote it, and the mismatch      -->
+<!-- would surface as substitutions quietly coming out wrong instead of    -->
+<!-- as a statement of what is actually the matter.                        -->
+<xsl:template match="/" mode="dynamic-substitution">
+    <xsl:if test="($exercise-style = 'static') and not($b-extracting) and not($dynamic-substitutions-file = '')">
+        <xsl:variable name="recorded" select="document($dynamic-substitutions-file,$original)/*/@version"/>
+        <!-- A missing @version is an older file, and is silent: the        -->
+        <!-- representation template already falls back for those.  Only a  -->
+        <!-- version from the future is worth saying anything about.        -->
+        <xsl:if test="$recorded &gt; $dynamic-substitutions-format">
+            <xsl:message>
+                <xsl:text>PTX:WARNING: the dynamic substitutions file records format version </xsl:text>
+                <xsl:value-of select="$recorded"/>
+                <xsl:text>,&#xa;</xsl:text>
+                <xsl:text>but this version of PreTeXt reads version </xsl:text>
+                <xsl:value-of select="$dynamic-substitutions-format"/>
+                <xsl:text> at the newest.  The file was written by a&#xa;</xsl:text>
+                <xsl:text>newer PreTeXt, and dynamic exercises may come out wrong.  Either update&#xa;</xsl:text>
+                <xsl:text>PreTeXt, or delete the file and let this version generate it again.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+    </xsl:if>
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="representations">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="representations"/>
@@ -1651,7 +1688,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Identify this evaluate's position among its siblings and its name, -->
     <!-- to locate the corresponding fillin by name first, position second. -->
-    <xsl:variable name="eval-position" select="count(preceding-sibling::evaluate) + 1"/>
+    <xsl:variable name="eval-position" select="count(preceding-sibling::evaluate[not(@all='yes')]) + 1"/>
     <xsl:variable name="eval-name" select="@name"/>
 
     <!-- Navigate to the exercise/project/task parent of evaluation -->
@@ -1691,7 +1728,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:message>PTX:WARNING: fillin in "<xsl:value-of
-                        select="$exercise-parent/@visible-id"/>" has @answer but
+                        select="$exercise-parent/@pi:original-id"/>" has @answer but
                         @mode is missing or not recognized (expected 'number' or
                         'string'). No default correct test synthesized.</xsl:message>
                 </xsl:otherwise>
@@ -1738,8 +1775,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@ansobj"/>
+            <xsl:variable name="recorded" select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            <!-- An answer is typeset as mathematics for the same modes that   -->
+            <!-- "fillin-solution" in  pretext-runestone-static.xsl  wraps in  -->
+            <!-- "m", so the two have to agree on which representation to use. -->
             <xsl:variable name="substitution">
-                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+                <xsl:apply-templates select="$recorded" mode="dynamic-representation">
+                    <xsl:with-param name="b-latex" select="(@mode = 'math') or (@mode = 'number')"/>
+                </xsl:apply-templates>
             </xsl:variable>
             <xsl:copy>
                 <xsl:attribute name="answer">
@@ -1769,8 +1812,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@obj"/>
+            <xsl:variable name="recorded" select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            <!-- The value lands wherever the "eval" stood, so the surrounding  -->
+            <!-- markup decides which representation is wanted.  This is the    -->
+            <!-- same test the HTML version makes when it wraps a reference in  -->
+            <!-- "toTeX" in  pretext-runestone-fitb.xsl , and the two must      -->
+            <!-- agree.  "md" is included because its single-line form holds    -->
+            <!-- text directly, with no "mrow" for an ancestor step to find.    -->
             <xsl:variable name="substitution">
-                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+                <xsl:apply-templates select="$recorded" mode="dynamic-representation">
+                    <xsl:with-param name="b-latex" select="boolean(ancestor::m|ancestor::md|ancestor::mrow)"/>
+                </xsl:apply-templates>
             </xsl:variable>
             <xsl:value-of select="$substitution"/>
         </xsl:when>
@@ -1781,6 +1833,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
             </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Pick a recorded substitution's representation.                      -->
+<!--                                                                     -->
+<!-- One generated object is routinely referenced more than once, and     -->
+<!-- not always in the same way: as the answer of a "fillin" and again    -->
+<!-- inside an "m" in the solution, say.  Those want different strings    -->
+<!-- from the same object, and the substitutions file is keyed only by    -->
+<!-- the object, so it cannot record which was meant.  Instead it records -->
+<!-- both, and the caller, which does know its own context, chooses.      -->
+<!--                                                                     -->
+<!-- Substitution files generated before this distinction existed hold    -->
+<!-- text and no children; that text is used for either request.          -->
+<xsl:template match="eval-subst" mode="dynamic-representation">
+    <xsl:param name="b-latex" select="false()"/>
+<!-- Each representation is independent: a request for one never looks -->
+<!-- at whether the other happens to be present.  A v1 substitution    -->
+<!-- carries both children together, or neither (the legacy case,      -->
+<!-- below), never just one, but the fallback is written per-child     -->
+<!-- regardless, since that is the contract, not an assumption about   -->
+<!-- which files exist.                                                -->
+    <xsl:choose>
+        <xsl:when test="$b-latex">
+            <xsl:choose>
+                <xsl:when test="latex">
+                    <xsl:value-of select="latex"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="plain">
+                    <xsl:value-of select="plain"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
