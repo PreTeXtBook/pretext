@@ -1,16 +1,16 @@
 
                     namespace pf = "https://prefigure.org"
                     grammar {
-                
+
             start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
-            
+
             PretextRoot =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
                     (Book | Article | Letter | Memorandum)
                 }
-            
+
             Article =
                 element article {
                     MetaDataLinedSubtitle,
@@ -46,7 +46,7 @@
                 element letter {empty}
             Memorandum =
                 element memo {empty}
-            
+
             Part =
                 element part {
                     MetaDataLinedTitle, Chapter+
@@ -176,7 +176,7 @@
                     MetaDataAltTitleOptional,
                     IndexList
                 }
-            
+
             ArticleFrontMatter =
                 element frontmatter {
                     MetaDataTitleOptional,
@@ -327,7 +327,7 @@
                         )
                     )
                 }
-            
+
             ArticleBackMatter =
                 element backmatter {
                     MetaDataTitleOptional,
@@ -351,7 +351,7 @@
                     MetaDataTarget,
                     (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
-            
+
             Paragraphs =
                 element paragraphs {
                     MetaDataTitle,
@@ -364,7 +364,7 @@
                     Index*,
                     BlockStatementNoNumber+
                 }
-            
+
             ReadingQuestions =
                 element reading-questions {
                     MetaDataAltTitleOptional,
@@ -412,7 +412,7 @@
                     HeadNote?,
                     GlossaryItem+
                 }
-            
+
             PrintoutAttributes =
                 attribute margin { text }?,
                 attribute top { text }?,
@@ -454,7 +454,7 @@
             # A printout is a worksheet or a handout
             Printout =
                 Worksheet | Handout
-            
+
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
                 Image | Video | Audio | Program | Console | Tabular
@@ -472,7 +472,7 @@
                 Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | Exercise | Project | OpenProblem |
                 Poem | Assemblage | ListGenerator | Fragment
-            
+
             Prelude =
                 element prelude {BlockText+}
             Postlude =
@@ -496,7 +496,7 @@
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
-            
+
             IntroductionText =
                 element introduction {BlockText+}
             ConclusionText =
@@ -531,7 +531,7 @@
                 }
             HeadNote =
                 element headnote {BlockStatementNoNumber+}
-            
+
             Objectives =
                 element objectives {
                     MetaDataTitleOptional,
@@ -546,7 +546,7 @@
                     List,
                     ConclusionText?
                 }
-            
+
             BlockQuote =
                 element blockquote {
                     MetaDataTitleOptional,
@@ -559,7 +559,7 @@
                 element line {TextShort}
             LongLine =
                 element line {TextLong}
-            
+
             CodeLine =
                 element cline {text}
             CodeDisplay =
@@ -672,7 +672,7 @@
                         )
                     )
                 }
-            
+
             ListItem = element li {
                 (
                     (MetaDataTarget, TextParagraph)
@@ -702,7 +702,7 @@
                     attribute width {"narrow" | "medium" | "wide"}?,
                     DefinitionListItem+
                 }
-            
+
             DefinitionLike =
                 attribute workspace {text}?,
                 MetaDataTitleOptional,
@@ -710,7 +710,7 @@
                 Statement
             Definition =
                 element definition {DefinitionLike}
-            
+
             Case =
                 element case {
                    MetaDataTitleOptional,
@@ -738,7 +738,7 @@
                 element algorithm {TheoremLike} |
                 element fact {TheoremLike} |
                 element identity {TheoremLike}
-            
+
             AxiomLike =
                 MetaDataTitleCreatorOptional,
                 Statement
@@ -749,7 +749,7 @@
                 element heuristic {AxiomLike} |
                 element hypothesis {AxiomLike} |
                 element assumption {AxiomLike}
-            
+
             ExampleLike =
                 attribute workspace {text}?,
                 MetaDataTitleOptional,
@@ -762,7 +762,7 @@
                 element example {ExampleLike} |
                 element question {ExampleLike} |
                 element problem {ExampleLike}
-            
+
             ProjectLike =
                 attribute workspace {text}?,
                 MetaDataTitleOptional,
@@ -794,7 +794,7 @@
                         (IntroductionStatement?, Task+, ConclusionStatement?)
                     )
                 }
-            
+
             OpenProblemLike =
                 MetaDataTitleOptional,
                 Prelude?,
@@ -824,7 +824,7 @@
             DiscussionLike =
                 MetaDataTitleOptional,
                 BlockStatement+
-            
+
             RemarkLike =
                 MetaDataTitleOptional,
                 BlockStatement+
@@ -835,7 +835,7 @@
                 element observation {RemarkLike} |
                 element warning {RemarkLike} |
                 element insight {RemarkLike}
-            
+
             ComputationLike =
                 MetaDataTitleOptional,
                 BlockStatement+
@@ -843,7 +843,7 @@
                 element computation {ComputationLike} |
                 element technology {ComputationLike} |
                 element data {ComputationLike}
-            
+
             AsideLike =
                 MetaDataTitleOptional,
                 BlockText+
@@ -851,13 +851,13 @@
                 element aside {AsideLike} |
                 element biographical {AsideLike} |
                 element historical {AsideLike}
-            
+
             Assemblage =
                 element assemblage {
                     MetaDataTitleOptional,
                     (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
-            
+
             Caption =
                 element caption {Component?, TextLong}
             Landscape =
@@ -895,7 +895,7 @@
                     List,
                     ConclusionText?
                 }
-            
+
             Stack =
                 element stack {
                     (
@@ -961,7 +961,7 @@
                     SidebySideAttributes,
                     SideBySideNoNumber+
                 }
-            
+
             Image = ImageRaster | ImageCode
             ImageDescription = element description {(Paragraph | Tabular)+}
             ImageShortDescription = element shortdescription {text}
@@ -1055,7 +1055,7 @@
                       )
                     )
                 }
-            
+
             BorderThickness = "none" | "minor" | "medium" | "major"
             BorderTop =
                 attribute top {BorderThickness}
@@ -1117,7 +1117,7 @@
                     TableColumn*,
                     TableRow+
                 }
-            
+
             SageOutput = element output {text}
             SageInput = element input {text}
             Sage = element sage {
@@ -1129,13 +1129,13 @@
                 attribute type {text}?,
                 (SageInput, SageOutput?)?
             }
-            
+
             MuseScore =
                 element score {
                     attribute musescoreuser {text},
                     attribute musescore {text}
                 }
-            
+
             Video =
                 element video {
                     UniqueID?,
@@ -1181,7 +1181,7 @@
                 attribute youtubeplaylist {text}
             AttributesVimeo =
                 attribute vimeo {text}
-            
+
             ExerciseOrderedList =
                 element ol {
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
@@ -1219,7 +1219,7 @@
                     Exercise+,
                     ConclusionStatementNoNumber?
                 }
-            
+
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
             PoemAuthor =
                 element author {
@@ -1243,7 +1243,7 @@
                     attribute indent {xsd:integer}?,
                     TextShort
                 }
-            
+
             TextBib = mixed { (Character | MathInline)* }
             BibliographyItem =
                 element biblio {
@@ -1400,13 +1400,13 @@
                     attribute day {text}?,
                     empty
                 }
-            
+
             GlossaryItem =
                 element gi {
                     MetaDataTitle,
                     BlockStatementNoNumber+
                 }
-            
+
             Contributor =
                 element contributor {
                     MetaDataTarget,
@@ -1428,7 +1428,7 @@
                 }
             AuthorByline =
                 element author {(TextSimple|Xref)}
-            
+
             WebWork = (WebWorkAuthored | WebWorkSource)
             WebWorkSource =
                 element webwork {
@@ -1509,7 +1509,7 @@
                 element solution {
                     (BlockStatementWW)+
                 }
-            
+
             Fragment =
                 element fragment {
                     (
@@ -1528,14 +1528,14 @@
                         }
                     )+
                 }
-            
-            
+
+
             Attribution =
                 element attribution {
                     Component?,
                     (TextLong | LongLine+)
                 }
-            
+
             UniqueID =
                 attribute xml:id {text}
             LabelID =
@@ -1633,7 +1633,7 @@
                 Title?,
                 Caption,
                 Index*
-            
+
             # The union is named so extensions (e.g. the development
             # schema) can widen it with a choice-combine ("|=")
             TextParagraphItem =
@@ -1668,7 +1668,7 @@
                     Component?,
                     element line {TextShort}+
                 }
-            
+
             TextSimple = mixed {
                 Character* }
             TextShort = mixed { (
@@ -1689,13 +1689,13 @@
                 Custom |
                 WWVariable
             TextLong =  mixed { (TextLongContent)* }
-                
+
             Footnote =
                 element fn {
                     MetaDataTarget,
                     TextLong
                 }
-            
+
             IdxHeading =
                 element h {
                     attribute sortby {text}?,
@@ -1719,7 +1719,7 @@
                     )
                 }
             IndexList = element index-list {empty}
-            
+
             XrefTextStyle =
                 "local" | "global" | "hybrid" | "type-local" | "type-global" |
                 "type-hybrid" | "phrase-global" | "phrase-hybrid" |
@@ -1763,7 +1763,7 @@
                     element usage {MathInline},
                     NotationDescription
                 }
-            
+
             FillInMath = element fillin {
                              (attribute fill{text}?|attribute characters {xsd:integer}?),
                              empty
@@ -1825,7 +1825,7 @@
                         )
                     )
                 }
-            
+
             Verbatim =
                 element c {text} |
                 Email |
@@ -1833,18 +1833,18 @@
                     attribute language {text}?,
                     text
                 }
-            
+
             Group |=
                 element abbr {TextSimple} |
                 element acro {TextSimple} |
                 element init {TextSimple}
-            
+
             Group |=
                 element q {TextLong} |
                 element sq {TextLong} |
                 element angles {TextLong} |
                 element dblbrackets {TextLong}
-                
+
             Group |=
                 element em {TextLong} |
                 element term {TextLong} |
@@ -1855,17 +1855,17 @@
                   XMLLang?,
                   TextLong
                 }
-            
+
             Group |=
                 element delete {TextLong} |
                 element insert {TextLong} |
                 element stale {TextLong}
-                
+
             Group |=
                 element tag {text} |
                 element tage {text} |
                 element attr {text}
-            
+
             Group |=
                 element taxon {
                     attribute ncbi {xsd:integer}?,
@@ -1877,7 +1877,7 @@
                         )
                     )
                 }
-            
+
             Generator =
                 element today {empty} |
                 element timeofday {empty} |
@@ -1901,7 +1901,7 @@
                 element ps {empty} |
                 element vs {empty} |
                 element viz {empty}
-            
+
             FillInText =
                 element fillin {
                     attribute characters {xsd:integer}?,
@@ -1911,7 +1911,7 @@
                 }
             Generator |=
                 FillInText
-            
+
             UnitSpecification =
                     attribute prefix {text}?,
                     attribute base {text},
@@ -1922,12 +1922,12 @@
                     element unit {UnitSpecification}*,
                     element per {UnitSpecification}*
                 }
-            
+
             Character |=
                 element nbsp {empty} |
                 element ndash {empty} |
                 element mdash {empty}
-            
+
             Character =
                 element lsq {empty} |
                 element rsq {empty} |
@@ -1937,7 +1937,7 @@
                 element rdblbracket {empty} |
                 element langle {empty}|
                 element rangle {empty}
-            
+
             Character |=
                 element minus {empty} |
                 element times {empty} |
@@ -1947,7 +1947,7 @@
                 element degree {empty} |
                 element prime {empty} |
                 element dblprime {empty}
-            
+
             CopyrightCharacter =
                 element copyright {empty}
             Character |=
@@ -1963,17 +1963,17 @@
                 element trademark {empty} |
                 element phonomark {empty} |
                 element servicemark {empty}
-            
+
             Character |=
                 element icon {
                     attribute name {text}
                 }
-                
+
             Character |=
                 element kbd {
                     (text | attribute name {text})
                 }
-            
+
             MusicFlat =
                 element flat {empty}
             MusicSharp =
@@ -2010,7 +2010,7 @@
                         MusicFlat)*
                     }*
                 }
-                
+
             ListGenerator =
                 element list-of {
                     attribute elements {text},
@@ -2020,20 +2020,20 @@
                 }
             NotationList =
                 element notation-list {empty}
-            
+
             DocInfo =
                 element docinfo {
                     Component?,
                     XMLLang?,
                     Configuration+
                 }
-            
+
             Configuration |=
                 element brandlogo {
                     attribute url {text}?,
                     attribute source {text}
                 }
-            
+
             Configuration |=
                     element math-package {
                         attribute latex-name {text},
@@ -2047,32 +2047,32 @@
                 element pf:prefigure-preamble {
                     external "pf-preamble-adapter.rnc"
                 }
-            
+
             Configuration |=
                 element macros {text}
-            
+
             Configuration |=
                 element
                     cross-references {
                         attribute text { XrefTextStyle }
                     }
-            
+
             Configuration |=
                 element initialism {text}
-            
+
             FeedbackUrl = element url {text}
             Configuration |=
                 element feedback {
                     FeedbackUrl
                 }
-            
+
             Configuration |=
                 element rename {
                     attribute element {text},
                     attribute xml:lang {text}?,
                     text
                 }
-            
+
             Configuration |=
                 element images {
                     element archive {
@@ -2080,19 +2080,19 @@
                         text
                     }+
                 }
-            
+
             Configuration |=
                 element author-biographies {
                     attribute length {"short" | "long"}
                 }
-            
+
             Configuration |=
                 element numbering {
                     element division {
                         attribute part {"decorative" | "structural"}
                     }?
                 }
-            
+
             Configuration |=
                 element programs {
                     attribute language {text}?,
@@ -2103,11 +2103,10 @@
                     attribute interpreter-args {text}?,
                     attribute timeout {text}?
                 }
-            
+
             Configuration |=
                 element parsons {
                     attribute language {text}?
                 }
-            
+
                     }
-                

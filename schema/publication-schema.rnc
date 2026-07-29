@@ -1,8 +1,8 @@
 
             grammar {
-            
+
             start = Publication
-            
+
             Publication =
                 element publication {
                     Common? &
@@ -18,7 +18,7 @@
                     Text? &
                     Webwork?
                 }
-            
+
             Common =
                 element common {
                     element chunking {
@@ -96,7 +96,7 @@
                     attribute center { text }?,
                     attribute right { text }?
                 }?
-            
+
             Source =
                 element source {
                     attribute customizations { text }?,
@@ -115,7 +115,7 @@
                 element version {
                     attribute include { text }
                 }
-            
+
             Numbering =
                 element numbering {
                     Divisions? &
@@ -173,7 +173,7 @@
                 element footnotes {
                     attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?
                 }
-            
+
             Latex =
                 element latex {
                     attribute latex-style {text}?,
@@ -211,12 +211,12 @@
                 element asymptote {
                     attribute links { "yes" | "no" }?
                 }
-            
+
             Pdf =
                 element pdf {
                     attribute font { "latin-modern" }?
                 }
-            
+
             Html =
                 element html {
                     attribute design-width { xsd:integer }?,
@@ -379,7 +379,6 @@
                     attribute project { "dynamic" | "static" }?
                 }
 
-            
             Revealjs =
                 element revealjs {
                     Appearance? &
@@ -411,19 +410,19 @@
                     attribute host { "local" | "cdn" | "embedded" }?,
                     attribute math { "online" | "embedded" }?
                 }
-            
+
             Epub =
                 element epub {
                     element cover {
                         attribute front { text }
                     }
                 }
-            
+
             Jupyter =
                 element jupyter {
                     attribute kernel { "sagemath" | "python3" }
                 }
-            
+
             Braille =
                 element braille {
                     element page {
@@ -431,12 +430,12 @@
                         attribute height { xsd:positiveInteger }?
                     }
                 }
-            
+
             Text =
                 element text {
                     attribute characters { "unicode" | "ascii" }?
                 }
-            
+
             Webwork =
                 element webwork {
                     attribute server { text },
@@ -445,6 +444,5 @@
                     attribute password { text }?,
                     attribute task-reveal { "preceding-correct" | "all" }?
                 }
-            
+
             }
-            
