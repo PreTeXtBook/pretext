@@ -150,6 +150,17 @@
         <title>Font Notes</title>
 
         <subsection>
+            <title>Ligatures and a Searchable <init>PDF</init></title>
+            <idx>ligature</idx>
+
+            <p>Many fonts combine certain letter pairs<mdash/>such as <q>fi</q> or <q>fl</q><mdash/>into a single <term>ligature</term> glyph.  This looks good, but a search of the resulting <init>PDF</init> may then fail to find a word that contains the pair, and copying such a word out of the <init>PDF</init> can drop or garble those characters.  The Publisher FAQ (<xref ref="publisher-faq"/>) has a related note titled <q>Searching my <init>PDF</init> output is broken</q>.  If you adopt a custom font and notice that search or copy-and-paste has stopped working, its ligatures are the likely cause.</p>
+
+            <p>The remedy is to control the ligature features through <c>fontspec</c>.  Mitch Keller reported that, using Palatino for <pubtitle>Active Calculus</pubtitle> and <pubtitle>Applied Combinatorics</pubtitle>, changing the font declaration to<cd>
+                <cline>\defaultfontfeatures{Ligatures=TeX,Mapping=tex-text}</cline>
+            </cd>restored both searching and copying.  More generally, the <c>Ligatures</c> option, together with the <c>liga</c> and <c>dlig</c> features listed earlier, lets you trade the ligature glyphs for reliably searchable text.</p>
+        </subsection>
+
+        <subsection>
             <title>Dyslexic Font</title>
 
             <p>There is an <init>OTF</init> font, with an open license, that purports to help readers with dyslexia.<ul>
