@@ -607,6 +607,8 @@
             <subsubsection xml:id="topics-separators">
                 <title>Separators</title>
 
+                <p>A word of best practice before the individual marks.  <pretext/> never guesses which of these you intend: a hyphen you type stays a hyphen, and is never silently promoted to a longer dash the way a word processor's autocorrect might.  So the choice is always yours to make explicitly<mdash/>type a plain hyphen for a hyphen, and use <tage>ndash</tage> or <tage>mdash</tage> when you want one of the dashes below.</p>
+
                 <paragraphs>
                     <title><tage>ndash</tage>, <ndash />, en dash</title>
                     <p>A dash, the width of a lowercase <sq>n</sq>, or exactly half the width of the em dash.  This is typically used to express a range, such as <c>1955&lt;ndash /&gt;1975</c>, with no intervening spaces.  It is often expressed as two hyphens when typed.  Bringhurst suggests an ndash surrounded by spaces <ndash /> thusly <ndash /> when setting off phrases.</p>
