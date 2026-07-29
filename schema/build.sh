@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # ********************************************************************
-# Copyright 2017-2019 Robert A. Beezer
+# Copyright (C) 2017-2026  Robert A. Beezer
 #
 # This file is part of PreTeXt.
 #

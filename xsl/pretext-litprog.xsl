@@ -1,7 +1,7 @@
 <?xml version='1.0'?> <!-- As XML file -->
 
 <!--********************************************************************
-Copyright 2013-2020 Robert A. Beezer
+Copyright (C) 2013-2026  Robert A. Beezer
 
 This file is part of PreTeXt.
 

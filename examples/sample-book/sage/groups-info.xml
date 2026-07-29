@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!--********************************************************************
-Copyright 2015 Robert A. Beezer
+Copyright (C) 2015-2026  Robert A. Beezer
 
 This file is part of MathBook XML.
 
@@ -23,7 +23,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!--   Abstract Algebra: Theory and Applications   -->
 <!--                                               -->
-<!-- Copyright (C) 2010-2014  Robert A. Beezer     -->
+<!-- Copyright (C) 2010-2026  Robert A. Beezer     -->
 <!-- See the file COPYING for copying conditions.  -->
 
 <remark>

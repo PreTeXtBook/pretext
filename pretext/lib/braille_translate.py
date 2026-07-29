@@ -1,5 +1,5 @@
 # ********************************************************************
-# Copyright 2010-2026 Robert A. Beezer
+# Copyright (C) 2010-2026  Robert A. Beezer
 #
 # This file is part of PreTeXt.
 #
