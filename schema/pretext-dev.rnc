@@ -3,7 +3,7 @@
                 grammar {
 
                 include "pretext.rnc"
-            
+
             Interactive =
                 element interactive {
                     UniqueID?,
@@ -139,7 +139,7 @@
                 ),
                 ConclusionDivision?
             }
-            
+
             ShortLicense_X =
                 element shortlicense {
                     TextLong &
@@ -151,19 +151,19 @@
                 element address {text}
             }
             Website |= Website_X
-            
+
             Configuration |=
                 element blurb {
                     attribute shelf {text}?,
                     text
                 }
-            
+
             Configuration |=
                 element document-id {
                     attribute edition {text}?,
                     text
                 }
-            
+
             ProofLike =
                 MetaDataTitleOptional,
                 (BlockStatement | Case)+
@@ -173,14 +173,13 @@
                 element justification {ProofLike} |
                 element reasoning {ProofLike} |
                 element explanation {ProofLike}
-            
+
             Figure |=
                 element figure {
                     MetaDataCaption,
                     Tabular
                 }
 
-            
             Solutions |=
                 element solutions {
                     MetaDataAltTitleOptional,
@@ -194,7 +193,7 @@
                     IntroductionDivision?,
                     ConclusionDivision?
                 }
-            
+
             MyOpenMath =
                 MetaDataTitleOptional,
                 IntroductionText?,
@@ -632,6 +631,5 @@
                 FreeResponse |
                 FillInBlank |
                 Areas
-            
+
                 }
-            

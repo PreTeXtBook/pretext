@@ -87,12 +87,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Duplicate code, rather than default sanitization, so author -->
 <!-- needs to be cognizant of indentation in PreTeXt source and  -->
 <!-- resulting indentation of output                             -->
+<!--                                                             -->
+<!-- A "code" ends with whitespace indenting its closing tag,    -->
+<!-- which would otherwise become a whitespace-only line where   -->
+<!-- two fragments join, so trailing whitespace is trimmed away. -->
+<!-- Leading indentation is untouched, the author's to own.      -->
 <!-- TODO: indentation/relative indentation specification on a "fragment"? -->
 <!--     In "indentation units" with global value in spaces (or tabs?)?    -->
 <!-- TODO: or maybe a "mangle" attribute (newlines, and/or more)           -->
 <!-- TODO: global switch to minify (remove indentation, remove newlines?)  -->
 <xsl:template match="fragment/code">
-    <xsl:value-of select="."/>
+    <xsl:call-template name="trim-end">
+        <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- As we process a fragment, a mix of code and pointers, -->
