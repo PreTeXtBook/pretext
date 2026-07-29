@@ -1012,6 +1012,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- First define the replacements. These must be in     -->
 <!-- order as search + replace pairs                     -->
+<!-- Other control character replacements are not        -->
+<!-- included because they would not be valid at an      -->
+<!-- earlier stage.                                      -->
 <xsl:variable name="json-replacements">
     <search>\</search>
     <replace>\\</replace>
@@ -1025,6 +1028,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <replace>\r</replace>
     <search><xsl:value-of select="string('&#x22;')"/></search>
     <replace>\&#x22;</replace>
+    <search><xsl:value-of select="string('&#x2028;')"/></search>
+    <replace>\u2028</replace>
+    <search><xsl:value-of select="string('&#x2029;')"/></search>
+    <replace>\u2029</replace>
 </xsl:variable>
 <xsl:variable name="json-replacements-search-set" select="exsl:node-set($json-replacements)/search" />
 <xsl:variable name="json-replacements-replace-set" select="exsl:node-set($json-replacements)/replace" />
