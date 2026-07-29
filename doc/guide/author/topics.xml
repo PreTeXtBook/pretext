@@ -3401,6 +3401,14 @@
 
                     <p>Every image in <pretext/> may be constrained by width and/or margins, or may be restricted to a panel of a <tag>sidebyside</tag> with a certain width.  So the TikZ code you author will create an image that is then scaled by <pretext/> to fit the constraints (much as any other image is scaled).  Except this is done in a way that scales both the font and the line art.  Your main goal is to have this scaling use a scale factor of <m>1.0</m>.  Which, of course, sounds like a waste of effort, but it is critical for how the image behaves in <init>HTML</init> (next).</p>
 
+                    <p>One consequence of this scaling deserves a caution.  Because your picture is placed inside a box that <pretext/> scales to the computed width, <latex/> reads the picture as the argument of that box, and in the process discards the end-of-line characters in your source.  This is invisible for ordinary TikZ, but it breaks <c>pgfplots</c> when you supply <em>inline</em> table data.  By default <c>pgfplots</c> separates the rows of an inline table with newlines, and once those are gone it stops with an error such as <q>maybe TeX screwed up your end-of-lines</q> and produces no picture.  The remedy, which <c>pgfplots</c> itself recommends, is to change the row separator<mdash/>set <c>row sep=crcr</c> and terminate each row of data with <c>\\</c>.  For a single table, place the option on the plot,<cd>
+                        <cline>\addplot table[row sep=crcr] {</cline>
+                        <cline>x y \\</cline>
+                        <cline>1 1 \\</cline>
+                        <cline>2 4 \\</cline>
+                        <cline>};</cline>
+                    </cd>or set it once for the whole picture by adding <c>\pgfplotsset{/pgfplots/table/row sep=crcr}</c> ahead of the data.  Only inline data is affected; a table that <c>pgfplots</c> reads from an external file needs no change.</p>
+
                     <p>To accomplish this unit scaling, follow this procedure for each TikZ picture.<ol>
                         <li>Determine the width of the TikZ picture itself, in physical units of length.  Typically, the lengths used for larger portions are described in centimeters.  But note that an overall scale factor is sometimes applied for convenience (or as a result of poor planning!).  Also, the default unit length (centimeters) can be changed.  Note also, that text may <q>push out</q> to the right and left, defining the boundaries on the sides, and these lengths can be hard to compute or predict.</li>
                         <li>Recall the width of your text (above).  Recognize that list items will be indented (reducing width), and perhaps there are multiple indents if a list has multiple levels.</li>
