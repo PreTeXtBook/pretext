@@ -24,6 +24,12 @@
       <publication>publication/publication.ptx</publication>
       <output-dir>output/pdf</output-dir>
     </target>
+    <target name="epub">
+      <format>epub</format>
+      <source>source/main.ptx</source>
+      <publication>publication/publication.ptx</publication>
+      <output-dir>output/epub</output-dir>
+    </target>
   </targets>
   <executables>
       <latex>latex</latex>
