@@ -539,14 +539,14 @@
     </xsl:call-template>
     <!-- All our problems load MathObjects, and so should have at least    -->
     <!-- one explicit Context() load.                                      -->
-    <xsl:if test="not(contains(.//pg-code,'Context('))">
+    <xsl:if test="not(contains(pg-code,'Context('))">
         <xsl:text>Context('Numeric');</xsl:text>
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
-    <xsl:if test=".//pg-code">
+    <xsl:if test="pg-code">
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select=".//pg-code" />
+            <xsl:with-param name="text" select="pg-code" />
         </xsl:call-template>
     </xsl:if>
     <!-- if there are latex-image in the problem, put their code here -->
