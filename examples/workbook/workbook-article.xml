@@ -98,12 +98,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "my-book" is a poor choice, "beezer-first-course-linear-algebra"   -->
         <!-- is better.  And maybe something in-between is best: "beezer-FCLA". -->
         <document-id>pretext-SWA</document-id>
-        <latex-output>
-            <!-- turn this on once it is easier to make   -->
-            <!-- standalone worksheets, uncomment to test -->
-            <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
-        </latex-output>
-
     </docinfo>
 
     <!--
