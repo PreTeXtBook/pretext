@@ -114,4 +114,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <insertions pagebreaks="sidebyside-bully-pulpit sbsgroup-pagebreak-test"/>
     </latex>
 
+    <html>
+        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
+    </html>
+
 </publication>

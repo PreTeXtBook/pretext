@@ -40,4 +40,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <directories external="media" generated="gen"/>
     </source>
 
+    <html>
+        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
+    </html>
+
 </publication>

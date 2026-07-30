@@ -97,6 +97,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--     favicon/favicon-16x16.png   -->
     <!-- in external images directory    -->
     <html favicon="simple" embed-button="yes">
+        <!-- A picture or logo for the upper-left corner of each page.    -->
+        <!-- An image of a cover for a physical version is a good choice: -->
+        <!-- 16th Century Art Book Cover, 176x240 pixels, Public Domain,  -->
+        <!-- commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg -->
+        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
         <!-- Images may carry a discreet list of links to "archival"     -->
         <!-- versions in a variety of formats; the author supplies the   -->
         <!-- actual files.  A global request lists suffixes/formats:     -->
