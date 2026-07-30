@@ -11862,6 +11862,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'requests for archive (download) versions of images have moved to the publication file, as &quot;/publication/html/images/archive&quot;.  We will honor an &quot;images&quot; element within &quot;docinfo&quot; while the publication file is silent, but please relocate the request.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-30  "docinfo/brandlogo" moves to the publication file -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/brandlogo&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-30'" />
+        <xsl:with-param name="message" select="'the brand logo of the HTML masthead has moved to the publication file, as &quot;/publication/html/brandlogo&quot; with the same attributes.  We will honor a &quot;brandlogo&quot; within &quot;docinfo&quot; while the publication file is silent, but please relocate the element.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
