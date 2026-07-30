@@ -2911,8 +2911,8 @@ Book (with parts), "section" at level 3
                 <xsl:value-of select="@width" />
             </xsl:when>
             <!-- not on an image, but doc-wide default exists -->
-            <xsl:when test="self::image and $docinfo/defaults/image-width">
-                <xsl:value-of select="$docinfo/defaults/image-width" />
+            <xsl:when test="self::image and $docinfo/defaults/images/@width">
+                <xsl:value-of select="$docinfo/defaults/images/@width" />
             </xsl:when>
             <!-- naked slate, look to enclosing interactive -->
             <xsl:when test="self::slate">
@@ -4199,6 +4199,11 @@ Book (with parts), "section" at level 3
             <xsl:when test="@margins">
                 <xsl:value-of select="normalize-space(@margins)" />
             </xsl:when>
+            <!-- not placed on image, or figure/image,      -->
+            <!-- but a document-wide default margins exists -->
+            <xsl:when test="self::image and not(ancestor::sidebyside) and $docinfo/defaults/images/@margins">
+                <xsl:value-of select="normalize-space($docinfo/defaults/images/@margins)" />
+            </xsl:when>
             <!-- default if not specified -->
             <xsl:otherwise>
                 <xsl:text>auto</xsl:text>
@@ -4237,8 +4242,8 @@ Book (with parts), "section" at level 3
             </xsl:when>
             <!-- not placed on image, or figure/image,    -->
             <!-- but a document-wide default width exists -->
-            <xsl:when test="self::image and not(ancestor::sidebyside) and $docinfo/defaults/image-width">
-                <xsl:value-of select="$docinfo/defaults/image-width" />
+            <xsl:when test="self::image and not(ancestor::sidebyside) and $docinfo/defaults/images/@width">
+                <xsl:value-of select="$docinfo/defaults/images/@width" />
             </xsl:when>
             <!-- default setting if not specified, and not global -->
             <xsl:otherwise>
@@ -7410,10 +7415,29 @@ Book (with parts), "section" at level 3
 
 <!-- Define variables for default active language - will be picked up by -->
 <!-- RS manifest and can be a different string than the raw language. -->
+<!-- NB: the language-default templates and variables here can be     -->
+<!-- invoked from within the assembly chain's "representations" pass  -->
+<!-- (via import precedence over their near-duplicates in the         -->
+<!-- -runestone-static stylesheet), where the tree behind  $docinfo   -->
+<!-- does not exist yet and referencing it is a circular definition.  -->
+<!-- So they read the version tree, and must recognize both the       -->
+<!-- "docinfo/defaults" home (preferred) and the deprecated top-level -->
+<!-- placement, which the later "repair" pass would have normalized.  -->
+<xsl:variable name="docinfo-programs-language">
+    <xsl:choose>
+        <xsl:when test="$version-docinfo/defaults/programs/@language">
+            <xsl:value-of select="$version-docinfo/defaults/programs/@language"/>
+        </xsl:when>
+        <xsl:when test="$version-docinfo/programs/@language">
+            <xsl:value-of select="$version-docinfo/programs/@language"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+
 <xsl:variable name="default-active-programming-language">
-    <xsl:if test="$version-docinfo/programs/@language">
+    <xsl:if test="not($docinfo-programs-language = '')">
         <xsl:for-each select="$programming-language-table">
-            <xsl:value-of select="key('programming-language-key', $version-docinfo/programs/@language)/@active" />
+            <xsl:value-of select="key('programming-language-key', $docinfo-programs-language)/@active" />
         </xsl:for-each>
     </xsl:if>
 </xsl:variable>
@@ -7434,11 +7458,14 @@ Book (with parts), "section" at level 3
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
         </xsl:when>
+        <xsl:when test="$version-docinfo/defaults/parsons/@language">
+            <xsl:value-of select="$version-docinfo/defaults/parsons/@language" />
+        </xsl:when>
         <xsl:when test="$version-docinfo/parsons/@language">
             <xsl:value-of select="$version-docinfo/parsons/@language" />
         </xsl:when>
-        <xsl:when test="$version-docinfo/programs/@language">
-            <xsl:value-of select="$version-docinfo/programs/@language" />
+        <xsl:when test="not($docinfo-programs-language = '')">
+            <xsl:value-of select="$docinfo-programs-language" />
         </xsl:when>
     </xsl:choose>
 </xsl:template>
@@ -7485,8 +7512,11 @@ Book (with parts), "section" at level 3
         <xsl:when test="@*[name() = $attr]">
             <xsl:value-of select="@*[name() = $attr]" />
         </xsl:when>
-        <xsl:when test="$docinfo/programs/@*[name() = $attr]">
-            <xsl:value-of select="$docinfo/programs/@*[name() = $attr]" />
+        <xsl:when test="$version-docinfo/defaults/programs/@*[name() = $attr]">
+            <xsl:value-of select="$version-docinfo/defaults/programs/@*[name() = $attr]" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/programs/@*[name() = $attr]">
+            <xsl:value-of select="$version-docinfo/programs/@*[name() = $attr]" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$default" />
