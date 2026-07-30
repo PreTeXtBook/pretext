@@ -11822,7 +11822,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!-- image (og,twitter) - if its URL can be constructed -->
-    <xsl:if test="$b-has-baseurl and $docinfo/brandlogo">
+    <xsl:if test="$b-has-baseurl and $b-brandlogo">
         <xsl:call-template name="social-meta-element">
             <xsl:with-param name="og" select="true()"/>
             <xsl:with-param name="twitter" select="true()"/>
@@ -11832,7 +11832,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- empty when not using managed directories -->
                 <xsl:value-of select="$baseurl"/>
                 <xsl:value-of select="$external-directory"/>
-                <xsl:value-of select="$docinfo/brandlogo/@source"/>
+                <xsl:value-of select="$brandlogo-source"/>
             </xsl:with-param>
         </xsl:call-template>
         <!-- alttext -->
@@ -11883,7 +11883,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="property" select="'card'"/>
         <xsl:with-param name="content">
             <xsl:choose>
-                <xsl:when test="$b-has-baseurl and $docinfo/brandlogo">
+                <xsl:when test="$b-has-baseurl and $b-brandlogo">
                     <xsl:text>summary_large_image</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -14562,22 +14562,22 @@ TODO:
 <!-- Brand Logo -->
 <!-- Place image in masthead -->
 <!-- We either create a link with an image, or just an image. -->
-<!-- NB: This template does nothing unless $docinfo/brandlogo -->
-<!-- exists, in which case we assume @source exists, as       -->
-<!-- required by the schema.                                  -->
+<!-- NB: This template does nothing unless a brand logo has   -->
+<!-- been elected (publication file, or the deprecated        -->
+<!-- "docinfo" location), which requires its @source.         -->
 <xsl:template name="brand-logo">
-    <xsl:if test="$docinfo/brandlogo">
+    <xsl:if test="$b-brandlogo">
         <xsl:variable name="location">
             <!-- empty when not using managed directories -->
             <xsl:value-of select="$external-directory"/>
-            <xsl:value-of select="$docinfo/brandlogo/@source"/>
+            <xsl:value-of select="$brandlogo-source"/>
         </xsl:variable>
 
         <xsl:choose>
-            <xsl:when test="$docinfo/brandlogo/@url">
+            <xsl:when test="not($brandlogo-url = '')">
                 <a id="logo-link" class="logo-link" target="_blank" >
                     <xsl:attribute name="href">
-                        <xsl:value-of select="$docinfo/brandlogo/@url"/>
+                        <xsl:value-of select="$brandlogo-url"/>
                     </xsl:attribute>
                     <img src="{$location}" alt="Logo image"/>
                 </a>

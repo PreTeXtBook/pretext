@@ -227,6 +227,7 @@
                         Annotation? &
                         Asymptote? &
                         Baseurl? &
+                        Brandlogo? &
                         Calculator? &
                         Css? &
                         Crossreferences? &
@@ -261,6 +262,12 @@
             Baseurl =
                 element baseurl {
                     attribute href { text }
+                }
+
+            Brandlogo =
+                element brandlogo {
+                    attribute source { text },
+                    attribute url { text }?
                 }
 
             Calculator =

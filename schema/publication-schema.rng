@@ -722,6 +722,9 @@
           <ref name="Baseurl"/>
         </optional>
         <optional>
+          <ref name="Brandlogo"/>
+        </optional>
+        <optional>
           <ref name="Calculator"/>
         </optional>
         <optional>
@@ -800,6 +803,14 @@
   <define name="Baseurl">
     <element name="baseurl">
       <attribute name="href"/>
+    </element>
+  </define>
+  <define name="Brandlogo">
+    <element name="brandlogo">
+      <attribute name="source"/>
+      <optional>
+        <attribute name="url"/>
+      </optional>
     </element>
   </define>
   <define name="Calculator">

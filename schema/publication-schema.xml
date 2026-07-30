@@ -427,6 +427,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         Annotation? &amp;
                         Asymptote? &amp;
                         Baseurl? &amp;
+                        Brandlogo? &amp;
                         Calculator? &amp;
                         Css? &amp;
                         Crossreferences? &amp;
@@ -461,6 +462,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             Baseurl =
                 element baseurl {
                     attribute href { text }
+                }
+
+            Brandlogo =
+                element brandlogo {
+                    attribute source { text },
+                    attribute url { text }?
                 }
 
             Calculator =
