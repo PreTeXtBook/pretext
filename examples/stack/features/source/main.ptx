@@ -20,6 +20,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <docinfo>
+        <directories external="../assets"/>
         <macros>
         \newcommand{\doubler}[1]{2#1}
         </macros>
