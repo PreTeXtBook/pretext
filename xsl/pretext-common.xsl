@@ -11869,6 +11869,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the brand logo of the HTML masthead has moved to the publication file, as &quot;/publication/html/brandlogo&quot; with the same attributes.  We will honor a &quot;brandlogo&quot; within &quot;docinfo&quot; while the publication file is silent, but please relocate the element.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-30  "event" is bibliographic content, belongs in "bibinfo" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/event&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-30'" />
+        <xsl:with-param name="message" select="'an &quot;event&quot; element now resides in the &quot;bibinfo&quot; of the &quot;frontmatter&quot;, alongside the other bibliographic facts of a document.  We will honor an &quot;event&quot; within &quot;docinfo&quot;, but please relocate the element.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
