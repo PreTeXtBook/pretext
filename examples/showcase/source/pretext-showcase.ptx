@@ -31,10 +31,6 @@
 
     <document-id>pretext-SC</document-id>
 
-    <html>
-      <favicon/>
-    </html>
-
     <rename element="fact" xml:lang="en-US">Self Evident Fact</rename>
 
   </docinfo>
