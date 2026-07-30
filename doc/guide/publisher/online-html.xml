@@ -45,6 +45,14 @@
             <idx><h>HTML</h><h>banner content</h></idx>
 
             <p>The top of page banner normally features the title, subtitle, and author. If the subtitle or author list are long, or not particularly relevant for a given work, the publisher may wish to not render them at the top of each page. Of course, this information will still always be available at least once in places equivalent to a title page in the <q>front</q> of your document.  See <xref ref="online-banner"/> for details on specifying what to display.</p>
+
+            <paragraphs xml:id="online-banner-brandlogo">
+                <title>Brand Logo</title>
+
+                <p>The banner has room in its upper-left corner for a small image<mdash/>an institution's mark, or an image of a printed version's cover.  Elect it with the <tag>brandlogo</tag> element of the publication file (<xref ref="online-brandlogo-options"/>); with a <attr>url</attr> attribute the image becomes a link, a natural way to reach a project's landing page (<xref ref="landing-page"/>).</p>
+
+                <p>The <attr>source</attr> attribute is a path <em>relative to the external directory of the hosted output</em>, not to your source tree: place the image file in the directory of externally-produced assets (<xref ref="processing-directory-management"/>) and give the path from there.  When the pages are served, the image is fetched from that location alongside them.</p>
+            </paragraphs>
         </subsection>
 
         <subsection xml:id="online-html-annotation">
