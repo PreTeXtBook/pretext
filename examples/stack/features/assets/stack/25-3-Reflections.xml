@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>25.3 Reflections</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>For this question, your browser may ask whether you want to "leave the page". In this case, you should click leave and your answer will be saved.</p>
+<p><br></p>
+
+<center>
+[[jsxgraph height="500px" width="500px" input-ref-ans2="sR2" input-ref-ans3="sR3"]]
+
+    JXG.Options.text.useMathJax=true;
+    var board = JXG.JSXGraph.initBoard(divid, {
+      boundingBox:[-7,7,7,-7],
+      showCopyright:false,
+      showNavigation:false,
+      keepaspectratio:true,
+      axis:true
+    });
+
+    var initCenCoords = {#initCen#};
+    var initTipCoords = {#initTip#};
+    var refCenCoords = {#refCen#};
+
+    // Fixed initial shape
+
+    var vertexStyle = {
+      visible:false,
+      fixed:true
+    };
+
+    var initFixedCen = board.create("point", initCenCoords, vertexStyle);
+    var initFixedTip = board.create("point", initTipCoords, vertexStyle);
+
+    var constLine1 = board.create("line", [initFixedCen, initFixedTip], {visible:false});
+    var constLine2 = board.create("perpendicular", [
+      [5*initFixedCen.X()/2-3*initFixedTip.X()/2, 5*initFixedCen.Y()/2-3*initFixedTip.Y()/2], 
+      constLine1
+    ], {visible:false});
+    var constLine3 = board.create("parallel", [
+      [initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y())/2, initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+    var constLine4 = board.create("parallel", [
+      [initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y())/2, initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+
+    var initFixedPointList = [
+      initFixedCen,
+      initFixedTip,
+      board.create("point", [
+        initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y()),
+        initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())
+      ], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y())/2,
+        initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())/2
+      ], vertexStyle),
+      board.create("intersection", [constLine2,constLine3], vertexStyle),
+      board.create("intersection", [constLine2,constLine4], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y())/2,
+        initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())/2
+      ], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y()),
+        initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())
+      ], vertexStyle),
+    ];
+
+    board.create("polygon", initFixedPointList.slice(1), {
+      fixed:true,
+      highlight:false,
+      fillColor:"pink",
+      fillOpacity:0.7,
+      borders:{
+        visible:false
+      }
+    });
+
+    // Fixed reflected shape
+
+    var fixedCen = board.create("point", refCenCoords, vertexStyle);
+
+    var cenJoin = board.create("line", [initCenCoords,refCenCoords], {visible:false});
+    var cenMid = board.create("midpoint", [initCenCoords,refCenCoords], {visible:false});
+    var refLine = board.create("perpendicular", [cenMid, cenJoin], {visible:false});
+
+    var fixedTip = board.create("reflection", [initFixedTip,refLine], vertexStyle);
+
+    var constLine1 = board.create("line", [fixedCen, fixedTip], {visible:false});
+    var constLine2 = board.create("perpendicular", [
+      [5*fixedCen.X()/2-3*fixedTip.X()/2, 5*fixedCen.Y()/2-3*fixedTip.Y()/2], 
+      constLine1
+    ], {visible:false});
+    var constLine3 = board.create("parallel", [
+      [fixedCen.X()+(fixedTip.Y()-fixedCen.Y())/2, fixedCen.Y()+(fixedTip.X()-fixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+    var constLine4 = board.create("parallel", [
+      [fixedCen.X()-(fixedTip.Y()-fixedCen.Y())/2, fixedCen.Y()-(fixedTip.X()-fixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+
+    var fixedPointList = [
+      fixedCen,
+      fixedTip,
+      board.create("point", [
+        fixedCen.X()+(fixedTip.Y()-fixedCen.Y()),
+        fixedCen.Y()+(fixedTip.X()-fixedCen.X())
+      ], vertexStyle),
+      board.create("point", [
+        fixedCen.X()+(fixedTip.Y()-fixedCen.Y())/2,
+        fixedCen.Y()+(fixedTip.X()-fixedCen.X())/2
+      ], vertexStyle),
+      board.create("intersection", [constLine2,constLine3], vertexStyle),
+      board.create("intersection", [constLine2,constLine4], vertexStyle),
+      board.create("point", [
+        fixedCen.X()-(fixedTip.Y()-fixedCen.Y())/2,
+        fixedCen.Y()-(fixedTip.X()-fixedCen.X())/2
+      ], vertexStyle),
+      board.create("point", [
+        fixedCen.X()-(fixedTip.Y()-fixedCen.Y()),
+        fixedCen.Y()-(fixedTip.X()-fixedCen.X())
+      ], vertexStyle),
+    ];
+
+    board.create("polygon", fixedPointList.slice(1), {
+      fixed:true,
+      highlight:false,
+      borders:{
+        visible:false
+      }
+    });
+
+    // Draggable shape
+
+    var dragPointStyle = {
+      showInfoBox:false,
+      withLabel:false
+    };
+
+    var dragTip = board.create("point", initTipCoords, dragPointStyle);
+    
+    dragPointStyle.snapToGrid = true;
+    var dragCen = board.create("point", initCenCoords, dragPointStyle);
+
+    vertexStyle.fixed = false;
+
+    var dragPointList = [
+      dragCen,
+      dragTip,
+      board.create("point", [initFixedPointList[2].X(), initFixedPointList[2].Y()], vertexStyle),
+      board.create("point", [initFixedPointList[3].X(), initFixedPointList[3].Y()], vertexStyle),
+      board.create("point", [initFixedPointList[4].X(), initFixedPointList[4].Y()], vertexStyle),
+      board.create("point", [initFixedPointList[5].X(), initFixedPointList[5].Y()], vertexStyle),
+      board.create("point", [initFixedPointList[6].X(), initFixedPointList[6].Y()], vertexStyle),
+      board.create("point", [initFixedPointList[7].X(), initFixedPointList[7].Y()], vertexStyle),
+    ];
+
+    var dragArrow = board.create("group", dragPointList);
+    dragArrow.setRotationCenter(dragCen);
+    dragArrow.setRotationPoints(dragTip);
+
+    board.create("polygon", dragPointList.slice(1), {
+      fixed:true,
+      highlight:false,
+      fillColor:"pink",
+      fillOpacity:0.7,
+      borders:{
+        fixed:true,
+        highlight:false,
+        strokeColor:"black"
+      }
+    });
+
+    stack_jxg.bind_point(sR2, dragCen);
+    stack_jxg.bind_point(sR3, dragTip);
+
+    board.unsuspendUpdate();
+
+[[/jsxgraph]]
+</center>
+
+
+<p><br> Using the movable points, transform the <b>pink</b> arrow by a reflection in the \({@refAxis@}\) axis.</p>
+<p align="right"><b>(3)</b></p>
+<p hidden>[[input:ans2]] [[input:ans3]] [[validation:ans2]] [[validation:ans3]]</p>
+<p>[[feedback:prt2]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>5</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2025073100</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* Initial position */
+initCen:[rand([1,-1])*rand([2,3,4]), rand([1,-1])*rand([2,3,4])];
+initTipOffset:random_permutation([0,rand([1,-1])*2]);
+initTip:[first(initCen)+first(initTipOffset), second(initCen)+second(initTipOffset)];
+
+/* Reflected shape */
+cenTrans:rand_with_prohib(4, min(abs(first(initCen)),abs(second(initCen)))+4, [abs(first(initCen))+abs(second(initCen))]);
+refCen:[first(initCen)+(if first(initCen)>=0 then -1 else 1)*cenTrans, second(initCen)+(if second(initCen)>=0 then -1 else 1)*cenTrans];
+
+/* Finding line of reflection */
+cenMid: [(first(initCen)+first(refCen))/2,(second(initCen)+second(refCen))/2];
+tans1: if sign(first(initCen))=sign(second(initCen)) then y=first(cenMid)+second(cenMid)-x else y=x+second(cenMid)-first(cenMid);
+
+/* Random variables for (b) */
+refAxis:rand(["x","y"]);
+refCenB: if refAxis="x" then [first(initCen), -second(initCen)] else [-first(initCen), second(initCen)];
+transCenB: [(if first(refCenB)>=0 then 1 else -1)*rand_with_prohib(2,4,[abs(first(refCenB))]), (if second(refCenB)>=0 then 1 else -1)*rand_with_prohib(2,4,[abs(second(refCenB))])];
+transVec:matrix([first(transCenB)-first(refCenB)],[second(transCenB)-second(refCenB)]);
+
+/* Solving for rotation point for (b) */
+tans3: if refAxis="x" then [first(first(transVec))+first(initTip), first(second(transVec))-second(initTip)] else [first(first(transVec))-first(initTip), first(second(transVec))+second(initTip)];]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="moodle_auto_format">
+      <text><![CDATA[<p>Initial position: {@initCen@}, {@initTip@}</p>
+
+<p>(b): Reflection in {@refAxis@}, Translation by {@transVec@}</p>]]></text>
+    </questionnote>
+    <questiondescription format="moodle_auto_format">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>(</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>tans1</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>1</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>2</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>algebraic</type>
+      <tans>transCenB</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans3</name>
+      <type>algebraic</type>
+      <tans>tans3</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options/>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text><![CDATA[/* Node 1: Check correct answer */
+/* Node 2: Worked solution */
+/* Node 3: Correct coefficient of x (+1) */
+node3_test: if abs((coeff(lhs(ans1)-rhs(ans1),x)/coeff(lhs(ans1)-rhs(ans1),y))-(coeff(lhs(tans1)-rhs(tans1),x)/coeff(lhs(tans1)-rhs(tans1),y)))<=0.0001 then 1 else 0;
+
+/* Node 4: Correct y-intercept (+1) */
+node4_test: if abs((coeff(lhs(ans1)-rhs(ans1),x,0)/coeff(lhs(ans1)-rhs(ans1),y))-(coeff(lhs(tans1)-rhs(tans1),x,0)/coeff(lhs(tans1)-rhs(tans1),y)))<=0.0001 then 1 else 0;]]></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>tans1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>1</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>Here is a worked solution:</p>
+<p>To find the line of reflection between two shapes, you can join up similar points on each shape.
+<br>The line of reflection is then given by the perpendicular bisectors of all these lines.</p>
+<p><br></p>
+
+<center>
+[[jsxgraph height="360px" width="360px"]]
+
+    JXG.Options.text.useMathJax=true;
+    var board = JXG.JSXGraph.initBoard(divid, {
+      boundingBox:[-7,7,7,-7],
+      showCopyright:false,
+      showNavigation:false,
+      keepaspectratio:true,
+      axis:true
+    });
+
+    var initCenCoords = {#initCen#};
+    var initTipCoords = {#initTip#};
+    var refCenCoords = {#refCen#};
+
+    // Fixed initial shape
+
+    var vertexStyle = {
+      visible:false,
+      fixed:true
+    };
+
+    var initFixedCen = board.create("point", initCenCoords, vertexStyle);
+    var initFixedTip = board.create("point", initTipCoords, vertexStyle);
+
+    var constLine1 = board.create("line", [initFixedCen, initFixedTip], {visible:false});
+    var constLine2 = board.create("perpendicular", [
+      [5*initFixedCen.X()/2-3*initFixedTip.X()/2, 5*initFixedCen.Y()/2-3*initFixedTip.Y()/2], 
+      constLine1
+    ], {visible:false});
+    var constLine3 = board.create("parallel", [
+      [initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y())/2, initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+    var constLine4 = board.create("parallel", [
+      [initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y())/2, initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+
+    var initFixedPointList = [
+      initFixedCen,
+      initFixedTip,
+      board.create("point", [
+        initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y()),
+        initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())
+      ], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y())/2,
+        initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())/2
+      ], vertexStyle),
+      board.create("intersection", [constLine2,constLine3], vertexStyle),
+      board.create("intersection", [constLine2,constLine4], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y())/2,
+        initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())/2
+      ], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y()),
+        initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())
+      ], vertexStyle),
+    ];
+
+    board.create("polygon", initFixedPointList.slice(1), {
+      fixed:true,
+      highlight:false,
+      fillColor:"pink",
+      fillOpacity:0.7,
+      borders:{
+        visible:false
+      }
+    });
+
+    // Fixed reflected shape
+
+    var fixedCen = board.create("point", refCenCoords, vertexStyle);
+
+    var cenJoin = board.create("segment", [initCenCoords,refCenCoords], {
+      fixed:true,
+      highlight:false,
+      strokeColor:"blue",
+      dash:1
+    });
+    
+    var cenMid = board.create("midpoint", [initCenCoords,refCenCoords], {visible:false});
+
+    var refLine = board.create("perpendicular", [cenMid, cenJoin], {
+      fixed:true,
+      highlight:false,
+    });
+
+    var fixedTip = board.create("reflection", [initFixedTip,refLine], vertexStyle);
+
+    var tipJoin = board.create("segment", [initFixedTip,fixedTip], {
+      fixed:true,
+      highlight:false,
+      strokeColor:"blue",
+      dash:1
+    });
+
+    var constLine1 = board.create("line", [fixedCen, fixedTip], {visible:false});
+    var constLine2 = board.create("perpendicular", [
+      [5*fixedCen.X()/2-3*fixedTip.X()/2, 5*fixedCen.Y()/2-3*fixedTip.Y()/2], 
+      constLine1
+    ], {visible:false});
+    var constLine3 = board.create("parallel", [
+      [fixedCen.X()+(fixedTip.Y()-fixedCen.Y())/2, fixedCen.Y()+(fixedTip.X()-fixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+    var constLine4 = board.create("parallel", [
+      [fixedCen.X()-(fixedTip.Y()-fixedCen.Y())/2, fixedCen.Y()-(fixedTip.X()-fixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+
+    var fixedPointList = [
+      fixedCen,
+      fixedTip,
+      board.create("point", [
+        fixedCen.X()+(fixedTip.Y()-fixedCen.Y()),
+        fixedCen.Y()+(fixedTip.X()-fixedCen.X())
+      ], vertexStyle),
+      board.create("point", [
+        fixedCen.X()+(fixedTip.Y()-fixedCen.Y())/2,
+        fixedCen.Y()+(fixedTip.X()-fixedCen.X())/2
+      ], vertexStyle),
+      board.create("intersection", [constLine2,constLine3], vertexStyle),
+      board.create("intersection", [constLine2,constLine4], vertexStyle),
+      board.create("point", [
+        fixedCen.X()-(fixedTip.Y()-fixedCen.Y())/2,
+        fixedCen.Y()-(fixedTip.X()-fixedCen.X())/2
+      ], vertexStyle),
+      board.create("point", [
+        fixedCen.X()-(fixedTip.Y()-fixedCen.Y()),
+        fixedCen.Y()-(fixedTip.X()-fixedCen.X())
+      ], vertexStyle),
+    ];
+
+    board.create("polygon", fixedPointList.slice(1), {
+      fixed:true,
+      highlight:false,
+      borders:{
+        visible:false
+      }
+    });
+
+[[/jsxgraph]]
+</center>
+
+<p><br>The equation of this line is: {@tans1@}</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node3_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0.5</truescore>
+        <truepenalty/>
+        <truenextnode>3</truenextnode>
+        <trueanswernote>prt1-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>The coefficient of \(x\) in your equation is correct.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt1-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p><br>The coefficient of \(x\) in your equation is not correct.</p>]]></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node4_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0.5</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt1-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>The \(y\) intercept in your equation is correct.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>The \(y\) intercept in your equation is not correct.</p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt2</name>
+      <value>3.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text><![CDATA[/* Node 1: Check correct answer */
+node1_test: if ans2=transCenB and first(ans3)-first(tans3)<=0.1 and second(ans3)-second(tans3)<=0.1 then 1 else 0;
+
+/* Node 2: Worked solution */
+
+/* Node 3: Correct centre of arrow with incorrect orientation (2) */
+node3_test: if ans2=transCenB then 1 else 0;
+
+/* Node 4: Reflects in the wrong axis (1) */
+
+wrongAxisCen: if refAxis="y" then [first(initCen)+first(first(transVec)), first(second(transVec))-second(initCen)] else [first(first(transVec))-first(initCen), first(second(transVec))+second(initCen)];
+
+wrongAxisTip: if refAxis="y" then [first(initTip)+first(first(transVec)), first(second(transVec))-second(initTip)] else [first(first(transVec))-first(initTip), first(second(transVec))+second(initTip)];
+
+node4_test: if ans2=wrongAxisCen and first(ans3)-first(wrongAxisTip)<=0.1 and second(ans3)-second(wrongAxisTip)<=0.1 then 1 else 0;
+
+/* Node 5: Wrong order of transformations (1) */
+
+unordCen: if refAxis="x" then [first(initCen)+first(first(transVec)), -first(second(transVec))-second(initCen)] else [-first(first(transVec))-first(initCen), first(second(transVec))+second(initCen)];
+
+unordTip: if refAxis="x" then [first(initTip)+first(first(transVec)), -first(second(transVec))-second(initTip)] else [-first(first(transVec))-first(initTip), first(second(transVec))+second(initTip)];
+
+node5_test: if ans2=unordCen and first(ans3)-first(unordTip)<=0.1 and second(ans3)-second(unordTip)<=0.1 then 1 else 0;
+
+/* Node 6: Correct reflection followed by attempt to translate (uses (2,-2) or similar) (1) */
+
+impliedVec: matrix([first(ans2)-first(refCenB)], [second(ans2)-second(refCenB)]);
+
+node6_test: if ((refAxis="x" and abs(first(ans3)-first(first(impliedVec))-first(initTip))<=0.1 and abs(second(ans3)-first(second(impliedVec))+second(initTip))<=0.1) or (refAxis="y" and abs(first(ans3)-first(first(impliedVec))+first(initTip))<=0.1 and abs(second(ans3)-first(second(impliedVec))-second(initTip))<=0.1)) and {abs(first(first(impliedVec))), abs(first(second(impliedVec)))}={abs(first(first(transVec))), abs(first(second(transVec)))} then 1 else 0;
+
+
+]]></text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node1_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt2-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>1</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>Here is a worked solution:</p>
+<p>First reflecting in the \({@refAxis@}\) axis gives the arrow shown in dashed lines.</p>
+<p>The subsiquent translation by vector {@transVec@} moves the arrow to the position shown below.</p>
+
+[[jsxgraph height="360px" width="360px"]]
+
+    JXG.Options.text.useMathJax=true;
+    var board = JXG.JSXGraph.initBoard(divid, {
+      boundingBox:[-7,7,7,-7],
+      showCopyright:false,
+      showNavigation:false,
+      keepaspectratio:true,
+      axis:true
+    });
+
+    var initCenCoords = {#initCen#};
+    var initTipCoords = {#initTip#};
+    var refAxis = {#refAxis#};
+    var transVec = [{#first(first(transVec))#},{#first(second(transVec))#}]
+
+    // Fixed initial shape
+
+    var vertexStyle = {
+      visible:false,
+      fixed:true
+    };
+
+    var initFixedCen = board.create("point", initCenCoords, vertexStyle);
+    var initFixedTip = board.create("point", initTipCoords, vertexStyle);
+
+    var constLine1 = board.create("line", [initFixedCen, initFixedTip], {visible:false});
+    var constLine2 = board.create("perpendicular", [
+      [5*initFixedCen.X()/2-3*initFixedTip.X()/2, 5*initFixedCen.Y()/2-3*initFixedTip.Y()/2], 
+      constLine1
+    ], {visible:false});
+    var constLine3 = board.create("parallel", [
+      [initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y())/2, initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+    var constLine4 = board.create("parallel", [
+      [initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y())/2, initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())/2],
+      constLine1
+    ], {visible:false});
+
+    var initFixedPointList = [
+      initFixedCen,
+      initFixedTip,
+      board.create("point", [
+        initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y()),
+        initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())
+      ], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()+(initFixedTip.Y()-initFixedCen.Y())/2,
+        initFixedCen.Y()+(initFixedTip.X()-initFixedCen.X())/2
+      ], vertexStyle),
+      board.create("intersection", [constLine2,constLine3], vertexStyle),
+      board.create("intersection", [constLine2,constLine4], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y())/2,
+        initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())/2
+      ], vertexStyle),
+      board.create("point", [
+        initFixedCen.X()-(initFixedTip.Y()-initFixedCen.Y()),
+        initFixedCen.Y()-(initFixedTip.X()-initFixedCen.X())
+      ], vertexStyle),
+    ];
+
+    board.create("polygon", initFixedPointList.slice(1), {
+      fixed:true,
+      highlight:false,
+      fillColor:"pink",
+      fillOpacity:0.7,
+      borders:{
+        visible:false
+      }
+    });
+
+    // After reflection
+
+    var refPointList = [];
+    
+    if (refAxis == "x") {
+      var refLine = board.create("line", [[0,0], [1,0]], {
+        fixed:true,
+        visible:false
+      });
+    } else if (refAxis == "y") {
+      var refLine = board.create("line", [[0,0], [0,1]], {
+        fixed:true,
+        visible:false
+      });
+    };
+
+    var i;
+    for (i in initFixedPointList.slice(1)) {
+      refPointList.push(board.create(
+        "reflection", 
+        [initFixedPointList.slice(1)[i], refLine], 
+        {
+          fixed:true,
+          visible:false
+        })
+      );
+    }
+
+    board.create("polygon", refPointList, {
+      fixed:true,
+      highlight:false,
+      fillColor:"none",
+      borders:{
+        fixed:true,
+        highlight:false,
+        strokeColor:"black",
+        strokeWidth:2,
+        dash:2
+      }
+    });
+
+    // After translation
+
+    var transPointList = [];
+
+    for (i in refPointList) {
+      transPointList.push(board.create(
+        "point", 
+        [
+          refPointList[i].X()+transVec[0],
+          refPointList[i].Y()+transVec[1]
+        ], 
+        {
+          fixed:true,
+          visible:false
+        })
+      );
+    }
+
+    board.create("polygon", transPointList, {
+      fixed:true,
+      highlight:false,
+      fillColor:"pink",
+      fillOpacity:0.7,
+      borders:{
+        fixed:true,
+        highlight:false,
+        strokeColor:"black",
+        strokeWidth:2,
+      }
+    });
+
+[[/jsxgraph]]]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt2-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node3_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0.667</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>You have correctly transformed the centre point of the pink arrow.
+<br>However, your resulting shape is not at the correct orientation.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt2-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node4_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0.333</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>You have correctly translated the shape after the reflection.
+<br>However, you reflected the shape in the \({@if refAxis="x" then "y" else "x"@}\) axis instead of the \({@refAxis@}\) axis.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt2-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node5_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0.333</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>You have performed the transformations in the wrong order.
+<br>You should have <i>reflected</i> the arrow first, and then <i>translated</i> it.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>5</falsenextnode>
+        <falseanswernote>prt2-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>5</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node6_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-6-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>You have correctly reflected the pink arrow in the \({@refAxis@}\) axis.
+<br>However, you have then translated the shape by the vector {@matrix([first(ans2)-first(refCenB)],[second(ans2)-second(refCenB)])@}</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>6</falsenextnode>
+        <falseanswernote>prt2-6-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>6</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node7_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-7-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>You have correctly performed the {@if (ans2=refCenB and first(ans3)-first(tans3)+first(first(transVec))<=0.1 and second(ans3)-second(tans3)+first(second(transVec))<=0.1) then "reflection" else "translation"@} given.
+<br>However, you have not attempted to {@if (ans2=refCenB and first(ans3)-first(tans3)+first(first(transVec))<=0.1 and second(ans3)-second(tans3)+first(second(transVec))<=0.1) then "translate" else "reflect"@} the shape.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>7</falsenextnode>
+        <falseanswernote>prt2-7-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>7</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>node8_test</sans>
+        <tans>1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt2-8-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br>You have correctly transformed the <b>green</b> arrow.
+<br>However, you should have transformed the <b>pink</b> arrow.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt2-8-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1665101253</deployedseed>
+    <deployedseed>1042086715</deployedseed>
+    <deployedseed>200544972</deployedseed>
+    <deployedseed>602965448</deployedseed>
+    <deployedseed>560239246</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans2</name>
+        <value>transCenB</value>
+      </testinput>
+      <testinput>
+        <name>ans3</name>
+        <value>tans3</value>
+      </testinput>
+      <expected>
+        <name>prt2</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt2-2-T</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>
