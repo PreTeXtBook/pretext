@@ -24,6 +24,10 @@
 <!-- This is a skeleton file to hold WeBWorK problems authored in PreTeXt. -->
 
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+  <docinfo>
+      <directories external="external"/>
+  </docinfo>
+
   <article xml:id="webwork-mini">
     <title><webwork /> Minimal Example</title>
     <frontmatter>

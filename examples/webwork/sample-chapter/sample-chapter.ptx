@@ -28,6 +28,7 @@
     <!-- information which a reader mostly will never see. -->
 
     <docinfo>
+        <directories external="my-external"/>
 
         <!-- To aid uniqueness of database identifiers in Runestone -->
         <document-id edition="2">PTXWW</document-id>
