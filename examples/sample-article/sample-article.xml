@@ -172,7 +172,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- certain items completely.  For example, a data file -->
         <!-- for an plot image. Illustrated here, search for the -->
         <!-- use of the translation, "external/"                 -->
-        <directories data="numerical"/>
+        <directories external="media" data="numerical"/>
 
         <!-- A blurb that briefly describes the document -->
         <blurb>
