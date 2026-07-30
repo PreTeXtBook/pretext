@@ -23,7 +23,10 @@
 // Print specific rules should go in a file in targets/print-worksheet stylesheet
 @use 'components/helpers/buttons-default' as buttons;
 
-.heading .print-links {
+// The print preview icon.  For a printout (worksheet, handout) this sits
+// inside the division's heading; for a project-like standalone printout it is
+// a sibling just after the heading, so do not require a .heading ancestor.
+.print-links {
   float: right;
   position: relative;
   z-index: 100;
@@ -34,6 +37,49 @@
   }
   .material-symbols-outlined {
     margin-top:5pt;
+  }
+}
+
+// Pin the icon to the block's top right corner, level with the title.  A float
+// would not do: floated after the heading it drops into the gap below the
+// title, and floated before it the title's background would paint over it.
+// Out of flow it also leaves the text's line boxes full width.  Every theme
+// already gives a project-like "position: relative", so this anchors to the
+// block itself.
+.project-like.standalone-printout > .print-links {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  // no title baseline to line up with out here
+  .material-symbols-outlined {
+    margin-top: 0;
+  }
+}
+
+// A project-like that offers a print preview (see "standalone-printout" in
+// pretext-html.xsl) reads as a worksheet, so its title belongs on a line of its
+// own rather than running into the text, and it has to leave a lane clear for
+// the pinned icon above.
+//
+// Themes style a project title three different ways: inline
+// (inline-heading-mixin), an inline-block filled bar (C-box-mixin), and a block
+// notch cut into the box border (heading-box-mixin).  Block is what lets
+// max-width bite -- an inline box ignores it -- and fit-content keeps the width
+// all three intended, so that a filled title bar does not stretch across the
+// column just because we changed its display.
+//
+// NB: the inline mixin's companion rules for the text after the title are
+// already inert, since the .print-links div, not the text, follows the heading.
+.project-like.standalone-printout > .heading:first-child {
+  display: block;
+  width: fit-content;
+  // a title long enough to fill the column would run under the pinned icon
+  max-width: calc(100% - 2.5em);
+
+  // the inline mixin's trailing thin space, which separated title from run-in text
+  &::after {
+    content: none;
   }
 }
 
