@@ -32,6 +32,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     So on a first reading, skip ahead to the article tag.
     -->
     <docinfo>
+        <directories external="media"/>
         <!--
         In the HTML version there is room for a picture or logo
         in the upper left corner.  An image of a cover for a
