@@ -22,6 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is where you can define macros and other book-wide -->
 <!-- settings. -->
 <docinfo xmlns:xi="http://www.w3.org/2001/XInclude">
+    <directories external="../assets"/>
 
 
   <!-- brandlogo is the image that may appear next to the title in the banner -->

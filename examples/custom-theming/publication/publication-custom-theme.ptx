@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <source>
     <!-- Paths to folders containing external assets and generated assets -->
     <!-- relative to your main source file.                               -->
-    <directories external="../assets" generated="../generated-assets" />
+    <directories generated="../generated-assets" />
   </source>
 
   <html>

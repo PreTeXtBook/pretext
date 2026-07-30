@@ -27,7 +27,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- relative to your main source file.                               -->
     <!-- the @external value is where any file specified by               -->
     <!--  html.css.extra CSS should be                                    -->
-    <directories external="../assets" generated="../generated-assets" />
+    <directories generated="../generated-assets" />
   </source>
 
   <html>
