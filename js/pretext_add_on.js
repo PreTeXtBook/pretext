@@ -416,6 +416,16 @@ window.addEventListener("load",function(event) {
 
 // The new method for creating pages and adjusting workspace //
 
+// The element being previewed.  Usually a worksheet or handout section, but a
+// project-like block with workspace that lives outside any worksheet/handout
+// is previewed as a printout in its own right, in which case this is the
+// project's <article>.  loadPrintout() tags whichever it is with "printout",
+// which is also the hook the print stylesheet keys on, so nothing downstream
+// has to care which kind of element it got.
+function getPrintout() {
+    return document.querySelector('.printout');
+}
+
 // Unwrap section.paragraphs containers so their children flow directly
 // into the parent, enabling CSS page breaks between the inner elements.
 function flattenParagraphsSections(printout) {
@@ -452,6 +462,17 @@ function waitForImages(container, timeoutMs = 5000) {
     ]);
 }
 
+// The workspace divs in, or at, an element.  In a worksheet a workspace is
+// always nested inside an exercise or task, but a project-like standalone
+// printout can carry @workspace on itself, and then the block *is* the
+// workspace div -- which querySelectorAll, looking only at descendants, misses.
+function workspaceDivsIn(elem) {
+    if (elem.classList.contains('workspace')) {
+        return [elem];
+    }
+    return [...elem.querySelectorAll('.workspace')];
+}
+
 // This is used multiple places to set height of workspace divs to their author-provided heights
 function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll('.workspace');
@@ -464,7 +485,7 @@ function setInitialWorkspaceHeights() {
 // If a printout (worksheet or handout) includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
 function adjustPrintoutPages() {
     console.log("*** Adjusting printout pages.");
-    const printout = document.querySelector('section.worksheet, section.handout');
+    const printout = getPrintout();
     if (!printout) {
         console.warn("No printout found, exiting adjustPrintoutPages.");
         return;
@@ -506,7 +527,7 @@ function createPrintoutPages(margins) {
     const conservativeContentHeight = 1056 - (margins.top + margins.bottom); // in pixels
     const conservativeContentWidth = 794 - (margins.left + margins.right); // in pixels
 
-    const printout = document.querySelector('section.worksheet, section.handout');
+    const printout = getPrintout();
     if (!printout) {
         console.warn("No printout found, exiting createPrintoutPages.");
         return;
@@ -554,7 +575,7 @@ function createPrintoutPages(margins) {
             continue;
         }
         let totalWorkspaceHeight = 0;
-        if (row.querySelector('.workspace')) {
+        if (workspaceDivsIn(row).length > 0) {
             // Workspace height is not just sum of workspace heights; we need to be careful with sidebyside and columns
             totalWorkspaceHeight = getElemWorkspaceHeight(row);
         }
@@ -597,7 +618,7 @@ function createPrintoutPages(margins) {
 
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
 function addHeadersAndFootersToPrintout() {
-    const printout = document.querySelector('section.worksheet, section.handout');
+    const printout = getPrintout();
     if (!printout) {
         console.warn("No printout found, exiting addHeadersAndFootersToPrintout.");
         return;
@@ -779,7 +800,7 @@ function getElemWorkspaceHeight(elem) {
             }
         }
     }
-    const workspaces = elem.querySelectorAll('.workspace');
+    const workspaces = workspaceDivsIn(elem);
     let totalHeight = 0;
     workspaces.forEach(ws => {
         const workspaceHeight = ws.offsetHeight;
@@ -949,6 +970,45 @@ function getPaperSize() {
     return paperSize || "letter";
 }
 
+// A project-like born hidden as a knowl (the publisher's knowl-project) renders
+// as
+//   <details id="..."><summary><h2 class="heading"/><div class="print-links"/></summary>
+//     <article class="knowl__content">...</article></details>
+// so the id lands on the <details>, the title sits in the <summary>, and the
+// content is a separate article with no title of its own.  Rebuild it as the
+// single block a visible project would have produced, title first, so the rest
+// of the preview needs to know nothing about knowls.  Returns the block to
+// preview, or the <details> unchanged if it is not shaped as expected.
+function flattenKnowledPrintout(details) {
+    const content = details.querySelector(':scope > .knowl__content');
+    if (!content) {
+        console.warn("Born-hidden printout has no knowl content; previewing as-is:", details);
+        return details;
+    }
+    const heading = details.querySelector(':scope > summary > .heading');
+    if (heading) {
+        content.insertBefore(heading, content.firstChild);
+    }
+    // It is the page now, not knowl content.  Carry the id over so the preview
+    // keeps the identity named in the URL.
+    content.classList.remove('knowl__content');
+    content.id = details.id;
+    // Moves content out of details, then drops the details (and its summary).
+    details.replaceWith(content);
+    return content;
+}
+
+// The print icon has to live inside the <summary> of a born-hidden knowl to be
+// visible while the knowl is closed, but a click in a <summary> is the knowl's
+// own open/close toggle.  So follow the link ourselves and swallow the toggle.
+document.addEventListener("click", (ev) => {
+    const link = ev.target.closest("a.print-link");
+    if (!link || !link.closest("summary")) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    window.location.assign(link.href);
+});
+
 // Function to load the printout section and switch to print stylesheet.  This will run whenever a user clicks on a print preview link (which adds ?printpreview=sectionID to the URL).
 async function loadPrintout(printableSectionID) {
 
@@ -967,13 +1027,24 @@ async function loadPrintout(printableSectionID) {
         });
     }
 
-    // Find the section with this ID
-    const printableSection = document.getElementById(printableSectionID);
+    // Find the element with this ID.  For a worksheet or handout this is the
+    // division's section; for a standalone project-like printout it is the
+    // project's article, nested somewhere inside a division section, or a
+    // <details> if the project is born hidden as a knowl.
+    let printableSection = document.getElementById(printableSectionID);
     if (!printableSection) {
-        console.error("No section found with ID:", printableSectionID);
+        console.error("No printable element found with ID:", printableSectionID);
         return;
     }
-    // Remove any existing sections from .ptx-content and add only the printable section
+    if (printableSection.tagName === "DETAILS") {
+        printableSection = flattenKnowledPrintout(printableSection);
+    }
+    // Mark it as the printout so the stylesheet and the pagination code below
+    // can find it without knowing which kind of element it is.
+    printableSection.classList.add("printout");
+    // Remove any existing sections from .ptx-content and add only the printable
+    // section.  Removing a section that contains the printout is harmless: we
+    // still hold a reference to it, and re-attach it on the next line.
     const ptxContent = document.querySelector('.ptx-content');
     const existingSections = ptxContent.querySelectorAll(':scope > section');
     existingSections.forEach(sec => ptxContent.removeChild(sec));
@@ -982,7 +1053,7 @@ async function loadPrintout(printableSectionID) {
 
 // Function to redo solutions details to divs with summary as title
 function rewriteSolutions() {
-    var born_hidden_knowls = document.querySelectorAll('.worksheet details, .handout details');
+    var born_hidden_knowls = document.querySelectorAll('.printout details');
     born_hidden_knowls.forEach(function(detail) {
         const summary = detail.querySelector('summary');
         const content = detail.innerHTML.replace(summary.outerHTML, '');
@@ -1029,8 +1100,16 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         const printableSectionID = urlParams.get("printpreview");
         await loadPrintout(printableSectionID);
 
+        // loadPrintout bails out if the id names nothing printable (a stale or
+        // hand-edited URL), so there may be no printout to lay out.
+        const printout = getPrintout();
+        if (!printout) {
+            console.warn("Nothing to preview for printpreview=" + printableSectionID + "; leaving the page as it is.");
+            return;
+        }
+
         // First, get the margins for pages to be passed around as needed.
-        const marginList = document.querySelector('section.worksheet, section.handout').getAttribute('data-margins').split(' ');
+        const marginList = (printout.getAttribute('data-margins') || "").split(' ');
         // Convert margin values to pixels if they are not already numbers
         const margins = {
             top: toPixels(marginList[0] || "0.75in"), // Default to 0.75in if not specified
@@ -1113,7 +1192,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // Finally, with everything set up, we create or adjust the printout pages as needed.
 
         // Flatten paragraphs sections so page breaks can occur inside them.
-        const printoutSection = document.querySelector('section.worksheet, section.handout');
+        const printoutSection = getPrintout();
         if (printoutSection) {
             flattenParagraphsSections(printoutSection);
         }
