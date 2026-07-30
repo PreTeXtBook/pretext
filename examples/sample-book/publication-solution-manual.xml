@@ -30,7 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- not used, and a separate preface is used.  Only chapter  -->
     <!-- contents get recycled.                                   -->
     <source>
-        <directories external="ext" generated="gen"/>
+        <directories generated="gen"/>
         <version include="no-parts"/>
     </source>
 

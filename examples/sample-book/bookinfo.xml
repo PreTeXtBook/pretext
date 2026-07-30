@@ -25,6 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 <docinfo>
+    <directories external="ext"/>
 
     <!-- the other option is "long" which will produce an -->
     <!-- entire front matter section with more headings   -->
