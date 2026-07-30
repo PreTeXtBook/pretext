@@ -3866,7 +3866,7 @@
 
             <subsubsection xml:id="program-default-values">
                 <title>Default Attributes for Programs</title>
-                <p>Book-level default values for some program attributes can be set in <c>docinfo/programs</c>. If a value for an attribute is set in that location, it will be used for any <tag>program</tag> that lacks the corresponding attribute.</p>
+                <p>Book-level default values for some program attributes can be set on a <tag>programs</tag> element within <c>docinfo/defaults</c>. If a value for an attribute is set in that location, it will be used for any <tag>program</tag> that lacks the corresponding attribute.  (A sibling <tag>parsons</tag> element defaults the language of Parsons problems the same way.)</p>
                 <p>The following attributes can be given default values - some only are applicable to interactive programs (see <xref ref="interactive-program-codelens"/> and <xref ref="interactive-program-activecode"/>): <attr>compiler-args</attr>, <attr>linker-args</attr>, <attr>interpreter-args</attr>, <attr>download</attr>, <attr>language</attr>, <attr>linenumbers</attr>, and <attr>timelimit</attr>.</p>
             </subsubsection>
 
