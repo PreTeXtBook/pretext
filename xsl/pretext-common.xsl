@@ -11841,6 +11841,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;audio&quot;, &quot;video&quot;, or &quot;interactive&quot; element may not appear within a &quot;sidebyside&quot;, at any depth.  Content may go missing with no further warning.  Relocate the element outside the &quot;sidebyside&quot;.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-30  "programs" and "parsons" relocate into "docinfo/defaults" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/programs | $docinfo/parsons&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-30'" />
+        <xsl:with-param name="message" select="'a &quot;programs&quot; or &quot;parsons&quot; element now resides within a &quot;defaults&quot; element of the &quot;docinfo&quot;, alongside other document-wide defaults for authored attributes.  We will honor your intent, but please relocate the element.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-07-30  "docinfo/defaults/image-width" element becomes "images/@width" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/defaults/image-width&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-30'" />
+        <xsl:with-param name="message" select="'a document-wide default width for images is now a &quot;width&quot; attribute on an &quot;images&quot; element within &quot;docinfo/defaults&quot;, replacing the &quot;image-width&quot; element.  We will honor your intent, but please convert to the attribute form.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
