@@ -2063,6 +2063,12 @@
                 }
 
             Configuration |=
+                element directories {
+                    attribute external {text}?,
+                    attribute data {text}?
+                }
+
+            Configuration |=
                 element author-biographies {
                     attribute length {"short" | "long"}
                 }

@@ -5348,6 +5348,16 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
+    <element name="directories">
+      <optional>
+        <attribute name="external"/>
+      </optional>
+      <optional>
+        <attribute name="data"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
     <element name="author-biographies">
       <attribute name="length">
         <choice>

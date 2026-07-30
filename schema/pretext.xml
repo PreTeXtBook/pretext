@@ -3604,6 +3604,7 @@
             <fragref ref="cross-references" />
             <fragref ref="initialism" />
             <fragref ref="rename" />
+            <fragref ref="directories" />
             <fragref ref="authorbiographylength" />
             <fragref ref="defaults" />
             <fragref ref="doenetml" />
@@ -3676,6 +3677,19 @@
                     attribute element {text},
                     attribute xml:lang {text}?,
                     text
+                }
+            </code>
+        </fragment>
+
+        <p>The directories an author curates run with the source, as paths relative to the location of the main source file.  The <attr>external</attr> attribute names the directory of externally-produced files an author provides (images, and other assets); swap that directory and the document's content changes, so it is a fact of the source.  The <attr>data</attr> attribute names the directory of data files consumed when building certain images and programs.  The <em>destination</em> for files <pretext/> generates is a publisher convenience, and remains a publication file entry.</p>
+
+        <fragment xml:id="directories">
+            <title>Source directories</title>
+            <code>
+            Configuration |=
+                element directories {
+                    attribute external {text}?,
+                    attribute data {text}?
                 }
             </code>
         </fragment>
