@@ -323,22 +323,6 @@
   <define name="Website" combine="choice">
     <ref name="Website_X"/>
   </define>
-  <define name="Configuration" combine="choice">
-    <element name="blurb">
-      <optional>
-        <attribute name="shelf"/>
-      </optional>
-      <text/>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="document-id">
-      <optional>
-        <attribute name="edition"/>
-      </optional>
-      <text/>
-    </element>
-  </define>
   <define name="ProofLike">
     <ref name="MetaDataTitleOptional"/>
     <oneOrMore>

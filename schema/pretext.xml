@@ -3609,6 +3609,8 @@
             <fragref ref="programs" />
             <fragref ref="doenetml" />
             <fragref ref="logo" />
+            <fragref ref="blurb" />
+            <fragref ref="document-id" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -3771,13 +3773,6 @@
                 }
             </code>
         </fragment>
-    </section>
-
-    <section>
-        <title>Document Information (experimental)</title>
-
-        <p>We extend the <c>docinfo</c> to include new elements. We
-                add each to the <c>Configuration</c> group.</p>
 
         <p>A textbook can have a blurb (roughly what you would expect on the back of the book), and optionally a <attr>shelf</attr> that tells Runestone how to categorize the book.</p>
 
@@ -3792,6 +3787,8 @@
             </code>
         </fragment>
 
+        <p>A stable identifier for the document, with an optional <attr>edition</attr>, supports services which track a project across builds and releases (such as Runestone).</p>
+
         <fragment xml:id="document-id">
             <title>Document ID</title>
             <code>
@@ -3801,13 +3798,6 @@
                     text
                 }
             </code>
-        </fragment>
-
-        <p>Now we collect these to add to the dev schema.</p>
-        <fragment xml:id="docinfo-dev">
-            <title>Experimental Document Info</title>
-            <fragref ref="blurb"/>
-            <fragref ref="document-id"/>
         </fragment>
     </section>
 
@@ -3938,7 +3928,6 @@
             </code>
             <fragref ref="interactive" />
             <fragref ref="frontmatter-dev"/>
-            <fragref ref="docinfo-dev"/>
             <fragref ref="proof-like"/>
             <fragref ref="figure-dev"/>
             <fragref ref="solutions-dev"/>
