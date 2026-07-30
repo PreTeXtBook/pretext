@@ -3604,7 +3604,6 @@
             <fragref ref="cross-references" />
             <fragref ref="initialism" />
             <fragref ref="rename" />
-            <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
             <fragref ref="defaults" />
             <fragref ref="doenetml" />
@@ -3690,21 +3689,6 @@
                     attribute element {text},
                     attribute xml:lang {text}?,
                     text
-                }
-            </code>
-        </fragment>
-
-        <p>Image archives have some global specification.  The <c>from</c> attribute gives a root for only working on a subtree of the document.  The content is a comma-separated list of file extensions.</p>
-
-        <fragment xml:id="imagearchive">
-            <title>Image archives</title>
-            <code>
-            Configuration |=
-                element images {
-                    element archive {
-                        attribute from {text}?,
-                        text
-                    }+
                 }
             </code>
         </fragment>

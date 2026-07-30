@@ -2068,14 +2068,6 @@
                 }
 
             Configuration |=
-                element images {
-                    element archive {
-                        attribute from {text}?,
-                        text
-                    }+
-                }
-
-            Configuration |=
                 element author-biographies {
                     attribute length {"short" | "long"}
                 }

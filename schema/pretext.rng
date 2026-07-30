@@ -5353,18 +5353,6 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="images">
-      <oneOrMore>
-        <element name="archive">
-          <optional>
-            <attribute name="from"/>
-          </optional>
-          <text/>
-        </element>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
     <element name="author-biographies">
       <attribute name="length">
         <choice>
