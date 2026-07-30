@@ -243,7 +243,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             Directories =
                 element directories {
-                    attribute external { text },
+                    # deprecated (2026-07-30): the external directory is a
+                    # fact of the source and is declared as
+                    # "directories/@external" within "docinfo"; this entry
+                    # is honored while the "docinfo" is silent
+                    attribute external { text }?,
                     attribute generated { text }
                 }
 
