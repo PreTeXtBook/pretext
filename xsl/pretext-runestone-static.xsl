@@ -1221,23 +1221,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="statement" mode="fillin-solution">
     <xsl:variable name="exercise" select=".."/>
+    <xsl:variable name="ordered-evaluates" select="$exercise/evaluation/evaluate[not(@all = 'yes')]"/>
     <solution>
         <xsl:apply-templates select="node()|@*" mode="fillin-solution"/>
         <!-- xerox feedback for correct response on each var -->
         <xsl:for-each select="../setup/var/condition[1]/feedback">
             <xsl:apply-templates select="node()" mode="fillin-solution"/>
         </xsl:for-each>
-        <xsl:for-each select=".//fillin[@answer]">
+        <xsl:for-each select=".//fillin">
             <xsl:variable name="fillin-name" select="@name"/>
             <xsl:variable name="fillin-pos" select="position()"/>
+            <xsl:variable name="named-evaluate" select="$exercise/evaluation/evaluate[@name = $fillin-name]"/>
+            <xsl:variable name="ordered-evaluate" select="$ordered-evaluates[position() = $fillin-pos]"/>
             <xsl:choose>
                 <!-- If #evaluate matches by name, find feedback on a correct result -->
-                <xsl:when test="$exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']">
-                    <xsl:apply-templates select="$exercise/evaluation/evaluate[@name='$fillin-name']/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
+                <xsl:when test="$named-evaluate/test[@correct = 'yes']">
+                    <xsl:apply-templates select="$named-evaluate/test[@correct = 'yes']/feedback/node()" mode="fillin-solution"/>
                 </xsl:when>
                 <!-- Otherwise #evaluate matches by order, find feedback on a correct result -->
-                <xsl:when test="$exercise/evaluation/evaluate[$fillin-pos]/test[@correct='yes']">
-                    <xsl:apply-templates select="$exercise/evaluation/evaluate[$fillin-pos]/test[@correct='yes']/feedback/node()" mode="fillin-solution"/>
+                <xsl:when test="$ordered-evaluate/test[@correct = 'yes']">
+                    <xsl:apply-templates select="$ordered-evaluate/test[@correct = 'yes']/feedback/node()" mode="fillin-solution"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
