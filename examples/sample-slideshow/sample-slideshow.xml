@@ -21,6 +21,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <pretext>
 
     <docinfo>
+        <directories external="external"/>
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         </macros>
