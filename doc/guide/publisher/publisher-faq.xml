@@ -100,6 +100,11 @@
         </li>
 
         <li>
+            <title>My SVG images show up with scrollbars, or do not display</title>
+            <p>An image that appears with scrollbars, or fails to display at all, is usually a sign that your web server is sending the file with the wrong <term>MIME type</term><mdash/><c>text/xml</c>, say, instead of <c>image/svg+xml</c>.  This is a server configuration matter, and so outside of <pretext/>'s control.  Most modern hosts (including <init>GitHub</init> Pages) serve <init>SVG</init> correctly with no effort on your part, but if yours does not, consult its documentation for how to associate the <c>.svg</c> extension with the <c>image/svg+xml</c> type.</p>
+        </li>
+
+        <li>
             <title>My LMS breaks my HTML</title>
             <p>Suppose your <init>HTML</init> output seems to work fine, but once you place it inside your university's Learning Management System (<init>LMS</init>) it no longer works very well.</p>
             <p>A likely culprit is that your <init>LMS</init> is adding material to your files, ruining them in the process.</p>

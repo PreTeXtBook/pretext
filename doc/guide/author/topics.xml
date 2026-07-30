@@ -607,6 +607,8 @@
             <subsubsection xml:id="topics-separators">
                 <title>Separators</title>
 
+                <p>A word of best practice before the individual marks.  <pretext/> never guesses which of these you intend: a hyphen you type stays a hyphen, and is never silently promoted to a longer dash the way a word processor's autocorrect might.  So the choice is always yours to make explicitly<mdash/>type a plain hyphen for a hyphen, and use <tage>ndash</tage> or <tage>mdash</tage> when you want one of the dashes below.</p>
+
                 <paragraphs>
                     <title><tage>ndash</tage>, <ndash />, en dash</title>
                     <p>A dash, the width of a lowercase <sq>n</sq>, or exactly half the width of the em dash.  This is typically used to express a range, such as <c>1955&lt;ndash /&gt;1975</c>, with no intervening spaces.  It is often expressed as two hyphens when typed.  Bringhurst suggests an ndash surrounded by spaces <ndash /> thusly <ndash /> when setting off phrases.</p>
@@ -1629,6 +1631,16 @@
             <p>You can fool the alignment behavior by hiding all your ampersands in macro definitions, so there is the optional <attr>alignment</attr> attribute for the <tag>md</tag> element, in order to force the right kind of alignment.  Allowable values are <c>gather</c>, <c>align</c>, and <c>alignat</c>.  The latter is similar to <c>align</c>, but no space is automatically provided between columns.  You can leave it that way, or explicitly add your own.  For example, this allows you to precisely arrange individual terms of a system of linear equations, especially when terms with zero coefficients are omitted.  When using the <c>alignat</c> option <pretext /> tries to count ampersands to see how many columns you intend, since <latex /> needs this number (we are not sure why).  This detection can be fooled too, especially if you have something like a matrix with lots of ampersands for other purposes.  So set the <attr>alignat-columns</attr> attribute to the <em>number of intended columns</em>, if necessary.</p>
 
             <p>If you have many aligned equation in a single <tag>md</tag>, but want to add a short sentence or two somewhere in the middle, place it in an <tag>intertext</tag> element, and keep it simple.  Just some words and punctuation, plus maybe some elements like <tag>em</tag> or <tag>q</tag>, but nothing like a list.  In <init>PDF</init> output constructed via <latex/> the alignment will be preserved across the break for the intertext (since this feature is inspired by <latex/>'s <c>\intertext{}</c> macro).  Unfortunately, this is too complicated in other (electronic) output formats, so we just do the best we can to preserve your intent.  Perhaps some day, MathJax will be more capable, and we can make your source do better.</p>
+        </subsection>
+
+        <subsection xml:id="cases-and-matrices">
+            <title>Cases and Matrices</title>
+            <idx><h>cases (mathematics)</h></idx>
+            <idx><h>matrix</h></idx>
+
+            <p>As the preceding subsections illustrate, you never author a <latex/> <em>display</em> environment (<c>align</c>, <c>gather</c>, <c>equation</c>) inside an <tag>m</tag>, <tag>md</tag>, or <tag>mrow</tag> element.  <pretext/> chooses the environment, and each <tag>mrow</tag> delimits a displayed line, which is why the <c>\\</c> line separator never appears in your source.</p>
+
+            <p>The exception is an environment that builds structure <em>within a single formula</em>: the matrix family (<c>\begin{pmatrix}</c>, <c>\begin{bmatrix}</c>, and friends) and <c>\begin{cases}</c> for a definition by cases.  Author these inside <tag>m</tag>, <tag>md</tag>, or <tag>mrow</tag> as ordinary <latex/>.  Within such an environment<mdash/>and only there<mdash/><c>\\</c> ends a row and <c>\amp</c> separates the columns.  There is a complete <c>cases</c> example, with commentary, in <xref ref="text-in-mathematics"/>, and advice on avoiding the unsupported <c>\matrix{}</c> <em>command</em> in favor of these environments in <xref ref="topic-mathematics-practices"/>.</p>
         </subsection>
 
         <subsection xml:id="commutative-diagrams">
@@ -3401,6 +3413,14 @@
 
                     <p>Every image in <pretext/> may be constrained by width and/or margins, or may be restricted to a panel of a <tag>sidebyside</tag> with a certain width.  So the TikZ code you author will create an image that is then scaled by <pretext/> to fit the constraints (much as any other image is scaled).  Except this is done in a way that scales both the font and the line art.  Your main goal is to have this scaling use a scale factor of <m>1.0</m>.  Which, of course, sounds like a waste of effort, but it is critical for how the image behaves in <init>HTML</init> (next).</p>
 
+                    <p>One consequence of this scaling deserves a caution.  Because your picture is placed inside a box that <pretext/> scales to the computed width, <latex/> reads the picture as the argument of that box, and in the process discards the end-of-line characters in your source.  This is invisible for ordinary TikZ, but it breaks <c>pgfplots</c> when you supply <em>inline</em> table data.  By default <c>pgfplots</c> separates the rows of an inline table with newlines, and once those are gone it stops with an error such as <q>maybe TeX screwed up your end-of-lines</q> and produces no picture.  The remedy, which <c>pgfplots</c> itself recommends, is to change the row separator<mdash/>set <c>row sep=crcr</c> and terminate each row of data with <c>\\</c>.  For a single table, place the option on the plot,<cd>
+                        <cline>\addplot table[row sep=crcr] {</cline>
+                        <cline>x y \\</cline>
+                        <cline>1 1 \\</cline>
+                        <cline>2 4 \\</cline>
+                        <cline>};</cline>
+                    </cd>or set it once for the whole picture by adding <c>\pgfplotsset{/pgfplots/table/row sep=crcr}</c> ahead of the data.  Only inline data is affected; a table that <c>pgfplots</c> reads from an external file needs no change.</p>
+
                     <p>To accomplish this unit scaling, follow this procedure for each TikZ picture.<ol>
                         <li>Determine the width of the TikZ picture itself, in physical units of length.  Typically, the lengths used for larger portions are described in centimeters.  But note that an overall scale factor is sometimes applied for convenience (or as a result of poor planning!).  Also, the default unit length (centimeters) can be changed.  Note also, that text may <q>push out</q> to the right and left, defining the boundaries on the sides, and these lengths can be hard to compute or predict.</li>
                         <li>Recall the width of your text (above).  Recognize that list items will be indented (reducing width), and perhaps there are multiple indents if a list has multiple levels.</li>
@@ -3765,6 +3785,10 @@
                 <title>Content and Placement</title>
 
             <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
+
+            <p>In a fixed-width format like <init>PDF</init>, the lines of a program are set verbatim, and a long line is wrapped only where there is whitespace at which to break.  A dense line with no interior spaces<mdash/>a long string literal, say, or a function signature packed with keyword arguments<mdash/>then has nowhere to break, and runs off the right margin.  So aim to keep such lines short.  Most languages give you the means: in one with Python syntax you can spread a long call across several lines inside its parentheses or brackets, insert a few spaces at natural points, or build a long string from shorter pieces joined with the newline character, <c>"\n".join([...])</c>, rather than typing it as one unbreakable line.</p>
+
+            <p>A related caution concerns the alphabet you use in comments and string literals.  The default monospace font for <init>PDF</init> output (Inconsolata) covers Latin text and common Western-European accented characters, but not every alphabet<mdash/>Vietnamese, with its doubly-accented vowels, is a reported case.  A character the font lacks is <em>silently dropped</em> from the <init>PDF</init>: the compilation succeeds, and only the log records a <c>Missing character</c> warning, so proofread program text authored in such an alphabet carefully.  (Online output is typically unaffected, since a web browser substitutes glyphs from another font.)  A publisher can instead select a monospace font with the needed coverage; see <xref ref="latex-fonts"/>.</p>
 
             <p>The text contents of a program can be surrounded with <tag>code</tag>, but that is only necessary if you have other elements inside of the <tag>program</tag> like <tag>preamble</tag> or <tag>tests</tag> used by an interactive program (see <xref ref="interactive-program-activecode"/> below for details).</p>
 

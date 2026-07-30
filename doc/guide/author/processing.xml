@@ -738,6 +738,20 @@
         <p>We have devoted an entire chapter (<xref ref="schema" />) to amplifying this introduction and providing more details, such as where to find details on installing a validator.</p>
     </section>
 
+    <section xml:id="processing-warnings-errors">
+        <title>Warnings and Errors</title>
+        <idx>warnings</idx>
+        <idx>errors</idx>
+
+        <p>Your first response to any trouble<mdash/>a failed conversion, or output that looks spectacularly wrong<mdash/>should be to <em>validate your source</em>, always (see <xref ref="processing-dtd"/> and the fuller <xref ref="schema"/>).  Many puzzling conversion warnings are only downstream symptoms of a structural mistake that validation names directly and early.  And do not be alarmed if a document that produces fine output still reports validation errors, or the reverse: the two checks are independent, a point the Author FAQ (<xref ref="author-faq"/>) takes up, along with several warnings that are safe to ignore.</p>
+
+        <p>When a conversion does warn, it tells you where.  Alongside a description of the problem, <pretext/> prints the structural path to the element<mdash/>an ancestor chain such as <c>pretext/book/chapter/section/theorem/statement/p/xref</c>, with a trailing <c>@name</c> for an attribute<mdash/>and the nearest enclosing <tag>title</tag> and author-supplied <attr>xml:id</attr>.  Any one of these is a search target: copy a title or an <attr>xml:id</attr> and use your editor's <q>find in all files</q>, or <c>grep</c> from a terminal, to land on the exact spot in your source, whichever file holds it.  Because the whole project is processed as a single tree, a conversion message cannot name the file for you, but the search will.</p>
+
+        <p>The validation report locates a problem even more precisely.  It names the offending source <em>file</em> outright, and gives a counted path such as <c>/pretext/article/section[2]/p[3]/em[2]/p[1]</c><mdash/>in the second <tag>section</tag>, its third <tag>p</tag>, that paragraph's second <tag>em</tag>, the first <tag>p</tag> inside<mdash/>along with a line number in the assembled version of your source and an excerpt of the offending content.  A count tallies elements of the same name, so <c>p[3]</c> is the third paragraph of its section even when other elements stand between, and an element that is the only one of its name at its location shows no count.  This is one more reason validation is the first response, not the last resort.</p>
+
+        <p>If a message is too vague to act on, narrow it by removing content until it goes away.  With modular source (<xref ref="processing-modular"/>) this is quick: comment out the <tag>xi:include</tag> for a chapter or section, rebuild, and see whether the problem leaves with it; an individual element can be commented out with <c>&lt;!-- --&gt;</c> just the same.  When a whole chapter is suspect, bisect it by hand<mdash/>comment out half of its sections, rebuild, and repeat on whichever half still fails.  A few rounds corner almost any offending construction, even one a message describes poorly.</p>
+    </section>
+
     <section xml:id="processing-customizations">
         <title>Customizations</title>
 
