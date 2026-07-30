@@ -1633,6 +1633,16 @@
             <p>If you have many aligned equation in a single <tag>md</tag>, but want to add a short sentence or two somewhere in the middle, place it in an <tag>intertext</tag> element, and keep it simple.  Just some words and punctuation, plus maybe some elements like <tag>em</tag> or <tag>q</tag>, but nothing like a list.  In <init>PDF</init> output constructed via <latex/> the alignment will be preserved across the break for the intertext (since this feature is inspired by <latex/>'s <c>\intertext{}</c> macro).  Unfortunately, this is too complicated in other (electronic) output formats, so we just do the best we can to preserve your intent.  Perhaps some day, MathJax will be more capable, and we can make your source do better.</p>
         </subsection>
 
+        <subsection xml:id="cases-and-matrices">
+            <title>Cases and Matrices</title>
+            <idx><h>cases (mathematics)</h></idx>
+            <idx><h>matrix</h></idx>
+
+            <p>As the preceding subsections illustrate, you never author a <latex/> <em>display</em> environment (<c>align</c>, <c>gather</c>, <c>equation</c>) inside an <tag>m</tag>, <tag>md</tag>, or <tag>mrow</tag> element.  <pretext/> chooses the environment, and each <tag>mrow</tag> delimits a displayed line, which is why the <c>\\</c> line separator never appears in your source.</p>
+
+            <p>The exception is an environment that builds structure <em>within a single formula</em>: the matrix family (<c>\begin{pmatrix}</c>, <c>\begin{bmatrix}</c>, and friends) and <c>\begin{cases}</c> for a definition by cases.  Author these inside <tag>m</tag>, <tag>md</tag>, or <tag>mrow</tag> as ordinary <latex/>.  Within such an environment<mdash/>and only there<mdash/><c>\\</c> ends a row and <c>\amp</c> separates the columns.  There is a complete <c>cases</c> example, with commentary, in <xref ref="text-in-mathematics"/>, and advice on avoiding the unsupported <c>\matrix{}</c> <em>command</em> in favor of these environments in <xref ref="topic-mathematics-practices"/>.</p>
+        </subsection>
+
         <subsection xml:id="commutative-diagrams">
             <title>Commutative Diagrams</title>
 
