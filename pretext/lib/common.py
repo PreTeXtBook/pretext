@@ -674,19 +674,37 @@ def verify_input_directory(inputdir):
 
 
 def get_managed_directories(xml_source, pub_file):
-    """Returns pair: (generated, external) absolute paths, derived from publisher file"""
+    """Returns pair: (generated, external) absolute paths, from source and publisher file"""
 
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
-    # Examine /publication/source/directories element carefully
-    # for attributes which we code here for convenience
+    # The external directory is a fact of the source, declared as
+    # "directories/@external" within "docinfo" (2026-07-30).  A publisher
+    # file "source/directories/@external" is deprecated, but honored
+    # while the "docinfo" is silent.  The generated directory remains a
+    # publisher file entry.
     gen_attr = "generated"
     ext_attr = "external"
 
     # prepare for relative paths later
     source_dir = get_source_path(xml_source)
     # some parameterized error messages used later
+    src_abs_path_error = " ".join(
+        [
+            "the directory path for a managed directory, given in the",
+            'source file as "directories/@{}" within "docinfo" must be relative to',
+            'the PreTeXt source file location, and not the absolute path "{}"',
+        ]
+    )
+    src_missing_dir_error = " ".join(
+        [
+            'the directory "{}" implied by the value "{}" in the',
+            '"directories/@{}" entry within "docinfo" of the source file does not',
+            "exist. Check the spelling, create the necessary directory, or remove",
+            'the attribute.'
+        ]
+    )
     pub_abs_path_error = " ".join(
         [
             "the directory path for a managed directory, given in the",
@@ -706,6 +724,23 @@ def get_managed_directories(xml_source, pub_file):
     # Unknown until running the gauntlet
     generated = None
     external = None
+
+    # the source's declaration of the external directory
+    src_tree = guarded_xml_include_parser(xml_source)
+    directories_list = src_tree.xpath("/pretext/docinfo/directories")
+    if directories_list:
+        attributes_dict = directories_list[0].attrib
+        if ext_attr in attributes_dict.keys():
+            raw_path = attributes_dict[ext_attr]
+            if os.path.isabs(raw_path):
+                raise ValueError(src_abs_path_error.format(ext_attr, raw_path))
+            else:
+                abs_path = os.path.join(source_dir, raw_path)
+            try:
+                external = verify_input_directory(abs_path)
+            except:
+                raise ValueError(src_missing_dir_error.format(abs_path, raw_path, ext_attr))
+
     if pub_file:
         # parse publisher file, xinclude is conceivable
         # for multiple similar publisher files with common parts
@@ -730,15 +765,34 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, gen_attr))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
-                raw_path = attributes_dict[ext_attr]
-                if os.path.isabs(raw_path):
-                    raise ValueError(pub_abs_path_error.format(ext_attr, raw_path))
+                if external is not None:
+                    log.warning(" ".join(
+                        [
+                            "the external directory is specified both within",
+                            '"docinfo" ("directories/@external") and in the publisher',
+                            'file ("source/directories/@external").  The "docinfo"',
+                            "value is used; please remove the publisher file entry.",
+                        ]
+                    ))
                 else:
-                    abs_path = os.path.join(source_dir, raw_path)
-                try:
-                    external = verify_input_directory(abs_path)
-                except:
-                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, ext_attr))
+                    log.warning(" ".join(
+                        [
+                            "(2026-07-30) the external directory is a fact of the",
+                            "source, and is now declared with a",
+                            '"directories/@external" attribute within "docinfo".',
+                            'The publisher file entry "source/directories/@external"',
+                            "is honored meanwhile, but please relocate it.",
+                        ]
+                    ))
+                    raw_path = attributes_dict[ext_attr]
+                    if os.path.isabs(raw_path):
+                        raise ValueError(pub_abs_path_error.format(ext_attr, raw_path))
+                    else:
+                        abs_path = os.path.join(source_dir, raw_path)
+                    try:
+                        external = verify_input_directory(abs_path)
+                    except:
+                        raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, ext_attr))
 
     # pair of discovered absolute paths
     return (generated, external)
