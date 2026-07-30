@@ -758,6 +758,18 @@
         <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your writing, nor a concern while you concentrating on your writing.</p>
 
         <p>Therefore, many aspects of how your writing is <em>presented</em> is accomplished by your publisher.  Note that this is very different from <em>your</em> role as the author of your project.  When your project is mature then you can consult with your publisher about how to best present your project to your audience.  An entire part of this guide is devoted to this process (<xref ref="part-publisher"/>), but if you are curious, the first part of <xref ref="conversions"/> can serve as an introduction.</p>
+
+        <p>So when you want to adjust something, there are two places to look, and one question sorts them out: <em>would the change alter the actual words or content of your document, or only how that content appears?</em>  Configuration that affects the words themselves lives in the <tag>docinfo</tag> element of your source, since it travels with your writing and your document is not the same document without it.  Configuration that affects presentation and production lives in a publication file (<xref ref="publication-file-reference"/>), where a publisher<mdash/>even if that publisher is you, wearing a different hat<mdash/>can change it without touching your meaning.</p>
+
+        <p>Some common wants, sorted:<ul>
+            <li>Calling every <tag>activity</tag> a <q>Laboratory</q>: the <tag>rename</tag> element, in <tag>docinfo</tag><mdash/>it changes words your readers see.</li>
+            <li>A <latex/> macro used throughout your mathematics: the <tag>macros</tag> element, in <tag>docinfo</tag><mdash/>your mathematics does not survive without it.</li>
+            <li>How the text of a cross-reference reads (<q>Theorem 5.2</q> versus <q>5.2</q>): the <tag>cross-references</tag> element, in <tag>docinfo</tag><mdash/>that text sits inside sentences you wrote around it.</li>
+            <li>The paper size or font size of the <init>PDF</init>: the publication file<mdash/>same words, different sheet.</li>
+            <li>Whether each web page is a chapter or a section: the publication file.</li>
+            <li>Whether solutions to exercises are visible or withheld: the publication file<mdash/>the publisher selects among whole components you provided.</li>
+            <li>How deep the numbering of divisions runs: the publication file<mdash/>numbers are generated apparatus, not authored words.</li>
+        </ul></p>
     </section>
 
     <section xml:id="processing-directory-management">
