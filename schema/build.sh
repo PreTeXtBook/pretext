@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # ********************************************************************
-# Copyright 2017-2019 Robert A. Beezer
+# Copyright (C) 2017-2026  Robert A. Beezer
 #
 # This file is part of PreTeXt.
 #
@@ -16,7 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+# along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 #
 # Schema build script

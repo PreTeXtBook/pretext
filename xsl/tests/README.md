@@ -1,3 +1,22 @@
+<!--********************************************************************
+Copyright (C) 2025-2026  Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*****************************************************************-->
+
 # XSL Automated Tests
 
 This folder contains testing utilities for XSL templates. The tests focus on function-like templates for tasks like string manipulation that are used as helpers throughout the XSL stylesheets. Most of these functions are otherwise only observable indirectly through their effects on the output of the main XSL stylesheets.

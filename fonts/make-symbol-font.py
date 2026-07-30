@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2026 Robert A. Beezer
+# Copyright (C) 2026  Robert A. Beezer
 #
 # This file is part of PreTeXt.
 #
