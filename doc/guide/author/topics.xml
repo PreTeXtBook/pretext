@@ -4686,7 +4686,7 @@
         <paragraphs>
             <title>What the Images Need, and Where Files Live</title>
 
-            <p>A <tag>latex-image-preamble</tag> and an <tag>asymptote-preamble</tag> supply setup for images described by source code, and a <c>pf:prefigure-preamble</c> does the same for PreFigure (<xref ref="topic-images"/>).  A <tag>directories</tag> element with a <attr>data</attr> attribute names the directory of data files that images and programs consume; the directories of external and generated images are named in the publication file (<xref ref="processing-directory-management"/>).</p>
+            <p>A <tag>latex-image-preamble</tag> and an <tag>asymptote-preamble</tag> supply setup for images described by source code, and a <c>pf:prefigure-preamble</c> does the same for PreFigure (<xref ref="topic-images"/>).  A <tag>directories</tag> element declares the directories that run with your source: <attr>external</attr> names the directory of files you curate (images and other assets<mdash/>a different directory is a different document), and <attr>data</attr> the directory of data files that images and programs consume.  The <em>destination</em> for generated files remains a publication file entry (<xref ref="processing-directory-management"/>).</p>
         </paragraphs>
 
         <paragraphs>

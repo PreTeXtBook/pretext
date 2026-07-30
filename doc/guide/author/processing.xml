@@ -831,9 +831,11 @@
                     <cline>            sloth.jpg</cline>
                 </cd></p>
 
-                <p>In your publication files you would then have the entry, as a sub-element of the <c>source</c> element,<cd>
-                    <cline>&lt;directories external="../ext" generated="../gen"/&gt;</cline>
-                </cd>Notice that we have deliberately named our directories <c>ext</c> and <c>gen</c> as part of this illustration, so that they are not identical to the <em>attribute</em> names on the <tag>directories</tag> element.  The two attribute values are <em>relative</em> to the location of the main <pretext/> file, in this case <c>aota.ptx</c>.  The two periods, <c>..</c>, mean to go up a level, here to the <c>aota</c> directory, then the slash indicates a step down to either <c>gen</c> or <c>ext</c>.  Note that <c>latex-image</c> and <c>youtube</c> within <c>gen</c> <em>must</em> be specified exactly that way.  Now every <pretext/> production tool can deduce where your files are.</p>
+                <p>The two directories are declared in two places, by their nature.  The external directory holds files <em>you</em> curate<mdash/>swap that directory for another and your document's content changes<mdash/>so it is a fact of the source, declared in your <tag>docinfo</tag> (<xref ref="topic-docinfo"/>):<cd>
+                    <cline>&lt;directories external="../ext"/&gt;</cline>
+                </cd>The generated directory is a destination the build machinery manages, so it is a publication file entry, a sub-element of the <c>source</c> element:<cd>
+                    <cline>&lt;directories generated="../gen"/&gt;</cline>
+                </cd>(An <attr>external</attr> attribute in the publication file is deprecated, but honored while the <tag>docinfo</tag> is silent.)  Notice that we have deliberately named our directories <c>ext</c> and <c>gen</c> as part of this illustration, so that they are not identical to the <em>attribute</em> names on the <tag>directories</tag> elements.  Both attribute values are <em>relative</em> to the location of the main <pretext/> file, in this case <c>aota.ptx</c>.  The two periods, <c>..</c>, mean to go up a level, here to the <c>aota</c> directory, then the slash indicates a step down to either <c>gen</c> or <c>ext</c>.  Note that <c>latex-image</c> and <c>youtube</c> within <c>gen</c> <em>must</em> be specified exactly that way.  Now every <pretext/> production tool can deduce where your files are.</p>
 
                 <p>How do you specify in your <pretext/> source which file to use where?  Suppose you want your two (external) photographs to be used in a <tag>sidebyside</tag> element.  You would author<cd>
                     <cline>&lt;sidebyside widths="50% 30%"&gt;</cline>

@@ -47,7 +47,7 @@
             <li>Exercise-component visibility <em>changes which letters appear on the page</em>, yet is the publication file: the publisher selects among whole units the author supplied, altering none of them.</li>
             <li>The depth of division numbering changes visible glyphs, yet is the publication file: numbers are generated apparatus.</li>
             <li>A document-wide default image width is <tag>docinfo</tag> by principle 3: it is a default for the authored <attr>width</attr> attribute, a convenience for a per-image authoring decision.</li>
-            <li>Managed directories illustrate that one <em>concept</em> can straddle the line: the files an author curates (external images, data) are source material<mdash/>swap the directory and it is a different book<mdash/>while the destination for generated build products is publisher convenience.  Judge each piece by its nature, not by keeping a family together.</li>
+            <li>Managed directories illustrate that one <em>concept</em> can straddle the line: the files an author curates (external images, data) are source material<mdash/>swap the directory and it is a different book<mdash/>while the destination for generated build products is publisher convenience.  The homes now match: <attr>external</attr> and <attr>data</attr> are declared on <c>docinfo/directories</c>, <attr>generated</attr> in the publication file.  Judge each piece by its nature, not by keeping a family together.</li>
         </ul></p>
 
         <p>When a proposed feature resists these tests, that is usually a sign it bundles an authoring concern with a presentation concern, and should be split.</p>
