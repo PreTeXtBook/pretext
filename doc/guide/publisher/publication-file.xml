@@ -211,6 +211,10 @@
             </p>
 
             <p>
+                PROJECT-LIKE elements that contain workspace will also be treated like a worksheet or handout using this setting.
+            </p>
+
+            <p>
                 These settings will be used for both the <latex /> and <init>HTML</init> conversions.
                 See also <xref ref="latex-worksheet-options"/> for more information on how these margins are used in the <latex/> conversion.
             </p>
@@ -434,7 +438,7 @@
         <subsection xml:id="latex-worksheet-options">
             <title><latex /> Worksheet Options</title>
             <p>
-                By default, worksheets are formatted differently than other pages, including customizable margins, workspace between exercises, and on their own pages.  This separate formatting can be ignored, causing worksheets to be treated like any other division, using the<cd>
+                By default, worksheets, handouts, and PROJECT-LIKE containing <attr>workspace</attr> are formatted differently than other pages, including customizable margins, workspace between exercises, and on their own pages.  This separate formatting can be ignored, causing worksheets to be treated like any other division, using the<cd>
                 <cline>/publication/latex/worksheet/@formatted</cline>
              </cd>attribute, setting the value to <c>no</c>.  The default value is <c>yes</c>.
             </p>
