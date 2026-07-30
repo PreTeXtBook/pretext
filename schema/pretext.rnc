@@ -204,6 +204,7 @@
                     ((Credit | ColophonCredit)* &
                     Date? &
                     Edition? &
+                    Event? &
                     Keywords* &
                     Support? &
                     Website? &
@@ -236,9 +237,9 @@
                 TextSimple
             }
             Edition = element edition {text}
-            # "event" is consumed only by the slideshow conversions
-            # (Beamer, reveal.js).  This schema does not yet describe a
-            # "slideshow" document, so the pattern is dormant until then.
+            # "event" names the occasion of a presentation: the slideshow
+            # conversions (Beamer, reveal.js) read it, and an article's
+            # title page carries it as a line following the title.
             Event = element event {
                 TextLong
             }
