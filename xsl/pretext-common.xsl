@@ -11855,6 +11855,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'a document-wide default width for images is now a &quot;width&quot; attribute on an &quot;images&quot; element within &quot;docinfo/defaults&quot;, replacing the &quot;image-width&quot; element.  We will honor your intent, but please convert to the attribute form.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-30  "docinfo/images/archive" moves to the publication file -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/images&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-30'" />
+        <xsl:with-param name="message" select="'requests for archive (download) versions of images have moved to the publication file, as &quot;/publication/html/images/archive&quot;.  We will honor an &quot;images&quot; element within &quot;docinfo&quot; while the publication file is silent, but please relocate the request.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
