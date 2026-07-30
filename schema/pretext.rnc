@@ -2060,12 +2060,6 @@
             Configuration |=
                 element initialism {text}
 
-            FeedbackUrl = element url {text}
-            Configuration |=
-                element feedback {
-                    FeedbackUrl
-                }
-
             Configuration |=
                 element rename {
                     attribute element {text},
@@ -2084,13 +2078,6 @@
             Configuration |=
                 element author-biographies {
                     attribute length {"short" | "long"}
-                }
-
-            Configuration |=
-                element numbering {
-                    element division {
-                        attribute part {"decorative" | "structural"}
-                    }?
                 }
 
             Configuration |=

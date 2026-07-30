@@ -5343,16 +5343,6 @@
       <text/>
     </element>
   </define>
-  <define name="FeedbackUrl">
-    <element name="url">
-      <text/>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="feedback">
-      <ref name="FeedbackUrl"/>
-    </element>
-  </define>
   <define name="Configuration" combine="choice">
     <element name="rename">
       <attribute name="element"/>
@@ -5382,20 +5372,6 @@
           <value>long</value>
         </choice>
       </attribute>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="numbering">
-      <optional>
-        <element name="division">
-          <attribute name="part">
-            <choice>
-              <value>decorative</value>
-              <value>structural</value>
-            </choice>
-          </attribute>
-        </element>
-      </optional>
     </element>
   </define>
   <define name="Configuration" combine="choice">
