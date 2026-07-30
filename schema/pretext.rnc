@@ -2029,12 +2029,6 @@
                 }
 
             Configuration |=
-                element brandlogo {
-                    attribute url {text}?,
-                    attribute source {text}
-                }
-
-            Configuration |=
                     element math-package {
                         attribute latex-name {text},
                         attribute mathjax-name {text}

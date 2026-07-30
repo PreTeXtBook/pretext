@@ -5296,14 +5296,6 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="brandlogo">
-      <optional>
-        <attribute name="url"/>
-      </optional>
-      <attribute name="source"/>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
     <zeroOrMore>
       <element name="math-package">
         <attribute name="latex-name"/>

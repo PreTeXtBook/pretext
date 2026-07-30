@@ -3598,7 +3598,6 @@
                     Configuration+
                 }
             </code>
-            <fragref ref="brandlogo" />
             <fragref ref="preambles" />
             <fragref ref="macros" />
             <fragref ref="cross-references" />
@@ -3610,19 +3609,6 @@
             <fragref ref="logo" />
             <fragref ref="blurb" />
             <fragref ref="document-id" />
-        </fragment>
-
-        <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
-
-        <fragment xml:id="brandlogo">
-            <title>Brand logo</title>
-            <code>
-            Configuration |=
-                element brandlogo {
-                    attribute url {text}?,
-                    attribute source {text}
-                }
-            </code>
         </fragment>
 
         <p>We add some items which will become parts of preambles to support math in <latex/> syntax, <tag>latex-image</tag>, and <tag>asymptote</tag>.  <latex/> packages, and their cousins, MathJax extensions, can be specified to support mathematics elements (<tag>m</tag> and friends).  Images specified by <latex/> or Asymptote syntax sometimes need extra information in their preambles.</p>
