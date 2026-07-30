@@ -10,10 +10,6 @@
   <docinfo>
     <brandlogo url="https://pretextbook.org" source="ptx-logo.png" />
 
-    <images>
-      <archive>eps pdf png svg tex</archive>
-    </images>
-
     <macros>
       \newcommand{\order}[1]{\left\lvert#1\right\rvert}
     </macros>

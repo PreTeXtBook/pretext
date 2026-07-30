@@ -25,6 +25,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <baseurl href="https://pretextbook.org/examples/pretext-showcase/html" />
         <calculator model="geogebra-classic"/>
         <css theme="default-modern" palette="blue-red"/>
+        <!-- archive (download) links on every image -->
+        <images>
+            <archive>eps pdf png svg tex</archive>
+        </images>
     </html>
 
     <!-- Relative path, relative to "main" source file -->
