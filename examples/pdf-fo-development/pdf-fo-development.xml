@@ -26,6 +26,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <pretext>
 
+    <docinfo>
+        <directories external="external"/>
+    </docinfo>
+
     <article xml:id="pdf-fo-development" label="pdf-fo-development">
         <title>XSL-FO Conversion Development</title>
 
