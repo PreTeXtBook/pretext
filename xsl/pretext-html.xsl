@@ -6920,7 +6920,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2.  Author must ensure the versions are next to file employed -->
 <!-- 3.  Formatting and case of suffixes is author's choice        -->
 <!-- 4.  Order in suffix list is respected in output               -->
-<!-- 5.  Per-image, with global spec in "docinfo/images/archive"   -->
+<!-- 5.  Per-image, with global spec in the publication file       -->
+<!--     ("/publication/html/images/archive"); the old location    -->
+<!--     within "docinfo" is honored while the former is silent    -->
 <!--                                                               -->
 <!-- The originating image template knows/computes the filename,   -->
 <!-- so this template accepts the filename, sans period and        -->
@@ -6942,28 +6944,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- last in list that contains the image wins             -->
             <!-- Documented heavily as first "mid-range" specification -->
             <!-- A single @from puts us in mid-range mode              -->
-            <xsl:when test="$docinfo/images/archive[@from]">
-                <!-- context of next "select" filters is "archive" -->
-                <!-- so save off the present context, the "image"  -->
+            <xsl:when test="$image-archives[@from]">
+                <!-- An "archive" node may live in the publication file,  -->
+                <!-- so the id() lookup for its @from must be evaluated   -->
+                <!-- with the context switched into the (assembled)       -->
+                <!-- source, where the present "image" lives.             -->
                 <xsl:variable name="the-image" select="." />
-                <!-- Filter all of the "archive" in docinfo with @from      -->
-                <!-- Subset occurs in document order                        -->
-                <!-- Form two subtrees of all desendant nodes, rooted at    -->
+                <!-- Test each "archive" with @from, in document order:     -->
+                <!-- Form two subtrees of all descendant nodes, rooted at   -->
                 <!--   (1) the image node                                   -->
                 <!--   (2) the node pointed to by @from                     -->
                 <!-- The pipe forms a union of the nodes in the subtrees    -->
                 <!-- "image" is on the subtree @from iff union is no larger -->
-                <xsl:variable name="containing-archives"
-                    select="$docinfo/images/archive[@from][count($the-image/descendant-or-self::node()|id(@from)/descendant-or-self::node())=count(id(@from)/descendant-or-self::node())]" />
+                <!-- Each containing "archive" records its formats, so the  -->
+                <!-- effective (last) one can be read off the collection.   -->
+                <xsl:variable name="containing-archives-rtf">
+                    <xsl:for-each select="$image-archives[@from]">
+                        <xsl:variable name="the-formats" select="string(.)"/>
+                        <xsl:variable name="the-from" select="string(@from)"/>
+                        <xsl:for-each select="$the-image">
+                            <xsl:if test="count($the-image/descendant-or-self::node()|id($the-from)/descendant-or-self::node())=count(id($the-from)/descendant-or-self::node())">
+                                <pi:archive-formats>
+                                    <xsl:value-of select="$the-formats"/>
+                                </pi:archive-formats>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:for-each>
+                </xsl:variable>
                 <!-- We mimic XSL and the last applicable "archive" is effective -->
                 <!-- This way, big subtrees go first, included subtrees refine   -->
                 <!-- @from can be an empty string and turn off the behavior      -->
                 <!-- We grab the content of the last "archive" to be the formats -->
-                <xsl:value-of select="$containing-archives[last()]/." />
+                <xsl:value-of select="exsl:node-set($containing-archives-rtf)/pi:archive-formats[last()]" />
             </xsl:when>
             <!-- global, presumes one only, ignores subtree versions -->
-            <xsl:when test="$docinfo/images/archive[not(@from)]">
-                <xsl:value-of select="normalize-space($docinfo/images/archive)" />
+            <xsl:when test="$image-archives[not(@from)]">
+                <xsl:value-of select="normalize-space($image-archives)" />
             </xsl:when>
             <!-- nothing begets nothing -->
             <xsl:otherwise />

@@ -232,6 +232,7 @@
                         Crossreferences? &
                         Exercises? &
                         Feedback? &
+                        Images? &
                         Indexpage? &
                         Interactives? &
                         Knowls? &
@@ -292,6 +293,14 @@
             Feedback =
                 element feedback {
                     attribute href { text }
+                }
+
+            Images =
+                element images {
+                    element archive {
+                        attribute from { text }?,
+                        text
+                    }+
                 }
 
             Indexpage =

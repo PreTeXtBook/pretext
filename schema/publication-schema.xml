@@ -432,6 +432,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         Crossreferences? &amp;
                         Exercises? &amp;
                         Feedback? &amp;
+                        Images? &amp;
                         Indexpage? &amp;
                         Interactives? &amp;
                         Knowls? &amp;
@@ -492,6 +493,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             Feedback =
                 element feedback {
                     attribute href { text }
+                }
+
+            Images =
+                element images {
+                    element archive {
+                        attribute from { text }?,
+                        text
+                    }+
                 }
 
             Indexpage =

@@ -2748,6 +2748,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!--                            -->
+<!-- HTML Image Archive Links   -->
+<!--                            -->
+
+<!-- Requests for archive (download) versions of images: repeatable  -->
+<!-- "archive" elements within an "images" element.  The publication -->
+<!-- file form is preferred, and wins wholesale when present; the    -->
+<!-- "images" element within "docinfo" is deprecated (2026-07-30)    -->
+<!-- but honored while the publication file is silent.               -->
+<xsl:variable name="image-archives" select="$publication/html/images/archive | $docinfo/images/archive[not($publication/html/images/archive)]"/>
+
+<!--                            -->
 <!-- HTML Embed Page button     -->
 <!--                            -->
 

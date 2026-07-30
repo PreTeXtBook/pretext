@@ -737,6 +737,9 @@
           <ref name="Feedback"/>
         </optional>
         <optional>
+          <ref name="Images"/>
+        </optional>
+        <optional>
           <ref name="Indexpage"/>
         </optional>
         <optional>
@@ -882,6 +885,18 @@
   <define name="Feedback">
     <element name="feedback">
       <attribute name="href"/>
+    </element>
+  </define>
+  <define name="Images">
+    <element name="images">
+      <oneOrMore>
+        <element name="archive">
+          <optional>
+            <attribute name="from"/>
+          </optional>
+          <text/>
+        </element>
+      </oneOrMore>
     </element>
   </define>
   <define name="Indexpage">
