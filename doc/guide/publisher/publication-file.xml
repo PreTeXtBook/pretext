@@ -623,6 +623,15 @@
             </ul>The default is <c>none</c>.  See <xref ref="online-favicon-configuration"/> for more, including an explanation of what a favicon is.</p>
         </subsection>
 
+        <subsection xml:id="online-image-archive-options">
+            <title>HTML Image Archives</title>
+            <idx><h>image archive</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/images/archive</cline>
+            </cd>element requests archive (download) links below images.  Its content is a space-separated list of file suffixes/formats, one link each.  The element is repeatable, and an optional <attr>from</attr> attribute names the <attr>xml:id</attr> of an element of the source, restricting that request to images within it.  The publisher supplies the actual files.  See <xref ref="topic-images-archive"/> for a full discussion with examples.</p>
+        </subsection>
+
         <subsection xml:id="online-webwork-dynamism">
             <title>HTML <webwork/> Dynamism</title>
             <idx><h>WeBWorK</h><h><init>HTML</init>dynamism</h></idx>
