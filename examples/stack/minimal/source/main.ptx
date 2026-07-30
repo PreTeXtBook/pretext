@@ -42,12 +42,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     xsltproc PATH_TO/mathbook/xsl/pretext-html.xsl source/main.ptx                           -->
 <!--     <browser>  minimal.html                                                                  -->
 <!--                                                                                              -->
-<!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
-<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
-<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-smc.xsl source/main.ptx   -->
-<!--     <CoCalc> minimal.sagews                                                                  -->
-<!--                                                                                              -->
-<!-- (4) Sage doctesting                                                                          -->
+<!-- (3) Sage doctesting                                                                          -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
 <!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-sage-doctest.xsl source/main.ptx  -->
 <!--     <read further instructions in> minimal.py                                                -->

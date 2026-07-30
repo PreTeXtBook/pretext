@@ -57,7 +57,6 @@ These notices are not altered at all, years included.
 | Glyph & Cog, LLC | 8 | `examples/showcase/generated/latex-image/` — produced files | as-is |
 | The PreTeXt Organization | 7 | `examples/showcase/source/` | as-is |
 | Free Software Foundation | 5 | `legal/gpl-license-v2.txt`, `legal/gpl-license-v3.txt`, `doc/guide/COPYING`, `doc/guide/appendices/gfdl-pretext.xml`, `examples/sample-book/gfdl-mathbook.xml` | as-is — verbatim license texts, whose own terms forbid modification |
-| Bryan A. Jones | 3 | `codechat_config.yaml` in `examples/humanities`, `examples/minimal`, `examples/sample-book` | as-is |
 | O'Reilly Media, Inc. | 3 | `xsl/entities.ent`, `xsl/pretext-epub.xsl`, `xsl/pretext-text-utilities.xsl` | as-is — the headers quote O'Reilly's own permission for code examples |
 | Aalto University | 2 | `js/pretext-stack/stackjsvle.js` and its copy under `js/dist/` | as-is — carries no license statement and has no nearby README |
 | Andrew Rechnitzer | 1 | `xsl/latex/pretext-latex-CLP.xsl` | as-is |
@@ -75,7 +74,6 @@ These notices are not altered at all, years included.
 
 | Files | Location | Note |
 |---|---|---|
-| 6 | `contrib/hitchman/`, `contrib/ups-writers/` | Contributed stylesheets, no notice at all.  Each directory has a README but no license.  Needs a decision. |
 | 1 | `xsl/support/play-button/README.md` | Left deliberately: it states that its content does not meet the threshold of originality for copyright protection. |
 
 ## Permissions

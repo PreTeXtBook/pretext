@@ -25,4 +25,3 @@ using `xsltproc` or the PreTeXt-CLI.
 
 `project.ptx` is a project configuration file for use with the PreTeXt-CLI.
 
-`codechat_config.yaml` is a CodeChat project configuration file, which will use the PreTeXt-CLI for processing.
