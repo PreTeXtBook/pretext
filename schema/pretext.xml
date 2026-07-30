@@ -3607,6 +3607,8 @@
             <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
             <fragref ref="programs" />
+            <fragref ref="doenetml" />
+            <fragref ref="logo" />
         </fragment>
 
         <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
@@ -3738,6 +3740,34 @@
             Configuration |=
                 element parsons {
                     attribute language {text}?
+                }
+            </code>
+        </fragment>
+
+        <p>DoenetML content is authored against a particular version of the DoenetML viewer, so the version is a fact of the source.  It is recorded here and consulted when the viewer is loaded.</p>
+
+        <fragment xml:id="doenetml">
+            <title>DoenetML version</title>
+            <code>
+            Configuration |=
+                element doenetml {
+                    attribute version {text}
+                }
+            </code>
+        </fragment>
+
+        <p>A logo image can be placed at absolute coordinates of the printed page, such as the letterhead of a letter or memorandum.  The image's lower-left corner sits at the coordinates given by <attr>llx</attr> and <attr>lly</attr>, in points.  A <attr>width</attr> in fixed units (such as <c>in</c> or <c>cm</c>) will scale the image, and <attr>pages</attr> elects placement on the first page only (the default) or on every page.</p>
+
+        <fragment xml:id="logo">
+            <title>Page logo</title>
+            <code>
+            Configuration |=
+                element logo {
+                    attribute source {text},
+                    attribute llx {text},
+                    attribute lly {text},
+                    attribute width {text}?,
+                    attribute pages {"first" | "all"}?
                 }
             </code>
         </fragment>

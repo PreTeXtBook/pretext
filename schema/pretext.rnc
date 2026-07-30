@@ -2096,4 +2096,18 @@
                     attribute language {text}?
                 }
 
+            Configuration |=
+                element doenetml {
+                    attribute version {text}
+                }
+
+            Configuration |=
+                element logo {
+                    attribute source {text},
+                    attribute llx {text},
+                    attribute lly {text},
+                    attribute width {text}?,
+                    attribute pages {"first" | "all"}?
+                }
+
                     }

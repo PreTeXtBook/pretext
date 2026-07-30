@@ -5416,4 +5416,27 @@
       </optional>
     </element>
   </define>
+  <define name="Configuration" combine="choice">
+    <element name="doenetml">
+      <attribute name="version"/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="logo">
+      <attribute name="source"/>
+      <attribute name="llx"/>
+      <attribute name="lly"/>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="pages">
+          <choice>
+            <value>first</value>
+            <value>all</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
 </grammar>
