@@ -2081,19 +2081,25 @@
                 }
 
             Configuration |=
-                element programs {
-                    attribute language {text}?,
-                    attribute compiler-args {text}?,
-                    attribute download {"yes"|"no"}?,
-                    attribute linenumbers {"yes"|"no"}?,
-                    attribute linker-args {text}?,
-                    attribute interpreter-args {text}?,
-                    attribute timeout {text}?
-                }
-
-            Configuration |=
-                element parsons {
-                    attribute language {text}?
+                element defaults {
+                    element images {
+                        attribute width {text}?,
+                        attribute margins {text}?
+                    }?
+                    &
+                    element programs {
+                        attribute language {text}?,
+                        attribute compiler-args {text}?,
+                        attribute download {"yes"|"no"}?,
+                        attribute linenumbers {"yes"|"no"}?,
+                        attribute linker-args {text}?,
+                        attribute interpreter-args {text}?,
+                        attribute timeout {text}?
+                    }?
+                    &
+                    element parsons {
+                        attribute language {text}?
+                    }?
                 }
 
             Configuration |=

@@ -3606,7 +3606,7 @@
             <fragref ref="rename" />
             <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
-            <fragref ref="programs" />
+            <fragref ref="defaults" />
             <fragref ref="doenetml" />
             <fragref ref="logo" />
             <fragref ref="blurb" />
@@ -3721,27 +3721,31 @@
             </code>
         </fragment>
 
-        <p>Some global defaults can be set for programs and Parsons problems.</p>
+        <p>Document-wide defaults for attributes an author writes on individual elements are gathered in a single <c>defaults</c> element.  Each child is the plural of the element whose authored attributes it defaults: an attribute given here is employed by any <c>image</c>, <c>program</c>, or Parsons problem which does not carry that attribute itself.  The plural names also ensure this configuration is never mistaken for the content elements themselves.</p>
 
-        <fragment xml:id="programs">
-            <title>Program options</title>
+        <fragment xml:id="defaults">
+            <title>Authored-attribute defaults</title>
             <code>
             Configuration |=
-                element programs {
-                    attribute language {text}?,
-                    attribute compiler-args {text}?,
-                    attribute download {"yes"|"no"}?,
-                    attribute linenumbers {"yes"|"no"}?,
-                    attribute linker-args {text}?,
-                    attribute interpreter-args {text}?,
-                    attribute timeout {text}?
-                }
-            </code>
-            <title>Parsons options</title>
-            <code>
-            Configuration |=
-                element parsons {
-                    attribute language {text}?
+                element defaults {
+                    element images {
+                        attribute width {text}?,
+                        attribute margins {text}?
+                    }?
+                    &amp;
+                    element programs {
+                        attribute language {text}?,
+                        attribute compiler-args {text}?,
+                        attribute download {"yes"|"no"}?,
+                        attribute linenumbers {"yes"|"no"}?,
+                        attribute linker-args {text}?,
+                        attribute interpreter-args {text}?,
+                        attribute timeout {text}?
+                    }?
+                    &amp;
+                    element parsons {
+                        attribute language {text}?
+                    }?
                 }
             </code>
         </fragment>

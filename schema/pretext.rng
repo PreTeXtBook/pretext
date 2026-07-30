@@ -5375,45 +5375,61 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="programs">
-      <optional>
-        <attribute name="language"/>
-      </optional>
-      <optional>
-        <attribute name="compiler-args"/>
-      </optional>
-      <optional>
-        <attribute name="download">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="linenumbers">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="linker-args"/>
-      </optional>
-      <optional>
-        <attribute name="interpreter-args"/>
-      </optional>
-      <optional>
-        <attribute name="timeout"/>
-      </optional>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="parsons">
-      <optional>
-        <attribute name="language"/>
-      </optional>
+    <element name="defaults">
+      <interleave>
+        <optional>
+          <element name="images">
+            <optional>
+              <attribute name="width"/>
+            </optional>
+            <optional>
+              <attribute name="margins"/>
+            </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="programs">
+            <optional>
+              <attribute name="language"/>
+            </optional>
+            <optional>
+              <attribute name="compiler-args"/>
+            </optional>
+            <optional>
+              <attribute name="download">
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="linenumbers">
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="linker-args"/>
+            </optional>
+            <optional>
+              <attribute name="interpreter-args"/>
+            </optional>
+            <optional>
+              <attribute name="timeout"/>
+            </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="parsons">
+            <optional>
+              <attribute name="language"/>
+            </optional>
+          </element>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="Configuration" combine="choice">
