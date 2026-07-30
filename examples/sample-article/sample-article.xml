@@ -165,32 +165,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
-        <!-- Authors have complete freedom to do this as they choose,    -->
-        <!-- along with complete responsibility to provide the actual    -->
-        <!-- files, with proper filenames and suffices.  Search this     -->
-        <!-- source file for "archive=" to see particular examples.      -->
-        <!-- The following demonstrates a global specification, which    -->
-        <!-- we just use for testing - it just makes totally fake links. -->
-        <!--
-        <images>
-            <archive>One Two Three</archive>
-        </images>
-        -->
-
-        <!-- Demonstration of subtree specifications for archive formats -->
-        <!-- (Do not use in concert with above global test)              -->
-        <!-- Chapter on graphics, fake "A B" links throughout            -->
-        <!-- No other part of the @archive scheme is affected            -->
-        <!-- Two images, inside figures, within graphics chapter         -->
-        <!--   1) one has "A B" links turned off                         -->
-        <!--   2) single link "exceptional"                              -->
-        <!--
-        <images>
-            <archive from="graphics">A B</archive>
-            <archive from="figure-asymptote-levers"/>
-            <archive from="figure-asymptote-contour-plot">exceptional</archive>
-        </images>
-        -->
+        <!-- A per-image request is the "archive" attribute on "image"   -->
+        <!-- (search this source file for "archive=").  Global and       -->
+        <!-- subtree-scoped requests are now publication file entries,   -->
+        <!-- demonstrated (commented) in the companion publication.xml.  -->
 
         <!-- A *source* directory for files necessary to build   -->
         <!-- certain items completely.  For example, a data file -->
