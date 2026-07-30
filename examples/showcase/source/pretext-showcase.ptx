@@ -8,6 +8,7 @@
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <docinfo>
+      <directories external="../external"/>
 
     <macros>
       \newcommand{\order}[1]{\left\lvert#1\right\rvert}
