@@ -62,6 +62,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <pretext>
 
     <docinfo>
+        <directories external="ext"/>
         <macros>
         </macros>
     </docinfo>

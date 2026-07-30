@@ -38,7 +38,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <source>
-        <directories external="ext" generated="gen"/>
+        <directories generated="gen"/>
     </source>
 
     <numbering>
