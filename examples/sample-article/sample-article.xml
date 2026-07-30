@@ -186,12 +186,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </images>
         -->
 
-        <latex-output>
-            <!-- turn this on once it is easier to make   -->
-            <!-- standalone worksheets, uncomment to test -->
-            <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
-        </latex-output>
-
         <!-- A *source* directory for files necessary to build   -->
         <!-- certain items completely.  For example, a data file -->
         <!-- for an plot image. Illustrated here, search for the -->
