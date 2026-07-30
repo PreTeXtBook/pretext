@@ -2949,6 +2949,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- 2026-07-30: an "event" is bibliographic content, so it -->
+<!-- belongs in "bibinfo", already its home for slideshows. -->
+<!-- Suppressed at its origin within "docinfo"...           -->
+<xsl:template match="docinfo/event" mode="repair"/>
+
+<!-- ...and lands in an authored "bibinfo" without its own. -->
+<xsl:template match="frontmatter/bibinfo[not(event)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
+        <xsl:apply-templates select="/*/docinfo/event" mode="event-relocate"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- A faithful copy, since the "repair" mode on the same   -->
+<!-- element is its suppression at the original location.   -->
+<xsl:template match="docinfo/event" mode="event-relocate">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- 2024-10-29: program is reworked -->
 
 <!-- Add code element around text in program when missing -->
@@ -3023,6 +3046,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="titlepage/date" mode="repair"/>
             <!-- for slides, we allowed an "event" -->
             <xsl:apply-templates select="titlepage/event" mode="repair"/>
+            <!-- 2026-07-30: an "event" may also arrive from "docinfo" -->
+            <xsl:apply-templates select="/*/docinfo/event[not(current()/titlepage/event)]" mode="event-relocate"/>
             <xsl:apply-templates select="colophon/credit" mode="repair"/>
             <xsl:apply-templates select="colophon/edition" mode="repair"/>
             <xsl:apply-templates select="colophon/website" mode="repair"/>
