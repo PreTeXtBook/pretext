@@ -74,7 +74,6 @@ These notices are not altered at all, years included.
 
 | Files | Location | Note |
 |---|---|---|
-| 6 | `contrib/hitchman/`, `contrib/ups-writers/` | Contributed stylesheets, no notice at all.  Each directory has a README but no license.  Needs a decision. |
 | 1 | `xsl/support/play-button/README.md` | Left deliberately: it states that its content does not meet the threshold of originality for copyright protection. |
 
 ## Permissions
