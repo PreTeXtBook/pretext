@@ -5601,6 +5601,22 @@ Book (with parts), "section" at level 3
 <!-- the element from this template would be useful.                       -->
 <xsl:template match="*" mode="dry-run"/>
 
+<!-- A PROJECT-LIKE which is *not* already inside a printout, but which   -->
+<!-- requests workspace, is a printout in its own right: it is meant to be -->
+<!-- worked on paper, so each conversion gives it the treatment it gives   -->
+<!-- a worksheet.  In HTML that is a print preview icon, page margins, and -->
+<!-- workspace divs the preview javascript expands to fill pages; in       -->
+<!-- LaTeX it is a page of its own, with the worksheet margins.  Inside a  -->
+<!-- worksheet or handout there is nothing to do, since the enclosing      -->
+<!-- printout already provides all of this.                                -->
+<xsl:template match="*" mode="is-standalone-printout">
+    <xsl:value-of select="false()"/>
+</xsl:template>
+
+<xsl:template match="&PROJECT-LIKE;" mode="is-standalone-printout">
+    <xsl:value-of select="boolean(not(ancestor::worksheet|ancestor::handout) and (@workspace|.//@workspace))"/>
+</xsl:template>
+
 <!-- This template is called for items in a printout that can have a   -->
 <!-- workspace specified.  It is important that this sometimes returns -->
 <!-- an empty string, since that is a signal to not construct some     -->
@@ -5613,7 +5629,7 @@ Book (with parts), "section" at level 3
     <!-- NB: a blank workspace is used as a signal in "divisionexercise" -->
     <!--     in LaTeX conversion, via parameter #3 of the  environment   -->
 
-    <xsl:if test="(ancestor::worksheet or ancestor::handout) and not(child::task)">
+    <xsl:if test="(ancestor::worksheet or ancestor::handout or ancestor-or-self::*[&PROJECT-FILTER;]) and not(child::task)">
         <!-- First element with @workspace, confined to the printout   -->
         <!-- Could be empty node-set, which will be empty string later -->
         <xsl:variable name="raw-workspace">
@@ -6417,7 +6433,8 @@ Book (with parts), "section" at level 3
 <!-- Printout Margins -->
 <!-- ################ -->
 
-<xsl:template match="&PRINTOUT;" mode="printout-margin">
+<!-- PROJECT-LIKE is here for standalone printout previews. -->
+<xsl:template match="&PRINTOUT;|&PROJECT-LIKE;" mode="printout-margin">
     <xsl:param name="author-side"/>
     <xsl:param name="publisher-side"/>
     <xsl:choose>
