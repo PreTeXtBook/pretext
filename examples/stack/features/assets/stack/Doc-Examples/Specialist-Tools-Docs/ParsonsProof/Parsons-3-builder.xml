@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Parsons-feedback-builder</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text><![CDATA[Let \(\displaystyle s_n=\sum_{r=1}^n r^3\).  Prove by induction that \(s_n=n^2(n+1)^2/4\).
+ [[parsons input="ans1"]]
+{# parsons_encode(proof_steps) #}
+[[/parsons ]]
+
+<p>[[input:ans1]] [[validation:ans1]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2024092500</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[stack_include_contrib("prooflib.mac");
+stack_include_contrib("builder.mac");
+
+/* The proof-steps are common to all prooflib.mac questions. */
+/* For builder questions, the teacher answer field is a list
+ * of lists of the form [skey, phrase, pos] where
+ * phrase and skey are strings, and pos is a nonnegative integer.
+ */
+proof_steps: [
+    ["intro_P","Let \\(P(n)\\) be the statement that \\(s_n=n^2(n+1)^2/4\\).",1],
+    ["base","Statement \\(P(1)\\) says that \\(s_1=1^22^2/4=1\\).",2],
+    ["s_one","We also have \\(s_1=1^3=1\\), so \\(P(1)\\) is true.",3],
+    ["intro_k","Now suppose that \\(P(k)\\) holds for some \\(k\\).  We must show that \\(P(k+1)\\) also holds.",4],
+    ["s_next","From the definition of \\(s_n\\), we have \\(s_{k+1}=s_k+(k+1)^3\\).",5],
+    ["use_hyp",
+      sconcat(
+       "The induction hypothesis \\(P(k)\\) tells us that \\(s_k=k^2(k+1)^2/4\\), ",
+       "so we can rewrite this as \\(s_{k+1}=k^2(k+1)^2/4+(k+1)^3\\)."
+      ),6],
+    ["rearrange",
+     sconcat(
+      "We can now rearrange this as ",
+      "\\(s_{k+1}=\\frac{1}{4}(k+1)^2(k^2+4k+4)=\\frac{1}{4}(k+1)^2(k+2)^2\\), ",
+      "which means that \\(P(k+1)\\) holds, as required."
+     ),7],
+    ["conclude","We have now proved the base case \\(P(1)\\) and the induction step \\(P(k)\\Rightarrow P(k+1)\\), so \\(P(n)\\) holds for all \\(n\\) by induction",8]
+   ];
+/* We just create a "correct answer" from the steps above, as given. */
+ta:apply(proof,map(first, proof_steps));
+/* Create a wrong answer for testing. */
+wa1:apply(proof,map(first, rest(proof_steps)));
+
+
+/* The prules array below is used by the builder.mac feedback system. */
+prules : [
+    ["needs",["base","s_one","step_setup","use_hyp","rearrange","conclude"],"intro_P",
+     "You have used the symbol \\(P\\), but you have not defined it.  You need to explain what \\(P(n)\\) means."
+    ],
+    ["needs",["use_hyp"],"intro_k",
+     sconcat(
+      "You seem to be assuming that \\(P(k)\\) holds, but you have not ",
+      "explicitly stated or proved anything about that."
+     )
+    ],
+    ["needs",["s_next","use_hyp","rearrange"],"intro_k",builder_needs_intro("k")],
+    ["needs",["s_one"],"base",
+     "Why is \\(P(1)\\) true?  You need to spell out what \\(P(1)\\) says before you can prove it."
+    ],
+    ["needs_immediate",["use_hyp"],"s_next",
+     sconcat(
+      "You said: \"... so we can rewrite this ...\".  What is the statement that ",
+      "you want to rewrite?  On the line directly before this one, you need to ",
+      "have an equation involving \\(s_k\\), so that you can make the substitution ",
+      "\\(s_k=k\\cdot 2^k\\) in that equation."
+     )
+    ],
+    ["needs_immediate",["rearrange"],"use_hyp",
+     sconcat(
+      "You said: \"We can now rearrange this ...\".  What is the statement that ",
+      "you want to rearrange?  On the line directly before this one, you need to ",
+      "have an equation involving roughly the same ingredients as the desired ",
+      "equation \\(s_{k+1}=(k+1)2^{k+1}\\)."
+     )
+    ],
+    ["needs",["conclude"],"s_one",
+     "You say that you have proved the base case \\(P(1)\\), but in fact you have not."
+    ],
+    ["needs",["conclude"],"rearrange",
+     "You say that you have proved the induction step \\(P(k)\\Rightarrow P(k+1)\\), but in fact you have not."
+    ],
+    ["require",["conclude"],
+     "This is needed to complete the proof."
+    ]
+   ];
+
+/* Below just creates random order for displaying the steps. */
+proof_steps:random_permutation(proof_steps);
+/* The parsons input must have lists of length exactly two, so we strip out the 3rs element. */
+ps:map(lambda([ex],[first(ex),second(ex)]),proof_steps);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{#map(first,proof_steps)#}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text>This question illustrates a general framework for questions that ask the student to construct a proof by selecting phrases from a given list and arranging them in order.    
+
+The question author can specify various kinds of rules for generating feedback if the proof is invalid.    Most of the logic is in a Maxima file `builder.mac` in the contrib directory, 
+
+The advantage is that teachers can mange meaningful feedback for individual steps, but of course that is more work than using the auto-generated feedback.  As illustrated in this question, the auto-generated feedback can sit alongside the bespoke feedback generated by the builder library.</text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>parsons</type>
+      <tans>[ta, ps]</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options/>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text>sa: parsons_decode(ans1);
+[pd, saa]:proof_assessment(sa, proof_alternatives(ta));
+[sc,an,fb]:builder_check_rules(sa,proof_steps,prules);</text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>pd</sans>
+        <tans>0</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>{@fb@}
+{@proof_assessment_display(saa, proof_steps)@}</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>40</deployedseed>
+    <deployedseed>41504164</deployedseed>
+    <deployedseed>455960548</deployedseed>
+    <deployedseed>2084307450</deployedseed>
+    <deployedseed>793026621</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>parsons_answer(ta, proof_steps)</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>2</testcase>
+      <description>Should be the missing first step.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>parsons_answer(wa1, proof_steps)</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt1-1-F</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>

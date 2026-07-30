@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="category">
+    <category>
+      <text>top/stacklibrary/Doc-Examples/Specialist-Tools/JSXgraphs</text>
+    </category>
+    <info format="moodle_auto_format">
+      <text>Examples tied to the STACK JSX graphs documentation </text>
+    </info>
+    <idnumber/>
+  </question>
+</quiz>

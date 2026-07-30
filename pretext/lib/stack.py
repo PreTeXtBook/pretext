@@ -130,27 +130,46 @@ def _stack_download_assets(assets, api_url, asset_prefix_abs, stack_file):
     except ImportError:
         raise ImportError(__module_warning.format("pyMuPDF"))
 
-    # Download assets (images, plots)
+    # Download assets (images, plots). Newer STACK API deployments serve
+    # these indirectly through plot.php (so a submitted file can't be
+    # accessed/run directly); older deployments only have the direct link.
+    # Try the new path first and fall back to the old one if it's not there.
     for filename, urlname in assets.items():
-        plots_url = api_url.replace('/render', '/plots')
-        full_url = f"{plots_url}/{urlname}";
+        plot_php_url = api_url.replace('/render', '/plot.php')
+        full_url = "{}/{}".format(plot_php_url, urlname)
         response = requests.get(full_url)
+        if response.status_code != 200:
+            plots_url = api_url.replace('/render', '/plots')
+            full_url = "{}/{}".format(plots_url, urlname)
+            response = requests.get(full_url)
         if response.status_code == 200:
             response.raw.decode_content = True
-            asset_file = f"{asset_prefix_abs}-{filename}"
-            asset_file_out = asset_file.replace(".svg", ".pdf")
-            log.debug(f"Extracting asset {asset_file} from {stack_file}.")
+            asset_file = "{}-{}".format(asset_prefix_abs, filename)
+            log.debug("Extracting asset {} from {}.".format(asset_file, stack_file))
             if asset_file.endswith(".svg"):
+                # Save the SVG as received (used directly by EPUB/web output),
+                # and also derive a PDF (LaTeX/print) and PNG (Kindle, whose
+                # images are always PNG) so every output route gets its
+                # preferred format with no placeholder fallback (epubcheck
+                # MED-003 otherwise triggers when only a PDF is available).
+                with open(asset_file, "wb") as svgout:
+                    svgout.write(response.content)
                 with fitz.Document(stream=response.content) as doc:
-                    log.info(f"converting {asset_file} to PDF")
+                    log.info("converting {} to PDF".format(asset_file))
                     pdfbytes = doc.convert_to_pdf()
-                    with open(asset_file_out, "wb") as pdfout:
+                    asset_file_pdf = asset_file.replace(".svg", ".pdf")
+                    with open(asset_file_pdf, "wb") as pdfout:
                         pdfout.write(pdfbytes)
+
+                    log.info("converting {} to PNG".format(asset_file))
+                    png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
+                    asset_file_png = asset_file.replace(".svg", ".png")
+                    png.save(asset_file_png)
             else:
                 with open(asset_file, 'wb') as f:
                     f.write(response.content)
         else:
-            log.warning(f"Failed to download image {filename} for {stack_file}.")
+            log.warning("Failed to download image {} for {}.".format(filename, stack_file))
 
 
 # 2025-08-16: verbatim from
