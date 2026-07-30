@@ -21,6 +21,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
     <!-- May need lilyglyphs.sty from Debian/Ubuntu texlive-music -->
     <docinfo>
+        <directories external="../assets"/>
         <!-- this is the default, but supresses a warning -->
         <cross-references text="type-global" />
     </docinfo>
