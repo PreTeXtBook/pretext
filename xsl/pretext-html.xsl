@@ -505,8 +505,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                  <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
             </xsl:apply-templates>
         </xsl:with-param>
-        <!-- Set b-has-printout to true if the structural node is or contains a worksheet or handout -->
-        <xsl:with-param name="b-has-printout" select="descendant-or-self::worksheet or descendant-or-self::handout"/>
+        <!-- Set b-has-printout to true if the structural node is or contains a  -->
+        <!-- worksheet or handout, or a PROJECT-LIKE acting as its own printout. -->
+        <xsl:with-param name="b-has-printout" select="descendant-or-self::worksheet or descendant-or-self::handout or descendant::*[&PROJECT-FILTER;][not(ancestor::worksheet|ancestor::handout)][@workspace|.//@workspace]"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -1025,7 +1026,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- print previews.  A simple button with printer icon that reloads -->
 <!-- the page with a url parameter that tells javascript to switch   -->
 <!-- to printout css and format all the pages and workspace.         -->
-<xsl:template match="&PRINTOUT;" mode="standalone-printout-links">
+<xsl:template match="&PRINTOUT;|&PROJECT-LIKE;" mode="standalone-printout-links">
     <xsl:variable name="printout-id">
         <xsl:apply-templates select="." mode="html-id"/>
     </xsl:variable>
@@ -4046,17 +4047,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- And its CSS class -->
+<!-- A project acting as a standalone printout is marked as such, so the -->
+<!-- stylesheet can treat it as the printable thing it is (for one, its   -->
+<!-- title gets a line of its own rather than running into the text).     -->
 <xsl:template match="&PROJECT-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> project-like</xsl:text>
+    <xsl:variable name="b-standalone-printout">
+        <xsl:apply-templates select="." mode="is-standalone-printout"/>
+    </xsl:variable>
+    <xsl:if test="$b-standalone-printout = 'true'">
+        <xsl:text> standalone-printout</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- When born use this heading -->
+<!-- A standalone printout earns a print preview icon.  Unlike a printout, -->
+<!-- whose icon lives inside its heading, a project's icon is a sibling    -->
+<!-- following the heading: a project's title is a styled thing in its own -->
+<!-- right in several themes (a boxed legend, a filled bar), and the icon  -->
+<!-- has no business inside that.  As a floated sibling it lands just      -->
+<!-- below the title at the right, clear of the title's decoration.        -->
+<!-- NB: a project born hidden as a knowl (the publisher's knowl-project)  -->
+<!-- also comes through here, putting the icon in the knowl's "summary",   -->
+<!-- the only place it is visible while the knowl is closed.  The preview  -->
+<!-- javascript ("flattenKnowledPrintout") knows how to unpack that.       -->
 <xsl:template match="&PROJECT-LIKE;" mode="heading-birth">
     <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-full">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
+    <xsl:variable name="b-standalone-printout">
+        <xsl:apply-templates select="." mode="is-standalone-printout"/>
+    </xsl:variable>
+    <xsl:if test="$b-standalone-printout = 'true'">
+        <xsl:apply-templates select="." mode="standalone-printout-links"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- When used in solutions -->
@@ -5424,6 +5450,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-original and not($block-type = 'hidden')">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
+        <!-- Both are empty unless this block is a standalone printout, -->
+        <!-- ie a PROJECT-LIKE with workspace outside of any printout.  -->
+        <xsl:apply-templates select="." mode="page-margins-attribute"/>
+        <xsl:apply-templates select="." mode="page-header-footer-attributes"/>
         <!-- If visible, heading interior to article -->
         <xsl:if test="$block-type = 'visible'">
             <xsl:apply-templates select="." mode="heading-birth">
@@ -14717,7 +14747,24 @@ TODO:
 <!-- We put page-margins-attributes only on printout sections -->
 <xsl:template match="*" mode="page-margins-attribute"/>
 
+<!-- A PROJECT-LIKE acting as a standalone printout is paginated by the -->
+<!-- same javascript, so it needs the same data.  It has no margin      -->
+<!-- attributes of its own, so "printout-margin" falls through to the   -->
+<!-- publisher's worksheet defaults for all four sides.                 -->
+<xsl:template match="&PROJECT-LIKE;" mode="page-margins-attribute">
+    <xsl:variable name="b-standalone-printout">
+        <xsl:apply-templates select="." mode="is-standalone-printout"/>
+    </xsl:variable>
+    <xsl:if test="$b-standalone-printout = 'true'">
+        <xsl:call-template name="printout-margins-attribute"/>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="&PRINTOUT;" mode="page-margins-attribute">
+    <xsl:call-template name="printout-margins-attribute"/>
+</xsl:template>
+
+<xsl:template name="printout-margins-attribute">
     <xsl:attribute name="data-margins">
         <!-- A space-separated list for top, right, bottom, and left margins -->
         <xsl:apply-templates select="." mode="printout-margin">
@@ -14745,7 +14792,20 @@ TODO:
 <!-- Add data-* attributes for headers and footers -->
 <xsl:template match="*" mode="page-header-footer-attributes"/>
 
+<xsl:template match="&PROJECT-LIKE;" mode="page-header-footer-attributes">
+    <xsl:variable name="b-standalone-printout">
+        <xsl:apply-templates select="." mode="is-standalone-printout"/>
+    </xsl:variable>
+    <xsl:if test="$b-standalone-printout = 'true'">
+        <xsl:call-template name="printout-header-footer-attributes"/>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="&PRINTOUT;" mode="page-header-footer-attributes">
+    <xsl:call-template name="printout-header-footer-attributes"/>
+</xsl:template>
+
+<xsl:template name="printout-header-footer-attributes">
     <xsl:if test="not($ws-header-first-left = '')">
         <xsl:attribute name="data-header-first-left">
             <xsl:value-of select="normalize-space($ws-header-first-left)"/>
