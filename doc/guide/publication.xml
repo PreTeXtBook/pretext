@@ -43,7 +43,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Relative path, relative to "main" source file -->
     <source>
-        <directories external="external" generated="generated"/>
+        <directories generated="generated"/>
     </source>
 
 </publication>

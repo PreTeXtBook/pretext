@@ -9,6 +9,7 @@
 <!-- See the file COPYING for copying conditions.                   -->
 
 <docinfo>
+    <directories external="external"/>
     <rename element="note" xml:lang="en-US">Best Practice</rename>
     <rename element="insight" xml:lang="en-US">Tip</rename>
     <!-- a demonstration in Basic Reference -->
