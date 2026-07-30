@@ -4659,6 +4659,75 @@
         <p>It should be clear now that a <tag>sidebyside</tag> is more about presentation than most <pretext /> elements, though there is some semantic information being conveyed by grouping the panels with one another.</p>
     </section>
 
+    <section xml:id="topic-docinfo">
+        <title>Document Information</title>
+        <idx><h>docinfo</h></idx>
+
+        <p>A <tag>docinfo</tag> element, first below the root <tag>pretext</tag> element, is a small database about your document.  Everything in it shares one character: it is a fact required to <em>interpret or build</em> your source.  Remove an item and the document no longer means the same thing, or no longer builds.  Choices about how the same content is <em>presented</em> belong instead in a publication file (<xref ref="publication-file-reference"/>); the dividing line is discussed for authors in <xref ref="processing-customizations"/> and rigorously in <xref ref="developer-configuration-homes"/>.</p>
+
+        <paragraphs>
+            <title>Identity and Catalog</title>
+
+            <p>A <tag>document-id</tag> is a stable identifier for the project<mdash/>make it distinctive, and never change it<mdash/>with an optional <attr>edition</attr>; services that track a project across builds (such as Runestone) rely on it.  A <tag>blurb</tag> is a short markup-free description, roughly what you would expect on the back cover of a book, with an optional <attr>shelf</attr> that tells Runestone how to categorize the work.  An <tag>initialism</tag> is a useful short form of the title, such as <c>FCLA</c>.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>The Vocabulary of the Document</title>
+
+            <p>A <tag>rename</tag> element substitutes your name for a <pretext/> element's, such as calling every <tag>activity</tag> a <q>Laboratory</q>; an <attr>xml:lang</attr> attribute makes the substitution per-language.  A <tag>cross-references</tag> element sets the document-wide style of cross-reference text via its <attr>text</attr> attribute (<xref ref="topic-cross-referencing"/>)<mdash/>this is <tag>docinfo</tag> material precisely because that text lands inside sentences you wrote around it.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>What the Mathematics Needs</title>
+
+            <p>Your <latex/> <tag>macros</tag> are shared by every conversion (<xref ref="mathematics-macros"/>).  A <tag>math-package</tag> element names a <latex/> package and its MathJax extension so mathematics may rely on both (see <xref ref="topic-mathematics"/>).</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>What the Images Need, and Where Files Live</title>
+
+            <p>A <tag>latex-image-preamble</tag> and an <tag>asymptote-preamble</tag> supply setup for images described by source code, and a <c>pf:prefigure-preamble</c> does the same for PreFigure (<xref ref="topic-images"/>).  A <tag>directories</tag> element with a <attr>data</attr> attribute names the directory of data files that images and programs consume; the directories of external and generated images are named in the publication file (<xref ref="processing-directory-management"/>).</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Defaults for Authored Attributes</title>
+
+            <p>A document-wide default for an attribute you write on individual elements lives with the source, gathered in a single <tag>defaults</tag> element.  Each child is the plural of the element it serves: an <tag>images</tag> child may carry default <attr>width</attr> and <attr>margins</attr> for every <tag>image</tag> lacking its own; a <tag>programs</tag> child defaults the attributes of <tag>program</tag> elements, notably <attr>language</attr>; a <tag>parsons</tag> child defaults the language of Parsons problems.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Compatibility and Identity Marks</title>
+
+            <p>A <tag>doenetml</tag> element records, in its <attr>version</attr> attribute, which version of the DoenetML viewer the document's DoenetML content was authored against.  A <tag>logo</tag> element places an image at absolute coordinates of a printed page<mdash/>the letterhead of a letter or memorandum<mdash/>via <attr>source</attr>, <attr>llx</attr>, <attr>lly</attr>, an optional <attr>width</attr>, and <attr>pages</attr> electing the first page (default) or every page.</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>No Longer Here</title>
+
+            <p>Several items once configured in <tag>docinfo</tag> have found better homes, and old placements are honored with a warning during a transition.  The masthead brand logo and requests for image archive links are publication file entries (<xref ref="online-brandlogo-options"/>, <xref ref="online-image-archive-options"/>).  An <tag>event</tag><mdash/>the occasion of a presentation<mdash/>is bibliographic content and resides in the <tag>bibinfo</tag> (<xref ref="topic-front-matter"/>).  Analytics, search, favicon, base <init>URL</init>, and worksheet-margin configuration all moved to the publication file in years past.</p>
+        </paragraphs>
+
+        <p>A <tag>docinfo</tag> exercising most of this could read:<cd>
+            <cline>&lt;docinfo&gt;</cline>
+            <cline>    &lt;document-id edition="2"&gt;fauna-guide&lt;/document-id&gt;</cline>
+            <cline>    &lt;blurb shelf="Mathematics"&gt;A field guide to the fauna of PreTeXt.&lt;/blurb&gt;</cline>
+            <cline>    &lt;initialism&gt;FG&lt;/initialism&gt;</cline>
+            <cline>    &lt;rename element="activity"&gt;Laboratory&lt;/rename&gt;</cline>
+            <cline>    &lt;cross-references text="type-global"/&gt;</cline>
+            <cline>    &lt;macros&gt;\newcommand{\adjoint}[1]{#1^\ast}&lt;/macros&gt;</cline>
+            <cline>    &lt;math-package latex-name="cancel" mathjax-name="cancel"/&gt;</cline>
+            <cline>    &lt;latex-image-preamble&gt;\usepackage{pgfplots}&lt;/latex-image-preamble&gt;</cline>
+            <cline>    &lt;directories data="data"/&gt;</cline>
+            <cline>    &lt;defaults&gt;</cline>
+            <cline>        &lt;images width="60%"/&gt;</cline>
+            <cline>        &lt;programs language="python"/&gt;</cline>
+            <cline>        &lt;parsons language="natural"/&gt;</cline>
+            <cline>    &lt;/defaults&gt;</cline>
+            <cline>    &lt;doenetml version="0.7"/&gt;</cline>
+            <cline>&lt;/docinfo&gt;</cline>
+        </cd></p>
+    </section>
+
     <section xml:id="topic-front-matter">
         <title>Front Matter</title>
 
