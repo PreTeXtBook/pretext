@@ -3907,7 +3907,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="author-tools" select="''" />
 
 <!-- The autoname parameter is deprecated (2017-07-25) -->
-<!-- Replace with docinfo/cross-references/@text       -->
+<!-- Replace with docinfo/defaults/xrefs/@text         -->
 <xsl:param name="autoname" select="''" />
 
 <!-- 2020-11-22: latex.print to publisher file -->
@@ -4121,15 +4121,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- 2017-07-25  deprecate intentional autoname without new setting -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2017-07-25'" />
-        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/cross-references/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
-        <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references)" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, but is still effective since  &quot;docinfo/defaults/xrefs/@text&quot;  has not been set.  The following parameter values equate to the attribute values: &quot;no&quot; is &quot;global&quot;, &quot;yes&quot; is &quot;type-global&quot;, &quot;title&quot; is &quot;title&quot;'" />
+        <xsl:with-param name="incorrect-use" select="not($autoname = '') and not(//docinfo/cross-references | //docinfo/defaults/xrefs)" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-25  deprecate intentional autoname also with new setting -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2017-07-25'" />
-        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/cross-references/@text&quot;  and so is totally ineffective and can be removed'" />
-            <xsl:with-param name="incorrect-use" select="not($autoname = '') and //docinfo/cross-references" />
+        <xsl:with-param name="message" select="'the  autoname  parameter is deprecated, and is being overidden by a  &quot;docinfo/defaults/xrefs/@text&quot;  and so is totally ineffective and can be removed'" />
+            <xsl:with-param name="incorrect-use" select="not($autoname = '') and (//docinfo/cross-references | //docinfo/defaults/xrefs)" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-18  deprecate three console macro characters -->

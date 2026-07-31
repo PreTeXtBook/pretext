@@ -2923,17 +2923,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2026-07-30: authored-attribute defaults gather under "defaults" -->
 
-<!-- A "programs" or "parsons" element, as a child of "docinfo",  -->
-<!-- moves inside a "defaults" element.  The first of the pair    -->
-<!-- present builds the container for both, and the same match    -->
-<!-- then suppresses the other.                                   -->
-<xsl:template match="docinfo/programs | docinfo/parsons" mode="repair">
-    <xsl:if test="count(preceding-sibling::programs | preceding-sibling::parsons) = 0">
+<!-- A "programs", "parsons", or "cross-references" element, as   -->
+<!-- a child of "docinfo", moves inside a "defaults" element.     -->
+<!-- The first of the trio present builds the container for all,  -->
+<!-- and the same match then suppresses the others.  The retired  -->
+<!-- "cross-references" element is renamed "xrefs" on the way in. -->
+<xsl:template match="docinfo/programs | docinfo/parsons | docinfo/cross-references" mode="repair">
+    <xsl:if test="count(preceding-sibling::programs | preceding-sibling::parsons | preceding-sibling::cross-references) = 0">
         <xsl:element name="defaults">
-            <xsl:for-each select="../programs | ../parsons">
-                <xsl:copy>
-                    <xsl:copy-of select="@*"/>
-                </xsl:copy>
+            <xsl:for-each select="../programs | ../parsons | ../cross-references">
+                <xsl:choose>
+                    <xsl:when test="self::cross-references">
+                        <xsl:element name="xrefs">
+                            <xsl:copy-of select="@*"/>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:copy>
+                            <xsl:copy-of select="@*"/>
+                        </xsl:copy>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each>
         </xsl:element>
     </xsl:if>

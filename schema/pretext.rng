@@ -5330,13 +5330,6 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="cross-references">
-      <attribute name="text">
-        <ref name="XrefTextStyle"/>
-      </attribute>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
     <element name="initialism">
       <text/>
     </element>
@@ -5423,6 +5416,13 @@
             <optional>
               <attribute name="language"/>
             </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="xrefs">
+            <attribute name="text">
+              <ref name="XrefTextStyle"/>
+            </attribute>
           </element>
         </optional>
       </interleave>

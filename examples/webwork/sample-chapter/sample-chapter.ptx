@@ -43,8 +43,10 @@
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2} % comments get stripped
         </macros>
 
-        <!-- this is the default, but supresses a warning -->
-        <cross-references text="type-global" />
+        <defaults>
+            <!-- this is the default, but supresses a warning -->
+            <xrefs text="type-global" />
+        </defaults>
 
         <!-- 
         This initialism specifies the filename of the macro file (WWSC.pl) that 

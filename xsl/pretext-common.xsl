@@ -219,19 +219,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Employing variants of the text displayed for a cross-reference -->
-<!-- affects the words shown to the reader, and hence is a choice   -->
-<!-- preserved in the source, and is not just a processing decision -->
-<!-- $xref-text-style is the global choice, based on                -->
-<!--   docinfo/cross-references/@text                               -->
-<!-- We control the possible values with the schema, allowing junk  -->
-<!-- NB: blank is not set, and is ignored so the legacy-autoname    -->
-<!-- scheme controls the global default.  When that goes away, we   -->
-<!-- should set the default here when there is no attribute.        -->
+<!-- Employing variants of the text displayed for a cross-reference  -->
+<!-- affects the words shown to the reader, and hence is a choice    -->
+<!-- preserved in the source, and is not just a processing decision  -->
+<!-- $xref-text-style is the global choice, based on                 -->
+<!--   docinfo/defaults/xrefs/@text                                  -->
+<!-- The "repair" phase of assembly normalizes the retired           -->
+<!-- "cross-references" element to this location, so one path serves -->
+<!-- We control the possible values with the schema, allowing junk   -->
+<!-- NB: blank is not set, and is ignored so the legacy-autoname     -->
+<!-- scheme controls the global default.  When that goes away, we    -->
+<!-- should set the default here when there is no attribute.         -->
 <xsl:variable name="xref-text-style">
     <xsl:choose>
-        <xsl:when test="$docinfo/cross-references/@text">
-            <xsl:value-of select="$docinfo/cross-references/@text" />
+        <xsl:when test="$docinfo/defaults/xrefs/@text">
+            <xsl:value-of select="$docinfo/defaults/xrefs/@text" />
         </xsl:when>
         <xsl:otherwise>
             <text />
@@ -11874,6 +11876,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$docinfo/event&quot;" />
         <xsl:with-param name="date-string" select="'2026-07-30'" />
         <xsl:with-param name="message" select="'an &quot;event&quot; element now resides in the &quot;bibinfo&quot; of the &quot;frontmatter&quot;, alongside the other bibliographic facts of a document.  We will honor an &quot;event&quot; within &quot;docinfo&quot;, but please relocate the element.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-07-31  "docinfo/cross-references" becomes "xrefs" within "docinfo/defaults" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/cross-references&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-31'" />
+        <xsl:with-param name="message" select="'the document-wide style of cross-reference text is now a &quot;text&quot; attribute on an &quot;xrefs&quot; element within &quot;docinfo/defaults&quot;, replacing the &quot;cross-references&quot; element.  We will honor your intent, but please convert to the new form.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

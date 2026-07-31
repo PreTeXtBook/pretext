@@ -8,7 +8,9 @@
 <pretext>
 
     <docinfo>
-        <cross-references text="type-global" />
+        <defaults>
+            <xrefs text="type-global" />
+        </defaults>
     </docinfo>
 
     <article xml:id="pretext">
@@ -3602,7 +3604,6 @@
             </code>
             <fragref ref="preambles" />
             <fragref ref="macros" />
-            <fragref ref="cross-references" />
             <fragref ref="initialism" />
             <fragref ref="rename" />
             <fragref ref="directories" />
@@ -3642,19 +3643,6 @@
             <code>
             Configuration |=
                 element macros {text}
-            </code>
-        </fragment>
-
-        <p>The style of text used in a cross-reference (the <c>xref</c> element) is contained in the source and uses the same per-item choices.</p>
-
-        <fragment xml:id="cross-references">
-            <title>Cross-reference text style</title>
-            <code>
-            Configuration |=
-                element
-                    cross-references {
-                        attribute text { XrefTextStyle }
-                    }
             </code>
         </fragment>
 
@@ -3707,7 +3695,7 @@
             </code>
         </fragment>
 
-        <p>Document-wide defaults for attributes an author writes on individual elements are gathered in a single <c>defaults</c> element.  Each child is the plural of the element whose authored attributes it defaults: an attribute given here is employed by any <c>image</c>, <c>program</c>, or Parsons problem which does not carry that attribute itself.  The plural names also ensure this configuration is never mistaken for the content elements themselves.</p>
+        <p>Document-wide defaults for attributes an author writes on individual elements are gathered in a single <c>defaults</c> element.  Each child is the plural of the element whose authored attributes it defaults: an attribute given here is employed by any <c>image</c>, <c>program</c>, Parsons problem, or <c>xref</c> which does not carry that attribute itself.  The plural names also ensure this configuration is never mistaken for the content elements themselves.</p>
 
         <fragment xml:id="defaults">
             <title>Authored-attribute defaults</title>
@@ -3731,6 +3719,10 @@
                     &amp;
                     element parsons {
                         attribute language {text}?
+                    }?
+                    &amp;
+                    element xrefs {
+                        attribute text { XrefTextStyle }
                     }?
                 }
             </code>

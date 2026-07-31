@@ -1114,7 +1114,7 @@
         <subsection>
             <title>Text of a Cross-Reference</title>
 
-            <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attr>text</attr> attribute in <c>docinfo/cross-references</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attr>text</attr> attribute to your <tage>xref</tage> element to override the document-wide setting.  The first column of this table lists the possible attribute values, either document-wide, or on a per-cross-reference basis.  The second column has live cross-references to a section of an earlier chapter (that is far away).  The third column has live cross-references to another section of this chapter (which is close by).  For the fourth column, we have placed content (<q>Extra</q>) into the <tag>xref</tag> element as an override of, or addition to, some of the text for the cross-references of the preceding column.  Study the table and then read some more explanation following.  Note that <c>type-global</c> is the default.</p>
+            <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attr>text</attr> attribute of the <tag>xrefs</tag> element in <c>docinfo/defaults</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attr>text</attr> attribute to your <tage>xref</tage> element to override the document-wide setting.  The first column of this table lists the possible attribute values, either document-wide, or on a per-cross-reference basis.  The second column has live cross-references to a section of an earlier chapter (that is far away).  The third column has live cross-references to another section of this chapter (which is close by).  For the fourth column, we have placed content (<q>Extra</q>) into the <tag>xref</tag> element as an override of, or addition to, some of the text for the cross-references of the preceding column.  Study the table and then read some more explanation following.  Note that <c>type-global</c> is the default.</p>
 
             <table>
                 <title>Cross-reference visual text styles</title>
@@ -4678,7 +4678,7 @@
         <paragraphs>
             <title>The Vocabulary of the Document</title>
 
-            <p>A <tag>rename</tag> element substitutes your name for a <pretext/> element's, such as calling every <tag>activity</tag> a <q>Laboratory</q>; an <attr>xml:lang</attr> attribute makes the substitution per-language.  A <tag>cross-references</tag> element sets the document-wide style of cross-reference text via its <attr>text</attr> attribute (<xref ref="topic-cross-referencing"/>)<mdash/>this is <tag>docinfo</tag> material precisely because that text lands inside sentences you wrote around it.</p>
+            <p>A <tag>rename</tag> element substitutes your name for a <pretext/> element's, such as calling every <tag>activity</tag> a <q>Laboratory</q>; an <attr>xml:lang</attr> attribute makes the substitution per-language.</p>
         </paragraphs>
 
         <paragraphs>
@@ -4696,7 +4696,7 @@
         <paragraphs>
             <title>Defaults for Authored Attributes</title>
 
-            <p>A document-wide default for an attribute you write on individual elements lives with the source, gathered in a single <tag>defaults</tag> element.  Each child is the plural of the element it serves: an <tag>images</tag> child may carry default <attr>width</attr> and <attr>margins</attr> for every <tag>image</tag> lacking its own; a <tag>programs</tag> child defaults the attributes of <tag>program</tag> elements, notably <attr>language</attr>; a <tag>parsons</tag> child defaults the language of Parsons problems.</p>
+            <p>A document-wide default for an attribute you write on individual elements lives with the source, gathered in a single <tag>defaults</tag> element.  Each child is the plural of the element it serves: an <tag>images</tag> child may carry default <attr>width</attr> and <attr>margins</attr> for every <tag>image</tag> lacking its own; a <tag>programs</tag> child defaults the attributes of <tag>program</tag> elements, notably <attr>language</attr>; a <tag>parsons</tag> child defaults the language of Parsons problems; an <tag>xrefs</tag> child sets the document-wide style of cross-reference text via its <attr>text</attr> attribute (<xref ref="topic-cross-referencing"/>)<mdash/>that text lands inside sentences you wrote around it.</p>
         </paragraphs>
 
         <paragraphs>

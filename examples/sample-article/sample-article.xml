@@ -78,16 +78,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- employed in a PreFigure linear algebra diagram -->
             <line stroke="blue"/>
         </prefigure-preamble>
-        <!-- We control the appearance of the text of cross-references here           -->
-        <!-- (these are the "xref" elements).  Because this changes the words         -->
-        <!-- that appear in your output, it is a decision with stays with the source. -->
-        <!-- Experiment here with different choices and a few different "xref"        -->
-        <!-- elements before you decide on a final choice.  We use 'type-global',     -->
-        <!-- which is also the default, and produces text like "Theorem 5.2", where   -->
-        <!-- "Theorem" will be translated into the document language.  Individual     -->
-        <!-- "xref" carry an explicit "text" attribute where a different scheme is    -->
-        <!-- wanted.                                                                  -->
-        <cross-references text="type-global"/>
         <!--
         Extra packages, package options, and package settings for latex-based images.
         Inserted in the preamble for LaTeX output.
@@ -135,14 +125,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "image" lacking that attribute; the "programs" @language to    -->
         <!-- any program or Runestone interactive lacking one; the          -->
         <!-- "parsons" @language to Parsons problems (else the programs     -->
-        <!-- default, else natural language).                               -->
-        <!--
+        <!-- default, else natural language); the "xrefs" @text to any      -->
+        <!-- "xref" lacking its own.                                        -->
         <defaults>
+            <!--
             <images width="60%"/>
             <programs language="python"/>
             <parsons language="natural"/>
+            -->
+            <!-- The "xrefs" element controls the appearance of the text of    -->
+            <!-- cross-references (the "xref" elements).  Because this changes -->
+            <!-- the words that appear in your output, it is a decision which  -->
+            <!-- stays with the source.  Experiment with different choices and -->
+            <!-- a few different "xref" elements before you decide on a final  -->
+            <!-- choice.  We use 'type-global', which is also the default, and -->
+            <!-- produces text like "Theorem 5.2", where "Theorem" will be     -->
+            <!-- translated into the document language.  Individual "xref"     -->
+            <!-- carry an explicit "text" attribute where a different scheme   -->
+            <!-- is wanted.                                                    -->
+            <xrefs text="type-global"/>
         </defaults>
-        -->
 
         <!--
         "Names" for various parts of a document are determined exactly

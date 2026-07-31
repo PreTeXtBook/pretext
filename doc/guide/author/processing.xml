@@ -764,7 +764,7 @@
         <p>Some common wants, sorted:<ul>
             <li>Calling every <tag>activity</tag> a <q>Laboratory</q>: the <tag>rename</tag> element, in <tag>docinfo</tag><mdash/>it changes words your readers see.</li>
             <li>A <latex/> macro used throughout your mathematics: the <tag>macros</tag> element, in <tag>docinfo</tag><mdash/>your mathematics does not survive without it.</li>
-            <li>How the text of a cross-reference reads (<q>Theorem 5.2</q> versus <q>5.2</q>): the <tag>cross-references</tag> element, in <tag>docinfo</tag><mdash/>that text sits inside sentences you wrote around it.</li>
+            <li>How the text of a cross-reference reads (<q>Theorem 5.2</q> versus <q>5.2</q>): the <tag>xrefs</tag> element, in <c>docinfo/defaults</c><mdash/>that text sits inside sentences you wrote around it.</li>
             <li>The paper size or font size of the <init>PDF</init>: the publication file<mdash/>same words, different sheet.</li>
             <li>Whether each web page is a chapter or a section: the publication file.</li>
             <li>Whether solutions to exercises are visible or withheld: the publication file<mdash/>the publisher selects among whole components you provided.</li>
