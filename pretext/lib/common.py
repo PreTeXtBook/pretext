@@ -355,6 +355,13 @@ def guarded_xml_include_parser(xml):
 
     # Seems a depth of 256 was exceeded for an SVG image:
     # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
+    #
+    # N.B. an @xml:id whose value is not an XML "NCName" (leading digit,
+    # a space, a colon) dies right here as an XMLSyntaxError, phrased in
+    # that jargon.  Do not bother catching it to translate the message:
+    # lxml only enforces the rule on the file at the root of a parse, so
+    # a bad @xml:id in an xi:included file never trips it, and a
+    # translation here would miss the modular projects that are the norm.
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml, parser=huge_parser)
     try:
