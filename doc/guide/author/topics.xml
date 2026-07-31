@@ -4005,7 +4005,11 @@
                     </li>
                     <li>
                         <title>codetailor</title>
-                        <p>Set to <c>yes</c> to add a <q>Get Help</q> button to the ActiveCode (the default is <c>no</c>).  On a Runestone server, a reader who is stuck may press it to be given a personalized Parsons problem<mdash/>the lines of a correct solution, scrambled for them to reassemble<mdash/>generated for their current attempt.  This is most effective when the solution decomposes into a handful of clear lines.  See the <q>CodeTailor</q> exercise in <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book</url>.</p>
+                        <p>The presence of this attribute enables Runestone's CodeTailor feature, adding a <q>Get Help</q> button to the ActiveCode; its absence is the default, no button.  On a Runestone server, a reader who is stuck may press it to be given a personalized Parsons problem<mdash/>the blocks of a correct solution, scrambled for them to reassemble<mdash/>generated for their current attempt.  A block may hold one line of code or several.  The value <c>all</c> scrambles a complete solution; the value <c>incorrect</c> locks the blocks a reader already has right, so only the wrong ones move.  See the <q>CodeTailor</q> exercises in <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book</url>.</p>
+                    </li>
+                    <li>
+                        <title>codetailor-fallback</title>
+                        <p>The <attr>xml:id</attr> of a Parsons problem elsewhere in the same document, to be presented by the <q>Get Help</q> button when a personalized problem cannot be generated.  Without this attribute, generation is always requested.  Only meaningful together with <attr>codetailor</attr>.</p>
                     </li>
                     <li>
                         <title>compiler-args</title>
