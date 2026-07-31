@@ -4669,6 +4669,8 @@
 
         <p>A <tag>docinfo</tag> element, first below the root <tag>pretext</tag> element, is a small database about your document.  Everything in it shares one character: it is a fact required to <em>interpret or build</em> your source.  Remove an item and the document no longer means the same thing, or no longer builds.  Choices about how the same content is <em>presented</em> belong instead in a publication file (<xref ref="publication-file-reference"/>); the dividing line is discussed for authors in <xref ref="processing-customizations"/> and rigorously in <xref ref="developer-configuration-homes"/>.</p>
 
+        <p>A corollary for your workflow: because these items determine words on the page, your prose grows around them<mdash/>settle them early, and expect some effort to reconsider one later (change the document-wide style of cross-reference text, say, and every sentence written around an <tag>xref</tag> deserves a re-read).  Publication file switches are the reverse: they never require revisiting what you wrote, and most can wait until authoring is complete.</p>
+
         <paragraphs>
             <title>Identity and Catalog</title>
 
