@@ -1758,10 +1758,13 @@
       <optional>
         <attribute name="codetailor">
           <choice>
-            <value>yes</value>
-            <value>no</value>
+            <value>all</value>
+            <value>incorrect</value>
           </choice>
         </attribute>
+      </optional>
+      <optional>
+        <attribute name="codetailor-fallback"/>
       </optional>
       <optional>
         <attribute name="starting-step">
