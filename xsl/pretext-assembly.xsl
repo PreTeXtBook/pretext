@@ -2955,6 +2955,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- 2026-07-31: a footnote within a "tabular" cell becomes a "tn" -->
+<!-- table note, lettered and placed at the bottom of the table    -->
+<!-- (Notes to tables: CMoS 18th ed., 3.77-3.81; specific notes    -->
+<!-- at 3.80).  Any identification attributes are orphaned: a      -->
+<!-- "tn" is not a cross-reference target.                         -->
+<xsl:template match="tabular//fn" mode="repair">
+    <tn>
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </tn>
+</xsl:template>
+
 <!-- 2026-07-30: an "event" is bibliographic content, so it -->
 <!-- belongs in "bibinfo", already its home for slideshows. -->
 <!-- Suppressed at its origin within "docinfo"...           -->
