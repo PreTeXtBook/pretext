@@ -219,19 +219,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Employing variants of the text displayed for a cross-reference -->
-<!-- affects the words shown to the reader, and hence is a choice   -->
-<!-- preserved in the source, and is not just a processing decision -->
-<!-- $xref-text-style is the global choice, based on                -->
-<!--   docinfo/cross-references/@text                               -->
-<!-- We control the possible values with the schema, allowing junk  -->
-<!-- NB: blank is not set, and is ignored so the legacy-autoname    -->
-<!-- scheme controls the global default.  When that goes away, we   -->
-<!-- should set the default here when there is no attribute.        -->
+<!-- Employing variants of the text displayed for a cross-reference  -->
+<!-- affects the words shown to the reader, and hence is a choice    -->
+<!-- preserved in the source, and is not just a processing decision  -->
+<!-- $xref-text-style is the global choice, based on                 -->
+<!--   docinfo/defaults/xrefs/@text                                  -->
+<!-- The "repair" phase of assembly normalizes the retired           -->
+<!-- "cross-references" element to this location, so one path serves -->
+<!-- We control the possible values with the schema, allowing junk   -->
+<!-- NB: blank is not set, and is ignored so the legacy-autoname     -->
+<!-- scheme controls the global default.  When that goes away, we    -->
+<!-- should set the default here when there is no attribute.         -->
 <xsl:variable name="xref-text-style">
     <xsl:choose>
-        <xsl:when test="$docinfo/cross-references/@text">
-            <xsl:value-of select="$docinfo/cross-references/@text" />
+        <xsl:when test="$docinfo/defaults/xrefs/@text">
+            <xsl:value-of select="$docinfo/defaults/xrefs/@text" />
         </xsl:when>
         <xsl:otherwise>
             <text />
