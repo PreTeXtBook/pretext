@@ -2746,6 +2746,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Footnotes -->
 <!-- ######### -->
 
+<!-- A table note ("tn") drops only its superscript letter mark at the -->
+<!-- cell location, linked to the note text collected below the table  -->
+<!-- in the "tabular-inclusion" template.  Letters count per-tabular   -->
+<!-- in document order (Notes to tables: CMoS 18th ed., 3.77-3.81;     -->
+<!-- specific notes at 3.80).  Adjacency is the presentation: a note   -->
+<!-- sits just below its table, so there is no knowl.                  -->
+<xsl:template match="tabular//tn">
+    <sup class="tablenote-mark">
+        <a>
+            <xsl:attribute name="href">
+                <xsl:text>#</xsl:text>
+                <xsl:apply-templates select="." mode="unique-id"/>
+            </xsl:attribute>
+            <i>
+                <xsl:apply-templates select="." mode="number"/>
+            </i>
+        </a>
+    </sup>
+</xsl:template>
+
 <!-- Currently implemented as a details html element with no guardrails   -->
 <!-- on nested content. Other footnotes, block content, etc... will all   -->
 <!-- be rendered, but perhaps not well. Caveat emptor.                    -->
@@ -8141,6 +8161,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="ambient-relative-width" select="$width" />
         </xsl:apply-templates>
     </table>
+    <!-- Table notes ("tn") collect just below the table, lettered in -->
+    <!-- reading order, which is document order of the marks (Notes   -->
+    <!-- to tables: CMoS 18th ed., 3.77-3.81; specific notes at       -->
+    <!-- 3.80).  Disjoint from true footnote numbering.               -->
+    <xsl:if test=".//tn">
+        <!-- each note is a plain "div" (not a "p"): one tight -->
+        <!-- line per note, free of paragraph margins          -->
+        <div class="tablenotes">
+            <xsl:for-each select=".//tn">
+                <div class="tablenote">
+                    <xsl:apply-templates select="." mode="html-id-attribute"/>
+                    <sup>
+                        <i>
+                            <xsl:apply-templates select="." mode="number"/>
+                        </i>
+                    </sup>
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates/>
+                </div>
+            </xsl:for-each>
+        </div>
+    </xsl:if>
 </xsl:template>
 
 <!-- A row of table -->
