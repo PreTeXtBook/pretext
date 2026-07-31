@@ -11878,6 +11878,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;event&quot; element now resides in the &quot;bibinfo&quot; of the &quot;frontmatter&quot;, alongside the other bibliographic facts of a document.  We will honor an &quot;event&quot; within &quot;docinfo&quot;, but please relocate the element.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-31  "docinfo/cross-references" becomes "xrefs" within "docinfo/defaults" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/cross-references&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-31'" />
+        <xsl:with-param name="message" select="'the document-wide style of cross-reference text is now a &quot;text&quot; attribute on an &quot;xrefs&quot; element within &quot;docinfo/defaults&quot;, replacing the &quot;cross-references&quot; element.  We will honor your intent, but please convert to the new form.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
