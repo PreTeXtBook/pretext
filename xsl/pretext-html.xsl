@@ -754,10 +754,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="heading-level" select="$next-level"/>
         </xsl:apply-templates>
 
-        <!-- Sometimes conclude with groupwork submission items -->
-        <xsl:if test="$b-is-groupwork">
-            <xsl:apply-templates select="." mode="runestone-groupwork"/>
-        </xsl:if>
+        <!-- Groupwork submission items are not emitted here.  They belong   -->
+        <!-- above the Runestone progress indicator, which the various        -->
+        <!-- "structural-division-inner-content" templates emit as their last -->
+        <!-- act, so each of those emits the submission items just before it. -->
 
         <!-- Include permalink for the section as last child -->
         <xsl:apply-templates select="." mode="permalink"/>
@@ -813,9 +813,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-is-groupwork">
             <!-- the actual list of exercises -->
             <xsl:copy-of select="$the-exercises"/>
-            <!-- Infrastructure for groupwork is provided by -->
-            <!--   "structural-division-content"             -->
-            <!-- template (early and late in "section")      -->
+            <!-- and the group selection and submission items -->
+            <xsl:apply-templates select="." mode="runestone-groupwork"/>
             <!-- No progress indicator in this case -->
         </xsl:when>
         <!-- some extra wrapping for timed exercises      -->
@@ -845,6 +844,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
+    <!-- A "worksheet" electing group work arrives here, and its submission  -->
+    <!-- items go above the progress indicator: Runestone attaches the "mark -->
+    <!-- as completed" control to that indicator, and a reader chooses their -->
+    <!-- group before declaring the page done, not after.                    -->
+    <xsl:if test="$b-host-runestone and (@groupwork = 'yes') and (self::worksheet or self::exercises) and (parent::chapter or parent::appendix)">
+        <xsl:apply-templates select="." mode="runestone-groupwork"/>
+    </xsl:if>
     <!-- only at "section" level. only when building for a Runestone server -->
     <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
 </xsl:template>
