@@ -353,10 +353,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Modest: each row a line, cells separated by double spaces.   -->
 <!-- No column alignment (yet), spanning cells simply run in.     -->
+<!-- Table notes ("tn") collect just below the table, lettered    -->
+<!-- in reading order; letters keep them apart from the [1]-style -->
+<!-- marks of true footnotes.                                     -->
 <xsl:template match="tabular">
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="row"/>
+    <xsl:for-each select=".//tn">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="number"/>
+        <xsl:text>] </xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:for-each>
     <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The letter mark of a table note, at its cell location -->
+<xsl:template match="tabular//tn">
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:text>]</xsl:text>
 </xsl:template>
 
 <xsl:template match="row">
