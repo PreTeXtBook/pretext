@@ -1730,9 +1730,15 @@
             AlignmentVertical =
                 attribute valign {"top" | "middle" | "bottom"}
 
-            # A table cell admits footnotes, authored as table notes; the
-            # rendering (below the table, keyed a, b, c) is a pending TODO.
-            TableCellText = mixed { (TextLongContent | Footnote)* }
+            # A table cell takes "tn" table notes, not "fn" footnotes.  A
+            # table note is lettered a, b, c per-tabular in reading order
+            # and is placed below the table, disjoint from the numbering
+            # of true footnotes.  Notes to tables: CMoS 18th ed.,
+            # 3.77-3.81; the specific (lettered) notes here are 3.80.
+            # A "tn" is not a cross-reference target, so takes no
+            # identification attributes.
+            TableNote = element tn {TextLong}
+            TableCellText = mixed { (TextLongContent | TableNote)* }
             TableCell =
                 element cell {
                     AlignmentHorizontal?,
@@ -1742,7 +1748,11 @@
                     (
                         TableCellText |
                         LongLine+ |
-                        Paragraph+
+                        # a paragraph's content is the same everywhere, so a
+                        # cell of paragraphs anchors a table note after any
+                        # of them; assembly relocates the note's mark to the
+                        # end of the paragraph it follows
+                        (Paragraph, TableNote*)+
                     )
                 }
             TableRow =
