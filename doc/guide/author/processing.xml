@@ -770,6 +770,8 @@
             <li>Whether solutions to exercises are visible or withheld: the publication file<mdash/>the publisher selects among whole components you provided.</li>
             <li>How deep the numbering of divisions runs: the publication file<mdash/>numbers are generated apparatus, not authored words.</li>
         </ul></p>
+
+        <p>This division has a corollary for your workflow.  Because <tag>docinfo</tag> items determine words on the page, your prose grows around them and they become woven into your writing: change the document-wide style of cross-reference text late, and every sentence written around an <tag>xref</tag> deserves a re-read.  So settle <tag>docinfo</tag> early.  Publisher switches are the reverse: they never require revisiting what you wrote, and most can be safely ignored until authoring is complete, then changed with little effort.  (A few publication file entries are part of the build machinery you use while authoring<mdash/>the destination directory for generated files, the address of a WeBWorK server<mdash/>so those get set early, but even they remain cheap to change.)</p>
     </section>
 
     <section xml:id="processing-directory-management">
