@@ -625,8 +625,7 @@
                         asy="asy"
                         sage="sage"
                         pdfeps="pdftops"
-                        node="node"
-                        liblouis="file2brl" />
+                        node="node" />
 
                   ]]>
                   </code>
