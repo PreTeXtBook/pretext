@@ -623,10 +623,12 @@
                         pdflatex="pdflatex"
                         xelatex="xelatex"
                         asy="asy"
+                        mermaid="mmdc"
                         sage="sage"
                         pdfeps="pdftops"
                         node="node"
-                        liblouis="file2brl" />
+                        perl="perl"
+                        fop="fop" />
 
                   ]]>
                   </code>
