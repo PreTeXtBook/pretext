@@ -2309,6 +2309,8 @@
                 <p>You accomplish this by placing a unique value in a <attr>label</attr> attribute on an outermost element, such as an <tag>exercise</tag>, <tag>task</tag>, <tag>project</tag>, <tag>video</tag>, <tag>program</tag>, etc.  You should choose these strings carefully, as they should not be changed, lest the database entries become confused.  Under the hood, we get the content of <c>docinfo/document-id</c> element, and the <attr>edition</attr> attribute of <tag>document-id</tag>, to form a database identifier such as <c>AATA_2_easy-exercise</c>.  The <tag>document-id</tag> distinguishes your book from other books, and the edition allows you some flexibility.  In other words, if you declare a new edition, you can change some of your <attr>label</attr> as part of that process and you will get new database entries while preserving the old.</p>
 
                 <p>Short answer: <em>before</em> hosting your project on Runestone, decide on permanent values for <tag>document-id</tag>, <attr>edition</attr>, and all necessary <attr>label</attr>.  (We expect to add a warning for Runestone builds when these values are not set.)</p>
+
+                <p>Note that the <attr>label</attr> attribute is not only for Runestone: it is the general device for a stable, reader-facing identifier, naming the web pages of your divisions and the files of generated images as well.  See <xref ref="overview-cross-references"/> for the full story of <attr>label</attr> and its companion <attr>xml:id</attr>.</p>
             </note>
         </introduction>
 
@@ -3925,7 +3927,7 @@
                       <p>Any program you want to link to from other places should get an <attr>xml:id</attr>. It always goes on the program itself.</p>
                     </li>
                   </ul>
-                  It is perfectly fine to use the same value for both <attr>label</attr> and <attr>xml:id</attr>, although xml:ids are more restrictive in terms of what characters are allowed.
+                  It is perfectly fine to use the same value for both <attr>label</attr> and <attr>xml:id</attr>.  Both use the same restricted character set (see <xref ref="overview-cross-references"/>), and an <attr>xml:id</attr> has one extra rule from <init>XML</init> itself: it may not begin with a digit.
                 </p>
             </warning>
 
