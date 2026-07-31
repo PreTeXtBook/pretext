@@ -31,6 +31,28 @@
         </ul></p>
     </section>
 
+    <section xml:id="developer-configuration-homes">
+        <title>Choosing a Home for Configuration</title>
+
+        <p>Every new configurable feature must decide where its switch lives: in the <tag>docinfo</tag> element of an author's source, or in a publication file.  This is not a matter of taste, and mistakes are expensive to unwind (a deprecation, a period of honoring both, and churn in every project).  Decide by these three principles, applied in order.<ol>
+            <li><p><term>The dividing line.</term>  <tag>docinfo</tag> affects <em>what</em> actual letters and content appear on a page; the publication file affects <em>how</em> that content appears.  Remove something from <tag>docinfo</tag> and the document no longer means the same thing, or no longer builds.  Change something in the publication file and the same document is presented differently.</p></li>
+            <li><p><term>The publisher's limits.</term>  A publication file entry may <em>select among, or suppress, whole units the author provided</em> (which of hint, answer, solution display; a solutions manual), and may control <em>generated apparatus</em> (numbers, running heads).  It may never alter, nor render incorrect, words the author wrote<mdash/>nor words that must agree grammatically with them.  If a publisher flipping the switch could manufacture incorrect prose, the switch belongs in <tag>docinfo</tag>.</p></li>
+            <li><p><term>Defaults follow their attribute.</term>  A document-wide default for an attribute that authors write on elements lives where the attribute lives: with the source, in <tag>docinfo</tag>.</p></li>
+        </ol></p>
+
+        <p>The extremes are easy.  A <latex/> macro is <tag>docinfo</tag> at its purest: the mathematics neither builds nor means anything without it.  Page geometry is the publication file at its purest: identical letters on a different sheet.</p>
+
+        <p>The instructive cases sit near the line.<ul>
+            <li>The document-wide style of cross-reference text <em>looks</em> presentational, but is <tag>docinfo</tag>.  Authors write prose around the generated text (the word <q>see</q> followed by an <tage>xref</tage>), so a publisher-side change can produce <q>Section Section 5.4</q> in a sentence the author proofread.  Principle 2 forbids exactly this.</li>
+            <li>Exercise-component visibility <em>changes which letters appear on the page</em>, yet is the publication file: the publisher selects among whole units the author supplied, altering none of them.</li>
+            <li>The depth of division numbering changes visible glyphs, yet is the publication file: numbers are generated apparatus.</li>
+            <li>A document-wide default image width is <tag>docinfo</tag> by principle 3: it is a default for the authored <attr>width</attr> attribute, a convenience for a per-image authoring decision.</li>
+            <li>Managed directories illustrate that one <em>concept</em> can straddle the line: the files an author curates (external images, data) are source material<mdash/>swap the directory and it is a different book<mdash/>while the destination for generated build products is publisher convenience.  Judge each piece by its nature, not by keeping a family together.</li>
+        </ul></p>
+
+        <p>When a proposed feature resists these tests, that is usually a sign it bundles an authoring concern with a presentation concern, and should be split.</p>
+    </section>
+
     <section>
         <title>Run-Time Messages</title>
 

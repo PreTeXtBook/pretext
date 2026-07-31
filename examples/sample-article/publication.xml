@@ -97,6 +97,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--     favicon/favicon-16x16.png   -->
     <!-- in external images directory    -->
     <html favicon="simple" embed-button="yes">
+        <!-- A picture or logo for the upper-left corner of each page.    -->
+        <!-- An image of a cover for a physical version is a good choice: -->
+        <!-- 16th Century Art Book Cover, 176x240 pixels, Public Domain,  -->
+        <!-- commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg -->
+        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
+        <!-- Images may carry a discreet list of links to "archival"     -->
+        <!-- versions in a variety of formats; the author supplies the   -->
+        <!-- actual files.  A global request lists suffixes/formats:     -->
+        <!--
+        <images>
+            <archive>One Two Three</archive>
+        </images>
+        -->
+        <!-- Subtree-scoped requests: each "archive" applies to images   -->
+        <!-- within the element whose "xml:id" its "from" names, the     -->
+        <!-- last containing "archive" winning.  (Do not use in concert  -->
+        <!-- with the global form above.)  Fake "A B" links throughout   -->
+        <!-- the graphics chapter; one image turned off; one image a     -->
+        <!-- single "exceptional" link.                                  -->
+        <!--
+        <images>
+            <archive from="graphics">A B</archive>
+            <archive from="figure-asymptote-levers"/>
+            <archive from="figure-asymptote-contour-plot">exceptional</archive>
+        </images>
+        -->
         <!-- links below images to open full-size, must be elected -->
         <asymptote links="yes"/>
         <!-- Several embedded calculators are available            -->

@@ -505,11 +505,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="subtitle" />
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:if test="$docinfo/event">
+    <xsl:if test="$bibinfo/event">
         <xsl:if test="title">
             <xsl:text>\\</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="$docinfo/event" />
+        <xsl:apply-templates select="$bibinfo/event" />
     </xsl:if>
     <xsl:if test="$bibinfo/support">
         <xsl:text>\ptxsupport{</xsl:text>

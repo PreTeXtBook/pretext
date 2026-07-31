@@ -39,12 +39,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <docinfo>
         <!--
         In the HTML version there is room for a picture or logo
-        in the upper left corner.  An image of a cover for a
-        physical version is a good choice to go here.  We use
-        16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
-        http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
+        in the upper left corner.  Election of the image is a
+        publication file entry (/publication/html/brandlogo),
+        demonstrated in the companion publication.xml.
         -->
-        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
         <!--
         LaTeX packages that are also implemented as MathJax extensions
         may be specified here and any macros they have in common may be
@@ -132,13 +130,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- is better.  And maybe something in-between is best: "beezer-FCLA". -->
         <document-id>pretext-SA</document-id>
 
-        <!-- If provided, the programs @language will be used for           -->
-        <!-- any programs or runestone interactives that lack @language     -->
-        <!-- <programs language="python"/> -->
-        <!-- If provided, the parsons @language will be used for           -->
-        <!-- parsons problems that lack @language. If not provided,        -->
-        <!-- programs@language will be used.                               -->
-        <!-- <parsons language="natural"/> -->
+        <!-- A "defaults" element holds document-wide defaults for authored -->
+        <!-- attributes.  An "images" @width or @margins applies to any     -->
+        <!-- "image" lacking that attribute; the "programs" @language to    -->
+        <!-- any program or Runestone interactive lacking one; the          -->
+        <!-- "parsons" @language to Parsons problems (else the programs     -->
+        <!-- default, else natural language).                               -->
+        <!--
+        <defaults>
+            <images width="60%"/>
+            <programs language="python"/>
+            <parsons language="natural"/>
+        </defaults>
+        -->
 
         <!--
         "Names" for various parts of a document are determined exactly
@@ -159,38 +163,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
-        <!-- Authors have complete freedom to do this as they choose,    -->
-        <!-- along with complete responsibility to provide the actual    -->
-        <!-- files, with proper filenames and suffices.  Search this     -->
-        <!-- source file for "archive=" to see particular examples.      -->
-        <!-- The following demonstrates a global specification, which    -->
-        <!-- we just use for testing - it just makes totally fake links. -->
-        <!--
-        <images>
-            <archive>One Two Three</archive>
-        </images>
-        -->
-
-        <!-- Demonstration of subtree specifications for archive formats -->
-        <!-- (Do not use in concert with above global test)              -->
-        <!-- Chapter on graphics, fake "A B" links throughout            -->
-        <!-- No other part of the @archive scheme is affected            -->
-        <!-- Two images, inside figures, within graphics chapter         -->
-        <!--   1) one has "A B" links turned off                         -->
-        <!--   2) single link "exceptional"                              -->
-        <!--
-        <images>
-            <archive from="graphics">A B</archive>
-            <archive from="figure-asymptote-levers"/>
-            <archive from="figure-asymptote-contour-plot">exceptional</archive>
-        </images>
-        -->
-
-        <latex-output>
-            <!-- turn this on once it is easier to make   -->
-            <!-- standalone worksheets, uncomment to test -->
-            <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
-        </latex-output>
+        <!-- A per-image request is the "archive" attribute on "image"   -->
+        <!-- (search this source file for "archive=").  Global and       -->
+        <!-- subtree-scoped requests are now publication file entries,   -->
+        <!-- demonstrated (commented) in the companion publication.xml.  -->
 
         <!-- A *source* directory for files necessary to build   -->
         <!-- certain items completely.  For example, a data file -->

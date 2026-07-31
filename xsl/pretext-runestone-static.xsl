@@ -55,10 +55,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These get-programming-language templates duplicate logic from pretext-common  -->
 <!-- as the contents of that file are not available yet.                           -->
+<!-- NB: these run during assembly, before the repair pass has produced the tree  -->
+<!-- behind $docinfo, so they read the version tree and must recognize both the   -->
+<!-- "docinfo/defaults" home (preferred) and the deprecated top-level placement.  -->
 <xsl:template match="program" mode="get-programming-language">
     <xsl:choose>
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/defaults/programs/@language">
+            <xsl:value-of select="$version-docinfo/defaults/programs/@language" />
         </xsl:when>
         <xsl:when test="$version-docinfo/programs/@language">
             <xsl:value-of select="$version-docinfo/programs/@language" />
@@ -71,8 +77,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@language">
             <xsl:value-of select="@language" />
         </xsl:when>
+        <xsl:when test="$version-docinfo/defaults/parsons/@language">
+            <xsl:value-of select="$version-docinfo/defaults/parsons/@language" />
+        </xsl:when>
         <xsl:when test="$version-docinfo/parsons/@language">
             <xsl:value-of select="$version-docinfo/parsons/@language" />
+        </xsl:when>
+        <xsl:when test="$version-docinfo/defaults/programs/@language">
+            <xsl:value-of select="$version-docinfo/defaults/programs/@language" />
         </xsl:when>
         <xsl:when test="$version-docinfo/programs/@language">
             <xsl:value-of select="$version-docinfo/programs/@language" />

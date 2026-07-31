@@ -683,6 +683,9 @@
         <optional>
           <ref name="Edition"/>
         </optional>
+        <optional>
+          <ref name="Event"/>
+        </optional>
         <zeroOrMore>
           <ref name="Keywords"/>
         </zeroOrMore>
@@ -800,9 +803,9 @@
     </element>
   </define>
   <!--
-    "event" is consumed only by the slideshow conversions
-    (Beamer, reveal.js).  This schema does not yet describe a
-    "slideshow" document, so the pattern is dormant until then.
+    "event" names the occasion of a presentation: the slideshow
+    conversions (Beamer, reveal.js) read it, and an article's
+    title page carries it as a line following the title.
   -->
   <define name="Event">
     <element name="event">
@@ -5296,14 +5299,6 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="brandlogo">
-      <optional>
-        <attribute name="url"/>
-      </optional>
-      <attribute name="source"/>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
     <zeroOrMore>
       <element name="math-package">
         <attribute name="latex-name"/>
@@ -5343,16 +5338,6 @@
       <text/>
     </element>
   </define>
-  <define name="FeedbackUrl">
-    <element name="url">
-      <text/>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="feedback">
-      <ref name="FeedbackUrl"/>
-    </element>
-  </define>
   <define name="Configuration" combine="choice">
     <element name="rename">
       <attribute name="element"/>
@@ -5360,18 +5345,6 @@
         <attribute name="xml:lang"/>
       </optional>
       <text/>
-    </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <element name="images">
-      <oneOrMore>
-        <element name="archive">
-          <optional>
-            <attribute name="from"/>
-          </optional>
-          <text/>
-        </element>
-      </oneOrMore>
     </element>
   </define>
   <define name="Configuration" combine="choice">
@@ -5385,59 +5358,100 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="numbering">
+    <element name="defaults">
+      <interleave>
+        <optional>
+          <element name="images">
+            <optional>
+              <attribute name="width"/>
+            </optional>
+            <optional>
+              <attribute name="margins"/>
+            </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="programs">
+            <optional>
+              <attribute name="language"/>
+            </optional>
+            <optional>
+              <attribute name="compiler-args"/>
+            </optional>
+            <optional>
+              <attribute name="download">
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="linenumbers">
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+            </optional>
+            <optional>
+              <attribute name="linker-args"/>
+            </optional>
+            <optional>
+              <attribute name="interpreter-args"/>
+            </optional>
+            <optional>
+              <attribute name="timeout"/>
+            </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="parsons">
+            <optional>
+              <attribute name="language"/>
+            </optional>
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="doenetml">
+      <attribute name="version"/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="logo">
+      <attribute name="source"/>
+      <attribute name="llx"/>
+      <attribute name="lly"/>
       <optional>
-        <element name="division">
-          <attribute name="part">
-            <choice>
-              <value>decorative</value>
-              <value>structural</value>
-            </choice>
-          </attribute>
-        </element>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="pages">
+          <choice>
+            <value>first</value>
+            <value>all</value>
+          </choice>
+        </attribute>
       </optional>
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="programs">
+    <element name="blurb">
       <optional>
-        <attribute name="language"/>
+        <attribute name="shelf"/>
       </optional>
-      <optional>
-        <attribute name="compiler-args"/>
-      </optional>
-      <optional>
-        <attribute name="download">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="linenumbers">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="linker-args"/>
-      </optional>
-      <optional>
-        <attribute name="interpreter-args"/>
-      </optional>
-      <optional>
-        <attribute name="timeout"/>
-      </optional>
+      <text/>
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <element name="parsons">
+    <element name="document-id">
       <optional>
-        <attribute name="language"/>
+        <attribute name="edition"/>
       </optional>
+      <text/>
     </element>
   </define>
 </grammar>

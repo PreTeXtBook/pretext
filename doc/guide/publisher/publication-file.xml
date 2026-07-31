@@ -560,6 +560,15 @@
             </cd>attribute may be given as a complete <init>URL</init> for the top-level of where <init>HTML</init> output is hosted.  Of course, this may be different for different publishers.  The value is a directory, and so should end with a slash (path separator).  See <xref ref="online-base-url"/> for reasons why you might want to specify this.</p>
         </subsection>
 
+        <subsection xml:id="online-brandlogo-options">
+            <title>HTML Brand Logo</title>
+            <idx>brand logo</idx>
+
+            <p>The<cd>
+                <cline>/publication/html/brandlogo</cline>
+            </cd>element places an image in the upper-left corner of every page's banner.  The <attr>source</attr> attribute (required) locates the image file, and an optional <attr>url</attr> attribute makes the image a link, such as to a project's landing page.  See <xref ref="online-banner-brandlogo"/> for a fuller discussion, including where the image file must reside.</p>
+        </subsection>
+
         <subsection xml:id="online-banner">
             <title>HTML Banner Options</title>
             <idx><h>HTML</h><h>banner content options</h></idx>
@@ -621,6 +630,15 @@
                     </ul></p>
                 </li>
             </ul>The default is <c>none</c>.  See <xref ref="online-favicon-configuration"/> for more, including an explanation of what a favicon is.</p>
+        </subsection>
+
+        <subsection xml:id="online-image-archive-options">
+            <title>HTML Image Archives</title>
+            <idx><h>image archive</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/images/archive</cline>
+            </cd>element requests archive (download) links below images.  Its content is a space-separated list of file suffixes/formats, one link each.  The element is repeatable, and an optional <attr>from</attr> attribute names the <attr>xml:id</attr> of an element of the source, restricting that request to images within it.  The publisher supplies the actual files.  See <xref ref="topic-images-archive"/> for a full discussion with examples.</p>
         </subsection>
 
         <subsection xml:id="online-webwork-dynamism">

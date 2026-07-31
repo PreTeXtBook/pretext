@@ -8,11 +8,6 @@
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <docinfo>
-    <brandlogo url="https://pretextbook.org" source="ptx-logo.png" />
-
-    <images>
-      <archive>eps pdf png svg tex</archive>
-    </images>
 
     <macros>
       \newcommand{\order}[1]{\left\lvert#1\right\rvert}
@@ -30,10 +25,6 @@
     <initialism>PTXSC</initialism>
 
     <document-id>pretext-SC</document-id>
-
-    <html>
-      <favicon/>
-    </html>
 
     <rename element="fact" xml:lang="en-US">Self Evident Fact</rename>
 

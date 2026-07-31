@@ -3362,6 +3362,7 @@
                     ((Credit | ColophonCredit)* &amp;
                     Date? &amp;
                     Edition? &amp;
+                    Event? &amp;
                     Keywords* &amp;
                     Support? &amp;
                     Website? &amp;
@@ -3394,9 +3395,9 @@
                 TextSimple
             }
             Edition = element edition {text}
-            # "event" is consumed only by the slideshow conversions
-            # (Beamer, reveal.js).  This schema does not yet describe a
-            # "slideshow" document, so the pattern is dormant until then.
+            # "event" names the occasion of a presentation: the slideshow
+            # conversions (Beamer, reveal.js) read it, and an article's
+            # title page carries it as a line following the title.
             Event = element event {
                 TextLong
             }
@@ -3598,30 +3599,17 @@
                     Configuration+
                 }
             </code>
-            <fragref ref="brandlogo" />
             <fragref ref="preambles" />
             <fragref ref="macros" />
             <fragref ref="cross-references" />
             <fragref ref="initialism" />
-            <fragref ref="feedback" />
             <fragref ref="rename" />
-            <fragref ref="imagearchive" />
             <fragref ref="authorbiographylength" />
-            <fragref ref="numbering" />
-            <fragref ref="programs" />
-        </fragment>
-
-        <p>A nice icon near the top of an electronic version is a nice touch, and can link back to a project landing page.</p>
-
-        <fragment xml:id="brandlogo">
-            <title>Brand logo</title>
-            <code>
-            Configuration |=
-                element brandlogo {
-                    attribute url {text}?,
-                    attribute source {text}
-                }
-            </code>
+            <fragref ref="defaults" />
+            <fragref ref="doenetml" />
+            <fragref ref="logo" />
+            <fragref ref="blurb" />
+            <fragref ref="document-id" />
         </fragment>
 
         <p>We add some items which will become parts of preambles to support math in <latex/> syntax, <tag>latex-image</tag>, and <tag>asymptote</tag>.  <latex/> packages, and their cousins, MathJax extensions, can be specified to support mathematics elements (<tag>m</tag> and friends).  Images specified by <latex/> or Asymptote syntax sometimes need extra information in their preambles.</p>
@@ -3678,19 +3666,6 @@
             </code>
         </fragment>
 
-        <p>Online versions can request feedback via a URL for some form.  Maybe this should really be an <c>href</c> for consistency.  There should be a device to provide text to go with the link.</p>
-
-        <fragment xml:id="feedback">
-            <title>Feedback link</title>
-            <code>
-            FeedbackUrl = element url {text}
-            Configuration |=
-                element feedback {
-                    FeedbackUrl
-                }
-            </code>
-        </fragment>
-
         <p>Some elements can be renamed.  This should be a rare event.  Since the content of this element can (optionally) be specified in  different languages, the <attr>xml:lang</attr> attribute is appropriate.<fn><url href="https://www.w3.org/International/questions/qa-when-xmllang"/></fn></p>
 
         <fragment xml:id="rename">
@@ -3701,21 +3676,6 @@
                     attribute element {text},
                     attribute xml:lang {text}?,
                     text
-                }
-            </code>
-        </fragment>
-
-        <p>Image archives have some global specification.  The <c>from</c> attribute gives a root for only working on a subtree of the document.  The content is a comma-separated list of file extensions.</p>
-
-        <fragment xml:id="imagearchive">
-            <title>Image archives</title>
-            <code>
-            Configuration |=
-                element images {
-                    element archive {
-                        attribute from {text}?,
-                        text
-                    }+
                 }
             </code>
         </fragment>
@@ -3732,51 +3692,62 @@
             </code>
         </fragment>
 
-        <p>Many aspects of numbering are configurable.  These choices affect the numbers printed, and so are an author's decision, and hence run with the source.</p>
+        <p>Document-wide defaults for attributes an author writes on individual elements are gathered in a single <c>defaults</c> element.  Each child is the plural of the element whose authored attributes it defaults: an attribute given here is employed by any <c>image</c>, <c>program</c>, or Parsons problem which does not carry that attribute itself.  The plural names also ensure this configuration is never mistaken for the content elements themselves.</p>
 
-        <fragment xml:id="numbering">
-            <title>Numbering of part divisions</title>
+        <fragment xml:id="defaults">
+            <title>Authored-attribute defaults</title>
             <code>
             Configuration |=
-                element numbering {
-                    element division {
-                        attribute part {"decorative" | "structural"}
+                element defaults {
+                    element images {
+                        attribute width {text}?,
+                        attribute margins {text}?
+                    }?
+                    &amp;
+                    element programs {
+                        attribute language {text}?,
+                        attribute compiler-args {text}?,
+                        attribute download {"yes"|"no"}?,
+                        attribute linenumbers {"yes"|"no"}?,
+                        attribute linker-args {text}?,
+                        attribute interpreter-args {text}?,
+                        attribute timeout {text}?
+                    }?
+                    &amp;
+                    element parsons {
+                        attribute language {text}?
                     }?
                 }
             </code>
         </fragment>
 
-        <p>Some global defaults can be set for programs and Parsons problems.</p>
+        <p>DoenetML content is authored against a particular version of the DoenetML viewer, so the version is a fact of the source.  It is recorded here and consulted when the viewer is loaded.</p>
 
-        <fragment xml:id="programs">
-            <title>Program options</title>
+        <fragment xml:id="doenetml">
+            <title>DoenetML version</title>
             <code>
             Configuration |=
-                element programs {
-                    attribute language {text}?,
-                    attribute compiler-args {text}?,
-                    attribute download {"yes"|"no"}?,
-                    attribute linenumbers {"yes"|"no"}?,
-                    attribute linker-args {text}?,
-                    attribute interpreter-args {text}?,
-                    attribute timeout {text}?
-                }
-            </code>
-            <title>Parsons options</title>
-            <code>
-            Configuration |=
-                element parsons {
-                    attribute language {text}?
+                element doenetml {
+                    attribute version {text}
                 }
             </code>
         </fragment>
-    </section>
 
-    <section>
-        <title>Document Information (experimental)</title>
+        <p>A logo image can be placed at absolute coordinates of the printed page, such as the letterhead of a letter or memorandum.  The image's lower-left corner sits at the coordinates given by <attr>llx</attr> and <attr>lly</attr>, in points.  A <attr>width</attr> in fixed units (such as <c>in</c> or <c>cm</c>) will scale the image, and <attr>pages</attr> elects placement on the first page only (the default) or on every page.</p>
 
-        <p>We extend the <c>docinfo</c> to include new elements. We
-                add each to the <c>Configuration</c> group.</p>
+        <fragment xml:id="logo">
+            <title>Page logo</title>
+            <code>
+            Configuration |=
+                element logo {
+                    attribute source {text},
+                    attribute llx {text},
+                    attribute lly {text},
+                    attribute width {text}?,
+                    attribute pages {"first" | "all"}?
+                }
+            </code>
+        </fragment>
 
         <p>A textbook can have a blurb (roughly what you would expect on the back of the book), and optionally a <attr>shelf</attr> that tells Runestone how to categorize the book.</p>
 
@@ -3791,6 +3762,8 @@
             </code>
         </fragment>
 
+        <p>A stable identifier for the document, with an optional <attr>edition</attr>, supports services which track a project across builds and releases (such as Runestone).</p>
+
         <fragment xml:id="document-id">
             <title>Document ID</title>
             <code>
@@ -3800,13 +3773,6 @@
                     text
                 }
             </code>
-        </fragment>
-
-        <p>Now we collect these to add to the dev schema.</p>
-        <fragment xml:id="docinfo-dev">
-            <title>Experimental Document Info</title>
-            <fragref ref="blurb"/>
-            <fragref ref="document-id"/>
         </fragment>
     </section>
 
@@ -3937,7 +3903,6 @@
             </code>
             <fragref ref="interactive" />
             <fragref ref="frontmatter-dev"/>
-            <fragref ref="docinfo-dev"/>
             <fragref ref="proof-like"/>
             <fragref ref="figure-dev"/>
             <fragref ref="solutions-dev"/>

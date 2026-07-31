@@ -35,8 +35,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- of a printed version.  Keep it simple.                          -->
     <blurb shelf="Author/Instructor Help">This is a book written in PreTeXt, in order to provide testing for a variety of purposes, not least a conversion to Runestone Academy.</blurb>
 
-    <brandlogo url="http://abstract.pugetsound.edu" source="cover_aata_2014.png" />
-
     <document-id edition="2">PTXSB</document-id>
 
     <!-- Prefix to enhance Sage notebook contents -->
@@ -73,12 +71,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     \usetikzlibrary{snakes}
     </latex-image-preamble>
 
-    <!-- Any program or Runestone interactive without a @language will -->
-    <!-- assumed to be python                                          -->
-    <programs language="python"/>
-    <!-- Any parsons problems will be assumed to be natural language   -->
-    <!-- If not set, this would default to programs@language           -->
-    <!-- If neither is set, parsons will default to "natural" language -->
-    <parsons language="natural"/>
+    <!-- Document-wide defaults for authored attributes -->
+    <defaults>
+        <!-- Any program or Runestone interactive without a @language will -->
+        <!-- assumed to be python                                          -->
+        <programs language="python"/>
+        <!-- Any parsons problems will be assumed to be natural language   -->
+        <!-- If not set, this would default to programs@language           -->
+        <!-- If neither is set, parsons will default to "natural" language -->
+        <parsons language="natural"/>
+    </defaults>
 
 </docinfo>

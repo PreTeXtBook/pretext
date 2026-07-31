@@ -25,7 +25,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
   <!-- brandlogo is the image that may appear next to the title in the banner -->
-  <!-- <brandlogo url="" source="images/cover.png"/> -->
+  <!-- A brand logo for the masthead is a publication file entry: -->
+  <!-- /publication/html/brandlogo with "source" and optional "url" -->
 
   <!-- It is possible to rename elements: -->
   <rename element="observation" xml:lang="en-US">Danger</rename>

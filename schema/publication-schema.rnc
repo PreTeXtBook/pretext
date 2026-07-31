@@ -227,11 +227,13 @@
                         Annotation? &
                         Asymptote? &
                         Baseurl? &
+                        Brandlogo? &
                         Calculator? &
                         Css? &
                         Crossreferences? &
                         Exercises? &
                         Feedback? &
+                        Images? &
                         Indexpage? &
                         Interactives? &
                         Knowls? &
@@ -260,6 +262,12 @@
             Baseurl =
                 element baseurl {
                     attribute href { text }
+                }
+
+            Brandlogo =
+                element brandlogo {
+                    attribute source { text },
+                    attribute url { text }?
                 }
 
             Calculator =
@@ -292,6 +300,14 @@
             Feedback =
                 element feedback {
                     attribute href { text }
+                }
+
+            Images =
+                element images {
+                    element archive {
+                        attribute from { text }?,
+                        text
+                    }+
                 }
 
             Indexpage =

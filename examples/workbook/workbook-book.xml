@@ -39,7 +39,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
         http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
         -->
-        <brandlogo url="https://pretextbook.org"/>
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
         \newcommand{\myequation}[2]{#1\amp =#2} % testing alignment override
@@ -98,12 +97,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "my-book" is a poor choice, "beezer-first-course-linear-algebra"   -->
         <!-- is better.  And maybe something in-between is best: "beezer-FCLA". -->
         <document-id>pretext-SWB</document-id>
-        <latex-output>
-            <!-- turn this on once it is easier to make   -->
-            <!-- standalone worksheets, uncomment to test -->
-            <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
-        </latex-output>
-
     </docinfo>
 
     <!--

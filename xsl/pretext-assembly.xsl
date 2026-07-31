@@ -2921,6 +2921,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- 2026-07-30: authored-attribute defaults gather under "defaults" -->
+
+<!-- A "programs" or "parsons" element, as a child of "docinfo",  -->
+<!-- moves inside a "defaults" element.  The first of the pair    -->
+<!-- present builds the container for both, and the same match    -->
+<!-- then suppresses the other.                                   -->
+<xsl:template match="docinfo/programs | docinfo/parsons" mode="repair">
+    <xsl:if test="count(preceding-sibling::programs | preceding-sibling::parsons) = 0">
+        <xsl:element name="defaults">
+            <xsl:for-each select="../programs | ../parsons">
+                <xsl:copy>
+                    <xsl:copy-of select="@*"/>
+                </xsl:copy>
+            </xsl:for-each>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
+
+<!-- The old "image-width" element, whose content was the width,  -->
+<!-- becomes a "width" attribute on an "images" element.          -->
+<xsl:template match="docinfo/defaults/image-width" mode="repair">
+    <xsl:element name="images">
+        <xsl:attribute name="width">
+            <xsl:value-of select="normalize-space(.)"/>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+<!-- 2026-07-30: an "event" is bibliographic content, so it -->
+<!-- belongs in "bibinfo", already its home for slideshows. -->
+<!-- Suppressed at its origin within "docinfo"...           -->
+<xsl:template match="docinfo/event" mode="repair"/>
+
+<!-- ...and lands in an authored "bibinfo" without its own. -->
+<xsl:template match="frontmatter/bibinfo[not(event)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
+        <xsl:apply-templates select="/*/docinfo/event" mode="event-relocate"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- A faithful copy, since the "repair" mode on the same   -->
+<!-- element is its suppression at the original location.   -->
+<xsl:template match="docinfo/event" mode="event-relocate">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- 2024-10-29: program is reworked -->
 
 <!-- Add code element around text in program when missing -->
@@ -2995,6 +3046,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="titlepage/date" mode="repair"/>
             <!-- for slides, we allowed an "event" -->
             <xsl:apply-templates select="titlepage/event" mode="repair"/>
+            <!-- 2026-07-30: an "event" may also arrive from "docinfo" -->
+            <xsl:apply-templates select="/*/docinfo/event[not(current()/titlepage/event)]" mode="event-relocate"/>
             <xsl:apply-templates select="colophon/credit" mode="repair"/>
             <xsl:apply-templates select="colophon/edition" mode="repair"/>
             <xsl:apply-templates select="colophon/website" mode="repair"/>

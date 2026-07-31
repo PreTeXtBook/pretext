@@ -39,6 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         />
 
     <html>
+        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png"/>
         <!-- native search with Javascript -->
         <search variant="default"/>
         <!-- for this demonstration, we want all the problems dynamic -->

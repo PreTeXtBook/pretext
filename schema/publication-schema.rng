@@ -722,6 +722,9 @@
           <ref name="Baseurl"/>
         </optional>
         <optional>
+          <ref name="Brandlogo"/>
+        </optional>
+        <optional>
           <ref name="Calculator"/>
         </optional>
         <optional>
@@ -735,6 +738,9 @@
         </optional>
         <optional>
           <ref name="Feedback"/>
+        </optional>
+        <optional>
+          <ref name="Images"/>
         </optional>
         <optional>
           <ref name="Indexpage"/>
@@ -797,6 +803,14 @@
   <define name="Baseurl">
     <element name="baseurl">
       <attribute name="href"/>
+    </element>
+  </define>
+  <define name="Brandlogo">
+    <element name="brandlogo">
+      <attribute name="source"/>
+      <optional>
+        <attribute name="url"/>
+      </optional>
     </element>
   </define>
   <define name="Calculator">
@@ -882,6 +896,18 @@
   <define name="Feedback">
     <element name="feedback">
       <attribute name="href"/>
+    </element>
+  </define>
+  <define name="Images">
+    <element name="images">
+      <oneOrMore>
+        <element name="archive">
+          <optional>
+            <attribute name="from"/>
+          </optional>
+          <text/>
+        </element>
+      </oneOrMore>
     </element>
   </define>
   <define name="Indexpage">

@@ -152,18 +152,6 @@
             }
             Website |= Website_X
 
-            Configuration |=
-                element blurb {
-                    attribute shelf {text}?,
-                    text
-                }
-
-            Configuration |=
-                element document-id {
-                    attribute edition {text}?,
-                    text
-                }
-
             ProofLike =
                 MetaDataTitleOptional,
                 (BlockStatement | Case)+

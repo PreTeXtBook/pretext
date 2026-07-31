@@ -204,6 +204,7 @@
                     ((Credit | ColophonCredit)* &
                     Date? &
                     Edition? &
+                    Event? &
                     Keywords* &
                     Support? &
                     Website? &
@@ -236,9 +237,9 @@
                 TextSimple
             }
             Edition = element edition {text}
-            # "event" is consumed only by the slideshow conversions
-            # (Beamer, reveal.js).  This schema does not yet describe a
-            # "slideshow" document, so the pattern is dormant until then.
+            # "event" names the occasion of a presentation: the slideshow
+            # conversions (Beamer, reveal.js) read it, and an article's
+            # title page carries it as a line following the title.
             Event = element event {
                 TextLong
             }
@@ -2029,12 +2030,6 @@
                 }
 
             Configuration |=
-                element brandlogo {
-                    attribute url {text}?,
-                    attribute source {text}
-                }
-
-            Configuration |=
                     element math-package {
                         attribute latex-name {text},
                         attribute mathjax-name {text}
@@ -2060,12 +2055,6 @@
             Configuration |=
                 element initialism {text}
 
-            FeedbackUrl = element url {text}
-            Configuration |=
-                element feedback {
-                    FeedbackUrl
-                }
-
             Configuration |=
                 element rename {
                     attribute element {text},
@@ -2074,39 +2063,56 @@
                 }
 
             Configuration |=
-                element images {
-                    element archive {
-                        attribute from {text}?,
-                        text
-                    }+
-                }
-
-            Configuration |=
                 element author-biographies {
                     attribute length {"short" | "long"}
                 }
 
             Configuration |=
-                element numbering {
-                    element division {
-                        attribute part {"decorative" | "structural"}
+                element defaults {
+                    element images {
+                        attribute width {text}?,
+                        attribute margins {text}?
+                    }?
+                    &
+                    element programs {
+                        attribute language {text}?,
+                        attribute compiler-args {text}?,
+                        attribute download {"yes"|"no"}?,
+                        attribute linenumbers {"yes"|"no"}?,
+                        attribute linker-args {text}?,
+                        attribute interpreter-args {text}?,
+                        attribute timeout {text}?
+                    }?
+                    &
+                    element parsons {
+                        attribute language {text}?
                     }?
                 }
 
             Configuration |=
-                element programs {
-                    attribute language {text}?,
-                    attribute compiler-args {text}?,
-                    attribute download {"yes"|"no"}?,
-                    attribute linenumbers {"yes"|"no"}?,
-                    attribute linker-args {text}?,
-                    attribute interpreter-args {text}?,
-                    attribute timeout {text}?
+                element doenetml {
+                    attribute version {text}
                 }
 
             Configuration |=
-                element parsons {
-                    attribute language {text}?
+                element logo {
+                    attribute source {text},
+                    attribute llx {text},
+                    attribute lly {text},
+                    attribute width {text}?,
+                    attribute pages {"first" | "all"}?
+                }
+
+            Configuration |=
+                element blurb {
+                    attribute shelf {text}?,
+                    text
+                }
+
+            Configuration |=
+                element document-id {
+                    attribute edition {text}?,
+                    text
                 }
 
                     }

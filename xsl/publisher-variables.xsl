@@ -2748,6 +2748,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!--                            -->
+<!-- HTML Image Archive Links   -->
+<!--                            -->
+
+<!-- Requests for archive (download) versions of images: repeatable  -->
+<!-- "archive" elements within an "images" element.  The publication -->
+<!-- file form is preferred, and wins wholesale when present; the    -->
+<!-- "images" element within "docinfo" is deprecated (2026-07-30)    -->
+<!-- but honored while the publication file is silent.               -->
+<xsl:variable name="image-archives" select="$publication/html/images/archive | $docinfo/images/archive[not($publication/html/images/archive)]"/>
+
+<!--                            -->
+<!-- HTML Brand Logo            -->
+<!--                            -->
+
+<!-- An image for the masthead, optionally linking to a landing   -->
+<!-- page.  The publication file form is preferred, and elects    -->
+<!-- the logo wholesale (both attributes); the "brandlogo" within -->
+<!-- "docinfo" is deprecated (2026-07-30) but honored while the   -->
+<!-- publication file is silent.                                  -->
+<xsl:variable name="brandlogo-elected" select="$publication/html/brandlogo | $docinfo/brandlogo[not($publication/html/brandlogo)]"/>
+<xsl:variable name="brandlogo-source" select="string($brandlogo-elected/@source)"/>
+<xsl:variable name="brandlogo-url" select="string($brandlogo-elected/@url)"/>
+<xsl:variable name="b-brandlogo" select="not($brandlogo-source = '')"/>
+
+<!--                            -->
 <!-- HTML Embed Page button     -->
 <!--                            -->
 
