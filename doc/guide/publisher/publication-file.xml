@@ -1093,6 +1093,22 @@
               </ul>
             </p>
         </subsection>
+
+        <subsection xml:id="online-read-aloud-options">
+            <title>Read Aloud Options</title>
+            <idx><h>read aloud</h><h>publisher options</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>read-aloud</attr> with values:<ul>
+                <li><c>yes</c>: the default, enable read-aloud functionality.</li>
+                <li><c>no</c>: disable read-aloud functionality.</li>
+            </ul></p>
+
+            <p>
+                When enabled, the read-aloud functionality will use the Web Speech API to read aloud the text content of the page. The user can control the playback using the provided controls, as well as options to adjust the reading speed and voice selection (if supported by the browser), whether to expand and read knowls when it comes to them, and whether to continue directly to the next page when it reaches the end of the content.
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">
