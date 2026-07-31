@@ -10752,7 +10752,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:value-of select="name()" />
                 <xsl:text> "</xsl:text>
                 <xsl:value-of select="." />
-                <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+                <xsl:text>" is invalid.  Use only the 26 Latin letters (7-bit ASCII, no accents), numbers, hyphens and underscores.</xsl:text>
             </xsl:message>
         </xsl:if>
         <!-- a reserved UI id: "=" against the token node-set is true if this -->
