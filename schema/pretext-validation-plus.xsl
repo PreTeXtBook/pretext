@@ -365,6 +365,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A note anchored in a table cell is a "tn" table note, lettered   -->
+<!-- and placed at the bottom of the table (Notes to tables: CMoS     -->
+<!-- 18th ed., 3.77-3.81), never an "fn" footnote.  The schema        -->
+<!-- rejects an "fn" as direct cell content, but cannot reach one     -->
+<!-- inside a cell's paragraphs, since a paragraph's content is the   -->
+<!-- same everywhere.  This check reaches every depth of a "tabular". -->
+<xsl:template match="tabular//fn">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'footnote-in-tabular'"/>
+        <xsl:with-param name="message">
+            <xsl:text>A footnote (&lt;fn&gt;) has no place within a &lt;tabular&gt;: a note anchored&#xa;</xsl:text>
+            <xsl:text>in a table belongs at the bottom of the table, not in the numbering of&#xa;</xsl:text>
+            <xsl:text>true footnotes.  Use a &lt;tn&gt; table note instead; it will be lettered&#xa;</xsl:text>
+            <xsl:text>a, b, c and placed below the table.  A build will honor this footnote&#xa;</xsl:text>
+            <xsl:text>as a table note in the meantime.</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="title[m]">
     <xsl:if test="parent::chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter and not(following-sibling::shorttitle)">
         <xsl:apply-templates select="." mode="messaging">
