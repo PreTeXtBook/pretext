@@ -95,6 +95,16 @@
                Please check to see if there was a warning you missed.  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
         </li>
 
+        <li xml:id="faq-navigation-collision">
+            <title>Why is my <init>HTML</init> navigation acting so oddly?</title>
+
+            <p>The symptoms vary.  The <q>next</q> and <q>previous</q> buttons circle back on themselves, a link arrives at a division you did not ask for, or a page you were expecting seems to have been replaced by a different one.  We cannot promise a single explanation for every report of this, but there is one situation we know produces exactly these effects, and it is worth ruling out first.</p>
+
+            <p>It needs two things to be true at once.  First, some of your divisions carry an <attr>xml:id</attr> or a <attr>label</attr> built out of numbers, in a hierarchical pattern such as <c>ch-3</c>, and then <c>ch-3-4</c> for something inside it.  Second, other divisions nearby carry neither attribute.  A division with neither is not left nameless: we manufacture an identifier for it, from the nearest ancestor that does have one, together with the division's position among its siblings.  So an unnamed second child of a division you called <c>ch-3</c> becomes <c>ch-3-2</c><mdash/>and if you also authored a division named <c>ch-3-2</c>, then two different divisions now answer to the same name.  Those names become file names in <init>HTML</init> output, so the two pages collide and the navigation between them misbehaves.</p>
+
+            <p>We are aware of this and do not have a good solution.  So the practical remedy is the advice in <xref ref="overview-structure"/>: do not build your identifiers out of numbers.  Let <pretext/> do the numbering, and name a division for what it contains.  <xref ref="overview-cross-references"/> tells the full story of <attr>xml:id</attr> and <attr>label</attr>, including what happens for a division that has neither.</p>
+        </li>
+
         <li xml:id="faq-pull-regularly">
             <title>I don't like surprises and have not updated in months.  Why do I now have a problem?</title>
             <p>We almost never release mistaken code that breaks output produced from valid source (<xref ref="schema" />).  And when we have, the cause is usually a small typo, or something that gets fixed easily and quickly.  We do sometimes make backwards-incompatible changes, but you always get warnings, often the changes can wait, there are announcements on the mailing lists, and whenever possible, we update tools that automate the changes.</p>
