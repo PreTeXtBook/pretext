@@ -32,6 +32,11 @@ $center-content: true !default;
 
 @use 'components/page-parts/extras/navbar-btn-borders';
 
+@use 'components/page-parts/read-aloud' with (
+  $nav-height: $nav-height,
+  $navbar-breakpoint: $navbar-breakpoint
+);
+
 .ptx-navbar {
   position: sticky;
   top: 0;
@@ -188,7 +193,7 @@ $center-content: true !default;
     display: none;
   }
 
-  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button) .name {
+  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button, .ptx-read-aloud-button) .name {
     @include accessibility.sr-only;
   }
 
