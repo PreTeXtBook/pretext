@@ -1,0 +1,4 @@
+{
+    "//": "Marks the read-aloud sources as ES modules so Node can run the unit tests in test/ directly (node --test).  esbuild ignores this file when bundling.",
+    "type": "module"
+}
