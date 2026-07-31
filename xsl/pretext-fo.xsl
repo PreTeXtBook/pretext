@@ -2346,6 +2346,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="row[not(@header = 'yes') and not(@header = 'vertical')]"/>
         </fo:table-body>
     </fo:table>
+    <!-- Table notes ("tn") collect just below the table, lettered in -->
+    <!-- reading order, which is document order of the marks (Notes   -->
+    <!-- to tables: CMoS 18th ed., 3.77-3.81; specific notes at       -->
+    <!-- 3.80).  Disjoint from true footnote numbering.               -->
+    <xsl:for-each select=".//tn">
+        <fo:block font-size="80%" text-align="{$text-alignment}" text-align-last="start" space-before="0.25em">
+            <fo:inline baseline-shift="35%" font-size="70%" font-style="italic">
+                <xsl:apply-templates select="." mode="number"/>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- An estimated width, in points, for each of a tabular's columns, -->
@@ -3624,6 +3637,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text, and the body, marked again, collected at the bottom of -->
 <!-- the page above the separator rule defined in the entry       -->
 <!-- template.  The footnote number is the serial machinery's.    -->
+<!-- A table note ("tn") drops only its superscript letter mark at   -->
+<!-- the cell location; the note text collects below the table, in   -->
+<!-- the "tabular" template.  No footnote machinery is involved.     -->
+<xsl:template match="tabular//tn">
+    <fo:inline baseline-shift="35%" font-size="70%" font-style="italic">
+        <xsl:apply-templates select="." mode="number"/>
+    </fo:inline>
+</xsl:template>
+
 <xsl:template match="fn">
     <xsl:variable name="the-mark">
         <xsl:apply-templates select="." mode="serial-number"/>
