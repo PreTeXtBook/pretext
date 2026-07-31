@@ -6342,7 +6342,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <tabular>
                     <row>
                         <cell>Red</cell>
-                        <cell>Green<fn>Green can be a very sick looking color.</fn></cell>
+                        <cell>Green<tn>Green can be a very sick looking color.</tn></cell>
                         <cell>Yellow</cell>
                     </row>
                     <row>
@@ -14104,7 +14104,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <tabular width="auto">
                     <row header="yes">
-                        <cell>State<fn>Only from the West Coast.</fn></cell>
+                        <cell>State<tn>Only from the West Coast.</tn></cell>
                         <cell>Population</cell>
                         <cell>Area (sq. mi.)</cell>
                         <cell>Statehood (Year)</cell>
@@ -14123,7 +14123,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </row>
                     <row>
                         <cell>California</cell>
-                        <cell>39,512,223<fn>Wow! That is as big as many countries.</fn></cell>
+                        <cell>39,512,223<tn>Wow! That is as big as many countries.</tn></cell>
                         <cell>163,696</cell>
                         <cell>1850</cell>
                     </row>
