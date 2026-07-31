@@ -757,15 +757,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </answer>
         </exercise>
 
-        <p>An activecode exercise can offer extra help to a reader who gets stuck.  Setting <attr>codetailor</attr> to <c>yes</c> adds a <q>Get Help</q> button that, on a Runestone server, presents a personalized Parsons problem<mdash/>the lines of a correct solution, scrambled for the reader to reassemble.  It works best for an exercise whose solution decomposes into a handful of clear lines, as here.</p>
+        <p>An activecode exercise can offer extra help to a reader who gets stuck, via Runestone's CodeTailor feature.  A <attr>codetailor</attr> attribute adds a <q>Get Help</q> button that, on a Runestone server, presents a personalized Parsons problem<mdash/>the blocks of a correct solution, scrambled for the reader to reassemble, where a block may hold one line of code or several.  The value <c>all</c> scrambles a complete solution, while <c>incorrect</c> locks the blocks a reader already has right, so only the wrong ones move.  A companion <attr>codetailor-fallback</attr> names, by its <attr>xml:id</attr>, a Parsons problem elsewhere in this document to present when a personalized problem cannot be generated; without it, generation is always requested.  The first exercise below elects <c>all</c> and falls back to a Parsons problem from a later chapter; the second elects <c>incorrect</c> and relies on generation alone.</p>
 
         <exercise xml:id="codetailor-example" label="coding-exercise-codetailor">
             <title>Coding Exercise, with CodeTailor Help</title>
 
             <statement>
-                <p>Write a function <c>total</c> that returns the sum of a list of numbers.  If you get stuck, use the <q>Get Help</q> button to assemble a solution from scrambled lines.</p>
+                <p>Write a function <c>total</c> that returns the sum of a list of numbers.  If you get stuck, use the <q>Get Help</q> button to assemble a solution from scrambled blocks.</p>
             </statement>
-            <program interactive="activecode" language="python" codetailor="yes">
+            <program interactive="activecode" language="python" codetailor="all" codetailor-fallback="parsons-with-partial-order">
                 <code>
                 def total(numbers):
                     return 0
@@ -791,6 +791,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         result = 0
                         for n in numbers:
                             result = result + n
+                        return result
+                    </code>
+                </program>
+            </solution>
+        </exercise>
+
+        <exercise xml:id="codetailor-incorrect-example" label="coding-exercise-codetailor-incorrect">
+            <title>Coding Exercise, CodeTailor Help for Incorrect Blocks</title>
+
+            <statement>
+                <p>Write a function <c>largest</c> that returns the greatest number in a nonempty list.  Here the <q>Get Help</q> button locks the blocks you already have right, so you rearrange only the incorrect ones.</p>
+            </statement>
+            <program interactive="activecode" language="python" codetailor="incorrect">
+                <code>
+                def largest(numbers):
+                    return 0
+                </code>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class myTests(TestCaseGui):
+
+                    def testOne(self):
+                        self.assertEqual(largest([1, 3, 2]), 3, "Largest of three integers")
+                        self.assertEqual(largest([-5, -2, -9]), -2, "Largest of negatives")
+                        self.assertEqual(largest([7]), 7, "Largest of a single number")
+
+                myTests().main()
+                </tests>
+            </program>
+            <solution>
+                <p>Track the greatest value seen so far.</p>
+                <program language="python">
+                    <code>
+                    def largest(numbers):
+                        result = numbers[0]
+                        for n in numbers:
+                            if n > result:
+                                result = n
                         return result
                     </code>
                 </program>
@@ -3128,7 +3167,7 @@ TEST_CASE( "Test the add function" ) {
             <hint><p>Dorothy will not be much help with this proof.</p></hint>
         </exercise>
 
-        <exercise label="parsons-with-partial-order" adaptive="yes" indentation="hide" language="python">
+        <exercise xml:id="parsons-with-partial-order" label="parsons-with-partial-order" adaptive="yes" indentation="hide" language="python">
             <title>Parsons Problem, Partial Ordering</title>
             <statement>
                 <p>Parsons problems can specify a partial ordering that allows for multiple valid solutions.</p>

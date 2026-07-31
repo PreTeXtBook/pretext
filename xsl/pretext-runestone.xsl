@@ -2292,12 +2292,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:with-param name="hosting" select="$hosting"/>
                             </xsl:call-template>
                             <!-- CodeTailor: when an author requests it, emit the data       -->
-                            <!-- attributes that have Runestone offer the reader an          -->
-                            <!-- automatically-personalized Parsons puzzle as scaffolding     -->
+                            <!-- The presence of @codetailor has Runestone offer the reader   -->
+                            <!-- an automatically-personalized Parsons puzzle as scaffolding  -->
                             <!-- (a "Get Help" button) when they are stuck on the exercise.   -->
-                            <xsl:if test="@codetailor = 'yes'">
-                                <xsl:attribute name="data-parsonspersonalize">movable</xsl:attribute>
-                                <xsl:attribute name="data-parsonsexample">LLM-example</xsl:attribute>
+                            <!-- The value "all" scrambles a complete solution, while         -->
+                            <!-- "incorrect" locks blocks the reader already has right, so    -->
+                            <!-- only wrong ones move.  A @codetailor-fallback names, by      -->
+                            <!-- @xml:id, a Parsons problem of this document to present when  -->
+                            <!-- a personalized puzzle cannot be generated; in its absence,   -->
+                            <!-- generation is always requested.                              -->
+                            <xsl:if test="@codetailor">
+                                <xsl:attribute name="data-parsonspersonalize">
+                                    <xsl:choose>
+                                        <xsl:when test="@codetailor = 'incorrect'">
+                                            <xsl:text>partial</xsl:text>
+                                        </xsl:when>
+                                        <!-- "all", the only other value the schema admits -->
+                                        <xsl:otherwise>
+                                            <xsl:text>movable</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="data-parsonsexample">
+                                    <xsl:choose>
+                                        <xsl:when test="@codetailor-fallback">
+                                            <xsl:call-template name="runestone-targets">
+                                                <xsl:with-param name="id-list" select="@codetailor-fallback"/>
+                                                <xsl:with-param name="separator" select="''"/>
+                                            </xsl:call-template>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>LLM-example</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
                             </xsl:if>
                             <!-- This is a bit awful, but we need to figure out how much margin     -->
                             <!-- to add to runestone dividers. It must match indentation used for   -->
