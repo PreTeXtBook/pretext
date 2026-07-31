@@ -2048,12 +2048,6 @@
                 element macros {text}
 
             Configuration |=
-                element
-                    cross-references {
-                        attribute text { XrefTextStyle }
-                    }
-
-            Configuration |=
                 element initialism {text}
 
             Configuration |=
@@ -2093,6 +2087,10 @@
                     &
                     element parsons {
                         attribute language {text}?
+                    }?
+                    &
+                    element xrefs {
+                        attribute text { XrefTextStyle }
                     }?
                 }
 
