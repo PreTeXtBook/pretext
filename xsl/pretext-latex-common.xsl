@@ -7720,7 +7720,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <!-- finish grouping for tabular font -->
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="pop-footnote-text"/>
+    <!-- Table notes ("tn") collect below the table, lettered in  -->
+    <!-- reading order, which is document order of the marks      -->
+    <!-- (Notes to tables: CMoS 18th ed., 3.77-3.81; specific     -->
+    <!-- notes at 3.80).  Disjoint from true footnote numbering.  -->
+    <xsl:if test=".//tn">
+        <xsl:text>\par\smallskip%&#xa;</xsl:text>
+        <xsl:text>{\footnotesize%&#xa;</xsl:text>
+        <xsl:for-each select=".//tn">
+            <xsl:text>\textsuperscript{\textit{</xsl:text>
+            <xsl:apply-templates select="." mode="number"/>
+            <xsl:text>}}\,</xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>\par&#xa;</xsl:text>
+        </xsl:for-each>
+        <xsl:text>}%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="ancestor::sidebyside">
         <xsl:text>\par}&#xa;</xsl:text>
     </xsl:if>
@@ -9011,9 +9026,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- matching  \footnotetext  since "biblio" is not yet a    -->
 <!-- tcolorbox and the "pop-footnote-text" template was not  -->
 <!-- present as part of processing  biblio/note.             -->
+<!-- A table note ("tn") drops only its superscript letter mark at  -->
+<!-- the cell location; the note text collects below the table, in  -->
+<!-- the "tabular-inclusion" template.  Letters count per-tabular   -->
+<!-- in document order.  No footnote machinery is involved, so a    -->
+<!-- "tn" never interacts with tcolorbox footnote management.       -->
+<xsl:template match="tabular//tn">
+    <xsl:text>\textsuperscript{\textit{</xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:text>}}</xsl:text>
+</xsl:template>
+
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl) or self::proof[not(parent::*[&THEOREM-FILTER;])] or self::argument[not(parent::*[&THEOREM-FILTER;])] or self::justification[not(parent::*[&THEOREM-FILTER;])] or self::reasoning[not(parent::*[&THEOREM-FILTER;])] or self::explanation[not(parent::*[&THEOREM-FILTER;])]] and not(ancestor::note/parent::biblio)">
+        <!-- NB: "self::tabular" is not among these ancestors: a footnote -->
+        <!-- within a "tabular" cell is repaired into a "tn" table note   -->
+        <!-- during assembly, so never arrives here.                      -->
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl) or self::proof[not(parent::*[&THEOREM-FILTER;])] or self::argument[not(parent::*[&THEOREM-FILTER;])] or self::justification[not(parent::*[&THEOREM-FILTER;])] or self::reasoning[not(parent::*[&THEOREM-FILTER;])] or self::explanation[not(parent::*[&THEOREM-FILTER;])]] and not(ancestor::note/parent::biblio)">
             <!-- a footnote in the text of a caption will migrate to -->
             <!-- the auxiliary file for use in the "list of figures" -->
             <!-- and there is some confusion of braces and the use   -->
@@ -9053,8 +9082,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: these templates could be improved with an entity          -->
 <!-- NB: "detached" proofs require a proliferation of              -->
 <!-- complicated constructions                                     -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise|dl/li|proof[not(parent::*[&THEOREM-FILTER;])]|argument[not(parent::*[&THEOREM-FILTER;])]|justification[not(parent::*[&THEOREM-FILTER;])]|reasoning[not(parent::*[&THEOREM-FILTER;])]|explanation[not(parent::*[&THEOREM-FILTER;])]" mode="pop-footnote-text">
-    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl) or self::proof[not(parent::*[&THEOREM-FILTER;])] or self::argument[not(parent::*[&THEOREM-FILTER;])] or self::justification[not(parent::*[&THEOREM-FILTER;])] or self::reasoning[not(parent::*[&THEOREM-FILTER;])] or self::explanation[not(parent::*[&THEOREM-FILTER;])]]) = 0">
+<!-- NB: "tabular" appears nowhere here: a footnote within a "tabular"  -->
+<!-- cell is repaired into a "tn" table note during assembly, which     -->
+<!-- involves no footnote machinery at all.                             -->
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise|dl/li|proof[not(parent::*[&THEOREM-FILTER;])]|argument[not(parent::*[&THEOREM-FILTER;])]|justification[not(parent::*[&THEOREM-FILTER;])]|reasoning[not(parent::*[&THEOREM-FILTER;])]|explanation[not(parent::*[&THEOREM-FILTER;])]" mode="pop-footnote-text">
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl) or self::proof[not(parent::*[&THEOREM-FILTER;])] or self::argument[not(parent::*[&THEOREM-FILTER;])] or self::justification[not(parent::*[&THEOREM-FILTER;])] or self::reasoning[not(parent::*[&THEOREM-FILTER;])] or self::explanation[not(parent::*[&THEOREM-FILTER;])]]) = 0">
         <xsl:for-each select=".//fn">
             <xsl:text>\footnotetext[</xsl:text>
             <xsl:apply-templates select="." mode="serial-number"/>
