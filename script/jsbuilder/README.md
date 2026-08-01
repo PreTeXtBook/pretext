@@ -61,7 +61,7 @@ The builder gives us:
 | `pretext-stack/stackapicalls.js` | `js/pretext-stack/stackapicalls.js` | Conditional (STACK problems) |
 | `lti_iframe_resizer.js` | `js/lti_iframe_resizer.js` | Conditional (LTI) |
 | `diagcess/diagcess.js` | `js/diagcess/diagcess.js` | Conditional (diagram a11y) |
-| `pretext-webwork/2.X/pretext-webwork.js` | `js/pretext-webwork/2.X/pretext-webwork.js` | Conditional (WeBWorK, version-matched) |
+| `pretext-webwork.js` | `js/src/pretext-webwork.js` | Conditional (WeBWorK) |
 
 **Not included:** `js/jquery.min.js`.  jQuery is loaded separately by the XSL
 from `$html.js.root` (the `js/` root, not `js/dist/`), because it is a
@@ -163,6 +163,6 @@ repository.  A future CLI enhancement could optionally run the jsbuilder
 
 JavaScript that is part of the Runestone integration is **not** managed here.
 Runestone's JS is loaded separately by `xsl/pretext-runestone.xsl` via the
-`$rs-js` parameter.  The WeBWorK files in `js/pretext-webwork/` do contain
+`$rs-js` parameter.  The WeBWorK files in `js/src/pretext-webwork/` do contain
 Runestone-aware conditional code, but they are PreTeXt-owned files and are
 included here.

@@ -25,7 +25,7 @@
  *    ptx_scorm_events        js/ptx_scorm_events.js
  *    lti_iframe_resizer      js/lti_iframe_resizer.js
  *    knowl                   js/knowl.js
- *    pretext-webwork/2.X/pretext-webwork   (versions: 2.19–2.20)
+ *    pretext-webwork         js/src/pretext-webwork.js
  *
  *  Copied verbatim — pre-built third-party bundles; esbuild copies them as-is.
  *    diagcess/diagcess       js/diagcess/diagcess.js
@@ -176,10 +176,6 @@ function getOptions() {
 //               Example: diagcess.js ships already minified from npm; any
 //               esbuild transformation breaks its UMD self-registration.
 
-// The supported WeBWorK server minor versions.  Each ships its own copy
-// of the integration shim so that the correct iframe API can be targeted.
-const WEBWORK_VERSIONS = ['2.19', '2.20'];
-
 function getAllTargets() {
   return [
     // ------------------------------------------------------------------
@@ -295,15 +291,11 @@ function getAllTargets() {
       group: 'script',
       in: path.join(jsRoot, 'pretext-stack/stackapicalls.js'),
     },
-
-    // WeBWorK integration: one file per server minor version (2.19–2.20).
-    // Loaded conditionally; the version is selected at build time based on
-    // the WeBWorK server minor version reported in the processed XML.
-    ...WEBWORK_VERSIONS.map(v => ({
-      name: `pretext-webwork/${v}/pretext-webwork`,
+    {
+      name: 'pretext-webwork',
       group: 'script',
-      in: path.join(jsRoot, `pretext-webwork/${v}/pretext-webwork.js`),
-    })),
+      in: path.join(jsRoot, 'src/pretext-webwork.js'),
+    },
   ];
 }
 
