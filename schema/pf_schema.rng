@@ -168,35 +168,45 @@
       <optional>
         <attribute name="string-columns"/>
       </optional>
-      <attribute name="type"/>
+      <optional>
+        <attribute name="type"/>
+      </optional>
     </element>
   </define>
+  <!--
+    template elements only carry default attributes, so no
+    attribute is required inside a template
+  -->
   <define name="Templates">
     <element name="templates">
       <oneOrMore>
-        <ref name="GraphicalElements"/>
+        <ref name="TemplateElement"/>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="TemplateElement">
+    <element>
+      <anyName/>
+      <zeroOrMore>
+        <choice>
+          <attribute>
+            <anyName/>
+          </attribute>
+          <text/>
+          <ref name="TemplateElement"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <!-- the next elements group other elements together -->
   <define name="GroupElements">
-    <interleave>
-      <optional>
-        <ref name="Coordinates"/>
-      </optional>
-      <optional>
-        <ref name="Group"/>
-      </optional>
-      <optional>
-        <ref name="Repeat"/>
-      </optional>
-      <optional>
-        <ref name="Clip"/>
-      </optional>
-      <optional>
-        <ref name="Transform"/>
-      </optional>
-    </interleave>
+    <choice>
+      <ref name="Coordinates"/>
+      <ref name="Group"/>
+      <ref name="Repeat"/>
+      <ref name="Clip"/>
+      <ref name="Transform"/>
+    </choice>
   </define>
   <!-- coordinates are special in that they can contain everything a diagram can -->
   <define name="Coordinates">
@@ -216,20 +226,17 @@
           </choice>
         </attribute>
       </optional>
-      <interleave>
-        <zeroOrMore>
+      <optional>
+        <attribute name="scales"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
           <ref name="DefinitionElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GraphicalElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GroupElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="TransformElements"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="Group">
@@ -244,20 +251,14 @@
         <attribute name="transform"/>
       </optional>
       <ref name="CommonAttributes"/>
-      <interleave>
-        <zeroOrMore>
+      <zeroOrMore>
+        <choice>
           <ref name="DefinitionElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GraphicalElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GroupElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="TransformElements"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="Repeat">
@@ -267,20 +268,14 @@
         <attribute name="at"/>
       </optional>
       <ref name="CommonAttributes"/>
-      <interleave>
-        <zeroOrMore>
+      <zeroOrMore>
+        <choice>
           <ref name="DefinitionElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GraphicalElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GroupElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="TransformElements"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="Clip">
@@ -290,74 +285,63 @@
       </optional>
       <attribute name="shape"/>
       <ref name="CommonAttributes"/>
-      <interleave>
-        <zeroOrMore>
+      <zeroOrMore>
+        <choice>
           <ref name="DefinitionElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GraphicalElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GroupElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="TransformElements"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="Transform">
     <element name="transform">
-      <interleave>
-        <zeroOrMore>
+      <zeroOrMore>
+        <choice>
           <ref name="DefinitionElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GraphicalElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="GroupElements"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="TransformElements"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="TransformElements">
-    <interleave>
-      <zeroOrMore>
-        <element name="translate">
-          <attribute name="by"/>
-        </element>
-      </zeroOrMore>
-      <zeroOrMore>
-        <element name="rotate">
-          <attribute name="by"/>
-          <optional>
-            <attribute name="about"/>
-          </optional>
-          <optional>
-            <attribute name="degrees">
-              <choice>
-                <value>yes</value>
-                <value>no</value>
-              </choice>
-            </attribute>
-          </optional>
-        </element>
-      </zeroOrMore>
-      <zeroOrMore>
-        <element name="scale">
-          <attribute name="by"/>
-        </element>
-      </zeroOrMore>
-      <zeroOrMore>
-        <element name="change-basis">
-          <attribute name="basis"/>
-        </element>
-      </zeroOrMore>
-    </interleave>
+    <choice>
+      <element name="translate">
+        <attribute name="by"/>
+      </element>
+      <element name="rotate">
+        <attribute name="by"/>
+        <optional>
+          <attribute name="about"/>
+        </optional>
+        <optional>
+          <attribute name="degrees">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+      </element>
+      <element name="scale">
+        <attribute name="by"/>
+      </element>
+      <element name="scale3d">
+        <attribute name="by"/>
+      </element>
+      <element name="change-basis">
+        <attribute name="basis"/>
+      </element>
+      <element name="center">
+        <empty/>
+      </element>
+      <element name="set-eye">
+        <attribute name="eye"/>
+      </element>
+    </choice>
   </define>
   <!-- attributes and text for labels -->
   <define name="LabelAttributes">
@@ -733,12 +717,7 @@
       </attribute>
     </optional>
     <optional>
-      <attribute name="outline">
-        <choice>
-          <value>yes</value>
-          <value>no</value>
-        </choice>
-      </attribute>
+      <attribute name="outline"/>
     </optional>
     <optional>
       <ref name="TactileStrokeAttributes"/>
@@ -1081,10 +1060,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="stroke"/>
+        <attribute name="hticks"/>
       </optional>
       <optional>
-        <attribute name="thickness"/>
+        <attribute name="vticks"/>
       </optional>
       <optional>
         <attribute name="tick-size"/>
@@ -1129,6 +1108,7 @@
           </choice>
         </attribute>
       </optional>
+      <ref name="StrokeAttributes"/>
       <ref name="CommonAttributes"/>
       <optional>
         <ref name="XLabel"/>
@@ -1266,6 +1246,12 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="hticks"/>
+      </optional>
+      <optional>
+        <attribute name="vticks"/>
+      </optional>
+      <optional>
         <attribute name="tick-size"/>
       </optional>
       <optional>
@@ -1302,6 +1288,22 @@
       </optional>
       <optional>
         <attribute name="label-commas">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="coordinates">
+          <choice>
+            <value>cartesian</value>
+            <value>polar</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="clear-background">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -1434,6 +1436,9 @@
       <optional>
         <attribute name="fill"/>
       </optional>
+      <optional>
+        <attribute name="arrows"/>
+      </optional>
       <ref name="StrokeAttributes"/>
       <ref name="CommonAttributes"/>
     </element>
@@ -1474,6 +1479,9 @@
         <attribute name="scale"/>
       </optional>
       <ref name="CommonAttributes"/>
+      <zeroOrMore>
+        <ref name="GraphicalElements"/>
+      </zeroOrMore>
     </element>
   </define>
   <define name="Histogram">
@@ -1567,6 +1575,9 @@
         <attribute name="endpoint-offsets"/>
       </optional>
       <optional>
+        <attribute name="tactile-endpoint-offsets"/>
+      </optional>
+      <optional>
         <attribute name="infinite">
           <choice>
             <value>yes</value>
@@ -1592,12 +1603,10 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="additional-arrows">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
+        <attribute name="additional-arrows"/>
+      </optional>
+      <optional>
+        <attribute name="label-location"/>
       </optional>
       <ref name="StrokeAttributes"/>
       <ref name="CommonAttributes"/>
@@ -1683,6 +1692,36 @@
       </optional>
       <optional>
         <attribute name="node-size"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-edge-stroke"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-edge-thickness"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-edge-dash"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-node-fill"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-node-stroke"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-node-thickness"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-node-style"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-node-size"/>
+      </optional>
+      <optional>
+        <attribute name="edge-spread"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-edge-spread"/>
       </optional>
       <optional>
         <attribute name="labels">
@@ -1976,12 +2015,23 @@
         <attribute name="at"/>
       </optional>
       <attribute name="function"/>
-      <attribute name="N"/>
+      <optional>
+        <attribute name="N"/>
+      </optional>
       <optional>
         <attribute name="domain"/>
       </optional>
       <optional>
         <attribute name="rule"/>
+      </optional>
+      <optional>
+        <attribute name="partition"/>
+      </optional>
+      <optional>
+        <attribute name="samples"/>
+      </optional>
+      <optional>
+        <attribute name="subinterval-text"/>
       </optional>
       <ref name="FillAttributes"/>
       <ref name="CommonAttributes"/>
@@ -2009,6 +2059,12 @@
       </optional>
       <optional>
         <attribute name="point-text"/>
+      </optional>
+      <optional>
+        <attribute name="style"/>
+      </optional>
+      <optional>
+        <attribute name="size"/>
       </optional>
       <ref name="FillAttributes"/>
       <ref name="CommonAttributes"/>
@@ -2077,6 +2133,9 @@
       </optional>
       <attribute name="points"/>
       <optional>
+        <attribute name="t-values"/>
+      </optional>
+      <optional>
         <attribute name="parameter"/>
       </optional>
       <optional>
@@ -2119,6 +2178,9 @@
       </optional>
       <attribute name="function"/>
       <attribute name="point"/>
+      <optional>
+        <attribute name="name"/>
+      </optional>
       <optional>
         <attribute name="domain"/>
       </optional>
@@ -2226,6 +2288,9 @@
       </optional>
       <optional>
         <attribute name="arrow-angles"/>
+      </optional>
+      <optional>
+        <attribute name="exponent"/>
       </optional>
       <ref name="StrokeAttributes"/>
       <ref name="CommonAttributes"/>
