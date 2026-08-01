@@ -12,7 +12,7 @@
     <solution><p><m>7 + 1 = {8}\text{.}</m></p>
 </solution>
   </static>
-  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Exploration-1_1_2-Inside_an_exploration.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Exploration-1_1_10-Inside_an_exploration.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
   <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
