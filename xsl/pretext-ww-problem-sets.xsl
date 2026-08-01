@@ -29,6 +29,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     extension-element-prefixes="exsl"
 >
 
@@ -154,18 +155,20 @@
     <xsl:value-of select="concat('/',$external-directory,@local)"/>
 </xsl:template>
 
-<!-- For copied problems move to the problem that was copied -->
-<!-- NB: this @copied-from is a plain attribute, not a "pi"  -->
-<!-- namespace stamp: it arrives via the representations     -->
-<!-- file, an interchange format written by the Python       -->
-<!-- routines, and is promoted onto "webwork" elements when  -->
-<!-- the representations merge into the tree.                -->
-<xsl:template match="webwork[@copied-from]" mode="relative-filename">
-    <xsl:variable name="copied-from" select="@copied-from"/>
+<!-- For copied problems move to the problem that was copied.   -->
+<!-- This stylesheet imports pretext-assembly.xsl and assembles -->
+<!-- from source, so the attribute it sees is the tree stamp    -->
+<!-- "@pi:copied-from", holding the @xml:id the author aimed    -->
+<!-- @copy at.  The plain "@copied-from" of the representations -->
+<!-- file is a different thing with a different value, the      -->
+<!-- assembly identifier of the copied problem's exercise, and  -->
+<!-- it never reaches this stylesheet.                          -->
+<xsl:template match="webwork[@pi:copied-from]" mode="relative-filename">
+    <xsl:variable name="copied-from" select="@pi:copied-from"/>
     <xsl:apply-templates select="$document-root//webwork[@xml:id=$copied-from]" mode="relative-filename"/>
 </xsl:template>
-<xsl:template match="webwork[@copied-from]" mode="filename">
-    <xsl:variable name="copied-from" select="@copied-from"/>
+<xsl:template match="webwork[@pi:copied-from]" mode="filename">
+    <xsl:variable name="copied-from" select="@pi:copied-from"/>
     <xsl:apply-templates select="$document-root//webwork[@xml:id=$copied-from]" mode="filename"/>
 </xsl:template>
 
@@ -203,7 +206,7 @@
 </xsl:template>
 
 <!-- We don't write a new file for a copied webwork exercise -->
-<xsl:template match="webwork[@copied-from]" mode="write-file"/>
+<xsl:template match="webwork[@pi:copied-from]" mode="write-file"/>
 
 <!-- ################## -->
 <!-- Chunking Def Files-->
