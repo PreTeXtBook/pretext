@@ -250,17 +250,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-needs-custom-marker-css" select="boolean(exsl:node-set($ol-markers)/ol-markers/ol-marker)"/>
 
 
-<!-- ######## -->
-<!-- WeBWorK  -->
-<!-- ######## -->
-
-<!-- We mine some values from the first "WW representation" to have been -->
-<!-- inserted into the source by the pre-processor ("assembly") when     -->
-<!-- making dynamic exercises.                                           -->
-
-<xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@webwork2_major_version"/>
-<xsl:variable name="webwork-minor-version" select="$document-root//webwork-reps[1]/@webwork2_minor_version"/>
-
 <!-- #### EXPERIMENTAL #### -->
 <!-- We allow for the HTML conversion to chunk output, starting  -->
 <!-- from an arbitrary node.  $subtree-node needs context.       -->
@@ -11194,7 +11183,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK Javascript header -->
 <xsl:template name="webwork-js">
     <xsl:if test="$b-has-webwork-reps">
-        <script src="{$html.js.dir}/pretext-webwork/2.{$webwork-minor-version}/pretext-webwork.js"></script>
+        <script src="{$html.js.dir}/pretext-webwork.js"></script>
         <script src="{$webwork-server}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
     </xsl:if>
 </xsl:template>
