@@ -78,29 +78,20 @@
 </xsl:variable>
 <xsl:variable name="mock-UUID">mock-123456789-0-987654321</xsl:variable>
 
-<!-- We hard-code the chunking level.  Level 2 is the  -->
-<!-- default for books, which we presume throughout.   -->
-<!-- Specialized divisions, to the spine, assume this. -->
-<!-- NB: this override is only defined for a "book",   -->
-<!-- so when there is support for "article" it will    -->
-<!-- need new definitions.                             -->
-<xsl:variable name="chunk-level">
-    <xsl:choose>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <!-- break "article" into "section" -->
-        <xsl:when test="$root/article/section">1</xsl:when>
-        <!-- otherwise, no real divisions -->
-        <xsl:when test="$root/article">0</xsl:when>
-    </xsl:choose>
-</xsl:variable>
+<!-- The level a document's structure implies, with no publisher    -->
+<!-- choice consulted: a reader is served by files that are neither -->
+<!-- so large that a reading system labors over one nor so numerous -->
+<!-- that it labors over the set.  See "chunking-level-warnings".   -->
+<xsl:variable name="chunk-level" select="$chunk-level-default"/>
 
-<!-- Force level 2 as the top level heading for chunks      -->
-<!-- by overrideing this template than calling the original -->
+<!-- Force level 2 as the top level heading for chunks     -->
+<!-- by overriding this variable rather than the original. -->
 <xsl:variable name="chunk-heading-level" select="2"/>
 
-<!-- We disable the ToC level to avoid any conflicts with chunk level -->
-<xsl:variable name="toc-level" select="number(0)" />
+<!-- The navigation document lists every file of the spine, so its   -->
+<!-- depth is the chunking level and there is nothing left for a     -->
+<!-- table of contents level to say.  See "chunking-level-warnings". -->
+<xsl:variable name="toc-level" select="number(0)"/>
 
 <!-- XHTML files as output -->
 <xsl:variable name="file-extension" select="'.xhtml'" />
@@ -213,10 +204,23 @@
     <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <!-- Following should use $root or $document-root as defined -->
     <!-- by the "assembly" template.  Checked 2020-07-16.        -->
+    <xsl:call-template name="chunking-level-warnings"/>
     <xsl:call-template name="setup" />
     <xsl:apply-templates select="$root"/>
     <xsl:call-template name="package-document" />
     <xsl:call-template name="packaging-info"/>
+</xsl:template>
+
+<!-- Two publisher choices under "common" do not reach this    -->
+<!-- conversion, and an author who set one deserves to hear so -->
+<!-- rather than wonder why the output never changed.          -->
+<xsl:template name="chunking-level-warnings">
+    <xsl:if test="$chunk-level-entered != ''">
+        <xsl:message>PTX:FALLBACK: the publisher file  common/chunking/@level  entry is being ignored for the conversion to EPUB, which always divides a document at the default level for its structure.  The choice matters little here: a reading system presents the files as one continuous reading order, and the level only governs how large the files are.  The default keeps them at a size reading systems handle well.</xsl:message>
+    </xsl:if>
+    <xsl:if test="$publication/common/tableofcontents/@level">
+        <xsl:message>PTX:FALLBACK: the publisher file  common/tableofcontents/@level  entry is being ignored for the conversion to EPUB, whose navigation lists every file of the document, leaving a reading system to provide its own control over how much of that to show at once.</xsl:message>
+    </xsl:if>
 </xsl:template>
 
 <!-- First, create the cover page and table of contents files, which are          -->

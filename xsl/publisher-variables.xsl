@@ -2740,23 +2740,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Always use cdn when "b-portable-html" is true or "resources-host" is "cdn" -->
 <xsl:variable name="b-cdn-resources" select="$b-portable-html or $resources-host = 'cdn'"/>
 
-<!-- HTML chunk-level defaults, available to any stylesheet that    -->
-<!-- needs to compute HTML filenames via the "containing-filename"  -->
-<!-- template (pretext-common.xsl) without importing the full       -->
-<!-- pretext-html.xsl.  Uses $version-root rather than $root        -->
-<!-- because this is computed before later assembly passes.  The    -->
-<!-- contract (documented at the definition of $version-root in     -->
-<!-- pretext-assembly.xsl) is that no assembly pass alters the      -->
-<!-- gross document structure (book/article type, part/chapter/     -->
-<!-- section hierarchy), so $version-root is reliable for these     -->
-<!-- top-level queries.  Same contract relied upon by $toc-level.   -->
-<xsl:variable name="html-chunk-level">
+<!-- The chunk level a document's structure implies, with no publisher -->
+<!-- or command-line choice consulted.  A conversion that accepts such -->
+<!-- a choice layers it over this; one that does not, such as EPUB,    -->
+<!-- uses this as-is, so the two can never drift apart.                -->
+<!-- Uses $version-root rather than $root because this is computed     -->
+<!-- before later assembly passes.  The contract (documented at the    -->
+<!-- definition of $version-root in pretext-assembly.xsl) is that no   -->
+<!-- assembly pass alters the gross document structure (book/article   -->
+<!-- type, part/chapter/section hierarchy), so $version-root is        -->
+<!-- reliable for these top-level queries.  Same contract relied upon  -->
+<!-- by $toc-level.                                                    -->
+<xsl:variable name="chunk-level-default">
     <xsl:choose>
-        <!-- portable html always gets chunk level 0 -->
-        <xsl:when test="$b-portable-html">0</xsl:when>
-        <xsl:when test="$chunk-level-entered != ''">
-            <xsl:value-of select="$chunk-level-entered" />
-        </xsl:when>
         <xsl:when test="$version-has-parts">3</xsl:when>
         <xsl:when test="$version-doc-type = 'book'">2</xsl:when>
         <xsl:when test="$version-article-sections or $version-article-printouts">1</xsl:when>
@@ -2765,7 +2761,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
         <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:BUG:   HTML chunk level not determined</xsl:message>
+            <xsl:message>PTX:BUG:   chunk level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The chunk level for HTML, available to any stylesheet that needs  -->
+<!-- to compute HTML filenames via the "containing-filename" template  -->
+<!-- (pretext-common.xsl) without importing the full pretext-html.xsl. -->
+<xsl:variable name="html-chunk-level">
+    <xsl:choose>
+        <!-- portable html always gets chunk level 0 -->
+        <xsl:when test="$b-portable-html">0</xsl:when>
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$chunk-level-default"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
