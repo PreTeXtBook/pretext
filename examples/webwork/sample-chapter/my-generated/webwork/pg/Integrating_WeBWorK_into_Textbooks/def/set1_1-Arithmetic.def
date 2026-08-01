@@ -38,10 +38,10 @@ source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arit
 problem_id = 8
 problem_end
 problem_start
-source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Project-1_1_1-Inside_a_project.pg
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Project-1_1_9-Inside_a_project.pg
 problem_id = 
 problem_end
 problem_start
-source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Exploration-1_1_2-Inside_an_exploration.pg
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Exploration-1_1_10-Inside_an_exploration.pg
 problem_id = 
 problem_end
