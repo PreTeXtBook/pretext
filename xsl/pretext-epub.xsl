@@ -901,18 +901,10 @@
                 <nav epub:type="toc" id="toc">
                     <h2>Table of Contents</h2>
                     <ol>
-                        <!-- top-level divisions, for a book -->
-                        <xsl:for-each select="$document-root/chapter[$b-is-book]|$document-root/section[$b-is-article]">
-                            <li>
-                                <xsl:element name="a">
-                                    <xsl:attribute name="href">
-                                        <xsl:apply-templates select="." mode="containing-filename" />
-                                    </xsl:attribute>
-                                    <xsl:apply-templates select="." mode="title-simple" />
-                                </xsl:element>
-                                <xsl:apply-templates select="." mode="nav-companions"/>
-                            </li>
-                        </xsl:for-each>
+                        <!-- Top-level divisions.  When a book has parts its  -->
+                        <!-- chapters live inside them, so the parts are what -->
+                        <!-- is top-level and the chapters nest one level in. -->
+                        <xsl:apply-templates select="$document-root/part[$b-is-book]|$document-root/chapter[$b-is-book]|$document-root/section[$b-is-article]" mode="nav-entry"/>
                         <!-- following divisions identical for book v. article -->
                         <xsl:if test="$document-root/backmatter/appendix|$document-root/backmatter/solutions">
                             <li class="no-marker">
@@ -946,6 +938,27 @@
             </body>
         </html>
     </exsl:document>
+</xsl:template>
+
+<!-- One entry of the navigation document: a link to the     -->
+<!-- division, then its companion files, then any chapters   -->
+<!-- it contains.  Only a "part" has chapters, and they nest -->
+<!-- one level in, mirroring the reading order of the spine. -->
+<xsl:template match="part|chapter|section" mode="nav-entry">
+    <li>
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:apply-templates select="." mode="containing-filename" />
+            </xsl:attribute>
+            <xsl:apply-templates select="." mode="title-simple" />
+        </xsl:element>
+        <xsl:apply-templates select="." mode="nav-companions"/>
+        <xsl:if test="chapter">
+            <ol>
+                <xsl:apply-templates select="chapter" mode="nav-entry"/>
+            </ol>
+        </xsl:if>
+    </li>
 </xsl:template>
 
 <!-- Division companions of a division, nested in the nav -->
