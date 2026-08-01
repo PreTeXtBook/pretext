@@ -44,6 +44,8 @@ $border-radius: 8px !default;
 .openproblem-like,
 .computation-like,
 .commentary  {
+  @include L-mixin.border;
+
   > .heading {
     display: block;
     font-size: 1.1em;
