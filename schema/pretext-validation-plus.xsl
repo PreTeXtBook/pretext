@@ -529,9 +529,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: a single text node can have many problems, -->
 <!-- we catch such a node and then test for problems  -->
 <xsl:template match="text()[contains(., '&#x00B0;') or contains(., '&#x00D7;') or contains(., '&#x200B;') or contains(., '&#x2013;') or contains(., '&#x2014;') or contains(., '&#x2018;') or contains(., '&#x2019;') or contains(., '&#x201C;') or contains(., '&#x201D;')]">
-    <!-- These characters do process properly in math mode -->
-    <!-- and can be useful in \text{} then, so we allow them there -->
-    <xsl:if test="not(parent::m or parent::me or parent::men or parent::mrow)">
+    <!-- A zero-width space is always worth reporting: the advice is to    -->
+    <!-- delete it, which an author can act on anywhere, and an invisible  -->
+    <!-- character does more damage in code or in a LaTeX fragment than in -->
+    <!-- prose.  So it is tested outside the guard below.                  -->
+    <xsl:if test="contains(., '&#x200B;')">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'unicode-zero-width-space'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A run of text contains a Unicode character for zero-width character (U+200B, decimal 8203).&#xa;</xsl:text>
+                <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
+                <xsl:text>It is unnecessary and likely to cause errors.  It should be removed.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- The remaining advice is to replace the character with a PreTeXt    -->
+    <!-- element, so it is withheld where no element could go.  Math is     -->
+    <!-- LaTeX, where these characters process properly and are useful in   -->
+    <!-- \text{}.  The elements of &TEXT-ONLY-FILTER; take text and nothing -->
+    <!-- else.  A text-only element has no element children, so testing the -->
+    <!-- parent reaches every such run of text.                             -->
+    <xsl:if test="not(parent::m or parent::md or parent::mrow) and not(parent::*[&TEXT-ONLY-FILTER;])">
         <!-- Unicode Character 'DEGREE SIGN' (U+00B0) decimal: 176 -->
         <xsl:if test="contains(., '&#x00B0;')">
             <xsl:apply-templates select="." mode="messaging">
@@ -540,7 +559,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for a degree symbol (U+00B0, decimal 176).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
-                    <xsl:text>The symbol will behave better as the empty element "&lt;degree/&gt;"</xsl:text>
+                    <xsl:text>Where the markup is allowed, the symbol will behave better as the empty element "&lt;degree/&gt;"</xsl:text>
                 </xsl:with-param>
             </xsl:apply-templates>
         </xsl:if>
@@ -552,19 +571,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for a multiplication sign (U+00D7, decimal 215).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
-                    <xsl:text>The symbol will behave better as the empty element "&lt;times/&gt;"</xsl:text>
-                </xsl:with-param>
-            </xsl:apply-templates>
-        </xsl:if>
-        <!-- Unicode Character 'ZERO WIDTH SPACE' (U+200B) decimal: 8203 -->
-        <xsl:if test="contains(., '&#x200B;')">
-            <xsl:apply-templates select="." mode="messaging">
-                <xsl:with-param name="severity" select="'warn'"/>
-                <xsl:with-param name="message-id" select="'unicode-zero-width-space'"/>
-                <xsl:with-param name="message">
-                    <xsl:text>A run of text contains a Unicode character for zero-width character (U+200B, decimal 8203).&#xa;</xsl:text>
-                    <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
-                    <xsl:text>It is unnecessary and likely to cause errors.  It should be removed.</xsl:text>
+                    <xsl:text>Where the markup is allowed, the symbol will behave better as the empty element "&lt;times/&gt;"</xsl:text>
                 </xsl:with-param>
             </xsl:apply-templates>
         </xsl:if>
@@ -576,7 +583,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for an en-dash (U+2013, decimal 8211).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
-                    <xsl:text>The en-dash will behave better as the empty element "&lt;ndash/&gt;".&#xa;</xsl:text>
+                    <xsl:text>Where the markup is allowed, the en-dash will behave better as the empty element "&lt;ndash/&gt;".&#xa;</xsl:text>
                     <xsl:text>Understand the difference between an en-dash and an em-dash before editing.&#xa;</xsl:text>
                     <xsl:text>An en-dash is used for a range, such as the years 2013-22.</xsl:text>
                 </xsl:with-param>
@@ -590,7 +597,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for an em-dash (U+2014, decimal 8212).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
-                    <xsl:text>The em-dash will behave better as the empty element "&lt;mdash/&gt;".&#xa;</xsl:text>
+                    <xsl:text>Where the markup is allowed, the em-dash will behave better as the empty element "&lt;mdash/&gt;".&#xa;</xsl:text>
                     <xsl:text>Understand the difference between an en-dash and an em-dash before editing.&#xa;</xsl:text>
                     <xsl:text>An em-dash is used for a pause in a sentence, and should not be authored with a space on either side.</xsl:text>
                 </xsl:with-param>
@@ -606,7 +613,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>A run of text contains Unicode characters for single quotation marks (U+2018, decimal 8216; U+2019, decimal 8217).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
                     <xsl:text>A U+2019 in isolation could be an apostrophe.  Replace it with the keyboard version: U+0027.&#xa;</xsl:text>
-                    <xsl:text>A matching pair U+2018, U+2019 should be replaced by the "&lt;sq&gt;" element enclosing content.&#xa;</xsl:text>
+                    <xsl:text>Where the markup is allowed, a matching pair U+2018, U+2019 should be replaced by the "&lt;sq&gt;" element enclosing content.&#xa;</xsl:text>
                     <xsl:text>In rare cases, U+2018 might be replaced by the empty element "&lt;lsq/&gt;".&#xa;</xsl:text>
                     <xsl:text>In rare cases, U+2019 might be replaced by the empty element "&lt;rsq/&gt;".</xsl:text>
                 </xsl:with-param>
@@ -621,7 +628,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains Unicode characters for double quotation marks (U+201C, decimal 8220; U+201D, decimal 8221).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
-                    <xsl:text>A matching pair U+201C, U+201D should be replaced by the "&lt;q&gt;" element enclosing content.&#xa;</xsl:text>
+                    <xsl:text>Where the markup is allowed, a matching pair U+201C, U+201D should be replaced by the "&lt;q&gt;" element enclosing content.&#xa;</xsl:text>
                     <xsl:text>In rare cases, U+201C might be replaced by the empty element "&lt;lq/&gt;".&#xa;</xsl:text>
                     <xsl:text>In rare cases, U+201D might be replaced by the empty element "&lt;rq/&gt;".</xsl:text>
                 </xsl:with-param>
