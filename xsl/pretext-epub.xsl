@@ -901,38 +901,11 @@
                 <nav epub:type="toc" id="toc">
                     <h2>Table of Contents</h2>
                     <ol>
-                        <!-- Top-level divisions.  When a book has parts its  -->
-                        <!-- chapters live inside them, so the parts are what -->
-                        <!-- is top-level and the chapters nest one level in. -->
-                        <xsl:apply-templates select="$document-root/part[$b-is-book]|$document-root/chapter[$b-is-book]|$document-root/section[$b-is-article]" mode="nav-entry"/>
-                        <!-- following divisions identical for book v. article -->
-                        <xsl:if test="$document-root/backmatter/appendix|$document-root/backmatter/solutions">
-                            <li class="no-marker">
-                                <span>Appendices</span>
-                                <ol type="A">
-                                    <xsl:for-each select="$document-root/backmatter/appendix|$document-root/backmatter/solutions">
-                                        <li>
-                                            <xsl:element name="a">
-                                                <xsl:attribute name="href">
-                                                    <xsl:apply-templates select="." mode="containing-filename" />
-                                                </xsl:attribute>
-                                                <xsl:apply-templates select="." mode="title-simple" />
-                                            </xsl:element>
-                                        </li>
-                                    </xsl:for-each>
-                                </ol>
-                            </li>
-                        </xsl:if>
-                        <xsl:for-each select="$document-root/backmatter/references|$document-root/backmatter/index">
-                            <li class="no-marker">
-                                <xsl:element name="a">
-                                    <xsl:attribute name="href">
-                                        <xsl:apply-templates select="." mode="containing-filename" />
-                                    </xsl:attribute>
-                                    <xsl:apply-templates select="." mode="title-simple" />
-                                </xsl:element>
-                            </li>
-                        </xsl:for-each>
+                        <!-- The whole document, so the navigation mirrors the spine:   -->
+                        <!-- every file of the reading order earns an entry, nested by  -->
+                        <!-- the divisions that contain it.  A reading system offers no -->
+                        <!-- other way in, so anything omitted here is unreachable.     -->
+                        <xsl:apply-templates select="$document-root" mode="nav-entry"/>
                     </ol>
                 </nav>
             </body>
@@ -940,52 +913,68 @@
     </exsl:document>
 </xsl:template>
 
-<!-- One entry of the navigation document: a link to the     -->
-<!-- division, then its companion files, then any chapters   -->
-<!-- it contains.  Only a "part" has chapters, and they nest -->
-<!-- one level in, mirroring the reading order of the spine. -->
-<xsl:template match="part|chapter|section" mode="nav-entry">
-    <li>
-        <xsl:element name="a">
-            <xsl:attribute name="href">
-                <xsl:apply-templates select="." mode="containing-filename" />
-            </xsl:attribute>
-            <xsl:apply-templates select="." mode="title-simple" />
-        </xsl:element>
-        <xsl:apply-templates select="." mode="nav-companions"/>
-        <xsl:if test="chapter">
-            <ol>
-                <xsl:apply-templates select="chapter" mode="nav-entry"/>
-            </ol>
-        </xsl:if>
-    </li>
+<!-- One "li" of the navigation document per file of the spine. -->
+<!-- The test is "is-epub-page", the very template the manifest -->
+<!-- and the spine consult, so the four cannot disagree.  A     -->
+<!-- division that is not a file of its own ("book" and         -->
+<!-- "backmatter") contributes no entry, and its children rise  -->
+<!-- to take its place rather than becoming unreachable.        -->
+<xsl:template match="&STRUCTURAL;" mode="nav-entry">
+    <xsl:variable name="is-page">
+        <xsl:apply-templates select="." mode="is-epub-page"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$is-page = 'true'">
+            <li>
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:apply-templates select="." mode="containing-filename"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="." mode="title-simple"/>
+                </xsl:element>
+                <xsl:call-template name="nav-subentries"/>
+            </li>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*" mode="nav-entry"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- Division companions of a division, nested in the nav -->
-<!-- document, exactly when they are files of the spine   -->
-<xsl:template match="*" mode="nav-companions">
-    <xsl:variable name="companion-files">
-        <xsl:for-each select="introduction|conclusion|objectives|outcomes">
-            <xsl:apply-templates select="." mode="is-chunk"/>
-        </xsl:for-each>
+<!-- A division companion is a file exactly when it is a chunk, -->
+<!-- the same test the manifest makes.  It has no children that -->
+<!-- could ever be files, so there is no recursion.             -->
+<xsl:template match="&DIVISION-COMPANION;" mode="nav-entry">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
     </xsl:variable>
-    <xsl:if test="contains($companion-files, 'true')">
+    <xsl:if test="$chunk = 'true'">
+        <li class="no-marker">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:apply-templates select="." mode="containing-filename"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="division-companion-text"/>
+            </xsl:element>
+        </li>
+    </xsl:if>
+</xsl:template>
+
+<!-- Everything else is not a division, so it is not a file, so -->
+<!-- it earns no entry.  Without this the default template rule -->
+<!-- would spill the text of paragraphs into the navigation.    -->
+<xsl:template match="*" mode="nav-entry"/>
+
+<!-- The nested list of a division's own entries, built first so -->
+<!-- that a division whose children are all inlined contributes  -->
+<!-- no empty "ol", which is invalid in a navigation document.   -->
+<xsl:template name="nav-subentries">
+    <xsl:variable name="subentries">
+        <xsl:apply-templates select="*" mode="nav-entry"/>
+    </xsl:variable>
+    <xsl:if test="exsl:node-set($subentries)/*">
         <ol>
-            <xsl:for-each select="introduction|conclusion|objectives|outcomes">
-                <xsl:variable name="chunk">
-                    <xsl:apply-templates select="." mode="is-chunk"/>
-                </xsl:variable>
-                <xsl:if test="$chunk = 'true'">
-                    <li class="no-marker">
-                        <xsl:element name="a">
-                            <xsl:attribute name="href">
-                                <xsl:apply-templates select="." mode="containing-filename" />
-                            </xsl:attribute>
-                            <xsl:apply-templates select="." mode="division-companion-text" />
-                        </xsl:element>
-                    </li>
-                </xsl:if>
-            </xsl:for-each>
+            <xsl:copy-of select="$subentries"/>
         </ol>
     </xsl:if>
 </xsl:template>
