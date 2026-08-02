@@ -1226,7 +1226,7 @@
                 <cline>/publication/source/directories</cline>
             </cd>element has the attribute:<ul>
                 <li><attr>generated</attr>: a directory of files produced automatically via <pretext/> tools, from aspects of your <pretext/> source.</li>
-            </ul>The companion directory of files produced independently of the project is a fact of the <em>source</em>, declared with a <attr>external</attr> attribute on a <tag>directories</tag> element within <tag>docinfo</tag> (<xref ref="topic-docinfo"/>); an <attr>external</attr> attribute here is deprecated, but honored while the <tag>docinfo</tag> is silent.  Managed directories require both declarations<mdash/>it is an error to supply only one.</p>
+            </ul>The companion directory of files produced independently of the project is a property of your <em>source</em>, declared with a <attr>external</attr> attribute on a <tag>directories</tag> element within <tag>docinfo</tag> (<xref ref="topic-docinfo"/>); an <attr>external</attr> attribute here is deprecated, but honored while the <tag>docinfo</tag> is silent.  The <attr>generated</attr> attribute is optional: with no declaration at all, a directory named <c>generated</c> next to the main <pretext/> source file is assumed, and created when it is needed.</p>
         </subsection>
 
         <subsection xml:id="publication-file-source-version">
