@@ -2205,25 +2205,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "sageplot" has no useful print representation yet.)         -->
 <xsl:template match="image[latex-image]|image[sageplot]|image[asymptote]|image[pf:prefigure]|image[mermaid]" mode="image-filename">
     <xsl:value-of select="$generated-directory"/>
-    <xsl:if test="$b-managed-directories">
-        <xsl:choose>
-            <xsl:when test="latex-image">
-                <xsl:text>latex-image/</xsl:text>
-            </xsl:when>
-            <xsl:when test="sageplot">
-                <xsl:text>sageplot/</xsl:text>
-            </xsl:when>
-            <xsl:when test="asymptote">
-                <xsl:text>asymptote/</xsl:text>
-            </xsl:when>
-            <xsl:when test="pf:prefigure">
-                <xsl:text>prefigure/</xsl:text>
-            </xsl:when>
-            <xsl:when test="mermaid">
-                <xsl:text>mermaid/</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="latex-image">
+            <xsl:text>latex-image/</xsl:text>
+        </xsl:when>
+        <xsl:when test="sageplot">
+            <xsl:text>sageplot/</xsl:text>
+        </xsl:when>
+        <xsl:when test="asymptote">
+            <xsl:text>asymptote/</xsl:text>
+        </xsl:when>
+        <xsl:when test="pf:prefigure">
+            <xsl:text>prefigure/</xsl:text>
+        </xsl:when>
+        <xsl:when test="mermaid">
+            <xsl:text>mermaid/</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:apply-templates select="latex-image|sageplot|asymptote|pf:prefigure|mermaid" mode="image-source-basename"/>
     <xsl:choose>
         <xsl:when test="pf:prefigure">

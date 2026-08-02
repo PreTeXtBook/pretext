@@ -633,9 +633,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-reveal-embedded-math">
             <xsl:variable name="base-pathname">
                 <xsl:value-of select="$generated-directory"/>
-                <xsl:if test="$b-managed-directories">
-                    <xsl:text>prefigure/</xsl:text>
-                </xsl:if>
+                <xsl:text>prefigure/</xsl:text>
                 <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
             </xsl:variable>
             <xsl:apply-templates select="." mode="svg-png-wrapper">

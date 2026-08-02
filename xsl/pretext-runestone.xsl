@@ -1426,15 +1426,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- NB: sample had paths with a leading backslash -->
                     <xsl:if test="@database">
                         <xsl:attribute name="data-dburl">
-                            <xsl:choose>
-                                <xsl:when test="$b-managed-directories">
-                                    <xsl:value-of select="$external-directory"/>
-                                    <xsl:value-of select="@database"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="@database"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:value-of select="$external-directory"/>
+                            <xsl:value-of select="@database"/>
                         </xsl:attribute>
                     </xsl:if>
                     <!-- for natural language, just skip attribute -->
@@ -2584,15 +2577,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- This is a location in the external directory. -->
         <xsl:if test="@database">
             <xsl:attribute name="data-dburl">
-                <xsl:choose>
-                    <xsl:when test="$b-managed-directories">
-                        <xsl:value-of select="$external-directory"/>
-                        <xsl:value-of select="@database"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="@database"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="@database"/>
             </xsl:attribute>
         </xsl:if>
     </xsl:if>
@@ -2715,9 +2701,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- locate trace data via a *.js file, managed or not -->
     <xsl:variable name="trace-file">
         <xsl:value-of select="$generated-directory"/>
-        <xsl:if test="$b-managed-directories">
-            <xsl:text>trace/</xsl:text>
-        </xsl:if>
+        <xsl:text>trace/</xsl:text>
         <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     </xsl:variable>
     <!-- the Runestone HTML -->

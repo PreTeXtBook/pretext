@@ -6422,16 +6422,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- $base-pathname needed later for archive links -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
-        <xsl:if test="$b-managed-directories">
-            <xsl:choose>
-                <xsl:when test="latex-image">
-                    <xsl:text>latex-image/</xsl:text>
-                </xsl:when>
-                <xsl:when test="pf:prefigure">
-                    <xsl:text>prefigure/</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="latex-image">
+                <xsl:text>latex-image/</xsl:text>
+            </xsl:when>
+            <xsl:when test="pf:prefigure">
+                <xsl:text>prefigure/</xsl:text>
+            </xsl:when>
+        </xsl:choose>
         <!-- NB: node-set in @select will have exactly -->
         <!-- one (child) node, given @match above      -->
         <xsl:apply-templates select="latex-image|pf:prefigure" mode="image-source-basename"/>
@@ -6487,9 +6485,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- $base-pathname needed later for archive links -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
-        <xsl:if test="$b-managed-directories">
-            <xsl:text>sageplot/</xsl:text>
-        </xsl:if>
+        <xsl:text>sageplot/</xsl:text>
         <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
     </xsl:variable>
     <!-- 2d are SVG, 3d are HTML -->
@@ -6527,9 +6523,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- for source analysis.                                           -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$generated-directory"/>
-        <xsl:if test="$b-managed-directories">
-            <xsl:text>asymptote/</xsl:text>
-        </xsl:if>
+        <xsl:text>asymptote/</xsl:text>
         <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
     </xsl:variable>
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
@@ -6538,9 +6532,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- insert correctly as a scaled instance                     -->
     <xsl:variable name="html-source-filename">
         <xsl:value-of select="$generated-directory-source"/>
-        <xsl:if test="$b-managed-directories">
-            <xsl:text>asymptote/</xsl:text>
-        </xsl:if>
+        <xsl:text>asymptote/</xsl:text>
         <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
         <xsl:text>.html</xsl:text>
     </xsl:variable>
@@ -6679,16 +6671,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Get the filename of the generated svg file -->
     <xsl:variable name="svg-source-filename">
         <xsl:value-of select="$generated-directory-source" />
-        <xsl:if test="$b-managed-directories">
-            <xsl:choose>
-                <xsl:when test="latex-image">
-                    <xsl:text>latex-image/</xsl:text>
-                </xsl:when>
-                <xsl:when test="pf:prefigure">
-                    <xsl:text>prefigure/</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="latex-image">
+                <xsl:text>latex-image/</xsl:text>
+            </xsl:when>
+            <xsl:when test="pf:prefigure">
+                <xsl:text>prefigure/</xsl:text>
+            </xsl:when>
+        </xsl:choose>
         <xsl:apply-templates select="latex-image|pf:prefigure" mode="image-source-basename"/>
         <xsl:text>.svg</xsl:text>
     </xsl:variable>
@@ -10763,11 +10753,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="substring($raw-location,1,4) = 'http'">
                         <xsl:value-of select="$raw-location"/>
                     </xsl:when>
-                    <xsl:when test="not($b-managed-directories)">
-                        <xsl:value-of select="$raw-location"/>
-                    </xsl:when>
                     <xsl:otherwise>
-                        <!-- empty when not using managed directories -->
                         <xsl:value-of select="$external-directory"/>
                         <xsl:value-of select="$raw-location"/>
                     </xsl:otherwise>
@@ -10797,11 +10783,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="substring($raw-location,1,4) = 'http'">
                         <xsl:value-of select="$raw-location"/>
                     </xsl:when>
-                    <xsl:when test="not($b-managed-directories)">
-                        <xsl:value-of select="$raw-location"/>
-                    </xsl:when>
                     <xsl:otherwise>
-                        <!-- empty when not using managed directories -->
                         <xsl:value-of select="$external-directory"/>
                         <xsl:value-of select="$raw-location"/>
                     </xsl:otherwise>
