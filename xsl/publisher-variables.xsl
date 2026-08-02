@@ -3887,9 +3887,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- silently moved here, which should make no real difference -->
 <xsl:param name="directory.knowls"  select="''" />
 
-<!-- Deprecated 2020-11-23 in favor of publisher file -->
-<!-- specification, but will still be respected       -->
-<xsl:param name="directory.images" select="'images'" />
+<!-- Deprecated 2020-11-23 in favor of publisher file  -->
+<!-- specification; as of 2026-08-02 managed           -->
+<!-- directories are the only scheme, so this is dead: -->
+<!-- it survives only to power a deprecation warning.  -->
+<xsl:param name="directory.images" select="''" />
 
 <!-- 2021-01-03 chunk.level to publisher file -->
 <xsl:param name="chunk.level" select="''" />
@@ -4678,6 +4680,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="date-string" select="'2026-07-25'" />
         <xsl:with-param name="message" select="'the  html.annotation  parameter has been replaced by the  html/annotation/@platform  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
         <xsl:with-param name="incorrect-use" select="($html.annotation != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-02  managed directories are the only scheme -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2026-08-02'" />
+        <xsl:with-param name="message" select="'the  directory.images  parameter is now ignored: managed directories are the only scheme.  Generated assets live in the directory given by  source/directories/@generated  in the publication file (default: &quot;generated&quot;, beside the source), and external assets in the directory given by  &quot;directories/@external&quot;  within  &quot;docinfo&quot;.'" />
+        <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>
