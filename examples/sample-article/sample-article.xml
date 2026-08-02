@@ -2834,7 +2834,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- “She kept repeating to herself, ‘I have a lover! a lover!’  -->
                     <!-- savoring the idea as if a new puberty had come upon her.”   -->
 
-                    <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
+                    <p>Primary only: <q>La liberté commence où l'ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J'ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d'une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
                 </paragraphs>
 
                 <paragraphs xml:lang="fr-CA">
@@ -2849,7 +2849,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- “She kept repeating to herself, ‘I have a lover! a lover!’  -->
                     <!-- savoring the idea as if a new puberty had come upon her.”   -->
 
-                    <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
+                    <p>Primary only: <q>La liberté commence où l'ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J'ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d'une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
                 </paragraphs>
 
                 <paragraphs xml:lang="de-DE">
@@ -10738,7 +10738,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd>
                     as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
-                    <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
+                    <li><p>Alan Wood's <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
             </paragraphs>
 
