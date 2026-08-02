@@ -2966,6 +2966,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </tn>
 </xsl:template>
 
+<!-- A "tn" authored as a block sibling of a cell's paragraphs is -->
+<!-- relocated to the tail of the paragraph it follows, where its -->
+<!-- mark belongs typographically; conversions then treat every   -->
+<!-- "tn" as inline.  A "tn" amid the mixed text of a cell is     -->
+<!-- already inline, and is untouched.                            -->
+<xsl:template match="cell[p]/tn" mode="repair"/>
+
+<xsl:template match="cell/p" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="repair"/>
+        <xsl:apply-templates select="following-sibling::tn[count(preceding-sibling::p[1] | current()) = 1]" mode="tn-relocate"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- A faithful copy, since the "repair" mode on the same   -->
+<!-- element is its suppression at the original location.   -->
+<xsl:template match="cell/tn" mode="tn-relocate">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- 2026-07-30: an "event" is bibliographic content, so it -->
 <!-- belongs in "bibinfo", already its home for slideshows. -->
 <!-- Suppressed at its origin within "docinfo"...           -->
