@@ -810,6 +810,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Full Numbers -->
 <!--              -->
 
+<!-- The "number" of a table note ("tn") is its letter: a, b, c,     -->
+<!-- assigned per-"tabular" in document order of the marks, which is -->
+<!-- reading order (Notes to tables: CMoS 18th ed., 3.77-3.81;       -->
+<!-- specific notes at 3.80).  One computation, consumed by every    -->
+<!-- conversion, and deliberately disjoint from the numbering of     -->
+<!-- true footnotes.                                                 -->
+<xsl:template match="tabular//tn" mode="number">
+    <xsl:number level="any" from="tabular" format="a"/>
+</xsl:template>
+
 <!-- Now trivial, the container structure plus the serial.  -->
 <!-- We condition on empty serial number in order to create -->
 <!-- empty full numbers.  This is where we add separator,   -->
