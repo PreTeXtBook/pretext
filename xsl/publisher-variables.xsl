@@ -1156,7 +1156,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- while a trailing slash will be reliably added if                     -->
 <!--     (a) not present in publisher file specification                  -->
 <!--     (b) the path is not empty                                        -->
-<!-- The external directory is a fact of the source (a different       -->
+<!-- The external directory is a property of the source (a different    -->
 <!-- directory of files is a different document), so its declaration    -->
 <!-- is "directories/@external" within "docinfo" (2026-07-30).  The     -->
 <!-- publication file "source/directories/@external" is deprecated but  -->
@@ -1165,6 +1165,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- directory variables and the tree behind  $docinfo  does not exist  -->
 <!-- yet at that point (referencing it is a circular definition).       -->
 <xsl:variable name="external-directory-source">
+    <!-- an empty declaration is an error, not an election -->
+    <xsl:if test="$version-docinfo/directories/@external = ''">
+        <xsl:message terminate="yes">PTX:FATAL:   the value of "directories/@external" within "docinfo" must be nonempty</xsl:message>
+    </xsl:if>
+    <xsl:if test="$publication/source/directories/@external = ''">
+        <xsl:message terminate="yes">PTX:FATAL:   the value of source/directories/@external in the publisher file must be nonempty</xsl:message>
+    </xsl:if>
     <xsl:variable name="raw-input">
         <xsl:choose>
             <xsl:when test="$version-docinfo/directories/@external">
@@ -1174,7 +1181,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$version-docinfo/directories/@external"/>
             </xsl:when>
             <xsl:when test="$publication/source/directories/@external">
-                <xsl:message>PTX:DEPRECATE: (2026-07-30) the external directory is a fact of the source, and is now declared with a "directories/@external" attribute within "docinfo".  The publication file entry "source/directories/@external" is honored meanwhile, but please relocate it.</xsl:message>
+                <xsl:message>PTX:DEPRECATE: (2026-07-30) the external directory is a property of your source, and is now declared with a "directories/@external" attribute within "docinfo".  The publication file entry "source/directories/@external" is honored meanwhile, but please relocate it.</xsl:message>
                 <xsl:value-of select="$publication/source/directories/@external"/>
             </xsl:when>
             <xsl:otherwise/>
@@ -1200,104 +1207,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Historically this was given by the "images" directory as a default, -->
-<!-- and it seems almost every author just ran with this.                -->
+<!-- The generated directory is machine-owned, so it is defaultable:  -->
+<!-- an undeclared location is the directory "generated", beside the  -->
+<!-- source.  (Historically an unmanaged scheme fell back to the      -->
+<!-- "images" directory; managed directories are now the only scheme.)-->
 <xsl:variable name="generated-directory-source">
-    <xsl:variable name="raw-input" select="$publication/source/directories/@generated"/>
-    <xsl:choose>
-        <xsl:when test="$b-managed-directories">
-            <xsl:choose>
-                <xsl:when test="substring($raw-input, 1, 1) = '/'">
-                    <xsl:message>PTX:FALLBACK:   a generated-image directory (source/directories/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
-                    <xsl:text/>
-                </xsl:when>
-                <!-- trailing path separator is good -->
-                <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
-                    <xsl:value-of select="$raw-input"/>
-                </xsl:when>
-                <!-- if there is substance, we need to add a trailing slash -->
-                <xsl:when test="string-length($raw-input) > 0">
-                    <xsl:value-of select="concat($raw-input, '/')"/>
-                </xsl:when>
-                <!-- specification must be empty, so we leave it that way -->
-                <xsl:otherwise/>
-            </xsl:choose>
-        </xsl:when>
-        <!-- Should issue a deprecation warning (elsewhere) for this.    -->
-        <!-- directory.images *is* defined elsewhere in this stylesheet, -->
-        <!-- and defaults to "images", but does not have a slash, which  -->
-        <!-- is presumed for the $generated-directory variable           -->
-        <xsl:otherwise>
-            <xsl:value-of select="concat($directory.images, '/')"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- For backward-compatibility, we want to know if the collection of  -->
-<!-- generated images is structured by their production method (newer) -->
-<!-- or not (older, historical).  So we create a boolean based on the  -->
-<!-- presence of the publisher file specification.                     -->
-<xsl:variable name="managed-directories">
-    <xsl:if test="$version-docinfo/directories/@external = ''">
-        <xsl:message terminate="yes">PTX:FATAL:   the value of "directories/@external" within "docinfo" must be nonempty</xsl:message>
-    </xsl:if>
-    <xsl:if test="$publication/source/directories/@external = ''">
-        <xsl:message terminate="yes">PTX:FATAL:   the value of source/directories/@external in the publisher file must be nonempty</xsl:message>
-    </xsl:if>
     <xsl:if test="$publication/source/directories/@generated = ''">
         <xsl:message terminate="yes">PTX:FATAL:   the value of source/directories/@generated in the publisher file must be nonempty</xsl:message>
     </xsl:if>
-    <!-- The external directory may be declared in "docinfo" (preferred) -->
-    <!-- or the publication file (deprecated, honored); the generated    -->
-    <!-- directory is a publication file entry.  Management requires an  -->
-    <!-- external declaration, from either home, together with the       -->
-    <!-- generated declaration.                                          -->
-    <xsl:variable name="b-has-external" select="boolean($version-docinfo/directories/@external) or boolean($publication/source/directories/@external)"/>
+    <xsl:variable name="raw-input">
+        <xsl:choose>
+            <xsl:when test="$publication/source/directories/@generated">
+                <xsl:value-of select="$publication/source/directories/@generated"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>generated</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$b-has-external and $publication/source/directories/@generated">
-            <xsl:text>yes</xsl:text>
+        <xsl:when test="substring($raw-input, 1, 1) = '/'">
+            <xsl:message>PTX:FALLBACK:   a generated-image directory (source/directories/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:text/>
         </xsl:when>
-        <xsl:when test="not($b-has-external) and not($publication/source/directories/@generated)">
-            <xsl:text>no</xsl:text>
+        <!-- trailing path separator is good -->
+        <xsl:when test="substring($raw-input, string-length($raw-input), 1) = '/'">
+            <xsl:value-of select="$raw-input"/>
         </xsl:when>
+        <!-- add the trailing slash -->
         <xsl:otherwise>
-            <xsl:message>PTX:FALLBACK:   an external directory ("directories/@external" within "docinfo", or the deprecated publication file form) and a generated directory (source/directories/@generated in the publication file) must be specified together; only one was found. Proceeding as if neither was specified.</xsl:message>
-            <xsl:text>no</xsl:text>
+            <xsl:value-of select="concat($raw-input, '/')"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-<xsl:variable name="b-managed-directories" select="$managed-directories = 'yes'"/>
 
-<!-- Destination directory is hard-coded here and used in      -->
-<!-- various conversions under the managed directories scheme. -->
-<xsl:variable name="external-directory">
-    <xsl:choose>
-        <xsl:when test="$b-managed-directories">
-            <xsl:text>external/</xsl:text>
-        </xsl:when>
-        <!-- backwards-compatiblity, there never was any sort of   -->
-        <!-- naming/copying scheme for externally produced content -->
-        <xsl:otherwise/>
-    </xsl:choose>
-</xsl:variable>
+<!-- Managed directories are the only scheme (2026-08-02).  The two  -->
+<!-- directions are independent facts: an undeclared external means  -->
+<!-- the project has no external assets, and the machine-owned       -->
+<!-- generated directory is defaultable.                             -->
 
-<!-- There was once a scheme of sorts for managing the directory -->
-<!-- where generated images landed and were found.  So we need   -->
-<!-- to preserve that logic for backward-compatibility.          -->
-<xsl:variable name="generated-directory">
-    <xsl:choose>
-        <xsl:when test="$b-managed-directories">
-            <xsl:value-of select="'generated/'"/>
-        </xsl:when>
-        <!-- Should issue a deprecation warning (elsewhere) for this.    -->
-        <!-- directory.images *is* defined elsewhere in this stylesheet, -->
-        <!-- and defaults to "images", but does not have a slash, which  -->
-        <!-- is presumed for the $generated-directory variable           -->
-        <xsl:otherwise>
-            <xsl:value-of select="concat($directory.images, '/')"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+
+<!-- The destination directories within any output are hard-coded -->
+<!-- here, and used in the various conversions.                   -->
+<xsl:variable name="external-directory" select="'external/'"/>
+<xsl:variable name="generated-directory" select="'generated/'"/>
 
 
 <!-- This is a directory that may need to be copied to a      -->
@@ -1436,22 +1389,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- variable since it will not be used, and it is silent.        -->
     <xsl:if test="$original//webwork[node() or @*]">
         <xsl:choose>
-            <!-- Note: $generated-directory-source is never empty?    -->
-            <!-- Defaults to the very old "directory.images"?         -->
-            <!-- So testing for the publication file entry is better. -->
-            <xsl:when test="$publication/source/directories/@generated">
-                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/'), '&#x20;', '%20')"/>
-            </xsl:when>
-            <xsl:when test="$publication/source/@webwork-problems">
+            <!-- the deprecated location is honored only when no -->
+            <!-- generated directory is declared                 -->
+            <xsl:when test="$publication/source/@webwork-problems and not($publication/source/directories/@generated)">
                 <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
                 <xsl:message>PTX:DEPRECATE: the publication file entry  source/@webwork-problems  is</xsl:message>
                 <xsl:message>               deprecated, please move to using managed directories</xsl:message>
             </xsl:when>
-            <!-- no specification, so empty string for filename -->
-            <!-- this will be noted where it is employed        -->
-            <!-- no specification, so empty string for directory    -->
-            <!-- this will be noted where it is employed            -->
-            <xsl:otherwise/>
+            <!-- the generated directory, declared or defaulted -->
+            <xsl:otherwise>
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/'), '&#x20;', '%20')"/>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
 </xsl:variable>
@@ -1463,15 +1411,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="dynamic-substitutions-file">
     <!-- Only relevant if there are dynamic exercises present.      -->
     <xsl:if test="$original//exercise//setup">
-        <xsl:choose>
-            <!-- Look in the publication file for the generated directory -->
-            <xsl:when test="$publication/source/directories/@generated">
-                <xsl:value-of select="str:replace(concat($generated-directory-source, 'dynamic_subs/dynamic_substitutions.xml'), '&#x20;', '%20')"/>
-            </xsl:when>
-            <!-- no specification, so empty string for filename -->
-            <!-- this will be noted where it is employed        -->
-            <xsl:otherwise/>
-        </xsl:choose>
+        <!-- the generated directory, declared or defaulted -->
+        <xsl:value-of select="str:replace(concat($generated-directory-source, 'dynamic_subs/dynamic_substitutions.xml'), '&#x20;', '%20')"/>
     </xsl:if>
 </xsl:variable>
 
