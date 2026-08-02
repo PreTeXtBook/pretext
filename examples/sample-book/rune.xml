@@ -995,7 +995,7 @@ TEST_CASE( "Test the add function" ) {
 
             for aline in ccfile:
                 values = aline.split()
-                print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
+                print('In', values[0], 'the average temp. was', values[1], '&#x00B0;C and CO2 emmisions were', values[2], 'gigatons.')
 
             ccfile.close()
             </code>
@@ -1122,7 +1122,7 @@ TEST_CASE( "Test the add function" ) {
 
             for aline in ccfile:
                 values = aline.split()
-                print('In', values[0], 'the average temp. was', values[1], '°C and CO2 emmisions were', values[2], 'gigatons.')
+                print('In', values[0], 'the average temp. was', values[1], '&#x00B0;C and CO2 emmisions were', values[2], 'gigatons.')
 
             ccfile.close()
             </code>
