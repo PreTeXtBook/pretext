@@ -224,6 +224,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-myopenmath"   select="boolean($document-root//myopenmath)"/>
 <xsl:variable name="b-has-stack"        select="boolean($document-root//exercise/stack)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
+<xsl:variable name="b-has-gdscript"     select="boolean($document-root//program[@language='gdscript'])"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
@@ -14119,6 +14120,9 @@ TODO:
     <xsl:if test="$b-has-program and not($b-debug-react)">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+        <xsl:if test="$b-has-gdscript">
+            <script src="{$html.js.dir}/prism/gdscript-prism.js"></script>
+        </xsl:if>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha512-93uCmm0q+qO5Lb1huDqr7tywS8A2TFA+1/WHvyiWaK6/pvsFl6USnILagntBx8JnVbQH5s3n0vQZY6xNthNfKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <xsl:if test="$b-html-theme-legacy or $b-reveal-build" >
