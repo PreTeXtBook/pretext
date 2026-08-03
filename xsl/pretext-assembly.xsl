@@ -2496,7 +2496,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="datafile|query" mode="representations">
+<xsl:template match="datafile|file|query" mode="representations">
     <xsl:choose>
         <!-- make a static version, in a PreTeXt style -->
         <!-- for use naturally by most conversions     -->
@@ -4860,7 +4860,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- — so the BUG fallback below can catch an unexpected           -->
 <!-- application.                                                  -->
 <xsl:template match="audio|video|interactive|image
-                   | datafile
+                   | datafile|file
                    | exercise/stack
                    | exercise[@pi:exercise-interactive='fillin' and setup]
                    | project[@pi:exercise-interactive='fillin' and setup]
@@ -5071,7 +5071,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with a path relative to the author's main source file, hence  -->
 <!-- the filename uses the directory name in author's source.      -->
 <!-- NB: identical code in static constructions.                   -->
-<xsl:template match="datafile" mode="datafile-filename">
+<xsl:template match="datafile|file" mode="datafile-filename">
     <xsl:value-of select="$generated-directory-source"/>
     <xsl:text>datafile/</xsl:text>
     <!-- context is "datafile", the basis for identifier -->
@@ -5108,6 +5108,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- The actual text contents of a "file", when it names an external -->
+<!-- file via @source.  Like "datafile/pre[@source]", the text comes -->
+<!-- back from the generated representation file, so the "file" must -->
+<!-- name text (a "pre" kind) to consult it.                        -->
+<xsl:template match="file[@source]" mode="datafile-text-contents">
+    <xsl:variable name="data-filename">
+        <xsl:apply-templates select="." mode="datafile-filename"/>
+    </xsl:variable>
+    <xsl:variable name="text-file-elt" select="document($data-filename, $original)/pi:text-file"/>
+    <xsl:value-of select="$text-file-elt"/>
+</xsl:template>
+
+<!-- The actual text contents of a "file", specified in a "pre" element.  -->
+<xsl:template match="file[pre]" mode="datafile-text-contents">
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text">
+            <xsl:value-of select="pre"/>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>
