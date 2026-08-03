@@ -715,6 +715,14 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="read-aloud">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="short-answer-responses">
           <choice>
             <value>graded</value>

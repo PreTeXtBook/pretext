@@ -227,6 +227,7 @@
                 element html {
                     attribute design-width { xsd:integer }?,
                     attribute favicon { "none" | "simple" }?,
+                    attribute read-aloud { "yes" | "no" }?,
                     attribute short-answer-responses { "graded" | "always" }?,
                     (
                         Analytics? &
