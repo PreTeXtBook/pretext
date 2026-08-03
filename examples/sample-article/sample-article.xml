@@ -16602,6 +16602,62 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </handout>
         </section>
 
+        <section xml:id="section-standalone-project-printouts" label="section-standalone-project-printouts">
+            <title>Projects as Printouts</title>
+
+            <p>
+                A project-like element outside of any worksheet or handout may still carry <c>workspace</c>, on itself or on its tasks.
+                When it does, HTML output gives it the same print preview icon a worksheet gets, and previewing it lays out just that project across pages with the workspace expanded to fill them.
+                In PDF such a project is typeset as an ordinary block, with no extra room.
+            </p>
+            <p>
+                The third project below has no <c>workspace</c> anywhere, so it gets no icon.
+            </p>
+
+
+            <project xml:id="project-printout-tasks">
+                <title>A Project With Workspace On Its Tasks</title>
+                <introduction>
+                    <p>Show all of your reasoning in the space provided.</p>
+                </introduction>
+                <task xml:id="project-printout-task-first" workspace="2in">
+                    <statement>
+                        <p>Find the derivative of <m>f(x) = x^2</m>.</p>
+                    </statement>
+                    <hint>
+                        <p>Use the power rule.</p>
+                    </hint>
+                    <solution>
+                        <p>We have <m>f'(x) = 2x</m>.</p>
+                    </solution>
+                </task>
+                <task xml:id="project-printout-task-second" workspace="3in">
+                    <statement>
+                        <p>Now find the derivative of <m>g(x) = x^3</m>, and explain the pattern you see.</p>
+                    </statement>
+                </task>
+                <conclusion>
+                    <p>Compare your two answers with a neighbor.</p>
+                </conclusion>
+            </project>
+
+            <project xml:id="project-printout-simple" workspace="4in">
+                <title>A Project With Workspace On Itself</title>
+                <statement>
+                    <p>
+                        Explain, in a paragraph, why the workspace requested here is not visible on screen, but does appear in the print preview.
+                    </p>
+                </statement>
+            </project>
+
+            <project xml:id="project-printout-none">
+                <title>A Project With No Workspace</title>
+                <statement>
+                    <p>This project should not have a print preview icon.</p>
+                </statement>
+            </project>
+        </section>
+
 
         <section xml:id="worksheet-solution-testing" label="section-worksheet-solutions-testing">
             <title>Worksheet Solution Testing</title>

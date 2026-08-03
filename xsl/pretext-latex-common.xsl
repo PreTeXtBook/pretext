@@ -2174,7 +2174,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Vertical workspace for worksheets and handouts -->
+<!-- Vertical workspace for worksheets, handouts, and PROJECT-LIKE with workspace -->
 <xsl:template match="*" mode="workspace">
     <xsl:variable name="vertical-space">
         <xsl:apply-templates select="." mode="sanitize-workspace"/>
@@ -4078,7 +4078,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the four margins, in units LaTeX understands (such as -->
 <!-- cm, in, pt).  This only produces text, so could go in -->
 <!-- -common, but is also only useful for LaTeX output.    -->
-<xsl:template match="&PRINTOUT;" mode="new-geometry">
+<xsl:template match="&PRINTOUT;|&PROJECT-LIKE;" mode="new-geometry">
     <!-- Four similar "choose" effect hierarchy/priority -->
     <!-- NB: a publisher string parameter to      -->
     <!-- *really* override (worksheet.left, etc.) -->
@@ -4556,6 +4556,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="ex-components-report" select="exsl:node-set($ex-components-rtf)/exercise-component-report"/>
 
+    <!-- A PROJECT-LIKE requesting workspace outside of any printout is a      -->
+    <!-- printout in its own right, so give it pages of its own with the        -->
+    <!-- worksheet margins, exactly as a worksheet or handout division gets     -->
+    <!-- (see "latex-division-heading").  Compute the test once, since the      -->
+    <!-- matching \restoregeometry below must fire under precisely the same     -->
+    <!-- condition or the geometry group will not balance.                      -->
+    <xsl:variable name="standalone-printout">
+        <xsl:apply-templates select="." mode="is-standalone-printout"/>
+    </xsl:variable>
+    <xsl:variable name="b-own-pages" select="($standalone-printout = 'true') and $b-latex-worksheet-formatted"/>
+
+    <xsl:if test="$b-own-pages">
+        <!-- \newgeometry includes a \clearpage -->
+        <xsl:apply-templates select="." mode="new-geometry"/>
+    </xsl:if>
     <!-- structured version of a project-like may contain a     -->
     <!-- prelude, which is rendered *before* environment begins -->
     <xsl:if test="$project and (statement or task)">
@@ -4639,6 +4654,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- which is rendered *after* environment ends              -->
     <xsl:if test="$project and (statement or task)">
         <xsl:apply-templates select="postlude" />
+    </xsl:if>
+    <!-- Give back the page geometry claimed above, under exactly the same -->
+    <!-- condition.  Matches the worksheet's "latex-division-footing".     -->
+    <xsl:if test="$b-own-pages">
+        <!-- \restoregeometry includes a \clearpage -->
+        <xsl:text>\restoregeometry&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 

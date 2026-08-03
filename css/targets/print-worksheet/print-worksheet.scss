@@ -99,8 +99,9 @@ $light-colors: map.merge(
     display:none;
   }
 
-  // Remove the print preview link
-.heading .print-links {
+  // Remove the print preview link, whether it sits inside a printout's
+  // heading or beside a standalone printout project's heading.
+.print-links {
   display: none;
 }
 
@@ -120,10 +121,26 @@ $light-colors: map.merge(
 }
 
 
-// Set font appropriate for printing
-section.worksheet, section.handout {
+// Set font appropriate for printing.
+// ".printout" is applied by the javascript to whatever element is being
+// previewed: a worksheet/handout section, or the article of a project-like
+// block that carries workspace outside of any worksheet or handout.
+.printout {
   font-size: 11pt;
   font-family: var(--font-print);
+}
+
+// A project-like printout is an "article", so it arrives with the block
+// decoration every other block gets.  As the page container it wants none.
+article.printout {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+
+  &::before, &::after {
+    all: unset;
+  }
 }
 
 // .onepage is the common class that wraps all content in a single worksheet page (often modified by the javascript)
@@ -285,7 +302,7 @@ form.papersize-select {
     margin: 50px auto;
   }
 
-  .worksheet, .handout {
+  .printout {
     max-width: var(--ws-width);
     margin: 0 auto;
   }
@@ -393,7 +410,7 @@ form.papersize-select {
     display: none;
   }
 
-  section.worksheet, section.handout {
+  .printout {
     border: none;
     width: 100%;
 

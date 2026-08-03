@@ -179,7 +179,10 @@
 <!-- template in the entry template here, so these pages are not built (good).      -->
 <!-- But we do get little buttons to elect a printable version.  We have to kill    -->
 <!-- those buttons, since EPUB wants to go looking for the printable-version files. -->
-<xsl:template match="&PRINTOUT;" mode="standalone-printout-links"/>
+<!-- PROJECT-LIKE is here for the same reason: a project with workspace    -->
+<!-- outside a printout earns a print preview button in HTML, which is     -->
+<!-- meaningless in EPUB.                                                  -->
+<xsl:template match="&PRINTOUT;|&PROJECT-LIKE;" mode="standalone-printout-links"/>
 
 
 <!-- ############## -->
