@@ -14,7 +14,8 @@
  * four categories based on how they are loaded and whether they need bundling:
  *
  *  IIFE bundles  — multiple source files combined into one IIFE.
- *    pretext-core    js/src/pretext-core.js  (pretext.js + pretext_add_on.js + knowl.js)
+ *    pretext-core        js/src/pretext-core.js  (pretext.js + pretext_add_on.js + knowl.js)
+ *    pretext-read-aloud  js/src/read-aloud/index.js  (embedded text-to-speech)
  *
  *  ES module     — loaded via `import` from an inline <script type="module">.
  *    mathjax_startup  js/mathjax_startup.js
@@ -193,6 +194,16 @@ function getAllTargets() {
       name: 'pretext-core',
       group: 'bundle',
       in: path.join(jsRoot, 'src/pretext-core.js'),
+    },
+
+    // Read-aloud (embedded text-to-speech): collector/segmenter/speech-queue
+    // pipeline plus player UI.  Conditional: the <script> is only emitted
+    // when the read-aloud publication option is enabled.
+    // Entry point: js/src/read-aloud/index.js
+    {
+      name: 'pretext-read-aloud',
+      group: 'bundle',
+      in: path.join(jsRoot, 'src/read-aloud/index.js'),
     },
 
     // ------------------------------------------------------------------

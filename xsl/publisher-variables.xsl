@@ -2765,6 +2765,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-has-embed-button" select="$embed-button = 'yes'"/>
 
+<!--                           -->
+<!-- HTML Read-aloud control   -->
+<!--                           -->
+
+<xsl:variable name="read-aloud">
+    <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='read-aloud']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-read-aloud" select="not($read-aloud = 'no')"/>
 
 <!--                            -->
 <!-- HTML Banner options        -->
@@ -3489,6 +3497,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
+        <pi:pub-attribute name="read-aloud" default="yes" options="no"/>
         <pi:pub-attribute name="favicon" default="none" options="simple"/>
         <pi:pub-attribute name="embed-button" default="no" options="yes"/>
         <pi:pub-attribute name="design-width" freeform="yes"/>

@@ -5740,6 +5740,11 @@
             </li>
 
             <li>
+                <title>Built-in Screen Reader</title>
+                <p>We provide a screen reader, which is a JavaScript library that will read aloud the content of a page.  It is activated by clicking on the <c>Read Aloud</c> button in the navigation bar at the top of the page.  The reader will read the content of the page, and will also read any mathematics that is present.  While not as comprehensive as a commercial screen reader like NVDA or JAWS, it provides an easy way for users who prefer to listen to the main content of the page.</p>
+            </li>
+
+            <li>
                 <title>3D Images</title>
                 <p>Asymptote is a language for describing 2D and 3D images, which we support as much as possible.  The 3D images produced are rotatable for exploration via a mouse or finger.  For those with motor limitations, the images may also be manipulated with keyboard controls.  (Many assistive technologies rely on, or emulate, keyboards.)</p>
             </li>

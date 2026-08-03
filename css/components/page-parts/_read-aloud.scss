@@ -1,0 +1,231 @@
+// Styles for the read-aloud (text-to-speech) feature: the in-navbar player,
+// its settings dialog, and the current-sentence highlight.  Included via
+// _navbar.scss so every theme with a navbar gets it; the markup only exists
+// when the read-aloud publication option is on.
+
+$nav-height: 36px !default;
+$navbar-breakpoint: 800px !default;
+
+@use 'components/helpers/dialogs' as dialogs;
+
+// ---------------------------------------------------------------------------
+// Player bar
+//
+// The player is emitted inside .nav-other-controls and simply unhides in
+// place, growing the navbar row to the right of the button that opened it.
+// It is deliberately *not* a floating bubble: a second styled surface hovering
+// over the page competed with the navbar it was anchored to, and on narrow
+// screens (where the navbar moves to the foot of the page) it had to be moved
+// again to avoid covering the content.  Living in the row, it inherits the
+// navbar's own button styling and needs no positioning of its own — only
+// below the breakpoint, where it lifts onto a second row, does it position
+// at all.
+
+.ptx-read-aloud-player {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+
+  &[hidden] {
+    display: none;
+  }
+
+  // The toggle button carries both glyphs; data-state picks one.
+  //
+  // `display: contents` rather than inline/block: prev and next hold their
+  // .icon as the button's direct flex child, where align-items centers it.
+  // A wrapper of its own would be the flex item instead, and as a blockified
+  // line box it stood 29px tall with the 24px glyph pinned to its top —
+  // leaving the play triangle riding ~2.5px above its neighbours.  Dropping
+  // the wrapper from the box tree makes this button structurally identical to
+  // the other two rather than merely tuned to match.
+  .ptx-read-aloud-icon-play {
+    display: contents;
+  }
+
+  .ptx-read-aloud-icon-pause {
+    display: none;
+  }
+}
+
+.ptx-read-aloud-player[data-state="speaking"] {
+  .ptx-read-aloud-icon-play {
+    display: none;
+  }
+  .ptx-read-aloud-icon-pause {
+    display: contents;
+  }
+}
+
+// After cross-page continuation, invite the single click that browsers
+// require before speech can start again.  An inset ring rather than an outer
+// glow: the button now shares an edge with its neighbours in the navbar.
+.ptx-read-aloud-player[data-state="continue-ready"] .ptx-read-aloud-toggle {
+  animation: ptx-read-aloud-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ptx-read-aloud-pulse {
+  50% {
+    box-shadow: inset 0 0 0 3px rgba(100, 150, 255, 0.6);
+  }
+}
+
+// The continue link only appears at end of page, and is the only control
+// carrying a word, so it is allowed to shrink before the buttons do.
+//
+// The [hidden] rule has to out-specify `.ptx-navbar .button { display: flex }`.
+// Both are (0,2,0), and this file is @use'd from the top of _navbar.scss, so on
+// a tie the navbar wins and the link shows on every page.  Qualifying by the
+// player breaks the tie in the direction the hidden attribute intends.
+.ptx-read-aloud-continue {
+  min-width: 0;
+}
+
+.ptx-read-aloud-player .ptx-read-aloud-continue[hidden] {
+  display: none;
+}
+
+// An open player needs room from somewhere, and *where* it takes it decides
+// whether the navbar appears to move.  Everything left of the player — the
+// contents button, search, and the read-aloud button itself — has to stay
+// nailed in place; a reader who presses a button should not watch it slide
+// out from under the cursor.  So the room comes from the right instead: the
+// tree buttons are last in the row and already right-aligned within their own
+// span, so narrowing them moves nothing except themselves.
+//
+// This only bites under real pressure.  Flex items shrink toward these floors
+// rather than to them, so at comfortable widths Prev/Up/Next keep their names
+// and full 75px, and the whole rule is invisible.
+@media screen and (min-width: $navbar-breakpoint) {
+  .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) {
+    // .ptx-navbar-contents is `flex: 1` with the default `min-width: auto`, so
+    // it refuses to shrink below its own min-content and overflows the navbar
+    // instead — which meant no child ever felt the squeeze the rules below
+    // describe.  Releasing the floor is what lets the shrinking start.
+    .ptx-navbar-contents {
+      min-width: 0;
+    }
+
+    // Aim that squeeze.  Without this the fixed-width contents button gives
+    // first, dragging search and the read-aloud button left with it; pinning
+    // everything but the right-hand groups leaves the tree buttons as the
+    // only thing that can yield.
+    .ptx-navbar-contents > *:not(.treebuttons, .nav-runestone-controls) {
+      flex-shrink: 0;
+    }
+
+    // Same `min-width: auto` trap one level down: the tree buttons are
+    // nowrap, so their min-content is the full width of "Prev"/"Up"/"Next"
+    // and the group would not give up a pixel.  With the floor released it
+    // can always shrink, so the navbar never actually spills — worst case
+    // the labels ellipsize.
+    .treebuttons {
+      min-width: 0;
+    }
+
+    .treebuttons > * {
+      min-width: 35px;
+    }
+  }
+
+  // Where the squeeze is real, drop to chevrons rather than ellipsized words.
+  // The threshold is cosmetic, not structural: it is the width below which an
+  // end-of-page player (the widest it gets, with "Continue" showing) stops
+  // fitting beside full-width tree buttons.  If a translation or theme moves
+  // that point, the rule above still keeps the row intact — the labels just
+  // clip instead of vanishing cleanly, which is why this number is allowed to
+  // be approximate.
+  @media screen and (max-width: 900px) {
+    .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) .treebuttons .name {
+      display: none;
+    }
+  }
+}
+
+// Below the breakpoint there is no room for the player *beside* six other
+// buttons, and the navbar centers its contents — so an overflow would spill
+// off both edges and lose the leading button rather than simply running long.
+// Rather than take the row and hide the page's navigation, the player lifts
+// onto a second row directly above it, leaving every original button in
+// place.  The navbar is fixed to the foot of the page here, so "above" is
+// where a phone already expects a media bar to stack.
+@media screen and (max-width: $navbar-breakpoint) {
+  .ptx-navbar .ptx-read-aloud-player {
+    // Positioned against .ptx-navbar-contents, which is the navbar's only
+    // positioned ancestor and spans its full width at this size.
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: $nav-height;
+    // Grouped in the middle, spaced like any other run of navbar buttons —
+    // stretching five controls across the width reads as a tab bar, not as
+    // the transport it is.
+    justify-content: center;
+    background: var(--navbar-background);
+    border-top: 1px solid var(--page-border-color);
+  }
+
+  // The extra row is fixed over the page like the navbar itself, so the
+  // content underneath needs the matching reservation or its last line hides.
+  body.pretext:has(.ptx-read-aloud-player:not([hidden])) {
+    padding-bottom: calc(2 * #{$nav-height});
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Settings dialog
+//
+// Reuses the readability dialog's group/label classes so the two reading
+// dialogs stay visually identical; only the trigger and contents differ.
+
+.ptx-navbar .ptx-read-aloud-settings-popup {
+  padding: 10px;
+  margin-top: $nav-height;
+  min-width: 16rem;
+  max-width: 600px;
+  margin-bottom: 0.5em;
+  width: 90%;
+
+  @include dialogs.ptx-dialog-modal;
+}
+
+@media screen and (max-width: $navbar-breakpoint) {
+  .ptx-navbar .ptx-read-aloud-settings-popup {
+    margin-top: unset;
+    margin-bottom: 0;
+    top: auto;
+    bottom: $nav-height;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Current-sentence highlight
+//
+// ::highlight() paints text ranges without touching the DOM.  Colors must
+// satisfy contrast in both themes; only a translucent background is set so
+// the theme's own text color continues to apply.
+
+::highlight(ptx-read-aloud) {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.45));
+}
+
+:root.dark-mode ::highlight(ptx-read-aloud) {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.28));
+}
+
+// Math is highlighted by class on the mjx-container (CHTML internals do not
+// expose highlightable text nodes), and block-level fallback covers browsers
+// without the Custom Highlight API.
+.ptx-read-aloud-current-math,
+.ptx-read-aloud-current-block {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.45));
+  border-radius: 3px;
+}
+
+:root.dark-mode {
+  .ptx-read-aloud-current-math,
+  .ptx-read-aloud-current-block {
+    background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.28));
+  }
+}

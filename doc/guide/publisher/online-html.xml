@@ -55,6 +55,19 @@
             </paragraphs>
         </subsection>
 
+        <subsection xml:id="online-html-read-aloud">
+            <title>Read Aloud</title>
+            <idx><h>read aloud</h><h>HTML</h></idx>
+
+            <p>One of the many reasons to use <init>HTML</init> output of <pretext/> is screen reader support, based largely on MathJax.  While most accessibility-focused screen readers (like NVDA and JAWS) now do a very good job switching between MathJax-rendered mathematics and the surrounding text, a casual user of screen readers is unlikely to learn how to use this specialized software.  Browser plugins that offer text-to-speech often fail to handle the text-to-math handoff.</p>
+
+            <p>So <pretext/> provides its own browser based screen reading support for the <init>HTML</init> output via the <attr>read-aloud</attr> attribute of the publication file (<xref ref="online-read-aloud-options"/>).  This feature will turn on by default, but can be turned off by the publisher.  When enabled, a small button appears in the navigation bar of each page.  Clicking it will expose player controls to play/pause and skip back or ahead (by sentence).  More complicated elements, like tables and interactive elements are announced and skipped.</p>
+
+            <p>Hidden knowls are also announced and skipped, unless the reader selects an option to read all of them.  Alternatively, using the up and down arrow keys will jump the reader between different paragraphs, and pressing <kbd>SPACE</kbd> while on a knowl's title will trigger reading it in full.</p>
+
+            <p>Additional options in the read-aloud settings menu (next to the playback controls) allow the reader to change the voice (which voices are included depends entirely on the browser and operating system), reading speed, and whether to continue to the next page once reaching the end.</p>
+        </subsection>
+
         <subsection xml:id="online-html-annotation">
             <title>Annotation</title>
             <idx><h>Hypothes.is</h></idx>
