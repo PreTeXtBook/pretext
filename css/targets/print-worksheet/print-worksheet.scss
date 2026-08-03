@@ -62,12 +62,47 @@ $light-colors: map.merge(
   )
 );
 
+// Runestone ships its own dark-mode CSS variables that are independent of
+// PreTeXt theme variables; force those to light values in worksheet previews.
+$runestone-light-colors: (
+  "background": #fff,
+  "outerBackground": #eee,
+  "links": #0645ad,
+  "bodyFont": #000,
+  "tooltip": #fff,
+  "grayToWhite": #333,
+  "navbar": #f8f8f8,
+  "navbarFont": #707070,
+  "navbarFontHover": #000,
+  "alerts": #d9edf7,
+  "completionButton": #f19711,
+  "completionButtonHover": #ff9f19,
+  "completionButtonText": #000,
+  "admonition": #fcf8e3,
+  "admonitionBorder": #fbeed5,
+  "codeButtons": #474949,
+  "codeButtonsBorder": #474949,
+  "dangerAlerts": #f2dede,
+  "successAlerts": #dff0d8,
+  "componentBgColor": #f0f8ff,
+  "componentBorderColor": #000,
+  "questionBgColor": #e1efff,
+  "parsonsBgColor": #d5d5d5,
+  "parsonsBorderColor": #494949,
+);
+
 // Print worksheets should always render with the light palette, even if the page
 // root still carries the site's dark-mode class.
 :root,
 :root.dark-mode {
   color-scheme: light;
   @include colorHelpers.scss-to-css($light-colors);
+}
+
+:root.dark-mode {
+  @each $name, $value in $runestone-light-colors {
+    --#{$name}: #{$value} !important;
+  }
 }
 
 // ---------------------------------------------
