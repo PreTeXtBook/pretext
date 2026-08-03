@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://practices/L1.P1.double_value/practice.gd" id="1_bmi4d"]
+
+[node name="DoubleValue" type="Node" unique_id=2012261070]
+script = ExtResource("1_bmi4d")
