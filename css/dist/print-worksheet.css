@@ -2012,6 +2012,32 @@ iframe {
   --primary-color: black;
   --assemb-border-color: var(--primary-color-white-50);
 }
+:root.dark-mode {
+  --background: #fff !important;
+  --outerBackground: #eee !important;
+  --links: #0645ad !important;
+  --bodyFont: #000 !important;
+  --tooltip: #fff !important;
+  --grayToWhite: #333 !important;
+  --navbar: #f8f8f8 !important;
+  --navbarFont: #707070 !important;
+  --navbarFontHover: #000 !important;
+  --alerts: #d9edf7 !important;
+  --completionButton: #f19711 !important;
+  --completionButtonHover: #ff9f19 !important;
+  --completionButtonText: #000 !important;
+  --admonition: #fcf8e3 !important;
+  --admonitionBorder: #fbeed5 !important;
+  --codeButtons: #474949 !important;
+  --codeButtonsBorder: #474949 !important;
+  --dangerAlerts: #f2dede !important;
+  --successAlerts: #dff0d8 !important;
+  --componentBgColor: #f0f8ff !important;
+  --componentBorderColor: #000 !important;
+  --questionBgColor: #e1efff !important;
+  --parsonsBgColor: #d5d5d5 !important;
+  --parsonsBorderColor: #494949 !important;
+}
 :root {
   --ws-width: 8.5in;
   --ws-height: 11in;
@@ -2030,7 +2056,7 @@ body.pretext > a.assistive,
 .pretext .ptx-main > div.ptx-content-footer {
   display: none;
 }
-.heading .print-links {
+.print-links {
   display: none;
 }
 .autopermalink {
@@ -2041,10 +2067,19 @@ body.pretext > a.assistive,
 .ptx-runestone-container button.btn {
   display: none;
 }
-section.worksheet,
-section.handout {
+.printout {
   font-size: 11pt;
   font-family: var(--font-print);
+}
+article.printout {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+article.printout::before,
+article.printout::after {
+  all: unset;
 }
 .onepage > .heading {
   margin-top: 0;
@@ -2185,8 +2220,7 @@ form.papersize-select {
     max-width: var(--ws-width);
     margin: 50px auto;
   }
-  .worksheet,
-  .handout {
+  .printout {
     max-width: var(--ws-width);
     margin: 0 auto;
   }
@@ -2304,13 +2338,11 @@ form.papersize-select {
   .print-preview-header {
     display: none;
   }
-  section.worksheet,
-  section.handout {
+  .printout {
     border: none;
     width: 100%;
   }
-  section.worksheet .onepage,
-  section.handout .onepage {
+  .printout .onepage {
     margin-top: 0;
     width: 100%;
     height: var(--ws-content-height);
@@ -2318,26 +2350,19 @@ form.papersize-select {
     page-break-after: always;
     page-break-inside: avoid;
   }
-  section.worksheet .onepage:last-of-type,
-  section.handout .onepage:last-of-type {
+  .printout .onepage:last-of-type {
     page-break-after: avoid;
   }
-  section.worksheet .first-page-header,
-  section.worksheet .running-header,
-  section.handout .first-page-header,
-  section.handout .running-header {
+  .printout .first-page-header,
+  .printout .running-header {
     border-bottom: none;
   }
-  section.worksheet .first-page-footer,
-  section.worksheet .running-footer,
-  section.handout .first-page-footer,
-  section.handout .running-footer {
+  .printout .first-page-footer,
+  .printout .running-footer {
     border-top: none;
   }
-  section.worksheet div.workspace,
-  section.worksheet div.workspace.squashed.tight,
-  section.handout div.workspace,
-  section.handout div.workspace.squashed.tight {
+  .printout div.workspace,
+  .printout div.workspace.squashed.tight {
     border: none;
     padding: 0;
     background: none !important;

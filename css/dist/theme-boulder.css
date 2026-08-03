@@ -1449,18 +1449,34 @@ iframe {
     margin: 0.75in 0.75in 0.75in 0.75in;
   }
 }
-.heading .print-links {
+.print-links {
   float: right;
   position: relative;
   z-index: 100;
   vertical-align: bottom;
 }
-.heading .print-links .print-link {
+.print-links .print-link {
   font-family: var(--font-body);
   padding: 0.1em 0.2em;
 }
-.heading .print-links .material-symbols-outlined {
+.print-links .material-symbols-outlined {
   margin-top: 5pt;
+}
+.project-like.standalone-printout > .print-links {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.project-like.standalone-printout > .print-links .material-symbols-outlined {
+  margin-top: 0;
+}
+.project-like.standalone-printout > .heading:first-child {
+  display: block;
+  width: fit-content;
+  max-width: calc(100% - 2.5em);
+}
+.project-like.standalone-printout > .heading:first-child::after {
+  content: none;
 }
 .pretext .searchwrapper {
   max-width: 900px;
