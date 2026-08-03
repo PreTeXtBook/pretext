@@ -1052,7 +1052,7 @@ async function loadPrintout(printableSectionID) {
 }
 
 // Function to redo solutions details to divs with summary as title
-function rewriteSolutions() {
+async function rewriteSolutions() {
     var born_hidden_knowls = document.querySelectorAll('.printout details');
     born_hidden_knowls.forEach(function(detail) {
         const summary = detail.querySelector('summary');
@@ -1069,6 +1069,9 @@ function rewriteSolutions() {
         div.appendChild(body);
         detail.parentNode.replaceChild(div, detail);
     });
+    if (typeof MathJax !== "undefined" && MathJax.typesetPromise) {
+        await MathJax.typesetPromise();
+    }
 }
 
 // Utility to convert various CSS length units to pixels
@@ -1119,7 +1122,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         }
 
         // Transform all solutions details elements to divs with the summary as a title
-        rewriteSolutions();
+        await rewriteSolutions();
 
         // Get the papersize from localStorage or set it based on user's geographic region.  This will always return a value (defaulting to 'letter' if all else fails).
         let paperSize = getPaperSize();

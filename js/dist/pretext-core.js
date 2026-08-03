@@ -40,6 +40,9 @@
         for (const bhk of bornHiddens) {
           const summary = bhk.querySelector(":scope > summary");
           const contents = bhk.querySelector(":scope > summary + *");
+          if (!summary || !contents) {
+            continue;
+          }
           new SlideRevealer(summary, contents, bhk);
         }
       }
@@ -1872,7 +1875,7 @@
     existingSections.forEach((sec) => ptxContent.removeChild(sec));
     ptxContent.appendChild(printableSection);
   }
-  function rewriteSolutions() {
+  async function rewriteSolutions() {
     var born_hidden_knowls = document.querySelectorAll(".printout details");
     born_hidden_knowls.forEach(function(detail) {
       const summary = detail.querySelector("summary");
@@ -1889,6 +1892,9 @@
       div.appendChild(body);
       detail.parentNode.replaceChild(div, detail);
     });
+    if (typeof MathJax !== "undefined" && MathJax.typesetPromise) {
+      await MathJax.typesetPromise();
+    }
   }
   function toPixels(value) {
     if (typeof value === "number") return value;
@@ -1926,7 +1932,7 @@
         bottom: toPixels(marginList[2] || "0.75in"),
         left: toPixels(marginList[3] || "0.75in")
       };
-      rewriteSolutions();
+      await rewriteSolutions();
       let paperSize = getPaperSize();
       if (paperSize) {
         const radio = document.querySelector(`input[name="papersize"][value="${paperSize}"]`);
