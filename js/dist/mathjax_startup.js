@@ -109,6 +109,12 @@ function startMathJax(opts) {
       }
     };
   }
+  mathJaxOpts["options"]["enableSpeech"] = true;
+  const sreLocales = ["en", "fr", "es", "de", "it"];
+  const primaryTag = (opts.lang || "").split("-")[0].toLowerCase();
+  if (sreLocales.includes(primaryTag)) {
+    mathJaxOpts["options"]["sre"] = { "locale": primaryTag };
+  }
   window.MathJax = mathJaxOpts;
   const runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);
   window.runestoneMathReady = runestoneMathReady;

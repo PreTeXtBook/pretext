@@ -1403,6 +1403,9 @@
       }
     }
   });
+  function getPrintout() {
+    return document.querySelector(".printout");
+  }
   function flattenParagraphsSections(printout) {
     const paragraphsSections = printout.querySelectorAll("section.paragraphs");
     paragraphsSections.forEach((section) => {
@@ -1430,6 +1433,12 @@
       new Promise((resolve) => setTimeout(resolve, timeoutMs))
     ]);
   }
+  function workspaceDivsIn(elem) {
+    if (elem.classList.contains("workspace")) {
+      return [elem];
+    }
+    return [...elem.querySelectorAll(".workspace")];
+  }
   function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll(".workspace");
     workspaces.forEach((ws) => {
@@ -1439,7 +1448,7 @@
   }
   function adjustPrintoutPages() {
     console.log("*** Adjusting printout pages.");
-    const printout = document.querySelector("section.worksheet, section.handout");
+    const printout = getPrintout();
     if (!printout) {
       console.warn("No printout found, exiting adjustPrintoutPages.");
       return;
@@ -1470,7 +1479,7 @@
     console.log("*** Creating printout pages with margins:", margins);
     const conservativeContentHeight = 1056 - (margins.top + margins.bottom);
     const conservativeContentWidth = 794 - (margins.left + margins.right);
-    const printout = document.querySelector("section.worksheet, section.handout");
+    const printout = getPrintout();
     if (!printout) {
       console.warn("No printout found, exiting createPrintoutPages.");
       return;
@@ -1508,7 +1517,7 @@
         continue;
       }
       let totalWorkspaceHeight = 0;
-      if (row.querySelector(".workspace")) {
+      if (workspaceDivsIn(row).length > 0) {
         totalWorkspaceHeight = getElemWorkspaceHeight(row);
       }
       blockList.push({ elem: row, height: blockHeight, workspaceHeight: totalWorkspaceHeight });
@@ -1539,7 +1548,7 @@
     }
   }
   function addHeadersAndFootersToPrintout() {
-    const printout = document.querySelector("section.worksheet, section.handout");
+    const printout = getPrintout();
     if (!printout) {
       console.warn("No printout found, exiting addHeadersAndFootersToPrintout.");
       return;
@@ -1688,7 +1697,7 @@
         }
       }
     }
-    const workspaces = elem.querySelectorAll(".workspace");
+    const workspaces = workspaceDivsIn(elem);
     let totalHeight = 0;
     workspaces.forEach((ws) => {
       const workspaceHeight = ws.offsetHeight;
@@ -1817,6 +1826,28 @@
     }
     return paperSize || "letter";
   }
+  function flattenKnowledPrintout(details) {
+    const content2 = details.querySelector(":scope > .knowl__content");
+    if (!content2) {
+      console.warn("Born-hidden printout has no knowl content; previewing as-is:", details);
+      return details;
+    }
+    const heading = details.querySelector(":scope > summary > .heading");
+    if (heading) {
+      content2.insertBefore(heading, content2.firstChild);
+    }
+    content2.classList.remove("knowl__content");
+    content2.id = details.id;
+    details.replaceWith(content2);
+    return content2;
+  }
+  document.addEventListener("click", (ev) => {
+    const link = ev.target.closest("a.print-link");
+    if (!link || !link.closest("summary")) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    window.location.assign(link.href);
+  });
   async function loadPrintout(printableSectionID) {
     const themeStylesheetLink = document.querySelector('link[rel="stylesheet"][href*="theme"]');
     const themeStylesheetHref = themeStylesheetLink ? themeStylesheetLink.getAttribute("href") : null;
@@ -1827,18 +1858,22 @@
         themeStylesheetLink.addEventListener("load", resolve, { once: true });
       });
     }
-    const printableSection = document.getElementById(printableSectionID);
+    let printableSection = document.getElementById(printableSectionID);
     if (!printableSection) {
-      console.error("No section found with ID:", printableSectionID);
+      console.error("No printable element found with ID:", printableSectionID);
       return;
     }
+    if (printableSection.tagName === "DETAILS") {
+      printableSection = flattenKnowledPrintout(printableSection);
+    }
+    printableSection.classList.add("printout");
     const ptxContent = document.querySelector(".ptx-content");
     const existingSections = ptxContent.querySelectorAll(":scope > section");
     existingSections.forEach((sec) => ptxContent.removeChild(sec));
     ptxContent.appendChild(printableSection);
   }
   function rewriteSolutions() {
-    var born_hidden_knowls = document.querySelectorAll(".worksheet details, .handout details");
+    var born_hidden_knowls = document.querySelectorAll(".printout details");
     born_hidden_knowls.forEach(function(detail) {
       const summary = detail.querySelector("summary");
       const content2 = detail.innerHTML.replace(summary.outerHTML, "");
@@ -1878,7 +1913,12 @@
     if (urlParams.has("printpreview")) {
       const printableSectionID = urlParams.get("printpreview");
       await loadPrintout(printableSectionID);
-      const marginList = document.querySelector("section.worksheet, section.handout").getAttribute("data-margins").split(" ");
+      const printout = getPrintout();
+      if (!printout) {
+        console.warn("Nothing to preview for printpreview=" + printableSectionID + "; leaving the page as it is.");
+        return;
+      }
+      const marginList = (printout.getAttribute("data-margins") || "").split(" ");
       const margins = {
         top: toPixels(marginList[0] || "0.75in"),
         // Default to 0.75in if not specified
@@ -1942,7 +1982,7 @@
           });
         }
       }
-      const printoutSection = document.querySelector("section.worksheet, section.handout");
+      const printoutSection = getPrintout();
       if (printoutSection) {
         flattenParagraphsSections(printoutSection);
       }
