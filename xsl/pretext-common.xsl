@@ -11902,6 +11902,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the document-wide style of cross-reference text is now a &quot;text&quot; attribute on an &quot;xrefs&quot; element within &quot;docinfo/defaults&quot;, replacing the &quot;cross-references&quot; element.  We will honor your intent, but please convert to the new form.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-31  a footnote within a "tabular" cell becomes a "tn" table note -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//tabular//fn&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-31'" />
+        <xsl:with-param name="message" select="'a footnote (&quot;fn&quot;) within a &quot;tabular&quot; cell is now a table note, the &quot;tn&quot; element, lettered and placed at the bottom of the table.  We will honor your intent, but please convert to &quot;tn&quot;.  Note that a table note is not part of the numbering of true footnotes, and is not a target for a cross-reference.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

@@ -6335,20 +6335,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>That was a Sage cell just now, which has nothing to do with tables.  But we needed someplace to test placement right after a division heading.  Carry on.</p>
 
-            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  Footnotes inside cells are tested here.</p>
+            <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.  A single table note (the <tag>tn</tag> element) is tested here.</p>
 
             <table>
                 <title>Some Colors</title>
                 <tabular>
                     <row>
                         <cell>Red</cell>
-                        <cell>Green<fn>Green can be a very sick looking color.</fn></cell>
+                        <cell>Green<tn>Green can be a very sick looking color.</tn></cell>
                         <cell>Yellow</cell>
                     </row>
                     <row>
                         <cell>Blue</cell>
                         <cell>White</cell>
                         <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Table notes get a thorough workout in the next table: one in a header cell, one in a cell spanning two columns, two in a single cell of two paragraphs (one note anchored at the end of each paragraph), and one anchored mid-text of an ordinary cell.  Letters accumulate in reading order, and begin again with each table.</p>
+
+            <table xml:id="table-note-gallery">
+                <title>Table Notes in Demanding Locations</title>
+                <tabular>
+                    <col width="40%"/>
+                    <col width="35%"/>
+                    <col width="25%"/>
+                    <row header="yes">
+                        <cell>Construction<tn>A header cell may carry a note.</tn></cell>
+                        <cell>Behavior</cell>
+                        <cell>Year</cell>
+                    </row>
+                    <row>
+                        <cell colspan="2"><p>A single cell of text long enough that it plainly runs across the boundary between the first and second columns.</p><tn>The mark trails the spanning content.</tn></cell>
+                        <cell>1971</cell>
+                    </row>
+                    <row>
+                        <cell>
+                            <p>A first paragraph, with a note anchored at its end.</p>
+                            <tn>Anchored after the first paragraph.</tn>
+                            <p>A second paragraph, with its own note.</p>
+                            <tn>Anchored after the second paragraph.</tn>
+                        </cell>
+                        <cell>A note<tn>Anchored mid-text, at the word <q>note</q>.</tn> amid running text</cell>
+                        <cell>2026</cell>
                     </row>
                 </tabular>
             </table>
@@ -14104,7 +14134,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <tabular width="auto">
                     <row header="yes">
-                        <cell>State<fn>Only from the West Coast.</fn></cell>
+                        <cell>State<tn>Only from the West Coast.</tn></cell>
                         <cell>Population</cell>
                         <cell>Area (sq. mi.)</cell>
                         <cell>Statehood (Year)</cell>
@@ -14123,7 +14153,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </row>
                     <row>
                         <cell>California</cell>
-                        <cell>39,512,223<fn>Wow! That is as big as many countries.</fn></cell>
+                        <cell>39,512,223<tn>Wow! That is as big as many countries.</tn></cell>
                         <cell>163,696</cell>
                         <cell>1850</cell>
                     </row>

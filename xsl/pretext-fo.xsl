@@ -2346,6 +2346,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="row[not(@header = 'yes') and not(@header = 'vertical')]"/>
         </fo:table-body>
     </fo:table>
+    <!-- Table notes ("tn") collect just below the table, lettered in -->
+    <!-- reading order, which is document order of the marks (Notes   -->
+    <!-- to tables: CMoS 18th ed., 3.77-3.81; specific notes at       -->
+    <!-- 3.80).  Disjoint from true footnote numbering.               -->
+    <xsl:for-each select=".//tn">
+        <fo:block font-size="80%" text-align="{$text-alignment}" text-align-last="start" space-before="0.25em">
+            <fo:inline baseline-shift="35%" font-size="70%" font-style="italic">
+                <xsl:apply-templates select="." mode="number"/>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- An estimated width, in points, for each of a tabular's columns, -->
@@ -2454,6 +2467,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="fn" mode="width-text"/>
+
+<!-- A table note's text sets below the table, so a cell is only -->
+<!-- as wide as its mark: one superscript letter, roughly one    -->
+<!-- character.                                                  -->
+<xsl:template match="tn" mode="width-text">
+    <xsl:text>a</xsl:text>
+</xsl:template>
 
 <!-- A cross-reference's displayed text is generated, never in    -->
 <!-- the source, so render it via the shared "xref-text" (driven  -->
@@ -3179,42 +3199,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures and Caption -->
 <!-- ################### -->
 
-<!-- The FIGURE-LIKE blocks (a captioned "figure"; and "table",   -->
-<!-- "listing", "list", each titled) wrap their contents and      -->
-<!-- finish with a caption: a body-aligned paragraph led by a     -->
-<!-- bold run-in heading (the type name and number), so a long    -->
-<!-- caption sets as ordinary prose, not centered ragged lines.   -->
-<!-- All share one counter.  The "caption" element is consumed    -->
-<!-- here, so it is killed in the default mode, with the rest     -->
-<!-- of the metadata.                                             -->
+<!-- The FIGURE-LIKE blocks: a "figure" wraps its contents and    -->
+<!-- finishes with its caption below, while the titled blocks     -->
+<!-- ("table", "listing", "list") lead with their title above,    -->
+<!-- as the other conversions do.  Either way the heading is a    -->
+<!-- body-aligned paragraph led by a bold run-in (the type name   -->
+<!-- and number), so a long caption or title sets as ordinary     -->
+<!-- prose, not centered ragged lines.  All share one counter.    -->
+<!-- The "caption" element is consumed here, so it is killed in   -->
+<!-- the default mode, with the rest of the metadata.             -->
 <xsl:template match="&FIGURE-LIKE;">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:if test="not(self::figure)">
+            <xsl:apply-templates select="." mode="figure-like-heading"/>
+        </xsl:if>
         <xsl:apply-templates select="*"/>
-        <fo:block text-align="{$text-alignment}" space-before="0.5em" keep-with-previous.within-page="always">
-            <fo:inline font-weight="bold">
-                <xsl:apply-templates select="." mode="type-name"/>
-                <xsl:variable name="the-number">
-                    <xsl:apply-templates select="." mode="number"/>
-                </xsl:variable>
-                <xsl:if test="not($the-number = '')">
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="$the-number"/>
-                </xsl:if>
-                <xsl:text>.</xsl:text>
-            </fo:inline>
-            <xsl:text> </xsl:text>
-            <xsl:choose>
-                <xsl:when test="self::figure">
-                    <xsl:apply-templates select="caption/node()"/>
-                </xsl:when>
-                <!-- "table", "listing", "list" are titled -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </fo:block>
+        <xsl:if test="self::figure">
+            <xsl:apply-templates select="." mode="figure-like-heading"/>
+        </xsl:if>
+    </fo:block>
+</xsl:template>
+
+<!-- The caption of a "figure" (set below, held to its content), or -->
+<!-- the title of a "table"/"listing"/"list" (set above, held to    -->
+<!-- its content).                                                  -->
+<xsl:template match="&FIGURE-LIKE;" mode="figure-like-heading">
+    <fo:block text-align="{$text-alignment}">
+        <xsl:choose>
+            <xsl:when test="self::figure">
+                <xsl:attribute name="space-before">0.5em</xsl:attribute>
+                <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="space-after">0.5em</xsl:attribute>
+                <xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
+        <fo:inline font-weight="bold">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="." mode="number"/>
+            </xsl:variable>
+            <xsl:if test="not($the-number = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$the-number"/>
+            </xsl:if>
+            <xsl:text>.</xsl:text>
+        </fo:inline>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+            <xsl:when test="self::figure">
+                <xsl:apply-templates select="caption/node()"/>
+            </xsl:when>
+            <!-- "table", "listing", "list" are titled -->
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="title-full"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </fo:block>
 </xsl:template>
 
@@ -3624,6 +3667,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text, and the body, marked again, collected at the bottom of -->
 <!-- the page above the separator rule defined in the entry       -->
 <!-- template.  The footnote number is the serial machinery's.    -->
+<!-- A table note ("tn") drops only its superscript letter mark at   -->
+<!-- the cell location; the note text collects below the table, in   -->
+<!-- the "tabular" template.  No footnote machinery is involved.     -->
+<xsl:template match="tabular//tn">
+    <fo:inline baseline-shift="35%" font-size="70%" font-style="italic">
+        <xsl:apply-templates select="." mode="number"/>
+    </fo:inline>
+</xsl:template>
+
 <xsl:template match="fn">
     <xsl:variable name="the-mark">
         <xsl:apply-templates select="." mode="serial-number"/>
