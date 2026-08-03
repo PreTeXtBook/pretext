@@ -7387,6 +7387,8 @@ Book (with parts), "section" at level 3
     <language name="basic"      active=""            listings="Basic"            prism="basic"/>
     <language name="c"          active="c"           listings="C"                prism="c"/>
     <language name="cpp"        active="cpp"         listings="C++"              prism="cpp"/>
+    <!-- using Python as a closest match for now in listings. -->
+    <language name="gdscript"   active="gdscript"    listings="Python"           prism="gdscript"/>
     <language name="go"         active=""            listings="C"                prism="go"/>
     <language name="java"       active="java"        listings="Java"             prism="java"/>
     <language name="javascript" active="javascript"  listings=""                 prism="javascript"/>
