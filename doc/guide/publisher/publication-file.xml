@@ -1110,7 +1110,7 @@
             </ul></p>
 
             <p>
-                When enabled, the read-aloud functionality will use the Web Speech API to read aloud the text content of the page. The user can control the playback using the provided controls, as well as options to adjust the reading speed and voice selection (if supported by the browser), whether to expand and read knowls when it comes to them, and whether to continue directly to the next page when it reaches the end of the content.
+                When enabled, the read-aloud functionality will use the Web Speech API to read aloud the text content of the page. The user can control the playback using the provided controls, as well as options to adjust the reading speed and voice selection (if supported by the browser), whether to expand and read knowls when it comes to them, and whether to continue directly to the next page when it reaches the end of the content.  See <xref ref="online-html-read-aloud"/> for more information.
             </p>
         </subsection>
     </section>
