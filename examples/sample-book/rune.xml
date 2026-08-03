@@ -1267,6 +1267,15 @@ TEST_CASE( "Test the add function" ) {
             </code>
         </program>
 
+        <!-- A text "file" with no @user-interaction stays hidden from -->
+        <!-- the reader (the default); @format may be omitted for a    -->
+        <!-- text file inserted with a "pre" child, taken to be "pre". -->
+        <file label="numbers-hidden" filename="numbers-hidden.txt">
+            <pre>
+10 20 30
+            </pre>
+        </file>
+
         <computation>
             <title>Golden Gate Bridge Image processing</title>
 
