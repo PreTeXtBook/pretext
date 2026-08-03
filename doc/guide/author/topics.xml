@@ -3801,6 +3801,7 @@
                     <li><c>basic</c></li>
                     <li><c>c</c></li>
                     <li><c>cpp</c></li>
+                    <li><c>gdscript</c></li>
                     <li><c>go</c></li>
                     <li><c>java</c></li>
                     <li><c>javascript</c></li>
@@ -3956,6 +3957,7 @@
                                 <li><c>python</c> supports <c>unittest</c></li>
                                 <li><c>java</c> supports <c>junit</c></li>
                                 <li><c>c</c> and <c>cpp</c> support <c>doctest</c> (which tends to build and run significantly faster) and <c>catch</c></li>
+                                <li><c>gdscript</c> utilizes the <c>tester</c> code from GDPractice. This can either test code directly or use a <c>pck</c> to support side by side dynamic testing with a reference program.</li>
                             </ul>
                         </p>
                     </li>
@@ -4036,7 +4038,7 @@
                     <li>
                         <title>hidecode</title>
                         <p>Set to <c>yes</c> to initially hide the code.     When code is hidden, the 'Run' button is also disabled. To run the code, a user either presses 'Show Code', then 'Run'.</p>
-                        <p>You might use this if you want to put an ActiveCode block in the page in order to include 
+                        <p>You might use this if you want to put an ActiveCode block in the page in order to include
                             it in another ActiveCode block, but you don't need or want students to see it right away. Or to hide the code of an ActiveCode with <attr>autorun</attr> where you initially want to focus on the output instead of the program.
                         </p>
                     </li>
@@ -4070,6 +4072,12 @@
                     <li>
                         <title>timelimit</title>
                         <p>A maximum time allowed, in milliseconds, for a program to compile and run. If not provided, the default is <c>25000</c> (25 seconds). A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
+                    </li>
+                    <li> <title>pck</title>
+                        <p>The directory relative to the source directory where the GDScript package files are for a <c>gdscript</c> ActiveCode program. Typically, this is in a subdirectory of a directory called <c>gdscript</c></p>
+                    </li>
+                    <li> <title>scene</title>
+                        <p>The resource location of the scene in the practices directory that the student's code will attach to. Typically this has the form <c>res://practices/_problem_name_/_scene_name_.tscn</c></p>
                     </li>
                 </dl>
             </p>
@@ -4164,6 +4172,12 @@
                         <cell>AC + IO</cell>
                     </row>
                     <row>
+                        <cell>GDScript</cell>
+                        <cell><c>gdscript</c></cell>
+                        <cell>AC + UT</cell>
+                        <cell>AC + UT</cell>
+                    </row>
+                    <row>
                         <cell>Java</cell>
                         <cell><c>java</c></cell>
                         <cell>CL</cell>
@@ -4217,6 +4231,58 @@
                     </row>
                 </tabular>
             </table>
+        </subsection>
+
+        <subsection xml:id="gdscript-nuances">
+            <title>GDScript Nuances</title>
+            <paragraphs>
+                <title>Active Code Setup</title>
+                <p>GDScript runs in the Godot game engine. In order for that to work in an
+                    html and/or runestone pretext book a Web Assembly version of the Godot
+                    engine is run in the browser with any book using gdscript ActiveCode. In
+                    addition, there are extra parameters that you need to be aware of if you
+                    want to utilize prebuilt scenes in any ActiveCode.
+                </p>
+                <p>The <url href="https://github.com/DavidCooperWCU/GDPractice">GDPractice addon</url>,
+                    originally created by GDQuest has
+                    been extended to stage files for runestone. Once you make a practice
+                    exercise using GDPractice, you can stage it to a directory in your pretext
+                    source, and then it will be ready to be added to your book.
+                </p>
+                <p>Adding the practice exercise to your book involves making an ActiveCode program
+                    with the <c>@language</c> as <c>gdscript</c>, the <c>@pck</c> should be
+                    the directory that you staged your practice exercise to, and the <c>@scene</c>
+                    should be the resource path to your practice scene, such as
+                    <c>res://practices/L1.P1.example/practice.tscn</c>. Then the
+                    <c>code</c> block should have the practice code that is in
+                    the <c>.gd</c> file that is associated with the practice scene.
+                    The <c>tests</c> block should have the code that is in the <c>test.gd</c>
+                    file that is in the <c>practice_solutions</c> directory of
+                    your exercise. If you want to display the graphical reference solution
+                    next to the student solution graphically, then you'll need to add the
+                    expression <c>side_by_side = true</c> to the <c>_init</c> function in
+                    the <c>tests</c> block.
+                </p>
+            </paragraphs>
+            <paragraphs>
+                <title>Publishing Variables</title>
+                <p>The current version of the Web Assembly Godot Engine is
+                    4.6.3. However, there is a likelihood that newer
+                    versions of the engine will be used in the future. In
+                    addition the Engine is currently hosted on runestone.academy
+                    servers, and for those who intend to host their book
+                    in a different site there is the option to use an engine
+                    that is hosted elsewhere. To enable changing the version
+                    and changing the version number there are two <c>String Parameters</c>
+                    that are used for this purpose <c>godot.version</c> and <c>godot.shell</c>.
+                </p>
+                <p><c>godot.version</c> is used both to determine what version of Godot to use
+                    locally to package the exercises and what version the Web Assembly Engine is.
+                    <c>godot.shell</c> is the web address of the Web Assembly Engine without
+                    the version number.
+                </p>
+            </paragraphs>
+
         </subsection>
     </section>
 
