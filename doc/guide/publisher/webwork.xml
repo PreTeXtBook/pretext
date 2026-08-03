@@ -320,9 +320,8 @@
         to install it.)
       </p>
       <p>
-        Processing <webwork/> problems is best accomplished if you are using directory management.
-        With a publication file, declare the external and generated directories as describe in
-        <xref ref="processing-directory-management"/>. Then use the <c>pretext</c> script to extract
+        Directory management (<xref ref="processing-directory-management"/>) places the results
+        of processing <webwork/> problems. Use the <c>pretext</c> script to extract
         <pretext/> content from the <webwork/> server. It will be placed in a <c>webwork</c>
         subfolder of your generated folder. For example:
       </p>
@@ -363,7 +362,7 @@
       <title>HTML output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as
+        We assume you have a <webwork/> representations file as
         above.  Build the HTML with <c>pretext build TARGET</c> where <c>TARGET</c> is the name of
         a target that has <c>format="html"</c>. You can also use <c>pretext/pretext</c> to build
         HTML. For example:
@@ -407,7 +406,7 @@
       <title><latex/> output</title>
 
       <p>
-        We assume you are using managed directories, and have <webwork/> representations file as
+        We assume you have a <webwork/> representations file as
         above. Then build as normal with the CLI. Or you may use <c>pretext/pretext</c> to build a
         <latex/> PDF. For example:
       </p>

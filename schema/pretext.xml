@@ -3670,7 +3670,7 @@
             </code>
         </fragment>
 
-        <p>The directories an author curates run with the source, as paths relative to the location of the main source file.  The <attr>external</attr> attribute names the directory of externally-produced files an author provides (images, and other assets); swap that directory and the document's content changes, so it is a fact of the source.  The <attr>data</attr> attribute names the directory of data files consumed when building certain images and programs.  The <em>destination</em> for files <pretext/> generates is a publisher convenience, and remains a publication file entry.</p>
+        <p>The directories an author curates run with the source, as paths relative to the location of the main source file.  The <attr>external</attr> attribute names the directory of externally-produced files an author provides (images, and other assets); swap that directory and the document's content changes, so it is a property of the source.  The <attr>data</attr> attribute names the directory of data files consumed when building certain images and programs.  The <em>destination</em> for files <pretext/> generates is a publisher convenience, and remains a publication file entry.</p>
 
         <fragment xml:id="directories">
             <title>Source directories</title>
@@ -3728,7 +3728,7 @@
             </code>
         </fragment>
 
-        <p>DoenetML content is authored against a particular version of the DoenetML viewer, so the version is a fact of the source.  It is recorded here and consulted when the viewer is loaded.</p>
+        <p>DoenetML content is authored against a particular version of the DoenetML viewer, so the version is a property of the source.  It is recorded here and consulted when the viewer is loaded.</p>
 
         <fragment xml:id="doenetml">
             <title>DoenetML version</title>

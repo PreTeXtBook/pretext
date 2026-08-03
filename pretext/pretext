@@ -142,29 +142,25 @@ def get_destination_directory(directory, xml_source, pub_file, component):
         "references" : "references",
         "webwork": "webwork",
     }
-    # if specified, check, sanitize, return absolute path
+    # if specified, sanitize, create when missing (an output
+    # destination is machine-owned), return absolute path
     if directory:
-        return ptx.verify_input_directory(directory)
-    # explore a default provided by the  managed directories
-    # scheme, as specified in the publication file.  "generated"
-    # will be sanitized as an absolute path, so we run with it
+        os.makedirs(directory, exist_ok=True)
+        return os.path.abspath(directory)
+    # explore the default provided by the managed directories
+    # scheme: "generated" is always an absolute path, declared in
+    # the publication file or the default beside the source
     generated, _ = ptx.get_managed_directories(xml_source, pub_file)
-    # generated is "None" means publisher has not
-    #   opted-in for managed directories
     # "missing" key means we are not creating a component
     #   with pieces distributed to directories
-    if generated and (component in component_dirs):
-        # generally the component directory already exists (so the
-        # error does not concern us), but we create the directory the
-        # first time it is filled as part of a *managed* scheme
+    if component in component_dirs:
+        # the generated directory is machine-owned, so it (and the
+        # component subdirectory) are created the first time filled
         subdirectory = os.path.join(generated, component_dirs[component])
-        try:
-            os.mkdir(subdirectory)
-        except FileExistsError:
-            pass
+        os.makedirs(subdirectory, exist_ok=True)
         # good - we've formed it and ensured it exists - ship it and finish
         return subdirectory
-    # else, absent managed directories, default to current working directory
+    # else, no component destination applies: current working directory
     return os.getcwd()
 
 

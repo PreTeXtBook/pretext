@@ -108,11 +108,13 @@
             Directories =
                 element directories {
                     # deprecated (2026-07-30): the external directory is a
-                    # fact of the source and is declared as
+                    # property of the source and is declared as
                     # "directories/@external" within "docinfo"; this entry
                     # is honored while the "docinfo" is silent
                     attribute external { text }?,
-                    attribute generated { text }
+                    # when absent, a directory named "generated" next to
+                    # the main source file is assumed
+                    attribute generated { text }?
                 }
 
             Version =

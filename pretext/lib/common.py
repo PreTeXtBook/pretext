@@ -686,11 +686,21 @@ def get_managed_directories(xml_source, pub_file):
     # N.B. manage attributes carefully to distinguish
     # absent (None) versus empty string value ('')
 
-    # The external directory is a fact of the source, declared as
+    # The external directory is a property of the source, declared as
     # "directories/@external" within "docinfo" (2026-07-30).  A publisher
     # file "source/directories/@external" is deprecated, but honored
     # while the "docinfo" is silent.  The generated directory remains a
     # publisher file entry.
+    #
+    # Ownership governs verification.  The external directory is
+    # author-owned: when declared, it must exist (a missing directory is
+    # almost certainly a typo), and when undeclared the project simply
+    # has no external assets (None).  The generated directory is
+    # machine-owned: its contents are disposable and reproducible, so a
+    # missing directory is never an error, and an undeclared location
+    # falls back to the default "generated", beside the source.  A
+    # manager (such as the CLI) may therefore always create the
+    # generated directory, and should never create the external one.
     gen_attr = "generated"
     ext_attr = "external"
 
@@ -725,6 +735,13 @@ def get_managed_directories(xml_source, pub_file):
             '"source/directories/@{}" entry of the publisher file does not',
             "exist. Check the spelling, create the necessary directory, or entirely",
             'remove the whole "source/directories" element of the publisher file.'
+        ]
+    )
+    gen_missing_dir_note = " ".join(
+        [
+            'the generated directory "{}" does not exist yet.  Its contents',
+            "are machine-made, so this is routine: it will appear when assets",
+            "are first generated, and until then there is nothing to collect.",
         ]
     )
 
@@ -766,10 +783,10 @@ def get_managed_directories(xml_source, pub_file):
                     raise ValueError(pub_abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
-                try:
-                    generated = verify_input_directory(abs_path)
-                except:
-                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, gen_attr))
+                # machine-owned: a missing directory is routine, never fatal
+                generated = os.path.abspath(abs_path)
+                if not os.path.isdir(generated):
+                    log.debug(gen_missing_dir_note.format(generated))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 if external is not None:
@@ -784,7 +801,7 @@ def get_managed_directories(xml_source, pub_file):
                 else:
                     log.warning(" ".join(
                         [
-                            "(2026-07-30) the external directory is a fact of the",
+                            "(2026-07-30) the external directory is a property of your",
                             "source, and is now declared with a",
                             '"directories/@external" attribute within "docinfo".',
                             'The publisher file entry "source/directories/@external"',
@@ -800,6 +817,14 @@ def get_managed_directories(xml_source, pub_file):
                         external = verify_input_directory(abs_path)
                     except:
                         raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, ext_attr))
+
+    # An undeclared generated directory falls back to the default
+    # location, beside the source; machine-owned, so its absence
+    # is routine.
+    if generated is None:
+        generated = os.path.abspath(os.path.join(source_dir, "generated"))
+        if not os.path.isdir(generated):
+            log.debug(gen_missing_dir_note.format(generated))
 
     # pair of discovered absolute paths
     return (generated, external)
@@ -889,15 +914,18 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, d
     # and generated_abs (unless set to None) into a build directory.  Since the
     # build directory is fresh for each build, these directories should not exist
     # in advance and the  shutil.copytree()  function should raise an error.
-    if external_abs is not None:
+    # A source directory that does not exist yet is skipped: the generated
+    # directory is machine-owned and routinely absent before any assets
+    # have been generated.
+    if external_abs is not None and os.path.isdir(external_abs):
         external_dir = os.path.join(build_dir, "external")
         shutil.copytree(external_abs, external_dir)
 
-    if generated_abs is not None:
+    if generated_abs is not None and os.path.isdir(generated_abs):
         generated_dir = os.path.join(build_dir, "generated")
         shutil.copytree(generated_abs, generated_dir)
 
-    if data_abs is not None:
+    if data_abs is not None and os.path.isdir(data_abs):
         data_dir = os.path.join(build_dir, "data")
         shutil.copytree(data_abs, data_dir)
 

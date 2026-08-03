@@ -7324,9 +7324,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- need image filename in two different scenarios -->
     <xsl:variable name="image-file-name">
         <xsl:value-of select="$generated-directory"/>
-        <xsl:if test="$b-managed-directories">
-            <xsl:text>asymptote/</xsl:text>
-        </xsl:if>
+        <xsl:text>asymptote/</xsl:text>
         <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
         <xsl:text>.pdf</xsl:text>
     </xsl:variable>
@@ -7335,9 +7333,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="image-html-url">
             <xsl:value-of select="$baseurl"/>
             <xsl:value-of select="$generated-directory"/>
-            <xsl:if test="$b-managed-directories">
-                <xsl:text>asymptote/</xsl:text>
-            </xsl:if>
+            <xsl:text>asymptote/</xsl:text>
             <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
             <xsl:text>.html</xsl:text>
         </xsl:variable>
@@ -7368,9 +7364,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$generated-directory"/>
-    <xsl:if test="$b-managed-directories">
-        <xsl:text>sageplot/</xsl:text>
-    </xsl:if>
+    <xsl:text>sageplot/</xsl:text>
     <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
     <xsl:choose>
         <xsl:when test="not(sageplot/@variant) or (sageplot/@variant = '2d')">
@@ -7393,9 +7387,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$generated-directory"/>
-    <xsl:if test="$b-managed-directories">
-        <xsl:text>mermaid/</xsl:text>
-    </xsl:if>
+    <xsl:text>mermaid/</xsl:text>
     <xsl:apply-templates select="mermaid" mode="image-source-basename"/>
     <xsl:text>.png</xsl:text>
     <xsl:text>}%&#xa;</xsl:text>
@@ -7406,9 +7398,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$generated-directory"/>
-    <xsl:if test="$b-managed-directories">
-        <xsl:text>prefigure/</xsl:text>
-    </xsl:if>
+    <xsl:text>prefigure/</xsl:text>
     <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
     <xsl:text>.pdf</xsl:text>
     <xsl:text>}%&#xa;</xsl:text>
