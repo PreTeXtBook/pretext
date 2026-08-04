@@ -1403,11 +1403,6 @@
 </xsl:template>
 
 <!-- Footnotes -->
-<!-- First disable the "footnote" popping routine used to -->
-<!-- move the content out of HTML structures where it is  -->
-<!-- not welcome (e.g a "p" inside a "p").                -->
-<xsl:template match="*" mode="pop-footnote-text"/>
-
 <!-- Drop a marker as a superscript -->
 <xsl:template match="fn">
     <xsl:variable name="hid">

@@ -1862,6 +1862,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </li>
             </ul></p>
 
+            <example xml:id="example-nested-box-footnotes">
+                <title>Footnotes in Nested Boxes</title>
+
+                <p>An <tag>example</tag> is implemented as one box in print, and this one<fn>Eighth test footnote, one box deep</fn> holds two more kinds of boxes, each holding a footnote of its own.</p>
+
+                <aside>
+                    <title>A Box within a Box</title>
+                    <p>An <tag>aside</tag> is a second box, so this footnote<fn>Ninth test footnote, in an aside two boxes deep</fn> lives two boxes deep.</p>
+                </aside>
+
+                <p>A description list makes a third kind of box.<dl>
+                    <li>
+                        <title>Depth</title>
+                        <p>Two boxes down once more,<fn>Tenth test footnote, in a description list item two boxes deep</fn> now in a list item.</p>
+                    </li>
+                </dl></p>
+            </example>
+
             <!-- This is not implemented
             <subsection>
                 <title>Automatically Defining Sage Code</title>
