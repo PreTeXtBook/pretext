@@ -240,6 +240,161 @@ body.standalone-page .ptx-page {
 :root.dark-mode {
   --dialog-shadow-color: var(--primary-color-black-80);
 }
+.ptx-read-aloud-player {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+.ptx-read-aloud-player[hidden] {
+  display: none;
+}
+.ptx-read-aloud-player .ptx-read-aloud-icon-play {
+  display: contents;
+}
+.ptx-read-aloud-player .ptx-read-aloud-icon-pause {
+  display: none;
+}
+.ptx-read-aloud-player[data-state=speaking] .ptx-read-aloud-icon-play {
+  display: none;
+}
+.ptx-read-aloud-player[data-state=speaking] .ptx-read-aloud-icon-pause {
+  display: contents;
+}
+.ptx-read-aloud-player[data-state=continue-ready] .ptx-read-aloud-toggle {
+  animation: ptx-read-aloud-pulse 1.5s ease-in-out infinite;
+}
+@keyframes ptx-read-aloud-pulse {
+  50% {
+    box-shadow: inset 0 0 0 3px rgba(100, 150, 255, 0.6);
+  }
+}
+.ptx-read-aloud-continue {
+  min-width: 0;
+}
+.ptx-read-aloud-player .ptx-read-aloud-continue[hidden] {
+  display: none;
+}
+@media screen and (min-width: 800px) {
+  .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) .ptx-navbar-contents {
+    min-width: 0;
+  }
+  .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) .ptx-navbar-contents > *:not(.treebuttons, .nav-runestone-controls) {
+    flex-shrink: 0;
+  }
+  .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) .treebuttons {
+    min-width: 0;
+  }
+  .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) .treebuttons > * {
+    min-width: 35px;
+  }
+}
+@media screen and (min-width: 800px) and (max-width: 900px) {
+  .ptx-navbar:has(.ptx-read-aloud-player:not([hidden])) .treebuttons .name {
+    display: none;
+  }
+}
+@media screen and (max-width: 800px) {
+  .ptx-navbar .ptx-read-aloud-player {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: 36px;
+    justify-content: center;
+    background: var(--navbar-background);
+    border-top: 1px solid var(--page-border-color);
+  }
+  body.pretext:has(.ptx-read-aloud-player:not([hidden])) {
+    padding-bottom: calc(2 * 36px);
+  }
+}
+.ptx-navbar .ptx-read-aloud-settings-popup {
+  padding: 10px;
+  margin-top: 36px;
+  min-width: 16rem;
+  max-width: 600px;
+  margin-bottom: 0.5em;
+  width: 90%;
+  border: 1px solid var(--dialog-border-color);
+  border-radius: 0;
+  background: var(--dialog-background);
+  box-shadow: 0 0 5px var(--dialog-shadow-color);
+  color: var(--dialog-text-color);
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-close-button {
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+  color: var(--button-text-color);
+  background-color: var(--button-background);
+  border-width: 0;
+  border-color: var(--button-border-color);
+  border-style: solid;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-close-button:hover:not(.disabled) {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-close-button:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: -2px;
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-close-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-close-button.hidden {
+  display: none;
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-close-button.open {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .ptx-dialog-topbar {
+  min-height: 15px;
+  user-select: none;
+}
+.ptx-navbar .ptx-read-aloud-settings-popup .heading:is(h2) {
+  font-size: 1.5em;
+  margin: 0.5em 0;
+}
+.ptx-navbar .ptx-read-aloud-settings-popup::backdrop {
+  background: var(--dialog-background);
+  opacity: 0.6;
+}
+@media screen and (max-width: 800px) {
+  .ptx-navbar .ptx-read-aloud-settings-popup {
+    margin-top: unset;
+    margin-bottom: 0;
+    top: auto;
+    bottom: 36px;
+  }
+}
+::highlight(ptx-read-aloud) {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.45));
+}
+:root.dark-mode ::highlight(ptx-read-aloud) {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.28));
+}
+.ptx-read-aloud-current-math,
+.ptx-read-aloud-current-block {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.45));
+  border-radius: 3px;
+}
+:root.dark-mode .ptx-read-aloud-current-math,
+:root.dark-mode .ptx-read-aloud-current-block {
+  background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.28));
+}
 .ptx-navbar {
   position: sticky;
   top: 0;
@@ -511,7 +666,7 @@ body.standalone-page .ptx-page {
 .ptx-navbar :is(.index-button) .icon {
   display: none;
 }
-.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button) .name {
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button, .ptx-read-aloud-button) .name {
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(50%);
   height: 1px;
