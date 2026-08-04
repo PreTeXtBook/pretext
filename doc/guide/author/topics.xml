@@ -4242,16 +4242,16 @@
             <paragraphs>
                 <title>Active Code Setup</title>
                 <p>GDScript runs in the Godot game engine. In order for that to work in an
-                    html and/or runestone pretext book a Web Assembly version of the Godot
-                    engine is run in the browser with any book using gdscript ActiveCode. In
+                    <init>HTML</init> and/or Runestone <pretext/> book a Web Assembly version of the
+                    Godot engine is run in the browser with any book using GDScript ActiveCode. In
                     addition, there are extra parameters that you need to be aware of if you
                     want to utilize prebuilt scenes in any ActiveCode.
                 </p>
                 <p>The <url href="https://github.com/DavidCooperWCU/GDPractice">GDPractice addon</url>,
                     originally created by GDQuest has
-                    been extended to stage files for runestone. Once you make a practice
-                    exercise using GDPractice, you can stage it to a directory in your pretext
-                    source, and then it will be ready to be added to your book.
+                    been extended to stage files for Runestone. Once you make a practice
+                    exercise using GDPractice, you can stage it to a directory in your
+                    <pretext/> source, and then it will be ready to be added to your book.
                 </p>
                 <p>Adding the practice exercise to your book involves making an ActiveCode program
                     with the <c>@language</c> as <c>gdscript</c>, the <c>@pck</c> should be
@@ -4273,12 +4273,12 @@
                 <p>The current version of the Web Assembly Godot Engine is
                     4.6.3. However, there is a likelihood that newer
                     versions of the engine will be used in the future. In
-                    addition the Engine is currently hosted on runestone.academy
+                    addition the engine is currently hosted on runestone.academy
                     servers, and for those who intend to host their book
-                    in a different site there is the option to use an engine
-                    that is hosted elsewhere. To enable changing the version
-                    and changing the version number there are two <c>String Parameters</c>
-                    that are used for this purpose <c>godot.version</c> and <c>godot.shell</c>.
+                    on a different site there is the option to use an engine
+                    that is hosted elsewhere. To allow changing the version
+                    and the host, there are two string parameters for this purpose:
+                    <c>godot.version</c> and <c>godot.shell</c>.
                 </p>
                 <p><c>godot.version</c> is used both to determine what version of Godot to use
                     locally to package the exercises and what version the Web Assembly Engine is.
