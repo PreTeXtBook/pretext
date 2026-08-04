@@ -616,6 +616,25 @@ function createPrintoutPages(margins) {
     }
 }
 
+function unwrapOnepages() {
+const printout = document.querySelector('section.worksheet, section.handout');
+if (!printout) return;
+const pages = [...printout.querySelectorAll(':scope > .onepage')];
+pages.forEach(page => {
+page.querySelectorAll(':scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer').forEach(hf => hf.remove());
+while (page.firstChild) {
+printout.insertBefore(page.firstChild, page);
+}
+printout.removeChild(page);
+});
+}
+
+function resetPrintoutPagination(margins) {
+unwrapOnepages();
+createPrintoutPages(margins);
+addHeadersAndFootersToPrintout();
+}
+
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
 function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
@@ -1185,7 +1204,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         } else {
                             elem.classList.remove("hidden");
                         }
-                        //adjustPrintoutPages();
+                        resetPrintoutPagination(margins);
                         adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                     });
                 });
