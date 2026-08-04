@@ -19,9 +19,9 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates program[@pck] elements and -->
-<!-- prepares a file necessary to zip a -->
-<!-- pck for each activcode with gdscript   -->
+<!-- This stylesheet locates "program[@pck]" elements and prepares -->
+<!-- a file necessary to zip a "pck" for each activecode with      -->
+<!-- GDScript.                                                     -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -42,19 +42,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:import href="./extract-identity.xsl" />
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- PreTeXt override: Force dynamic exercise processing so that the   -->
-<!-- "visible-id" templates calculate IDs matching the interactive web -->
-<!-- target rather than a static print target.                        -->
+<!-- PreTeXt override: force dynamic exercise processing so that the    -->
+<!-- "unique-id" template computes identifiers matching the interactive -->
+<!-- web target rather than a static print target.                      -->
 <xsl:variable name="exercise-style" select="'dynamic'"/>
 
-
-<!-- The default godot version is 4.6.3, this parameter allows         -->
-<!-- publishers to use a different version as newer versions become    -->
-<!-- available.                                                        -->
-<xsl:param name="godot.version" select="'4.6.3'"/>
-
-
-<!-- Visible id, pck, scene name, and version as a comma-separated quadruple per line -->
+<!-- Unique id, pck, scene name, and version as a comma-separated quadruple per line -->
 <xsl:template match="program[@pck and @interactive='activecode']" mode="extraction">
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>,</xsl:text>

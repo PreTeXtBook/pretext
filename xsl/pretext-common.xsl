@@ -81,6 +81,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
 
+<!-- The Godot engine version used for GDScript.  Read both by the   -->
+<!-- conversion to Runestone, for the Web Assembly shell, and by the -->
+<!-- "pck" extraction, which runs as a separate command.  A default  -->
+<!-- in each would let the two silently disagree.                    -->
+<xsl:param name="godot.version" select="'4.6.3'"/>
+
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->

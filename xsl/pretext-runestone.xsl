@@ -59,10 +59,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="rs-css" select="''"/>
 <xsl:param name="rs-version" select="''"/>
 
-<!-- The default godot version is 4.6.3, this parameter allows         -->
-<!-- publishers to use a different version as newer versions become    -->
-<!-- available.                                                        -->
-<xsl:param name="godot.version" select="'4.6.3'"/>
 <xsl:param name="godot.shell" select="'https://runestone.academy/cdn/runestone/godot-shell-'"/>
 
 <!-- The Runestone Services version actually in use is -->
@@ -2603,7 +2599,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <!-- add subdirectory -->
                 <xsl:text>gdscript/</xsl:text>
-                <!-- add template-->
+                <!-- add template -->
                 <xsl:apply-templates select="." mode="unique-id" />
                 <xsl:text>.zip</xsl:text>
             </xsl:attribute>
