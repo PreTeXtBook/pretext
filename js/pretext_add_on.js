@@ -616,23 +616,45 @@ function createPrintoutPages(margins) {
     }
 }
 
-function unwrapOnepages() {
-const printout = document.querySelector('section.worksheet, section.handout');
-if (!printout) return;
-const pages = [...printout.querySelectorAll(':scope > .onepage')];
-pages.forEach(page => {
-page.querySelectorAll(':scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer').forEach(hf => hf.remove());
-while (page.firstChild) {
-printout.insertBefore(page.firstChild, page);
+function pageOverflows() {
+    const pages = document.querySelectorAll('.onepage');
+    for (const page of pages) {
+        const pRect = page.getBoundingClientRect();
+        for (const child of page.children) {
+            const r = child.getBoundingClientRect();
+            if (r.bottom > pRect.bottom + 1) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
-printout.removeChild(page);
-});
+
+function adjustWorkspaceOrRepaginate({paperSize, margins}) {
+    adjustWorkspaceToFitPage({paperSize, margins});
+    if (pageOverflows()) {
+        resetPrintoutPagination(margins);
+        adjustWorkspaceToFitPage({paperSize, margins});
+    }
+}
+
+function unwrapOnepages() {
+    const printout = document.querySelector('section.worksheet, section.handout');
+    if (!printout) return;
+    const pages = [...printout.querySelectorAll(':scope > .onepage')];
+    pages.forEach(page => {
+        page.querySelectorAll(':scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer').forEach(hf => hf.remove());
+        while (page.firstChild) {
+            printout.insertBefore(page.firstChild, page);
+        }
+        printout.removeChild(page);
+    });
 }
 
 function resetPrintoutPagination(margins) {
-unwrapOnepages();
-createPrintoutPages(margins);
-addHeadersAndFootersToPrintout();
+    unwrapOnepages();
+    createPrintoutPages(margins);
+    addHeadersAndFootersToPrintout();
 }
 
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
@@ -1204,9 +1226,17 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         } else {
                             elem.classList.remove("hidden");
                         }
+                    });
+                    // Recompute layout once, after all elements of this type have been toggled
+                    if (checkbox.checked) {
+                        // Hiding: content only shrinks, so always fully repaginate for a compact layout.
                         resetPrintoutPagination(margins);
                         adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-                    });
+                    } else {
+                        // Revealing: try to absorb the extra height into existing workspace first;
+                        // only repaginate if a page still overflows even with workspace at zero.
+                        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
+                    }
                 });
             }
         }
