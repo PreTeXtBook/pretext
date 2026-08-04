@@ -10,11 +10,16 @@ function addKnowls(target) {
   for (const xref of xrefs) {
     LinkKnowl.initializeXrefKnowl(xref);
   }
-
+ 
   const bornHiddens = target.querySelectorAll(".born-hidden-knowl");
   for (const bhk of bornHiddens) {
     const summary = bhk.querySelector(":scope > summary");
     const contents = bhk.querySelector(":scope > summary + *");
+    if (!summary || !contents) {
+      // Skip elements that carry the class but aren't an actual
+      // <details>/<summary> knowl (e.g. a print-layout clone).
+      continue;
+    }
     new SlideRevealer(summary, contents, bhk);
   }
 }
