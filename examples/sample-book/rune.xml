@@ -2856,6 +2856,34 @@ TEST_CASE( "Test the add function" ) {
                 ]]>
             </tests>
         </program>
+
+        <!-- A compiled Java archive, stored as an external binary source,  -->
+        <!-- made available to a server-side (Jobe) Java program via        -->
+        <!-- @compile-also.  The source is examples/sample-book/ext/datafiles/ -->
+        <!-- Helper.java; PreTeXt stores a base64 representation in the     -->
+        <!-- generated "gen/datafile/" directory.                           -->
+        <!--                                                               -->
+        <!-- @compile-also both delivers the file (it is folded into the    -->
+        <!-- program's add-files) and marks it as part of the build.  On a   -->
+        <!-- Jobe server this puts the jar on the javac/java classpath      -->
+        <!-- (-cp) so the compiled classes it holds are visible to the      -->
+        <!-- program.  On other languages the meaning of "add to            -->
+        <!-- compilation" differs: text source files are compiled           -->
+        <!-- together, C/C++ object/archive files are placed on the link    -->
+        <!-- line, and interpreted languages just read the delivered file   -->
+        <!-- from the working directory.                                    -->
+        <file label="helper-jar" xml:id="helper-jar" filename="helper.jar" format="binary" source="datafiles/helper.jar"/>
+
+        <program label="java-helper-square" interactive="activecode" language="java" compile-also="helper-jar">
+            <code>
+            public class Main {
+                public static void main(String[] args) {
+                    System.out.println(Helper.square(5));
+                    System.out.println(Helper.square(-4));
+                }
+            }
+            </code>
+        </program>
     </section>
 
     <section xml:id="videos-in-runestone">
