@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://practices/L2.P9.visual_2d_input_motion/practice.gd" id="1_edxaw"]
+
+[node name="Visual2DInputMotion" type="Node2D" unique_id=2142483323]
+script = ExtResource("1_edxaw")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1691221339]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
