@@ -2593,10 +2593,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Optional: per-exercise pck directory in the external directory -->
         <xsl:if test="@pck">
             <xsl:attribute name="data-pck">
-                <!-- insert generated-directory when managed -->
-                <xsl:if test="$b-managed-directories">
-                    <xsl:value-of select="$generated-directory"/>
-                </xsl:if>
+                <xsl:value-of select="$generated-directory"/>
                 <!-- add subdirectory -->
                 <xsl:text>gdscript/</xsl:text>
                 <!-- add template -->
