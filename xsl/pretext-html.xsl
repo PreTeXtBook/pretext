@@ -2753,14 +2753,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- specific notes at 3.80).  Adjacency is the presentation: a note   -->
 <!-- sits just below its table, so there is no knowl.                  -->
 <xsl:template match="tabular//tn">
+    <xsl:variable name="note-number">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:variable>
     <sup class="tablenote-mark">
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
         <a>
             <xsl:attribute name="href">
                 <xsl:text>#</xsl:text>
-                <xsl:apply-templates select="." mode="unique-id"/>
+                <xsl:apply-templates select="." mode="html-id"/>
+                <xsl:text>-note</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="aria-label">
+                <xsl:text>Go to table note </xsl:text>
+                <xsl:value-of select="$note-number"/>
             </xsl:attribute>
             <i>
-                <xsl:apply-templates select="." mode="number"/>
+                <xsl:value-of select="$note-number"/>
             </i>
         </a>
     </sup>
@@ -8166,22 +8175,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- to tables: CMoS 18th ed., 3.77-3.81; specific notes at       -->
     <!-- 3.80).  Disjoint from true footnote numbering.               -->
     <xsl:if test=".//tn">
-        <!-- each note is a plain "div" (not a "p"): one tight -->
-        <!-- line per note, free of paragraph margins          -->
-        <div class="tablenotes">
+        <!-- each note is a list item (not a "p"): one tight -->
+        <!-- line per note, free of paragraph margins        -->
+        <ol class="tablenotes" aria-label="Table notes">
             <xsl:for-each select=".//tn">
-                <div class="tablenote">
-                    <xsl:apply-templates select="." mode="html-id-attribute"/>
+                <xsl:variable name="note-number">
+                    <xsl:apply-templates select="." mode="number"/>
+                </xsl:variable>
+                <li class="tablenote">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="html-id"/>
+                        <xsl:text>-note</xsl:text>
+                    </xsl:attribute>
                     <sup>
-                        <i>
-                            <xsl:apply-templates select="." mode="number"/>
-                        </i>
+                        <a>
+                            <xsl:attribute name="href">
+                                <xsl:text>#</xsl:text>
+                                <xsl:apply-templates select="." mode="html-id"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="aria-label">
+                                <xsl:text>Back to table note reference </xsl:text>
+                                <xsl:value-of select="$note-number"/>
+                            </xsl:attribute>
+                            <i>
+                                <xsl:value-of select="$note-number"/>
+                            </i>
+                        </a>
                     </sup>
                     <xsl:text> </xsl:text>
                     <xsl:apply-templates/>
-                </div>
+                </li>
             </xsl:for-each>
-        </div>
+        </ol>
     </xsl:if>
 </xsl:template>
 
