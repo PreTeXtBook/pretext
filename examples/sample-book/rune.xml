@@ -133,7 +133,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>A GDScript program will run interactively in the browser.</p>
 
-        <activity xml:id="program-activecode-gdscript">
+        <activity xml:id="program-activecode-gdscript" label="program-activecode-gdscript">
             <title>An interactive GDScript program, using <pubtitle>Runestone</pubtitle></title>
             <statement><p>Run the following code.
         You'll need to fix the function `get_double` that takes 1 `int` parameter and returns an `int` for the test to pass.</p></statement>
@@ -201,7 +201,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Here's a GDScript program with some graphics.</p>
 
-        <activity xml:id="program-activecode-gdscript-graphics">
+        <activity xml:id="program-activecode-gdscript-graphics" label="program-activecode-gdscript-graphics">
             <title>An interactive GDScript program, with graphics</title>
             <statement><p>This is the <em>first script</em> from the <url href="https://docs.godotengine.org/en/stable/getting_started/step_by_step/scripting_first_script.html#">Godot getting started step-by-step example</url>.
             The first thing to try is adding the following code:</p>
@@ -263,7 +263,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Here's a GDScript program with split graphics. testing making a change</p>
 
-        <activity xml:id="program-activecode-gdscript-split-graphics">
+        <activity xml:id="program-activecode-gdscript-split-graphics" label="program-activecode-gdscript-split-graphics">
             <title>An interactive GDScript program, with split graphics</title>
             <statement><p>This is an example of split screen code.
             </p></statement>
