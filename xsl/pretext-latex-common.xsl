@@ -1496,10 +1496,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://tex.stackexchange.com/questions/106159/why-i-shouldnt-load-pdftex-option-with-hyperref -->
 <xsl:template name="load-configure-hyperref">
     <xsl:text>%% hyperref driver does not need to be specified, it will be detected&#xa;</xsl:text>
-    <xsl:text>%% Footnote marks in tcolorbox have broken linking under&#xa;</xsl:text>
-    <xsl:text>%% hyperref, so it is necessary to turn off all linking&#xa;</xsl:text>
-    <xsl:text>%% It *must* be given as a package option, not with \hypersetup&#xa;</xsl:text>
-    <xsl:text>\usepackage[hyperfootnotes=false]{hyperref}&#xa;</xsl:text>
+    <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
     <!-- Any footnote within a tcolorbox-implemented block would have    -->
     <!-- its text trapped in the box, marked by the letters of the       -->
     <!-- "mpfootnote" counter that boxes switch to.  The "footnotehyper" -->
