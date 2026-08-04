@@ -473,6 +473,128 @@ function workspaceDivsIn(elem) {
     return [...elem.querySelectorAll('.workspace')];
 }
 
+// Split .task (and .conclusion) elements out of an .exercise -- or out of an
+// enclosing .task, for sub-tasks -- so each becomes its own top-level child
+// of `container`, positioned immediately after the block that used to hold
+// it. This is what lets both pagination paths treat a single task as an
+// independently placeable/movable unit: for computed pagination it lets
+// findPageBreaks() weigh each task on its own, and for authored pagination
+// it lets addSpilloverPages() push just the oversized task (and whatever
+// follows it on that page) onto a spillover page, instead of being stuck
+// with the whole exercise as one atomic block that can't be split when a
+// solution inside it grows too long.
+function flattenTasksIn(container) {
+    for (const child of [...container.children]) {
+        if (child.classList.contains('sidebyside')) {
+            continue; // sidebyside could have tasks, but we don't split into it
+        }
+        const tasks = child.querySelectorAll('.task, .conclusion');
+        if (tasks.length === 0) continue;
+        // Tag nesting depth so CSS can indent appropriately once an element
+        // is pulled out of its parent .task/.exercise: if its parent (or
+        // grandparent) is itself a .task, it was a sub-(sub-)task.
+        for (const task of tasks) {
+            const parent = task.parentElement;
+            const grandparent = parent.parentElement;
+            if (grandparent && grandparent.classList.contains('task')) {
+                task.classList.add('subsubtask');
+            } else if (parent.classList.contains('task')) {
+                task.classList.add('subtask');
+            }
+        }
+        // Move every task out, including the first one, in reverse order, so
+        // they land in their original order immediately after `child`.
+        for (let i = tasks.length - 1; i >= 0; i--) {
+            container.insertBefore(tasks[i], child.nextSibling);
+        }
+    }
+}
+
+// Split a long `.introduction` block up so its paragraphs/tables/etc. become
+// independent top-level children of `container`, the same way flattenTasksIn
+// splits out `.task`/`.conclusion`. Otherwise an introduction is one atomic
+// row for pagination purposes, and overflows the page whenever it alone is
+// taller than a page, regardless of how the task(s) after it are split.
+//
+// The print stylesheet displays a heading inline with its first paragraph
+// (`article>.heading:first-child+:is(.para,.para.logical,.introduction)`),
+// so the introduction's first child is left in place -- replacing the
+// .introduction wrapper right where it was -- rather than extracted, and
+// only the rest is moved out to become independent top-level rows.
+//
+// Must run after flattenTasksIn(), since the reverse insertion here also
+// targets `child.nextSibling`, and running after keeps reading order correct
+// (introduction paragraphs end up before the task, not after it).
+//
+// A `.introduction` can appear nested inside a top-level child (e.g. an
+// exercise's own introduction) or as a top-level child itself (e.g. a
+// project-like printout's own opening section). Both are handled: for the
+// nested case the wrapper is unwrapped in place and its later children
+// extracted to be `child`'s top-level siblings; for the top-level case the
+// wrapper *is* `child`, so the first paragraph becomes the new top-level row
+// in its place, and later children are extracted as its siblings instead.
+function flattenIntroductionsIn(container) {
+    for (const child of [...container.children]) {
+        if (child.classList.contains('sidebyside')) {
+            continue; // sidebyside could have introductions, but we don't split into it
+        }
+        const isTopLevelIntroduction = child.classList.contains('introduction');
+        const introductions = isTopLevelIntroduction ? [child] : [...child.querySelectorAll('.introduction')];
+        introductions.forEach(intro => {
+            const introParent = intro.parentNode;
+            const introChildren = [...intro.children];
+            if (introChildren.length === 0) {
+                intro.remove();
+                return;
+            }
+            // Leave the first paragraph in place, right where .introduction was,
+            // so it stays adjacent to whatever precedes it (typically the heading).
+            introParent.insertBefore(introChildren[0], intro);
+            // Move the rest out to become independent top-level rows of
+            // `container`, in reverse order, so they land back in their
+            // original order immediately after the anchor. When `intro` was
+            // itself the top-level child, that anchor is the first paragraph
+            // just placed above (which now occupies `child`'s old top-level
+            // slot); otherwise it's `child` as before.
+            const anchor = intro === child ? introChildren[0] : child;
+            for (let i = introChildren.length - 1; i >= 1; i--) {
+                container.insertBefore(introChildren[i], anchor.nextSibling);
+            }
+            intro.remove();
+        });
+    }
+}
+
+// Split a `.solutions` block up so each hint/answer/solution knowl becomes
+// an independent top-level row, the same way flattenTasksIn splits out
+// `.task` and flattenIntroductionsIn splits out `.introduction`. Otherwise
+// a task or exercise with a large solution is one atomic row that overflows
+// the page whenever its prompt plus its solution content together are
+// taller than a page, even if the prompt alone would fit comfortably.
+//
+// Unlike `.introduction`, `.solutions` has no adjacent-heading display rule
+// to preserve, so every child is extracted -- none needs to stay behind.
+//
+// Must run after flattenTasksIn() so that, when the `.solutions` belongs to
+// a task rather than directly to an exercise, `child` is already that task
+// (a top-level row in its own right) -- keeping the extracted solution
+// content ordered right after its own task instead of after a sibling task.
+function flattenSolutionsIn(container) {
+    for (const child of [...container.children]) {
+        if (child.classList.contains('sidebyside') || child.classList.contains('solutions')) {
+            continue;
+        }
+        const solutionsBlocks = [...child.querySelectorAll('.solutions')];
+        solutionsBlocks.forEach(solutions => {
+            const solChildren = [...solutions.children];
+            for (let i = solChildren.length - 1; i >= 0; i--) {
+                container.insertBefore(solChildren[i], child.nextSibling);
+            }
+            solutions.remove();
+        });
+    }
+}
+
 // This is used multiple places to set height of workspace divs to their author-provided heights
 function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll('.workspace');
@@ -513,7 +635,17 @@ function adjustPrintoutPages() {
         nextChild = nextChild.nextSibling;
         lastPage.appendChild(tempChild);
     }
-    console.log("Moved all content before the first page and after the last page into the respective pages.");
+    // Split nested tasks out to be top-level children of their page (see
+    // flattenTasksIn), so overflowing solutions inside a single task can be
+    // spilled onto a new page instead of dragging the whole exercise along
+    // as one unsplittable block. Then do the same for introductions (see
+    // flattenIntroductionsIn); must run second so reading order stays correct.
+    pages.forEach(page => {
+        flattenTasksIn(page);
+        flattenIntroductionsIn(page);
+        flattenSolutionsIn(page);
+    });
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, and solutions for independent repagination.");
 }
 
 // This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
@@ -532,40 +664,23 @@ function createPrintoutPages(margins) {
         console.warn("No printout found, exiting createPrintoutPages.");
         return;
     }
-    printout.style.width = toString(conservativeContentWidth + margins.left + margins.right) + 'px';
+    // Narrow the printout to our conservative width while we measure row
+    // heights below, so text wraps at least as much as it will once placed
+    // in the real, narrower, padded .onepage box -- otherwise rows measure
+    // shorter than their actual rendered height and pagination overflows.
+    printout.style.width = conservativeContentWidth + 'px';
     // Set the height of each workspace based on its data-space attribute
     setInitialWorkspaceHeights(printout);
 
-    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
-    let rows = [];
-    for (const child of printout.children) {
-        if (child.classList.contains('sidebyside')) {
-            // sidebyside could have tasks, but we don't want to dive further into them.
-            rows.push(child);
-        } else if (child.querySelector('.task')) {
-            // Keep the child as a block, but put each task after the first one as its own row:
-            rows.push(child);
-            const tasks = child.querySelectorAll('.task, .conclusion');
-
-            //Determine how many levels of nesting each task has.  If parent is an .exercise, leave alone.  If parent is a .task, add .subtask class.  If grandparent is .task, add .subsubtask to it so it can be indented by css:
-            for (let i = 0; i < tasks.length; i++) {
-                let parent = tasks[i].parentElement;
-                let grandparent = parent.parentElement;
-                if (grandparent.classList.contains('task')) {
-                    tasks[i].classList.add('subsubtask');
-                } else if (parent.classList.contains('task')) {
-                    tasks[i].classList.add('subtask');
-                }
-            }
-            for (let i = tasks.length-1; i > 0; i--) {
-                // Move the task out of the original child and place it directly after it in the printout.  We do this in reverse order so when every task is moved, they return to the original order. They will then be added to the rows list as their own blocks.
-                printout.insertBefore(tasks[i], child.nextSibling);
-            }
-        // Skipping separate treatment of exercisegroups for now.
-        } else {
-            rows.push(child);
-        }
-    }
+    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children (e.g. tasks inside an exercise).  Split those out into their own top-level blocks first (see flattenTasksIn), then every block we care about is simply a direct child of the printout.
+    // Skipping separate treatment of exercisegroups for now.
+    flattenTasksIn(printout);
+    // Same treatment for introductions (see flattenIntroductionsIn) and for
+    // task solutions (see flattenSolutionsIn); both must run after
+    // flattenTasksIn so reading order comes out right.
+    flattenIntroductionsIn(printout);
+    flattenSolutionsIn(printout);
+    let rows = [...printout.children];
     // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
     let blockList = [];
     for (const row of rows) {
@@ -584,6 +699,10 @@ function createPrintoutPages(margins) {
 
     // Now find pageBreaks so that extra workspace is as uniform as possible.
     const pageBreaks = findPageBreaks(blockList, conservativeContentHeight);
+
+    // Done measuring; let the printout go back to its normal width so the
+    // .onepage sections built below render at their real page size.
+    printout.style.width = "";
 
     // Create page divs and insert rows into them
     for (let i = 0; i < pageBreaks.length; i++) {
@@ -614,6 +733,168 @@ function createPrintoutPages(margins) {
             printout.removeChild(child);
         }
     }
+}
+
+function getPageContentBottom(page) {
+    // The page element's own bottom edge includes its bottom padding, which
+    // corresponds to the print margin. Content that lands in that padding
+    // area still fits within the page's outer box, but real printing
+    // respects the margin strictly and will push it to the next page.
+    // So overflow must be measured against the content area, not the raw box.
+    const pRect = page.getBoundingClientRect();
+    const paddingBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
+    return pRect.bottom - paddingBottom;
+}
+
+function pageOverflows() {
+    const pages = document.querySelectorAll('.onepage');
+    for (const page of pages) {
+        const pRect = page.getBoundingClientRect();
+        for (const child of page.children) {
+            const r = child.getBoundingClientRect();
+            // if (r.bottom > pRect.bottom + 1) {
+            if (r.bottom > getPageContentBottom(page) + 1) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}) {
+    adjustWorkspaceToFitPage({paperSize, margins});
+    if (pageOverflows()) {
+        if (fullRecompute) {
+            resetPrintoutPagination(margins);
+        } else {
+            addSpilloverPages(margins);
+        }
+        adjustWorkspaceToFitPage({paperSize, margins});
+    }
+}
+
+function unwrapOnepages() {
+    const printout = getPrintout();
+    if (!printout) return;
+    const pages = [...printout.querySelectorAll(':scope > .onepage')];
+    pages.forEach(page => {
+        page.querySelectorAll(':scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer').forEach(hf => hf.remove());
+        while (page.firstChild) {
+            printout.insertBefore(page.firstChild, page);
+        }
+        printout.removeChild(page);
+    });
+}
+
+function resetPrintoutPagination(margins) {
+    unwrapOnepages();
+    createPrintoutPages(margins);
+    addHeadersAndFootersToPrintout();
+}
+
+function isHeaderFooterEl(el) {
+  return el.classList.contains('first-page-header') || el.classList.contains('running-header') ||
+         el.classList.contains('first-page-footer') || el.classList.contains('running-footer');
+}
+
+function addSpilloverPages(margins) {
+  const printout = getPrintout();
+  if (!printout) return;
+  let pages = [...printout.querySelectorAll(':scope > .onepage')];
+
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i];
+    const pageRect = page.getBoundingClientRect();
+    const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
+
+    let overflowStartIndex = -1;
+    for (let j = 0; j < contentChildren.length; j++) {
+      const r = contentChildren[j].getBoundingClientRect();
+    //   if (r.bottom > pageRect.bottom + 1) {
+    if (r.bottom > getPageContentBottom(page) + 1) {
+        overflowStartIndex = j;
+        break;
+      }
+    }
+    if (overflowStartIndex === -1) continue; // this page fits fine, leave it completely alone
+    if (overflowStartIndex === 0) {
+      // The very first row alone is already too tall to fit on any page —
+      // nothing we can do about that specific row. But if there are other
+      // rows after it, they shouldn't be trapped here too: move everything
+      // after the oversized first row onto a fresh page.
+      if (contentChildren.length <= 1) continue; // truly nothing else to move
+      overflowStartIndex = 1;
+    }
+
+    const overflowElems = contentChildren.slice(overflowStartIndex);
+    const newPage = document.createElement('section');
+    newPage.classList.add('onepage', 'spillover');
+    if (page.classList.contains('lastpage')) {
+      page.classList.remove('lastpage');
+      newPage.classList.add('lastpage');
+    }
+    overflowElems.forEach(el => newPage.appendChild(el));
+    page.parentNode.insertBefore(newPage, page.nextSibling);
+
+    [...page.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+
+    pages.splice(i + 1, 0, newPage); // let the loop also check the new page for cascading overflow
+  }
+
+  printout.querySelectorAll(':scope > .onepage').forEach(p => {
+    [...p.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+  });
+  addHeadersAndFootersToPrintout();
+}
+
+// Append `children` onto the end of a page's *content*, i.e. before its
+// running/first-page footer if one is already attached. Pages being merged
+// in collapseSpilloverPages() still have their old footer in place (footers
+// aren't stripped until after the whole merge pass finishes), so a plain
+// appendChild would land new content after the footer -- corrupting both
+// the reading order and the overflow measurement used to judge the merge.
+function appendPageContent(page, children) {
+    const footer = [...page.children].find(c => c.classList.contains('first-page-footer') || c.classList.contains('running-footer'));
+    children.forEach(c => page.insertBefore(c, footer || null));
+}
+
+// Eagerly fold every spillover page's content back into the page before it,
+// unconditionally -- i.e. without checking whether the merged page fits yet.
+// That check is intentionally left to the caller (via adjustWorkspaceOrRepaginate,
+// which shrinks workspace boxes to fit before measuring overflow, then
+// re-splits with addSpilloverPages() if something still doesn't fit).
+// Deciding here, before workspace has a chance to shrink back down from
+// whatever size it was left at by the previous, more spread-out layout,
+// is unreliable: a page can measure as overflowing purely because its
+// workspace boxes are still sized for the old layout, when shrinking them
+// would actually make room.
+//
+// Processing pages highest-index-first guarantees that a spillover page's
+// merge target (the page right before it) hasn't itself already been
+// removed by an earlier step in this same pass, so chains of cascaded
+// spillover pages collapse correctly in a single pass.
+function collapseSpilloverPages(margins) {
+  const printout = getPrintout();
+  if (!printout) return;
+  const pages = [...printout.querySelectorAll(':scope > .onepage')];
+
+  for (let i = pages.length - 1; i >= 1; i--) {
+    const page = pages[i];
+    if (!page.classList.contains('spillover')) continue;
+    const prevPage = pages[i - 1];
+
+    const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
+    appendPageContent(prevPage, contentChildren);
+    if (page.classList.contains('lastpage')) {
+      prevPage.classList.add('lastpage');
+    }
+    page.remove();
+  }
+
+  printout.querySelectorAll(':scope > .onepage').forEach(p => {
+    [...p.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+  });
+  addHeadersAndFootersToPrintout();
 }
 
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
@@ -851,8 +1132,10 @@ function findPageBreaks(rows, pageHeight) {
         }
     }
     // Backtrack to find the actual page breaks based on nextPageBreak
-    // Note: the nextPage = 1 is not an indexing mistake; we always assume that row 0 is a title and will go on the same page as row 1.
-    let nextPage = 1;
+    // Note: nextPage used to be set to 1.
+    // This meant the very first page's title height was never counted against that page's budget during optimization, even though it still occupied real space once pages were built.
+    // This caused the first page to sometimes exceed capacity, and the resulting correction to cascade into large wasted-space gaps on later pages.
+    let nextPage = 0;
     while (nextPage < rows.length) {
         pageBreaks.push(nextPageBreak[nextPage]);
         nextPage = nextPageBreak[nextPage];
@@ -1059,6 +1342,24 @@ async function rewriteSolutions() {
         const content = detail.innerHTML.replace(summary.outerHTML, '');
         const div = document.createElement('div');
         div.classList = detail.classList;
+        // Apply the correct hidden/visible state immediately, so the div is
+        // never briefly visible before the later checkbox setup hides it.
+        for (const solutionType of ["hint", "answer", "solution"]) {
+            if (div.classList.contains(solutionType)) {
+                const storageKey = `hide-${solutionType}`;
+                let hide;
+                if (localStorage.getItem(storageKey) !== null) {
+                    hide = localStorage.getItem(storageKey) === "true";
+                } else {
+                    // Match the default used later: answers/solutions start hidden, hints don't.
+                    hide = (solutionType === "answer" || solutionType === "solution");
+                }
+                if (hide) {
+                    div.classList.add("hidden");
+                }
+                break;
+            }
+        }
         if (summary) {
             const title = document.createElement('h5');
             title.innerHTML = summary.innerHTML;
@@ -1098,6 +1399,7 @@ function toPixels(value) {
 // Event listener for page load to handle print preview setup
 window.addEventListener("DOMContentLoaded", async function(event) {
     const urlParams = new URLSearchParams(window.location.search);
+    let pendingSettle = Promise.resolve();
     // We condition on the existence of the papersize radio buttons, which only appear in the printout print preview.
     if (urlParams.has("printpreview")) {
         const printableSectionID = urlParams.get("printpreview");
@@ -1136,7 +1438,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         document.body.classList.add(paperSize);
         setPageGeometryCSS({paperSize: paperSize, margins: margins});
         } else {
-            console.warning("Bug: paperSize should always have a value here.");
+            console.warn("Bug: paperSize should always have a value here.");
         }
         // Add event listeners to the papersize radio buttons to handle changes
         const papersizeRadios = document.querySelectorAll('input[name="papersize"]');
@@ -1176,18 +1478,70 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                     }
                 });
                 // Add event listener to toggle visibility
-                checkbox.addEventListener("change", function() {
+                checkbox.addEventListener("change", async function() {
+                    await pendingSettle;
                     localStorage.setItem(storageKey, this.checked);
-                    // toggle visibility of solution divs
                     document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
-                        if (checkbox.checked) {
-                            elem.classList.add("hidden");
-                        } else {
-                            elem.classList.remove("hidden");
-                        }
-                        //adjustPrintoutPages();
-                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                        if (checkbox.checked) { elem.classList.add("hidden"); }
+                        else { elem.classList.remove("hidden"); }
                     });
+                    if (checkbox.checked) {
+                        if (hasAuthoredPages) {
+                            // Eagerly merge every spillover page back into its previous
+                            // page, then let adjustWorkspaceOrRepaginate() shrink
+                            // workspace boxes to fit *before* measuring overflow, and
+                            // re-split with addSpilloverPages() only what still doesn't
+                            // fit after that. Checking fit before workspace gets a
+                            // chance to shrink back down is unreliable -- see
+                            // collapseSpilloverPages()'s comment for why.
+                            collapseSpilloverPages(margins);
+                            adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+                            // Content just hidden (e.g. a long solution) can take a moment
+                            // to finish settling into its final, compact size, so an
+                            // immediate measurement can miss a page that's actually able
+                            // to collapse. Mirror the retry loop in the "show" branch
+                            // below: keep re-attempting for a couple of seconds.
+                            pendingSettle = (async () => {
+                                const deadline = Date.now() + 2000;
+                                while (Date.now() < deadline) {
+                                    await new Promise(r => setTimeout(r, 100));
+                                    collapseSpilloverPages(margins);
+                                    adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+                                }
+                            })();
+                        } else {
+                            resetPrintoutPagination(margins);
+                            adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                            // Same reasoning as the authored-pages branch above: content
+                            // just hidden can take a moment to settle, so keep re-checking
+                            // for a couple of seconds rather than pagination based on a
+                            // possibly-stale measurement.
+                            pendingSettle = (async () => {
+                                const deadline = Date.now() + 2000;
+                                while (Date.now() < deadline) {
+                                    await new Promise(r => setTimeout(r, 100));
+                                    resetPrintoutPagination(margins);
+                                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                                }
+                            })();
+                        }
+                    } else {
+                        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
+                        pendingSettle = (async () => {
+                            const deadline = Date.now() + 2000;
+                            while (Date.now() < deadline) {
+                                await new Promise(r => setTimeout(r, 100));
+                                if (pageOverflows()) {
+                                    if (hasAuthoredPages) {
+                                        addSpilloverPages(margins);
+                                    } else {
+                                        resetPrintoutPagination(margins);
+                                    }
+                                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                                }
+                            }
+                        })();
+                    }
                 });
             }
         }
@@ -1205,11 +1559,34 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             await waitForImages(printoutSection);
         }
 
+        // Add explicit await before initial pagination step so all math is settled before measuring content height.
+        if (typeof MathJax !== "undefined" && MathJax.typesetPromise) {
+            await MathJax.typesetPromise([getPrintout()]);
+        }
+
         // If the printout has authored pages, there will be at least one .onepage element.
-        if (document.querySelector('.onepage')) {
+        // Remember this so the hide/reveal checkbox handler below can pick the right
+        // strategy: preserve authored structure vs. safely recompute a computed layout.
+        const hasAuthoredPages = document.querySelectorAll('.onepage').length > 0;
+        if (hasAuthoredPages) {
             adjustPrintoutPages();
         } else {
             createPrintoutPages(margins);
+            // Safety net: content heights (e.g. proof knowls, large matrices) can
+            // still be settling into their final size at this point, which can
+            // cause createPrintoutPages to make suboptimal page-break decisions
+            // that don't overflow but leave large amounts of wasted space. Since
+            // that failure mode isn't detectable via pageOverflows(), just
+            // unconditionally re-run pagination once more after a brief settle delay.
+            // Tracked via pendingSettle so any checkbox toggle that happens in the
+            // meantime waits for this to finish first, instead of racing it.
+            pendingSettle = (async () => {
+                await new Promise(r => setTimeout(r, 300));
+                unwrapOnepages();
+                createPrintoutPages(margins);
+                addHeadersAndFootersToPrintout();
+                adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+            })();
         }
 
         // Add headers and footers to all pages in the printout
@@ -1239,14 +1616,40 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         } else {
                             elem.classList.add("hidden");
                         }
-                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                     });
+                    // Recompute layout once, after all elements of this type have been toggled
+                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                 });
             }
         }
 
-        // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
-        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+        // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size),
+        // falling back to a spillover page if content still overflows even with workspace at zero.
+        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
+        // Assign to pendingSettle (like every other retry loop) so a checkbox
+        // toggled within the next couple of seconds awaits this first, instead
+        // of racing it and potentially clobbering each other's pagination.
+        pendingSettle = (async () => {
+            const deadline = Date.now() + 2000;
+            while (Date.now() < deadline) {
+                await new Promise(r => setTimeout(r, 100));
+                if (hasAuthoredPages) {
+                    // Content still settling into its final size right after
+                    // load (e.g. a solution knowl, an embedded matrix) can make
+                    // the very first pass above split content onto a spillover
+                    // page it doesn't actually need once things settle down.
+                    // Eagerly try collapsing spillover pages back on every tick
+                    // and let addSpilloverPages() re-split only what still
+                    // doesn't fit -- see collapseSpilloverPages()'s comment for
+                    // why collapsing first, unconditionally, is the reliable order.
+                    collapseSpilloverPages(margins);
+                    adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+                } else if (pageOverflows()) {
+                    resetPrintoutPagination(margins);
+                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                }
+            }
+        })();
 
         // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
         // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
