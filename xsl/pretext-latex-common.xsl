@@ -1536,6 +1536,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- unexpected-value-for-option-hidelinkshyperref-is-ignored -->
         <!-- https://tex.stackexchange.com/a/503001                   -->
         <xsl:text>\hypersetup{hidelinks}&#xa;</xsl:text>
+        <xsl:text>%% A print PDF needs no internal anchors, nor links to them:&#xa;</xsl:text>
+        <xsl:text>%% both dissolve to their content, which preserves spacing&#xa;</xsl:text>
+        <xsl:text>\renewcommand{\hypertarget}[2]{#2}&#xa;</xsl:text>
+        <xsl:text>\renewcommand{\hyperlink}[2]{#2}&#xa;</xsl:text>
     </xsl:if>
     <!-- Hyperref gives names to destinations for links that look like      -->
     <!-- "section*.5.2" which you can guess is the second section of        -->
