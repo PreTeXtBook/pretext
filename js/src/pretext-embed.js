@@ -1,3 +1,5 @@
+import {applyThemeChoice } from "./readability-options.js";
+
 // Share button and embed in LMS code
 window.addEventListener("DOMContentLoaded", function(event) {
     const shareButton = document.getElementById("ptx-embed-button");
@@ -53,28 +55,43 @@ window.addEventListener("DOMContentLoaded", function(event) {
     }
 });
 
-// Hide everything except the content when the URL has "embed" in it
+// The embed URL carries the instructor's choice: plain "embed" asks for light,
+// "embed=dark" for dark, so the frame can be made to match the LMS page around
+// it.  We always enforce this theme and remove the choices from the reader.
+function applyEmbedTheme(embedValue) {
+    const instructorTheme = (embedValue === "dark") ? "dark" : "light";
+    applyThemeChoice(instructorTheme);
+}
+
+// Strip the page down to its content when the URL has "embed" in it, as an
+// instructor's LMS iframe loads it.
 window.addEventListener("DOMContentLoaded", function(event) {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("embed")) {
-        // Set dark mode based on value of param
-        if (urlParams.get("embed") === "dark") {
-            setDarkMode(true);
-        } else {
-            setDarkMode(false);
-        }
-        const elemsToHide = [
-            "ptx-navbar",
-            "ptx-masthead",
-            "ptx-page-footer",
-            "ptx-sidebar",
-            "ptx-content-footer"
-        ];
-        for (let id of elemsToHide) {
-            const elem = document.getElementById(id);
-            if (elem) {
-                elem.classList.add("hidden");
-            }
+    if (!urlParams.has("embed")) {
+        return;
+    }
+
+    // Hands the page to _embed.scss, which restyles the navbar below into a
+    // floating cluster in the top-right corner.
+    document.body.classList.add("ptx-embedded");
+
+    // "ptx-navbar" is deliberately absent from this list.  Hiding it used to be
+    // how the table of contents, search and prev/next buttons were dropped, but
+    // it took the reading settings and the read-aloud player down with them --
+    // those live in the same bar, and they are the controls an embedded reader
+    // most needs.  _embed.scss hides the navigation and keeps the rest.
+    const elemsToHide = [
+        "ptx-masthead",
+        "ptx-page-footer",
+        "ptx-sidebar",
+        "ptx-content-footer"
+    ];
+    for (let id of elemsToHide) {
+        const elem = document.getElementById(id);
+        if (elem) {
+            elem.classList.add("hidden");
         }
     }
+
+    applyEmbedTheme(urlParams.get("embed"));
 });
