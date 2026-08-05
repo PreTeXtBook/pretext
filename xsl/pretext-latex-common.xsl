@@ -8759,6 +8759,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="xref-as-ref">
         <xsl:apply-templates select="$target" mode="xref-as-ref" />
     </xsl:variable>
+    <!-- Under the author's draft mode a forward reference, one     -->
+    <!-- preceding its target in document order, colors distinctly, -->
+    <!-- so material moved out of logical order announces itself.   -->
+    <!-- The count-union membership test reads document order.      -->
+    <xsl:variable name="b-draft-forward-reference" select="$b-latex-draft-mode and not(ancestor::title|ancestor::subtitle) and (count(current()|$target/preceding::*) = count($target/preceding::*))"/>
+    <xsl:if test="$b-draft-forward-reference">
+        <xsl:text>{\hypersetup{linkcolor=green}</xsl:text>
+    </xsl:if>
     <xsl:choose>
         <!-- inactive in titles, just text               -->
         <!-- With protection against incorrect, sloppy   -->
@@ -8805,6 +8813,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="$b-draft-forward-reference">
+        <xsl:text>}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="xref|&PROOF-LIKE;" mode="latex-page-number">
