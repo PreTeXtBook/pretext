@@ -1761,11 +1761,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- https://stackoverflow.com/questions/538293/find-common-parent-using-xpath -->
             <xsl:variable name="nearest-common-ancestor"
                           select="./ancestor::*[count(. | $link/ancestor::*) = count($link/ancestor::*)] [1]"/>
-            <xsl:variable name="nearest-ancestor-level">
-                <xsl:apply-templates select="$nearest-common-ancestor" mode="enclosing-level"/>
-            </xsl:variable>
-            <!-- remove not(), replace operator with <, then radically different behavior -->
-            <xsl:value-of select="not($nearest-ancestor-level >= $chunk-level)"/>
+            <xsl:choose>
+                <!-- A division's "introduction" or "conclusion" renders on   -->
+                <!-- its division's page, whole, whatever the chunk level.    -->
+                <!-- So a link and target together inside one companion are   -->
+                <!-- always on one page, though the companion's level would   -->
+                <!-- say otherwise.  Deliberately a containment test, not     -->
+                <!-- level arithmetic: the levels of these companions are     -->
+                <!-- slated for rework.                                       -->
+                <xsl:when test="$nearest-common-ancestor/ancestor-or-self::introduction[parent::*[&STRUCTURAL-FILTER;]] or $nearest-common-ancestor/ancestor-or-self::conclusion[parent::*[&STRUCTURAL-FILTER;]]">
+                    <xsl:value-of select="false()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="nearest-ancestor-level">
+                        <xsl:apply-templates select="$nearest-common-ancestor" mode="enclosing-level"/>
+                    </xsl:variable>
+                    <!-- remove not(), replace operator with <, then radically different behavior -->
+                    <xsl:value-of select="not($nearest-ancestor-level >= $chunk-level)"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
