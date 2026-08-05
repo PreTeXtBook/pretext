@@ -37,6 +37,13 @@ $center-content: true !default;
   $navbar-breakpoint: $navbar-breakpoint
 );
 
+// Restyles this navbar into a floating control cluster when the page is loaded
+// with the "embed" URL parameter.  Its rules out-specify the ones below rather
+// than relying on source order, so its position here does not matter.
+@use 'components/page-parts/embed' with (
+  $nav-height: $nav-height
+);
+
 .ptx-navbar {
   position: sticky;
   top: 0;
