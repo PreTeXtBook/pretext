@@ -1,0 +1,133 @@
+// Styles for a page loaded with the "embed" URL parameter, as an instructor's
+// LMS iframe loads it.  pretext-embed.js hides the masthead, footers and
+// sidebar outright; the navbar is the one page part it keeps, because the
+// reading controls live inside it and those are worth keeping.  Everything
+// here restyles that surviving navbar into a small floating cluster.
+//
+// Included via _navbar.scss so every theme with a navbar gets it.  The rules
+// only bite when JavaScript has put .ptx-embedded on the body.
+
+$nav-height: 36px !default;
+
+// The cluster's inset from the top-right corner of the iframe, and the corner
+// rounding of the cluster itself.  Both are deliberately independent of the
+// theme's button radius: navbar buttons are square-cornered in most themes
+// because they sit in a full-width bar with nothing to round against, which
+// stops being true the moment the bar becomes a floating object.
+$embed-controls-inset: 0.75rem !default;
+$embed-controls-radius: 5px !default;
+
+body.pretext.ptx-embedded {
+  // The navbar reserves space for itself at the foot of the page below the
+  // breakpoint, and read-aloud reserves a second row on top of that.  Neither
+  // reservation means anything once the bar is floating at the top, and both
+  // would show as dead space under the last line of content.
+  //
+  // The read-aloud rule is `body.pretext:has(.ptx-read-aloud-player:not([hidden]))`,
+  // which is (0,3,1) — `:has()` takes the specificity of its heaviest argument.
+  // Matching the same `:has()` here and adding .ptx-embedded is what clears it;
+  // a plain `body.pretext.ptx-embedded` is only (0,2,1) and would silently lose.
+  padding-bottom: 0;
+
+  &:has(.ptx-read-aloud-player:not([hidden])) {
+    padding-bottom: 0;
+  }
+
+  // -------------------------------------------------------------------------
+  // The navbar becomes the cluster
+
+  .ptx-navbar {
+    // Fixed rather than sticky or absolute: the embed code hands out a fixed
+    // 1000px-tall iframe, so a long page scrolls *inside* the frame and an
+    // in-flow cluster would scroll out of reach.  Fixed keeps the controls in
+    // the corner for the whole page.  In an auto-resized iframe (the LTI
+    // resizer grows the frame to fit its content) there is no inner scroll to
+    // outrun, and fixed and absolute come to the same thing.
+    position: fixed;
+    top: $embed-controls-inset;
+    right: $embed-controls-inset;
+    left: auto;
+    bottom: auto;
+    width: auto;
+    height: auto;
+    // Never wider than the frame, however narrow the LMS column is.  With the
+    // min-width floors released below, the buttons ellipsize or squeeze rather
+    // than spilling past the left edge.
+    max-width: calc(100% - 2 * #{$embed-controls-inset});
+    margin: 0;
+    background: transparent;
+    border: 0;
+    // Over the content, under the modal dialogs these buttons open.
+    z-index: 1200;
+
+    .ptx-navbar-contents {
+      // The full-page navbar centers itself in a max-width column and stretches
+      // to fill the row.  A floating cluster wants neither: it shrink-wraps its
+      // buttons and hugs the right edge.
+      max-width: none;
+      width: auto;
+      margin: 0;
+      flex: 0 0 auto;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    // Navigation is the reader's own; an embedded page is one page of a course
+    // shell that supplies its own.  That leaves the reading controls, which is
+    // the whole reason the navbar survives here.
+    .ptx-navbar-contents > *:not(.nav-other-controls) {
+      display: none;
+    }
+
+    // The share button hands out embed code for the current URL.  Inside an
+    // already-embedded page that URL still carries "embed", so it would offer
+    // an iframe of an iframe.
+    .ptx-embed-button {
+      display: none;
+    }
+
+    // -----------------------------------------------------------------------
+    // The cluster itself
+
+    .nav-other-controls {
+      height: $nav-height;
+      max-width: 100%;
+      min-width: 0;
+      background: var(--navbar-background);
+      border: 1px solid var(--page-border-color);
+      border-radius: $embed-controls-radius;
+      box-shadow: 1px 1px 3px var(--dialog-shadow-color);
+      // The buttons are square and butt against the border; without this the
+      // corners of the first and last one square off the rounding.
+      overflow: hidden;
+    }
+
+    // Below the breakpoint the player normally lifts onto its own row above the
+    // navbar (`bottom: 100%`), which is right when the navbar is pinned to the
+    // foot of the page and wrong here — the cluster is at the *top*, so that
+    // row would land off-screen above it.  It can stay in the row instead: the
+    // cluster holds two or three buttons rather than the six a full navbar
+    // carries, so the player has room that it does not have on a real page.
+    .ptx-read-aloud-player {
+      position: static;
+      height: auto;
+      background: none;
+      border-top: 0;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    // We remove the theme controls from reader controls entirely, because it is the instructor's choice that matters in an LMS iframe.,
+
+    .ptx-readability-options-group-theme {
+      display: none;
+    }
+
+    // What squeezing there is should land on the player's own controls, which
+    // are icons and stay legible at any width, rather than on the buttons that
+    // opened it.
+    .nav-other-controls > .button {
+      flex-shrink: 0;
+    }
+  }
+}
