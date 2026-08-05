@@ -430,6 +430,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:if test="not($the-number = '')">
                 <xsl:value-of select="$the-number"/>
+                <xsl:apply-templates select="." mode="division-number-separator"/>
                 <xsl:text> </xsl:text>
             </xsl:if>
             <xsl:variable name="the-title">
@@ -731,6 +732,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <xsl:if test="not($the-number = '')">
                     <xsl:value-of select="$the-number"/>
+                    <xsl:apply-templates select="." mode="division-number-separator"/>
                     <xsl:text> </xsl:text>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full"/>
