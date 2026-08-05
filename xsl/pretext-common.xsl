@@ -9081,7 +9081,18 @@ Book (with parts), "section" at level 3
                     <xsl:if test="not($the-number = '')">
                         <xsl:apply-templates select="." mode="xref-text-separator"/>
                     </xsl:if>
-                    <xsl:copy-of select="$the-number"/>
+                    <!-- a task's local serial reads as its rendered  -->
+                    <!-- label: "Task (a)", not "Task a"              -->
+                    <xsl:choose>
+                        <xsl:when test="$target/self::task">
+                            <xsl:text>(</xsl:text>
+                            <xsl:copy-of select="$the-number"/>
+                            <xsl:text>)</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="$the-number"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
@@ -9094,7 +9105,18 @@ Book (with parts), "section" at level 3
                     <xsl:if test="not($the-number = '')">
                         <xsl:apply-templates select="." mode="xref-text-separator"/>
                     </xsl:if>
-                    <xsl:copy-of select="$the-number"/>
+                    <!-- a task's local serial reads as its rendered  -->
+                    <!-- label: "Task (a)", not "Task a"              -->
+                    <xsl:choose>
+                        <xsl:when test="$target/self::task">
+                            <xsl:text>(</xsl:text>
+                            <xsl:copy-of select="$the-number"/>
+                            <xsl:text>)</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="$the-number"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
