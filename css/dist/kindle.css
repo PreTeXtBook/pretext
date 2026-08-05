@@ -496,6 +496,15 @@ a[href^="mailto:"] {
   margin-left: auto;
   margin-right: auto;
 }
+.tablenotes {
+  margin: 0.5em 0 0;
+  padding-left: 0;
+  list-style: none;
+  font-size: 80%;
+}
+.tablenotes .tablenote {
+  margin-top: 0;
+}
 table.notation-list tr th {
   text-align: left;
   margin-left: 1em;
