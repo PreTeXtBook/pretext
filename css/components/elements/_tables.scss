@@ -114,6 +114,17 @@
   margin-right: auto;
 }
 
+.tablenotes {
+  margin: 0.5em 0 0;
+  padding-left: 0;
+  list-style: none;
+  font-size: 80%;
+
+  .tablenote {
+    margin-top: 0;
+  }
+}
+
 // More specific types of tables
 
 table.notation-list {
