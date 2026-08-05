@@ -1431,24 +1431,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="exercise-heading"/>
             <xsl:text> </xsl:text>
         </xsl:variable>
+        <!-- The component switches must pass as genuine booleans: a   -->
+        <!-- with-param carrying *content* is a result tree fragment,   -->
+        <!-- and any fragment, even one whose text is "false", is true  -->
+        <!-- in the boolean tests downstream.  So: compute the strings, -->
+        <!-- pass comparisons.                                          -->
+        <xsl:variable name="has-hint">
+            <xsl:apply-templates select="." mode="b-main-text-component">
+                <xsl:with-param name="component" select="'hint'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:variable name="has-answer">
+            <xsl:apply-templates select="." mode="b-main-text-component">
+                <xsl:with-param name="component" select="'answer'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:variable name="has-solution">
+            <xsl:apply-templates select="." mode="b-main-text-component">
+                <xsl:with-param name="component" select="'solution'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
         <xsl:apply-templates select="." mode="exercise-components">
             <xsl:with-param name="b-original" select="true()"/>
             <xsl:with-param name="b-has-statement" select="true()"/>
-            <xsl:with-param name="b-has-hint">
-                <xsl:apply-templates select="." mode="b-main-text-component">
-                    <xsl:with-param name="component" select="'hint'"/>
-                </xsl:apply-templates>
-            </xsl:with-param>
-            <xsl:with-param name="b-has-answer">
-                <xsl:apply-templates select="." mode="b-main-text-component">
-                    <xsl:with-param name="component" select="'answer'"/>
-                </xsl:apply-templates>
-            </xsl:with-param>
-            <xsl:with-param name="b-has-solution">
-                <xsl:apply-templates select="." mode="b-main-text-component">
-                    <xsl:with-param name="component" select="'solution'"/>
-                </xsl:apply-templates>
-            </xsl:with-param>
+            <xsl:with-param name="b-has-hint" select="$has-hint = 'true'"/>
+            <xsl:with-param name="b-has-answer" select="$has-answer = 'true'"/>
+            <xsl:with-param name="b-has-solution" select="$has-solution = 'true'"/>
             <xsl:with-param name="run-in-heading" select="$heading"/>
         </xsl:apply-templates>
         <!-- writing space below, in a printout, when requested -->
