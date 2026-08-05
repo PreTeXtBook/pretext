@@ -79,6 +79,10 @@ ul {
 .asymptote-box {
   position: relative;
 }
+.image-box img,
+img.contained {
+  width: 100%;
+}
 iframe.asymptote,
 .video-box .video,
 .video-box .video-poster {
