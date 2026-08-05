@@ -586,7 +586,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- section-level items in the back matter         -->
 <xsl:template name="titlesec-section-style">
     <xsl:text>\titleformat{\section}[hang]&#xa;</xsl:text>
-    <xsl:text>{\divisionfont\Large\bfseries}{\thesection}{1ex}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\Large\bfseries}{\thesection\ptxappendixperiodsection}{1ex}{#1}&#xa;</xsl:text>
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\section,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\divisionfont\Large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
@@ -656,16 +656,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="titletoc-chapter-style">
     <xsl:text>\titlecontents{chapter}%&#xa;</xsl:text>
     <xsl:text>[0pt]{\contentsmargin{0em}\addvspace{1pc}\contentsfont\bfseries}%&#xa;</xsl:text>
-    <xsl:text>{\large\thecontentslabel\enspace}{\large}%&#xa;</xsl:text>
+    <xsl:text>{\large\thecontentslabel\ptxappendixperiodchapter\enspace}{\large}%&#xa;</xsl:text>
     <xsl:text>{\hfill\bfseries\thecontentspage}%&#xa;</xsl:text>
     <xsl:text>[\addvspace{.5pc}]%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- The indent, and space for the number/label are straight  -->
 <!-- from the  titletoc  documentation, which says they match -->
-<!-- the LaTeX  book  class                                   -->
+<!-- the LaTeX  book  class.  The top-level division of an    -->
+<!-- article is a section, so the  \dottedcontents  shorthand -->
+<!-- is expanded verbatim to the  \titlecontents  form it     -->
+<!-- abbreviates, exposing the label composition to carry the -->
+<!-- appendix-period seam                                     -->
 <xsl:template name="titletoc-section-style">
-    <xsl:text>\dottedcontents{section}[3.8em]{\contentsfont}{2.3em}{1pc}%&#xa;</xsl:text>
+    <xsl:text>\titlecontents{section}%&#xa;</xsl:text>
+    <xsl:text>[3.8em]{\contentsfont}%&#xa;</xsl:text>
+    <xsl:text>{\contentslabel[\thecontentslabel\ptxappendixperiodsection]{2.3em}}%&#xa;</xsl:text>
+    <xsl:text>{\hspace*{-2.3em}}%&#xa;</xsl:text>
+    <xsl:text>{\titlerule*[1pc]{.}\contentspage}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- The indent, and space for the number/label are straight  -->
