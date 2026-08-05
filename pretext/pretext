@@ -704,7 +704,7 @@ def main():
                 'cannot make Asymptote diagrams in "{}" format'.format(args.format)
             )
     elif args.component == "sageplot":
-        if args.format in ["pdf", "svg", "png", "html", "all"]:
+        if args.format in ["pdf", "svg", "png", "eps", "html", "all"]:
             ptx.sage_conversion(
                 xml_source,
                 publication_file,

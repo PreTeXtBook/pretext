@@ -1536,6 +1536,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- unexpected-value-for-option-hidelinkshyperref-is-ignored -->
         <!-- https://tex.stackexchange.com/a/503001                   -->
         <xsl:text>\hypersetup{hidelinks}&#xa;</xsl:text>
+        <xsl:text>%% A print PDF needs no internal anchors, nor links to them:&#xa;</xsl:text>
+        <xsl:text>%% both dissolve to their content, which preserves spacing&#xa;</xsl:text>
+        <xsl:text>\renewcommand{\hypertarget}[2]{#2}&#xa;</xsl:text>
+        <xsl:text>\renewcommand{\hyperlink}[2]{#2}&#xa;</xsl:text>
     </xsl:if>
     <!-- Hyperref gives names to destinations for links that look like      -->
     <!-- "section*.5.2" which you can guess is the second section of        -->
@@ -3350,6 +3354,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Preprocessor always puts Department, Institution, and Location         -->
 <!-- inside Affiliation. This just adds line breaks between them as needed. -->
 <xsl:template match="affiliation">
+    <xsl:if test="position">
+        <xsl:text>\\&#xa;</xsl:text>
+        <xsl:apply-templates select="position" />
+    </xsl:if>
     <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="department" />
@@ -3374,11 +3382,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Departments, Institutions, and Addresses are free-form, or sequences of lines  -->
 <!-- Line breaks are inserted above, due to \and, etc, so do not end last line here -->
-<xsl:template match="department|institution|location">
+<xsl:template match="position|department|institution|location">
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="department[line]|institution[line]|location[line]">
+<xsl:template match="position[line]|department[line]|institution[line]|location[line]">
     <xsl:apply-templates select="line" />
 </xsl:template>
 
@@ -8755,6 +8763,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="xref-as-ref">
         <xsl:apply-templates select="$target" mode="xref-as-ref" />
     </xsl:variable>
+    <!-- Under the author's draft mode a forward reference, one     -->
+    <!-- preceding its target in document order, colors distinctly, -->
+    <!-- so material moved out of logical order announces itself.   -->
+    <!-- The count-union membership test reads document order.      -->
+    <xsl:variable name="b-draft-forward-reference" select="$b-latex-draft-mode and not(ancestor::title|ancestor::subtitle) and (count(current()|$target/preceding::*) = count($target/preceding::*))"/>
+    <xsl:if test="$b-draft-forward-reference">
+        <xsl:text>{\hypersetup{linkcolor=green}</xsl:text>
+    </xsl:if>
     <xsl:choose>
         <!-- inactive in titles, just text               -->
         <!-- With protection against incorrect, sloppy   -->
@@ -8801,6 +8817,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="$b-draft-forward-reference">
+        <xsl:text>}</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="xref|&PROOF-LIKE;" mode="latex-page-number">

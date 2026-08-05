@@ -24,7 +24,7 @@
 
         <p>We isolate these publisher decisions in a file we call a <term>publication file</term>.  Generally, use of this file will change <em>how</em> words look, or are arranged, on the page, but will not change the author's words <em>themselves</em>.  some software might call this a <q>configuration file</q>, but we think it is very important to indicate its role in the publication process.</p>
 
-        <p>In tnis section, we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publication-file-reference"/>.</p>
+        <p>In this section, we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse comprehensive reference material in <xref ref="publication-file-reference"/>.</p>
 
         <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.  Avoid using spaces in the filename, even if your operating system encourages it.</p>
 

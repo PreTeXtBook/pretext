@@ -28,7 +28,7 @@
     <p>If you are hosting at your institution, that is a great outcome.  There is no cost to you, and everybody is happy.  Lobby for a great <init>URL</init>, like <c>platypus.mammal-institute.org</c> and the rest should take care of itself.  The rest of this section is about the second situation.</p>
 
     <p>To arrange hosting yourself,<ol>
-        <li>Purchase a domain name, it should not be a real big annual expense.  Choose something professional, rather than just your name (though your name does have a natural appeal).  And maybe something general enough that you can host your next book under that same domain name.  The idea here is to <em>own</em> the domain name, so your book can move anywhere, but that domain name will always point to the book.  This name should be <em>owned and controlled by you</em>, not your institution, not GitHub, not <c>5GBFree.com</c>.</li>
+        <li>Purchase a domain name; a typical registration runs a few dollars a month.  Choose something professional, rather than just your name (though your name does have a natural appeal).  And maybe something general enough that you can host your next book under that same domain name.  The idea here is to <em>own</em> the domain name, so your book can move anywhere, but that domain name will always point to the book.  This name should be <em>owned and controlled by you</em>, not your institution, not GitHub, not <c>5GBFree.com</c>.</li>
 
         <li>
             <p>Sign up for, and perhaps pay for, a hosting service that lets you point your domain name at the site.<ul>
@@ -36,7 +36,7 @@
                 <li>Mitch Keller likes the <q>Swift</q> plan at <url href="https://www.a2hosting.com/web-hosting" visual="www.a2hosting.com/web-hosting">A2 Hosting</url> at about $60 annually.  (2017-07-05)</li>
             </ul></p>
         </li>
-    </ol>Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>
+    </ol>Note the combination the two steps make possible: a project hosted at no cost on GitHub Pages, reached through a domain name you own, is complete control of your project's address for the price of the registration alone.  Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>
 
     <p>There are a few practical details to think about.  Eventually others will link to your book, and you will also release updates.  First, think about creating a simple high-level directory that will be stable, short, easy to type, and easy to remember.  Controlling your domain name (above) is the first step.  Then consider that you may also distribute a <init>PDF</init> version, and you may someday write a second book.  So, for example, your <init>URL</init> might look like:</p>
 

@@ -1177,6 +1177,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="affiliation">
+    <xsl:if test="position">
+        <xsl:apply-templates select="position" />
+        <xsl:if test="position/following-sibling::*">
+            <br />
+        </xsl:if>
+    </xsl:if>
     <xsl:if test="department">
         <xsl:apply-templates select="department" />
         <xsl:if test="department/following-sibling::*">
@@ -1198,11 +1204,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Departments and Institutions are free-form, or sequences of lines -->
-<xsl:template match="department|institution|location">
+<xsl:template match="position|department|institution|location">
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="department[line]|institution[line]|location[line]">
+<xsl:template match="position[line]|department[line]|institution[line]|location[line]">
     <xsl:apply-templates select="line" />
 </xsl:template>
 

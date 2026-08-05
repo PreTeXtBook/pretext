@@ -218,10 +218,12 @@
             PersonName = element personname {TextSimple}
             Affiliation =
                 element affiliation {
+                    Position? &
                     Department? &
                     Institution? &
                     Location?
                 }
+            Position = element position {TextSimple | ShortLine+}
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
             Support = element support {TextParagraph}
@@ -249,7 +251,7 @@
                     attribute xml:id {text}?,
                     PersonName,
                     (
-                        (Department? & Institution? & Location?) |
+                        (Position? & Department? & Institution? & Location?) |
                         Affiliation+
                     )?,
                     Email?,
@@ -260,7 +262,7 @@
                 element editor {
                     PersonName,
                     (
-                        (Department? & Institution? & Location?) |
+                        (Position? & Department? & Institution? & Location?) |
                         Affiliation+
                     )?,
                     Email?
@@ -661,6 +663,8 @@
                     attribute line-numbers {"yes"|"no"}?,
                     attribute linker-args {text}?,
                     attribute timelimit {text}?,
+                    attribute pck {text}?,
+                    attribute scene {text}?,
                     (
                         text
                     |

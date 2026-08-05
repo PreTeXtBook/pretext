@@ -3138,14 +3138,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <!-- Include "personname" first -->
         <xsl:apply-templates select="personname|@*" mode="repair"/>
-        <!-- If there are bare deparmtment/institution/address, wrap them in affailiation -->
-        <xsl:if test="department or institution or location">
+        <!-- If there are bare position/department/institution/address, wrap them in affiliation -->
+        <xsl:if test="position or department or institution or location">
             <affiliation>
-                <xsl:apply-templates select="department|institution|location" mode="repair"/>
+                <xsl:apply-templates select="position|department|institution|location" mode="repair"/>
             </affiliation>
         </xsl:if>
         <!-- Include all additional elements as they are -->
-        <xsl:apply-templates select="*[not(self::personname or self::department or self::institution or self::location)]" mode="repair"/>
+        <xsl:apply-templates select="*[not(self::personname or self::position or self::department or self::institution or self::location)]" mode="repair"/>
     </xsl:copy>
 </xsl:template>
 

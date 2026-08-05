@@ -92,6 +92,14 @@ ul {
   position: relative;
 }
 
+// images in containers grow to fit the container, whose inline
+// style carries an authored width, so image/@width is honored
+// (mirrors the rule in components/elements/_media.scss)
+.image-box img,
+img.contained {
+  width: 100%;
+}
+
 iframe.asymptote,
 .video-box .video,
 .video-box .video-poster {

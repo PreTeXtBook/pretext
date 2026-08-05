@@ -122,9 +122,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:variable>
     <!-- NB: 2D PNG is not preferable, but needed for EPUB sent to Kindle -->
+    <!-- NB: 2D EPS serves journals requiring it; Sage's matplotlib        -->
+    <!-- machinery saves any 2D plot by the requested file extension       -->
     <xsl:variable name="b-legal-combination" select="($variant = '2d' and $sageplot.fileformat = 'pdf')
                                                  or  ($variant = '2d' and $sageplot.fileformat = 'svg')
                                                  or  ($variant = '2d' and $sageplot.fileformat = 'png')
+                                                 or  ($variant = '2d' and $sageplot.fileformat = 'eps')
                                                  or  ($variant = '3d' and $sageplot.fileformat = 'png')
                                                  or  ($variant = '3d' and $sageplot.fileformat = 'html')"/>
     <!-- Only certain combinations are supported and only certain       -->
