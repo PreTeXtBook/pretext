@@ -28,6 +28,13 @@
 
         <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.  Avoid using spaces in the filename, even if your operating system encourages it.</p>
 
+        <paragraphs xml:id="publication-file-paths">
+            <title>Paths in a publication file</title>
+            <idx><h>publication file</h><h>paths within</h></idx>
+
+            <p>Every path inside a publication file<mdash/>a generated-files directory, a file of private solutions, a cover image<mdash/>is interpreted <em>relative to the main source file</em> of your project, the one holding the <tag>pretext</tag> element.  Not relative to the publication file itself, and not relative to the directory where you run a conversion.  This is deliberate: the publication file can live anywhere, be renamed, or be swapped for another, and its entries still locate the same files.  When a path seems to be ignored, or a file cannot be found, check it against the location of your main source file first.</p>
+        </paragraphs>
+
         <p>Entries that control aspects of the output are often attributes of various elements, but may also be the content of elements.  When you read the reference material in <xref ref="publication-file-reference"/> be aware that we use a sort of shorthand to describe these entries, modeled on a specification called XPath.  For example, if we say to set<cd>
             <cline>/publication/foo/bar/@bazz</cline>
         </cd>to possible values of <c>yes</c>, <c>no</c>, or <c>maybe</c> then the following will be the guts of a legitimate publication file that would somehow adjust your output in some way.  In particular, note that the <q>at sign</q>, <c>@</c>, indicates an attribute of the preceding element.</p>

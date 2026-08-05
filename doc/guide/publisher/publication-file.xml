@@ -15,7 +15,7 @@
     <title>Publication File Reference</title>
 
     <introduction>
-        <p>This chapter is reference material for the <term>publication file</term>, whose employment is described in <xref ref="publication-file"/>, where you can also find an explanation of the shorthand syntax used here to describe elements of this file.</p>
+        <p>This chapter is reference material for the <term>publication file</term>, whose employment is described in <xref ref="publication-file"/>, where you can also find an explanation of the shorthand syntax used here to describe elements of this file.  Any path appearing as a value below is relative to your <em>main source file</em>, never to the publication file itself (<xref ref="publication-file-paths"/>).</p>
     </introduction>
 
     <section xml:id="publication-file-common">
