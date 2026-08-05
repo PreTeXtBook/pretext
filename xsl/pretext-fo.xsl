@@ -498,11 +498,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="affiliation">
-    <xsl:apply-templates select="department|institution|location"/>
+    <xsl:apply-templates select="position|department|institution|location"/>
 </xsl:template>
 
 <!-- each is a line, or authored "line"s, of the address block -->
-<xsl:template match="department|institution|location">
+<xsl:template match="position|department|institution|location">
     <xsl:choose>
         <xsl:when test="line">
             <xsl:apply-templates select="line"/>
