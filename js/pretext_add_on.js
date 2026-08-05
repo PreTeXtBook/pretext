@@ -633,7 +633,7 @@ function pageOverflows() {
 function adjustWorkspaceOrRepaginate({paperSize, margins}) {
     adjustWorkspaceToFitPage({paperSize, margins});
     if (pageOverflows()) {
-        resetPrintoutPagination(margins);
+        addSpilloverPages(margins);
         adjustWorkspaceToFitPage({paperSize, margins});
     }
 }
@@ -655,6 +655,94 @@ function resetPrintoutPagination(margins) {
     unwrapOnepages();
     createPrintoutPages(margins);
     addHeadersAndFootersToPrintout();
+}
+
+function isHeaderFooterEl(el) {
+  return el.classList.contains('first-page-header') || el.classList.contains('running-header') ||
+         el.classList.contains('first-page-footer') || el.classList.contains('running-footer');
+}
+
+function addSpilloverPages(margins) {
+  const printout = document.querySelector('section.worksheet, section.handout');
+  if (!printout) return;
+  let pages = [...printout.querySelectorAll(':scope > .onepage')];
+
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i];
+    const pageRect = page.getBoundingClientRect();
+    const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
+
+    let overflowStartIndex = -1;
+    for (let j = 0; j < contentChildren.length; j++) {
+      const r = contentChildren[j].getBoundingClientRect();
+      if (r.bottom > pageRect.bottom + 1) {
+        overflowStartIndex = j;
+        break;
+      }
+    }
+    if (overflowStartIndex === -1) continue; // this page fits fine, leave it completely alone
+
+    const overflowElems = contentChildren.slice(overflowStartIndex);
+    const newPage = document.createElement('section');
+    newPage.classList.add('onepage', 'spillover');
+    if (page.classList.contains('lastpage')) {
+      page.classList.remove('lastpage');
+      newPage.classList.add('lastpage');
+    }
+    overflowElems.forEach(el => newPage.appendChild(el));
+    page.parentNode.insertBefore(newPage, page.nextSibling);
+
+    [...page.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+
+    pages.splice(i + 1, 0, newPage); // let the loop also check the new page for cascading overflow
+  }
+
+  printout.querySelectorAll(':scope > .onepage').forEach(p => {
+    [...p.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+  });
+  addHeadersAndFootersToPrintout();
+}
+
+function singlePageOverflows(page) {
+  const pRect = page.getBoundingClientRect();
+  for (const child of page.children) {
+    const r = child.getBoundingClientRect();
+    if (r.bottom > pRect.bottom + 1) return true;
+  }
+  return false;
+}
+
+function collapseSpilloverPages(margins) {
+  const printout = document.querySelector('section.worksheet, section.handout');
+  if (!printout) return;
+  let pages = [...printout.querySelectorAll(':scope > .onepage')];
+
+  for (let i = 1; i < pages.length; i++) {
+    const page = pages[i];
+    if (!page.classList.contains('spillover')) continue;
+    const prevPage = pages[i - 1];
+
+    const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
+    contentChildren.forEach(c => prevPage.appendChild(c));
+
+    if (!singlePageOverflows(prevPage)) {
+      // Success: the spillover page is no longer needed.
+      if (page.classList.contains('lastpage')) {
+        prevPage.classList.add('lastpage');
+      }
+      page.remove();
+      pages.splice(i, 1);
+      i--; // re-check prevPage's new index, in case it can absorb the next spillover page too
+    } else {
+      // Doesn't fit: put the content back where it was.
+      contentChildren.forEach(c => page.appendChild(c));
+    }
+  }
+
+  printout.querySelectorAll(':scope > .onepage').forEach(p => {
+    [...p.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+  });
+  addHeadersAndFootersToPrintout();
 }
 
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
@@ -1229,12 +1317,12 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                     });
                     // Recompute layout once, after all elements of this type have been toggled
                     if (checkbox.checked) {
-                        // Hiding: content only shrinks, so always fully repaginate for a compact layout.
-                        resetPrintoutPagination(margins);
+                        // Hiding: content only shrinks, so try to merge any spillover pages back in.
+                        collapseSpilloverPages(margins);
                         adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                     } else {
                         // Revealing: try to absorb the extra height into existing workspace first;
-                        // only repaginate if a page still overflows even with workspace at zero.
+                        // only spill onto a new page if a page still overflows even with workspace at zero.
                         adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
                     }
                 });
