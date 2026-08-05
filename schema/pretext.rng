@@ -722,6 +722,9 @@
     <element name="affiliation">
       <interleave>
         <optional>
+          <ref name="Position"/>
+        </optional>
+        <optional>
           <ref name="Department"/>
         </optional>
         <optional>
@@ -731,6 +734,16 @@
           <ref name="Location"/>
         </optional>
       </interleave>
+    </element>
+  </define>
+  <define name="Position">
+    <element name="position">
+      <choice>
+        <ref name="TextSimple"/>
+        <oneOrMore>
+          <ref name="ShortLine"/>
+        </oneOrMore>
+      </choice>
     </element>
   </define>
   <define name="Department">
@@ -830,6 +843,9 @@
         <choice>
           <interleave>
             <optional>
+              <ref name="Position"/>
+            </optional>
+            <optional>
               <ref name="Department"/>
             </optional>
             <optional>
@@ -861,6 +877,9 @@
       <optional>
         <choice>
           <interleave>
+            <optional>
+              <ref name="Position"/>
+            </optional>
             <optional>
               <ref name="Department"/>
             </optional>
@@ -1842,6 +1861,12 @@
       </optional>
       <optional>
         <attribute name="timelimit"/>
+      </optional>
+      <optional>
+        <attribute name="pck"/>
+      </optional>
+      <optional>
+        <attribute name="scene"/>
       </optional>
       <choice>
         <text/>

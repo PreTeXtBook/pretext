@@ -3391,10 +3391,12 @@
             PersonName = element personname {TextSimple}
             Affiliation =
                 element affiliation {
+                    Position? &amp;
                     Department? &amp;
                     Institution? &amp;
                     Location?
                 }
+            Position = element position {TextSimple | ShortLine+}
             Department = element department {TextSimple | ShortLine+}
             Institution = element institution {TextSimple | ShortLine+}
             Support = element support {TextParagraph}
@@ -3422,7 +3424,7 @@
                     attribute xml:id {text}?,
                     PersonName,
                     (
-                        (Department? &amp; Institution? &amp; Location?) |
+                        (Position? &amp; Department? &amp; Institution? &amp; Location?) |
                         Affiliation+
                     )?,
                     Email?,
@@ -3433,7 +3435,7 @@
                 element editor {
                     PersonName,
                     (
-                        (Department? &amp; Institution? &amp; Location?) |
+                        (Position? &amp; Department? &amp; Institution? &amp; Location?) |
                         Affiliation+
                     )?,
                     Email?
