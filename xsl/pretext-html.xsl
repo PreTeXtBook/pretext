@@ -9145,8 +9145,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </code>
 </xsl:template>
 
+<!-- A copy button serves a block of code; within a "tabular"  -->
+<!-- cell the content is short and the floating button crowds  -->
+<!-- the cell, so there we decline to provide one.             -->
 <xsl:template name="insert-clipboardable-class">
-    <xsl:text> clipboardable</xsl:text>
+    <xsl:if test="not(ancestor::tabular)">
+        <xsl:text> clipboardable</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- 100% analogue of LaTeX's verbatim            -->
