@@ -9026,18 +9026,32 @@ Book (with parts), "section" at level 3
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:apply-templates select="." mode="xref-text-separator"/>
-                    <xsl:apply-templates select="$target" mode="xref-number">
-                        <xsl:with-param name="xref" select="." />
-                    </xsl:apply-templates>
+                    <xsl:variable name="the-number">
+                        <xsl:apply-templates select="$target" mode="xref-number">
+                            <xsl:with-param name="xref" select="." />
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <!-- an unnumbered target ("paragraphs", squelched  -->
+                    <!-- numbering) contributes no separator, either    -->
+                    <xsl:if test="not($the-number = '')">
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:copy-of select="$the-number"/>
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:apply-templates select="." mode="xref-text-separator"/>
-                    <xsl:apply-templates select="$target" mode="xref-number">
-                        <xsl:with-param name="xref" select="." />
-                    </xsl:apply-templates>
+                    <xsl:variable name="the-number">
+                        <xsl:apply-templates select="$target" mode="xref-number">
+                            <xsl:with-param name="xref" select="." />
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <!-- an unnumbered target ("paragraphs", squelched  -->
+                    <!-- numbering) contributes no separator, either    -->
+                    <xsl:if test="not($the-number = '')">
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:copy-of select="$the-number"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -9046,14 +9060,28 @@ Book (with parts), "section" at level 3
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:apply-templates select="." mode="xref-text-separator"/>
-                    <xsl:apply-templates select="$target" mode="serial-number" />
+                    <xsl:variable name="the-number">
+                        <xsl:apply-templates select="$target" mode="serial-number" />
+                    </xsl:variable>
+                    <!-- an unnumbered target ("paragraphs", squelched  -->
+                    <!-- numbering) contributes no separator, either    -->
+                    <xsl:if test="not($the-number = '')">
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:copy-of select="$the-number"/>
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:apply-templates select="." mode="xref-text-separator"/>
-                    <xsl:apply-templates select="$target" mode="serial-number" />
+                    <xsl:variable name="the-number">
+                        <xsl:apply-templates select="$target" mode="serial-number" />
+                    </xsl:variable>
+                    <!-- an unnumbered target ("paragraphs", squelched  -->
+                    <!-- numbering) contributes no separator, either    -->
+                    <xsl:if test="not($the-number = '')">
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:copy-of select="$the-number"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -9068,19 +9096,26 @@ Book (with parts), "section" at level 3
                     <xsl:apply-templates select="$target" mode="type-name" />
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:apply-templates select="." mode="xref-text-separator"/>
             <!-- only difference in behavior is global/local number -->
-            <xsl:choose>
-                <xsl:when test="$text-style = 'type-global-title'">
-                    <xsl:apply-templates select="$target" mode="xref-number">
-                        <xsl:with-param name="xref" select="." />
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:when test="$text-style = 'type-local-title'">
-                    <xsl:apply-templates select="$target" mode="serial-number"/>
-                </xsl:when>
-                <xsl:otherwise/>
-            </xsl:choose>
+            <xsl:variable name="the-number">
+                <xsl:choose>
+                    <xsl:when test="$text-style = 'type-global-title'">
+                        <xsl:apply-templates select="$target" mode="xref-number">
+                            <xsl:with-param name="xref" select="." />
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:when test="$text-style = 'type-local-title'">
+                        <xsl:apply-templates select="$target" mode="serial-number"/>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+            </xsl:variable>
+            <!-- an unnumbered target ("paragraphs", squelched  -->
+            <!-- numbering) contributes no separator, either    -->
+            <xsl:if test="not($the-number = '')">
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
+            </xsl:if>
+            <xsl:copy-of select="$the-number"/>
             <xsl:variable name="the-title">
                 <xsl:apply-templates select="$target" mode="title-xref"/>
             </xsl:variable>
