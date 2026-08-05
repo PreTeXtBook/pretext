@@ -3223,6 +3223,19 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- A bare appendix letter beside a title is ambiguous ("A Trip    -->
+<!-- Abroad"), so wherever the letter and title compose on one line -->
+<!-- a period follows the letter: "A. Trip Abroad".  A "solutions"  -->
+<!-- division in the back matter shares the letter sequence (see    -->
+<!-- "division-serial-number" in the assembly), so it is treated    -->
+<!-- identically.  Only the top-level letter: subdivision numbers   -->
+<!-- ("A.2") are already unambiguous.  Styling refinements are      -->
+<!-- anticipated.                                                   -->
+<xsl:template match="*" mode="division-number-separator"/>
+<xsl:template match="appendix|backmatter/solutions" mode="division-number-separator">
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
 <!-- Most PreTeXt elements have names, and their localizations, indexed   -->
 <!-- by a "string-id" that is simply their local name.  However, others   -->
 <!-- ("exercise" is archetypical) have names that vary according to their -->

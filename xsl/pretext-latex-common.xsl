@@ -369,6 +369,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\AtBeginDocument{\setlength{\ptxnormalparindent}{\parindent}}&#xa;</xsl:text>
     <xsl:text>\AtBeginDocument{\setlength{\ptxnormalparskip}{\parskip}}&#xa;</xsl:text>
     <xsl:text>\newcommand{\ptxsetparstyle}{\setlength{\parindent}{\ptxnormalparindent}\setlength{\parskip}{\ptxnormalparskip}}</xsl:text>
+    <xsl:text>%% An appendix is numbered by a letter, and a bare letter beside a&#xa;</xsl:text>
+    <xsl:text>%% title is ambiguous ("A Trip Abroad"), so a letter composed with&#xa;</xsl:text>
+    <xsl:text>%% a title carries a period ("A. Trip Abroad").  These macros are&#xa;</xsl:text>
+    <xsl:text>%% seams in the division styles, empty until the appendices arrive&#xa;</xsl:text>
+    <xsl:text>%% (chapter-level for a book, section-level for an article, so a&#xa;</xsl:text>
+    <xsl:text>%% multi-part number like "E.1" never gains a period); see the&#xa;</xsl:text>
+    <xsl:text>%% uses at  \appendix&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxappendixperiodchapter}{}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxappendixperiodsection}{}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
@@ -3432,6 +3441,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="appendix|solutions">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix%&#xa;</xsl:text>
+        <xsl:text>%% Appendix letters compose with titles, so take a period: in&#xa;</xsl:text>
+        <xsl:text>%% contents entries (scoped: the .toc file is read within a group)&#xa;</xsl:text>
+        <xsl:text>\addtocontents{toc}{\protect\renewcommand{\protect\ptxappendixperiodsection}{.}}%&#xa;</xsl:text>
+        <xsl:text>%% and in the hang-shape division headings from here on&#xa;</xsl:text>
+        <xsl:text>\renewcommand{\ptxappendixperiodsection}{.}%&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>%% A lineskip in table of contents as a transition to the appendices&#xa;</xsl:text>
         <xsl:text>\addtocontents{toc}{\vspace{\normalbaselineskip}}%&#xa;</xsl:text>
@@ -3451,6 +3465,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="appendix|solutions">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix%&#xa;</xsl:text>
+        <xsl:text>%% Appendix letters compose with titles in contents entries, so&#xa;</xsl:text>
+        <xsl:text>%% take a period (scoped: the .toc file is read within a group;&#xa;</xsl:text>
+        <xsl:text>%% display-shape chapter headings do not compose, and stay bare)&#xa;</xsl:text>
+        <xsl:text>\addtocontents{toc}{\protect\renewcommand{\protect\ptxappendixperiodchapter}{.}}%&#xa;</xsl:text>
         <!-- When the equation counter is scoped to "part" (see the         -->
         <!-- equation-numbering template), the LaTeX book class's chapter   -->
         <!-- reset of "equation" has been removed, so \appendix no longer   -->

@@ -563,6 +563,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="not($num = '')">
                 <span class="codenumber">
                     <xsl:value-of select="$num" />
+                    <xsl:apply-templates select="." mode="division-number-separator"/>
                 </span>
                 <xsl:text> </xsl:text>
             </xsl:if>
@@ -984,6 +985,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="space-styled"/>
     <span class="codenumber">
         <xsl:apply-templates select="." mode="number" />
+        <xsl:apply-templates select="." mode="division-number-separator"/>
     </span>
     <xsl:call-template name="space-styled"/>
     <span class="title">
@@ -13270,6 +13272,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="not($the-number = '')">
                 <span class="codenumber">
                     <xsl:value-of select="$the-number" />
+                    <xsl:apply-templates select="." mode="division-number-separator"/>
                 </span>
                 <!-- separating space, only if needed -->
                 <xsl:text> </xsl:text>
