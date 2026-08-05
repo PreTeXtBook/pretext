@@ -6490,7 +6490,7 @@ Book (with parts), "section" at level 3
     <xsl:if test="@primary='no' or @secondary='yes'">
         <xsl:text>Secondary </xsl:text>
     </xsl:if>
-    <xsl:value-of select="."/>
+    <xsl:value-of select="normalize-space(.)"/>
     <xsl:choose>
         <xsl:when test="following-sibling::keyword[1][@primary='no' or @secondary='yes']">
             <xsl:text>; </xsl:text>
