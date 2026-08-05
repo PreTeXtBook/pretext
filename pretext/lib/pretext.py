@@ -1768,6 +1768,10 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # read lines, but only lines that are comma delimited
         thumbs = [t.strip() for t in id_file.readlines() if "," in t]
 
+    # A failed download (a video gone missing, a network hiccup) is
+    # reported and the remainder still downloads; the whole run only
+    # errors afterward, naming every failure.
+    failed_thumbnails = []
     for thumb in thumbs:
         thumb_pair = thumb.split(",")
         url = "http://i.ytimg.com/vi/{}/default.jpg".format(thumb_pair[0])
@@ -1775,14 +1779,32 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         log.info("downloading {} as {}...".format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
-        r = requests.get(url, stream=True, timeout=10)
+        try:
+            r = requests.get(url, stream=True, timeout=10)
+        except requests.exceptions.RequestException as e:
+            failed_thumbnails.append(url)
+            log.warning("the download of {} failed: {}".format(url, e))
+            continue
         if r.status_code == 200:
             with open(path, "wb") as f:
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
         else:
-            msg = "PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?"
-            raise OSError(msg.format(r.status_code, url))
+            failed_thumbnails.append(url)
+            log.warning(
+                "the download of {} returned a bad status code ({})".format(
+                    url, r.status_code
+                )
+            )
+    if failed_thumbnails:
+        msg = "\n".join(
+            [
+                "{} YouTube thumbnail(s) failed to download.",
+                "Perhaps a video has gone missing; try the address(es) manually:",
+            ]
+        ).format(len(failed_thumbnails))
+        url_list = "\n  " + "\n  ".join(failed_thumbnails)
+        raise OSError(msg + url_list)
     log.info("YouTube thumbnail download complete")
 
 
