@@ -2666,6 +2666,64 @@ body.standalone-page .ptx-page {
 :root.dark-mode .ptx-read-aloud-current-block {
   background-color: var(--ptx-read-aloud-highlight, rgba(255, 213, 79, 0.28));
 }
+body.pretext.ptx-embedded {
+  padding-bottom: 0;
+}
+body.pretext.ptx-embedded:has(.ptx-read-aloud-player:not([hidden])) {
+  padding-bottom: 0;
+}
+body.pretext.ptx-embedded .ptx-navbar {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  left: auto;
+  bottom: auto;
+  width: auto;
+  height: auto;
+  max-width: calc(100% - 2 * 0.75rem);
+  margin: 0;
+  background: transparent;
+  border: 0;
+  z-index: 1200;
+}
+body.pretext.ptx-embedded .ptx-navbar .ptx-navbar-contents {
+  max-width: none;
+  width: auto;
+  margin: 0;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  min-width: 0;
+}
+body.pretext.ptx-embedded .ptx-navbar .ptx-navbar-contents > *:not(.nav-other-controls) {
+  display: none;
+}
+body.pretext.ptx-embedded .ptx-navbar .ptx-embed-button {
+  display: none;
+}
+body.pretext.ptx-embedded .ptx-navbar .nav-other-controls {
+  height: 36px;
+  max-width: 100%;
+  min-width: 0;
+  background: var(--navbar-background);
+  border: 1px solid var(--page-border-color);
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px var(--dialog-shadow-color);
+  overflow: hidden;
+}
+body.pretext.ptx-embedded .ptx-navbar .ptx-read-aloud-player {
+  position: static;
+  height: auto;
+  background: none;
+  border-top: 0;
+  justify-content: flex-end;
+  min-width: 0;
+}
+body.pretext.ptx-embedded .ptx-navbar .ptx-readability-options-group-theme {
+  display: none;
+}
+body.pretext.ptx-embedded .ptx-navbar .nav-other-controls > .button {
+  flex-shrink: 0;
+}
 .ptx-navbar {
   position: sticky;
   top: 0;
