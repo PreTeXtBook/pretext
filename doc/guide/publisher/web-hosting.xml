@@ -38,6 +38,8 @@
         </li>
     </ol>Note the combination the two steps make possible: a project hosted at no cost on GitHub Pages, reached through a domain name you own, is complete control of your project's address for the price of the registration alone.  Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>
 
+    <p>Wherever the project lands, state its official home <em>inside</em> the project itself: a sentence in the preface or the colophon giving the address of the free, official <init>HTML</init> version.  Copies of openly-licensed projects circulate<mdash/>some unauthorized, some merely stale<mdash/>and a reader holding any copy should be one sentence away from the canonical, current version.</p>
+
     <p>There are a few practical details to think about.  Eventually others will link to your book, and you will also release updates.  First, think about creating a simple high-level directory that will be stable, short, easy to type, and easy to remember.  Controlling your domain name (above) is the first step.  Then consider that you may also distribute a <init>PDF</init> version, and you may someday write a second book.  So, for example, your <init>URL</init> might look like:</p>
 
     <pre>
