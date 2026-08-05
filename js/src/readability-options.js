@@ -323,3 +323,9 @@ applyFontSize(getSavedFontSize());
 // and from other modules (e.g. mermaid, embed code). Expose them globally.
 window.isDarkMode = isDarkMode;
 window.setDarkMode = setDarkMode;
+
+// Module exports for other files in the same bundle.  Preferred over the
+// window globals above, which exist for reaching code we do not bundle;
+// pretext-embed.js needs to know whether the reader has chosen a theme of
+// their own before it applies the one the embed URL asks for.
+export { applyThemeChoice };
