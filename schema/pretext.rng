@@ -2469,6 +2469,7 @@
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
           <ref name="MuseScore"/>
+          <ref name="Paragraph"/>
         </choice>
       </element>
       <!-- the one route to a numbered, titled "tabular" -->

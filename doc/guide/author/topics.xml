@@ -4339,6 +4339,8 @@
 
         <p>An <tag>image</tag> is likely the most frequent content in a <tag>figure</tag>.  But you may also place a <tag>video</tag>, <tag>audio</tag>, <tag>sidebyside</tag>, or <tag>sbsgroup</tag>.  Once completely implemented, an <tag>interactive</tag> is another possibility.  (See  <xref ref="topic-sidebyside"/> for more about the side-by-side construction.)</p>
 
+        <p>A <tag>figure</tag> may instead hold a single <tag>p</tag>.  This serves content that is honestly a captioned, numbered display, just built from text.  Displayed mathematics is the archetype: the addition table of a finite ring, authored as an <tag>md</tag> array, is no less a figure than a plot would be.  The humanities have the same need, for example the transcription of an inscription on a monument, a statue, or a coin.  It is a single paragraph by design<mdash/>a figure is a display, and is not meant to hold running prose that belongs to your narrative.</p>
+
         <p>A special situation is when a <tag>figure</tag> is a panel of a <tag>sidebyside</tag>, which is itself inside a <tag>figure</tag>.  Then the interior figure is <term>subnumbered</term>.  For example, the exterior figure might be Figure 4.12, and if a panel of the <tag>sidebyside</tag> is the second interior figure it will be Figure 4.12(b).  For example,<cd>
             <cline>&lt;figure&gt;</cline>
             <cline>    &lt;caption&gt;Salamanders at different life stages&lt;/caption&gt;</cline>

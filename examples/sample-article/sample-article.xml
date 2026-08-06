@@ -5016,6 +5016,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>pretext</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>pretext</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
 
+            <subsection xml:id="paragraph-figures" label="paragraph-figures">
+                <title>Paragraphs as Figures</title>
+                <idx><h>figure</h><h>holding a paragraph</h></idx>
+
+                <p>A <tag>figure</tag> usually holds an image or similar planar media, but it may instead hold a single paragraph.  This serves content that is honestly a captioned, numbered display, just built from text.  Displayed mathematics is the archetype: the addition table of a finite ring is no less a figure than a plot would be.</p>
+
+                <figure xml:id="figure-z5-addition">
+                    <caption>Addition table for <m>{\mathbb Z}_5</m></caption>
+                    <p><md>\begin{array}{c|ccccc}
+                    + &amp; 0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 \\
+                    \hline
+                    0 &amp; 0 &amp; 1 &amp; 2 &amp; 3 &amp; 4 \\
+                    1 &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 0 \\
+                    2 &amp; 2 &amp; 3 &amp; 4 &amp; 0 &amp; 1 \\
+                    3 &amp; 3 &amp; 4 &amp; 0 &amp; 1 &amp; 2 \\
+                    4 &amp; 4 &amp; 0 &amp; 1 &amp; 2 &amp; 3
+                    \end{array}</md></p>
+                </figure>
+
+                <p>The humanities have the same need.  The transcription of an inscription on a monument, a statue, or a coin is display material bound to its caption, not a paragraph of the surrounding argument.</p>
+
+                <figure xml:id="figure-pantheon-inscription">
+                    <caption>Inscription on the architrave of the Pantheon, Rome</caption>
+                    <p><foreign xml:lang="la">M·AGRIPPA·L·F·COS·TERTIVM·FECIT</foreign>, <q>Marcus Agrippa, son of Lucius, three times consul, built this.</q></p>
+                </figure>
+            </subsection>
+
             <subsection>
                 <title>Accessibility</title>
                 <p>
