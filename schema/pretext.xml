@@ -2776,6 +2776,23 @@
                 FreeResponse |
                 FillInBlank |
                 Areas
+            # The assembly classifies "task" alongside "exercise" and the
+            # project-like blocks, and every interactive form is
+            # implemented within a "task", so the same union applies
+            Task |=
+                element task {
+                    attribute workspace {text}?,
+                    (
+                    TrueFalse |
+                    MultipleChoice |
+                    Parsons |
+                    Matching |
+                    FreeResponse |
+                    FillInBlank |
+                    Areas |
+                    CodingExercise
+                    )
+                }
             </code>
         </fragment>
     </section>
