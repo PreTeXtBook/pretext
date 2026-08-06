@@ -198,13 +198,15 @@
                 StatementExercise,
                 element choices {
                     attribute randomize {"yes"|"no"}?,
+                    attribute multiple-correct {"yes"|"no"}?,
+                    attribute cols {xsd:integer}?,
                     Choice+
                 },
                 Hint*, Answer*, Solution*
             Choice =
                 element choice {
                     attribute correct {"yes"|"no"}?,
-                    ((mixed {BlockText?})
+                    ((mixed {BlockText*})
                     | (StatementExercise, Feedback?))
                 }
             Parsons =
@@ -557,11 +559,13 @@
                 }
             BlockStatement |= Datafile
 
-            # Query (poll/survey) element
+            # Query (poll/survey) element; results are private to the
+            # instructor unless @visibility says otherwise
             Query =
                 element query {
                     LabelID?,
                     attribute scale {xsd:integer}?,
+                    attribute visibility {"instructor"|"all"}?,
                     StatementExercise,
                     element choices {
                         Choice+

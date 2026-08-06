@@ -446,6 +446,19 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="multiple-correct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="cols">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <oneOrMore>
         <ref name="Choice"/>
       </oneOrMore>
@@ -472,9 +485,9 @@
       </optional>
       <choice>
         <mixed>
-          <optional>
+          <zeroOrMore>
             <ref name="BlockText"/>
-          </optional>
+          </zeroOrMore>
         </mixed>
         <group>
           <ref name="StatementExercise"/>
@@ -1349,7 +1362,10 @@
   <define name="BlockStatement" combine="choice">
     <ref name="Datafile"/>
   </define>
-  <!-- Query (poll/survey) element -->
+  <!--
+    Query (poll/survey) element; results are private to the
+    instructor unless @visibility says otherwise
+  -->
   <define name="Query">
     <element name="query">
       <optional>
@@ -1358,6 +1374,14 @@
       <optional>
         <attribute name="scale">
           <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="visibility">
+          <choice>
+            <value>instructor</value>
+            <value>all</value>
+          </choice>
         </attribute>
       </optional>
       <ref name="StatementExercise"/>
