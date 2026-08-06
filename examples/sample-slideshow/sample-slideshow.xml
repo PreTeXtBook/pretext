@@ -313,13 +313,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <col/>
                         <col/>
                         <row bottom="minor">
-                            <cell>Format</cell>
+                            <cell>Format<tn>A table note.</tn></cell>
                             <cell>Engine</cell>
                             <cell>Output</cell>
                         </row>
                         <row>
                             <cell>reveal.js</cell>
-                            <cell>browser</cell>
+                            <cell>browser<tn>Another table note, of a differing length.</tn></cell>
                             <cell><init>HTML</init></cell>
                         </row>
                         <row>
