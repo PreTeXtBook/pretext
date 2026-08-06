@@ -230,7 +230,7 @@
             <li>Locators for smaller units are knowls.</li>
             <li><q>Page ranges</q> use the initial location.</li>
             <li>No running heads (yet).</li>
-            <li>A <term>headnote</term> can be accomplished with an <tag>introduction</tag>.</li>
+            <li>A <tag>headnote</tag> renders between the heading and the entries.</li>
         </ul>Some of these choices would be easy to adjust or extend as the result of a feature request.</p>
 
         <p>Also, there can be significant differences between how <pretext/> implements the index for <init>HTML</init> and how the <c>imakeidx</c> package creates an index for <latex/>.  See <xref ref="latex-index-style"/> and <xref ref="indexing-guide"/>.</p>

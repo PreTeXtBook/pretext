@@ -18143,6 +18143,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <index label="the-index">
                 <title>Index</title>
+                <headnote>
+                    <p>An index may begin with a <tag>headnote</tag> like this one.  Indexing advice holds that a headnote is only necessary when the index has some unusual feature a reader should know in advance<mdash/>perhaps how symbols are ordered, or that persons and topics are interfiled.  This index has no such feature; this headnote is a demonstration.</p>
+                </headnote>
                 <index-list/>
             </index>
 

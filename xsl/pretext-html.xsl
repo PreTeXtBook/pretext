@@ -6125,10 +6125,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- A "headnote" prefaces the content of a "glossary".  Below -->
-<!-- is modeled on block introductions (just above), but with  -->
-<!-- no "title" and with a provisional recycled CSS class.     -->
-<xsl:template match="glossary/headnote">
+<!-- A "headnote" prefaces the list of a list-like division: a -->
+<!-- "glossary", a "references", an "index", an "appendix"     -->
+<!-- that is a notation list.  Below is modeled on block       -->
+<!-- introductions (just above), but with no "title".          -->
+<xsl:template match="glossary/headnote|references/headnote|index/headnote|appendix/headnote">
     <xsl:param name="b-original" select="true()" />
     <section class="headnote">
         <xsl:if test="$b-original">

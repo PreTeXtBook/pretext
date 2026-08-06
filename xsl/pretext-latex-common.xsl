@@ -1979,6 +1979,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$introduction-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- HEADNOTE (prefatory note of a list-like division) -->
+    <xsl:variable name="headnote-reps" select="($document-root//headnote)[1]"/>
+    <xsl:if test="$headnote-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% xparse environment for headnotes of list-like divisions&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$headnote-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- MISCELLANEOUS -->
     <!-- "paragraphs" are partly like a division, -->
     <!-- but we include it here as a one-off      -->
@@ -2371,6 +2381,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{}</xsl:text>
         </xsl:when>
     </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A "headnote" is the prefatory note of a list-like division -->
+<!-- (a glossary, a references, an index, an appendix that is a -->
+<!-- notation list).  It functions just like an "introduction", -->
+<!-- though a headnote never carries a title of its own.        -->
+<xsl:template match="headnote" mode="environment">
+    <xsl:text>%% headnote: prefatory note of a list-like division&#xa;</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{headnote}{m}&#xa;</xsl:text>
+    <xsl:text>{\notblank{#1}{\noindent\textbf{#1}\space}{}}</xsl:text>
+    <xsl:text>{\par\medskip}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -3581,13 +3603,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- infrastructure and not so hard-coded as it is here.     -->
             <xsl:text>\newpage%&#xa;</xsl:text>
             <xsl:apply-templates select="." mode="latex-division-heading"/>
+            <xsl:apply-templates select="headnote"/>
             <xsl:apply-templates select="index-list"/>
             <xsl:apply-templates select="." mode="latex-division-footing"/>
         </xsl:when>
         <xsl:when test="$index-maker = 'latex'">
+            <xsl:apply-templates select="headnote" mode="index-prologue"/>
             <xsl:apply-templates select="index-list"/>
         </xsl:when>
     </xsl:choose>
+</xsl:template>
+
+<!-- The \printindex of the  imakeidx  package makes the division  -->
+<!-- heading itself, so a headnote cannot simply precede it.  The  -->
+<!-- package's \indexprologue stores the note, and \printindex     -->
+<!-- sets it after the heading and before the entries.             -->
+<xsl:template match="index/headnote" mode="index-prologue">
+    <xsl:text>\indexprologue{%&#xa;</xsl:text>
+    <xsl:apply-templates select="."/>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- TEMPORARY (2024-08-11) (migrate to publisher)  -->
@@ -4119,9 +4153,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <!-- For references we open a list to hold "biblio" -->
-    <!-- unless we need to wait for an "introduction"   -->
-    <xsl:if test="self::references and not(introduction)">
+    <!-- For references we open a list to hold "biblio"  -->
+    <!-- unless we need to wait for an "introduction" or -->
+    <!-- a "headnote"                                    -->
+    <xsl:if test="self::references and not(introduction) and not(headnote)">
         <xsl:call-template name="open-reference-list"/>
     </xsl:if>
 </xsl:template>
@@ -4196,9 +4231,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
-    <!-- We have not opened the list of references yet    -->
-    <!-- when it has an "introduction".  Now is the time. -->
-    <xsl:if test="parent::references">
+    <!-- We have not opened the list of references yet when  -->
+    <!-- it has an "introduction".  Now is the time, unless  -->
+    <!-- a "headnote" follows and defers the list once more. -->
+    <xsl:if test="parent::references and not(following-sibling::headnote)">
         <xsl:call-template name="open-reference-list"/>
     </xsl:if>
 </xsl:template>
@@ -9174,12 +9210,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- TEMPORARILY: render a glossary "headnote" as an "introduction" -->
-<xsl:template match="glossary/headnote">
-    <xsl:text>%% this should be a new (isomorphic) "headnote" environment&#xa;</xsl:text>
-    <xsl:text>\begin{introduction}{}%&#xa;</xsl:text>
+<!-- A "headnote" prefaces the list of a list-like division; the -->
+<!-- index is special (see the "index-prologue" mode nearby its  -->
+<!-- division template), the other hosts render it in place      -->
+<xsl:template match="glossary/headnote|references/headnote|index/headnote|appendix/headnote">
+    <xsl:text>\begin{headnote}{}%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>\end{introduction}%&#xa;</xsl:text>
+    <xsl:text>\end{headnote}%&#xa;</xsl:text>
+    <!-- We have not opened the list of references yet when -->
+    <!-- a "headnote" intervenes.  Now is the time.         -->
+    <xsl:if test="parent::references">
+        <xsl:call-template name="open-reference-list"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Defined Terms, in a Glossary -->
@@ -9289,14 +9331,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and \bibitem seems comfortable there, so our source -->
 <!-- is nearly compatible with the usual usage           -->
 
-<!-- We open and close a single "referencelist" environment,    -->
-<!-- which we create in the preamble.  It opens right after     -->
-<!-- a "references" division, or after optional "introduction". -->
-<!-- It closes right before the "references" division closes,   -->
-<!-- or right before the "conclusion" begins.  The templates    -->
-<!-- below ensure consistency, and help with overrides.  You    -->
-<!-- can search on them to see the two pairs of scenarios       -->
-<!-- just described.                                            -->
+<!-- We open and close a single "referencelist" environment,      -->
+<!-- which we create in the preamble.  It opens right after a     -->
+<!-- "references" division, or after an optional "introduction"   -->
+<!-- or "headnote" (whichever comes last).  It closes right       -->
+<!-- before the "references" division closes, or right before the -->
+<!-- "conclusion" begins.  The templates below ensure             -->
+<!-- consistency, and help with overrides.  You can search on     -->
+<!-- them to see the pairs of scenarios just described.           -->
 
 <xsl:template name="open-reference-list">
     <xsl:text>%% If this is a top-level references&#xa;</xsl:text>

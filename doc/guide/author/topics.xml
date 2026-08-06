@@ -1447,7 +1447,7 @@
 
             <p>A <tag>glossary</tag> division may be placed inside any main matter division, and at most once in the <tag>backmatter</tag>.   In either event, the <pubtitle>Chicago Manual of Style</pubtitle> <xref ref="cmos" detail="1.87"/> indicates that it should be placed right before a <tag>references</tag>.</p>
 
-            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about the construction of a particular glossary.</p>
+            <p>After a <tag>title</tag>, index entries, and other metadata, a <tag>glossary</tag> division may begin with an optional <tag>headnote</tag>, which can use paragraphs to explain anything unusual about the construction of a particular glossary.  The same element serves the other list-like divisions: a <tag>references</tag>, an <tag>index</tag>, and an <tag>appendix</tag> that is exactly a <tag>notation-list</tag>.</p>
 
             <p>The remainder of a glossary is a sequence of items to explain.  Typically these are words, phrases, initialisms, or acronyms.  Each item is a <q>glossary item</q>, enclosed in a shorthand <tag>gi</tag> element.  The element must lead with a <tag>title</tag>, which is the term being explained.  <pretext/> will provide a period after each defined word, so there should not be any punctuation in your source at this location.  The term should not have any markup, <em>unless</em> the markup is used in every occurence of the term in the text.  Similarly, a term is capitalized only if it is capitalized routinely in the text.</p>
 
@@ -5092,6 +5092,7 @@
 
               <p>An index may start with a <term>headnote</term> giving advice about using the index.
                 Typically a headnote is not necessary unless the index has some unusual features.
+                Author one with a <tag>headnote</tag> element, holding paragraphs, placed just before the <tag>index-list</tag>.
               </p>
             </paragraphs>
 

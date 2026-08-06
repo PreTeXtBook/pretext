@@ -258,6 +258,11 @@
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionCompanion?)
                         )
+                    |
+                        (
+                            HeadNote?,
+                            NotationList
+                        )
                     )
                 }
             BookAppendix =
@@ -280,11 +285,17 @@
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionCompanion?)
                         )
+                    |
+                        (
+                            HeadNote?,
+                            NotationList
+                        )
                     )
                 }
             IndexDivision =
                 element index {
                     MetaDataAltTitleOptional,
+                    HeadNote?,
                     IndexList
                 }
             </code>
@@ -368,6 +379,7 @@
                 element references {
                     MetaDataAltTitleOptional,
                     IntroductionDivision?,
+                    HeadNote?,
                     BibliographyItem+,
                     ConclusionDivision?
                 }
@@ -1033,7 +1045,7 @@
 
         <p>The <c>introduction</c> and <c>conclusion</c> containers can be used in a variety of other structured elements.  They come in four levels, according to what they can contain, and are meant to be consonant with their surroundings.  As children of a division, they may carry a <c>title</c>, which in turn allows them to be cross-referenced by that text.</p>
 
-        <p>A <tag>headnote</tag> is like an <tag>introduction</tag>, but does not have a symmetric concluding element, and is typically meant for specialized divisions, such as a <tag>glossary</tag>.</p>
+        <p>A <tag>headnote</tag> is like an <tag>introduction</tag>, but does not have a symmetric concluding element, and is meant for divisions whose content is essentially one list: a <tag>glossary</tag>, a <tag>references</tag>, an <tag>index</tag>, or an <tag>appendix</tag> that is exactly a notation list.  It is a light prefatory note, only necessary when something about the list is unusual and deserves a reader's advance attention.</p>
 
         <fragment xml:id="introduction-conclusion-headnote">
             <title>Introductions, conclusions, headnotes</title>
