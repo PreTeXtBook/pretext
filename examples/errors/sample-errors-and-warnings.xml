@@ -1280,6 +1280,22 @@ m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
 
 
         <backmatter>
+            <!-- 2026-08-06: both companions deprecated, each provokes -->
+            <!-- a warning; repair converts the "introduction" to a    -->
+            <!-- "headnote" (discarding its "title") and drops the     -->
+            <!-- "conclusion" entirely                                 -->
+            <references>
+                <title>Deprecated References Companions</title>
+                <introduction>
+                    <title>A Discarded Title</title>
+                    <p>This preface survives repair as a headnote, but its title is discarded.</p>
+                </introduction>
+                <biblio type="raw" xml:id="biblio-deprecated-companions">An Author, <title>A Fine Book</title>, A Publisher, 2026.</biblio>
+                <conclusion>
+                    <p>This conclusion is discarded entirely by the repair.</p>
+                </conclusion>
+            </references>
+
             <!-- need an index to provoke error warnings above -->
             <index>
                 <title>Index</title>
