@@ -10468,30 +10468,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- HTML Code                                                  -->
-<!-- Simply create deep-copy of HTML elements                   -->
 <!-- TODO: should this be a div, with width and height?         -->
-<!-- Authored HTML goes into the page verbatim.  But a plain    -->
-<!-- "xsl:copy-of" materializes every namespace in scope at the -->
-<!-- source location as a declaration on the copy: the source   -->
-<!-- file's own declarations (such as XInclude) and any         -->
-<!-- namespace employed by the assembly machinery.  So instead  -->
-<!-- we rebuild each element, which carries along only the      -->
-<!-- namespaces actually in use.                                -->
+<!-- Authored HTML goes into the page, which is the content's   -->
+<!-- only destination, and an HTML parser has no notion of      -->
+<!-- namespaces.  So the copy keeps just the local name of each -->
+<!-- element: an author declares the XHTML namespace once (say, -->
+<!-- a prefix on the "slate") to satisfy validation, and the    -->
+<!-- output carries plain HTML tags with no declarations at     -->
+<!-- all.  (This utility may serve other embedded-markup        -->
+<!-- copying; nothing about it is specific to a "slate".)       -->
 <xsl:template match="slate[@surface = 'html']">
-    <xsl:apply-templates select="*" mode="copy-authored-html"/>
+    <xsl:apply-templates select="*" mode="copy-authored-xml"/>
 </xsl:template>
 
 <!-- Attributes in the internal namespace are the assembly's     -->
 <!-- identification stamps, not the author's work, so they stay  -->
 <!-- out of the copy.                                            -->
-<xsl:template match="*" mode="copy-authored-html">
-    <xsl:element name="{name()}" namespace="{namespace-uri()}">
+<xsl:template match="*" mode="copy-authored-xml">
+    <xsl:element name="{local-name()}">
         <xsl:copy-of select="@*[namespace-uri(.) != 'http://pretextbook.org/2020/pretext/internal']"/>
-        <xsl:apply-templates select="node()" mode="copy-authored-html"/>
+        <xsl:apply-templates select="node()" mode="copy-authored-xml"/>
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="text()|comment()|processing-instruction()" mode="copy-authored-html">
+<xsl:template match="text()|comment()|processing-instruction()" mode="copy-authored-xml">
     <xsl:copy/>
 </xsl:template>
 
