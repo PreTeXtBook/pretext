@@ -2788,6 +2788,19 @@
                 StatementExercise,
                 Program,
                 Hint*, Answer*, Solution*
+            # A select exercise poses one of several existing questions
+            # (variants), located by their @label values; @grade says
+            # how the graded variant is chosen: at random, by A/B
+            # experiment group, always the first listed (the others
+            # remain viewable), or any one the reader selects
+            Select =
+                MetaDataTitleOptional,
+                element select {
+                    attribute grade {"random"|"ab-experiment"|"first"|"any"}?,
+                    attribute questions {text},
+                    attribute experiment-name {text}?,
+                    empty
+                }
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
@@ -2801,7 +2814,8 @@
                     FreeResponse |
                     FillInBlank |
                     Areas |
-                    CodingExercise
+                    CodingExercise |
+                    Select
                     )
                 }
             # STACK assessment exercise type

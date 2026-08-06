@@ -1558,6 +1558,33 @@
       <ref name="Solution"/>
     </zeroOrMore>
   </define>
+  <!--
+    A select exercise poses one of several existing questions
+    (variants), located by their @label values; @grade says
+    how the graded variant is chosen: at random, by A/B
+    experiment group, always the first listed (the others
+    remain viewable), or any one the reader selects
+  -->
+  <define name="Select">
+    <ref name="MetaDataTitleOptional"/>
+    <element name="select">
+      <optional>
+        <attribute name="grade">
+          <choice>
+            <value>random</value>
+            <value>ab-experiment</value>
+            <value>first</value>
+            <value>any</value>
+          </choice>
+        </attribute>
+      </optional>
+      <attribute name="questions"/>
+      <optional>
+        <attribute name="experiment-name"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
   <!-- Include all exercise types in exercise and activity -->
   <define name="Exercise" combine="choice">
     <element name="exercise">
@@ -1574,6 +1601,7 @@
         <ref name="FillInBlank"/>
         <ref name="Areas"/>
         <ref name="CodingExercise"/>
+        <ref name="Select"/>
       </choice>
     </element>
   </define>
