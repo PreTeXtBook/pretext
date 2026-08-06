@@ -681,6 +681,14 @@ function addSpilloverPages(margins) {
       }
     }
     if (overflowStartIndex === -1) continue; // this page fits fine, leave it completely alone
+    if (overflowStartIndex === 0) {
+      // The very first row alone is already too tall to fit on any page —
+      // nothing we can do about that specific row. But if there are other
+      // rows after it, they shouldn't be trapped here too: move everything
+      // after the oversized first row onto a fresh page.
+      if (contentChildren.length <= 1) continue; // truly nothing else to move
+      overflowStartIndex = 1;
+    }
 
     const overflowElems = contentChildren.slice(overflowStartIndex);
     const newPage = document.createElement('section');
@@ -1188,6 +1196,24 @@ async function rewriteSolutions() {
         const content = detail.innerHTML.replace(summary.outerHTML, '');
         const div = document.createElement('div');
         div.classList = detail.classList;
+        // Apply the correct hidden/visible state immediately, so the div is
+        // never briefly visible before the later checkbox setup hides it.
+        for (const solutionType of ["hint", "answer", "solution"]) {
+            if (div.classList.contains(solutionType)) {
+                const storageKey = `hide-${solutionType}`;
+                let hide;
+                if (localStorage.getItem(storageKey) !== null) {
+                    hide = localStorage.getItem(storageKey) === "true";
+                } else {
+                    // Match the default used later: answers/solutions start hidden, hints don't.
+                    hide = (solutionType === "answer" || solutionType === "solution");
+                }
+                if (hide) {
+                    div.classList.add("hidden");
+                }
+                break;
+            }
+        }
         if (summary) {
             const title = document.createElement('h5');
             title.innerHTML = summary.innerHTML;
@@ -1316,15 +1342,37 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         }
                     });
                     // Recompute layout once, after all elements of this type have been toggled
+                    // Recompute layout once, after all elements of this type have been toggled
                     if (checkbox.checked) {
-                        // Hiding: content only shrinks, so try to merge any spillover pages back in.
-                        collapseSpilloverPages(margins);
+                        if (hasAuthoredPages) {
+                            // Hiding: content only shrinks, so try to merge any spillover pages back in,
+                            // preserving the author's original page breaks.
+                            collapseSpilloverPages(margins);
+                        } else {
+                            // No authored structure to protect here — safe to fully recompute
+                            // for a genuinely compact layout.
+                            resetPrintoutPagination(margins);
+                        }
                         adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-                    } else {
-                        // Revealing: try to absorb the extra height into existing workspace first;
-                        // only spill onto a new page if a page still overflows even with workspace at zero.
-                        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
-                    }
+                        } else {
+                            // Revealing: try to absorb the extra height into existing workspace first;
+                            // only spill onto a new page if a page still overflows even with workspace at zero.
+                            adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
+
+                            // Safety net: some content (e.g. large matrices) can take longer than
+                            // a single synchronous check to settle. Poll for genuine overflow over
+                            // a longer window and correct it if found.
+                            (async () => {
+                                const deadline = Date.now() + 2000;
+                                while (Date.now() < deadline) {
+                                    await new Promise(r => setTimeout(r, 100));
+                                    if (pageOverflows()) {
+                                        addSpilloverPages(margins);
+                                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                                    }
+                                }
+                            })();
+                        }
                 });
             }
         }
@@ -1342,8 +1390,16 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             await waitForImages(printoutSection);
         }
 
+        // Add explicit await before initial pagination step so all math is settled before measuring content height.
+        if (typeof MathJax !== "undefined" && MathJax.typesetPromise) {
+            await MathJax.typesetPromise([getPrintout()]);
+        }
+
         // If the printout has authored pages, there will be at least one .onepage element.
-        if (document.querySelector('.onepage')) {
+        // Remember this so the hide/reveal checkbox handler below can pick the right
+        // strategy: preserve authored structure vs. safely recompute a computed layout.
+        const hasAuthoredPages = document.querySelectorAll('.onepage').length > 0;
+        if (hasAuthoredPages) {
             adjustPrintoutPages();
         } else {
             createPrintoutPages(margins);
@@ -1382,8 +1438,22 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             }
         }
 
-        // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
-        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+        // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size),
+        // falling back to a spillover page if content still overflows even with workspace at zero.
+        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
+        // Safety net: some content (e.g. large matrices) can take longer than
+        // a couple of paint frames to settle into its final rendered size.
+        // Poll for genuine overflow over a longer window and correct it if found.
+        (async () => {
+            const deadline = Date.now() + 2000;
+            while (Date.now() < deadline) {
+                await new Promise(r => setTimeout(r, 100));
+                if (pageOverflows()) {
+                    addSpilloverPages(margins);
+                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                }
+            }
+        })();
 
         // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
         // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
