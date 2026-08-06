@@ -351,12 +351,6 @@
       </element>
     </choice>
   </define>
-  <define name="Figure" combine="choice">
-    <element name="figure">
-      <ref name="MetaDataCaption"/>
-      <ref name="Tabular"/>
-    </element>
-  </define>
   <define name="Solutions" combine="choice">
     <element name="solutions">
       <ref name="MetaDataAltTitleOptional"/>

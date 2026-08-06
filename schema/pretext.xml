@@ -1668,6 +1668,8 @@
         <title>Figures, Tables, Listings and Named Lists</title>
 
         <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print.</p>
+
+        <p>A <c>tabular</c> never takes a number directly.  Bare, it may sit between paragraphs as unnumbered, uncaptioned content; the <c>table</c> wrapper is the one route to a number and a title.  In particular, a <c>tabular</c> is not a child of a <c>figure</c>.</p>
         <!-- 2021-12-29: should add interactive to figure, once ready -->
 
         <fragment xml:id="table-figure">
@@ -1690,6 +1692,7 @@
                         MuseScore
                     )
                 } |
+                # the one route to a numbered, titled "tabular"
                 element table {
                     MetaDataAltTitle,
                     Landscape?,
@@ -1789,24 +1792,6 @@
                     TableColumn*,
                     TableRow+
                 }
-            </code>
-        </fragment>
-    </section>
-
-    <section>
-        <title>Figure (experimental)</title>
-        <p>
-            We add tabular as a valid child of a figure.
-        </p>
-        <fragment xml:id="figure-dev">
-            <title>Figure (experimental)</title>
-            <code>
-            Figure |=
-                element figure {
-                    MetaDataCaption,
-                    Tabular
-                }
-
             </code>
         </fragment>
     </section>
@@ -3925,7 +3910,6 @@
             <fragref ref="interactive" />
             <fragref ref="frontmatter-dev"/>
             <fragref ref="proof-like"/>
-            <fragref ref="figure-dev"/>
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="exercise-dev"/>
