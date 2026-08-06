@@ -531,6 +531,12 @@
             </optional>
           </interleave>
         </group>
+        <group>
+          <optional>
+            <ref name="HeadNote"/>
+          </optional>
+          <ref name="NotationList"/>
+        </group>
       </choice>
     </element>
   </define>
@@ -612,12 +618,21 @@
             </optional>
           </interleave>
         </group>
+        <group>
+          <optional>
+            <ref name="HeadNote"/>
+          </optional>
+          <ref name="NotationList"/>
+        </group>
       </choice>
     </element>
   </define>
   <define name="IndexDivision">
     <element name="index">
       <ref name="MetaDataAltTitleOptional"/>
+      <optional>
+        <ref name="HeadNote"/>
+      </optional>
       <ref name="IndexList"/>
     </element>
   </define>
@@ -1207,6 +1222,9 @@
       <ref name="MetaDataAltTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
+      </optional>
+      <optional>
+        <ref name="HeadNote"/>
       </optional>
       <oneOrMore>
         <ref name="BibliographyItem"/>

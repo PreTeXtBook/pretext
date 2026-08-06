@@ -147,6 +147,11 @@
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionCompanion?)
                         )
+                    |
+                        (
+                            HeadNote?,
+                            NotationList
+                        )
                     )
                 }
             BookAppendix =
@@ -169,11 +174,17 @@
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionCompanion?)
                         )
+                    |
+                        (
+                            HeadNote?,
+                            NotationList
+                        )
                     )
                 }
             IndexDivision =
                 element index {
                     MetaDataAltTitleOptional,
+                    HeadNote?,
                     IndexList
                 }
 
@@ -406,6 +417,7 @@
                 element references {
                     MetaDataAltTitleOptional,
                     IntroductionDivision?,
+                    HeadNote?,
                     BibliographyItem+,
                     ConclusionDivision?
                 }
