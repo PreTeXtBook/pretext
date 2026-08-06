@@ -302,15 +302,20 @@
                         TextLong
                     }+
                 })
+            # Premises and the response arrive in any order; a match
+            # with premises and no response, or a response and no
+            # premises, is a distractor
             Match =
                 element match {
                     element premise {
                         attribute order {xsd:integer}?,
                         TextLong
-                    }+,
+                    }*
+                    &
                     element response {
+                        attribute order {xsd:integer}?,
                         TextLong
-                    }
+                    }?
                 }
             FreeResponse =
                 MetaDataTitleOptional,

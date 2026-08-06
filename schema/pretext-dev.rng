@@ -767,21 +767,35 @@
       </element>
     </choice>
   </define>
+  <!--
+    Premises and the response arrive in any order; a match
+    with premises and no response, or a response and no
+    premises, is a distractor
+  -->
   <define name="Match">
     <element name="match">
-      <oneOrMore>
-        <element name="premise">
-          <optional>
-            <attribute name="order">
-              <data type="integer"/>
-            </attribute>
-          </optional>
-          <ref name="TextLong"/>
-        </element>
-      </oneOrMore>
-      <element name="response">
-        <ref name="TextLong"/>
-      </element>
+      <interleave>
+        <zeroOrMore>
+          <element name="premise">
+            <optional>
+              <attribute name="order">
+                <data type="integer"/>
+              </attribute>
+            </optional>
+            <ref name="TextLong"/>
+          </element>
+        </zeroOrMore>
+        <optional>
+          <element name="response">
+            <optional>
+              <attribute name="order">
+                <data type="integer"/>
+              </attribute>
+            </optional>
+            <ref name="TextLong"/>
+          </element>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="FreeResponse">
