@@ -2558,9 +2558,17 @@
             # a clickable area
             TableCellText |= mixed { (TextLongContent | TableNote | Area)* }
 
-            # General feedback element
+            # General feedback element; a short burst of marked-up text
+            # is as welcome as a sequence of blocks
             Feedback =
                 element feedback {
+                    MetaDataTitleOptional,
+                    (BlockSolution+ | TextLong)
+                }
+            # A dynamic exercise's automatic solution can be declined
+            Solution |=
+                element solution {
+                    attribute include-automatic {"yes"|"no"},
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
@@ -2608,10 +2616,13 @@
                     attribute reduce {"yes"}?,
                     text
                 }
-            # A formula; the content model follows @mode
+            # A formula; the content model follows @mode.  Outside a
+            # "de-object" there is no enclosing context, so the
+            # expression may declare its own with @context.
             DEExpression =
                 element de-expression {
                     attribute reduce {"yes"}?,
+                    attribute context {"number" | "formula"}?,
                     (
                         (attribute mode {"formula"}?, text) |
                         (attribute mode {"substitution"}, DEFormula, DEVariableValued) |
@@ -2683,10 +2694,15 @@
             # none, the provided answer or answer object is the default
             # comparison.  A test holds a single numcmp or strcmp, OR any
             # number of jscmp/mathcmp/logic combined with an implied AND.
+            # A bare "eval" or a bare constructor within a test is
+            # shorthand for a comparison with the submission; the
+            # assembly substitutes the full form
             FITBTest =
                 element test {
                     attribute correct {"yes"|"no"}?,
-                    (FITBNumcmp | FITBStrcmp | (FITBJscmp | FITBMathcmp | FITBLogic)+),
+                    (FITBNumcmp | FITBStrcmp |
+                     (FITBJscmp | FITBMathcmp | FITBLogic |
+                      Eval | DENumber | DEExpression | DEEvaluate)+),
                     Feedback?
                 }
             FITBComparison =

@@ -992,9 +992,30 @@
       </zeroOrMore>
     </mixed>
   </define>
-  <!-- General feedback element -->
+  <!--
+    General feedback element; a short burst of marked-up text
+    is as welcome as a sequence of blocks
+  -->
   <define name="Feedback">
     <element name="feedback">
+      <ref name="MetaDataTitleOptional"/>
+      <choice>
+        <oneOrMore>
+          <ref name="BlockSolution"/>
+        </oneOrMore>
+        <ref name="TextLong"/>
+      </choice>
+    </element>
+  </define>
+  <!-- A dynamic exercise's automatic solution can be declined -->
+  <define name="Solution" combine="choice">
+    <element name="solution">
+      <attribute name="include-automatic">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <ref name="BlockSolution"/>
@@ -1108,12 +1129,24 @@
       <text/>
     </element>
   </define>
-  <!-- A formula; the content model follows @mode -->
+  <!--
+    A formula; the content model follows @mode.  Outside a
+    "de-object" there is no enclosing context, so the
+    expression may declare its own with @context.
+  -->
   <define name="DEExpression">
     <element name="de-expression">
       <optional>
         <attribute name="reduce">
           <value>yes</value>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="context">
+          <choice>
+            <value>number</value>
+            <value>formula</value>
+          </choice>
         </attribute>
       </optional>
       <choice>
@@ -1265,6 +1298,9 @@
     none, the provided answer or answer object is the default
     comparison.  A test holds a single numcmp or strcmp, OR any
     number of jscmp/mathcmp/logic combined with an implied AND.
+    A bare "eval" or a bare constructor within a test is
+    shorthand for a comparison with the submission; the
+    assembly substitutes the full form
   -->
   <define name="FITBTest">
     <element name="test">
@@ -1284,6 +1320,10 @@
             <ref name="FITBJscmp"/>
             <ref name="FITBMathcmp"/>
             <ref name="FITBLogic"/>
+            <ref name="Eval"/>
+            <ref name="DENumber"/>
+            <ref name="DEExpression"/>
+            <ref name="DEEvaluate"/>
           </choice>
         </oneOrMore>
       </choice>
