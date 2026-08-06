@@ -77,13 +77,7 @@
                           Paragraph |
                           Tabular |
                           SideBySideNoNumber |
-                          SlateInput |
-                          AnyXhtml |
-                          element xhtml:button {
-                            attribute type { text },
-                            attribute id { text },
-                            text*
-                          }? |
+                          AnyXHTML |
                           text*
                         )*
                       )
@@ -99,20 +93,17 @@
                   text*
                 )
 
-              SlateInput =
-                element input {
-                  attribute type {text}?,
-                  attribute value {text}?,
-                  attribute onkeypress {text}?,
-                  attribute onclick {text}?,
-                  attribute style {text}?
-                }
-
-              # A slate with surface="html" embeds an arbitrary XHTML fragment.
-              AnyXhtml =
+              # A slate with surface="html" embeds an arbitrary XHTML
+              # fragment, and the XHTML namespace is the author's
+              # declaration that the content is foreign: anything
+              # un-namespaced still gets the schema's full scrutiny.
+              # Declare it once, as a prefix on the "slate" itself;
+              # the conversion keeps only local names, so the output
+              # page carries plain HTML tags, free of namespaces.
+              AnyXHTML =
                 element xhtml:* {
                   (attribute * { text })*,
-                  mixed { AnyXhtml* }
+                  mixed { AnyXHTML* }
                 }
 
             # add Interactives where used
@@ -138,6 +129,40 @@
                 Subexercises+ | Interactive
                 ),
                 ConclusionDivision?
+            }
+
+            # Hosted on Runestone, an "exercises" division can be a
+            # timed exam (@time-limit in minutes; results, feedback,
+            # the visible timer, and pausing each default on), or can
+            # collect group-work submissions (@groupwork, group size
+            # capped by @groupsize); a "worksheet" can do the latter
+            Exercises |= element exercises {
+                (
+                    (attribute time-limit {xsd:integer},
+                     attribute results {"yes"|"no"}?,
+                     attribute timer {"yes"|"no"}?,
+                     attribute feedback {"yes"|"no"}?,
+                     attribute pause {"yes"|"no"}?)
+                |
+                    (attribute groupwork {"yes"|"no"},
+                     attribute groupsize {xsd:integer}?)
+                ),
+                MetaDataAltTitleOptional,
+                IntroductionDivision?,
+                (Exercise | ExerciseGroup)+,
+                ConclusionDivision?
+            }
+            Worksheet |= element worksheet {
+                attribute groupwork {"yes"|"no"},
+                attribute groupsize {xsd:integer}?,
+                PrintoutAttributes,
+                attribute courseid {text}?,
+                attribute series {text}?,
+                attribute seriescode {text}?,
+                MetaDataAltTitleOptional,
+                (Objectives? & IntroductionDivision?),
+                (Page+ | PrintoutBlock+),
+                (Outcomes? & ConclusionDivision?)
             }
 
             ShortLicense_X =
@@ -198,57 +223,86 @@
                 StatementExercise,
                 element choices {
                     attribute randomize {"yes"|"no"}?,
+                    attribute multiple-correct {"yes"|"no"}?,
+                    attribute cols {xsd:integer}?,
                     Choice+
                 },
                 Hint*, Answer*, Solution*
             Choice =
                 element choice {
                     attribute correct {"yes"|"no"}?,
-                    ((mixed {BlockText?})
+                    ((mixed {BlockText*})
                     | (StatementExercise, Feedback?))
                 }
+            # A horizontal SQL Parsons may name a grading database and
+            # carry raw unit tests; a horizontal layout may permit the
+            # reuse of blocks, where a source block carries an @xml:id
+            # (and no @order) and each use references it with @ref
             Parsons =
                     MetaDataTitleOptional,
                     attribute number {text}?,
                     attribute language {text}?,
                     attribute adaptive {"yes"|"no"}?,
                     attribute indentation {text}?,
+                    attribute database {text}?,
                     StatementExercise,
                     element blocks {
                         attribute layout {"horizontal"}?,
                         attribute randomize {"yes"|"no"}?,
-                        ( BlockOrdered+ | BlockUnordered+ )
+                        attribute reuse {"yes"|"no"}?,
+                        attribute numbered {"left"|"right"|"no"}?,
+                        ( (BlockOrdered | BlockSource)+ | BlockUnordered+ )
                     },
+                    element tests {text}?,
                     Hint*, Answer*, Solution*,
-                    (
-                        element preamble {
-                            attribute indent {text}?,
-                            text
-                        }?,
-                        Program,
-                        element postamble {
-                            attribute indent {text}?,
-                            text
-                        }?
-                    )?
+                    (ParsonsProgramPreamble?, Program, ParsonsProgramPostamble?)?
+            # Fixed code surrounding a runnable Parsons solution.  These
+            # patterns stand apart so the element names can be revisited
+            # on their own: the plain "preamble" and "postamble" within
+            # a "program" are close cousins, and some later decision may
+            # unify them.
+            ParsonsProgramPreamble =
+                element program-preamble {
+                    attribute indent {text}?,
+                    text
+                }
+            ParsonsProgramPostamble =
+                element program-postamble {
+                    attribute indent {text}?,
+                    text
+                }
+            # Horizontal blocks hold short inline bursts (code via "c",
+            # mathematics, text); vertical blocks hold code lines or
+            # natural-language blocks
             BlockBody =
                 ((
                     attribute correct {"yes"|"no"}?,
-                    mixed {BlockText?, CodeLine?}+
+                    mixed {BlockText?, CodeLine?, Verbatim?, MathInline?}+
                 ) |
                 (
                     element choice {
                         attribute correct {"yes"|"no"}?,
-                        mixed {BlockText?, CodeLine?}+
+                        mixed {BlockText?, CodeLine?, Verbatim?, MathInline?}+
                     }+
                 ))
             BlockOrdered =
                 element block {
                     attribute order {xsd:integer},
+                    attribute name {text}?,
+                    attribute depends {text}?,
+                    attribute ref {text}?,
+                    BlockBody
+                }
+            BlockSource =
+                element block {
+                    UniqueID,
+                    attribute name {text}?,
                     BlockBody
                 }
             BlockUnordered =
                 element block {
+                    attribute name {text}?,
+                    attribute depends {text}?,
                     BlockBody
                 }
             Matching =
@@ -273,15 +327,20 @@
                         TextLong
                     }+
                 })
+            # Premises and the response arrive in any order; a match
+            # with premises and no response, or a response and no
+            # premises, is a distractor
             Match =
                 element match {
                     element premise {
                         attribute order {xsd:integer}?,
                         TextLong
-                    }+,
+                    }*
+                    &
                     element response {
+                        attribute order {xsd:integer}?,
                         TextLong
-                    }
+                    }?
                 }
             FreeResponse =
                 MetaDataTitleOptional,
@@ -339,19 +398,35 @@
                     Component?,
                     TextParagraphAreas
                 }
+            # The areas come in three forms: paragraphs of prose, lines
+            # of code (@language names the language), or a tabular with
+            # clickable cells.  Trailing components in any order.
             Areas =
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 StatementExercise,
                 element areas {
-                  ParagraphAreas+
+                  attribute language {text}?,
+                  (ParagraphAreas | ClineAreas | Tabular)+
                 },
-                Feedback?,
-                Hint*, Answer*, Solution*
+                (Feedback? & Hint* & Answer* & Solution*)
+            ClineAreas =
+                element cline { mixed {Area*} }
+            # within the development schema, any tabular cell may hold
+            # a clickable area
+            TableCellText |= mixed { (TextLongContent | TableNote | Area)* }
 
-            # General feedback element
+            # General feedback element; a short burst of marked-up text
+            # is as welcome as a sequence of blocks
             Feedback =
                 element feedback {
+                    MetaDataTitleOptional,
+                    (BlockSolution+ | TextLong)
+                }
+            # A dynamic exercise's automatic solution can be declined
+            Solution |=
+                element solution {
+                    attribute include-automatic {"yes"|"no"},
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
@@ -399,10 +474,13 @@
                     attribute reduce {"yes"}?,
                     text
                 }
-            # A formula; the content model follows @mode
+            # A formula; the content model follows @mode.  Outside a
+            # "de-object" there is no enclosing context, so the
+            # expression may declare its own with @context.
             DEExpression =
                 element de-expression {
                     attribute reduce {"yes"}?,
+                    attribute context {"number" | "formula"}?,
                     (
                         (attribute mode {"formula"}?, text) |
                         (attribute mode {"substitution"}, DEFormula, DEVariableValued) |
@@ -474,10 +552,15 @@
             # none, the provided answer or answer object is the default
             # comparison.  A test holds a single numcmp or strcmp, OR any
             # number of jscmp/mathcmp/logic combined with an implied AND.
+            # A bare "eval" or a bare constructor within a test is
+            # shorthand for a comparison with the submission; the
+            # assembly substitutes the full form
             FITBTest =
                 element test {
                     attribute correct {"yes"|"no"}?,
-                    (FITBNumcmp | FITBStrcmp | (FITBJscmp | FITBMathcmp | FITBLogic)+),
+                    (FITBNumcmp | FITBStrcmp |
+                     (FITBJscmp | FITBMathcmp | FITBLogic |
+                      Eval | DENumber | DEExpression | DEEvaluate)+),
                     Feedback?
                 }
             FITBComparison =
@@ -547,6 +630,8 @@
                     attribute rows {xsd:integer}?,
                     attribute cols {xsd:integer}?,
                     attribute editable {"yes"|"no"}?,
+                    # a non-editable datafile can start hidden
+                    attribute hide {"yes"|"no"}?,
                     (
                         element pre {
                             attribute source {text}?,
@@ -557,11 +642,13 @@
                 }
             BlockStatement |= Datafile
 
-            # Query (poll/survey) element
+            # Query (poll/survey) element; results are private to the
+            # instructor unless @visibility says otherwise
             Query =
                 element query {
                     LabelID?,
                     attribute scale {xsd:integer}?,
+                    attribute visibility {"instructor"|"all"}?,
                     StatementExercise,
                     element choices {
                         Choice+
@@ -577,6 +664,54 @@
                 StatementExercise,
                 Program,
                 Hint*, Answer*, Solution*
+            # LEGACY fill-in ("fillin-basic" to the assembly classifier):
+            # empty "var" marks in the statement pair positionally with
+            # the "var" elements of the "setup", each holding conditions
+            # tried in order (a numeric interval via @number/@tolerance,
+            # or a @string regular expression), with optional feedback.
+            # The machinery is fully implemented, interactive and
+            # static, so the form is admitted here.  It will NEVER move
+            # to the stable schema: its only future is retirement in
+            # favor of the dynamic fill-in above.
+            FillInLegacy =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                element setup {
+                    element var {
+                        attribute case {"insensitive"}?,
+                        element condition {
+                            (
+                                (attribute number {text},
+                                 attribute tolerance {text}?)
+                            |
+                                attribute string {text}
+                            ),
+                            Feedback?
+                        }+
+                    }+
+                },
+                Hint*, Answer*, Solution*
+            # the empty mark in a statement, sized by @width
+            VarMark =
+                element var {
+                    attribute width {xsd:integer}?,
+                    empty
+                }
+            TextParagraphItem |= VarMark
+            # A select exercise poses one of several existing questions
+            # (variants), located by their @label values; @grade says
+            # how the graded variant is chosen: at random, by A/B
+            # experiment group, always the first listed (the others
+            # remain viewable), or any one the reader selects
+            Select =
+                MetaDataTitleOptional,
+                element select {
+                    attribute grade {"random"|"ab-experiment"|"first"|"any"}?,
+                    attribute questions {text},
+                    attribute experiment-name {text}?,
+                    empty
+                }
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
@@ -589,9 +724,29 @@
                     Matching |
                     FreeResponse |
                     FillInBlank |
+                    FillInLegacy |
                     Areas |
-                    CodingExercise
+                    CodingExercise |
+                    Select
                     )
+                }
+            # STRICTLY EXPERIMENTAL, matching the sample's own alert:
+            # a dual exercise pairs a "dynamic" realization (typically
+            # an embedded interactive) with a "static" stand-in, and
+            # the assembly chooses one per output
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    element dynamic {
+                        StatementExercise
+                    },
+                    element static {
+                        (
+                            (StatementExercise, Hint*, Answer*, Solution*)
+                        |
+                            (IntroductionStatement?, Task+, ConclusionStatement?)
+                        )
+                    }
                 }
             # STACK assessment exercise type
             Exercise |=
@@ -613,5 +768,23 @@
                 FreeResponse |
                 FillInBlank |
                 Areas
+            # The assembly classifies "task" alongside "exercise" and the
+            # project-like blocks, and every interactive form is
+            # implemented within a "task", so the same union applies
+            Task |=
+                element task {
+                    attribute workspace {text}?,
+                    (
+                    TrueFalse |
+                    MultipleChoice |
+                    Parsons |
+                    Matching |
+                    FreeResponse |
+                    FillInBlank |
+                    FillInLegacy |
+                    Areas |
+                    CodingExercise
+                    )
+                }
 
                 }

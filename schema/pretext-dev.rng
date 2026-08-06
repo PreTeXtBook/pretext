@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <include href="pretext.rng"/>
   <define name="Interactive">
     <element name="interactive">
@@ -166,17 +166,7 @@
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
               <ref name="SideBySideNoNumber"/>
-              <ref name="SlateInput"/>
-              <ref name="AnyXhtml"/>
-              <optional>
-                <element name="xhtml:button">
-                  <attribute name="type"/>
-                  <attribute name="id"/>
-                  <zeroOrMore>
-                    <text/>
-                  </zeroOrMore>
-                </element>
-              </optional>
+              <ref name="AnyXHTML"/>
               <zeroOrMore>
                 <text/>
               </zeroOrMore>
@@ -213,27 +203,16 @@
       </zeroOrMore>
     </choice>
   </define>
-  <define name="SlateInput">
-    <element name="input">
-      <optional>
-        <attribute name="type"/>
-      </optional>
-      <optional>
-        <attribute name="value"/>
-      </optional>
-      <optional>
-        <attribute name="onkeypress"/>
-      </optional>
-      <optional>
-        <attribute name="onclick"/>
-      </optional>
-      <optional>
-        <attribute name="style"/>
-      </optional>
-    </element>
-  </define>
-  <!-- A slate with surface="html" embeds an arbitrary XHTML fragment. -->
-  <define name="AnyXhtml">
+  <!--
+    A slate with surface="html" embeds an arbitrary XHTML
+    fragment, and the XHTML namespace is the author's
+    declaration that the content is foreign: anything
+    un-namespaced still gets the schema's full scrutiny.
+    Declare it once, as a prefix on the "slate" itself;
+    the conversion keeps only local names, so the output
+    page carries plain HTML tags, free of namespaces.
+  -->
+  <define name="AnyXHTML">
     <element>
       <nsName ns="http://www.w3.org/1999/xhtml"/>
       <zeroOrMore>
@@ -243,7 +222,7 @@
       </zeroOrMore>
       <mixed>
         <zeroOrMore>
-          <ref name="AnyXhtml"/>
+          <ref name="AnyXHTML"/>
         </zeroOrMore>
       </mixed>
     </element>
@@ -295,6 +274,132 @@
       <optional>
         <ref name="ConclusionDivision"/>
       </optional>
+    </element>
+  </define>
+  <!--
+    Hosted on Runestone, an "exercises" division can be a
+    timed exam (@time-limit in minutes; results, feedback,
+    the visible timer, and pausing each default on), or can
+    collect group-work submissions (@groupwork, group size
+    capped by @groupsize); a "worksheet" can do the latter
+  -->
+  <define name="Exercises" combine="choice">
+    <element name="exercises">
+      <choice>
+        <group>
+          <attribute name="time-limit">
+            <data type="integer"/>
+          </attribute>
+          <optional>
+            <attribute name="results">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="timer">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="feedback">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="pause">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+        </group>
+        <group>
+          <attribute name="groupwork">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+          <optional>
+            <attribute name="groupsize">
+              <data type="integer"/>
+            </attribute>
+          </optional>
+        </group>
+      </choice>
+      <ref name="MetaDataAltTitleOptional"/>
+      <optional>
+        <ref name="IntroductionDivision"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="Exercise"/>
+          <ref name="ExerciseGroup"/>
+        </choice>
+      </oneOrMore>
+      <optional>
+        <ref name="ConclusionDivision"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Worksheet" combine="choice">
+    <element name="worksheet">
+      <attribute name="groupwork">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="groupsize">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="PrintoutAttributes"/>
+      <optional>
+        <attribute name="courseid"/>
+      </optional>
+      <optional>
+        <attribute name="series"/>
+      </optional>
+      <optional>
+        <attribute name="seriescode"/>
+      </optional>
+      <ref name="MetaDataAltTitleOptional"/>
+      <interleave>
+        <optional>
+          <ref name="Objectives"/>
+        </optional>
+        <optional>
+          <ref name="IntroductionDivision"/>
+        </optional>
+      </interleave>
+      <choice>
+        <oneOrMore>
+          <ref name="Page"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="PrintoutBlock"/>
+        </oneOrMore>
+      </choice>
+      <interleave>
+        <optional>
+          <ref name="Outcomes"/>
+        </optional>
+        <optional>
+          <ref name="ConclusionDivision"/>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="ShortLicense_X">
@@ -446,6 +551,19 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="multiple-correct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="cols">
+          <data type="integer"/>
+        </attribute>
+      </optional>
       <oneOrMore>
         <ref name="Choice"/>
       </oneOrMore>
@@ -472,9 +590,9 @@
       </optional>
       <choice>
         <mixed>
-          <optional>
+          <zeroOrMore>
             <ref name="BlockText"/>
-          </optional>
+          </zeroOrMore>
         </mixed>
         <group>
           <ref name="StatementExercise"/>
@@ -485,6 +603,12 @@
       </choice>
     </element>
   </define>
+  <!--
+    A horizontal SQL Parsons may name a grading database and
+    carry raw unit tests; a horizontal layout may permit the
+    reuse of blocks, where a source block carries an @xml:id
+    (and no @order) and each use references it with @ref
+  -->
   <define name="Parsons">
     <ref name="MetaDataTitleOptional"/>
     <optional>
@@ -504,6 +628,9 @@
     <optional>
       <attribute name="indentation"/>
     </optional>
+    <optional>
+      <attribute name="database"/>
+    </optional>
     <ref name="StatementExercise"/>
     <element name="blocks">
       <optional>
@@ -519,15 +646,40 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="reuse">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="numbered">
+          <choice>
+            <value>left</value>
+            <value>right</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <oneOrMore>
-          <ref name="BlockOrdered"/>
+          <choice>
+            <ref name="BlockOrdered"/>
+            <ref name="BlockSource"/>
+          </choice>
         </oneOrMore>
         <oneOrMore>
           <ref name="BlockUnordered"/>
         </oneOrMore>
       </choice>
     </element>
+    <optional>
+      <element name="tests">
+        <text/>
+      </element>
+    </optional>
     <zeroOrMore>
       <ref name="Hint"/>
     </zeroOrMore>
@@ -539,24 +691,42 @@
     </zeroOrMore>
     <optional>
       <optional>
-        <element name="preamble">
-          <optional>
-            <attribute name="indent"/>
-          </optional>
-          <text/>
-        </element>
+        <ref name="ParsonsProgramPreamble"/>
       </optional>
       <ref name="Program"/>
       <optional>
-        <element name="postamble">
-          <optional>
-            <attribute name="indent"/>
-          </optional>
-          <text/>
-        </element>
+        <ref name="ParsonsProgramPostamble"/>
       </optional>
     </optional>
   </define>
+  <!--
+    Fixed code surrounding a runnable Parsons solution.  These
+    patterns stand apart so the element names can be revisited
+    on their own: the plain "preamble" and "postamble" within
+    a "program" are close cousins, and some later decision may
+    unify them.
+  -->
+  <define name="ParsonsProgramPreamble">
+    <element name="program-preamble">
+      <optional>
+        <attribute name="indent"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="ParsonsProgramPostamble">
+    <element name="program-postamble">
+      <optional>
+        <attribute name="indent"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <!--
+    Horizontal blocks hold short inline bursts (code via "c",
+    mathematics, text); vertical blocks hold code lines or
+    natural-language blocks
+  -->
   <define name="BlockBody">
     <choice>
       <group>
@@ -575,6 +745,12 @@
             </optional>
             <optional>
               <ref name="CodeLine"/>
+            </optional>
+            <optional>
+              <ref name="Verbatim"/>
+            </optional>
+            <optional>
+              <ref name="MathInline"/>
             </optional>
           </mixed>
         </oneOrMore>
@@ -597,6 +773,12 @@
               <optional>
                 <ref name="CodeLine"/>
               </optional>
+              <optional>
+                <ref name="Verbatim"/>
+              </optional>
+              <optional>
+                <ref name="MathInline"/>
+              </optional>
             </mixed>
           </oneOrMore>
         </element>
@@ -608,11 +790,35 @@
       <attribute name="order">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="name"/>
+      </optional>
+      <optional>
+        <attribute name="depends"/>
+      </optional>
+      <optional>
+        <attribute name="ref"/>
+      </optional>
+      <ref name="BlockBody"/>
+    </element>
+  </define>
+  <define name="BlockSource">
+    <element name="block">
+      <ref name="UniqueID"/>
+      <optional>
+        <attribute name="name"/>
+      </optional>
       <ref name="BlockBody"/>
     </element>
   </define>
   <define name="BlockUnordered">
     <element name="block">
+      <optional>
+        <attribute name="name"/>
+      </optional>
+      <optional>
+        <attribute name="depends"/>
+      </optional>
       <ref name="BlockBody"/>
     </element>
   </define>
@@ -666,21 +872,35 @@
       </element>
     </choice>
   </define>
+  <!--
+    Premises and the response arrive in any order; a match
+    with premises and no response, or a response and no
+    premises, is a distractor
+  -->
   <define name="Match">
     <element name="match">
-      <oneOrMore>
-        <element name="premise">
-          <optional>
-            <attribute name="order">
-              <data type="integer"/>
-            </attribute>
-          </optional>
-          <ref name="TextLong"/>
-        </element>
-      </oneOrMore>
-      <element name="response">
-        <ref name="TextLong"/>
-      </element>
+      <interleave>
+        <zeroOrMore>
+          <element name="premise">
+            <optional>
+              <attribute name="order">
+                <data type="integer"/>
+              </attribute>
+            </optional>
+            <ref name="TextLong"/>
+          </element>
+        </zeroOrMore>
+        <optional>
+          <element name="response">
+            <optional>
+              <attribute name="order">
+                <data type="integer"/>
+              </attribute>
+            </optional>
+            <ref name="TextLong"/>
+          </element>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="FreeResponse">
@@ -815,6 +1035,11 @@
       <ref name="TextParagraphAreas"/>
     </element>
   </define>
+  <!--
+    The areas come in three forms: paragraphs of prose, lines
+    of code (@language names the language), or a tabular with
+    clickable cells.  Trailing components in any order.
+  -->
   <define name="Areas">
     <ref name="MetaDataTitleOptional"/>
     <optional>
@@ -822,26 +1047,80 @@
     </optional>
     <ref name="StatementExercise"/>
     <element name="areas">
+      <optional>
+        <attribute name="language"/>
+      </optional>
       <oneOrMore>
-        <ref name="ParagraphAreas"/>
+        <choice>
+          <ref name="ParagraphAreas"/>
+          <ref name="ClineAreas"/>
+          <ref name="Tabular"/>
+        </choice>
       </oneOrMore>
     </element>
-    <optional>
-      <ref name="Feedback"/>
-    </optional>
-    <zeroOrMore>
-      <ref name="Hint"/>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="Answer"/>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="Solution"/>
-    </zeroOrMore>
+    <interleave>
+      <optional>
+        <ref name="Feedback"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </interleave>
   </define>
-  <!-- General feedback element -->
+  <define name="ClineAreas">
+    <element name="cline">
+      <mixed>
+        <zeroOrMore>
+          <ref name="Area"/>
+        </zeroOrMore>
+      </mixed>
+    </element>
+  </define>
+  <!--
+    within the development schema, any tabular cell may hold
+    a clickable area
+  -->
+  <define name="TableCellText" combine="choice">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="TextLongContent"/>
+          <ref name="TableNote"/>
+          <ref name="Area"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
+  <!--
+    General feedback element; a short burst of marked-up text
+    is as welcome as a sequence of blocks
+  -->
   <define name="Feedback">
     <element name="feedback">
+      <ref name="MetaDataTitleOptional"/>
+      <choice>
+        <oneOrMore>
+          <ref name="BlockSolution"/>
+        </oneOrMore>
+        <ref name="TextLong"/>
+      </choice>
+    </element>
+  </define>
+  <!-- A dynamic exercise's automatic solution can be declined -->
+  <define name="Solution" combine="choice">
+    <element name="solution">
+      <attribute name="include-automatic">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <ref name="BlockSolution"/>
@@ -955,12 +1234,24 @@
       <text/>
     </element>
   </define>
-  <!-- A formula; the content model follows @mode -->
+  <!--
+    A formula; the content model follows @mode.  Outside a
+    "de-object" there is no enclosing context, so the
+    expression may declare its own with @context.
+  -->
   <define name="DEExpression">
     <element name="de-expression">
       <optional>
         <attribute name="reduce">
           <value>yes</value>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="context">
+          <choice>
+            <value>number</value>
+            <value>formula</value>
+          </choice>
         </attribute>
       </optional>
       <choice>
@@ -1112,6 +1403,9 @@
     none, the provided answer or answer object is the default
     comparison.  A test holds a single numcmp or strcmp, OR any
     number of jscmp/mathcmp/logic combined with an implied AND.
+    A bare "eval" or a bare constructor within a test is
+    shorthand for a comparison with the submission; the
+    assembly substitutes the full form
   -->
   <define name="FITBTest">
     <element name="test">
@@ -1131,6 +1425,10 @@
             <ref name="FITBJscmp"/>
             <ref name="FITBMathcmp"/>
             <ref name="FITBLogic"/>
+            <ref name="Eval"/>
+            <ref name="DENumber"/>
+            <ref name="DEExpression"/>
+            <ref name="DEEvaluate"/>
           </choice>
         </oneOrMore>
       </choice>
@@ -1335,6 +1633,15 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <!-- a non-editable datafile can start hidden -->
+        <attribute name="hide">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <element name="pre">
           <optional>
@@ -1349,7 +1656,10 @@
   <define name="BlockStatement" combine="choice">
     <ref name="Datafile"/>
   </define>
-  <!-- Query (poll/survey) element -->
+  <!--
+    Query (poll/survey) element; results are private to the
+    instructor unless @visibility says otherwise
+  -->
   <define name="Query">
     <element name="query">
       <optional>
@@ -1358,6 +1668,14 @@
       <optional>
         <attribute name="scale">
           <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="visibility">
+          <choice>
+            <value>instructor</value>
+            <value>all</value>
+          </choice>
         </attribute>
       </optional>
       <ref name="StatementExercise"/>
@@ -1394,6 +1712,101 @@
       <ref name="Solution"/>
     </zeroOrMore>
   </define>
+  <!--
+    LEGACY fill-in ("fillin-basic" to the assembly classifier):
+    empty "var" marks in the statement pair positionally with
+    the "var" elements of the "setup", each holding conditions
+    tried in order (a numeric interval via @number/@tolerance,
+    or a @string regular expression), with optional feedback.
+    The machinery is fully implemented, interactive and
+    static, so the form is admitted here.  It will NEVER move
+    to the stable schema: its only future is retirement in
+    favor of the dynamic fill-in above.
+  -->
+  <define name="FillInLegacy">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <attribute name="number"/>
+    </optional>
+    <ref name="StatementExercise"/>
+    <element name="setup">
+      <oneOrMore>
+        <element name="var">
+          <optional>
+            <attribute name="case">
+              <value>insensitive</value>
+            </attribute>
+          </optional>
+          <oneOrMore>
+            <element name="condition">
+              <choice>
+                <group>
+                  <attribute name="number"/>
+                  <optional>
+                    <attribute name="tolerance"/>
+                  </optional>
+                </group>
+                <attribute name="string"/>
+              </choice>
+              <optional>
+                <ref name="Feedback"/>
+              </optional>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+    <zeroOrMore>
+      <ref name="Hint"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Answer"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Solution"/>
+    </zeroOrMore>
+  </define>
+  <!-- the empty mark in a statement, sized by @width -->
+  <define name="VarMark">
+    <element name="var">
+      <optional>
+        <attribute name="width">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="TextParagraphItem" combine="choice">
+    <ref name="VarMark"/>
+  </define>
+  <!--
+    A select exercise poses one of several existing questions
+    (variants), located by their @label values; @grade says
+    how the graded variant is chosen: at random, by A/B
+    experiment group, always the first listed (the others
+    remain viewable), or any one the reader selects
+  -->
+  <define name="Select">
+    <ref name="MetaDataTitleOptional"/>
+    <element name="select">
+      <optional>
+        <attribute name="grade">
+          <choice>
+            <value>random</value>
+            <value>ab-experiment</value>
+            <value>first</value>
+            <value>any</value>
+          </choice>
+        </attribute>
+      </optional>
+      <attribute name="questions"/>
+      <optional>
+        <attribute name="experiment-name"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
   <!-- Include all exercise types in exercise and activity -->
   <define name="Exercise" combine="choice">
     <element name="exercise">
@@ -1408,9 +1821,52 @@
         <ref name="Matching"/>
         <ref name="FreeResponse"/>
         <ref name="FillInBlank"/>
+        <ref name="FillInLegacy"/>
         <ref name="Areas"/>
         <ref name="CodingExercise"/>
+        <ref name="Select"/>
       </choice>
+    </element>
+  </define>
+  <!--
+    STRICTLY EXPERIMENTAL, matching the sample's own alert:
+    a dual exercise pairs a "dynamic" realization (typically
+    an embedded interactive) with a "static" stand-in, and
+    the assembly chooses one per output
+  -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <element name="dynamic">
+        <ref name="StatementExercise"/>
+      </element>
+      <element name="static">
+        <choice>
+          <group>
+            <ref name="StatementExercise"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
+            <optional>
+              <ref name="IntroductionStatement"/>
+            </optional>
+            <oneOrMore>
+              <ref name="Task"/>
+            </oneOrMore>
+            <optional>
+              <ref name="ConclusionStatement"/>
+            </optional>
+          </group>
+        </choice>
+      </element>
     </element>
   </define>
   <!-- STACK assessment exercise type -->
@@ -1444,5 +1900,28 @@
       <ref name="FillInBlank"/>
       <ref name="Areas"/>
     </choice>
+  </define>
+  <!--
+    The assembly classifies "task" alongside "exercise" and the
+    project-like blocks, and every interactive form is
+    implemented within a "task", so the same union applies
+  -->
+  <define name="Task" combine="choice">
+    <element name="task">
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
+      <choice>
+        <ref name="TrueFalse"/>
+        <ref name="MultipleChoice"/>
+        <ref name="Parsons"/>
+        <ref name="Matching"/>
+        <ref name="FreeResponse"/>
+        <ref name="FillInBlank"/>
+        <ref name="FillInLegacy"/>
+        <ref name="Areas"/>
+        <ref name="CodingExercise"/>
+      </choice>
+    </element>
   </define>
 </grammar>

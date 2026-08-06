@@ -58,7 +58,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
+        <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/defaults/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
 
         <listing>
             <title>Python program, relying on default programs language</title>
@@ -103,7 +103,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/programs/@language</c> will be checked to determine what language to assume the code is written in.
+        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/defaults/programs/@language</c> will be checked to determine what language to assume the code is written in.
         </p>
 
         <listing xml:id="program-activecode-python2">
@@ -363,11 +363,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Some languages, like Java or C++, are only interactive when run on a Runestone server where the code can be compiled and run. Those languages can specify <attr>compiler-args</attr> and <attr>linker-args</attr> or <attr>interpreter-args</attr> as appropriate to the language. Default values for those options can be set in <tag>docinfo/programs</tag> - any defaults set there will be used for any program that lacks the corresponding attribute.</p>
+        <p>Some languages, like Java or C++, are only interactive when run on a Runestone server where the code can be compiled and run. Those languages can specify <attr>compiler-args</attr> and <attr>linker-args</attr> or <attr>interpreter-args</attr> as appropriate to the language. Default values for those options can be set in <tag>docinfo/defaults/programs</tag> - any defaults set there will be used for any program that lacks the corresponding attribute.</p>
+
+        <p>It may be convenient to set <attr>compiler-args</attr> and <attr>linker-args</attr> at the book level in <tag>docinfo/defaults/programs</tag>. Values specified in that location will be used for any <tag>program</tag> that does not override the values by specifying its own attributes.</p>
 
         <listing>
             <title>A C++ program with compiler-args and stdin</title>
-            <p>It may be convenient to set <attr>compiler-args</attr> and <attr>linker-args</attr> at the book level in <tag>docinfo/programs</tag>. Values specified in that location will be used for any <tag>program</tag> that does not override the values by specifying its own attributes.</p>
             <program interactive="activecode" label="hello-world-cpp" language="cpp" compiler-args="-std=c++17,-Wall,-g" linker-args="-g,-s">
                 <code>
                     #include &lt;iostream&gt;
@@ -506,7 +507,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output. Note that it does not have an <attr>language</attr> and is relying on the default one specified in <tag>docinfo/programs</tag></p>
+        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output. Note that it does not have an <attr>language</attr> and is relying on the default one specified in <tag>docinfo/defaults/programs</tag></p>
 
         <listing xml:id="listing-python-included">
             <title>A Python program that defines some statistics</title>
@@ -747,7 +748,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <exercise label="program-codelens-cpp-questions">
             <title>A C++ program as CodeLens exercise</title>
-            <statement>Run the codelens and answer the questions it asks.</statement>
+            <statement>
+                <p>Run the codelens and answer the questions it asks.</p>
+            </statement>
             <program interactive="codelens" language="cpp">
                 <code><![CDATA[
                   int foo() {
@@ -4475,7 +4478,7 @@ TEST_CASE( "Test the add function" ) {
             <title>Fill-In, New Markup Strings</title>
             <statement>
                 <p>The word I'm thinking about is hinted at by the image.</p>
-                <p><image source="cartoon-magic.jpg" width="50%"/></p>
+                <image source="cartoon-magic.jpg" width="50%"/>
                 <p>What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try <q>pizzazz</q>.")</p>
             </statement>
             <evaluation>
@@ -5590,8 +5593,10 @@ TEST_CASE( "Test the add function" ) {
                     </p>
                 </statement>
             </exercise>
+            <conclusion>
+                <p>And a final paragraph, now as a <tag>conclusion</tag> of the <tag>exercises</tag>, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
+            </conclusion>
         </exercises>
-        <p>And a final paragraph in the section, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
     </section>
 
     <worksheet groupwork="yes" groupsize="2" xml:id="worksheet-groupwork" label="worksheet-groupwork">
@@ -5984,16 +5989,19 @@ TEST_CASE( "Test the add function" ) {
     <figure xml:id="show-eval-visualization1">
         <caption>Show-Eval Visualization</caption>
         <interactive label="show-eval-visualization" platform="javascript" source="https://runestone.academy/cdn/runestone/showEval-0.10.0.js" width="100%" >
-            <slate surface="html">
-                <style>
+            <!-- The one namespace declaration on the "slate" marks all -->
+            <!-- the content as foreign, and satisfies validation; only  -->
+            <!-- local names survive into the output page                -->
+            <slate surface="html" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                <xhtml:style>
                     .showEval { font-family: monospace; font-size: 1.5em; }
                     .showEval span { vertical-align: text-top; }
-                </style>
-                <button id="nextStep">Next Step</button>
-                <button id="reset">Reset</button>
-                <div class='showEval'>eggs = ['dogs', 'cats', 'moose']</div>
-                <div id="showeval"></div>
-                <script>
+                </xhtml:style>
+                <xhtml:button id="nextStep">Next Step</xhtml:button>
+                <xhtml:button id="reset">Reset</xhtml:button>
+                <xhtml:div class='showEval'>eggs = ['dogs', 'cats', 'moose']</xhtml:div>
+                <xhtml:div id="showeval"></xhtml:div>
+                <xhtml:script>
                     document.addEventListener("DOMContentLoaded", function() {
                         console.log("Document loaded");
                         // for each step, put the part to replaced in the first set of {{ }}, and the replacement text in the following {{ }}
@@ -6003,7 +6011,7 @@ TEST_CASE( "Test the add function" ) {
                         "'DOGSCATSMOOSE'.join({{eggs}}{{['dogs', 'cats', 'moose']}})",
                         "{{'DOGSCATSMOOSE'.join(['dogs', 'cats', 'moose'])}}{{'dogsDOGSCATSMOOSEcatsDOGSCATSMOOSEmoose'}}"];
                         s = new SHOWEVAL.ShowEval(document.querySelector('#showeval'), steps, false); });
-                </script>
+                </xhtml:script>
             </slate>
         </interactive>
         </figure>
