@@ -6403,74 +6403,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex/> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext/> syntax.</p>
 
-            <p>Tables can be used and abused many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a <tag>tabular</tag>.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.  At least we have called it a <q>Figure,</q> not a <q>Table</q>.</p>
-
-            <figure>
-                <caption>Polynomial Long Division</caption>
-                <tabular halign="right">
-                    <row>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell bottom="medium"></cell>
-                        <cell bottom="medium"></cell>
-                        <cell bottom="medium"><m>x</m></cell>
-                        <cell bottom="medium"><m>-</m></cell>
-                        <cell bottom="medium"><m>5</m></cell>
-                    </row>
-                    <row>
-                        <cell><m>x</m></cell>
-                        <cell><m>+</m></cell>
-                        <cell right="medium"><m>2</m></cell>
-                        <cell><m>x^2</m></cell>
-                        <cell><m>-</m></cell>
-                        <cell><m>3x</m></cell>
-                        <cell><m>-</m></cell>
-                        <cell><m>8</m></cell>
-                    </row>
-                    <row>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell bottom="minor"><m>x^2</m></cell>
-                        <cell bottom="minor"><m>+</m></cell>
-                        <cell bottom="minor"><m>2x</m></cell>
-                        <cell bottom="minor"></cell>
-                        <cell bottom="minor"></cell>
-                    </row>
-                    <row>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell><m>-5x</m></cell>
-                        <cell><m>-</m></cell>
-                        <cell><m>8</m></cell>
-                    </row>
-                    <row>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell bottom="minor"><m>-5x</m></cell>
-                        <cell bottom="minor"><m>-</m></cell>
-                        <cell bottom="minor"><m>10</m></cell>
-                   </row>
-                    <row>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
-                        <cell><m>2</m></cell>
-                    </row>
-                </tabular>
-            </figure>
-
             <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
 
 
@@ -6894,6 +6826,71 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </row>
                 </tabular>
             </table>
+
+            <p>Long division of polynomials, described with vertical and horizontal borders on individual entries of a <tag>tabular</tag>.  The division lines are slightly thicker than the subtraction lines.  This is an ill-advised torture test of the <tag>tabular</tag> machinery<mdash/>the typical abuse of tables for horizontal and vertical layout<mdash/>so do not take it as a model, but do notice what the machinery can do.  It is also a <em>bare</em> <tag>tabular</tag>, sitting between paragraphs with no wrapper at all, and so with no number and no caption.  A <tag>tabular</tag> is either bare, like this one, or wrapped in a <tag>table</tag> when it deserves a number and a title.</p>
+
+            <tabular halign="right">
+                <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell bottom="medium"></cell>
+                    <cell bottom="medium"></cell>
+                    <cell bottom="medium"><m>x</m></cell>
+                    <cell bottom="medium"><m>-</m></cell>
+                    <cell bottom="medium"><m>5</m></cell>
+                </row>
+                <row>
+                    <cell><m>x</m></cell>
+                    <cell><m>+</m></cell>
+                    <cell right="medium"><m>2</m></cell>
+                    <cell><m>x^2</m></cell>
+                    <cell><m>-</m></cell>
+                    <cell><m>3x</m></cell>
+                    <cell><m>-</m></cell>
+                    <cell><m>8</m></cell>
+                </row>
+                <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell bottom="minor"><m>x^2</m></cell>
+                    <cell bottom="minor"><m>+</m></cell>
+                    <cell bottom="minor"><m>2x</m></cell>
+                    <cell bottom="minor"></cell>
+                    <cell bottom="minor"></cell>
+                </row>
+                <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell><m>-5x</m></cell>
+                    <cell><m>-</m></cell>
+                    <cell><m>8</m></cell>
+                </row>
+                <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell bottom="minor"><m>-5x</m></cell>
+                    <cell bottom="minor"><m>-</m></cell>
+                    <cell bottom="minor"><m>10</m></cell>
+               </row>
+                <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell><m>2</m></cell>
+                </row>
+            </tabular>
 
             <p>And now a <tag>sidebyside</tag> with a <tag>table</tag> and a <tag>tabular</tag> to check that width is scaled appropriately. See <xref ref="section-side-by-side" text="global">Section</xref> to learn about <tag>sidebyside</tag>s.</p>
 

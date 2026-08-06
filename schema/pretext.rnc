@@ -881,6 +881,7 @@
                         MuseScore
                     )
                 } |
+                # the one route to a numbered, titled "tabular"
                 element table {
                     MetaDataAltTitle,
                     Landscape?,

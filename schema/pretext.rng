@@ -2471,6 +2471,7 @@
           <ref name="MuseScore"/>
         </choice>
       </element>
+      <!-- the one route to a numbered, titled "tabular" -->
       <element name="table">
         <ref name="MetaDataAltTitle"/>
         <optional>
