@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <include href="pretext.rng"/>
   <define name="Interactive">
     <element name="interactive">
@@ -166,17 +166,7 @@
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
               <ref name="SideBySideNoNumber"/>
-              <ref name="SlateInput"/>
-              <ref name="AnyXhtml"/>
-              <optional>
-                <element name="xhtml:button">
-                  <attribute name="type"/>
-                  <attribute name="id"/>
-                  <zeroOrMore>
-                    <text/>
-                  </zeroOrMore>
-                </element>
-              </optional>
+              <ref name="AnyXHTML"/>
               <zeroOrMore>
                 <text/>
               </zeroOrMore>
@@ -213,27 +203,16 @@
       </zeroOrMore>
     </choice>
   </define>
-  <define name="SlateInput">
-    <element name="input">
-      <optional>
-        <attribute name="type"/>
-      </optional>
-      <optional>
-        <attribute name="value"/>
-      </optional>
-      <optional>
-        <attribute name="onkeypress"/>
-      </optional>
-      <optional>
-        <attribute name="onclick"/>
-      </optional>
-      <optional>
-        <attribute name="style"/>
-      </optional>
-    </element>
-  </define>
-  <!-- A slate with surface="html" embeds an arbitrary XHTML fragment. -->
-  <define name="AnyXhtml">
+  <!--
+    A slate with surface="html" embeds an arbitrary XHTML
+    fragment, and the XHTML namespace is the author's
+    declaration that the content is foreign: anything
+    un-namespaced still gets the schema's full scrutiny.
+    Declare it once, as a prefix on the "slate" itself;
+    the conversion keeps only local names, so the output
+    page carries plain HTML tags, free of namespaces.
+  -->
+  <define name="AnyXHTML">
     <element>
       <nsName ns="http://www.w3.org/1999/xhtml"/>
       <zeroOrMore>
@@ -243,7 +222,7 @@
       </zeroOrMore>
       <mixed>
         <zeroOrMore>
-          <ref name="AnyXhtml"/>
+          <ref name="AnyXHTML"/>
         </zeroOrMore>
       </mixed>
     </element>

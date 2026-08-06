@@ -2124,13 +2124,7 @@
                           Paragraph |
                           Tabular |
                           SideBySideNoNumber |
-                          SlateInput |
-                          AnyXhtml |
-                          element xhtml:button {
-                            attribute type { text },
-                            attribute id { text },
-                            text*
-                          }? |
+                          AnyXHTML |
                           text*
                         )*
                       )
@@ -2146,20 +2140,17 @@
                   text*
                 )
 
-              SlateInput =
-                element input {
-                  attribute type {text}?,
-                  attribute value {text}?,
-                  attribute onkeypress {text}?,
-                  attribute onclick {text}?,
-                  attribute style {text}?
-                }
-
-              # A slate with surface="html" embeds an arbitrary XHTML fragment.
-              AnyXhtml =
+              # A slate with surface="html" embeds an arbitrary XHTML
+              # fragment, and the XHTML namespace is the author's
+              # declaration that the content is foreign: anything
+              # un-namespaced still gets the schema's full scrutiny.
+              # Declare it once, as a prefix on the "slate" itself;
+              # the conversion keeps only local names, so the output
+              # page carries plain HTML tags, free of namespaces.
+              AnyXHTML =
                 element xhtml:* {
                   (attribute * { text })*,
-                  mixed { AnyXhtml* }
+                  mixed { AnyXHTML* }
                 }
 
             # add Interactives where used
