@@ -1492,6 +1492,71 @@ ENDDOCUMENT();
 
             </section>
 
+            <section xml:id="section-answer-formats">
+                <title>Answer Formats and Extra Macros</title>
+
+                <p>Each answer blank may carry a <attr>category</attr>, which decorates the blank with a link to WeBWorK's help for entering an answer of that flavor.  The gallery below exercises the categories whose answers need only the standard contexts; a second exercise loads extra macro files, with a <tag>pg-macros</tag> element, for the three categories that need them.</p>
+
+                <exercise label="answer-format-gallery">
+                    <title>A Gallery of Answer Formats</title>
+                    <webwork>
+                        <pg-code>
+                            Context("Numeric");
+                            $angle = Real(45);
+                            $decimal = Real(0.75);
+                            $exponent = Real(3);
+                            $logarithm = Compute("ln(2)");
+                            $limit = Real(6);
+                            $syntaxanswer = Formula("x^2+1");
+                            Context("Interval");
+                            $interval = Compute("(1,5)");
+                            Context("Vector");
+                            $point = Point("(1,2)");
+                            $vector = Vector("&lt;1,2&gt;");
+                        </pg-code>
+                        <statement>
+                            <p>Nine flavors of answer, each blank linking to format help of its own kind.<ol>
+                                <li><p>An angle, in degrees, half of a right angle: <var name="$angle" width="4" category="angle"/></p></li>
+                                <li><p>Three quarters, as a decimal: <var name="$decimal" width="6" category="decimal"/></p></li>
+                                <li><p>The exponent in <m>2^3 = 8</m>: <var name="$exponent" width="4" category="exponent"/></p></li>
+                                <li><p>The natural logarithm of <m>2</m>, exactly: <var name="$logarithm" width="6" category="logarithm"/></p></li>
+                                <li><p>The value of <m>\lim_{x\to 2}(x^2+2)</m>: <var name="$limit" width="4" category="limit"/></p></li>
+                                <li><p>Any formula equal to <m>x^2+1</m>: <var name="$syntaxanswer" width="10" category="syntax"/></p></li>
+                                <li><p>The open interval from <m>1</m> to <m>5</m>: <var name="$interval" width="8" category="interval"/></p></li>
+                                <li><p>The point where <m>y=x+1</m> crosses <m>x=1</m>: <var name="$point" width="8" category="point"/></p></li>
+                                <li><p>The vector from the origin to that point: <var name="$vector" width="8" category="vector"/></p></li>
+                            </ol></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="answer-format-extra-macros">
+                    <title>Answers Needing Extra Macros</title>
+                    <webwork>
+                        <pg-macros>
+                            <macro-file>contextFraction.pl</macro-file>
+                            <macro-file>contextInequalities.pl</macro-file>
+                            <macro-file>parserNumberWithUnits.pl</macro-file>
+                        </pg-macros>
+                        <pg-code>
+                            Context("Fraction");
+                            $fraction = Fraction(3, 4);
+                            Context("Inequalities");
+                            $inequality = Compute("x &gt; 2");
+                            Context("Numeric");
+                            $quantity = NumberWithUnits("4 m");
+                        </pg-code>
+                        <statement>
+                            <p>Three more flavors, each needing a macro file loaded by <tag>pg-macros</tag>.<ol>
+                                <li><p>Three quarters, as a fraction: <var name="$fraction" width="6" category="fraction"/></p></li>
+                                <li><p>The solutions of <m>3x &gt; 6</m>, as an inequality: <var name="$inequality" width="8" category="inequality"/></p></li>
+                                <li><p>Four meters, a number with its units: <var name="$quantity" width="8" category="quantity"/></p></li>
+                            </ol></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+            </section>
+
         </chapter>
 
         <chapter>

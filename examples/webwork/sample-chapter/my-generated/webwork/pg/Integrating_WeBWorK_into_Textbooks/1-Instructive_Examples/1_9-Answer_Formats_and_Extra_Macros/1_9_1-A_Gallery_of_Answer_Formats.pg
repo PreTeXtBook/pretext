@@ -1,11 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
-<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-divisional-introduction" assembly-id="divisional-introduction">
-  <static seed="99">
-    <statement><p><m>1+1=2</m></p>
-</statement>
-  </static>
-  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_2_3.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
-  <pg><![CDATA[
 #############################################
 ###       Generated from PreTeXt source      
 ###                                          
@@ -21,7 +13,7 @@
 ## EditionText1()
 ## AuthorText1()
 ## Section1(not reported)
-## Problem1(2.4.2.3)
+## Problem1(1.9.1)
 ## Author()
 ## Institution()
 ## Language(en-US)
@@ -35,6 +27,7 @@ loadMacros(
   "PGstandard.pl",
   "PGML.pl",
   "AnswerFormatHelp.pl",
+  "contextForm.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -46,14 +39,42 @@ COMMENT('Authored in PreTeXt');
 ############################################################
 # PG Setup Code
 ############################################################
-Context('Numeric');
+Context("Numeric");
+$angle = Real(45);
+$decimal = Real(0.75);
+$exponent = Real(3);
+$logarithm = Compute("ln(2)");
+$limit = Real(6);
+$syntaxanswer = Formula("x^2+1");
+Context("Interval");
+$interval = Compute("(1,5)");
+Context("Vector");
+$point = Point("(1,2)");
+$vector = Vector("<1,2>");
 
 ############################################################
 # Body
 ############################################################
 
 BEGIN_PGML
-[`1+1=2`]
+Nine flavors of answer, each blank linking to format help of its own kind.
+a.  An angle, in degrees, half of a right angle: [_]{$angle}{4} [@AnswerFormatHelp('angles')@]*
+
+a.  Three quarters, as a decimal: [_]{$decimal}{6} [@AnswerFormatHelp('decimals')@]*
+
+a.  The exponent in [`2^3 = 8\text{:}`] [_]{$exponent}{4} [@AnswerFormatHelp('exponents')@]*
+
+a.  The natural logarithm of [`2\text{,}`] exactly: [_]{$logarithm}{6} [@AnswerFormatHelp('logarithms')@]*
+
+a.  The value of [`\lim_{x\to 2}(x^2+2)\text{:}`] [_]{$limit}{4} [@AnswerFormatHelp('limits')@]*
+
+a.  Any formula equal to [`x^2+1\text{:}`] [_]{$syntaxanswer}{10} [@AnswerFormatHelp('syntax')@]*
+
+a.  The open interval from [`1`] to [`5\text{:}`] [_]{$interval}{8} [@AnswerFormatHelp('intervals')@]*
+
+a.  The point where [`y=x+1`] crosses [`x=1\text{:}`] [_]{$point}{8} [@AnswerFormatHelp('points')@]*
+
+a.  The vector from the origin to that point: [_]{$vector}{8} [@AnswerFormatHelp('vectors')@]*
 
 END_PGML
 
@@ -62,5 +83,3 @@ END_PGML
 ############################################################
 
 ENDDOCUMENT();
-]]></pg>
-</webwork-reps>

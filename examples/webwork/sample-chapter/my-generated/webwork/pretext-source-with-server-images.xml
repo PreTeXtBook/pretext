@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-pretext-source-with-server-images" assembly-id="pretext-source-with-server-images">
-  <static seed="82">
+  <static seed="84">
     <task>
       <statement><!-- PTX:WARNING: PGML wanted to center align here. -->
 <image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-1.png" width="25%"/>

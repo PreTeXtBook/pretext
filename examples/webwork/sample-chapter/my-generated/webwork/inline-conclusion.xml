@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-inline-conclusion" assembly-id="inline-conclusion">
-  <static seed="92">
+  <static seed="93">
     <statement><p><m>1+1=2</m></p>
 </statement>
   </static>

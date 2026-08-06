@@ -25,7 +25,3 @@ problem_start
 source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_5.pg
 problem_id = 5
 problem_end
-problem_start
-source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_6.pg
-problem_id = 6
-problem_end

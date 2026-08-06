@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-answer-format-extra-macros" assembly-id="answer-format-extra-macros">
+  <static seed="73">
+    <statement><p>Three more flavors, each needing a macro file loaded by <c>&lt;pg-macros&gt;</c>.
+<ol label="a.">
+<li>
+<p>Three quarters, as a fraction: <fillin characters="6" name="AnSwEr0001"/></p>
+</li>
+<li>
+<p>The solutions of <m>3x &gt; 6\text{,}</m> as an inequality: <fillin characters="8" name="AnSwEr0002"/></p>
+</li>
+<li>
+<p>Four meters, a number with its units: <fillin characters="8" name="AnSwEr0003"/></p>
+</li>
+</ol></p>
+</statement>
+    <answer>
+      <p>
+        <m>{\frac{3}{4}}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>x &gt; 2</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>4\ {\rm m}</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_9-Answer_Formats_and_Extra_Macros/1_9_2-Answers_Needing_Extra_Macros.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.9.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserNumberWithUnits.pl",
+  "contextFraction.pl",
+  "contextInequalities.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Fraction");
+$fraction = Fraction(3, 4);
+Context("Inequalities");
+$inequality = Compute("x > 2");
+Context("Numeric");
+$quantity = NumberWithUnits("4 m");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Three more flavors, each needing a macro file loaded by [|<pg-macros>|]*.
+a.  Three quarters, as a fraction: [_]{$fraction}{6} [@AnswerFormatHelp('fractions')@]*
+
+a.  The solutions of [`3x > 6\text{,}`] as an inequality: [_]{$inequality}{8} [@AnswerFormatHelp('inequalities')@]*
+
+a.  Four meters, a number with its units: [_]{$quantity}{8} [@AnswerFormatHelp('units')@]*
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

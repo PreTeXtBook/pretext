@@ -27,6 +27,7 @@ loadMacros(
   "PGstandard.pl",
   "PGML.pl",
   "AnswerFormatHelp.pl",
+  "niceTables.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -45,6 +46,14 @@ Context('Numeric');
 ############################################################
 
 BEGIN_PGML
+>> [@DataTable(
+  [
+    [
+     PGML(q"What's up, Doc?"),
+    ],
+  ],
+      align => '*{1}{l}',
+      valign => 'middle',);@]* <<
 
 END_PGML
 
