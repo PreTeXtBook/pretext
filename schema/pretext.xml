@@ -2186,6 +2186,40 @@
                 ),
                 ConclusionDivision?
             }
+
+            # Hosted on Runestone, an "exercises" division can be a
+            # timed exam (@time-limit in minutes; results, feedback,
+            # the visible timer, and pausing each default on), or can
+            # collect group-work submissions (@groupwork, group size
+            # capped by @groupsize); a "worksheet" can do the latter
+            Exercises |= element exercises {
+                (
+                    (attribute time-limit {xsd:integer},
+                     attribute results {"yes"|"no"}?,
+                     attribute timer {"yes"|"no"}?,
+                     attribute feedback {"yes"|"no"}?,
+                     attribute pause {"yes"|"no"}?)
+                |
+                    (attribute groupwork {"yes"|"no"},
+                     attribute groupsize {xsd:integer}?)
+                ),
+                MetaDataAltTitleOptional,
+                IntroductionDivision?,
+                (Exercise | ExerciseGroup)+,
+                ConclusionDivision?
+            }
+            Worksheet |= element worksheet {
+                attribute groupwork {"yes"|"no"},
+                attribute groupsize {xsd:integer}?,
+                PrintoutAttributes,
+                attribute courseid {text}?,
+                attribute series {text}?,
+                attribute seriescode {text}?,
+                MetaDataAltTitleOptional,
+                (Objectives? &amp; IntroductionDivision?),
+                (Page+ | PrintoutBlock+),
+                (Outcomes? &amp; ConclusionDivision?)
+            }
             </code>
         </fragment>
     </section>

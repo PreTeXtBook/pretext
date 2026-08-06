@@ -297,6 +297,132 @@
       </optional>
     </element>
   </define>
+  <!--
+    Hosted on Runestone, an "exercises" division can be a
+    timed exam (@time-limit in minutes; results, feedback,
+    the visible timer, and pausing each default on), or can
+    collect group-work submissions (@groupwork, group size
+    capped by @groupsize); a "worksheet" can do the latter
+  -->
+  <define name="Exercises" combine="choice">
+    <element name="exercises">
+      <choice>
+        <group>
+          <attribute name="time-limit">
+            <data type="integer"/>
+          </attribute>
+          <optional>
+            <attribute name="results">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="timer">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="feedback">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="pause">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+        </group>
+        <group>
+          <attribute name="groupwork">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+          <optional>
+            <attribute name="groupsize">
+              <data type="integer"/>
+            </attribute>
+          </optional>
+        </group>
+      </choice>
+      <ref name="MetaDataAltTitleOptional"/>
+      <optional>
+        <ref name="IntroductionDivision"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="Exercise"/>
+          <ref name="ExerciseGroup"/>
+        </choice>
+      </oneOrMore>
+      <optional>
+        <ref name="ConclusionDivision"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Worksheet" combine="choice">
+    <element name="worksheet">
+      <attribute name="groupwork">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="groupsize">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="PrintoutAttributes"/>
+      <optional>
+        <attribute name="courseid"/>
+      </optional>
+      <optional>
+        <attribute name="series"/>
+      </optional>
+      <optional>
+        <attribute name="seriescode"/>
+      </optional>
+      <ref name="MetaDataAltTitleOptional"/>
+      <interleave>
+        <optional>
+          <ref name="Objectives"/>
+        </optional>
+        <optional>
+          <ref name="IntroductionDivision"/>
+        </optional>
+      </interleave>
+      <choice>
+        <oneOrMore>
+          <ref name="Page"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="PrintoutBlock"/>
+        </oneOrMore>
+      </choice>
+      <interleave>
+        <optional>
+          <ref name="Outcomes"/>
+        </optional>
+        <optional>
+          <ref name="ConclusionDivision"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
   <define name="ShortLicense_X">
     <element name="shortlicense">
       <interleave>
