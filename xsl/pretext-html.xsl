@@ -1225,10 +1225,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- General support (not for a particular author) -->
+<!-- General support (not for a particular author).  The schema -->
+<!-- says a "support" statement is text-level, mixed content    -->
 <xsl:template match="bibinfo/support">
     <div class="support">
-        <xsl:apply-templates select="*"/>
+        <xsl:apply-templates select="node()"/>
     </div>
 </xsl:template>
 
