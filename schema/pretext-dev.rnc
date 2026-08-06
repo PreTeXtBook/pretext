@@ -621,6 +621,41 @@
                 StatementExercise,
                 Program,
                 Hint*, Answer*, Solution*
+            # LEGACY fill-in ("fillin-basic" to the assembly classifier):
+            # empty "var" marks in the statement pair positionally with
+            # the "var" elements of the "setup", each holding conditions
+            # tried in order (a numeric interval via @number/@tolerance,
+            # or a @string regular expression), with optional feedback.
+            # The machinery is fully implemented, interactive and
+            # static, so the form is admitted here.  It will NEVER move
+            # to the stable schema: its only future is retirement in
+            # favor of the dynamic fill-in above.
+            FillInLegacy =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                element setup {
+                    element var {
+                        attribute case {"insensitive"}?,
+                        element condition {
+                            (
+                                (attribute number {text},
+                                 attribute tolerance {text}?)
+                            |
+                                attribute string {text}
+                            ),
+                            Feedback?
+                        }+
+                    }+
+                },
+                Hint*, Answer*, Solution*
+            # the empty mark in a statement, sized by @width
+            VarMark =
+                element var {
+                    attribute width {xsd:integer}?,
+                    empty
+                }
+            TextParagraphItem |= VarMark
             # A select exercise poses one of several existing questions
             # (variants), located by their @label values; @grade says
             # how the graded variant is chosen: at random, by A/B
@@ -646,6 +681,7 @@
                     Matching |
                     FreeResponse |
                     FillInBlank |
+                    FillInLegacy |
                     Areas |
                     CodingExercise |
                     Select
@@ -684,6 +720,7 @@
                     Matching |
                     FreeResponse |
                     FillInBlank |
+                    FillInLegacy |
                     Areas |
                     CodingExercise
                     )

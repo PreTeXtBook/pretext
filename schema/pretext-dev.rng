@@ -1559,6 +1559,74 @@
     </zeroOrMore>
   </define>
   <!--
+    LEGACY fill-in ("fillin-basic" to the assembly classifier):
+    empty "var" marks in the statement pair positionally with
+    the "var" elements of the "setup", each holding conditions
+    tried in order (a numeric interval via @number/@tolerance,
+    or a @string regular expression), with optional feedback.
+    The machinery is fully implemented, interactive and
+    static, so the form is admitted here.  It will NEVER move
+    to the stable schema: its only future is retirement in
+    favor of the dynamic fill-in above.
+  -->
+  <define name="FillInLegacy">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <attribute name="number"/>
+    </optional>
+    <ref name="StatementExercise"/>
+    <element name="setup">
+      <oneOrMore>
+        <element name="var">
+          <optional>
+            <attribute name="case">
+              <value>insensitive</value>
+            </attribute>
+          </optional>
+          <oneOrMore>
+            <element name="condition">
+              <choice>
+                <group>
+                  <attribute name="number"/>
+                  <optional>
+                    <attribute name="tolerance"/>
+                  </optional>
+                </group>
+                <attribute name="string"/>
+              </choice>
+              <optional>
+                <ref name="Feedback"/>
+              </optional>
+            </element>
+          </oneOrMore>
+        </element>
+      </oneOrMore>
+    </element>
+    <zeroOrMore>
+      <ref name="Hint"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Answer"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Solution"/>
+    </zeroOrMore>
+  </define>
+  <!-- the empty mark in a statement, sized by @width -->
+  <define name="VarMark">
+    <element name="var">
+      <optional>
+        <attribute name="width">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="TextParagraphItem" combine="choice">
+    <ref name="VarMark"/>
+  </define>
+  <!--
     A select exercise poses one of several existing questions
     (variants), located by their @label values; @grade says
     how the graded variant is chosen: at random, by A/B
@@ -1599,6 +1667,7 @@
         <ref name="Matching"/>
         <ref name="FreeResponse"/>
         <ref name="FillInBlank"/>
+        <ref name="FillInLegacy"/>
         <ref name="Areas"/>
         <ref name="CodingExercise"/>
         <ref name="Select"/>
@@ -1654,6 +1723,7 @@
         <ref name="Matching"/>
         <ref name="FreeResponse"/>
         <ref name="FillInBlank"/>
+        <ref name="FillInLegacy"/>
         <ref name="Areas"/>
         <ref name="CodingExercise"/>
       </choice>
