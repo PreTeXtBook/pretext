@@ -1712,6 +1712,10 @@
       <text/>
     </element>
   </define>
+  <!--
+    A checkpoint's prompt and feedback are short bursts of
+    marked-up text, not sequences of blocks
+  -->
   <define name="CodelensCheckpoint">
     <element name="checkpoint">
       <attribute name="line"/>
@@ -1720,15 +1724,11 @@
         <attribute name="answer-variable"/>
       </choice>
       <element name="prompt">
-        <oneOrMore>
-          <ref name="BlockText"/>
-        </oneOrMore>
+        <ref name="TextLong"/>
       </element>
       <optional>
         <element name="feedback">
-          <oneOrMore>
-            <ref name="BlockText"/>
-          </oneOrMore>
+          <ref name="TextLong"/>
         </element>
       </optional>
     </element>
@@ -1786,11 +1786,9 @@
         <attribute name="codetailor-fallback"/>
       </optional>
       <optional>
+        <!-- the codelens trace step (1-based) to open on -->
         <attribute name="starting-step">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
+          <data type="integer"/>
         </attribute>
       </optional>
       <optional>
@@ -1801,6 +1799,9 @@
       </optional>
       <optional>
         <attribute name="database"/>
+      </optional>
+      <optional>
+        <attribute name="datafile"/>
       </optional>
       <optional>
         <attribute name="add-files"/>

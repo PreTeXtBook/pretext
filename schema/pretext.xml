@@ -1298,6 +1298,8 @@
                 element stdin {
                     text
                 }
+            # A checkpoint's prompt and feedback are short bursts of
+            # marked-up text, not sequences of blocks
             CodelensCheckpoint =
                 element checkpoint {
                     attribute line {text},
@@ -1306,8 +1308,8 @@
                     |
                         attribute answer-variable {text}
                     ),
-                    element prompt {BlockText+},
-                    element feedback {BlockText+}?
+                    element prompt {TextLong},
+                    element feedback {TextLong}?
                 }
             Program =
                 element program {
@@ -1321,10 +1323,12 @@
                     attribute codelens {"yes"|"no"}?,
                     attribute codetailor {"all"|"incorrect"}?,
                     attribute codetailor-fallback {text}?,
-                    attribute starting-step {"yes"|"no"}?,
+                    # the codelens trace step (1-based) to open on
+                    attribute starting-step {xsd:integer}?,
                     attribute compiler-args {text}?,
                     attribute extra-compiler-args {text}?,
                     attribute database {text}?,
+                    attribute datafile {text}?,
                     attribute add-files {text}?,
                     attribute compile-also {text}?,
                     attribute download {"yes"|"no"}?,
