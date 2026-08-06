@@ -1969,8 +1969,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
     <xsl:variable name="introduction-reps" select="
-        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//handout/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
-        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//handout/conclusion|$document-root//handout/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
+        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//handout/introduction|$document-root//reading-questions/introduction)[1]|
+        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//handout/conclusion|$document-root//reading-questions/conclusion)[1]"/>
     <xsl:if test="$introduction-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
@@ -4153,10 +4153,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <!-- For references we open a list to hold "biblio"  -->
-    <!-- unless we need to wait for an "introduction" or -->
-    <!-- a "headnote"                                    -->
-    <xsl:if test="self::references and not(introduction) and not(headnote)">
+    <!-- For references we open a list to hold "biblio" -->
+    <!-- unless we need to wait for a "headnote"         -->
+    <xsl:if test="self::references and not(headnote)">
         <xsl:call-template name="open-reference-list"/>
     </xsl:if>
 </xsl:template>
@@ -4196,9 +4195,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Footings are straightforward -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet|handout" mode="latex-division-footing">
-    <!-- For references we close a list holding "biblio"    -->
-    <!-- unless we already added it before the "conclusion" -->
-    <xsl:if test="self::references and not(conclusion)">
+    <!-- For references we close a list holding "biblio" -->
+    <xsl:if test="self::references">
         <xsl:call-template name="close-reference-list"/>
     </xsl:if>
 
@@ -4219,7 +4217,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title optional (and discouraged), in argument    -->
 <!-- typically just a few paragraphs                  -->
 <!-- NB: a glossary has a "headnote" (elsewhere) and does not have a "conclusion" -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction|references/introduction">
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction">
     <xsl:text>\begin{introduction}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -4231,20 +4229,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
-    <!-- We have not opened the list of references yet when  -->
-    <!-- it has an "introduction".  Now is the time, unless  -->
-    <!-- a "headnote" follows and defers the list once more. -->
-    <xsl:if test="parent::references and not(following-sibling::headnote)">
-        <xsl:call-template name="open-reference-list"/>
-    </xsl:if>
 </xsl:template>
 
-<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion|references/conclusion">
-    <!-- We will not close the list of references when -->
-    <!-- it has an "introduction".  Now is the time.   -->
-    <xsl:if test="parent::references">
-        <xsl:call-template name="close-reference-list"/>
-    </xsl:if>
+<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion">
     <xsl:text>\begin{conclusion}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -9331,14 +9318,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and \bibitem seems comfortable there, so our source -->
 <!-- is nearly compatible with the usual usage           -->
 
-<!-- We open and close a single "referencelist" environment,      -->
-<!-- which we create in the preamble.  It opens right after a     -->
-<!-- "references" division, or after an optional "introduction"   -->
-<!-- or "headnote" (whichever comes last).  It closes right       -->
-<!-- before the "references" division closes, or right before the -->
-<!-- "conclusion" begins.  The templates below ensure             -->
-<!-- consistency, and help with overrides.  You can search on     -->
-<!-- them to see the pairs of scenarios just described.           -->
+<!-- We open and close a single "referencelist" environment,   -->
+<!-- which we create in the preamble.  It opens right after a  -->
+<!-- "references" division, or after an optional "headnote",   -->
+<!-- and closes right before the division does.  The templates -->
+<!-- below ensure consistency, and help with overrides.        -->
 
 <xsl:template name="open-reference-list">
     <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
