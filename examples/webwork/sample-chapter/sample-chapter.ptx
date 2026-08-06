@@ -1230,7 +1230,7 @@ ENDDOCUMENT();
                                 This image is a visual proof that <m>\sum_{k=1}^{n}k</m> equals what?
                             </p>
                             <image width="50%">
-                               <description>
+                               <shortdescription>
                                     21 blue balls are arranged in a triangular formation,
                                     with one at the top, then a row of two, a row of three,
                                     and so on until a row of six;
@@ -1240,7 +1240,7 @@ ENDDOCUMENT();
                                     until they intersect two orange balls;
                                     the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
                                     to one pair from the 7 orange balls
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
@@ -1286,10 +1286,10 @@ ENDDOCUMENT();
                                 Find the area of the rectangle.
                             </p>
                             <image width="50%">
-                                <description>
+                                <shortdescription>
                                     a rectangle whose width is labeled <var name="$b"/> cm
                                     and height is labeled <var name="$a"/> cm
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
@@ -1324,10 +1324,10 @@ ENDDOCUMENT();
                                 What are the roots of this polynomial?
                             </p>
                             <image width="50%">
-                                <description>
+                                <shortdescription>
                                     the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
                                     <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \begin{axis}
@@ -1357,9 +1357,9 @@ ENDDOCUMENT();
                                 a printed at sign, and a percent sign used as a comment marker.
                             </p>
                             <image width="50%">
-                                <description>
+                                <shortdescription>
                                     this image has pictures of text with special characters like $, %, and @
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \node at (0,0) {I need about \$3.50.};
@@ -1409,9 +1409,9 @@ ENDDOCUMENT();
                                 Use the graph to solve the equation <m>f(x)=1</m>.
                             </p>
                             <image pg-name="$gr" width="50%">
-                                <description>
+                                <shortdescription>
                                     a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.
-                                </description>
+                                </shortdescription>
                             </image>
                             <p>
                                 <var name="$answer" width="5" category="number"/>
@@ -1422,9 +1422,9 @@ ENDDOCUMENT();
                                 The graph reveals that the solution set to <m>f(x)=1</m> is <m><var name="$answer"/></m>.
                             </p>
                             <image pg-name="$solgr" width="50%">
-                                <description>
+                                <shortdescription>
                                     a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=<var name="$a"/> on the x-axis.
-                                </description>
+                                </shortdescription>
                             </image>
                         </solution>
                     </webwork>
