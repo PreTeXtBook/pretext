@@ -58,7 +58,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
+        <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/defaults/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
 
         <listing>
             <title>Python program, relying on default programs language</title>
@@ -103,7 +103,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/programs/@language</c> will be checked to determine what language to assume the code is written in.
+        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/defaults/programs/@language</c> will be checked to determine what language to assume the code is written in.
         </p>
 
         <listing xml:id="program-activecode-python2">
@@ -363,9 +363,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Some languages, like Java or C++, are only interactive when run on a Runestone server where the code can be compiled and run. Those languages can specify <attr>compiler-args</attr> and <attr>linker-args</attr> or <attr>interpreter-args</attr> as appropriate to the language. Default values for those options can be set in <tag>docinfo/programs</tag> - any defaults set there will be used for any program that lacks the corresponding attribute.</p>
+        <p>Some languages, like Java or C++, are only interactive when run on a Runestone server where the code can be compiled and run. Those languages can specify <attr>compiler-args</attr> and <attr>linker-args</attr> or <attr>interpreter-args</attr> as appropriate to the language. Default values for those options can be set in <tag>docinfo/defaults/programs</tag> - any defaults set there will be used for any program that lacks the corresponding attribute.</p>
 
-        <p>It may be convenient to set <attr>compiler-args</attr> and <attr>linker-args</attr> at the book level in <tag>docinfo/programs</tag>. Values specified in that location will be used for any <tag>program</tag> that does not override the values by specifying its own attributes.</p>
+        <p>It may be convenient to set <attr>compiler-args</attr> and <attr>linker-args</attr> at the book level in <tag>docinfo/defaults/programs</tag>. Values specified in that location will be used for any <tag>program</tag> that does not override the values by specifying its own attributes.</p>
 
         <listing>
             <title>A C++ program with compiler-args and stdin</title>
@@ -507,7 +507,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output. Note that it does not have an <attr>language</attr> and is relying on the default one specified in <tag>docinfo/programs</tag></p>
+        <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output. Note that it does not have an <attr>language</attr> and is relying on the default one specified in <tag>docinfo/defaults/programs</tag></p>
 
         <listing xml:id="listing-python-included">
             <title>A Python program that defines some statistics</title>
