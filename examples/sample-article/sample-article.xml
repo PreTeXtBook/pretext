@@ -5417,9 +5417,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>References</title>
                 <idx><h>references</h><h>within a section</h></idx>
 
-                <introduction>
-                    <p>These items are here to test basic formatting of references.</p>
-                </introduction>
+                <headnote>
+                    <p>These items are here to test basic formatting of references.  Did you see that the entry for <xref ref="biblio-beezer-fcla"/> has a short annotation?  So you can make annotated bibliographies easily.</p>
+                </headnote>
 
                 <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
 
@@ -5450,10 +5450,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash/>888.</biblio>
 
                 <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid/>, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash/>103.</biblio>
-
-                <conclusion>
-                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see that the entry for <xref ref="biblio-beezer-fcla"/> has a short annotation?  So you can make annotated bibliographies easily.</p>
-                </conclusion>
             </references>
 
         </section>
@@ -17086,9 +17082,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <references>
                 <title>More Reading</title>
 
-                <introduction>
+                <headnote>
                     <p>Left intentionally blank, just checking sectioning.</p>
-                </introduction>
+                </headnote>
 
                 <biblio type="raw" xml:id="biblio-lay-article-repeat2">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash/>62.</biblio>
 
@@ -17400,9 +17396,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <references>
                 <title>More Reading</title>
 
-                <introduction>
+                <headnote>
                     <p>Left intentionally blank, just checking sectioning.</p>
-                </introduction>
+                </headnote>
 
                 <biblio type="raw" xml:id="biblio-lay-article-repeat1">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash/>62.</biblio>
 
@@ -17426,9 +17422,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <references xml:id="references-raw" label="references-raw">
                 <title>Raw Entries</title>
-                <introduction>
+                <headnote>
                     <p>The twelve references as <c>type="raw"</c> entries.</p>
-                </introduction>
+                </headnote>
 
                 <biblio xml:id="raw-judson" type="raw">Thomas W. Judson, <title>Abstract Algebra: Theory and Applications</title>, Orthogonal Publishing, Ann Arbor, MI, 2022.</biblio>
 
@@ -17457,9 +17453,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <references xml:id="references-bibtex" label="references-bibtex">
                 <title>BibTeX-Style Entries</title>
-                <introduction>
+                <headnote>
                     <p>The twelve references as <c>type="bibtex"</c> entries.</p>
-                </introduction>
+                </headnote>
 
                 <biblio xml:id="bibtex-judson" type="bibtex">
                     <author>Thomas W. Judson</author>
@@ -17564,9 +17560,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <references xml:id="references-csl" label="references-csl">
                 <title>CSL-Style Entries</title>
-                <introduction>
+                <headnote>
                     <p>The twelve references as CSL-style entries.</p>
-                </introduction>
+                </headnote>
 
                 <biblio xml:id="csl-judson" type="book">
                     <author>

@@ -433,22 +433,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- specialized: references -->
                 <references xml:id="rfs-chB">
                     <title>Chapter B References</title>
-                    <introduction>
+                    <headnote>
                         <p>Introduction to chapter B references<fn xml:id="fn-rfs-chB">A footnote in a references introduction.</fn>.</p>
                         <p><md><mrow xml:id="eq-intro-1-rfs-chB" number="yes">BB_1 = CC_1</mrow></md></p>
                         <p><md><mrow xml:id="eq-intro-2-rfs-chB" number="yes">BB_2 = CC_2</mrow></md></p>
-                    </introduction>
+                    </headnote>
                     <biblio xml:id="bib-1-chB" type="raw">
                         <title>First reference in chapter B.</title>
                     </biblio>
                     <biblio xml:id="bib-2-chB" type="raw">
                         <title>Second reference in chapter B.</title>
                     </biblio>
-                    <conclusion>
-                        <p>End of chapter B references.</p>
-                        <p><md><mrow xml:id="eq-concl-1-rfs-chB" number="yes">DD_1 = EE_1</mrow></md></p>
-                        <p><md><mrow xml:id="eq-concl-2-rfs-chB" number="yes">DD_2 = EE_2</mrow></md></p>
-                    </conclusion>
                 </references>
 
                 <!-- specialized: glossary -->
@@ -587,19 +582,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                     <references xml:id="rfs-chC-sB">
                         <title>Section B References</title>
-                        <introduction>
+                        <headnote>
                             <p>Introduction to section B references.</p>
                             <p><md><mrow xml:id="eq-intro-1-rfs-chC-sB" number="yes">NN_1 = OO_1</mrow></md></p>
                             <p><md><mrow xml:id="eq-intro-2-rfs-chC-sB" number="yes">NN_2 = OO_2</mrow></md></p>
-                        </introduction>
+                        </headnote>
                         <biblio xml:id="bib-1-chC-sB" type="raw">
                             <title>A reference.</title>
                         </biblio>
-                        <conclusion>
-                            <p>End of section B references.</p>
-                            <p><md><mrow xml:id="eq-concl-1-rfs-chC-sB" number="yes">PP_1 = QQ_1</mrow></md></p>
-                            <p><md><mrow xml:id="eq-concl-2-rfs-chC-sB" number="yes">PP_2 = QQ_2</mrow></md></p>
-                        </conclusion>
                     </references>
 
                     <glossary xml:id="gls-chC-sB">
@@ -1148,22 +1138,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- but its biblio entries are numbered within it.              -->
             <references xml:id="refs-bm">
                 <title>Bibliography</title>
-                <introduction>
+                <headnote>
                     <p>Introduction to the backmatter references.</p>
                     <p><md><mrow xml:id="eq-intro-1-refs-bm" number="yes">ZZZ_1 = AAAA_1</mrow></md></p>
                     <p><md><mrow xml:id="eq-intro-2-refs-bm" number="yes">ZZZ_2 = AAAA_2</mrow></md></p>
-                </introduction>
+                </headnote>
                 <biblio xml:id="bib-1-bm" type="raw">
                     <title>First backmatter reference.</title>
                 </biblio>
                 <biblio xml:id="bib-2-bm" type="raw">
                     <title>Second backmatter reference.</title>
                 </biblio>
-                <conclusion>
-                    <p>End of backmatter references.</p>
-                    <p><md><mrow xml:id="eq-concl-1-refs-bm" number="yes">BBBB_1 = CCCC_1</mrow></md></p>
-                    <p><md><mrow xml:id="eq-concl-2-refs-bm" number="yes">BBBB_2 = CCCC_2</mrow></md></p>
-                </conclusion>
             </references>
 
             <index xml:id="the-index">

@@ -2834,7 +2834,7 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction|glossary/introduction|references/introduction|article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion" mode="title-wants-punctuation">
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction|article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <xsl:template match="*" mode="title-wants-punctuation">
@@ -11985,6 +11985,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$document-root//tabular//fn&quot;" />
         <xsl:with-param name="date-string" select="'2026-07-31'" />
         <xsl:with-param name="message" select="'a footnote (&quot;fn&quot;) within a &quot;tabular&quot; cell is now a table note, the &quot;tn&quot; element, lettered and placed at the bottom of the table.  We will honor your intent, but please convert to &quot;tn&quot;.  Note that a table note is not part of the numbering of true footnotes, and is not a target for a cross-reference.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-06  references "introduction" is now a "headnote" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//references/introduction&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-06'" />
+        <xsl:with-param name="message" select="'a &quot;references&quot; &quot;introduction&quot; is now a &quot;headnote&quot;.  We will attempt to fix your source, but a &quot;title&quot; on such an &quot;introduction&quot; is discarded entirely: its text will not appear in any output.  Please convert to a &quot;headnote&quot; yourself'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-06  references "conclusion" is obsolete -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//references/conclusion&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-06'" />
+        <xsl:with-param name="message" select="'a &quot;references&quot; division no longer has a &quot;conclusion&quot;.  The element is discarded entirely: its content will not appear in any output.  Please relocate the content, perhaps following the &quot;references&quot;'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

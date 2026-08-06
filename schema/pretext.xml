@@ -375,13 +375,13 @@
                     IntroductionDivision?,
                     ConclusionDivision?
                 }
+            # A "references" is a list-like division: its one preface
+            # is a "headnote", and it has no "conclusion"
             References =
                 element references {
                     MetaDataAltTitleOptional,
-                    IntroductionDivision?,
                     HeadNote?,
-                    BibliographyItem+,
-                    ConclusionDivision?
+                    BibliographyItem+
                 }
             Glossary =
                 element glossary {
@@ -4105,7 +4105,6 @@
             <fragref ref="frontmatter-dev"/>
             <fragref ref="proof-like"/>
             <fragref ref="solutions-dev"/>
-            <fragref ref="reference-dev"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }
