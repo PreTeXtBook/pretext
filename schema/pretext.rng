@@ -1217,21 +1217,19 @@
       </optional>
     </element>
   </define>
+  <!--
+    A "references" is a list-like division: its one preface
+    is a "headnote", and it has no "conclusion"
+  -->
   <define name="References">
     <element name="references">
       <ref name="MetaDataAltTitleOptional"/>
-      <optional>
-        <ref name="IntroductionDivision"/>
-      </optional>
       <optional>
         <ref name="HeadNote"/>
       </optional>
       <oneOrMore>
         <ref name="BibliographyItem"/>
       </oneOrMore>
-      <optional>
-        <ref name="ConclusionDivision"/>
-      </optional>
     </element>
   </define>
   <define name="Glossary">
