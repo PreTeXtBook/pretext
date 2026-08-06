@@ -2606,6 +2606,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p>The proof of the theorem.</p>
                     </proof>
                 </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <statement>
+                        <p>A theorem with an <tag>argument</tag>, a proof-like alternate.</p>
+                    </statement>
+                    <argument>
+                        <p>The argument for the theorem.</p>
+                    </argument>
+                </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <statement>
+                        <p>A theorem with a <tag>reasoning</tag>, a proof-like alternate.</p>
+                    </statement>
+                    <reasoning>
+                        <p>The reasoning for the theorem.</p>
+                    </reasoning>
+                </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <statement>
+                        <p>A theorem with an <tag>explanation</tag>, a proof-like alternate.</p>
+                    </statement>
+                    <explanation>
+                        <p>The explanation of the theorem.</p>
+                    </explanation>
+                </theorem>
                 <corollary>
                     <title>A title</title>
                     <p>A minimal <tag>corollary</tag>.</p>
