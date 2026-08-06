@@ -639,6 +639,8 @@
                     attribute rows {xsd:integer}?,
                     attribute cols {xsd:integer}?,
                     attribute editable {"yes"|"no"}?,
+                    # a non-editable datafile can start hidden
+                    attribute hide {"yes"|"no"}?,
                     (
                         element pre {
                             attribute source {text}?,

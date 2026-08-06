@@ -3136,6 +3136,10 @@
         <ref name="AttributesYouTubePlaylist"/>
         <ref name="AttributesVimeo"/>
       </choice>
+      <optional>
+        <!-- names the video, as in a Runestone manifest -->
+        <ref name="Title"/>
+      </optional>
       <zeroOrMore>
         <ref name="Track"/>
       </zeroOrMore>

@@ -1172,6 +1172,8 @@
                     attribute preview {"default" | "generic" | text}?,
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
                      AttributesYouTubePlaylist | AttributesVimeo),
+                    # names the video, as in a Runestone manifest
+                    Title?,
                     Track*
                 }
             Audio =

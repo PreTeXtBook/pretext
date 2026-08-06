@@ -1654,6 +1654,15 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <!-- a non-editable datafile can start hidden -->
+        <attribute name="hide">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <element name="pre">
           <optional>
