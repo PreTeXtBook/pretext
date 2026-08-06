@@ -878,7 +878,8 @@
                         Audio |
                         SideBySide |
                         SideBySideGroup |
-                        MuseScore
+                        MuseScore |
+                        Paragraph
                     )
                 } |
                 # the one route to a numbered, titled "tabular"

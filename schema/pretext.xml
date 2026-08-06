@@ -1669,6 +1669,8 @@
 
         <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print.</p>
 
+        <p>A <c>figure</c> may also hold a single paragraph.  A captioned, numbered display of mathematics (a multiplication table as an <c>md</c> array, say), or the transcription of an inscription, is honestly a figure, and one paragraph is a display, not a container.</p>
+
         <p>A <c>tabular</c> never takes a number directly.  Bare, it may sit between paragraphs as unnumbered, uncaptioned content; the <c>table</c> wrapper is the one route to a number and a title.  In particular, a <c>tabular</c> is not a child of a <c>figure</c>.</p>
         <!-- 2021-12-29: should add interactive to figure, once ready -->
 
@@ -1689,7 +1691,8 @@
                         Audio |
                         SideBySide |
                         SideBySideGroup |
-                        MuseScore
+                        MuseScore |
+                        Paragraph
                     )
                 } |
                 # the one route to a numbered, titled "tabular"
