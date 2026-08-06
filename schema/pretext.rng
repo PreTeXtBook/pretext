@@ -2639,7 +2639,27 @@
     <choice>
       <ref name="ImageRaster"/>
       <ref name="ImageCode"/>
+      <ref name="ImagePG"/>
     </choice>
+  </define>
+  <!--
+    An image drawn by the PG code of a WeBWorK problem, named
+    by @pg-name.  Like "var", the form is admitted schema-wide
+    (it can appear deep within list items, say) but is
+    exclusive to a "webwork" problem; the validation-plus
+    stylesheet enforces the location.
+  -->
+  <define name="ImagePG">
+    <element name="image">
+      <attribute name="pg-name"/>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
+      </optional>
+      <empty/>
+    </element>
   </define>
   <define name="ImageDescription">
     <element name="description">
@@ -2651,9 +2671,18 @@
       </oneOrMore>
     </element>
   </define>
+  <!--
+    A "var" may ride along, per the schema-wide "var" pattern:
+    the validation-plus stylesheet confines it to a WeBWorK problem
+  -->
   <define name="ImageShortDescription">
     <element name="shortdescription">
-      <text/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="WWVariable"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
   <define name="ImageShortDescriptionCode">
@@ -3879,6 +3908,11 @@
       </choice>
     </element>
   </define>
+  <!--
+    A "webwork" with @copy is an empty, lightweight reference
+    to another authored problem (perhaps reseeded); the
+    assembly resolves it to a duplicate
+  -->
   <define name="WebWorkAuthored">
     <element name="webwork">
       <choice>
@@ -3896,9 +3930,6 @@
             <attribute name="seed">
               <data type="integer"/>
             </attribute>
-          </optional>
-          <optional>
-            <attribute name="copy"/>
           </optional>
           <optional>
             <ref name="WWDescription"/>
@@ -3933,6 +3964,24 @@
               </optional>
             </group>
           </choice>
+        </group>
+        <group>
+          <optional>
+            <ref name="UniqueID"/>
+          </optional>
+          <optional>
+            <ref name="LabelID"/>
+          </optional>
+          <optional>
+            <ref name="Component"/>
+          </optional>
+          <attribute name="copy"/>
+          <optional>
+            <attribute name="seed">
+              <data type="integer"/>
+            </attribute>
+          </optional>
+          <empty/>
         </group>
         <text/>
       </choice>
@@ -4005,6 +4054,12 @@
             <attribute name="width"/>
           </optional>
           <optional>
+            <!-- the variable holds PGML markup to be processed -->
+            <attribute name="data">
+              <value>pgml</value>
+            </attribute>
+          </optional>
+          <optional>
             <attribute name="category">
               <choice>
                 <value>angle</value>
@@ -4032,6 +4087,7 @@
                 <value>buttons</value>
                 <value>checkboxes</value>
                 <value>none</value>
+                <value>array</value>
               </choice>
             </attribute>
           </optional>
