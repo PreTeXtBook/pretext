@@ -2908,6 +2908,24 @@
                     Select
                     )
                 }
+            # STRICTLY EXPERIMENTAL, matching the sample's own alert:
+            # a dual exercise pairs a "dynamic" realization (typically
+            # an embedded interactive) with a "static" stand-in, and
+            # the assembly chooses one per output
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    element dynamic {
+                        StatementExercise
+                    },
+                    element static {
+                        (
+                            (StatementExercise, Hint*, Answer*, Solution*)
+                        |
+                            (IntroductionStatement?, Task+, ConclusionStatement?)
+                        )
+                    }
+                }
             # STACK assessment exercise type
             Exercise |=
                 element exercise {

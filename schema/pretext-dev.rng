@@ -1849,6 +1849,47 @@
       </choice>
     </element>
   </define>
+  <!--
+    STRICTLY EXPERIMENTAL, matching the sample's own alert:
+    a dual exercise pairs a "dynamic" realization (typically
+    an embedded interactive) with a "static" stand-in, and
+    the assembly chooses one per output
+  -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <element name="dynamic">
+        <ref name="StatementExercise"/>
+      </element>
+      <element name="static">
+        <choice>
+          <group>
+            <ref name="StatementExercise"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
+            <optional>
+              <ref name="IntroductionStatement"/>
+            </optional>
+            <oneOrMore>
+              <ref name="Task"/>
+            </oneOrMore>
+            <optional>
+              <ref name="ConclusionStatement"/>
+            </optional>
+          </group>
+        </choice>
+      </element>
+    </element>
+  </define>
   <!-- STACK assessment exercise type -->
   <define name="Exercise" combine="choice">
     <element name="exercise">
