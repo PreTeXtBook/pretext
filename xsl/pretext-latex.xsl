@@ -1017,12 +1017,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end:   copyright-page&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Only for a book with a colophon, we put the statement of support at the bottom of the colophon -->
+<!-- Only for a book with a colophon, we put the statement of support -->
+<!-- at the bottom of the colophon.  The schema says a "support"      -->
+<!-- statement is text-level, mixed content                           -->
 <xsl:template match="bibinfo/support" mode="copyright-page">
     <xsl:text>%% Funding/Support statement:</xsl:text>
     <xsl:text>\par\medskip&#xa;</xsl:text>
     <xsl:text>\noindent{}</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates select="node()"/>
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
 </xsl:template>
