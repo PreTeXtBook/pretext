@@ -209,48 +209,75 @@
                     ((mixed {BlockText*})
                     | (StatementExercise, Feedback?))
                 }
+            # A horizontal SQL Parsons may name a grading database and
+            # carry raw unit tests; a horizontal layout may permit the
+            # reuse of blocks, where a source block carries an @xml:id
+            # (and no @order) and each use references it with @ref
             Parsons =
                     MetaDataTitleOptional,
                     attribute number {text}?,
                     attribute language {text}?,
                     attribute adaptive {"yes"|"no"}?,
                     attribute indentation {text}?,
+                    attribute database {text}?,
                     StatementExercise,
                     element blocks {
                         attribute layout {"horizontal"}?,
                         attribute randomize {"yes"|"no"}?,
-                        ( BlockOrdered+ | BlockUnordered+ )
+                        attribute reuse {"yes"|"no"}?,
+                        attribute numbered {"left"|"right"|"no"}?,
+                        ( (BlockOrdered | BlockSource)+ | BlockUnordered+ )
                     },
+                    element tests {text}?,
                     Hint*, Answer*, Solution*,
-                    (
-                        element preamble {
-                            attribute indent {text}?,
-                            text
-                        }?,
-                        Program,
-                        element postamble {
-                            attribute indent {text}?,
-                            text
-                        }?
-                    )?
+                    (ParsonsProgramPreamble?, Program, ParsonsProgramPostamble?)?
+            # Fixed code surrounding a runnable Parsons solution.  These
+            # patterns stand apart so the element names can be revisited
+            # on their own: the plain "preamble" and "postamble" within
+            # a "program" are close cousins, and some later decision may
+            # unify them.
+            ParsonsProgramPreamble =
+                element program-preamble {
+                    attribute indent {text}?,
+                    text
+                }
+            ParsonsProgramPostamble =
+                element program-postamble {
+                    attribute indent {text}?,
+                    text
+                }
+            # Horizontal blocks hold short inline bursts (code via "c",
+            # mathematics, text); vertical blocks hold code lines or
+            # natural-language blocks
             BlockBody =
                 ((
                     attribute correct {"yes"|"no"}?,
-                    mixed {BlockText?, CodeLine?}+
+                    mixed {BlockText?, CodeLine?, Verbatim?, MathInline?}+
                 ) |
                 (
                     element choice {
                         attribute correct {"yes"|"no"}?,
-                        mixed {BlockText?, CodeLine?}+
+                        mixed {BlockText?, CodeLine?, Verbatim?, MathInline?}+
                     }+
                 ))
             BlockOrdered =
                 element block {
                     attribute order {xsd:integer},
+                    attribute name {text}?,
+                    attribute depends {text}?,
+                    attribute ref {text}?,
+                    BlockBody
+                }
+            BlockSource =
+                element block {
+                    UniqueID,
+                    attribute name {text}?,
                     BlockBody
                 }
             BlockUnordered =
                 element block {
+                    attribute name {text}?,
+                    attribute depends {text}?,
                     BlockBody
                 }
             Matching =

@@ -498,6 +498,12 @@
       </choice>
     </element>
   </define>
+  <!--
+    A horizontal SQL Parsons may name a grading database and
+    carry raw unit tests; a horizontal layout may permit the
+    reuse of blocks, where a source block carries an @xml:id
+    (and no @order) and each use references it with @ref
+  -->
   <define name="Parsons">
     <ref name="MetaDataTitleOptional"/>
     <optional>
@@ -517,6 +523,9 @@
     <optional>
       <attribute name="indentation"/>
     </optional>
+    <optional>
+      <attribute name="database"/>
+    </optional>
     <ref name="StatementExercise"/>
     <element name="blocks">
       <optional>
@@ -532,15 +541,40 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="reuse">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="numbered">
+          <choice>
+            <value>left</value>
+            <value>right</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <oneOrMore>
-          <ref name="BlockOrdered"/>
+          <choice>
+            <ref name="BlockOrdered"/>
+            <ref name="BlockSource"/>
+          </choice>
         </oneOrMore>
         <oneOrMore>
           <ref name="BlockUnordered"/>
         </oneOrMore>
       </choice>
     </element>
+    <optional>
+      <element name="tests">
+        <text/>
+      </element>
+    </optional>
     <zeroOrMore>
       <ref name="Hint"/>
     </zeroOrMore>
@@ -552,24 +586,42 @@
     </zeroOrMore>
     <optional>
       <optional>
-        <element name="preamble">
-          <optional>
-            <attribute name="indent"/>
-          </optional>
-          <text/>
-        </element>
+        <ref name="ParsonsProgramPreamble"/>
       </optional>
       <ref name="Program"/>
       <optional>
-        <element name="postamble">
-          <optional>
-            <attribute name="indent"/>
-          </optional>
-          <text/>
-        </element>
+        <ref name="ParsonsProgramPostamble"/>
       </optional>
     </optional>
   </define>
+  <!--
+    Fixed code surrounding a runnable Parsons solution.  These
+    patterns stand apart so the element names can be revisited
+    on their own: the plain "preamble" and "postamble" within
+    a "program" are close cousins, and some later decision may
+    unify them.
+  -->
+  <define name="ParsonsProgramPreamble">
+    <element name="program-preamble">
+      <optional>
+        <attribute name="indent"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <define name="ParsonsProgramPostamble">
+    <element name="program-postamble">
+      <optional>
+        <attribute name="indent"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <!--
+    Horizontal blocks hold short inline bursts (code via "c",
+    mathematics, text); vertical blocks hold code lines or
+    natural-language blocks
+  -->
   <define name="BlockBody">
     <choice>
       <group>
@@ -588,6 +640,12 @@
             </optional>
             <optional>
               <ref name="CodeLine"/>
+            </optional>
+            <optional>
+              <ref name="Verbatim"/>
+            </optional>
+            <optional>
+              <ref name="MathInline"/>
             </optional>
           </mixed>
         </oneOrMore>
@@ -610,6 +668,12 @@
               <optional>
                 <ref name="CodeLine"/>
               </optional>
+              <optional>
+                <ref name="Verbatim"/>
+              </optional>
+              <optional>
+                <ref name="MathInline"/>
+              </optional>
             </mixed>
           </oneOrMore>
         </element>
@@ -621,11 +685,35 @@
       <attribute name="order">
         <data type="integer"/>
       </attribute>
+      <optional>
+        <attribute name="name"/>
+      </optional>
+      <optional>
+        <attribute name="depends"/>
+      </optional>
+      <optional>
+        <attribute name="ref"/>
+      </optional>
+      <ref name="BlockBody"/>
+    </element>
+  </define>
+  <define name="BlockSource">
+    <element name="block">
+      <ref name="UniqueID"/>
+      <optional>
+        <attribute name="name"/>
+      </optional>
       <ref name="BlockBody"/>
     </element>
   </define>
   <define name="BlockUnordered">
     <element name="block">
+      <optional>
+        <attribute name="name"/>
+      </optional>
+      <optional>
+        <attribute name="depends"/>
+      </optional>
       <ref name="BlockBody"/>
     </element>
   </define>
