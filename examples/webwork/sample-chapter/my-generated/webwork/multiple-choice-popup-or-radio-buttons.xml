@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-multiple-choice-popup-or-radio-buttons" assembly-id="multiple-choice-popup-or-radio-buttons">
-  <static seed="78">
+  <static seed="80">
     <statement><p>My favorite color is <ul form="popup" name="AnSwEr0001"><li>
 <p>?</p>
 </li><li>

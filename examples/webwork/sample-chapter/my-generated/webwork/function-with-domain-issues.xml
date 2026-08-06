@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-function-with-domain-issues" assembly-id="function-with-domain-issues">
-  <static seed="77">
+  <static seed="79">
     <statement><p><ol label="a.">
 <li>
 <p>Suppose the correct answer is <m>\displaystyle {\sqrt{x-4}}\text{.}</m></p>

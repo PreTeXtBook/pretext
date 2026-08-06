@@ -699,6 +699,21 @@ systems.
                     </tabular>
                 </table>
 
+            <!-- Moved here from the WW sample chapter, 2026-08-06, -->
+            <!-- since the samples never deliberately raise errors  -->
+            <exercise label="empty-statement">
+                <introduction>
+                    <p>
+                        This exercise has no content in its statement.
+                        It should throw a PTX warning during the representations build.
+                    </p>
+                </introduction>
+                <webwork>
+                    <statement>
+                    </statement>
+                </webwork>
+            </exercise>
+
         </section>
 
         <glossary>

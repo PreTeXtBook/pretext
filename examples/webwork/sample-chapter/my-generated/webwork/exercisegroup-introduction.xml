@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-exercisegroup-introduction" assembly-id="exercisegroup-introduction">
-  <static seed="106">
+  <static seed="107">
     <statement><p><m>1+1=2</m></p>
 </statement>
   </static>

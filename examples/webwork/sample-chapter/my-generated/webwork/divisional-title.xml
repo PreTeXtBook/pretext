@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-divisional-title" assembly-id="divisional-title">
-  <static seed="97">
+  <static seed="98">
     <statement><p><m>1+1=2</m></p>
 </statement>
   </static>

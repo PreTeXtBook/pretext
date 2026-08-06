@@ -11,7 +11,7 @@
     <title>Schema Tools</title>
 
     <introduction>
-        <p>This appendix has technical information about tools that work with the <acro>RELAX-NG</acro> schema and our additional validation stylesheet.  See <xref ref="schema" /> for a more general overview.</p>
+        <p>This appendix has technical information about tools that work with the <acro>RELAX-NG</acro> schema and the validation-plus stylesheet.  See <xref ref="schema" /> for a more general overview.</p>
     </introduction>
 
     <section xml:id="jing-trang">

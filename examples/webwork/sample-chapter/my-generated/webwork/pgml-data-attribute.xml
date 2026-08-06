@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-pgml-data-attribute" assembly-id="pgml-data-attribute">
-  <static seed="74">
+  <static seed="76">
     <statement><p>some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text* makes:</p>
 <p>some PGML math: <m>\frac{1}{2}+\frac{3}{2}=2</m>; and some <alert>bold text</alert></p>
 </statement>

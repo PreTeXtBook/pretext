@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-ww-PGML-format" assembly-id="ww-PGML-format">
-  <static seed="72">
+  <static seed="74">
     <statement><p>Smart double quotes: <lq/>Life is about making an impact, not making an income.<rq/></p>
 <p>Smart single quotes: <lsq/>Whatever the mind of man can conceive and believe, it can achieve.<rsq/></p>
 <p>Regular apostrophes: My siblings<rsq/> mother<rsq/>s daughter isn<rsq/>t my daughter<rsq/>s siblings<rsq/> mother.</p>

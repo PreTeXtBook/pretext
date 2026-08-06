@@ -1,0 +1,15 @@
+openDate          = 01/01/2027 at 12:00am
+dueDate           = 12/31/2027 at 10:00pm
+answerDate        = 12/31/2027 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_9-Answer_Formats_and_Extra_Macros.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_9-Answer_Formats_and_Extra_Macros.pg
+description       = Answer Formats and Extra Macros
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_9-Answer_Formats_and_Extra_Macros/1_9_1-A_Gallery_of_Answer_Formats.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_9-Answer_Formats_and_Extra_Macros/1_9_2-Answers_Needing_Extra_Macros.pg
+problem_id = 2
+problem_end

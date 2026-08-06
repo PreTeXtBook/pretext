@@ -766,7 +766,7 @@
             </code>
         </fragment>
 
-        <p>A large class of similarly indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptiness here might get a bit messy, so an additional validation warning could be a good alternative.</p>
+        <p>A large class of similarly indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptiness here might get a bit messy, so a warning from the validation-plus stylesheet could be a good alternative.</p>
 
         <fragment xml:id="siunit">
             <title>SI units</title>
@@ -1918,9 +1918,23 @@
         <fragment xml:id="image">
             <title>Images</title>
             <code>
-            Image = ImageRaster | ImageCode
+            Image = ImageRaster | ImageCode | ImagePG
+            # An image drawn by the PG code of a WeBWorK problem, named
+            # by @pg-name.  Like "var", the form is admitted schema-wide
+            # (it can appear deep within list items, say) but is
+            # exclusive to a "webwork" problem; the validation-plus
+            # stylesheet enforces the location.
+            ImagePG =
+                element image {
+                    attribute pg-name {text},
+                    attribute width {text}?,
+                    attribute margins {text}?,
+                    empty
+                }
             ImageDescription = element description {(Paragraph | Tabular)+}
-            ImageShortDescription = element shortdescription {text}
+            # A "var" may ride along, per the schema-wide "var" pattern:
+            # the validation-plus stylesheet confines it to a WeBWorK problem
+            ImageShortDescription = element shortdescription {(text | WWVariable)*}
             ImageShortDescriptionCode = element shortdescription {
                 (text | WWVariable)+
             }
@@ -3208,6 +3222,9 @@
                         SimpleLine+
                     )
                 }
+            # A "webwork" with @copy is an empty, lightweight reference
+            # to another authored problem (perhaps reseeded); the
+            # assembly resolves it to a duplicate
             WebWorkAuthored =
                 element webwork {
                     (
@@ -3215,7 +3232,6 @@
                         LabelID?,
                         Component?,
                         attribute seed {xsd:integer}?,
-                        attribute copy {text}?,
                         WWDescription?,
                         WWMacros?,
                         element pg-code {text}?,
@@ -3224,6 +3240,14 @@
                         |
                             (IntroductionText?, TaskWW+, ConclusionText?)
                         )
+                    ) |
+                    (
+                        UniqueID?,
+                        LabelID?,
+                        Component?,
+                        attribute copy {text},
+                        attribute seed {xsd:integer}?,
+                        empty
                     ) |
                     text
                 }
@@ -3249,11 +3273,13 @@
                     element macro-file {text}+
                 }
             WWVariable =
-                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  PreTeXt's additional validation will check on these two situations.
+                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  The validation-plus stylesheet will check on these two situations.
                 element var {
                     (attribute name {text},
                     attribute evaluator {text}?,
                     attribute width {text}?,
+                    # the variable holds PGML markup to be processed
+                    attribute data {"pgml"}?,
                     attribute category {
                                         "angle" | "decimal" | "exponent"
                                       | "formula" | "fraction" | "inequality"
@@ -3261,7 +3287,7 @@
                                       | "limit" | "number" | "point"
                                       | "syntax" | "quantity" | "vector"
                                       }?,
-                    attribute form {"popup"|"buttons"|"checkboxes"|"none"}?) |
+                    attribute form {"popup"|"buttons"|"checkboxes"|"none"|"array"}?) |
                     (attribute form {"essay"},
                     attribute width {text}?)
                 }

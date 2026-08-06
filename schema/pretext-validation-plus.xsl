@@ -480,6 +480,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but we allow them (apparently) everywhere when writing the   -->
 <!-- official schema.  We indicate these situations here.         -->
 
+<!-- an image drawn by PG code is specific to WW -->
+<xsl:template match="image[@pg-name][not(ancestor::webwork)]">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'pg-image-outside-webwork'"/>
+        <xsl:with-param name="message">
+            <xsl:text>An &lt;image&gt; with a @pg-name attribute is drawn by the PG&#xa;</xsl:text>
+            <xsl:text>code of a WeBWorK problem, and so must only appear within&#xa;</xsl:text>
+            <xsl:text>a &lt;webwork&gt; element, not here.  It will be ignored.</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- "var" is specific to WW -->
 <xsl:template match="var[not(ancestor::webwork)]">
     <xsl:apply-templates select="." mode="messaging">

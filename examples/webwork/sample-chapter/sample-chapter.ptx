@@ -1230,7 +1230,7 @@ ENDDOCUMENT();
                                 This image is a visual proof that <m>\sum_{k=1}^{n}k</m> equals what?
                             </p>
                             <image width="50%">
-                               <description>
+                               <shortdescription>
                                     21 blue balls are arranged in a triangular formation,
                                     with one at the top, then a row of two, a row of three,
                                     and so on until a row of six;
@@ -1240,7 +1240,7 @@ ENDDOCUMENT();
                                     until they intersect two orange balls;
                                     the effect is that each of the 1+2+3+4+5+6 blue balls corresponds
                                     to one pair from the 7 orange balls
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -&#x2d; (7-0.5*6.5,-0.866025*6.5);
@@ -1286,10 +1286,10 @@ ENDDOCUMENT();
                                 Find the area of the rectangle.
                             </p>
                             <image width="50%">
-                                <description>
+                                <shortdescription>
                                     a rectangle whose width is labeled <var name="$b"/> cm
                                     and height is labeled <var name="$a"/> cm
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \draw[fill=blue!20] (0,0) -&#x2d;++ (6,0) node[pos=0.5,below] {\($b\)\,cm} -&#x2d;++ (0,4) node[pos=0.5,right] {\($a\)\,cm} -&#x2d;++ (-6,0) -&#x2d; cycle;
@@ -1324,10 +1324,10 @@ ENDDOCUMENT();
                                 What are the roots of this polynomial?
                             </p>
                             <image width="50%">
-                                <description>
+                                <shortdescription>
                                     the graph of a polynomial that crosses the x-axis at <var name="$roots[0]"/>,
                                     <var name="$roots[1]"/>, and <var name="$roots[2]"/>.
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \begin{axis}
@@ -1357,9 +1357,9 @@ ENDDOCUMENT();
                                 a printed at sign, and a percent sign used as a comment marker.
                             </p>
                             <image width="50%">
-                                <description>
+                                <shortdescription>
                                     this image has pictures of text with special characters like $, %, and @
-                                </description>
+                                </shortdescription>
                                 <latex-image>
                                     \begin{tikzpicture}
                                         \node at (0,0) {I need about \$3.50.};
@@ -1409,9 +1409,9 @@ ENDDOCUMENT();
                                 Use the graph to solve the equation <m>f(x)=1</m>.
                             </p>
                             <image pg-name="$gr" width="50%">
-                                <description>
+                                <shortdescription>
                                     a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right.
-                                </description>
+                                </shortdescription>
                             </image>
                             <p>
                                 <var name="$answer" width="5" category="number"/>
@@ -1422,9 +1422,9 @@ ENDDOCUMENT();
                                 The graph reveals that the solution set to <m>f(x)=1</m> is <m><var name="$answer"/></m>.
                             </p>
                             <image pg-name="$solgr" width="50%">
-                                <description>
+                                <shortdescription>
                                     a plot of a curve on a cartesian set of axes; the x axis ranges from -1 to 4, and the y-axis ranges from -1 to 4; the curve enters from the left, below the x-axis, and curves upward and to the right until it reaches the point (0,0); from here it continues predominantly rightward for a bit, bending slightly upward more and more as it progresses; it passes through the points (<var name="$a"/>,1) and (<var name="$second_x"/>,2) before leaving the graph moving more and more upward and to the right; a horizontal line segment moves rightward from y=1 on the y-axis until it reaches a point on the curve; a vertical line segment moves down from this point to x=<var name="$a"/> on the x-axis.
-                                </description>
+                                </shortdescription>
                             </image>
                         </solution>
                     </webwork>
@@ -1490,6 +1490,71 @@ ENDDOCUMENT();
                     </exercisegroup>
                 </exercises>
 
+            </section>
+
+            <section xml:id="section-answer-formats">
+                <title>Answer Formats and Extra Macros</title>
+
+                <p>Each answer blank may carry a <attr>category</attr>, which decorates the blank with a link to WeBWorK's help for entering an answer of that flavor.  The gallery below exercises the categories whose answers need only the standard contexts; a second exercise loads extra macro files, with a <tag>pg-macros</tag> element, for the three categories that need them.</p>
+
+                <exercise label="answer-format-gallery">
+                    <title>A Gallery of Answer Formats</title>
+                    <webwork>
+                        <pg-code>
+                            Context("Numeric");
+                            $angle = Real(45);
+                            $decimal = Real(0.75);
+                            $exponent = Real(3);
+                            $logarithm = Compute("ln(2)");
+                            $limit = Real(6);
+                            $syntaxanswer = Formula("x^2+1");
+                            Context("Interval");
+                            $interval = Compute("(1,5)");
+                            Context("Vector");
+                            $point = Point("(1,2)");
+                            $vector = Vector("&lt;1,2&gt;");
+                        </pg-code>
+                        <statement>
+                            <p>Nine flavors of answer, each blank linking to format help of its own kind.<ol>
+                                <li><p>An angle, in degrees, half of a right angle: <var name="$angle" width="4" category="angle"/></p></li>
+                                <li><p>Three quarters, as a decimal: <var name="$decimal" width="6" category="decimal"/></p></li>
+                                <li><p>The exponent in <m>2^3 = 8</m>: <var name="$exponent" width="4" category="exponent"/></p></li>
+                                <li><p>The natural logarithm of <m>2</m>, exactly: <var name="$logarithm" width="6" category="logarithm"/></p></li>
+                                <li><p>The value of <m>\lim_{x\to 2}(x^2+2)</m>: <var name="$limit" width="4" category="limit"/></p></li>
+                                <li><p>Any formula equal to <m>x^2+1</m>: <var name="$syntaxanswer" width="10" category="syntax"/></p></li>
+                                <li><p>The open interval from <m>1</m> to <m>5</m>: <var name="$interval" width="8" category="interval"/></p></li>
+                                <li><p>The point where <m>y=x+1</m> crosses <m>x=1</m>: <var name="$point" width="8" category="point"/></p></li>
+                                <li><p>The vector from the origin to that point: <var name="$vector" width="8" category="vector"/></p></li>
+                            </ol></p>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="answer-format-extra-macros">
+                    <title>Answers Needing Extra Macros</title>
+                    <webwork>
+                        <pg-macros>
+                            <macro-file>contextFraction.pl</macro-file>
+                            <macro-file>contextInequalities.pl</macro-file>
+                            <macro-file>parserNumberWithUnits.pl</macro-file>
+                        </pg-macros>
+                        <pg-code>
+                            Context("Fraction");
+                            $fraction = Fraction(3, 4);
+                            Context("Inequalities");
+                            $inequality = Compute("x &gt; 2");
+                            Context("Numeric");
+                            $quantity = NumberWithUnits("4 m");
+                        </pg-code>
+                        <statement>
+                            <p>Three more flavors, each needing a macro file loaded by <tag>pg-macros</tag>.<ol>
+                                <li><p>Three quarters, as a fraction: <var name="$fraction" width="6" category="fraction"/></p></li>
+                                <li><p>The solutions of <m>3x &gt; 6</m>, as an inequality: <var name="$inequality" width="8" category="inequality"/></p></li>
+                                <li><p>Four meters, a number with its units: <var name="$quantity" width="8" category="quantity"/></p></li>
+                            </ol></p>
+                        </statement>
+                    </webwork>
+                </exercise>
             </section>
 
         </chapter>
@@ -2310,19 +2375,6 @@ ENDDOCUMENT();
                                 </ul></p></li>
                                 <li><p>Level 1, third.</p></li>
                             </ul></p>
-                        </statement>
-                    </webwork>
-                </exercise>
-
-                <exercise label="empty-statement">
-                    <introduction>
-                        <p>
-                            This exercise has no content in its statement.
-                            It should throw a PTX warning during the representations build.
-                        </p>
-                    </introduction>
-                    <webwork>
-                        <statement>
                         </statement>
                     </webwork>
                 </exercise>
