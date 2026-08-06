@@ -644,15 +644,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The flow variant serves natural-language blocks: the children  -->
 <!-- of a block are "p", whose contents join the running line, so   -->
 <!-- mathematics and other markup process normally.                 -->
+<!-- A natural-language block may wrap its content in a "p", or -->
+<!-- carry short inline content directly; the flow copy handles -->
+<!-- both shapes, following @ref to a reused source block first -->
 <xsl:template match="blocks/block" mode="static-horizontal-block-flow">
+    <xsl:variable name="the-block" select="id(@ref)|self::*[not(@ref)]"/>
     <xsl:choose>
-        <!-- follow @ref, copy paragraph contents -->
-        <xsl:when test="@ref">
-            <xsl:copy-of select="id(@ref)/p/node()"/>
+        <xsl:when test="$the-block/p">
+            <xsl:copy-of select="$the-block/p/node()"/>
         </xsl:when>
-        <!-- otherwise duplicate paragraph contents -->
         <xsl:otherwise>
-            <xsl:copy-of select="p/node()"/>
+            <xsl:copy-of select="$the-block/node()"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

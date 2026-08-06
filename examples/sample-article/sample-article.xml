@@ -2606,6 +2606,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p>The proof of the theorem.</p>
                     </proof>
                 </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <statement>
+                        <p>A theorem with an <tag>argument</tag>, a proof-like alternate.</p>
+                    </statement>
+                    <argument>
+                        <p>The argument for the theorem.</p>
+                    </argument>
+                </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <statement>
+                        <p>A theorem with a <tag>reasoning</tag>, a proof-like alternate.</p>
+                    </statement>
+                    <reasoning>
+                        <p>The reasoning for the theorem.</p>
+                    </reasoning>
+                </theorem>
+                <theorem>
+                    <title>A title</title>
+                    <statement>
+                        <p>A theorem with an <tag>explanation</tag>, a proof-like alternate.</p>
+                    </statement>
+                    <explanation>
+                        <p>The explanation of the theorem.</p>
+                    </explanation>
+                </theorem>
                 <corollary>
                     <title>A title</title>
                     <p>A minimal <tag>corollary</tag>.</p>
@@ -10337,6 +10364,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </evaluate>
                     </evaluation>
                 </exercise>
+
+                <exercise label="fillin-remaining-machinery">
+                    <title>Fill-In, Remaining Machinery</title>
+                    <statement>
+                        <p>Let <m>n = <eval obj="n"/></m>.  Enter either <m>n</m> or its negative: <fillin mode="number" name="plusminus" width="5"/>.</p>
+                    </statement>
+                    <setup seed="1234">
+                        <de-object name="n" context="number">
+                            <de-random distribution="discrete" min="2" max="5"/>
+                        </de-object>
+                        <postRenderScript>
+                            // a hook run after the exercise renders; deliberately inert
+                        </postRenderScript>
+                    </setup>
+                    <evaluation>
+                        <evaluate>
+                            <test correct="yes">
+                                <logic op="or">
+                                    <mathcmp>
+                                        <eval obj="n"/>
+                                    </mathcmp>
+                                    <mathcmp>
+                                        <de-evaluate reduce="yes">
+                                            <formula>
+                                                <de-expression mode="formula">{{n}}*x</de-expression>
+                                            </formula>
+                                            <variable name="x">
+                                                <de-number>-1</de-number>
+                                            </variable>
+                                        </de-evaluate>
+                                    </mathcmp>
+                                </logic>
+                            </test>
+                            <test>
+                                <de-expression context="number" mode="formula" reduce="yes">2*{{n}}</de-expression>
+                                <feedback>
+                                    <p>Twice the value is neither the value nor its negative.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                    </evaluation>
+                    <solution include-automatic="no">
+                        <p>Both <m><eval obj="n"/></m> and its negative are accepted; the automatic solution is declined in favor of this sentence.</p>
+                    </solution>
+                </exercise>
             </exercises>
         </section>
 
@@ -17706,6 +17778,243 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <ISSN>0036-1445</ISSN>
                 </biblio>
             </references>
+        </section>
+
+        <section xml:id="section-runestone-components" label="section-runestone-components">
+            <title>Runestone Components</title>
+            <idx>Runestone components</idx>
+
+            <p>One of each interactive Runestone component, each with a moderately complicated set of attributes and features, so this article can serve as a regression test for the whole collection.  The final chapter of the sample book is the comprehensive tour, with many variants of each component; here one representative apiece suffices.  Fill-in exercises, in both the dynamic and the legacy styles, are exercised thoroughly at <xref ref="section-dynamic-exercises"/> and so are not repeated here.  Note that many of these components render, and function, in ordinary offline HTML; a Runestone server adds grading and persistence.</p>
+
+            <exercise xml:id="regression-truefalse" label="regression-truefalse">
+                <title>True/False, a True Statement</title>
+                <statement correct="yes">
+                    <p>The square of a real number is never negative.</p>
+                </statement>
+                <feedback>
+                    <p>Squaring preserves the sign of zero and erases the sign of everything else.</p>
+                </feedback>
+                <hint>
+                    <p>Consider the three cases: negative, zero, positive.</p>
+                </hint>
+            </exercise>
+
+            <exercise xml:id="regression-multiplechoice" label="regression-multiplechoice">
+                <title>Multiple Choice, Several Correct, Randomized</title>
+                <statement>
+                    <p>Which of the following are prime numbers?</p>
+                </statement>
+                <choices randomize="yes" multiple-correct="yes">
+                    <choice correct="yes">
+                        <statement>
+                            <p><m>2</m></p>
+                        </statement>
+                        <feedback>
+                            <p>The only even prime.</p>
+                        </feedback>
+                    </choice>
+                    <choice>
+                        <statement>
+                            <p><m>1</m></p>
+                        </statement>
+                        <feedback>
+                            <p>A unit, by convention not a prime.</p>
+                        </feedback>
+                    </choice>
+                    <choice correct="yes">
+                        <statement>
+                            <p><m>17</m></p>
+                        </statement>
+                        <feedback>
+                            <p>Indeed, no divisors but <m>1</m> and itself.</p>
+                        </feedback>
+                    </choice>
+                </choices>
+            </exercise>
+
+            <exercise label="regression-parsons" language="python" adaptive="yes" indentation="hide">
+                <title>Parsons, Vertical, Partial Ordering</title>
+                <statement>
+                    <p>Arrange the blocks to define a function and then call it.  There is more than one correct order, a paired distractor, and an unneeded block.</p>
+                </statement>
+                <blocks>
+                    <block order="3" name="define">
+                        <cline>def double(x):</cline>
+                        <cline>    return 2 * x</cline>
+                    </block>
+                    <block order="1" name="input" depends="define">
+                        <choice correct="yes">
+                            <cline>n = int(input())</cline>
+                        </choice>
+                        <choice>
+                            <cline>n = input()</cline>
+                        </choice>
+                    </block>
+                    <block order="2" depends="input">
+                        <cline>print(double(n))</cline>
+                    </block>
+                    <block order="4" correct="no">
+                        <cline>import antigravity</cline>
+                    </block>
+                </blocks>
+            </exercise>
+
+            <exercise label="regression-parsons-horizontal" language="natural">
+                <title>Parsons, Horizontal, Reused Blocks</title>
+                <statement>
+                    <p>Assemble a familiar proverb.  Two of the blocks are each used twice.</p>
+                </statement>
+                <blocks layout="horizontal" randomize="yes" reuse="yes">
+                    <block xml:id="regression-block-early">early</block>
+                    <block xml:id="regression-block-to">to</block>
+                    <block ref="regression-block-early" order="1"/>
+                    <block ref="regression-block-to" order="2"/>
+                    <block order="3">bed</block>
+                    <block order="4">and</block>
+                    <block ref="regression-block-early" order="5"/>
+                    <block ref="regression-block-to" order="6"/>
+                    <block order="7">rise</block>
+                </blocks>
+            </exercise>
+
+            <exercise label="regression-cardsort">
+                <title>Cardsort, with Distractors</title>
+                <statement>
+                    <p>Sort each function by its growth rate.  One category has no members, and one function fits no category.</p>
+                </statement>
+                <cardsort>
+                    <match>
+                        <response>Polynomial</response>
+                        <premise order="2"><m>n^2</m></premise>
+                        <premise order="4"><m>100 n^3</m></premise>
+                    </match>
+                    <match>
+                        <response>Exponential</response>
+                        <premise order="1"><m>2^n</m></premise>
+                    </match>
+                    <match>
+                        <response>Constant</response>
+                    </match>
+                    <match>
+                        <premise order="3"><m>n \log n</m></premise>
+                    </match>
+                </cardsort>
+            </exercise>
+
+            <exercise label="regression-matching">
+                <title>Matching, Premises with References</title>
+                <statement>
+                    <p>Match each derivative rule to its name.  One rule matches two names.</p>
+                </statement>
+                <matching>
+                    <premise ref="regression-response-product"><m>(fg)' = f'g + fg'</m></premise>
+                    <premise ref="regression-response-chain regression-response-composite"><m>(f \circ g)' = (f' \circ g) \cdot g'</m></premise>
+                    <response xml:id="regression-response-product" order="2">Product Rule</response>
+                    <response xml:id="regression-response-chain" order="1">Chain Rule</response>
+                    <response xml:id="regression-response-composite" order="3">Composite Rule</response>
+                </matching>
+            </exercise>
+
+            <exercise label="regression-clickablearea">
+                <title>Clickable Areas, Code</title>
+                <statement>
+                    <p>Click every line that mutates the list <c>data</c>.</p>
+                </statement>
+                <areas language="python">
+                    <cline>data = [3, 1, 2]</cline>
+                    <cline><area>data.sort()</area></cline>
+                    <cline><area correct="no">total = sum(data)</area></cline>
+                    <cline><area>data.append(total)</area></cline>
+                </areas>
+                <feedback>
+                    <p>Reading a list is not mutating it.</p>
+                </feedback>
+            </exercise>
+
+            <exercise label="regression-select">
+                <title>Select, an A/B Experiment</title>
+                <select grade="ab-experiment" experiment-name="sample-article-regression" questions="regression-truefalse regression-multiplechoice"/>
+            </exercise>
+
+            <exercise label="regression-shortanswer" attachment="yes">
+                <title>Short Answer, with Attachment</title>
+                <statement>
+                    <p>Describe, in a sentence or two, the difference between a sequence and a series.  Attach a photograph of your handwritten scratch work.</p>
+                </statement>
+                <response/>
+            </exercise>
+
+            <exercise label="regression-activecode">
+                <title>ActiveCode, Decorated</title>
+                <statement>
+                    <p>Run the program, then modify the highlighted line so it counts down instead.</p>
+                </statement>
+                <program label="regression-activecode-program" interactive="activecode" language="python" line-numbers="yes" highlight-lines="2" download="yes">
+                    <code>
+                    for i in range(5):
+                        print(i)
+                    </code>
+                </program>
+            </exercise>
+
+            <exercise label="regression-codelens">
+                <title>CodeLens, with a Checkpoint</title>
+                <statement>
+                    <p>Step the visualization and answer the question it poses.</p>
+                </statement>
+                <program label="regression-codelens-program" interactive="codelens" language="python" starting-step="2">
+                    <code>
+                    a = 5
+                    b = a + 2
+                    c = a * b
+                    </code>
+                    <checkpoint line="3" answer="35">
+                        <prompt>What value is assigned to <c>c</c>?</prompt>
+                        <feedback>Multiply the current values of <c>a</c> and <c>b</c>.</feedback>
+                    </checkpoint>
+                </program>
+            </exercise>
+
+            <query label="regression-query" visibility="all">
+                <statement>
+                    <p>Which topic in this article did you find most challenging?</p>
+                </statement>
+                <choices>
+                    <choice>
+                        <p>The Fundamental Theorem</p>
+                    </choice>
+                    <choice>
+                        <p>Displayed mathematics</p>
+                    </choice>
+                    <choice>
+                        <p>Table calisthenics</p>
+                    </choice>
+                </choices>
+            </query>
+
+            <datafile label="regression-datafile" xml:id="regression-datafile" filename="regression.csv" editable="no" hide="yes" rows="4" cols="30">
+                <pre>
+                x,y
+                1,1
+                2,4
+                3,9
+                </pre>
+            </datafile>
+
+            <exercise xml:id="regression-dual" label="regression-dual">
+                <title>A Dual Exercise (Experimental)</title>
+                <dynamic>
+                    <statement>
+                        <p>Work the embedded exercise.</p>
+                        <interactive label="regression-dual-interactive" iframe="https://opendsax.cs.vt.edu/OpenDSA/Exercises/List/AlistInsertPRO.html" width="100%"/>
+                    </statement>
+                </dynamic>
+                <static>
+                    <statement>
+                        <p>An exercise about array-based list insertion goes here, in an output with no interaction.</p>
+                    </statement>
+                </static>
+            </exercise>
         </section>
 
         <exercises xml:id="exercises" label="exercises-top-level">

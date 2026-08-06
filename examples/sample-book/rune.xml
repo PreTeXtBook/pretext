@@ -3504,14 +3504,14 @@ TEST_CASE( "Test the add function" ) {
             </blocks>
             <!-- note that the blank lines in pre and postabmbles are intentional to -->
             <!-- separate those from user code, but you might not always want them   -->
-            <program-preamble>
+            <program-preamble indent="4">
                 print("Using your code to isolate the red in the Golden Gate Bridge image.")
                 import image
 
             </program-preamble>
             <!-- the program is empty as its contents will be replaced by student code -->
             <program datafile="golden-gate.png" codelens="no"/>
-            <program-postamble>
+            <program-postamble indent="4">
 
                 img = image.Image("golden-gate.png")
                 win = image.ImageWin(img.getWidth(), img.getHeight())
@@ -4184,7 +4184,7 @@ TEST_CASE( "Test the add function" ) {
 
         <p>We begin with standalone queries, using the <tag>query</tag> element.  Runestone calls these <term>polls</term>.   We plan structures/blocks such as <tag>poll</tag>, <tag>survey</tag>, and <tag>questionnaire</tag>, that will be structured collections of <tag>query</tag>.</p>
 
-        <query label="stoplight-query">
+        <query label="stoplight-query" visibility="all">
             <statement>
                 <p>In my town, the stoplights have:</p>
             </statement>
@@ -4973,11 +4973,26 @@ TEST_CASE( "Test the add function" ) {
                 </hint>
             </task>
 
-            <task label="short-answer-task-in-exercises">
+            <task label="short-answer-task-in-exercises" attachment="yes">
                 <statement>
                     <p>Explain your reasoning in the previous question.</p>
                 </statement>
                 <response/>
+            </task>
+
+            <task label="parsons-task-in-exercises" language="python" adaptive="yes" indentation="hide">
+                <title>Parsons Problem, as a Task</title>
+                <statement>
+                    <p>A Parsons problem hosted by a <tag>task</tag>, carrying its language, adaptivity, and indentation attributes there.</p>
+                </statement>
+                <blocks>
+                    <block order="2">
+                        <cline>x = 3</cline>
+                    </block>
+                    <block order="1">
+                        <cline>print(x)</cline>
+                    </block>
+                </blocks>
             </task>
 
             <conclusion>
@@ -6017,7 +6032,7 @@ TEST_CASE( "Test the add function" ) {
         </figure>
     </section>
 
-    <exercises xml:id="chapter-exam" label="chapter-exam" time-limit="15" pause="yes">
+    <exercises xml:id="chapter-exam" label="chapter-exam" time-limit="15" pause="yes" results="no" timer="no" feedback="no">
         <title>Timed Chapter Exam</title>
 
         <introduction>
