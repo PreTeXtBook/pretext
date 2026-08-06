@@ -45,7 +45,7 @@ $line-height: 1.35 !default;
 
 @layer spacing {
   // selectors for items that are expected to contain sequences of items
-  $containers: "section, article, .knowl__content, .introduction, .conclusion";
+  $containers: "section, article, .knowl__content, .introduction, .conclusion, .headnote";
 
   // inter-item spacing high level containers
   :is(#{$containers}) > *:not(:first-child) {
