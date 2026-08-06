@@ -930,6 +930,11 @@
       <ref name="TextParagraphAreas"/>
     </element>
   </define>
+  <!--
+    The areas come in three forms: paragraphs of prose, lines
+    of code (@language names the language), or a tabular with
+    clickable cells.  Trailing components in any order.
+  -->
   <define name="Areas">
     <ref name="MetaDataTitleOptional"/>
     <optional>
@@ -937,22 +942,55 @@
     </optional>
     <ref name="StatementExercise"/>
     <element name="areas">
+      <optional>
+        <attribute name="language"/>
+      </optional>
       <oneOrMore>
-        <ref name="ParagraphAreas"/>
+        <choice>
+          <ref name="ParagraphAreas"/>
+          <ref name="ClineAreas"/>
+          <ref name="Tabular"/>
+        </choice>
       </oneOrMore>
     </element>
-    <optional>
-      <ref name="Feedback"/>
-    </optional>
-    <zeroOrMore>
-      <ref name="Hint"/>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="Answer"/>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="Solution"/>
-    </zeroOrMore>
+    <interleave>
+      <optional>
+        <ref name="Feedback"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  <define name="ClineAreas">
+    <element name="cline">
+      <mixed>
+        <zeroOrMore>
+          <ref name="Area"/>
+        </zeroOrMore>
+      </mixed>
+    </element>
+  </define>
+  <!--
+    within the development schema, any tabular cell may hold
+    a clickable area
+  -->
+  <define name="TableCellText" combine="choice">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="TextLongContent"/>
+          <ref name="TableNote"/>
+          <ref name="Area"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
   </define>
   <!-- General feedback element -->
   <define name="Feedback">

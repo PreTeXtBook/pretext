@@ -373,15 +373,23 @@
                     Component?,
                     TextParagraphAreas
                 }
+            # The areas come in three forms: paragraphs of prose, lines
+            # of code (@language names the language), or a tabular with
+            # clickable cells.  Trailing components in any order.
             Areas =
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 StatementExercise,
                 element areas {
-                  ParagraphAreas+
+                  attribute language {text}?,
+                  (ParagraphAreas | ClineAreas | Tabular)+
                 },
-                Feedback?,
-                Hint*, Answer*, Solution*
+                (Feedback? & Hint* & Answer* & Solution*)
+            ClineAreas =
+                element cline { mixed {Area*} }
+            # within the development schema, any tabular cell may hold
+            # a clickable area
+            TableCellText |= mixed { (TextLongContent | TableNote | Area)* }
 
             # General feedback element
             Feedback =
