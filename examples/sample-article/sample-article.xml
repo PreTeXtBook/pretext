@@ -10364,6 +10364,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </evaluate>
                     </evaluation>
                 </exercise>
+
+                <exercise label="fillin-remaining-machinery">
+                    <title>Fill-In, Remaining Machinery</title>
+                    <statement>
+                        <p>Let <m>n = <eval obj="n"/></m>.  Enter either <m>n</m> or its negative: <fillin mode="number" name="plusminus" width="5"/>.</p>
+                    </statement>
+                    <setup seed="1234">
+                        <de-object name="n" context="number">
+                            <de-random distribution="discrete" min="2" max="5"/>
+                        </de-object>
+                        <postRenderScript>
+                            // a hook run after the exercise renders; deliberately inert
+                        </postRenderScript>
+                    </setup>
+                    <evaluation>
+                        <evaluate>
+                            <test correct="yes">
+                                <logic op="or">
+                                    <mathcmp>
+                                        <eval obj="n"/>
+                                    </mathcmp>
+                                    <mathcmp>
+                                        <de-evaluate reduce="yes">
+                                            <formula>
+                                                <de-expression mode="formula">{{n}}*x</de-expression>
+                                            </formula>
+                                            <variable name="x">
+                                                <de-number>-1</de-number>
+                                            </variable>
+                                        </de-evaluate>
+                                    </mathcmp>
+                                </logic>
+                            </test>
+                            <test>
+                                <de-expression context="number" mode="formula" reduce="yes">2*{{n}}</de-expression>
+                                <feedback>
+                                    <p>Twice the value is neither the value nor its negative.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                    </evaluation>
+                    <solution include-automatic="no">
+                        <p>Both <m><eval obj="n"/></m> and its negative are accepted; the automatic solution is declined in favor of this sentence.</p>
+                    </solution>
+                </exercise>
             </exercises>
         </section>
 
