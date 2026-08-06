@@ -3548,6 +3548,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- never summary pages (the situation that demands the heading)    -->
 <xsl:template match="introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title|conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title" mode="repair"/>
 
+<!-- 2026-08-06  a "references" preface is a "headnote" -->
+
+<!-- The "introduction" becomes a "headnote", which never carries a  -->
+<!-- "title", so any title is discarded; the deprecation warning     -->
+<!-- says so plainly                                                 -->
+<xsl:template match="references/introduction" mode="repair">
+    <headnote>
+        <xsl:apply-templates select="node()[not(self::title)]|@*" mode="repair"/>
+    </headnote>
+</xsl:template>
+
+<!-- A "references" has no "conclusion": the element is dropped -->
+<!-- whole, and the deprecation warning says so plainly         -->
+<xsl:template match="references/conclusion" mode="repair"/>
+
 <!-- ########## -->
 <!-- Enrichment -->
 <!-- ########## -->
