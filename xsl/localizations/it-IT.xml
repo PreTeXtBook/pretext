@@ -271,6 +271,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='readability-theme-light'>Chiaro</localization>
     <localization string-id='readability-theme-dark'>Scuro</localization>
     <localization string-id='readability-assistive-technologies'>Tecnologie assistive</localization>
-    <localization string-id='readability-expose-permalinks'>Mostr i permalink</localization>
+    <localization string-id='readability-expose-permalinks'>Mostra i permalink</localization>
     <localization string-id='reset-all'>Ripristina tutte</localization>
 </locale>
