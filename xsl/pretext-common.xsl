@@ -3207,7 +3207,7 @@ Book (with parts), "section" at level 3
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$str-id" />
             <xsl:text>]</xsl:text>
-            <xsl:message>PTX:BUG:     could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
+            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
