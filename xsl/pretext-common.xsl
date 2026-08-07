@@ -3838,7 +3838,7 @@ Book (with parts), "section" at level 3
                 <xsl:text>has been encountered without a @label attribute.  For reasons of backward-compatibility &#xa;</xsl:text>
                 <xsl:text>we have used the value of an @xml:id.  This may not be what you want, and as of 2024-02-15 &#xa;</xsl:text>
                 <xsl:text>is no longer best practice.  You can copy the @xml:id value exactly into a new @label &#xa;</xsl:text>
-                <xsl:text>attribute and this warning will stop AND your project's entries in any Runestone database &#xa;</xsl:text>
+                <xsl:text>attribute and this message will stop AND your project's entries in any Runestone database &#xa;</xsl:text>
                 <xsl:text>will be preserved and function exactly as before.&#xa;</xsl:text>
                 <xsl:text>[You may get more than one message about this instance.]&#xa;</xsl:text>
             </xsl:message>
