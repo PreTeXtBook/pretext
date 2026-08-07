@@ -1432,6 +1432,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         } else {
                             elem.classList.add("hidden");
                         }
+                        // Recompute layout once, after all elements of this type have been toggled
                         adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                     });
                 });
