@@ -225,15 +225,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>Nel Contesto</localization>
     <!-- <localization string-id='standalone'>Standalone</localization> -->
-    <!-- <localization string-id='embed'>Embed</localization> -->
-    <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
-    <!-- <localization string-id='copy'>Copy</localization> -->
-    <!-- <localization string-id='profile'>Profile</localization> -->
-    <!-- Following is in ENGLISH and should be translated.  Due to its -->
-    <!-- ubiquitous nature we have not left it undefined.  See the -->
-    <!-- "en-US" file for a more complete explanation of its use. -->
-    <!-- Please remove this entire comment when translated.  Thanks. -->
-    <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
+    <localization string-id='embed'>Immergi</localization>
+    <localization string-id='embed-this-page'>Immergi questa pagina</localization>
+    <localization string-id='copy'>Copia</localization>
+    <localization string-id='profile'>Profilo</localization>
+    <localization string-id='permalink-tooltip'>Copia descrizione e  permalink per</localization>
     <localization string-id='calculator'>Calcolatore</localization>
     <localization string-id='evaluate'>Calcola</localization>
     <localization string-id='code'>Codice</localization>
@@ -253,11 +249,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="hide-hints">Nascondi suggerimenti</localization>
     <localization string-id="hide-answers">Nascondi risposte</localization>
     <localization string-id="hide-solutions">Nascondi soluzioni</localization>
-    <localization string-id="print-header">Stampa testate</localization>
+    <localization string-id="print-header">Stampa intestazioni</localization>
     <localization string-id="print-footer">Stampa piè di pagina</localization>
     <localization string-id="first-page">Prima pagina</localization>
-    <!-- <localization string-id="running">Running</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
+    <localization string-id="running">Successive</localization>
+    <localization string-id="highlight-workspace">Evidenzia spazio di lavoro</localization>
     <localization string-id='print'>Stampa</localization>
     <localization string-id='print-preview'>Anteprima di stampa</localization>
     <localization string-id='close'>Chiudi</localization>
