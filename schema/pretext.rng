@@ -10,6 +10,7 @@
       <ref name="Subsection"/>
       <ref name="Subsubsection"/>
       <ref name="Printout"/>
+      <ref name="Slideshow"/>
       <ref name="Paragraphs"/>
       <ref name="ReadingQuestions"/>
       <ref name="Exercises"/>
@@ -43,6 +44,7 @@
         <ref name="Article"/>
         <ref name="Letter"/>
         <ref name="Memorandum"/>
+        <ref name="Slideshow"/>
       </choice>
     </element>
   </define>
@@ -160,6 +162,54 @@
   <define name="Memorandum">
     <element name="memo">
       <empty/>
+    </element>
+  </define>
+  <define name="Slideshow">
+    <element name="slideshow">
+      <ref name="MetaDataLinedSubtitle"/>
+      <optional>
+        <ref name="ArticleFrontMatter"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="SlideshowSection"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Slide"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <!-- a slideshow's "section" organizes slides, nothing more -->
+  <define name="SlideshowSection">
+    <element name="section">
+      <ref name="MetaDataAltTitle"/>
+      <oneOrMore>
+        <ref name="Slide"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Slide">
+    <element name="slide">
+      <ref name="MetaDataAltTitle"/>
+      <oneOrMore>
+        <choice>
+          <ref name="BlockDivision"/>
+          <ref name="List"/>
+          <ref name="Subslide"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- a group of material appearing all at once, after a pause -->
+  <define name="Subslide">
+    <element name="subslide">
+      <oneOrMore>
+        <choice>
+          <ref name="BlockDivision"/>
+          <ref name="List"/>
+        </choice>
+      </oneOrMore>
     </element>
   </define>
   <define name="Part">
@@ -1952,6 +2002,15 @@
         <optional>
           <attribute name="marker"/>
         </optional>
+        <optional>
+          <!-- pausing, within a slideshow: items appear one at a time -->
+          <attribute name="pause">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
         <oneOrMore>
           <ref name="ListItem"/>
         </oneOrMore>
@@ -1981,6 +2040,14 @@
             </choice>
           </attribute>
         </optional>
+        <optional>
+          <attribute name="pause">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
         <oneOrMore>
           <ref name="ListItem"/>
         </oneOrMore>
@@ -1995,6 +2062,14 @@
               <value>narrow</value>
               <value>medium</value>
               <value>wide</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="pause">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
             </choice>
           </attribute>
         </optional>
@@ -2545,6 +2620,15 @@
       <attribute name="margins"/>
     </optional>
     <optional>
+      <!-- pausing, within a slideshow -->
+      <attribute name="pause">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
       <attribute name="landscape">
         <choice>
           <value>yes</value>
@@ -2710,6 +2794,15 @@
         <attribute name="margins"/>
       </optional>
       <optional>
+        <!-- pausing, within a slideshow -->
+        <attribute name="pause">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="rotate"/>
       </optional>
       <optional>
@@ -2762,6 +2855,15 @@
       </optional>
       <optional>
         <attribute name="margins"/>
+      </optional>
+      <optional>
+        <!-- pausing, within a slideshow -->
+        <attribute name="pause">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="archive"/>
@@ -4497,6 +4599,15 @@
       </optional>
       <optional>
         <attribute name="workspace"/>
+      </optional>
+      <optional>
+        <!-- pausing, within a slideshow -->
+        <attribute name="pause">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
       </optional>
       <ref name="TextParagraph"/>
     </element>

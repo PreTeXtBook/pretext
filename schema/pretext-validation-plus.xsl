@@ -480,6 +480,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but we allow them (apparently) everywhere when writing the   -->
 <!-- official schema.  We indicate these situations here.         -->
 
+<!-- pausing is specific to slideshows -->
+<xsl:template match="*[@pause][not(ancestor::slideshow)]">
+    <xsl:apply-templates select="." mode="messaging">
+        <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'pause-outside-slideshow'"/>
+        <xsl:with-param name="message">
+            <xsl:text>The @pause attribute stages the incremental appearance&#xa;</xsl:text>
+            <xsl:text>of material in a &lt;slideshow&gt;, and has no meaning in any&#xa;</xsl:text>
+            <xsl:text>other document type.  It will be ignored.</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- an image drawn by PG code is specific to WW -->
 <xsl:template match="image[@pg-name][not(ancestor::webwork)]">
     <xsl:apply-templates select="." mode="messaging">
