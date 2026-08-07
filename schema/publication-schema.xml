@@ -127,7 +127,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     Jupyter? &amp;
                     Braille? &amp;
                     Text? &amp;
-                    Webwork?
+                    Webwork? &amp;
+                    Dynamics?
                 }
             </code>
         </fragment>
@@ -755,6 +756,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </section>
 
     <section>
+        <title>Dynamic Exercise Options</title>
+
+        <p>
+            A fill-in-the-blank exercise may generate its content with Javascript, and may import a library to do so.  In <init>HTML</init> that library runs in the reader's browser, sandboxed as any web page is.  A static conversion has no browser, so the same library is instead run once at build time, under Node, with the privileges of whoever is building the book.
+        </p>
+
+        <p>
+            That difference is why a library named by a <attribute>url</attribute> has to be approved here before a static build will run it.  Approval is per-library rather than a blanket switch, so approving one library never extends to a different one an exercise imports later.  A library kept with the project needs no approval, since it is already the author's own code.  <init>HTML</init> is not gated at all.
+        </p>
+
+        <p>
+            Only a secure <init>URL</init> may be approved.  The extraction script refuses any other scheme outright, before approval is ever consulted, so an entry naming one could never match and would sit here as dead configuration.
+        </p>
+
+        <fragment xml:id="dynamics">
+            <title>Dynamic Exercise Options</title>
+            <code>
+            Dynamics =
+                element dynamics {
+                    element remote-libraries {
+                        element library {
+                            attribute url { xsd:string { pattern = "https://.*" } }
+                        }*
+                    }?
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>Hierarchical Structure</title>
 
         <p>
@@ -780,6 +811,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <fragref ref="braille" />
             <fragref ref="text" />
             <fragref ref="webwork" />
+            <fragref ref="dynamics" />
             <code>
             }
             </code>

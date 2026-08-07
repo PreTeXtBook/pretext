@@ -1390,4 +1390,42 @@
             </p>
         </subsection>
     </section>
+
+    <section xml:id="publication-file-dynamics">
+        <title>Dynamic Exercise Options</title>
+        <idx>dynamic exercise publisher options</idx>
+        <idx><h>publisher options</h><h>dynamic exercises</h></idx>
+
+        <introduction>
+            <p>
+                A fill-in-the-blank exercise may import a Javascript library to generate its
+                content, described for authors in <xref ref="fill-in-exercises"/>.  In HTML that
+                library runs in the reader's browser.  A static conversion has no browser, so the
+                same library instead runs once at build time, under Node, with the privileges of
+                whoever is building the book.  The option here is what makes that static build
+                willing to run a library it did not ship with the project.
+            </p>
+        </introduction>
+
+        <subsection xml:id="publication-file-dynamics-remote-libraries">
+            <title>Approved Remote Libraries</title>
+            <p>
+                A dynamic exercise may name a Javascript library kept with the project
+                (<attr>source</attr>) or fetched from elsewhere (<attr>url</attr>).  A library kept
+                with the project needs no approval, since it is already the author's own code.  A
+                library named by <attr>url</attr> is different: a static build would otherwise run
+                unvetted, unpinned code as whoever is building the book, so it refuses to do so
+                unless the publisher lists that exact URL as approved,
+                <cd>
+                    <cline>/publication/dynamics/remote-libraries/library/@url</cline>
+                </cd>
+                repeated once per library.  Approval is per-URL rather than a blanket switch, so
+                approving one library never extends to a different one an exercise starts importing
+                later, and only a secure URL (<c>https://</c>) may ever be approved.  HTML output is
+                not gated this way, since the library then runs in the reader's browser under the
+                usual protections rather than as the person building the book.  See
+                <xref ref="fill-in-exercises"/> for the author-facing side of this feature.
+            </p>
+        </subsection>
+    </section>
 </chapter>

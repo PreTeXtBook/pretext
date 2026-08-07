@@ -102,7 +102,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Report if a seed is not provided-->
-                                <xsl:message>PTX:FALLBACK:   Dynamic exercise "<xsl:value-of select="@visible-id"/>" is missing setup @seed for static content generation.</xsl:message>
+                                <xsl:message>PTX:FALLBACK:   Dynamic exercise "<xsl:apply-templates select="." mode="unique-id" />" is missing setup @seed for static content generation.</xsl:message>
                                 <xsl:text>1234</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -139,12 +139,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>,&#xa;"dyn_imports": [</xsl:text>
                         <xsl:text>"BTM"</xsl:text>
                         <!-- Future: add additional packages here -->
+                        <xsl:if test="setup/jsimports">
+                          <xsl:apply-templates select="setup/jsimports/jslibrary" mode="js-import"/>
+                        </xsl:if>
                         <xsl:text>]</xsl:text>
                     </xsl:if>
                     <!-- Names assigned to the blanks.      -->
                     <!-- Empty if none named.               -->
                     <xsl:text>,&#xa;"blankNames": {</xsl:text>
-                    <xsl:apply-templates select="statement//fillin" mode="declare-blanks" />
+                    <xsl:for-each select="statement//fillin">
+                        <xsl:if test="position() > 1">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <xsl:apply-templates select="." mode="declare-blank"/>
+                    </xsl:for-each>
                     <xsl:text>}</xsl:text>
                     <xsl:if test="$b-is-dynamic">
                         <!-- The actual setup code is javascript enclosed in quotes. -->
@@ -163,10 +171,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:variable name="multiAns">
                         <xsl:apply-templates select="evaluation" mode="get-multianswer-check"/>
                     </xsl:variable>
+                    <!-- Verify match between fillin and evaluate -->
+                    <xsl:if test="count(evaluation/evaluate[not(@all='yes')]) != count(statement//fillin)">
+                        <xsl:message>PTX:ERROR:   "<xsl:apply-templates select="." mode="unique-id"/>" has <xsl:value-of
+                            select="count(statement//fillin)"/> blanks but <xsl:value-of
+                            select="count(evaluation/evaluate[not(@all='yes')])"/> "evaluate" elements; they must correspond one-to-one.</xsl:message>
+                    </xsl:if>
                     <!-- Generate test/feedback pair for each fillin             -->
-                    <xsl:apply-templates select="statement//fillin" mode="dynamic-feedback">
-                        <xsl:with-param name="multiAns" select="$multiAns" />
-                    </xsl:apply-templates>
+                    <xsl:for-each select="statement//fillin">
+                        <xsl:if test="position() > 1">
+                            <xsl:text>, </xsl:text>
+                        </xsl:if>
+                        <xsl:apply-templates select="." mode="dynamic-feedback">
+                            <xsl:with-param name="multiAns" select="$multiAns" />
+                        </xsl:apply-templates>
+                    </xsl:for-each>
                     <xsl:text>]</xsl:text>
                     <xsl:text>&#xa;}</xsl:text>
                 </script>
@@ -174,6 +193,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#xa;</xsl:text>
         </div>
     </div>
+</xsl:template>
+
+<!-- Find the sequential position of the fillin relative to its ancestor statement -->
+<xsl:template match="fillin" mode="blank-number">
+    <xsl:variable name="the-fillin" select="."/>
+    <xsl:for-each select="ancestor::statement[1]//fillin">
+        <xsl:if test="generate-id() = generate-id($the-fillin)">
+            <xsl:value-of select="position()"/>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Fillins can be provided a name or use a default rule -->
@@ -184,26 +213,58 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>blank</xsl:text>
-            <xsl:value-of select="position()" />
+            <xsl:apply-templates select="." mode="blank-number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Creating a list of blank names. -->
-<xsl:template match="fillin" mode="declare-blanks">
-    <xsl:variable name="blankNum">
-        <xsl:value-of select="position()" />
-    </xsl:variable>
-    <xsl:if test="$blankNum>1">
-        <xsl:text>, </xsl:text>
+<xsl:template match="fillin" mode="declare-blank">
+    <xsl:if test="not(@mode)">
+        <xsl:message>PTX:FALLBACK:   a "fillin" of interactive exercise "<xsl:apply-templates
+            select="ancestor::statement[1]/parent::*" mode="unique-id"/>" has no @mode, so "string" will be used.  A response is then compared as plain text, and an @ansobj answer is rendered with its "toString" and not as mathematics.  Set @mode to "math", "number", or "string" to say which is wanted.</xsl:message>
     </xsl:if>
+    <xsl:variable name="blankNum">
+        <xsl:apply-templates select="." mode="blank-number" />
+    </xsl:variable>
     <xsl:call-template name="quote-string">
         <xsl:with-param name="text">
             <xsl:apply-templates select="." mode="blank-name"/>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>: </xsl:text>
-    <xsl:value-of select="$blankNum - 1"/>
+    <xsl:value-of select="number($blankNum) - 1"/>
+</xsl:template>
+
+<!-- Identify external javascript libraries, either as asset or by url -->
+<xsl:template match="jslibrary" mode="js-import-path">
+    <xsl:choose>
+        <xsl:when test="@source">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="@source"/>
+        </xsl:when>
+        <xsl:when test="@url">
+            <xsl:value-of select="@url"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: a "jslibrary" element needs either a @source (project-local) or a @url (remote) attribute, and this one has neither, so it will be ignored.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A "jslibrary" as an entry of the HTML "dyn_imports" array.  The -->
+<!-- array always leads with "BTM", so every entry here is preceded  -->
+<!-- by a comma.                                                     -->
+<xsl:template match="jslibrary" mode="js-import">
+    <xsl:variable name="import-path">
+        <xsl:apply-templates select="." mode="js-import-path"/>
+    </xsl:variable>
+    <xsl:if test="string-length($import-path) > 0">
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="escape-quote-string">
+            <xsl:with-param name="text" select="$import-path"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- #eval in a dynamic exercise (has setup) is to evaluate -->
@@ -215,7 +276,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="eval[@obj]">
     <xsl:text>[%= </xsl:text>
     <xsl:choose>
-        <xsl:when test="ancestor::m|ancestor::mrow">
+        <xsl:when test="ancestor::m|ancestor::md|ancestor::mrow">
             <xsl:text>toTeX(</xsl:text>
             <xsl:value-of select="@obj"/>
             <xsl:text>)</xsl:text>
@@ -226,7 +287,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text> %]</xsl:text>
 </xsl:template>
-
 
 <!-- Part of static output content extraction process,   -->
 <!-- this creates elements that will be pulled from the  -->
@@ -305,6 +365,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="de-environment" mode="runestone-setup"/>
     <xsl:text>});&#xa;</xsl:text>
     <xsl:text>var RNG = v._mobjs.menv.rng;&#xa;</xsl:text>
+    <!-- Option to define v._config for any data purposes -->
+    <xsl:if test="setup/config-json">
+        <xsl:text>const _config = v._config = JSON.parse("</xsl:text>
+        <xsl:call-template name="escape-json-string">
+            <xsl:with-param name="text">
+                <xsl:value-of select="setup/config-json"/>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>");&#xa;</xsl:text>
+    </xsl:if>
     <!-- Generate all of the XML-declared math objects -->
     <xsl:apply-templates select="setup/de-object" mode="runestone-setup"/>
 </xsl:template>
@@ -342,8 +412,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- validating and parsing what the user enters as a response. -->
 <xsl:template name="setup-fillin-parsers">
     <xsl:text>v.types = [</xsl:text>
-    <xsl:apply-templates select="statement//fillin" mode="setup-parsers" />
+    <xsl:for-each select="statement//fillin">
+        <xsl:if test="position() > 1">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="setup-parsers"/>
+    </xsl:for-each>
     <xsl:text>];&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Each fillin defines a blank. Establish the list of parsers. -->
+<!-- During setup and called while creating dyn_vars.            -->
+<xsl:template match="fillin" mode="setup-parsers">
+     <xsl:choose>
+        <xsl:when test="@parser">
+          <xsl:value-of select="@parser"/>
+        </xsl:when>
+        <xsl:when test="@mode='math'">
+            <xsl:text>v._mobjs.getParser()</xsl:text>
+        </xsl:when>
+        <xsl:when test="@mode='number'">
+            <xsl:text>Number</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>function(val){ return val; }</xsl:text>
+        </xsl:otherwise>
+     </xsl:choose>
 </xsl:template>
 
 <!-- Create a call-back for what occurs post-rendering.  -->
@@ -355,26 +449,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="setup/postRenderScript"/>
         </xsl:if>
     <xsl:text>};&#xa;</xsl:text>
-</xsl:template>
-
-
-<!-- Each fillin defines a blank. Establish the list of parsers. -->
-<!-- During setup and called while creating dyn_vars.            -->
-<xsl:template match="fillin" mode="setup-parsers">
-    <xsl:if test="position() > 1">
-        <xsl:text>, </xsl:text>
-    </xsl:if>
-     <xsl:choose>
-        <xsl:when test="@mode='math-formula'">
-            <xsl:text>v._mobjs.getParser()</xsl:text>
-        </xsl:when>
-        <xsl:when test="@mode='number'">
-            <xsl:text>Number</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>function(val){ return val; }</xsl:text>
-        </xsl:otherwise>
-     </xsl:choose>
 </xsl:template>
 
 
@@ -412,20 +486,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Return the index of an evaluate -->
-<xsl:template match="evaluation/evaluate" mode="get-index">
-    <xsl:value-of select="position()"/>
-</xsl:template>
-
 <!-- Build feedback based on the #evaluate element. -->
 <xsl:template match="evaluate" mode="dynamic-feedback">
     <xsl:param name="multiAns"/>
     <xsl:param name="match-fillin"/>
 
-    <!-- Defend against name mismatches -->
-    <xsl:if test="@name and $match-fillin/@name and not(@name = $match-fillin/@name)">
-        <xsl:message>PTX:ERROR:    Dynamic content missing label "<xsl:value-of select="@visible-id"/>"</xsl:message>
-    </xsl:if>
+    <!-- Catching name mismatch is detected by the caller. See "fillin"/"dynamic-feedback".                                  -->
 
     <!-- First check is for correctness. -->
     <xsl:text>[</xsl:text>
@@ -474,12 +540,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>);&#xa;}</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:message>PTX:ERROR: fillin has an @ansobj with invalid or missing mode (valid: number|string|math) in "<xsl:value-of select="@visible-id"/>".</xsl:message>
+                            <xsl:message>PTX:ERROR: fillin has an @ansobj with invalid or missing mode (valid: number|string|math) in "<xsl:apply-templates select="." mode="unique-id" />".</xsl:message>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: No method provided to identify a correct answer for #fillin in "<xsl:value-of select="@visible-id"/>".</xsl:message>
+                    <xsl:message>PTX:ERROR: No method provided to identify a correct answer for #fillin in "<xsl:apply-templates select="." mode="unique-id" />".</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>, "feedback": "</xsl:text>
@@ -508,51 +574,73 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Template for answer checking. Actual work done by specialized templates. -->
 <xsl:template match="fillin" mode="dynamic-feedback">
     <xsl:param name="multiAns"/>
-    <xsl:variable name="curFillIn" select="."/>
+
     <xsl:variable name="fillinName">
         <xsl:apply-templates select="." mode="blank-name"/>
     </xsl:variable>
     <xsl:variable name="blankNum">
-        <xsl:value-of select="position()" />
+        <xsl:apply-templates select="." mode="blank-number"/>
     </xsl:variable>
 
-    <!-- we need to know which #evaluate matches the #fillin -->
-    <xsl:variable name="evaluate-index">
-        <xsl:choose>
-            <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
-                <xsl:apply-templates select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]" mode="get-index"/>
-            </xsl:when>
-            <xsl:when test="ancestor::statement/../evaluation/evaluate[position() = $blankNum]">
-                <xsl:value-of select="$blankNum"/>
-            </xsl:when>
-            <!-- No check matches: Make blank default. -->
-            <xsl:otherwise>
-                <xsl:number value="-1"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+    <!-- The multi-answer checker applies to the exercise as a whole, so   -->
+    <!-- it is excluded from the numbering.  Every other "evaluate" holds  -->
+    <!-- a slot, named or not: the pairing with blanks is one-to-one.      -->
+    <xsl:variable name="the-evaluation" select="ancestor::statement[1]/../evaluation"/>
+    <xsl:variable name="ordered-evaluates" select="$the-evaluation/evaluate[not(@all='yes')]"/>
 
-    <xsl:if test="$blankNum > 1">
-        <xsl:text>, </xsl:text>
-    </xsl:if>
+    <!-- Pair by name when possible, else by position. -->
+    <xsl:variable name="named-match" select="$the-evaluation/evaluate[@name = $fillinName]"/>
+    <xsl:variable name="ordered-match"
+                  select="$ordered-evaluates[position() = number($blankNum)]"/>
+    <xsl:variable name="the-evaluate"
+                  select="$named-match | $ordered-match[count($named-match) = 0]"/>
+
+    <!-- The two error branches below still emit a well-formed array, so   -->
+    <!-- that one authoring mistake costs the exercise its feedback and    -->
+    <!-- not its JSON.  The caller has already written the separator that  -->
+    <!-- precedes this blank; emitting nothing here would leave ", ," and  -->
+    <!-- the whole script would fail to parse.                             -->
     <xsl:choose>
-        <!-- First look for a matching name. -->
-        <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
-            <xsl:apply-templates select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]" mode="dynamic-feedback">
+        <!-- Author reused one @name on several "evaluate" elements. -->
+        <xsl:when test="count($the-evaluate) > 1">
+            <xsl:message>PTX:ERROR:   several "evaluate" share the name "<xsl:value-of
+                select="$fillinName"/>" in "<xsl:apply-templates select="." mode="unique-id"/>".</xsl:message>
+            <xsl:text>[{"feedback": "[Error: Several evaluate elements share this blank's name]"}]</xsl:text>
+        </xsl:when>
+        <xsl:when test="$the-evaluate">
+            <!-- Only reachable on the positional path: a name match makes   -->
+            <!-- @name and $fillinName equal by construction.                -->
+            <!--                                                             -->
+            <!-- @name on an "evaluate" exists to pair it with a "fillin" of -->
+            <!-- the same name, so a positional match whose names disagree   -->
+            <!-- is reported here.                                           -->
+            <xsl:if test="$the-evaluate/@name and not($the-evaluate/@name = $fillinName)">
+                <xsl:choose>
+                    <!-- Names don't agree    -->
+                    <xsl:when test="@name">
+                        <xsl:message>PTX:ERROR:   blank named "<xsl:value-of select="@name"/>" of "<xsl:apply-templates
+                            select="." mode="unique-id"/>" was matched by position to an "evaluate" named "<xsl:value-of
+                            select="$the-evaluate/@name"/>".  The names must agree, or the blank must be left unnamed.</xsl:message>
+                    </xsl:when>
+                    <!-- Name present for evaluate but not fillin -->
+                    <xsl:otherwise>
+                        <xsl:message>PTX:WARNING: the "evaluate" named "<xsl:value-of select="$the-evaluate/@name"/>" in "<xsl:apply-templates
+                            select="." mode="unique-id"/>" was matched to blank <xsl:value-of select="$blankNum"/> by position,
+                            because that blank has no @name.  A name on an "evaluate" is only used to pair it with a "fillin"
+                            carrying the same name; give the blank @name="<xsl:value-of select="$the-evaluate/@name"/>" to make
+                            the pairing explicit, or drop the name from the "evaluate".</xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+            <xsl:apply-templates select="$the-evaluate" mode="dynamic-feedback">
                 <xsl:with-param name="multiAns" select="$multiAns"/>
                 <xsl:with-param name="match-fillin" select="."/>
             </xsl:apply-templates>
         </xsl:when>
-        <!-- Otherwise match on order. -->
-        <xsl:when test="ancestor::statement/../evaluation/evaluate[position() = $blankNum]">
-            <xsl:apply-templates select="ancestor::statement/../evaluation/evaluate[position() = $blankNum]" mode="dynamic-feedback">
-                <xsl:with-param name="multiAns" select="$multiAns"/>
-                <xsl:with-param name="match-fillin" select="."/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- No check matches: Make blank default. -->
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: No matching #evaluate for #fillin in "<xsl:value-of select="@visible-id"/>".</xsl:message>
+            <xsl:message>PTX:ERROR: No matching #evaluate for #fillin in "<xsl:apply-templates
+                select="." mode="unique-id"/>".</xsl:message>
+            <xsl:text>[{"feedback": "[Error: No evaluate to match this blank]"}]</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -909,7 +997,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="name($curTest)='mathcmp' and $curTest/@use-answer='yes'">
                     <xsl:choose>
                         <xsl:when test="not($fillin/@ansobj)">
-                            <xsl:message>PTX:ERROR:   Feedback for "<xsl:value-of select="@visible-id"/>" says to use given math answer, but @ansobj not defined. </xsl:message>
+                            <xsl:message>PTX:ERROR:   Feedback for "<xsl:apply-templates select="." mode="unique-id" />" says to use given math answer, but @ansobj not defined. </xsl:message>
                             <xsl:text>UNDEFINED</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
@@ -959,7 +1047,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$logic = 'not'"/>         <!-- Negation has no preparation -->
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR:    Invalid logic operator in dynamic fillin for "<xsl:value-of select="@visible-id"/>"</xsl:message>
+            <xsl:message>PTX:ERROR:    Invalid logic operator in dynamic fillin for "<xsl:apply-templates select="." mode="unique-id" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:for-each select="$tests">    <!-- Work through the layer of tests one at a time. -->
@@ -1066,9 +1154,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="setupMode" select="$setupMode"/>
         </xsl:apply-templates>
         <xsl:text>, "number", {</xsl:text>
-        <xsl:apply-templates select="variable" mode="evaluation-binding" >
-            <xsl:with-param name="setupMode" select="$setupMode" />
-        </xsl:apply-templates>
+        <xsl:for-each select="variable">
+            <xsl:if test="position() > 1">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="evaluation-binding" >
+                <xsl:with-param name="setupMode" select="$setupMode" />
+            </xsl:apply-templates>
+        </xsl:for-each>
     <xsl:text>})</xsl:text>
     <xsl:if test="@reduce='yes'">
         <xsl:text>.reduce().simplifyConstants()</xsl:text>
@@ -1157,9 +1250,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="setupMode" select="$setupMode"/>
     </xsl:apply-templates>
     <xsl:text>, {</xsl:text>
-    <xsl:apply-templates select="variable" mode="evaluation-binding" >
-        <xsl:with-param name="setupMode" select="$setupMode" />
-    </xsl:apply-templates>
+    <xsl:for-each select="variable">
+        <xsl:if test="position() > 1">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="evaluation-binding" >
+            <xsl:with-param name="setupMode" select="$setupMode" />
+        </xsl:apply-templates>
+    </xsl:for-each>
     <xsl:text>})</xsl:text>
     <xsl:if test="@reduce='yes'">
         <xsl:text>.reduce().simplifyConstants()</xsl:text>
@@ -1199,9 +1297,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>v.</xsl:text>
         </xsl:if>
     </xsl:variable>
-    <xsl:if test="position() > 1">
-        <xsl:text>, </xsl:text>
-    </xsl:if>
     <xsl:call-template name="quote-string">
         <xsl:with-param name="text" select="@name" />
     </xsl:call-template>

@@ -1416,6 +1416,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:variable>
 
+<!-- A dynamic exercise may pull in a Javascript library that is not   -->
+<!-- part of the project, via  setup/jsimports/jslibrary/@url .  In    -->
+<!-- HTML that code runs in the reader's browser, sandboxed as any     -->
+<!-- other page script.  But a *static* build (LaTeX, PDF, EPUB) must  -->
+<!-- execute the same library under Node, on the machine doing the     -->
+<!-- build, with no sandbox at all.  So a static build refuses to run  -->
+<!-- a remote library unless the publisher has named it here:          -->
+<!--                                                                   -->
+<!--   <dynamics>                                                      -->
+<!--       <remote-libraries>                                          -->
+<!--           <library url="https://example.org/matrix.mjs"/>         -->
+<!--       </remote-libraries>                                         -->
+<!--   </dynamics>                                                     -->
+<!--                                                                   -->
+<!-- This is deliberately a per-URL list and not a blanket switch, so  -->
+<!-- that approval granted today cannot silently extend to a library   -->
+<!-- some exercise starts importing tomorrow.  HTML builds are not     -->
+<!-- gated, since the risk being managed is Node running unvetted      -->
+<!-- code as the author, which is strictly greater than the in-browser -->
+<!-- case.  The list is consumed by  extract-dynamic.xsl , which       -->
+<!-- passes it to the substitution script.                             -->
+<xsl:variable name="remote-library-allowlist" select="$publication/dynamics/remote-libraries/library"/>
+
 <!-- File of  custom/@name  elements, whose content is a custom -->
 <!-- replacement for a corresponding  custom/@ref  element in   -->
 <!-- the source.                                                -->

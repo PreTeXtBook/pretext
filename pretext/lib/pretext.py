@@ -1120,6 +1120,29 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     log.info("Creating temporary dynamic exercise setup JSON: {}".format(json_file))
     common.xsltproc(extraction_xslt, xml_source, json_file, tmp_dir, stringparams)
 
+    # An exercise may pull in a Javascript library kept with the project, and
+    # the extraction stylesheet writes the path to it the same way it writes
+    # the path for HTML: relative, and led by the "external" directory.  The
+    # JSON just written names every project-local library any exercise in the
+    # document imports (one xsltproc pass, over the whole tree, ahead of the
+    # one Node process below that will import them all), so only those
+    # specific libraries -- not the whole external directory -- need to be
+    # reproduced for the script to resolve against.
+    import json
+    external_directory_prefix = "external/"
+    with open(json_file, encoding="utf-8") as f:
+        dynamic_setup = json.load(f)
+    local_libraries = set()
+    for exercise in dynamic_setup.get("exercises", []):
+        for specifier in exercise.get("exercise_imports", []):
+            if specifier.startswith(external_directory_prefix):
+                local_libraries.add(specifier[len(external_directory_prefix):])
+
+    _, external_dir = common.get_managed_directories(xml_source, pub_file)
+    common.copy_managed_resources(
+        tmp_dir, external_abs=external_dir, external_resources=local_libraries
+    )
+
     # Use Node (Deno) to process the JSON to create the XML substitution file
     log.info("Generating substitutions.")
     import subprocess
@@ -1131,17 +1154,48 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
             #"--allow-write={}".format(dyn_subs_file),
             script,
             "--input={}".format(json_file),
-            "--output={}".format(dyn_subs_file)
+            "--output={}".format(dyn_subs_file),
+            "--basedir={}".format(tmp_dir)
             ],
             capture_output=True, text=True
         )
-        # See if successful (empty stdout)
-        if (len(result.stderr) > 0):
-            log.error(f"Dynamic substitution process failed: {result.stderr}")
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem generating dynamic substitutions.\n")
         raise ValueError(msg + root_cause)
+
+    # The script reports a failed exercise on stderr and carries on, so that one
+    # broken exercise does not cost the whole document its static content.  It
+    # writes a usable substitutions file whenever it can, so the exit code says
+    # how much to trust what was written rather than merely whether the run was
+    # happy:
+    #
+    #   0  every substitution was evaluated
+    #   1  the file is usable, but some substitutions are error markers
+    #   2  no usable file was written at all
+    #
+    # Relay whatever was reported, at the severity its own "PTX:TOKEN"
+    # asks for, through the same routing common.py uses for a stylesheet's
+    # relayed messages -- one table, one definition of "malformed token",
+    # for every PreTeXt-style message stream, not just this one.
+    for line in result.stderr.splitlines():
+        if not line.strip():
+            continue
+        common.log_relayed_message(line)
+    if result.returncode == 1:
+        # Reported, not raised.  Well-formed file created, but some exercises did not
+        # evaluate and their substitutions contain error place-holders
+        log.error(
+            "Some dynamic substitutions could not be generated.  The "
+            "affected exercises will read \"[ERROR generating substitution]\" in "
+            "static output.  See the messages above."
+        )
+    elif result.returncode != 0:
+        raise ValueError(
+            "PTX:ERROR:   The dynamic substitution script failed and no substitutions "
+            "were generated.  Exercises with dynamic content will be missing from "
+            "static output.  See the messages above."
+        )
 
 ################################
 #

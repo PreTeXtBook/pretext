@@ -2671,20 +2671,42 @@
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
-            # Fill-in-the-blank exercises: randomized setup, then evaluation.
-            # Content model per the FITB maintainer (Brian Walton), issue #2980.
+            # Fill-in-the-blank exercises: a setup and an evaluation
+            # accompany the statement.  Content model per the FITB
+            # maintainer (Brian Walton), issue #2980.
+            # "setup" and "evaluation" are data rather than content:
+            # neither is rendered where it sits, so their placement
+            # carries no meaning and is left to the author.  They may
+            # precede the "statement" (natural when the statement
+            # refers to objects the setup defines) or trail the
+            # solutions.  The remaining order is the usual one for an
+            # exercise, with "statement" ahead of any "hint", "answer"
+            # or "solution"; nesting that sequence inside the
+            # interleave is what preserves it.
             FillInBlank =
                 MetaDataTitleOptional,
                 attribute number {text}?,
-                StatementExercise,
-                (Setup? &amp; Evaluation &amp; Hint* &amp; Answer* &amp; Solution*)
-            # Problem setup: named objects defined sequentially (later ones
+                (
+                Setup? &amp;
+                Evaluation &amp;
+                ( StatementExercise, (Hint* &amp; Answer* &amp; Solution*) )
+                )
+            # Problem setup: imported javascript libraries, a configuration JSON for passing data,
+            # named objects defined sequentially (later ones
             # may reference earlier ones), then optional raw-Javascript hooks.
+            # External libraries can be passed as relative path to asset (using @source),
+            # or as an https:// url to the library (using @url).
             # A missing @seed makes any randomization unpredictable, so the
             # FITB machinery warns; but setup has non-randomizing uses too.
             Setup =
                 element setup {
                     attribute seed {text}?,
+                    element jsimports {
+                        element jslibrary {
+                            (attribute source {text} | attribute url {text})
+                        }+
+                    }?,
+                    element config-json {text}?,
                     DEObject*,
                     element setupScript {text}?,
                     element postRenderScript {text}?
@@ -2780,12 +2802,20 @@
             # maintainer describes an optional trailing "feedback" here;
             # observed usage places feedback inside "test", so both are
             # admitted.
+            # A bare "evaluate", with no "test" at all, is deliberately
+            # allowed: when the paired "fillin" carries an @answer or an
+            # @ansobj, the correct test is implicit and gets synthesized
+            # (the assembly "exercise" pass, or the Runestone conversion
+            # for @ansobj).  The element itself is still required, one
+            # per blank, since the pairing is positional; the
+            # validation-plus stylesheet checks that count, which no
+            # grammar can express.
             Evaluate =
                 element evaluate {
                     attribute name {text}?,
                     attribute submit {text}?,
                     attribute all {"yes"|"no"}?,
-                    FITBTest+,
+                    FITBTest*,
                     Feedback?
                 }
             # At most one test should carry @correct="yes", determining
@@ -2855,6 +2885,7 @@
                     attribute rows {xsd:integer}?,
                     attribute width {text}?,
                     attribute answer {text}?,
+                    attribute parser {text}?,
                     attribute mode {"string"|"number"|"math"}?,
                     attribute name {text}?,
                     attribute ansobj {text}?,

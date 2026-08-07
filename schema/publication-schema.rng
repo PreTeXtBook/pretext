@@ -42,6 +42,9 @@
         <optional>
           <ref name="Webwork"/>
         </optional>
+        <optional>
+          <ref name="Dynamics"/>
+        </optional>
       </interleave>
     </element>
   </define>
@@ -857,6 +860,7 @@
             <value>sql</value>
             <value>c</value>
             <value>cpp</value>
+            <value>gdscript</value>
             <value>java</value>
             <value>kotlin</value>
             <value>python3</value>
@@ -1411,6 +1415,23 @@
             <value>all</value>
           </choice>
         </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Dynamics">
+    <element name="dynamics">
+      <optional>
+        <element name="remote-libraries">
+          <zeroOrMore>
+            <element name="library">
+              <attribute name="url">
+                <data type="string">
+                  <param name="pattern">https://.*</param>
+                </data>
+              </attribute>
+            </element>
+          </zeroOrMore>
+        </element>
       </optional>
     </element>
   </define>

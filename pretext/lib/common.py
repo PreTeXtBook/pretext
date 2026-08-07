@@ -122,6 +122,36 @@ _XSL_MESSAGE_LEVELS = {
     'DEBUG':     DEBUG_LEVEL,
 }
 
+# Route one already-formatted message line to the severity named by its
+# leading "PTX:TOKEN", exactly the correspondence documented in the
+# "Messages and Severity" chapter of the Guide.  Shared by every consumer
+# of a PreTeXt-style message stream: the stylesheet relay in xsltproc()
+# below, and any subprocess (Node, say) that writes the same convention to
+# its own stderr.  A single definition means a change to the table, or to
+# how a malformed token is treated, only has to happen once.
+def log_relayed_message(message, prefix=""):
+    # The token is always read from the message itself; "prefix" only
+    # decorates what actually reaches the log (xsltproc()'s "* ", say),
+    # so a caller's presentation choice can never hide a token from the
+    # severity lookup.
+    token = re.match(r'\s*PTX:([\w-]+)', message)
+    display = prefix + message
+    if token:
+        level = _XSL_MESSAGE_LEVELS.get(token.group(1).upper())
+        if level is not None:
+            log.log(level, display)
+        else:
+            # a well-formed but unknown token (e.g. a "PTX:FO-TODO"
+            # work marker); keep it quiet rather than mis-leveling
+            log.debug(display)
+    elif re.match(r'\s*(?i:ptx|warning|error|fatal|bug|deprecate)\b', message):
+        # looks like it meant to carry a severity token but is
+        # malformed (an authoring slip); flag it
+        log.bug("a PreTeXt-style message has a malformed severity token: {}".format(display))
+    else:
+        # genuinely tokenless (e.g. a continuation line)
+        log.info(display)
+
 import re
 import traceback
 import os
@@ -290,23 +320,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
                 log.info("messages from the log for XSL processing (prefaced with a *):")
             # print out any unprinted messages from error_log
             for line in xslt.error_log[start:end]:
-                message = "* {}".format(line.message)
-                token = re.match(r'\s*PTX:([\w-]+)', line.message)
-                if token:
-                    level = _XSL_MESSAGE_LEVELS.get(token.group(1).upper())
-                    if level is not None:
-                        log.log(level, message)
-                    else:
-                        # a well-formed but unknown token (e.g. a "PTX:FO-TODO"
-                        # work marker); keep it quiet rather than mis-leveling
-                        log.debug(message)
-                elif re.match(r'\s*(?i:ptx|warning|error|fatal|bug|deprecate)\b', line.message):
-                    # looks like it meant to carry a severity token but is
-                    # malformed (a stylesheet-authoring slip); flag it
-                    log.bug("a PreTeXt stylesheet message has a malformed severity token: {}".format(line.message))
-                else:
-                    # genuinely tokenless (e.g. a continuation line)
-                    log.info(message)
+                log_relayed_message(line.message, prefix="* ")
             start = end
         if texc is None:
             log.info("successful application of {}".format(xsl))
@@ -928,6 +942,56 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, d
     if data_abs is not None and os.path.isdir(data_abs):
         data_dir = os.path.join(build_dir, "data")
         shutil.copytree(data_abs, data_dir)
+
+
+def copy_managed_resources(build_dir, external_abs=None, external_resources=None,
+                            generated_abs=None, generated_resources=None,
+                            data_abs=None, data_resources=None):
+    # A narrower sibling of copy_managed_directories(), for a caller that
+    # knows in advance the small, specific set of files it needs from a
+    # managed directory, rather than everything the project keeps there --
+    # the dynamic-substitution build is the first such caller: it has
+    # the exact list of project-local libraries an exercise's setup
+    # imports.
+    #
+    # Kept flat and three-times-repeated on purpose, parallel to
+    # copy_managed_directories() immediately above: an "_abs" path and its
+    # matching "_resources" list, one pair per managed directory.
+    #
+    # Each "_resources" list is an iterable of paths relative to its own
+    # "_abs" root (the same convention the "_abs" path itself uses).
+    # This copies the *directory* immediately containing each one --
+    # shutil.copytree() per directory, as copy_managed_directories() does
+    # for the whole tree -- so that a library made of several files under
+    # one directory, referring to each other with relative imports, still
+    # has its siblings available.
+    #
+    # A "_resources" list without its "_abs" path is refused outright
+    def _copy_resources(root_abs, resources, dest_name):
+        if not resources:
+            if root_abs is None:
+                return
+        elif root_abs is None:
+            raise ValueError(
+                "{}_resources was given without {}_abs to resolve it against"
+                .format(dest_name, dest_name)
+            )
+        # Using a set de-duplicates folders before any copying happens,
+        # so two resources sharing a directory (or naming the same one
+        # directly) cost one copytree() call, not two.
+        # Nesting is possible -- "code/fitb/a.js" and "code/fitb/sub/b.js"
+        # dedupe to two directories, one inside the other, which is why
+        # this copies with dirs_exist_ok=True.
+        folders = {os.path.dirname(resource) for resource in resources}
+        dest_root = os.path.join(build_dir, dest_name)
+        for folder in folders:
+            src = os.path.join(root_abs, folder)
+            dst = os.path.join(dest_root, folder)
+            shutil.copytree(src, dst, dirs_exist_ok=True)
+
+    _copy_resources(external_abs, external_resources, "external")
+    _copy_resources(generated_abs, generated_resources, "generated")
+    _copy_resources(data_abs, data_resources, "data")
 
 
 def copy_build_directory(build_dir, dest_dir):

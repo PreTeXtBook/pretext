@@ -16,7 +16,8 @@
                     Jupyter? &
                     Braille? &
                     Text? &
-                    Webwork?
+                    Webwork? &
+                    Dynamics?
                 }
 
             Common =
@@ -280,7 +281,7 @@
             Calculator =
                 element calculator {
                     attribute model { "geogebra-classic" | "geogebra-graphing" | "geogebra-geometry" | "geogebra-3d" | "none "}?,
-                    attribute activecode { "python" | "javascript" | "html" | "sql" | "c" | "cpp" | "java" | "kotlin" | "python3" | "octave" | "none"}?
+                    attribute activecode { "python" | "javascript" | "html" | "sql" | "c" | "cpp" | "gdscript" | "java" | "kotlin" | "python3" | "octave" | "none"}?
                 }
 
             Crossreferences =
@@ -466,6 +467,15 @@
                     attribute user { text }?,
                     attribute password { text }?,
                     attribute task-reveal { "preceding-correct" | "all" }?
+                }
+
+            Dynamics =
+                element dynamics {
+                    element remote-libraries {
+                        element library {
+                            attribute url { xsd:string { pattern = "https://.*" } }
+                        }*
+                    }?
                 }
 
             }
