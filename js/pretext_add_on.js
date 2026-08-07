@@ -642,10 +642,14 @@ function pageOverflows() {
     return false;
 }
 
-function adjustWorkspaceOrRepaginate({paperSize, margins}) {
+function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}) {
     adjustWorkspaceToFitPage({paperSize, margins});
     if (pageOverflows()) {
-        addSpilloverPages(margins);
+        if (fullRecompute) {
+            resetPrintoutPagination(margins);
+        } else {
+            addSpilloverPages(margins);
+        }
         adjustWorkspaceToFitPage({paperSize, margins});
     }
 }
@@ -1002,8 +1006,10 @@ function findPageBreaks(rows, pageHeight) {
         }
     }
     // Backtrack to find the actual page breaks based on nextPageBreak
-    // Note: the nextPage = 1 is not an indexing mistake; we always assume that row 0 is a title and will go on the same page as row 1.
-    let nextPage = 1;
+    // Note: nextPage used to be set to 1.
+    // This meant the very first page's title height was never counted against that page's budget during optimization, even though it still occupied real space once pages were built.
+    // This caused the first page to sometimes exceed capacity, and the resulting correction to cascade into large wasted-space gaps on later pages.
+    let nextPage = 0;
     while (nextPage < rows.length) {
         pageBreaks.push(nextPageBreak[nextPage]);
         nextPage = nextPageBreak[nextPage];
@@ -1267,6 +1273,7 @@ function toPixels(value) {
 // Event listener for page load to handle print preview setup
 window.addEventListener("DOMContentLoaded", async function(event) {
     const urlParams = new URLSearchParams(window.location.search);
+    let pendingSettle = Promise.resolve();
     // We condition on the existence of the papersize radio buttons, which only appear in the printout print preview.
     if (urlParams.has("printpreview")) {
         const printableSectionID = urlParams.get("printpreview");
@@ -1345,48 +1352,38 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                     }
                 });
                 // Add event listener to toggle visibility
-                checkbox.addEventListener("change", function() {
+                checkbox.addEventListener("change", async function() {
+                    await pendingSettle;
                     localStorage.setItem(storageKey, this.checked);
-                    // toggle visibility of solution divs
                     document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
-                        if (checkbox.checked) {
-                            elem.classList.add("hidden");
-                        } else {
-                            elem.classList.remove("hidden");
-                        }
+                        if (checkbox.checked) { elem.classList.add("hidden"); }
+                        else { elem.classList.remove("hidden"); }
                     });
-                    // Recompute layout once, after all elements of this type have been toggled
-                    // Recompute layout once, after all elements of this type have been toggled
                     if (checkbox.checked) {
                         if (hasAuthoredPages) {
-                            // Hiding: content only shrinks, so try to merge any spillover pages back in,
-                            // preserving the author's original page breaks.
                             collapseSpilloverPages(margins);
+                            adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                         } else {
-                            // No authored structure to protect here — safe to fully recompute
-                            // for a genuinely compact layout.
                             resetPrintoutPagination(margins);
+                            adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                         }
-                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-                        } else {
-                            // Revealing: try to absorb the extra height into existing workspace first;
-                            // only spill onto a new page if a page still overflows even with workspace at zero.
-                            adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
-
-                            // Safety net: some content (e.g. large matrices) can take longer than
-                            // a single synchronous check to settle. Poll for genuine overflow over
-                            // a longer window and correct it if found.
-                            (async () => {
-                                const deadline = Date.now() + 2000;
-                                while (Date.now() < deadline) {
-                                    await new Promise(r => setTimeout(r, 100));
-                                    if (pageOverflows()) {
+                    } else {
+                        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
+                        pendingSettle = (async () => {
+                            const deadline = Date.now() + 2000;
+                            while (Date.now() < deadline) {
+                                await new Promise(r => setTimeout(r, 100));
+                                if (pageOverflows()) {
+                                    if (hasAuthoredPages) {
                                         addSpilloverPages(margins);
-                                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                                    } else {
+                                        resetPrintoutPagination(margins);
                                     }
+                                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                                 }
-                            })();
-                        }
+                            }
+                        })();
+                    }
                 });
             }
         }
@@ -1417,6 +1414,21 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             adjustPrintoutPages();
         } else {
             createPrintoutPages(margins);
+            // Safety net: content heights (e.g. proof knowls, large matrices) can
+            // still be settling into their final size at this point, which can
+            // cause createPrintoutPages to make suboptimal page-break decisions
+            // that don't overflow but leave large amounts of wasted space. Since
+            // that failure mode isn't detectable via pageOverflows(), just
+            // unconditionally re-run pagination once more after a brief settle delay.
+            // Tracked via pendingSettle so any checkbox toggle that happens in the
+            // meantime waits for this to finish first, instead of racing it.
+            pendingSettle = (async () => {
+                await new Promise(r => setTimeout(r, 300));
+                unwrapOnepages();
+                createPrintoutPages(margins);
+                addHeadersAndFootersToPrintout();
+                adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+            })();
         }
 
         // Add headers and footers to all pages in the printout
@@ -1446,19 +1458,16 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         } else {
                             elem.classList.add("hidden");
                         }
-                        // Recompute layout once, after all elements of this type have been toggled
-                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                     });
+                    // Recompute layout once, after all elements of this type have been toggled
+                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                 });
             }
         }
 
         // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size),
         // falling back to a spillover page if content still overflows even with workspace at zero.
-        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins});
-        // Safety net: some content (e.g. large matrices) can take longer than
-        // a couple of paint frames to settle into its final rendered size.
-        // Poll for genuine overflow over a longer window and correct it if found.
+        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
         (async () => {
             const deadline = Date.now() + 2000;
             while (Date.now() < deadline) {
