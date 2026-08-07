@@ -2,13 +2,13 @@
                     namespace pf = "https://prefigure.org"
                     grammar {
 
-            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Slideshow | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
 
             PretextRoot =
                 element pretext {
                     XMLLang?,
                     DocInfo?,
-                    (Book | Article | Letter | Memorandum)
+                    (Book | Article | Letter | Memorandum | Slideshow)
                 }
 
             Article =
@@ -46,6 +46,29 @@
                 element letter {empty}
             Memorandum =
                 element memo {empty}
+
+            Slideshow =
+                element slideshow {
+                    MetaDataLinedSubtitle,
+                    ArticleFrontMatter?,
+                    (SlideshowSection+ | Slide+)
+                }
+            # a slideshow's "section" organizes slides, nothing more
+            SlideshowSection =
+                element section {
+                    MetaDataAltTitle,
+                    Slide+
+                }
+            Slide =
+                element slide {
+                    MetaDataAltTitle,
+                    (BlockDivision | List | Subslide)+
+                }
+            # a group of material appearing all at once, after a pause
+            Subslide =
+                element subslide {
+                    (BlockDivision | List)+
+                }
 
             Part =
                 element part {
@@ -711,17 +734,21 @@
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
+                    # pausing, within a slideshow: items appear one at a time
+                    attribute pause {"yes" | "no"}?,
                     ListItem+
                 } |
                 element ul {
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
+                    attribute pause {"yes" | "no"}?,
                     ListItem+
                 } |
                 element dl {
                     Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
+                    attribute pause {"yes" | "no"}?,
                     DefinitionListItem+
                 }
 
@@ -935,6 +962,8 @@
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
+                # pausing, within a slideshow
+                attribute pause {"yes" | "no"}?,
                 attribute landscape {"yes" | "no"}?,
                 (attribute width {text} | attribute widths {text})?,
                 (
@@ -1012,6 +1041,8 @@
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    # pausing, within a slideshow
+                    attribute pause {"yes" | "no"}?,
                     attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
@@ -1038,6 +1069,8 @@
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    # pausing, within a slideshow
+                    attribute pause {"yes" | "no"}?,
                     attribute archive {text}?,
                     (
                       attribute decorative {"yes"} |
@@ -1721,6 +1754,8 @@
                     LabelID?,
                     Component?,
                     attribute workspace {text}?,
+                    # pausing, within a slideshow
+                    attribute pause {"yes" | "no"}?,
                     TextParagraph
                 }
             ParagraphLined =

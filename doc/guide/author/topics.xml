@@ -6294,37 +6294,16 @@
     <section xml:id="topic-slides">
         <title>Slides</title>
         <idx>slides</idx>
-        <p>
-Slideshows may be authored in <pretext/> by using the following tags.
-        <ul>
-          <li>
-<c>slideshow</c> replaces the usual <c>article</c> or <c>book</c> tag to
-let <pretext/> know you are authoring a set of slides. As usual, you may then
-define your <c>title</c>, <c>subtitle</c>, and <c>frontmatter</c>.
-          </li>
-          <li>
-Similar to articles, your content should be organized into several
-<c>section</c>s.
-          </li>
-          <li>
-And within each section, a <c>slide</c> represents a full screen of information.
-Within a slide, you may author <pretext/> content as usual, such as paragraphs
-(<c>p</c>), lists (<c>ul</c>), and so on.
-          </li>
-          <li>
-Several elements support setting the <attr>pause</attr> attribute to the
-value <c>yes</c> to allow stepping through
-parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
-          </li>
-        </ul>
-        </p>
-        <p>
-A minimal working example may be found in the
-<url href="https://github.com/PreTeXtBook/pretext/blob/dev/examples/sample-slideshow/sample-slideshow.xml" visual="examples/sample-slideshow/sample-slideshow.xml">
-  Examples folder of the PreTeXt repo on GitHub
-</url>.
-See publishing details for various outputs in <xref ref="publisher-slides"/>.
-        </p>
+        <idx>slideshow</idx>
+
+        <p>A <tag>slideshow</tag> is a document type of its own: the element replaces <tag>article</tag> or <tag>book</tag> at the top of your source, as a child of <tag>pretext</tag>.  A <tag>docinfo</tag> works exactly as for any other document type, and so does the bibliographic information: the show opens with a <tag>title</tag>, an optional <tag>subtitle</tag>, and an optional <tag>frontmatter</tag> whose <tag>bibinfo</tag> (authors, an <tag>event</tag> naming the conference or seminar, a date) feeds a title slide, with an optional <tag>abstract</tag> following.</p>
+
+        <p>The body of the show is a sequence of <tag>section</tag>, or, for a short talk, simply a sequence of <tag>slide</tag>.  A section here is lighter than its namesake in an article: a <tag>title</tag> and then its slides, nothing else.  Each conversion renders a section title as an interstitial title slide, so sections give a long talk its signposts.</p>
+
+        <p>A <tag>slide</tag> has a <tag>title</tag> and then holds content much as a division does: paragraphs, displayed mathematics, figures, images, theorems and their kin, programs and consoles, side-by-side layouts.  One convenience is particular to the genre: a list (<tag>ol</tag>, <tag>ul</tag>, or <tag>dl</tag>) may sit directly on a slide, bare, without the customary wrapping <tag>p</tag>.  This applies only at the top level of a slide (or subslide); a list nested within a list item still requires its paragraph, just as anywhere else.</p>
+
+        <p>Presentation is incremental, and two devices control it, identically in every conversion.  First, the <attr>pause</attr> attribute, with value <c>yes</c>, may be placed on a paragraph, a list, an image, or a side-by-side: that material is held back until the next advance of the show, and a paused list reveals its items one at a time.  Second, a <tag>subslide</tag> gathers several blocks that then appear together, all at once, after an advance<mdash/>while material <em>following</em> the subslide is visible from the outset.  The <attr>pause</attr> attribute means nothing outside a slideshow, and validation will tell you so.</p>
+
     </section>
 
     <section xml:id="topic-literate-programming">

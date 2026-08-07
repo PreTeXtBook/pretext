@@ -76,7 +76,7 @@
         <fragment xml:id="start-elements">
             <title>Start elements</title>
             <code>
-            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Slideshow | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             </code>
         </fragment>
     </section>
@@ -93,7 +93,7 @@
                 element pretext {
                     XMLLang?,
                     DocInfo?,
-                    (Book | Article | Letter | Memorandum)
+                    (Book | Article | Letter | Memorandum | Slideshow)
                 }
             </code>
         </fragment>
@@ -142,6 +142,40 @@
                 element letter {empty}
             Memorandum =
                 element memo {empty}
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Slideshows</title>
+
+        <p>A <tag>slideshow</tag> is a document type of its own, a peer of <tag>book</tag> and <tag>article</tag>, whose <tag>docinfo</tag> and <tag>bibinfo</tag> are just as for the other types (its front matter has the shape of an article's).  The show is a sequence of <tag>section</tag>, each a titled sequence of <tag>slide</tag>, or is simply a sequence of <tag>slide</tag>.  A slide holds division-style content, with two conveniences particular to the genre.  A list (<tag>ol</tag>, <tag>ul</tag>, <tag>dl</tag>) may stand bare, outside any <tag>p</tag>, at the top level of a slide or subslide<mdash/>a nested list still requires its paragraph.  And presentation is incremental: a <attr>pause</attr> attribute on a paragraph, list, image, or side-by-side holds that material (list items one at a time) for the next advance of the show, while a <tag>subslide</tag> holds a group of material, all at once, the same way.  The <attr>pause</attr> attribute appears throughout the grammar for this purpose; the validation-plus stylesheet confines it to a slideshow.</p>
+
+        <fragment xml:id="slideshow">
+            <title>Slideshows</title>
+            <code>
+            Slideshow =
+                element slideshow {
+                    MetaDataLinedSubtitle,
+                    ArticleFrontMatter?,
+                    (SlideshowSection+ | Slide+)
+                }
+            # a slideshow's "section" organizes slides, nothing more
+            SlideshowSection =
+                element section {
+                    MetaDataAltTitle,
+                    Slide+
+                }
+            Slide =
+                element slide {
+                    MetaDataAltTitle,
+                    (BlockDivision | List | Subslide)+
+                }
+            # a group of material appearing all at once, after a pause
+            Subslide =
+                element subslide {
+                    (BlockDivision | List)+
+                }
             </code>
         </fragment>
     </section>
@@ -549,6 +583,8 @@
                     LabelID?,
                     Component?,
                     attribute workspace {text}?,
+                    # pausing, within a slideshow
+                    attribute pause {"yes" | "no"}?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -1399,17 +1435,21 @@
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
+                    # pausing, within a slideshow: items appear one at a time
+                    attribute pause {"yes" | "no"}?,
                     ListItem+
                 } |
                 element ul {
                     Component?,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {"disc" | "circle" | "square" | ""}?,
+                    attribute pause {"yes" | "no"}?,
                     ListItem+
                 } |
                 element dl {
                     Component?,
                     attribute width {"narrow" | "medium" | "wide"}?,
+                    attribute pause {"yes" | "no"}?,
                     DefinitionListItem+
                 }
             </code>
@@ -1852,6 +1892,8 @@
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
+                # pausing, within a slideshow
+                attribute pause {"yes" | "no"}?,
                 attribute landscape {"yes" | "no"}?,
                 (attribute width {text} | attribute widths {text})?,
                 (
@@ -1944,6 +1986,8 @@
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    # pausing, within a slideshow
+                    attribute pause {"yes" | "no"}?,
                     attribute rotate {text}?,
                     attribute archive {text}?,
                     attribute source {text},
@@ -1970,6 +2014,8 @@
                     Component?,
                     attribute width {text}?,
                     attribute margins {text}?,
+                    # pausing, within a slideshow
+                    attribute pause {"yes" | "no"}?,
                     attribute archive {text}?,
                     (
                       attribute decorative {"yes"} |
@@ -4053,6 +4099,7 @@
             <fragref ref="start-elements" />
             <fragref ref="gross-structure" />
             <fragref ref="document-types" />
+            <fragref ref="slideshow" />
             <fragref ref="divisions" />
             <fragref ref="frontmatter" />
             <fragref ref="backmatter" />
