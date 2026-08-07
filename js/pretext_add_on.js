@@ -616,13 +616,25 @@ function createPrintoutPages(margins) {
     }
 }
 
+function getPageContentBottom(page) {
+    // The page element's own bottom edge includes its bottom padding, which
+    // corresponds to the print margin. Content that lands in that padding
+    // area still fits within the page's outer box, but real printing
+    // respects the margin strictly and will push it to the next page.
+    // So overflow must be measured against the content area, not the raw box.
+    const pRect = page.getBoundingClientRect();
+    const paddingBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
+    return pRect.bottom - paddingBottom;
+}
+
 function pageOverflows() {
     const pages = document.querySelectorAll('.onepage');
     for (const page of pages) {
         const pRect = page.getBoundingClientRect();
         for (const child of page.children) {
             const r = child.getBoundingClientRect();
-            if (r.bottom > pRect.bottom + 1) {
+            // if (r.bottom > pRect.bottom + 1) {
+            if (r.bottom > getPageContentBottom(page) + 1) {
                 return true;
             }
         }
@@ -675,7 +687,8 @@ function addSpilloverPages(margins) {
     let overflowStartIndex = -1;
     for (let j = 0; j < contentChildren.length; j++) {
       const r = contentChildren[j].getBoundingClientRect();
-      if (r.bottom > pageRect.bottom + 1) {
+    //   if (r.bottom > pageRect.bottom + 1) {
+    if (r.bottom > getPageContentBottom(page) + 1) {
         overflowStartIndex = j;
         break;
       }
@@ -715,7 +728,8 @@ function singlePageOverflows(page) {
   const pRect = page.getBoundingClientRect();
   for (const child of page.children) {
     const r = child.getBoundingClientRect();
-    if (r.bottom > pRect.bottom + 1) return true;
+    // if (r.bottom > pRect.bottom + 1) return true;
+    if (r.bottom > getPageContentBottom(page) + 1) return true;
   }
   return false;
 }
