@@ -201,8 +201,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                               -->
 <!-- Each check below is on structure.                                             -->
 <xsl:template match="jslibrary">
-    <!-- A scheme is a name, then a colon, before any slash.  -->
-    <!-- So "https://x" has scheme and "code/lib.js" does not, and neither does "a/b:c".      -->
+    <!-- A scheme is a name, then a colon, before any slash.                             -->
+    <!-- So "https://x" has scheme and "code/lib.js" does not, and neither does "a/b:c". -->
     <xsl:variable name="url-scheme" select="(substring-before(@url, ':') != '') and not(contains(substring-before(@url, ':'), '/'))"/>
     <xsl:variable name="source-scheme" select="(substring-before(@source, ':') != '') and not(contains(substring-before(@source, ':'), '/'))"/>
 

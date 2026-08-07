@@ -1416,13 +1416,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:variable>
 
-<!-- A dynamic exercise may pull in a Javascript library that is not  -->
-<!-- part of the project, via  setup/jsimports/jslibrary/@url .  In   -->
-<!-- HTML that code runs in the reader's browser, sandboxed as any    -->
-<!-- other page script.  But a *static* build (LaTeX, PDF, EPUB) must -->
-<!-- execute the same library under Node, on the machine doing the    -->
-<!-- build, with no sandbox at all.  So a static build refuses to run -->
-<!-- a remote library unless the publisher has named it here:         -->
+<!-- A dynamic exercise may pull in a Javascript library that is not   -->
+<!-- part of the project, via  setup/jsimports/jslibrary/@url .  In    -->
+<!-- HTML that code runs in the reader's browser, sandboxed as any     -->
+<!-- other page script.  But a *static* build (LaTeX, PDF, EPUB) must  -->
+<!-- execute the same library under Node, on the machine doing the     -->
+<!-- build, with no sandbox at all.  So a static build refuses to run  -->
+<!-- a remote library unless the publisher has named it here:          -->
 <!--                                                                   -->
 <!--   <dynamics>                                                      -->
 <!--       <remote-libraries>                                          -->

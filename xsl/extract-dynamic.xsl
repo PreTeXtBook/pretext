@@ -120,7 +120,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>",&#xa;</xsl:text>
     <!-- The @assembly-id above is what the substitution pass reads   -->
     <!-- back, but it means nothing to an author.  Carry the          -->
-    <!-- @unique-id alongside it purely so that a failure during     -->
+    <!-- @unique-id alongside it purely so that a failure during      -->
     <!-- evaluation can name the exercise the way the author sees it. -->
     <xsl:text>  "exercise_unique_id": "</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
@@ -159,14 +159,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>",&#xa;</xsl:text>
-    <!-- Everything the static version needs a value for.  Each entry  -->
-    <!-- is the @obj (or @ansobj) verbatim, which is a Javascript      -->
-    <!-- *expression*, not merely a variable name: the HTML version    -->
-    <!-- drops the same string into a template as  [%= ... %] , so     -->
-    <!-- "_config.date" and the like have to evaluate, not be looked   -->
-    <!-- up.  The substitution script evaluates each one in the scope   -->
-    <!-- left behind by the setup.  Duplicates are harmless; they      -->
-    <!-- collapse to one entry there.                                   -->
+    <!-- Everything the static version needs a value for.  Each entry -->
+    <!-- is the @obj (or @ansobj) verbatim, which is a Javascript     -->
+    <!-- *expression*, not merely a variable name: the HTML version   -->
+    <!-- drops the same string into a template as  [%= ... %] , so    -->
+    <!-- "_config.date" and the like have to evaluate, not be looked  -->
+    <!-- up.  The substitution script evaluates each one in the scope -->
+    <!-- left behind by the setup.  Duplicates are harmless; they     -->
+    <!-- collapse to one entry there.                                 -->
     <xsl:text>  "exercise_evals": [</xsl:text>
     <xsl:for-each select="(statement|solution)//eval[@obj]|evaluation//test[@correct='yes']/feedback//eval[@obj]|statement//fillin[@ansobj]">
         <xsl:if test="position() > 1">

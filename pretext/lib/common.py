@@ -960,7 +960,7 @@ def copy_managed_resources(build_dir, external_abs=None, external_resources=None
     #
     # Each "_resources" list is an iterable of paths relative to its own
     # "_abs" root (the same convention the "_abs" path itself uses).
-    # This copies the *directory* immediately containing each one -- 
+    # This copies the *directory* immediately containing each one --
     # shutil.copytree() per directory, as copy_managed_directories() does
     # for the whole tree -- so that a library made of several files under
     # one directory, referring to each other with relative imports, still

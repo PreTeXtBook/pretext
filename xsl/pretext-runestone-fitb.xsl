@@ -367,13 +367,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>var RNG = v._mobjs.menv.rng;&#xa;</xsl:text>
     <!-- Option to define v._config for any data purposes -->
     <xsl:if test="setup/config-json">
-      <xsl:text>const _config = v._config = JSON.parse("</xsl:text>
-      <xsl:call-template name="escape-json-string">
-          <xsl:with-param name="text">
-              <xsl:value-of select="setup/config-json"/>
-          </xsl:with-param>
-      </xsl:call-template>
-      <xsl:text>");&#xa;</xsl:text>
+        <xsl:text>const _config = v._config = JSON.parse("</xsl:text>
+        <xsl:call-template name="escape-json-string">
+            <xsl:with-param name="text">
+                <xsl:value-of select="setup/config-json"/>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>");&#xa;</xsl:text>
     </xsl:if>
     <!-- Generate all of the XML-declared math objects -->
     <xsl:apply-templates select="setup/de-object" mode="runestone-setup"/>
@@ -608,11 +608,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[{"feedback": "[Error: Several evaluate elements share this blank's name]"}]</xsl:text>
         </xsl:when>
         <xsl:when test="$the-evaluate">
-            <!-- Only reachable on the positional path: a name match makes -->
-            <!-- @name and $fillinName equal by construction.              -->
-            <!--                                                           -->
-            <!-- @name for "evaluate" is to   pair it with a "fillin" with -->
-            <!-- the same name.  Otherwise there give error/warning    -->
+            <!-- Only reachable on the positional path: a name match makes   -->
+            <!-- @name and $fillinName equal by construction.                -->
+            <!--                                                             -->
+            <!-- @name on an "evaluate" exists to pair it with a "fillin" of -->
+            <!-- the same name, so a positional match whose names disagree   -->
+            <!-- is reported here.                                           -->
             <xsl:if test="$the-evaluate/@name and not($the-evaluate/@name = $fillinName)">
                 <xsl:choose>
                     <!-- Names don't agree    -->

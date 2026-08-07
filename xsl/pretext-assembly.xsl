@@ -1837,25 +1837,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Pick a recorded substitution's representation.                      -->
-<!--                                                                     -->
+<!-- Pick a recorded substitution's representation.                       -->
+<!--                                                                      -->
 <!-- One generated object is routinely referenced more than once, and     -->
 <!-- not always in the same way: as the answer of a "fillin" and again    -->
 <!-- inside an "m" in the solution, say.  Those want different strings    -->
 <!-- from the same object, and the substitutions file is keyed only by    -->
 <!-- the object, so it cannot record which was meant.  Instead it records -->
 <!-- both, and the caller, which does know its own context, chooses.      -->
-<!--                                                                     -->
+<!--                                                                      -->
 <!-- Substitution files generated before this distinction existed hold    -->
 <!-- text and no children; that text is used for either request.          -->
 <xsl:template match="eval-subst" mode="dynamic-representation">
     <xsl:param name="b-latex" select="false()"/>
-<!-- Each representation is independent: a request for one never looks -->
-<!-- at whether the other happens to be present.  A v1 substitution    -->
-<!-- carries both children together, or neither (the legacy case,      -->
-<!-- below), never just one, but the fallback is written per-child     -->
-<!-- regardless, since that is the contract, not an assumption about   -->
-<!-- which files exist.                                                -->
+    <!-- Each representation is independent: a request for one never looks -->
+    <!-- at whether the other happens to be present.  A v1 substitution    -->
+    <!-- carries both children together, or neither (the legacy case,      -->
+    <!-- below), never just one, but the fallback is written per-child     -->
+    <!-- regardless, since that is the contract, not an assumption about   -->
+    <!-- which files exist.                                                -->
     <xsl:choose>
         <xsl:when test="$b-latex">
             <xsl:choose>
