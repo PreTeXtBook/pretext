@@ -139,5 +139,15 @@ pre[class*=language-] {
 dfn {
   font-weight: bold;
 }
+.reveal .tablenotes {
+  margin: 0.5em auto;
+  width: fit-content;
+  display: block;
+  font-size: 80%;
+  list-style: none;
+}
+.reveal .tablenote sup i {
+  color: var(--r-link-color);
+}
 /*! Theme: reveal */
 /*# sourceMappingURL=pretext-reveal.css.map */

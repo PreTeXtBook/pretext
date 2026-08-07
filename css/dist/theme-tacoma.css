@@ -1577,10 +1577,10 @@ summary.knowl__link {
   --content-line-height: 1.35;
 }
 @layer spacing {
-  :is(section, article, .knowl__content, .introduction, .conclusion) > *:not(:first-child) {
+  :is(section, article, .knowl__content, .introduction, .conclusion, .headnote) > *:not(:first-child) {
     margin-top: 1.5em;
   }
-  :is(section, article, .knowl__content, .introduction, .conclusion) > .para + .para {
+  :is(section, article, .knowl__content, .introduction, .conclusion, .headnote) > .para + .para {
     margin-top: 1em;
   }
   .ptx-content :is(ul, td, li, dd, .blockquote, .sbspanel, .para.logical) > *:not(:first-child) {
