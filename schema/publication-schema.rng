@@ -860,6 +860,7 @@
             <value>sql</value>
             <value>c</value>
             <value>cpp</value>
+            <value>gdscript</value>
             <value>java</value>
             <value>kotlin</value>
             <value>python3</value>
