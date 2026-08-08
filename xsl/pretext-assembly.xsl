@@ -2949,6 +2949,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </dataurl>
 </xsl:template>
 
+<!-- 2026-08-08: deprecate "datafile" (with a @label) in favor of  -->
+<!-- the new "file" element.  Translation is a 1-for-1 replace-    -->
+<!-- ment, preserving @label/@xml:id and the @pi:* identification -->
+<!-- (stamped earlier), so the id passes stay coherent:           -->
+<!--    * @editable="yes"      -> @user-interaction="edit"        -->
+<!--    * @editable="no"/absent and no @hide -> @user-interaction  -->
+<!--                                              ="view"         -->
+<!--    * @hide="yes"          -> @user-interaction="none"         -->
+<!--    * "pre" child, authored content     -> "pre" child, no     -->
+<!--      @format (implies "pre")                                  -->
+<!--    * "pre" with @source (external text) -> @format="pre" and  -->
+<!--      @source                                                   -->
+<!--    * "image" child (external image)     -> @format="image"    -->
+<!--      and @source from the "image" child, @user-interaction="view" -->
+<xsl:template match="datafile[@label]" mode="repair">
+    <file>
+        <!-- all shared attributes, minus the two we consume here -->
+        <xsl:copy-of select="@*[not(local-name() = 'editable') and not(local-name() = 'hide')]"/>
+        <xsl:attribute name="user-interaction">
+            <xsl:choose>
+                <xsl:when test="@editable = 'yes'">
+                    <xsl:text>edit</xsl:text>
+                </xsl:when>
+                <xsl:when test="@hide = 'yes'">
+                    <xsl:text>none</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>view</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="image">
+                <!-- an image file: the "image" child's @source -->
+                <!-- names the file, and there is no child content -->
+                <xsl:attribute name="format">
+                    <xsl:text>image</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="source">
+                    <xsl:value-of select="image/@source"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="pre/@source">
+                <!-- an external text file, named by @source -->
+                <xsl:attribute name="format">
+                    <xsl:text>pre</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="source">
+                    <xsl:value-of select="pre/@source"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- an authored text file: keep the "pre" child -->
+                <xsl:apply-templates select="pre" mode="repair"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </file>
+</xsl:template>
+
 <xsl:template match="colophon/website[address]" mode="repair">
     <website>
         <xsl:apply-templates select="@*" mode="repair"/>
