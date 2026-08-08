@@ -658,8 +658,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- them it is the identity, so we skip the full-tree copy.  NB: a         -->
 <!-- new template in the mode must be reflected in this test.               -->
 <xsl:variable name="b-has-dynamic-markup" select="boolean($assembly-label//setup | $assembly-label//numcmp | $assembly-label//strcmp | $assembly-label//jscmp | $assembly-label//mathcmp | $assembly-label//logic | $assembly-label//fillin[@ansobj] | $assembly-label//eval[@obj])"/>
+<!-- libxslt evaluates global variables eagerly, so this pass would run     -->
+<!-- even for $b-assembly-id-only, which stops at $assembly-label and       -->
+<!-- discards everything after it.  Reading the substitutions file for      -->
+<!-- a discarded tree is a hard error when it has not been generated,       -->
+<!-- so the short-circuit belongs here and not with $representations.       -->
 <xsl:variable name="dynamic-rtf">
-    <xsl:if test="$b-has-dynamic-markup">
+    <xsl:if test="$b-has-dynamic-markup and not($b-assembly-id-only)">
         <xsl:apply-templates select="$assembly-label" mode="dynamic-substitution"/>
     </xsl:if>
 </xsl:variable>
