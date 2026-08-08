@@ -142,5 +142,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>
             Of course, you should then run e.g. <c>pdflatex slides.tex</c> to produce a PDF.
         </p>
+        <p>
+            Beamer's own habit is to center a frame's content vertically.
+            A <pretext/> slideshow instead places content at the top of every frame by default, in agreement with the Reveal.js conversion.
+            For the classic centered look<mdash/>title page, section pages, and every slide<mdash/>set a document-wide default of <c>middle</c> with the <attr>valign</attr> attribute described in <xref ref="topic-slides"/>.
+        </p>
     </section>
 </chapter>

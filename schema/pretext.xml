@@ -168,6 +168,9 @@
                 }
             Slide =
                 element slide {
+                    # vertical placement of this slide's content,
+                    # overriding the document-wide default
+                    attribute valign {"top" | "middle" | "bottom"}?,
                     MetaDataAltTitle,
                     (BlockDivision | List | Subslide)+
                 }
@@ -4015,6 +4018,10 @@
                     &amp;
                     element parsons {
                         attribute language {text}?
+                    }?
+                    &amp;
+                    element slides {
+                        attribute valign {"top" | "middle" | "bottom"}?
                     }?
                     &amp;
                     element xrefs {

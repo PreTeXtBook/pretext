@@ -191,6 +191,19 @@
   </define>
   <define name="Slide">
     <element name="slide">
+      <optional>
+        <!--
+          vertical placement of this slide's content,
+          overriding the document-wide default
+        -->
+        <attribute name="valign">
+          <choice>
+            <value>top</value>
+            <value>middle</value>
+            <value>bottom</value>
+          </choice>
+        </attribute>
+      </optional>
       <ref name="MetaDataAltTitle"/>
       <oneOrMore>
         <choice>
@@ -5651,6 +5664,19 @@
           <element name="parsons">
             <optional>
               <attribute name="language"/>
+            </optional>
+          </element>
+        </optional>
+        <optional>
+          <element name="slides">
+            <optional>
+              <attribute name="valign">
+                <choice>
+                  <value>top</value>
+                  <value>middle</value>
+                  <value>bottom</value>
+                </choice>
+              </attribute>
             </optional>
           </element>
         </optional>

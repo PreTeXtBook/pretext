@@ -22,6 +22,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <docinfo>
         <directories external="external"/>
+        <defaults>
+            <!-- top placement is the default; authored here as an illustration -->
+            <slides valign="top"/>
+        </defaults>
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
         </macros>
@@ -646,6 +650,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </prefigure>
                     </image>
                 </figure>
+            </slide>
+
+        </section>
+
+        <section>
+            <title>Vertical Alignment</title>
+
+            <slide>
+                <title>Placement by Document Default</title>
+                <p>The content of this slide is a single short paragraph, and where it sits within the slide is the entire point.</p>
+            </slide>
+
+            <slide valign="top">
+                <title>Placement at the Top</title>
+                <p>The content of this slide is a single short paragraph, and where it sits within the slide is the entire point.</p>
+            </slide>
+
+            <slide valign="middle">
+                <title>Placement in the Middle</title>
+                <p>The content of this slide is a single short paragraph, and where it sits within the slide is the entire point.</p>
+            </slide>
+
+            <slide valign="bottom">
+                <title>Placement at the Bottom</title>
+                <p>The content of this slide is a single short paragraph, and where it sits within the slide is the entire point.</p>
             </slide>
 
         </section>
