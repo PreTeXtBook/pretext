@@ -59,10 +59,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='displaymath'>Matematica in display</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Volume</localization>
-    <localization string-id='book'>libro</localization>
+    <localization string-id='book'>Libro</localization>
     <localization string-id='article'>Articolo</localization>
     <localization string-id='letter'>Lettera</localization>
-    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='slideshow'>Sequenza di diapositive</localization>
     <localization string-id='memo'>Memo</localization>
     <localization string-id='presentation'>Presentazione</localization>
     <!-- Parts of a document -->
@@ -79,7 +79,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Conclusione</localization>
     <localization string-id='exercises'>Esercizi</localization>
     <localization string-id='worksheet'>Scheda didattica</localization>
-    <!-- <localization string-id='handout'>Handout</localization> -->
+    <localization string-id='handout'>Dispensa</localization>
     <localization string-id='reading-questions'>Domande di comprensione del testo</localization>
     <localization string-id='solutions'>Soluzioni</localization>
     <localization string-id='glossary'>Glossario</localization>
@@ -88,7 +88,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Capoversi</localization>
     <localization string-id='subparagraph'>Sottocapoverso</localization>
     <!-- Adjustments to titles of divisions -->
-    <!-- <localization string-id='group'>Group</localization> -->
+    <localization string-id='group'>Gruppo</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <localization string-id='remark'>Osservazione</localization>
@@ -170,11 +170,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='video'>Video</localization>
     <localization string-id='program'>Programma</localization>
     <!-- Runestone Exercises -->
-    <!-- <localization string-id='true'>True</localization> -->
-    <!-- <localization string-id='false'>False</localization> -->
-    <!-- <localization string-id='or'>Or</localization> -->
-    <!-- <localization string-id='either'>Either</localization> -->
-    <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
+    <localization string-id='true'>Vero</localization>
+    <localization string-id='false'>Falso</localization>
+    <localization string-id='or'>O</localization>
+    <localization string-id='either'>O</localization>
+    <localization string-id='uncategorized'>Senza categoria</localization>
     <!-- <localization string-id='query'>Query</localization> -->
     <localization string-id='program-activecode'>ActiveCode</localization>
     <!-- <localization string-id='scratch-activecode'>Scratch ActiveCode</localization> -->
@@ -204,7 +204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='feedback'>Feedback</localization>
     <localization string-id='authored'>Redatto in PreTeXt</localization>
     <!-- Search Results display/dialog -->
-    <!-- <localization string-id='search-book'>Search Book</localization> -->
+    <localization string-id='search-book'>Cerca nel libro</localization>
     <localization string-id='search-results-heading'>Risultati</localization>
     <localization string-id='no-search-results'>Nessun risultato</localization>
     <!-- Parts of memos and letters -->
@@ -225,18 +225,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>Nel Contesto</localization>
     <!-- <localization string-id='standalone'>Standalone</localization> -->
-    <!-- <localization string-id='embed'>Embed</localization> -->
-    <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
-    <!-- <localization string-id='copy'>Copy</localization> -->
-    <!-- <localization string-id='profile'>Profile</localization> -->
-    <!-- Following is in ENGLISH and should be translated.  Due to its -->
-    <!-- ubiquitous nature we have not left it undefined.  See the -->
-    <!-- "en-US" file for a more complete explanation of its use. -->
-    <!-- Please remove this entire comment when translated.  Thanks. -->
-    <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
-    <!-- <localization string-id='calculator'>Calculator</localization> -->
+    <localization string-id='embed'>Immergi</localization>
+    <localization string-id='embed-this-page'>Immergi questa pagina</localization>
+    <localization string-id='copy'>Copia</localization>
+    <localization string-id='profile'>Profilo</localization>
+    <localization string-id='permalink-tooltip'>Copia descrizione e  permalink per</localization>
+    <localization string-id='calculator'>Calcolatore</localization>
     <localization string-id='evaluate'>Calcola</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
+    <localization string-id='code'>Codice</localization>
     <localization string-id='instructions'>Istruzioni</localization>
     <localization string-id='correct'>Giusto</localization>
     <localization string-id='incorrect'>Sbagliato</localization>
@@ -249,28 +245,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Azzera</localization>
     <localization string-id='array'>tabella</localization>
     <localization string-id="papersize">Formato carta</localization>
-    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
-    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
-    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
-    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
-    <!-- <localization string-id="print-header">Print headers</localization> -->
-    <!-- <localization string-id="print-footer">Print footers</localization> -->
-    <!-- <localization string-id="first-page">First page</localization> -->
-    <!-- <localization string-id="running">Running</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
+    <localization string-id="printing-options">Opzioni di stampa addizionali</localization>
+    <localization string-id="hide-hints">Nascondi suggerimenti</localization>
+    <localization string-id="hide-answers">Nascondi risposte</localization>
+    <localization string-id="hide-solutions">Nascondi soluzioni</localization>
+    <localization string-id="print-header">Stampa intestazioni</localization>
+    <localization string-id="print-footer">Stampa piè di pagina</localization>
+    <localization string-id="first-page">Prima pagina</localization>
+    <localization string-id="running">Successive</localization>
+    <localization string-id="highlight-workspace">Evidenzia spazio di lavoro</localization>
     <localization string-id='print'>Stampa</localization>
     <localization string-id='print-preview'>Anteprima di stampa</localization>
     <localization string-id='close'>Chiudi</localization>
-    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
+    <localization string-id='open-new-tab'>Apri in nuova scheda</localization>
     <!-- Readability menu items, HTML only, utilized by Javascript -->
-    <!-- <localization string-id='readability-settings'>Readability settings</localization> -->
-    <!-- <localization string-id='readability-line-height'>Line height</localization> -->
-    <!-- <localization string-id='readability-content-font-size'>Content font size</localization> -->
-    <!-- <localization string-id='readability-theme'>Theme</localization> -->
-    <!-- <localization string-id='readability-theme-system'>System</localization> -->
-    <!-- <localization string-id='readability-theme-light'>Light</localization> -->
-    <!-- <localization string-id='readability-theme-dark'>Dark</localization> -->
-    <!-- <localization string-id='readability-assistive-technologies'>Assistive technologies</localization> -->
-    <!-- <localization string-id='readability-expose-permalinks'>Expose permalinks</localization> -->
-    <!-- <localization string-id='reset-all'>Reset All</localization> -->
+    <localization string-id='readability-settings'>Impostazioni di leggibilità</localization>
+    <localization string-id='readability-line-height'>Interlinea</localization>
+    <localization string-id='readability-content-font-size'>Dimensione dei caratteri del contenuto</localization>
+    <localization string-id='readability-theme'>Tema</localization>
+    <localization string-id='readability-theme-system'>Sistema</localization>
+    <localization string-id='readability-theme-light'>Chiaro</localization>
+    <localization string-id='readability-theme-dark'>Scuro</localization>
+    <localization string-id='readability-assistive-technologies'>Tecnologie assistive</localization>
+    <localization string-id='readability-expose-permalinks'>Mostra i permalink</localization>
+    <localization string-id='reset-all'>Ripristina tutte</localization>
 </locale>
