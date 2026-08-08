@@ -84,7 +84,7 @@ def _export_templates_asset_name() -> str:
     return "Godot_v{}_export_templates.tpz".format(GODOT_VERSION_TAG)
 
 
-def _template_install_dir() -> str | os.PathLike[str]:
+def _template_install_dir() -> str:
     system = platform.system()
     if system == "Linux":
         return os.path.join(os.path.expanduser("~"),
@@ -102,9 +102,14 @@ def _template_install_dir() -> str | os.PathLike[str]:
         raise RuntimeError("Unsupported platform: {}".format(system))
 
 
-def _download(url: str, destination: str | os.PathLike[str]) -> None:
+def _remove_if_exists(path: str) -> None:
+    if os.path.exists(path):
+        os.remove(path)
+
+
+def _download(url: str, destination: str) -> None:
     log.info("Downloading {} ...".format(url))
-    destination.parent.mkdir(parents=True, exist_ok=True)
+    os.makedirs(os.path.dirname(destination), exist_ok=True)
     with urllib.request.urlopen(url, context=_SSL_CONTEXT) as response, open(destination, "wb") as out_file:
         shutil.copyfileobj(response, out_file)
 
@@ -127,7 +132,9 @@ def _get_release_sums() -> dict[str, str]:
     _download("{}/SHA512-SUMS.txt".format(GITHUB_RELEASE_BASE), sums_path)
 
     sums: dict[str, str] = {}
-    for line in sums_path.read_text().splitlines():
+    with open(sums_path, encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    for line in lines:
         line = line.strip()
         if not line:
             continue
@@ -140,12 +147,12 @@ def _get_release_sums() -> dict[str, str]:
         filename = filename.lstrip("*")
         sums[filename] = digest.lower()
 
-    sums_path.unlink()
+    os.remove(sums_path)
     _SUMS_CACHE[GODOT_VERSION_TAG] = sums
     return sums
 
 
-def _verify_checksum(file_path: str | os.PathLike[str], asset_name: str) -> None:
+def _verify_checksum(file_path: str, asset_name: str) -> None:
     """Verifies file_path's SHA-512 digest against the release's published sums.
 
     Raises RuntimeError (and deletes the offending file) on a missing entry or
@@ -155,7 +162,7 @@ def _verify_checksum(file_path: str | os.PathLike[str], asset_name: str) -> None
     sums = _get_release_sums()
     expected = sums.get(asset_name)
     if expected is None:
-        file_path.unlink(missing_ok=True)
+        _remove_if_exists(file_path)
         raise RuntimeError(
             "No checksum entry for '{}' in {}'s SHA512-SUMS.txt; ".format(asset_name,GODOT_VERSION_TAG) +
             "refusing to use this download."
@@ -168,7 +175,7 @@ def _verify_checksum(file_path: str | os.PathLike[str], asset_name: str) -> None
     actual = hasher.hexdigest()
 
     if actual != expected:
-        file_path.unlink(missing_ok=True)
+        _remove_if_exists(file_path)
         raise RuntimeError(
             "Checksum mismatch for '{}': expected {}, got {}. ".format(asset_name,expected,actual) +
             "The downloaded file was deleted; it may be corrupted or tampered with."
@@ -188,7 +195,7 @@ def _get_godot_version(godot_path: str) -> str | None:
     return result.stdout.strip()
 
 
-def _cached_binary_path() -> str | os.PathLike[str] | None:
+def _cached_binary_path() -> str | None:
     system = platform.system()
     if system == "Darwin":
         candidate = os.path.join(CACHE_DIR,
@@ -202,7 +209,7 @@ def _cached_binary_path() -> str | os.PathLike[str] | None:
     return candidate if os.path.exists(candidate) else None
 
 
-def _download_and_extract_godot() -> str | os.PathLike[str]:
+def _download_and_extract_godot() -> str:
     asset_name = _asset_name_for_platform()
     zip_path = os.path.join(CACHE_DIR,asset_name)
     _download("{}/{}".format(GITHUB_RELEASE_BASE,asset_name), zip_path)
@@ -211,7 +218,7 @@ def _download_and_extract_godot() -> str | os.PathLike[str]:
     log.info("Extracting {} ...".format(zip_path))
     with zipfile.ZipFile(zip_path) as zf:
         zf.extractall(CACHE_DIR)
-    zip_path.unlink()
+    os.remove(zip_path)
 
     binary_path = _cached_binary_path()
     if binary_path is None:
@@ -221,7 +228,7 @@ def _download_and_extract_godot() -> str | os.PathLike[str]:
         )
 
     if platform.system() != "Windows":
-        binary_path.chmod(binary_path.stat().st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
+        os.chmod(binary_path, os.stat(binary_path).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
 
     return binary_path
 
@@ -244,10 +251,10 @@ def resolve_godot(gd_cmd : str, version: str) -> str:
     cached = _cached_binary_path()
     if cached is not None:
         log.info("Using cached Godot {} at {}.".format(GODOT_VERSION,cached))
-        return str(cached)
+        return cached
 
     log.info("Godot {} not found on PATH or in cache; downloading...".format(GODOT_VERSION))
-    return str(_download_and_extract_godot())
+    return _download_and_extract_godot()
 
 
 def ensure_export_templates(version: str) -> None:
@@ -263,7 +270,7 @@ def ensure_export_templates(version: str) -> None:
     _verify_checksum(tpz_path, asset_name)
 
     log.info("Installing export templates to {} ...".format(template_dir))
-    template_dir.mkdir(parents=True, exist_ok=True)
+    os.makedirs(template_dir, exist_ok=True)
     # .tpz files are zip archives with a top-level "templates/" folder; Godot expects
     # the version directory's contents to be the files *inside* that folder, not the
     # folder itself.
@@ -272,11 +279,11 @@ def ensure_export_templates(version: str) -> None:
             if not member.startswith("templates/") or member == "templates/":
                 continue
             relative_path = member[len("templates/"):]
-            target_path = template_dir / relative_path
+            target_path = os.path.join(template_dir, relative_path)
             if member.endswith("/"):
-                target_path.mkdir(parents=True, exist_ok=True)
+                os.makedirs(target_path, exist_ok=True)
                 continue
-            target_path.parent.mkdir(parents=True, exist_ok=True)
+            os.makedirs(os.path.dirname(target_path), exist_ok=True)
             with zf.open(member) as source, open(target_path, "wb") as out_file:
                 shutil.copyfileobj(source, out_file)
-    tpz_path.unlink()
+    os.remove(tpz_path)
