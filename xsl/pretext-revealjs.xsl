@@ -165,6 +165,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>span.mjpage { display: inline; }&#xa;</xsl:text>
                 <xsl:text>span.mjpage__block { display: block; text-align: center; margin: 0.5em 0; }&#xa;</xsl:text>
             </xsl:if>
+            <!-- Vertical alignment of slides diverging from the      -->
+            <!-- document-wide default.  reveal.js absolutely         -->
+            <!-- positions each slide, and when configured to center  -->
+            <!-- ("center: true") it computes an inline "top" offset, -->
+            <!-- which only "!important" can overrule.  A top-aligned -->
+            <!-- slide just pins that offset to zero.  Middle and     -->
+            <!-- bottom alignment stretch the slide to the full frame -->
+            <!-- and place its content by flexbox; the "display" rule -->
+            <!-- is confined to the "present" slide so hidden slides  -->
+            <!-- retain "display: none".                              -->
+            <xsl:text>.reveal .slides section.valign-top { top: 0 !important; }&#xa;</xsl:text>
+            <xsl:text>.reveal .slides section.valign-middle.present { display: flex !important; flex-direction: column; justify-content: center; top: 0 !important; height: 100% !important; }&#xa;</xsl:text>
+            <xsl:text>.reveal .slides section.valign-bottom.present { display: flex !important; flex-direction: column; justify-content: flex-end; top: 0 !important; height: 100% !important; }&#xa;</xsl:text>
           </style>
           <!-- no diagcess machinery with embedded mathematics: an  -->
           <!-- annotated PreFigure diagram is then a static image   -->
@@ -238,7 +251,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$reveal-navigation-mode"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
-            <xsl:text>  center: false,&#xa;</xsl:text>
+            <!-- reveal.js "center" vertically centers every slide,  -->
+            <!-- so it realizes a document-wide "middle" default;    -->
+            <!-- a "top" or "bottom" default disables it, and slides -->
+            <!-- diverging from the default get a class instead      -->
+            <xsl:text>  center: </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$slides-valign-default = 'middle'">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
             <xsl:text>  hash: true,&#xa;</xsl:text>
             <xsl:text>  transition: 'fade',&#xa;</xsl:text>
             <xsl:text>  width: "100%",&#xa;</xsl:text>
@@ -283,6 +309,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 </xsl:template>
 
+<!-- reveal.js natively places content at the middle of a slide -->
+<!-- when centering (a "middle" default) and at the top         -->
+<!-- otherwise.  Any other placement gets a class tied to the   -->
+<!-- style rules above.                                         -->
+<xsl:template name="valign-class">
+    <xsl:param name="valign"/>
+    <xsl:variable name="native">
+        <xsl:choose>
+            <xsl:when test="$slides-valign-default = 'middle'">
+                <xsl:text>middle</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>top</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="not($valign = $native)">
+        <xsl:attribute name="class">
+            <xsl:text>valign-</xsl:text>
+            <xsl:value-of select="$valign"/>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
 <!-- A "section" contains multiple "slide", which we process,   -->
 <!-- but first we make a special slide announcing the "section" -->
 <!-- With reveal.js navigationMode set to "default" or "grid"   -->
@@ -297,6 +347,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="($reveal-navigation-mode = 'default') or ($reveal-navigation-mode = 'grid')">
             <section>
                 <section>
+                    <xsl:call-template name="valign-class">
+                        <xsl:with-param name="valign" select="$slides-valign-default"/>
+                    </xsl:call-template>
                     <h2>
                         <xsl:apply-templates select="." mode="title-full"/>
                     </h2>
@@ -306,6 +359,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$reveal-navigation-mode = 'linear'">
             <section>
+                <xsl:call-template name="valign-class">
+                    <xsl:with-param name="valign" select="$slides-valign-default"/>
+                </xsl:call-template>
                 <h2>
                     <xsl:apply-templates select="." mode="title-full"/>
                 </h2>
@@ -321,6 +377,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="frontmatter">
     <section>
       <section>
+        <xsl:call-template name="valign-class">
+            <xsl:with-param name="valign" select="$slides-valign-default"/>
+        </xsl:call-template>
         <!-- we assume an overall title exists -->
         <h1>
             <xsl:apply-templates select="$root/slideshow" mode="title-full" />
@@ -372,6 +431,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="abstract">
     <section>
+          <xsl:call-template name="valign-class">
+              <xsl:with-param name="valign" select="$slides-valign-default"/>
+          </xsl:call-template>
           <h2>Abstract</h2>
           <div align="left">
               <xsl:apply-templates select="*"/>
@@ -381,6 +443,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="slide">
     <section>
+          <xsl:call-template name="valign-class">
+              <xsl:with-param name="valign">
+                  <xsl:apply-templates select="." mode="valign"/>
+              </xsl:with-param>
+          </xsl:call-template>
           <xsl:variable name="slide-hN">
               <xsl:apply-templates select="." mode="hN">
                   <xsl:with-param name="heading-level" select="$reveal-slide-heading-level"/>
