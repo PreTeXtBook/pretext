@@ -28,6 +28,9 @@
           <ref name="Revealjs"/>
         </optional>
         <optional>
+          <ref name="Beamer"/>
+        </optional>
+        <optional>
           <ref name="Epub"/>
         </optional>
         <optional>
@@ -1349,6 +1352,18 @@
           </choice>
         </attribute>
       </optional>
+    </element>
+  </define>
+  <define name="Beamer">
+    <element name="beamer">
+      <optional>
+        <ref name="AppearanceBeamer"/>
+      </optional>
+    </element>
+  </define>
+  <define name="AppearanceBeamer">
+    <element name="appearance">
+      <attribute name="theme"/>
     </element>
   </define>
   <define name="Epub">

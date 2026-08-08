@@ -3444,6 +3444,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- ######################## -->
+<!-- Beamer Slideshow Options -->
+<!-- ######################## -->
+
+<!-- Beamer Theme -->
+
+<xsl:variable name="beamer-theme">
+    <xsl:apply-templates select="$publisher-attribute-options/beamer/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 
 <!-- ########################################### -->
 <!-- Set Values/Defaults for Publisher Variables -->
@@ -3692,6 +3702,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="math" default="online" options="embedded"/>
         </resources>
     </revealjs>
+    <beamer>
+        <appearance>
+            <pi:pub-attribute name="theme" default="Boadilla" freeform="yes"/>
+        </appearance>
+    </beamer>
 </pi:publisher>
 
 <!-- global variable for pi:publisher tree above -->

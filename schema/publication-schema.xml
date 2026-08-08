@@ -123,6 +123,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     Pdf? &amp;
                     Html? &amp;
                     Revealjs? &amp;
+                    Beamer? &amp;
                     Epub? &amp;
                     Jupyter? &amp;
                     Braille? &amp;
@@ -655,6 +656,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </section>
 
     <section>
+        <title>Beamer Options</title>
+
+        <p>
+            These options control the Beamer <latex/> slides presentation.
+        </p>
+
+        <fragment xml:id="beamer">
+            <title>Beamer Options</title>
+            <code>
+            Beamer =
+                element beamer {
+                    AppearanceBeamer?
+                }
+
+            AppearanceBeamer =
+                element appearance {
+                    attribute theme { text }
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>EPUB Options</title>
 
         <p>
@@ -806,6 +830,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <fragref ref="pdf" />
             <fragref ref="html" />
             <fragref ref="revealjs" />
+            <fragref ref="beamer" />
             <fragref ref="epub" />
             <fragref ref="jupyter" />
             <fragref ref="braille" />

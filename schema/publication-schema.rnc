@@ -12,6 +12,7 @@
                     Pdf? &
                     Html? &
                     Revealjs? &
+                    Beamer? &
                     Epub? &
                     Jupyter? &
                     Braille? &
@@ -433,6 +434,16 @@
                 element resources {
                     attribute host { "local" | "cdn" | "embedded" }?,
                     attribute math { "online" | "embedded" }?
+                }
+
+            Beamer =
+                element beamer {
+                    AppearanceBeamer?
+                }
+
+            AppearanceBeamer =
+                element appearance {
+                    attribute theme { text }
                 }
 
             Epub =

@@ -49,4 +49,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <navigation mode="default"/>
     </revealjs>
 
+    <beamer>
+        <!-- theme="Boadilla" is the default -->
+        <appearance theme="Singapore"/>
+    </beamer>
+
 </publication>

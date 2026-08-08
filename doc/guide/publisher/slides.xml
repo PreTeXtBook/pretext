@@ -143,6 +143,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             Of course, you should then run e.g. <c>pdflatex slides.tex</c> to produce a PDF.
         </p>
         <p>
+            Beamer has a large collection of themes, which set colors, navigation aids, and the overall look of every frame.
+            Elect one with the <attr>theme</attr> attribute of the <tag>appearance</tag> element within the <tag>beamer</tag> element of the publication file, exactly as you would name it in a <c>\usetheme</c> command (<xref ref="beamer-appearance-options"/>).
+            Absent a choice, the <c>Boadilla</c> theme is used.
+            A theme name your <latex/> installation does not provide stops the build early, with an error message that repeats the name and suggests the likely repairs.
+            Theme names are case-sensitive<mdash/>it is <c>Singapore</c>, never <c>singapore</c><mdash/>so check capitalization before anything else.
+        </p>
+        <p>
             Beamer's own habit is to center a frame's content vertically.
             A <pretext/> slideshow instead places content at the top of every frame by default, in agreement with the Reveal.js conversion.
             For the classic centered look<mdash/>title page, section pages, and every slide<mdash/>set a document-wide default of <c>middle</c> with the <attr>valign</attr> attribute described in <xref ref="topic-slides"/>.
