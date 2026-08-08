@@ -7482,6 +7482,35 @@ Book (with parts), "section" at level 3
     </xsl:if>
 </xsl:variable>
 
+<!-- The content of a "slide" of a "slideshow" may be placed at   -->
+<!-- the top, middle, or bottom of the slide.  A document-wide    -->
+<!-- default comes from "docinfo/defaults/slides/@valign"; absent -->
+<!-- an expressed preference, content is placed at the top.       -->
+<xsl:variable name="slides-valign-default">
+    <xsl:choose>
+        <xsl:when test="$docinfo/defaults/slides/@valign">
+            <xsl:value-of select="$docinfo/defaults/slides/@valign"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>top</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- A "slide" may override the document-wide default with its  -->
+<!-- own "@valign"; the conversions consult this modal template -->
+<!-- for the effective vertical alignment of a slide's content. -->
+<xsl:template match="slide" mode="valign">
+    <xsl:choose>
+        <xsl:when test="@valign">
+            <xsl:value-of select="@valign"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$slides-valign-default"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Determine programming language to use. First choice is @language     -->
 <!-- on current element. If that is not available, check docinfo default. -->
 <!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
