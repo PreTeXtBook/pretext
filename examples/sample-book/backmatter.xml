@@ -84,6 +84,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <appendix>
         <title>Some Runestone Elements</title>
         <p>These elements should end up in the Runestone manifest.</p>
+        <!-- The "datafile" element is deprecated (as of 2026-08-08) in -->
+        <!-- favor of the "file" element; kept here to exercise the     -->
+        <!-- automatic translation.                                     -->
         <datafile filename="datafile-appendix.txt" xml:id="datafile-appendix" label="datafile-appendix">
             <pre>
             Ipsum lorem...

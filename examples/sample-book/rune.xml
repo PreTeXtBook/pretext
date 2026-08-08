@@ -1187,6 +1187,15 @@ TEST_CASE( "Test the add function" ) {
 
         <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
 
+        <!-- The "datafile" element is deprecated (as of 2026-08-08) in favor of   -->
+        <!-- the "file" element, which names its kind with @format (pre, image,    -->
+        <!-- binary) and its visibility with @user-interaction (view, edit, none). -->
+        <!-- The conversions below translate automatically: @editable="yes"       -->
+        <!-- becomes @user-interaction="edit"; a hidden file (a text file with    -->
+        <!-- @hide="yes") becomes @user-interaction="none"; other files become    -->
+        <!-- @user-interaction="view".  These examples and others in the book      -->
+        <!-- still use "datafile" deliberately, to exercise that translation.     -->
+
         <!-- # Section 11.4 Think Like a Computer Scientist, Runestone 2023-01-23 -->
         <datafile label="file-global-climate-one" xml:id="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes">
             <pre>

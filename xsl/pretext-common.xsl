@@ -11721,6 +11721,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the old use of the &quot;datafile&quot; element has been replaced by the functionally-equivalent &quot;dataurl&quot; element.   New uses of &quot;datafile&quot; require a @label attribute.  So you are seeing this warning since your source has a &quot;datafile&quot; without a @label attribute.  We will try to honor your intent, but please make the change at your first convenience, as an automatic conversion might not be desirable in some cases.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-08-08  deprecate "datafile" (with @label) in favor of "file" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[@label]&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-08'" />
+        <xsl:with-param name="message" select="'the &quot;datafile&quot; element is deprecated in favor of the &quot;file&quot; element, which names its kind with @format (pre, image, binary) and its visibility with @user-interaction (view, edit, none).  An automatic conversion was made here.  @editable=&quot;yes&quot; becomes @user-interaction=&quot;edit&quot;, a hidden file (a text file with @hide=&quot;yes&quot;) becomes @user-interaction=&quot;none&quot;, and other files become @user-interaction=&quot;view&quot;.  Please update your source to use &quot;file&quot; at your first convenience, as the automatic conversion may not honor your intent in all cases.'"/>
+    </xsl:call-template>
+    <!--  -->
     <!-- 2023-08-08  Simplify, and make more reliable, the URL for website entry of copyright page -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$document-root//colophon/website[address]&quot;" />
