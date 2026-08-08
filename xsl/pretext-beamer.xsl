@@ -90,7 +90,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="frontmatter"/>
     <!-- an overview of the sections, when there are sections -->
     <xsl:if test="section">
-        <xsl:text>\begin{frame}&#xa;</xsl:text>
+        <xsl:text>\begin{frame}[</xsl:text>
+        <xsl:call-template name="valign-letter">
+            <xsl:with-param name="valign" select="$slides-valign-default"/>
+        </xsl:call-template>
+        <xsl:text>]&#xa;</xsl:text>
         <xsl:text>\frametitle{</xsl:text>
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'toc'"/>
@@ -152,14 +156,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$bibinfo/date"/>
     </xsl:if>
     <xsl:text>}&#xa;&#xa;</xsl:text>
-    <xsl:text>\begin{frame}[plain]&#xa;</xsl:text>
+    <xsl:text>\begin{frame}[plain,</xsl:text>
+    <xsl:call-template name="valign-letter">
+        <xsl:with-param name="valign" select="$slides-valign-default"/>
+    </xsl:call-template>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\titlepage&#xa;</xsl:text>
     <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
     <xsl:apply-templates select="abstract"/>
 </xsl:template>
 
 <xsl:template match="slideshow/frontmatter/abstract">
-    <xsl:text>\begin{frame}&#xa;</xsl:text>
+    <xsl:text>\begin{frame}[</xsl:text>
+    <xsl:call-template name="valign-letter">
+        <xsl:with-param name="valign" select="$slides-valign-default"/>
+    </xsl:call-template>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\frametitle{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -171,13 +183,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sections, Slides, Pauses -->
 <!-- ######################## -->
 
+<!-- Beamer places a frame's content by single-letter frame options -->
+<!-- ("t", "c", "b"), so every frame gets the letter realizing its  -->
+<!-- effective vertical alignment.                                  -->
+<xsl:template name="valign-letter">
+    <xsl:param name="valign"/>
+    <xsl:choose>
+        <xsl:when test="$valign = 'top'">
+            <xsl:text>t</xsl:text>
+        </xsl:when>
+        <xsl:when test="$valign = 'bottom'">
+            <xsl:text>b</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>c</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- A "section" is a Beamer section (navigation, table of contents) -->
 <!-- with a section-title frame, as in the reveal.js conversion.     -->
 <xsl:template match="slideshow/section">
     <xsl:text>&#xa;\section{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\begin{frame}&#xa;</xsl:text>
+    <xsl:text>\begin{frame}[</xsl:text>
+    <xsl:call-template name="valign-letter">
+        <xsl:with-param name="valign" select="$slides-valign-default"/>
+    </xsl:call-template>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\sectionpage&#xa;</xsl:text>
     <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
     <xsl:apply-templates select="slide"/>
@@ -187,11 +221,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- realized through the "listings" package (or other verbatim-like -->
 <!-- material) must be marked "fragile".                             -->
 <xsl:template match="slide">
-    <xsl:text>\begin{frame}</xsl:text>
+    <xsl:text>\begin{frame}[</xsl:text>
+    <xsl:call-template name="valign-letter">
+        <xsl:with-param name="valign">
+            <xsl:apply-templates select="." mode="valign"/>
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:if test="descendant::program or descendant::console or descendant::sage or descendant::cd or descendant::pre">
-        <xsl:text>[fragile]</xsl:text>
+        <xsl:text>,fragile</xsl:text>
     </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\frametitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}&#xa;</xsl:text>
