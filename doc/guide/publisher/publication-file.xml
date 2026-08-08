@@ -1177,6 +1177,27 @@
         </subsection>
     </section>
 
+    <section xml:id="publication-file-beamer" label="publication-file-beamer">
+        <title>Beamer Slideshow Options</title>
+        <idx>Beamer slideshow publisher options</idx>
+        <idx><h>publisher options</h><h>Beamer slideshow</h></idx>
+
+        <introduction>
+            <p>See <xref ref="publisher-beamer"/> for a more general overview of this conversion.</p>
+        </introduction>
+
+        <subsection xml:id="beamer-appearance-options" label="beamer-appearance-options">
+            <title>Beamer Appearance</title>
+            <idx><h>publisher options</h><h>Beamer appearance</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/beamer/appearance</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>theme</attr>: the name of a Beamer theme, as it would appear in a <c>\usetheme</c> command, such as <c>Singapore</c> or <c>Madrid</c>.  The default is <c>Boadilla</c>.  Any theme your <latex/> installation provides may be named, including a locally-installed custom theme.  A name the <latex/> installation cannot find stops the build with an error repeating the name; capitalization is the first thing to check.  See <xref ref="publisher-beamer"/>.</li>
+            </ul></p>
+        </subsection>
+    </section>
+
     <section xml:id="publication-file-epub">
         <title>EPUB Options</title>
         <idx>EPUB publisher options</idx>
