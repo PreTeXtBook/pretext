@@ -49,10 +49,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
-<!-- The Beamer theme, an author/publisher choice.  A string parameter -->
-<!-- until slideshow options mature in the publisher file.             -->
-<xsl:param name="beamer.theme" select="'Boadilla'"/>
-
 <!-- Blocks on slides never carry a LaTeX \label, so cross-reference -->
 <!-- numbers are hard-coded rather than realized through \ref        -->
 <xsl:variable name="b-latex-hardcode-numbers" select="true()"/>
@@ -488,8 +484,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.preamble.early" />
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <!-- A theme name unknown to the installation would surface as    -->
+    <!-- a cryptic missing-file error, so test for the theme's file   -->
+    <!-- first and die early with advice.  "\usetheme{X}" loads       -->
+    <!-- "beamerthemeX.sty", and "\IfFileExists" performs the same    -->
+    <!-- search, so a theme local to the document is also honored.    -->
+    <xsl:text>\IfFileExists{beamertheme</xsl:text>
+    <xsl:value-of select="$beamer-theme"/>
+    <xsl:text>.sty}{}{\errmessage{The Beamer theme "</xsl:text>
+    <xsl:value-of select="$beamer-theme"/>
+    <xsl:text>" is not part of this TeX installation.  Theme names are case-sensitive, so check capitalization first.  Install the theme, or remove the theme entry of the publication file to accept the default theme}}&#xa;</xsl:text>
     <xsl:text>\usetheme{</xsl:text>
-    <xsl:value-of select="$beamer.theme"/>
+    <xsl:value-of select="$beamer-theme"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\usefonttheme[onlymath]{serif}&#xa;</xsl:text>
     <xsl:text>%% quash navigation symbols&#xa;</xsl:text>
