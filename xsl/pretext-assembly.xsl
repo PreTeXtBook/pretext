@@ -4317,12 +4317,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="project-nodes"/>
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
-    <!-- terminal: holds content directly, so it has no child divisions of  -->
-    <!-- any kind.  Specialized divisions ("worksheet", "handout", etc.)     -->
-    <!-- count here just like the traditional ones, else a division whose    -->
-    <!-- children are specialized divisions is wrongly deemed terminal and   -->
-    <!-- pools their blocks into one scope instead of one scope apiece.      -->
-    <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface|exercises|worksheet|handout|reading-questions|references|glossary|solutions)"/>
+    <!-- Terminal: this division's items pool into one flat scope  -->
+    <!-- here.  For a traditional division the authority is the    -->
+    <!-- two-model test "is-structured-division": an unstructured  -->
+    <!-- division (content, plus at most one of each specialized   -->
+    <!-- division) is terminal, its specialized divisions pooling  -->
+    <!-- into its scope; a structured division (traditional        -->
+    <!-- subdivisions, or only worksheets) recurses, and each      -->
+    <!-- worksheet then opens a scope apiece.  The test does not   -->
+    <!-- apply to "frontmatter", "backmatter", a "preface", or the -->
+    <!-- specialized divisions themselves, which keep the plain    -->
+    <!-- child-division inspection.                                -->
+    <xsl:variable name="terminal">
+        <xsl:choose>
+            <xsl:when test="self::book or self::article or self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection">
+                <xsl:variable name="is-structured">
+                    <xsl:apply-templates select="." mode="is-structured-division"/>
+                </xsl:variable>
+                <xsl:value-of select="$is-structured = 'false'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="not(part|chapter|appendix|section|subsection|subsubsection|preface|exercises|worksheet|handout|reading-questions|references|glossary|solutions)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="b-terminal" select="$terminal = 'true'"/>
     <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@pi:level &gt;= $numbering-equations))"/>
     <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@pi:level &gt;= $numbering-footnotes))"/>
     <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@pi:level &gt;= $numbering-blocks))"/>
@@ -4705,7 +4724,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
     <xsl:variable name="all-children" select="*"/>
-    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|handout|conclusion"/>
+    <xsl:variable name="all-worksheet" select="title|subtitle|shorttitle|plaintitle|idx|frontmatter|introduction|worksheet|handout|conclusion"/>
     <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
 
     <xsl:value-of select="$has-traditional or $only-worksheets"/>
