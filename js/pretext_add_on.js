@@ -473,6 +473,43 @@ function workspaceDivsIn(elem) {
     return [...elem.querySelectorAll('.workspace')];
 }
 
+// Split .task (and .conclusion) elements out of an .exercise -- or out of an
+// enclosing .task, for sub-tasks -- so each becomes its own top-level child
+// of `container`, positioned immediately after the block that used to hold
+// it. This is what lets both pagination paths treat a single task as an
+// independently placeable/movable unit: for computed pagination it lets
+// findPageBreaks() weigh each task on its own, and for authored pagination
+// it lets addSpilloverPages() push just the oversized task (and whatever
+// follows it on that page) onto a spillover page, instead of being stuck
+// with the whole exercise as one atomic block that can't be split when a
+// solution inside it grows too long.
+function flattenTasksIn(container) {
+    for (const child of [...container.children]) {
+        if (child.classList.contains('sidebyside')) {
+            continue; // sidebyside could have tasks, but we don't split into it
+        }
+        const tasks = child.querySelectorAll('.task, .conclusion');
+        if (tasks.length === 0) continue;
+        // Tag nesting depth so CSS can indent appropriately once an element
+        // is pulled out of its parent .task/.exercise: if its parent (or
+        // grandparent) is itself a .task, it was a sub-(sub-)task.
+        for (const task of tasks) {
+            const parent = task.parentElement;
+            const grandparent = parent.parentElement;
+            if (grandparent && grandparent.classList.contains('task')) {
+                task.classList.add('subsubtask');
+            } else if (parent.classList.contains('task')) {
+                task.classList.add('subtask');
+            }
+        }
+        // Move every task after the first one out, in reverse order, so
+        // they land in their original order immediately after `child`.
+        for (let i = tasks.length - 1; i > 0; i--) {
+            container.insertBefore(tasks[i], child.nextSibling);
+        }
+    }
+}
+
 // This is used multiple places to set height of workspace divs to their author-provided heights
 function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll('.workspace');
@@ -513,7 +550,12 @@ function adjustPrintoutPages() {
         nextChild = nextChild.nextSibling;
         lastPage.appendChild(tempChild);
     }
-    console.log("Moved all content before the first page and after the last page into the respective pages.");
+    // Split nested tasks out to be top-level children of their page (see
+    // flattenTasksIn), so overflowing solutions inside a single task can be
+    // spilled onto a new page instead of dragging the whole exercise along
+    // as one unsplittable block.
+    pages.forEach(page => flattenTasksIn(page));
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks for independent repagination.");
 }
 
 // This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
@@ -536,36 +578,10 @@ function createPrintoutPages(margins) {
     // Set the height of each workspace based on its data-space attribute
     setInitialWorkspaceHeights(printout);
 
-    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
-    let rows = [];
-    for (const child of printout.children) {
-        if (child.classList.contains('sidebyside')) {
-            // sidebyside could have tasks, but we don't want to dive further into them.
-            rows.push(child);
-        } else if (child.querySelector('.task')) {
-            // Keep the child as a block, but put each task after the first one as its own row:
-            rows.push(child);
-            const tasks = child.querySelectorAll('.task, .conclusion');
-
-            //Determine how many levels of nesting each task has.  If parent is an .exercise, leave alone.  If parent is a .task, add .subtask class.  If grandparent is .task, add .subsubtask to it so it can be indented by css:
-            for (let i = 0; i < tasks.length; i++) {
-                let parent = tasks[i].parentElement;
-                let grandparent = parent.parentElement;
-                if (grandparent.classList.contains('task')) {
-                    tasks[i].classList.add('subsubtask');
-                } else if (parent.classList.contains('task')) {
-                    tasks[i].classList.add('subtask');
-                }
-            }
-            for (let i = tasks.length-1; i > 0; i--) {
-                // Move the task out of the original child and place it directly after it in the printout.  We do this in reverse order so when every task is moved, they return to the original order. They will then be added to the rows list as their own blocks.
-                printout.insertBefore(tasks[i], child.nextSibling);
-            }
-        // Skipping separate treatment of exercisegroups for now.
-        } else {
-            rows.push(child);
-        }
-    }
+    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children (e.g. tasks inside an exercise).  Split those out into their own top-level blocks first (see flattenTasksIn), then every block we care about is simply a direct child of the printout.
+    // Skipping separate treatment of exercisegroups for now.
+    flattenTasksIn(printout);
+    let rows = [...printout.children];
     // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
     let blockList = [];
     for (const row of rows) {
@@ -655,7 +671,7 @@ function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}
 }
 
 function unwrapOnepages() {
-    const printout = document.querySelector('section.worksheet, section.handout');
+    const printout = getPrintout();
     if (!printout) return;
     const pages = [...printout.querySelectorAll(':scope > .onepage')];
     pages.forEach(page => {
@@ -679,7 +695,7 @@ function isHeaderFooterEl(el) {
 }
 
 function addSpilloverPages(margins) {
-  const printout = document.querySelector('section.worksheet, section.handout');
+  const printout = getPrintout();
   if (!printout) return;
   let pages = [...printout.querySelectorAll(':scope > .onepage')];
 
@@ -728,41 +744,48 @@ function addSpilloverPages(margins) {
   addHeadersAndFootersToPrintout();
 }
 
-function singlePageOverflows(page) {
-  const pRect = page.getBoundingClientRect();
-  for (const child of page.children) {
-    const r = child.getBoundingClientRect();
-    // if (r.bottom > pRect.bottom + 1) return true;
-    if (r.bottom > getPageContentBottom(page) + 1) return true;
-  }
-  return false;
+// Append `children` onto the end of a page's *content*, i.e. before its
+// running/first-page footer if one is already attached. Pages being merged
+// in collapseSpilloverPages() still have their old footer in place (footers
+// aren't stripped until after the whole merge pass finishes), so a plain
+// appendChild would land new content after the footer -- corrupting both
+// the reading order and the overflow measurement used to judge the merge.
+function appendPageContent(page, children) {
+    const footer = [...page.children].find(c => c.classList.contains('first-page-footer') || c.classList.contains('running-footer'));
+    children.forEach(c => page.insertBefore(c, footer || null));
 }
 
+// Eagerly fold every spillover page's content back into the page before it,
+// unconditionally -- i.e. without checking whether the merged page fits yet.
+// That check is intentionally left to the caller (via adjustWorkspaceOrRepaginate,
+// which shrinks workspace boxes to fit before measuring overflow, then
+// re-splits with addSpilloverPages() if something still doesn't fit).
+// Deciding here, before workspace has a chance to shrink back down from
+// whatever size it was left at by the previous, more spread-out layout,
+// is unreliable: a page can measure as overflowing purely because its
+// workspace boxes are still sized for the old layout, when shrinking them
+// would actually make room.
+//
+// Processing pages highest-index-first guarantees that a spillover page's
+// merge target (the page right before it) hasn't itself already been
+// removed by an earlier step in this same pass, so chains of cascaded
+// spillover pages collapse correctly in a single pass.
 function collapseSpilloverPages(margins) {
-  const printout = document.querySelector('section.worksheet, section.handout');
+  const printout = getPrintout();
   if (!printout) return;
-  let pages = [...printout.querySelectorAll(':scope > .onepage')];
+  const pages = [...printout.querySelectorAll(':scope > .onepage')];
 
-  for (let i = 1; i < pages.length; i++) {
+  for (let i = pages.length - 1; i >= 1; i--) {
     const page = pages[i];
     if (!page.classList.contains('spillover')) continue;
     const prevPage = pages[i - 1];
 
     const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
-    contentChildren.forEach(c => prevPage.appendChild(c));
-
-    if (!singlePageOverflows(prevPage)) {
-      // Success: the spillover page is no longer needed.
-      if (page.classList.contains('lastpage')) {
-        prevPage.classList.add('lastpage');
-      }
-      page.remove();
-      pages.splice(i, 1);
-      i--; // re-check prevPage's new index, in case it can absorb the next spillover page too
-    } else {
-      // Doesn't fit: put the content back where it was.
-      contentChildren.forEach(c => page.appendChild(c));
+    appendPageContent(prevPage, contentChildren);
+    if (page.classList.contains('lastpage')) {
+      prevPage.classList.add('lastpage');
     }
+    page.remove();
   }
 
   printout.querySelectorAll(':scope > .onepage').forEach(p => {
@@ -1361,8 +1384,28 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                     });
                     if (checkbox.checked) {
                         if (hasAuthoredPages) {
+                            // Eagerly merge every spillover page back into its previous
+                            // page, then let adjustWorkspaceOrRepaginate() shrink
+                            // workspace boxes to fit *before* measuring overflow, and
+                            // re-split with addSpilloverPages() only what still doesn't
+                            // fit after that. Checking fit before workspace gets a
+                            // chance to shrink back down is unreliable -- see
+                            // collapseSpilloverPages()'s comment for why.
                             collapseSpilloverPages(margins);
-                            adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                            adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+                            // Content just hidden (e.g. a long solution) can take a moment
+                            // to finish settling into its final, compact size, so an
+                            // immediate measurement can miss a page that's actually able
+                            // to collapse. Mirror the retry loop in the "show" branch
+                            // below: keep re-attempting for a couple of seconds.
+                            pendingSettle = (async () => {
+                                const deadline = Date.now() + 2000;
+                                while (Date.now() < deadline) {
+                                    await new Promise(r => setTimeout(r, 100));
+                                    collapseSpilloverPages(margins);
+                                    adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+                                }
+                            })();
                         } else {
                             resetPrintoutPagination(margins);
                             adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
