@@ -4724,7 +4724,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
     <xsl:variable name="all-children" select="*"/>
-    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|handout|conclusion"/>
+    <xsl:variable name="all-worksheet" select="title|subtitle|shorttitle|plaintitle|idx|frontmatter|introduction|worksheet|handout|conclusion"/>
     <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
 
     <xsl:value-of select="$has-traditional or $only-worksheets"/>
