@@ -658,21 +658,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- them it is the identity, so we skip the full-tree copy.  NB: a         -->
 <!-- new template in the mode must be reflected in this test.               -->
 <xsl:variable name="b-has-dynamic-markup" select="boolean($assembly-label//setup | $assembly-label//numcmp | $assembly-label//strcmp | $assembly-label//jscmp | $assembly-label//mathcmp | $assembly-label//logic | $assembly-label//fillin[@ansobj] | $assembly-label//eval[@obj])"/>
+<!-- "assembly-id-only" emits $assembly-label, so every pass below is   -->
+<!-- discarded in that mode.  $post-label is empty then, and each later -->
+<!-- pass takes its input from $post-label, so each one copies nothing  -->
+<!-- and opens no file.  The test is written once, here, instead of     -->
+<!-- being repeated in every pass: libxslt computes a global variable   -->
+<!-- even when nothing uses the result, so a pass is not skipped just   -->
+<!-- by leaving its variable unread.                                    -->
+<xsl:variable name="post-label" select="$assembly-label[not($b-assembly-id-only)]"/>
 <xsl:variable name="dynamic-rtf">
     <xsl:if test="$b-has-dynamic-markup">
-        <xsl:apply-templates select="$assembly-label" mode="dynamic-substitution"/>
+        <xsl:apply-templates select="$post-label" mode="dynamic-substitution"/>
     </xsl:if>
 </xsl:variable>
-<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)[$b-has-dynamic-markup] | $assembly-label[not($b-has-dynamic-markup)]"/>
+<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)[$b-has-dynamic-markup] | $post-label[not($b-has-dynamic-markup)]"/>
 
 <xsl:variable name="representations-rtf">
-    <xsl:choose>
-        <!-- short-circuit to stop after adding @pi:assembly-id -->
-        <xsl:when test="$b-assembly-id-only"/>
-        <xsl:otherwise>
-            <xsl:apply-templates select="$dynamic" mode="representations"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$dynamic" mode="representations"/>
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 
