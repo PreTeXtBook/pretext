@@ -181,26 +181,56 @@ def string_parameters_as_dict(pairs):
     return params
 
 
+def method_argument_tokens(method):
+    """Normalize the -M argument into a list of method tokens."""
+    if not (method):
+        return []
+    if isinstance(method, str):
+        values = [method]
+    else:
+        values = method
+    tokens = []
+    for value in values:
+        if value:
+            tokens.extend(str(value).replace(",", " ").split())
+    return tokens
+
+
+def single_method_argument(method, purpose):
+    """Return one method token for uses of -M that accept only one value."""
+    tokens = method_argument_tokens(method)
+    if len(tokens) > 1:
+        log.warning(
+            'multiple method values supplied for {}; using "{}" and ignoring "{}"'.format(
+                purpose, tokens[0], " ".join(tokens[1:])
+            )
+        )
+    return tokens[0] if tokens else ""
+
+
+def all_validation_method_tokens(method):
+    """Whether every supplied -M token is a recognized validation token."""
+    validation_tokens = {
+        "local",
+        "server",
+        "production",
+        "dev",
+        "verbose",
+        "terse",
+        "local-dev",
+    }
+    tokens = method_argument_tokens(method)
+    return bool(tokens) and all(token.lower() in validation_tokens for token in tokens)
+
+
 def sanitize_method(method, component, format, validate):
     """Returns a string appropriate for the component and format, else None"""
     if validate:
-        # unset by command-line, use default
-        if not (method):
-            return "local"
-        # set, but illegal
-        elif not (method in ["local", "local-dev", "server", "terse"]):
-            msg = "\n".join(
-                [
-                    'the method given for validation ("{}") is not "local", "local-dev", "server", or "terse",',
-                    '              so using the default method instead ("local")',
-                ]
-            )
-            log.warning(msg.format(method))
-            return "local"
-        # set correctly
-        else:
-            return method
-    elif component == "asy":
+        return ptx.validation_method(method)
+    method = single_method_argument(
+        method, 'component "{}" and format "{}"'.format(component, format)
+    )
+    if component == "asy":
         # unset by command-line, use default
         if not (method):
             return "server"
@@ -482,10 +512,10 @@ def get_cli_arguments():
     parser.add_argument(
         "-M",
         "--method",
-        help="method to use for a component/format (values and defaults vary)",
-        action="store",
+        help="method value(s) to use for a component/format (values and defaults vary)",
+        nargs="*",
         dest="method",
-        default="",
+        default=[],
     )
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument(
@@ -541,12 +571,12 @@ def get_cli_arguments():
         dest="tgz",
     )
     validate_info = [
-        ("local", 'employs an installed "jing" program (default)'),
-        ("local-dev", 'as "local", but checks against the development schema'),
-        ("server", "a round-trip to a validation server"),
-        ("terse", "machine-readable, one tab-separated message per line"),
+        ("local, server", 'employ an installed "jing" program (default), or a validation server'),
+        ("production, dev", "check against the production schema (default), or development schema"),
+        ("verbose, terse", "write an author report (default), or one tab-separated message per line"),
+        ("local-dev", 'legacy alias for "local dev"'),
     ]
-    validate_help = "validate source, methods are:\n" + "\n".join(
+    validate_help = "validate source; -M may combine values in any order:\n" + "\n".join(
         ["  {} - {}".format(info[0], info[1]) for info in validate_info]
     )
     parser.add_argument(
@@ -557,10 +587,17 @@ def get_cli_arguments():
         dest="validate",
     )
     parser.add_argument(
-        "xml_file", help="PreTeXt source file with content", action="store"
+        "xml_file", help="PreTeXt source file with content", action="store", nargs="?"
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.xml_file is None and args.method:
+        if args.validate and all_validation_method_tokens(args.method):
+            parser.error("the following arguments are required: xml_file")
+        args.xml_file = args.method.pop()
+    if args.xml_file is None:
+        parser.error("the following arguments are required: xml_file")
+    return args
 
 
 ############################################

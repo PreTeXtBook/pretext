@@ -5447,21 +5447,89 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
 PI_SOURCE_URI = "{http://pretextbook.org/2020/pretext/internal}source-uri"
 
 
+def _validation_method_tokens(method):
+    """Normalize validation method input into individual option tokens."""
+    if not method:
+        return []
+    if isinstance(method, str):
+        values = [method]
+    else:
+        values = method
+    tokens = []
+    aliases = {
+        "local-dev": ["local", "dev"],
+    }
+    for value in values:
+        if not value:
+            continue
+        for raw_token in str(value).replace(",", " ").split():
+            token = raw_token.lower()
+            tokens.extend(aliases.get(token, [token]))
+    return tokens
+
+
+def _validation_method_settings(method):
+    """Return the three independent validation settings, with defaults."""
+    settings = {
+        "location": "local",
+        "schema": "production",
+        "report": "verbose",
+    }
+    choices = {
+        "local": ("location", "local"),
+        "server": ("location", "server"),
+        "production": ("schema", "production"),
+        "dev": ("schema", "dev"),
+        "verbose": ("report", "verbose"),
+        "terse": ("report", "terse"),
+    }
+    assigned = {}
+    invalid = []
+    for token in _validation_method_tokens(method):
+        if token not in choices:
+            invalid.append(token)
+            continue
+        category, value = choices[token]
+        previous = assigned.get(category)
+        if previous is not None and settings[category] != value:
+            log.warning(
+                'validation method "{}" replaces earlier "{}" for {}; using "{}"'.format(
+                    token, previous, category, value
+                )
+            )
+        settings[category] = value
+        assigned[category] = token
+    if invalid:
+        log.warning(
+            'ignoring unrecognized validation method value(s): "{}"'.format(
+                " ".join(invalid)
+            )
+        )
+    return settings
+
+
+def validation_method(method):
+    """Return a canonical validation method string from -M tokens."""
+    settings = _validation_method_settings(method)
+    return "{location} {schema} {report}".format(**settings)
+
+
 def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     """Validate source against the RELAX-NG schema, locally or via a server"""
 
-    # "local" validates against the production schema and "local-dev"
-    # against the development schema, each with a report meant for an
-    # author.  "terse" is the production schema with machine-readable
-    # output, one tab-separated message per line, meant for a program.
-    # "server" is "local" with the "jing" run delegated to a remote
-    # service; the consolidated report is identical.
-    if method == "local-dev":
+    # Three independent choices govern validation:
+    #   "local" or "server"       where the RELAX-NG check runs
+    #   "production" or "dev"     which schema is used
+    #   "verbose" or "terse"      author report or tab-separated output
+    # Defaults are "local production verbose"; legacy single values such
+    # as "local-dev", "server", and "terse" are accepted by the normalizer.
+    validation_settings = _validation_method_settings(method)
+    if validation_settings["schema"] == "dev":
         schema_file = "pretext-dev.rng"
     else:
         schema_file = "pretext.rng"
-    terse = method == "terse"
-    server = method == "server"
+    terse = validation_settings["report"] == "terse"
+    server = validation_settings["location"] == "server"
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
