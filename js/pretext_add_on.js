@@ -502,11 +502,96 @@ function flattenTasksIn(container) {
                 task.classList.add('subtask');
             }
         }
-        // Move every task after the first one out, in reverse order, so
+        // Move every task out, including the first one, in reverse order, so
         // they land in their original order immediately after `child`.
-        for (let i = tasks.length - 1; i > 0; i--) {
+        for (let i = tasks.length - 1; i >= 0; i--) {
             container.insertBefore(tasks[i], child.nextSibling);
         }
+    }
+}
+
+// Split a long `.introduction` block up so its paragraphs/tables/etc. become
+// independent top-level children of `container`, the same way flattenTasksIn
+// splits out `.task`/`.conclusion`. Otherwise an introduction is one atomic
+// row for pagination purposes, and overflows the page whenever it alone is
+// taller than a page, regardless of how the task(s) after it are split.
+//
+// The print stylesheet displays a heading inline with its first paragraph
+// (`article>.heading:first-child+:is(.para,.para.logical,.introduction)`),
+// so the introduction's first child is left in place -- replacing the
+// .introduction wrapper right where it was -- rather than extracted, and
+// only the rest is moved out to become independent top-level rows.
+//
+// Must run after flattenTasksIn(), since the reverse insertion here also
+// targets `child.nextSibling`, and running after keeps reading order correct
+// (introduction paragraphs end up before the task, not after it).
+//
+// A `.introduction` can appear nested inside a top-level child (e.g. an
+// exercise's own introduction) or as a top-level child itself (e.g. a
+// project-like printout's own opening section). Both are handled: for the
+// nested case the wrapper is unwrapped in place and its later children
+// extracted to be `child`'s top-level siblings; for the top-level case the
+// wrapper *is* `child`, so the first paragraph becomes the new top-level row
+// in its place, and later children are extracted as its siblings instead.
+function flattenIntroductionsIn(container) {
+    for (const child of [...container.children]) {
+        if (child.classList.contains('sidebyside')) {
+            continue; // sidebyside could have introductions, but we don't split into it
+        }
+        const isTopLevelIntroduction = child.classList.contains('introduction');
+        const introductions = isTopLevelIntroduction ? [child] : [...child.querySelectorAll('.introduction')];
+        introductions.forEach(intro => {
+            const introParent = intro.parentNode;
+            const introChildren = [...intro.children];
+            if (introChildren.length === 0) {
+                intro.remove();
+                return;
+            }
+            // Leave the first paragraph in place, right where .introduction was,
+            // so it stays adjacent to whatever precedes it (typically the heading).
+            introParent.insertBefore(introChildren[0], intro);
+            // Move the rest out to become independent top-level rows of
+            // `container`, in reverse order, so they land back in their
+            // original order immediately after the anchor. When `intro` was
+            // itself the top-level child, that anchor is the first paragraph
+            // just placed above (which now occupies `child`'s old top-level
+            // slot); otherwise it's `child` as before.
+            const anchor = intro === child ? introChildren[0] : child;
+            for (let i = introChildren.length - 1; i >= 1; i--) {
+                container.insertBefore(introChildren[i], anchor.nextSibling);
+            }
+            intro.remove();
+        });
+    }
+}
+
+// Split a `.solutions` block up so each hint/answer/solution knowl becomes
+// an independent top-level row, the same way flattenTasksIn splits out
+// `.task` and flattenIntroductionsIn splits out `.introduction`. Otherwise
+// a task or exercise with a large solution is one atomic row that overflows
+// the page whenever its prompt plus its solution content together are
+// taller than a page, even if the prompt alone would fit comfortably.
+//
+// Unlike `.introduction`, `.solutions` has no adjacent-heading display rule
+// to preserve, so every child is extracted -- none needs to stay behind.
+//
+// Must run after flattenTasksIn() so that, when the `.solutions` belongs to
+// a task rather than directly to an exercise, `child` is already that task
+// (a top-level row in its own right) -- keeping the extracted solution
+// content ordered right after its own task instead of after a sibling task.
+function flattenSolutionsIn(container) {
+    for (const child of [...container.children]) {
+        if (child.classList.contains('sidebyside') || child.classList.contains('solutions')) {
+            continue;
+        }
+        const solutionsBlocks = [...child.querySelectorAll('.solutions')];
+        solutionsBlocks.forEach(solutions => {
+            const solChildren = [...solutions.children];
+            for (let i = solChildren.length - 1; i >= 0; i--) {
+                container.insertBefore(solChildren[i], child.nextSibling);
+            }
+            solutions.remove();
+        });
     }
 }
 
@@ -553,9 +638,14 @@ function adjustPrintoutPages() {
     // Split nested tasks out to be top-level children of their page (see
     // flattenTasksIn), so overflowing solutions inside a single task can be
     // spilled onto a new page instead of dragging the whole exercise along
-    // as one unsplittable block.
-    pages.forEach(page => flattenTasksIn(page));
-    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks for independent repagination.");
+    // as one unsplittable block. Then do the same for introductions (see
+    // flattenIntroductionsIn); must run second so reading order stays correct.
+    pages.forEach(page => {
+        flattenTasksIn(page);
+        flattenIntroductionsIn(page);
+        flattenSolutionsIn(page);
+    });
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, and solutions for independent repagination.");
 }
 
 // This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
@@ -574,13 +664,22 @@ function createPrintoutPages(margins) {
         console.warn("No printout found, exiting createPrintoutPages.");
         return;
     }
-    printout.style.width = toString(conservativeContentWidth + margins.left + margins.right) + 'px';
+    // Narrow the printout to our conservative width while we measure row
+    // heights below, so text wraps at least as much as it will once placed
+    // in the real, narrower, padded .onepage box -- otherwise rows measure
+    // shorter than their actual rendered height and pagination overflows.
+    printout.style.width = conservativeContentWidth + 'px';
     // Set the height of each workspace based on its data-space attribute
     setInitialWorkspaceHeights(printout);
 
     // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children (e.g. tasks inside an exercise).  Split those out into their own top-level blocks first (see flattenTasksIn), then every block we care about is simply a direct child of the printout.
     // Skipping separate treatment of exercisegroups for now.
     flattenTasksIn(printout);
+    // Same treatment for introductions (see flattenIntroductionsIn) and for
+    // task solutions (see flattenSolutionsIn); both must run after
+    // flattenTasksIn so reading order comes out right.
+    flattenIntroductionsIn(printout);
+    flattenSolutionsIn(printout);
     let rows = [...printout.children];
     // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
     let blockList = [];
@@ -600,6 +699,10 @@ function createPrintoutPages(margins) {
 
     // Now find pageBreaks so that extra workspace is as uniform as possible.
     const pageBreaks = findPageBreaks(blockList, conservativeContentHeight);
+
+    // Done measuring; let the printout go back to its normal width so the
+    // .onepage sections built below render at their real page size.
+    printout.style.width = "";
 
     // Create page divs and insert rows into them
     for (let i = 0; i < pageBreaks.length; i++) {
@@ -1335,7 +1438,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         document.body.classList.add(paperSize);
         setPageGeometryCSS({paperSize: paperSize, margins: margins});
         } else {
-            console.warning("Bug: paperSize should always have a value here.");
+            console.warn("Bug: paperSize should always have a value here.");
         }
         // Add event listeners to the papersize radio buttons to handle changes
         const papersizeRadios = document.querySelectorAll('input[name="papersize"]');
@@ -1409,6 +1512,18 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                         } else {
                             resetPrintoutPagination(margins);
                             adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                            // Same reasoning as the authored-pages branch above: content
+                            // just hidden can take a moment to settle, so keep re-checking
+                            // for a couple of seconds rather than pagination based on a
+                            // possibly-stale measurement.
+                            pendingSettle = (async () => {
+                                const deadline = Date.now() + 2000;
+                                while (Date.now() < deadline) {
+                                    await new Promise(r => setTimeout(r, 100));
+                                    resetPrintoutPagination(margins);
+                                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                                }
+                            })();
                         }
                     } else {
                         adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
@@ -1511,12 +1626,26 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size),
         // falling back to a spillover page if content still overflows even with workspace at zero.
         adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
-        (async () => {
+        // Assign to pendingSettle (like every other retry loop) so a checkbox
+        // toggled within the next couple of seconds awaits this first, instead
+        // of racing it and potentially clobbering each other's pagination.
+        pendingSettle = (async () => {
             const deadline = Date.now() + 2000;
             while (Date.now() < deadline) {
                 await new Promise(r => setTimeout(r, 100));
-                if (pageOverflows()) {
-                    addSpilloverPages(margins);
+                if (hasAuthoredPages) {
+                    // Content still settling into its final size right after
+                    // load (e.g. a solution knowl, an embedded matrix) can make
+                    // the very first pass above split content onto a spillover
+                    // page it doesn't actually need once things settle down.
+                    // Eagerly try collapsing spillover pages back on every tick
+                    // and let addSpilloverPages() re-split only what still
+                    // doesn't fit -- see collapseSpilloverPages()'s comment for
+                    // why collapsing first, unconditionally, is the reliable order.
+                    collapseSpilloverPages(margins);
+                    adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+                } else if (pageOverflows()) {
+                    resetPrintoutPagination(margins);
                     adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
                 }
             }
