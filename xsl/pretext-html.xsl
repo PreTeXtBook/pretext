@@ -11254,19 +11254,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer"/>
     <xsl:param name="b-has-solution"/>
 
-    <!-- For Runestone, the WW problem is handled in isolation, -->
-    <!-- yet capturing and storing student work/results needs   -->
-    <!-- to be associated with the parent/enclosing "exercise"  -->
-    <!-- (or PROJECT-LIKE).  So in this case (only) we place    -->
-    <!-- an id value on the  div.exercise-wrapper that is       -->
-    <!-- derived from the parent.  Otherwise, we use the        -->
-    <!-- parent @pi:assembly-id with a "-ww-inner" suffix.      -->
-    <!-- The suffix ensures the inner wrapper's DOM id is       -->
-    <!-- distinct from the enclosing "exercise" article's       -->
-    <!-- id (which also holds the @pi:assembly-id value).       -->
-    <!-- Without the suffix, JavaScript (handleWW) would        -->
-    <!-- look up the inner id with getElementById and find      -->
-    <!-- the outer "exercise" article instead.                  -->
+    <!-- For Runestone, the WW problem is handled in isolation,   -->
+    <!-- yet capturing and storing student work/results needs     -->
+    <!-- to be associated with the parent/enclosing "exercise"    -->
+    <!-- (or PROJECT-LIKE).  So in this case (only) we place      -->
+    <!-- an id value on the  div.exercise-wrapper that is         -->
+    <!-- derived from the parent.  Otherwise, we use the          -->
+    <!-- @assembly-id of this "webwork-reps" with a "-ww-inner"   -->
+    <!-- suffix.  That attribute is NOT the assembly stamp and    -->
+    <!-- carries no "pi" prefix: it is written by webwork.py into -->
+    <!-- the generated representation file, naming it for the     -->
+    <!-- exercise it belongs to.  The suffix ensures the inner    -->
+    <!-- wrapper's DOM id is distinct from the enclosing          -->
+    <!-- "exercise" article's id, which holds the same value.     -->
+    <!-- Without the suffix, JavaScript (handleWW) would          -->
+    <!-- look up the inner id with getElementById and find        -->
+    <!-- the outer "exercise" article instead.                    -->
     <xsl:variable name="inner-id">
         <xsl:choose>
             <xsl:when test="$b-host-runestone">
@@ -11274,7 +11277,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>-ww-rs</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="concat(@pi:assembly-id, '-ww-inner')"/>
+                <xsl:value-of select="concat(@assembly-id, '-ww-inner')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -11422,7 +11425,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build the iframe -->
     <!-- mimicking Mike Gage's blog post -->
-    <iframe name="{concat(@pi:assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
+    <iframe name="{concat(@assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
