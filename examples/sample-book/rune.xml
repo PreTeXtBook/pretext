@@ -2884,6 +2884,24 @@ TEST_CASE( "Test the add function" ) {
             }
             </code>
         </program>
+
+        <!-- A binary data file (gzip-compressed text) delivered to a        -->
+        <!-- server-side (Jobe) program with plain @add-files, showing that  -->
+        <!-- a binary "file" is also just data in the working directory.     -->
+        <!-- The program decompresses it, proving the base64 round-trip      -->
+        <!-- preserved the bytes exactly.  No @compile-also here: Python has  -->
+        <!-- no build step to add the file to.                               -->
+        <file label="climate-gz" xml:id="climate-gz" filename="climate.txt.gz" format="binary" source="datafiles/climate.gz"/>
+
+        <program label="python-read-gzip" interactive="activecode" language="python3" add-files="climate-gz">
+            <code>
+            import gzip
+
+            with gzip.open("climate.txt.gz", "rt") as f:
+                for line in f:
+                    print(line, end="")
+            </code>
+        </program>
     </section>
 
     <section xml:id="videos-in-runestone">
