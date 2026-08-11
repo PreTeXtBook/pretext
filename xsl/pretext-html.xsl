@@ -14485,7 +14485,7 @@ TODO:
 </xsl:template>
 
 <!-- Header information for favicon -->
-<!-- Presently: needs two image files placeed in  HTML output     -->
+<!-- Presently: needs image files placed in HTML output           -->
 <!-- Publisher file could be extended to allow for other schemes. -->
 <!--      See: https://realfavicongenerator.net/faq               -->
 <!-- for one such option and ideas for others.                    -->
@@ -14495,24 +14495,37 @@ TODO:
     <!-- (pre-processor) phase, so we leave this in.  Removal   -->
     <!-- will require a sterner deprecation message that the    -->
     <!-- current, gentle, reminder.                             -->
-    <xsl:if test="($favicon-scheme = 'simple') or $docinfo/html/favicon">
-        <!-- Expects publisher to provide both -->
-        <!--     favicon/favicon-32x32.png     -->
-        <!--     favicon/favicon-16x16.png     -->
-        <!-- in the external images directory  -->
-        <xsl:variable name="res32">
-            <!-- empty when not using managed directories -->
-            <xsl:value-of select="$external-directory"/>
-            <xsl:text>favicon/favicon-32x32.png</xsl:text>
-        </xsl:variable>
-        <xsl:variable name="res16">
-            <!-- empty when not using managed directories -->
-            <xsl:value-of select="$external-directory"/>
-            <xsl:text>favicon/favicon-16x16.png</xsl:text>
-        </xsl:variable>
-        <link rel="icon" type="image/png" sizes="32x32" href="{$res32}"/>
-        <link rel="icon" type="image/png" sizes="16x16" href="{$res16}"/>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="$favicon-scheme = 'svg'">
+            <!-- Expects publisher to provide -->
+            <!--     favicon/favicon.svg      -->
+            <!-- in the external images directory -->
+            <xsl:variable name="ressvg">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:text>favicon/favicon.svg</xsl:text>
+            </xsl:variable>
+            <link rel="icon" type="image/svg+xml" href="{$ressvg}"/>
+        </xsl:when>
+        <xsl:when test="($favicon-scheme = 'simple') or $docinfo/html/favicon">
+            <!-- Expects publisher to provide both -->
+            <!--     favicon/favicon-32x32.png     -->
+            <!--     favicon/favicon-16x16.png     -->
+            <!-- in the external images directory  -->
+            <xsl:variable name="res32">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:text>favicon/favicon-32x32.png</xsl:text>
+            </xsl:variable>
+            <xsl:variable name="res16">
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$external-directory"/>
+                <xsl:text>favicon/favicon-16x16.png</xsl:text>
+            </xsl:variable>
+            <link rel="icon" type="image/png" sizes="32x32" href="{$res32}"/>
+            <link rel="icon" type="image/png" sizes="16x16" href="{$res16}"/>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- SCORM tracking script -->
