@@ -17,4 +17,4 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************-->
 
-This favicon is the test image from [https://realfavicongenerator.net/](RealFaviconGenerator).
+The png favicons feature the test image from [https://realfavicongenerator.net/](RealFaviconGenerator).

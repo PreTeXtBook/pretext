@@ -92,11 +92,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </numbering>
 
     <!-- HTML-Specific Options -->
-    <!-- favicon "simple" scheme expects -->
-    <!--     favicon/favicon-32x32.png   -->
-    <!--     favicon/favicon-16x16.png   -->
-    <!-- in external images directory    -->
-    <html favicon="simple" embed-button="yes">
+    <!-- favicon "svg" scheme expects -->
+    <!--     favicon/favicon.svg      -->
+    <!-- in external images directory -->
+    <html favicon="svg" embed-button="yes">
         <!-- A picture or logo for the upper-left corner of each page.    -->
         <!-- An image of a cover for a physical version is a good choice: -->
         <!-- 16th Century Art Book Cover, 176x240 pixels, Public Domain,  -->
