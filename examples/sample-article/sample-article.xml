@@ -11509,6 +11509,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </input>
             </console>
 
+            <p>A console may start with output. This is useful if you are showing sample use of a program.</p>
+            <listing>
+                <title>Console session, starting with program output</title>
+                <console>
+                    <output>Enter a number:</output>
+                    <input prompt="">42</input>
+                    <output>You entered 42.</output>
+                </console>
+            </listing>
+
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
             <p>Now a test of some listings (and pre-formatted text) in a block that likely has a background color in an HTML version.</p>
