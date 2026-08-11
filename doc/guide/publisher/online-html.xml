@@ -99,7 +99,9 @@
             <p>If you set the attribute to <c>simple</c> then you <em>must</em> provide two versions of your icon, in <init>PNG</init> format, in pixel sizes 16<times/>16 and 32<times/>32, with exactly the two filenames below (respectively), in the directory of provided external files (<xref ref="processing-directory-management"/>).<cd>
                 <cline>favicon/favicon-16x16.png</cline>
                 <cline>favicon/favicon-32x32.png</cline>
-            </cd>There are other ways to specify a favicon and some browsers expect different files.  Try this scheme first, as it appears to have been sufficient since 2018.  But if a new scheme needs implementation, we can consider a feature request.</p>
+            </cd>If you set the attribute to <c>svg</c> then you <em>must</em> provide your icon in <init>SVG</init> format, with exactly the filename below, in the directory of provided external files.<cd>
+                <cline>favicon/favicon.svg</cline>
+            </cd>There are other ways to specify a favicon and some browsers expect different files.  Try one of these schemes first, as they cover common modern browser behavior.  But if a new scheme needs implementation, we can consider a feature request.</p>
         </subsection>
 
         <subsection xml:id="online-scratch-activecode">
