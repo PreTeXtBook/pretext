@@ -1726,10 +1726,10 @@
         <attribute name="margins"/>
       </optional>
       <oneOrMore>
-        <ref name="ConsoleInput"/>
-        <optional>
+        <choice>
+          <ref name="ConsoleInput"/>
           <ref name="ConsoleOutput"/>
-        </optional>
+        </choice>
       </oneOrMore>
     </element>
   </define>
