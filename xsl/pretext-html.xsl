@@ -351,7 +351,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
     <!-- custom ol marker css production -->
-    <xsl:if test="not($b-subsetting) and not($b-portable-html)">
+    <!-- A CDN cannot host these styles, since they are derived from the -->
+    <!-- source.  CDN builds get them inline instead, see "css-common".  -->
+    <xsl:if test="not($b-subsetting) and not($b-cdn-resources)">
         <xsl:call-template name="ol-marker-styles"/>
     </xsl:if>
 </xsl:template>
@@ -14651,7 +14653,20 @@ TODO:
 <xsl:template name="css-common">
     <!-- Temporary until css handling overhaul by ascholer complete -->
     <xsl:if test="$b-needs-custom-marker-css">
-        <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
+        <xsl:choose>
+            <!-- These styles are derived from the source, so they are not on  -->
+            <!-- the CDN and "$html.css.dir" does not point at them.  Inline   -->
+            <!-- them: there is one short rule per unique author-supplied      -->
+            <!-- marker, and portable HTML has no place to link out to anyway. -->
+            <xsl:when test="$b-cdn-resources">
+                <style>
+                    <xsl:apply-templates select="exsl:node-set($ol-markers)//ol-marker" mode="ol-marker-style"/>
+                </style>
+            </xsl:when>
+            <xsl:otherwise>
+                <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <xsl:if test="not($html.css.extra = '')">
