@@ -488,7 +488,9 @@ function flattenTasksIn(container) {
         if (child.classList.contains('sidebyside')) {
             continue; // sidebyside could have tasks, but we don't split into it
         }
-        const tasks = child.querySelectorAll('.task, .conclusion');
+        // A sidebyside nested deeper than `child` itself (e.g. a diagram next
+        // to a task's text) is excluded the same way: its tasks stay put.
+        const tasks = [...child.querySelectorAll('.task, .conclusion')].filter(el => !el.closest('.sidebyside'));
         if (tasks.length === 0) continue;
         // Tag nesting depth so CSS can indent appropriately once an element
         // is pulled out of its parent .task/.exercise: if its parent (or
@@ -539,7 +541,20 @@ function flattenIntroductionsIn(container) {
             continue; // sidebyside could have introductions, but we don't split into it
         }
         const isTopLevelIntroduction = child.classList.contains('introduction');
-        const introductions = isTopLevelIntroduction ? [child] : [...child.querySelectorAll('.introduction')];
+        // A sidebyside nested deeper than `child` itself (e.g. a project
+        // description next to a figure) is excluded the same way as above:
+        // its introduction stays put.
+        const introductions = isTopLevelIntroduction
+            ? [child]
+            : [...child.querySelectorAll('.introduction')].filter(intro => !intro.closest('.sidebyside'));
+        // Where the next introduction's extracted content gets inserted.
+        // Starts at `child` and advances to the last row placed by each
+        // introduction in turn, so that when `child` contains more than one
+        // (e.g. an exercisegroup whose member exercises each carry their own),
+        // a later introduction's paragraphs land after an earlier one's
+        // instead of before it -- inserting every one of them relative to the
+        // same fixed `child` would put the last-processed introduction first.
+        let insertionAnchor = child;
         introductions.forEach(intro => {
             const introParent = intro.parentNode;
             const introChildren = [...intro.children];
@@ -550,17 +565,15 @@ function flattenIntroductionsIn(container) {
             // Leave the first paragraph in place, right where .introduction was,
             // so it stays adjacent to whatever precedes it (typically the heading).
             introParent.insertBefore(introChildren[0], intro);
-            // Move the rest out to become independent top-level rows of
-            // `container`, in reverse order, so they land back in their
-            // original order immediately after the anchor. When `intro` was
-            // itself the top-level child, that anchor is the first paragraph
-            // just placed above (which now occupies `child`'s old top-level
-            // slot); otherwise it's `child` as before.
-            const anchor = intro === child ? introChildren[0] : child;
+            // When `intro` was itself the top-level child, `child` no longer
+            // occupies a slot in `container` -- the first paragraph just placed
+            // above does instead -- so anchor off that rather than insertionAnchor.
+            const anchor = intro === child ? introChildren[0] : insertionAnchor;
             for (let i = introChildren.length - 1; i >= 1; i--) {
                 container.insertBefore(introChildren[i], anchor.nextSibling);
             }
             intro.remove();
+            insertionAnchor = introChildren[introChildren.length - 1];
         });
     }
 }
@@ -584,13 +597,23 @@ function flattenSolutionsIn(container) {
         if (child.classList.contains('sidebyside') || child.classList.contains('solutions')) {
             continue;
         }
-        const solutionsBlocks = [...child.querySelectorAll('.solutions')];
+        // Nested sidebyside excluded, same reasoning as flattenTasksIn/
+        // flattenIntroductionsIn.
+        const solutionsBlocks = [...child.querySelectorAll('.solutions')].filter(solutions => !solutions.closest('.sidebyside'));
+        // Advances after each block, same reasoning as flattenIntroductionsIn:
+        // when `child` has more than one solutions block (e.g. an
+        // exercisegroup whose member exercises each have their own), a later
+        // block's content must land after an earlier block's, not before it.
+        let insertionAnchor = child;
         solutionsBlocks.forEach(solutions => {
             const solChildren = [...solutions.children];
             for (let i = solChildren.length - 1; i >= 0; i--) {
-                container.insertBefore(solChildren[i], child.nextSibling);
+                container.insertBefore(solChildren[i], insertionAnchor.nextSibling);
             }
             solutions.remove();
+            if (solChildren.length > 0) {
+                insertionAnchor = solChildren[solChildren.length - 1];
+            }
         });
     }
 }
@@ -685,7 +708,19 @@ function createPrintoutPages(margins) {
     let blockList = [];
     for (const row of rows) {
         let blockHeight = getElementTotalHeight(row);
-        if (blockHeight === 0) {
+        // A currently-hidden hint/answer/solution row also measures zero
+        // height, but unlike an autopermalink it's meaningful content that
+        // may be revealed later -- it still needs a page to call home. Rows
+        // never added to blockList never get moved into a .onepage below,
+        // and then get deleted outright by the "remove old content not in a
+        // page" cleanup at the end of this function, which is correct for a
+        // genuinely-empty row but was silently destroying hidden solution
+        // content (and, since printout.children is a live collection there,
+        // corrupting the position of whatever survived that by accident).
+        // Keeping it in blockList with height 0 costs nothing towards
+        // findPageBreaks()'s page-height budget -- it just rides along onto
+        // whichever page its neighbors land on, ready to be revealed in place.
+        if (blockHeight === 0 && !row.classList.contains('hidden')) {
             console.log("Skipping row with zero height:", row);
             continue;
         }
@@ -749,10 +784,8 @@ function getPageContentBottom(page) {
 function pageOverflows() {
     const pages = document.querySelectorAll('.onepage');
     for (const page of pages) {
-        const pRect = page.getBoundingClientRect();
         for (const child of page.children) {
             const r = child.getBoundingClientRect();
-            // if (r.bottom > pRect.bottom + 1) {
             if (r.bottom > getPageContentBottom(page) + 1) {
                 return true;
             }
@@ -804,14 +837,12 @@ function addSpilloverPages(margins) {
 
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
-    const pageRect = page.getBoundingClientRect();
     const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
 
     let overflowStartIndex = -1;
     for (let j = 0; j < contentChildren.length; j++) {
       const r = contentChildren[j].getBoundingClientRect();
-    //   if (r.bottom > pageRect.bottom + 1) {
-    if (r.bottom > getPageContentBottom(page) + 1) {
+      if (r.bottom > getPageContentBottom(page) + 1) {
         overflowStartIndex = j;
         break;
       }
@@ -905,17 +936,31 @@ function addHeadersAndFootersToPrintout() {
         return;
     }
     const pages = printout.querySelectorAll('.onepage');
-    // Loop through pages and add header and footer divs
+    // Loop through pages and add header and footer divs. This function gets
+    // called every time pagination is rebuilt (resetPrintoutPagination(),
+    // addSpilloverPages(), collapseSpilloverPages(), ...), not just once at
+    // initial load, so the hidden/visible state has to be decided here from
+    // localStorage directly -- not left hidden for some later one-time setup
+    // step to correct, which would only ever apply to the *first* build and
+    // leave every rebuild after it hidden regardless of the checkbox state.
     pages.forEach((page, index) => {
         const isFirstPage = index === 0;
+        const headerClass = isFirstPage ? 'first-page-header' : 'running-header';
+        const footerClass = isFirstPage ? 'first-page-footer' : 'running-footer';
         // Add header
         const headerDiv = document.createElement('div');
-        headerDiv.classList.add(isFirstPage ? 'first-page-header' : 'running-header', 'hidden');
+        headerDiv.classList.add(headerClass);
+        if (localStorage.getItem(`print-${headerClass}`) !== "true") {
+            headerDiv.classList.add('hidden');
+        }
         headerDiv.innerHTML = `<div class="header-left" contenteditable="true"></div><div class="header-center" contenteditable="true"></div><div class="header-right" contenteditable="true"></div>`;
         page.insertBefore(headerDiv, page.firstChild);
         // Add footer
         const footerDiv = document.createElement('div');
-        footerDiv.classList.add(isFirstPage ? 'first-page-footer' : 'running-footer', 'hidden');
+        footerDiv.classList.add(footerClass);
+        if (localStorage.getItem(`print-${footerClass}`) !== "true") {
+            footerDiv.classList.add('hidden');
+        }
         footerDiv.innerHTML = `<div class="footer-left" contenteditable="true"></div><div class="footer-center" contenteditable="true"></div><div class="footer-right" contenteditable="true"></div>`;
         page.appendChild(footerDiv);
     });
@@ -1334,6 +1379,20 @@ async function loadPrintout(printableSectionID) {
     ptxContent.appendChild(printableSection);
 }
 
+// Whether hint/answer/solution divs of `solutionType` should be hidden: the
+// user's stored choice if there is one, otherwise the default (answers and
+// solutions start hidden, hints don't). Single source of truth for that
+// default so rewriteSolutions() (which needs it immediately, before the
+// checkbox that owns it has even been set up) and the checkbox setup loop
+// below can't drift apart.
+function solutionTypeHidden(solutionType) {
+    const stored = localStorage.getItem(`hide-${solutionType}`);
+    if (stored !== null) {
+        return stored === "true";
+    }
+    return solutionType === "answer" || solutionType === "solution";
+}
+
 // Function to redo solutions details to divs with summary as title
 async function rewriteSolutions() {
     var born_hidden_knowls = document.querySelectorAll('.printout details');
@@ -1342,21 +1401,19 @@ async function rewriteSolutions() {
         const content = detail.innerHTML.replace(summary.outerHTML, '');
         const div = document.createElement('div');
         div.classList = detail.classList;
-        // Apply the correct hidden/visible state immediately, so the div is
-        // never briefly visible before the later checkbox setup hides it.
+        // Unconditionally hidden here, regardless of the stored/default
+        // preference for this solutionType: the very first pagination pass
+        // needs one single, reproducible "everything hidden" starting point
+        // to lay pages out against (see the DOMContentLoaded handler below,
+        // where whichever types should actually start visible get revealed
+        // afterward, through the same incremental show/hide path a checkbox
+        // toggle uses). Basing initial layout on the *actual* visibility
+        // instead would make that layout as reachable only from that one
+        // specific combination of shown/hidden types, instead of from the
+        // one common base every hide always returns to.
         for (const solutionType of ["hint", "answer", "solution"]) {
             if (div.classList.contains(solutionType)) {
-                const storageKey = `hide-${solutionType}`;
-                let hide;
-                if (localStorage.getItem(storageKey) !== null) {
-                    hide = localStorage.getItem(storageKey) === "true";
-                } else {
-                    // Match the default used later: answers/solutions start hidden, hints don't.
-                    hide = (solutionType === "answer" || solutionType === "solution");
-                }
-                if (hide) {
-                    div.classList.add("hidden");
-                }
+                div.classList.add("hidden");
                 break;
             }
         }
@@ -1396,6 +1453,91 @@ function toPixels(value) {
     }
 }
 
+// A cheap fingerprint of the current page layout: how many pages there are
+// and each one's height. Good enough to tell "still changing" from "settled"
+// without needing to know *why* something might still be resizing (MathJax,
+// an image, a browser reflow after a class toggle, etc).
+function pageLayoutSignature() {
+    return [...document.querySelectorAll('.onepage')]
+        .map(page => Math.round(page.getBoundingClientRect().height))
+        .join(',');
+}
+
+// Repeatedly call `settle` (a synchronous pagination/layout pass) on an
+// interval, stopping as soon as the page layout looks the same for
+// `stableTicks` ticks in a row -- i.e. nothing is left to settle -- rather
+// than always running for the full `timeoutMs` window. `timeoutMs` is a hard
+// cap for content that can never fully converge (e.g. a single block
+// permanently too tall for one page -- see addSpilloverPages()); without it,
+// content still actively resizing (a solution knowl settling into its final
+// size, a late-typesetting equation) could stop being watched too early.
+//
+// Without the early stop, `settle` -- which can call
+// addHeadersAndFootersToPrintout(), destroying and recreating every
+// header/footer contenteditable div -- would otherwise run unconditionally
+// on every tick for the whole window, on every checkbox toggle, even long
+// after nothing is actually still changing: wasted layout work at best, and
+// at worst it yanks the cursor out from under someone mid-edit in a header
+// or footer field.
+async function pollUntilSettled(settle, {timeoutMs = 2000, intervalMs = 100, stableTicks = 3} = {}) {
+    const deadline = Date.now() + timeoutMs;
+    let lastSignature = null;
+    let stableCount = 0;
+    while (Date.now() < deadline) {
+        await new Promise(r => setTimeout(r, intervalMs));
+        settle();
+        const signature = pageLayoutSignature();
+        if (signature === lastSignature) {
+            if (++stableCount >= stableTicks) return;
+        } else {
+            stableCount = 0;
+            lastSignature = signature;
+        }
+    }
+}
+
+// Show or hide every div of `solutionType` and adjust pagination to match.
+// Shared by the checkbox change handler and by the initial application of
+// stored/default visibility right after the base layout is built, so both
+// paths are guaranteed to behave identically.
+//
+// Always incremental -- addSpilloverPages()/collapseSpilloverPages() acting
+// on the existing .onepage structure -- never a full recompute
+// (resetPrintoutPagination()/createPrintoutPages()). The base layout (built
+// with every hint/answer/solution hidden -- see rewriteSolutions()) assigns
+// each row to a page exactly once; a full recompute after that would
+// re-derive page breaks from whatever happens to be visible at the time,
+// which depends on which other types happen to be shown, so a show/hide
+// round trip on one type wasn't guaranteed to land back on the same layout
+// it started from. Collapsing always folds back toward that one base, and
+// showing only ever pushes overflow forward onto a new page, so hiding
+// reliably undoes exactly what showing did.
+async function applySolutionVisibility(solutionType, hidden, {paperSize, margins}) {
+    document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
+        if (hidden) { elem.classList.add("hidden"); }
+        else { elem.classList.remove("hidden"); }
+    });
+    if (hidden) {
+        collapseSpilloverPages(margins);
+        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        // Content just hidden (e.g. a long solution) can take a moment to
+        // finish settling into its final, compact size, so an immediate
+        // measurement can miss a page that's actually able to collapse.
+        await pollUntilSettled(() => {
+            collapseSpilloverPages(margins);
+            adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        });
+    } else {
+        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        await pollUntilSettled(() => {
+            if (pageOverflows()) {
+                addSpilloverPages(margins);
+                adjustWorkspaceToFitPage({paperSize, margins});
+            }
+        });
+    }
+}
+
 // Event listener for page load to handle print preview setup
 window.addEventListener("DOMContentLoaded", async function(event) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -1412,6 +1554,17 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             console.warn("Nothing to preview for printpreview=" + printableSectionID + "; leaving the page as it is.");
             return;
         }
+
+        // If the printout has authored pages, there will be at least one .onepage
+        // element. That's purely a property of the source HTML, so it's safe to
+        // read this early, before anything below has a chance to touch the DOM.
+        // Declared up here (rather than right before its first use, closer to
+        // adjustPrintoutPages()) because the hide/reveal checkbox handlers set
+        // up below close over it too, and a forward reference to a `const`
+        // declared later in this same function only happens to work today
+        // because those handlers can't fire before this function finishes
+        // running -- moving it here removes that fragility outright.
+        const hasAuthoredPages = document.querySelectorAll('.onepage').length > 0;
 
         // First, get the margins for pages to be passed around as needed.
         const marginList = (printout.getAttribute('data-margins') || "").split(' ');
@@ -1454,94 +1607,26 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             });
         });
 
-        // Add event listeners to the hide hints/answers/solutions checkboxes
+        // Set up (but don't yet apply) the hide hints/answers/solutions
+        // checkboxes. Actually showing whichever types should start visible
+        // happens later, in one place, after the base layout (built with
+        // everything hidden -- see rewriteSolutions()) is fully settled;
+        // see the applySolutionVisibility() call near the end of this handler.
         for (const solutionType of ["hint", "answer", "solution"]) {
             const checkbox = document.getElementById(`hide-${solutionType}-checkbox`);
             if (checkbox) {
                 const storageKey = `hide-${solutionType}`;
-                // by default, hide answer and solution divs
-                if (solutionType === "answer" || solutionType === "solution") {
-                    if (!localStorage.getItem(storageKey)) {
-                        checkbox.checked = true;
-                        localStorage.setItem(storageKey, "true");
-                    }
+                checkbox.checked = solutionTypeHidden(solutionType);
+                // Persist the default immediately (not just once the user
+                // makes an explicit choice), so it's already on record the
+                // next time anything -- e.g. rewriteSolutions() -- needs it.
+                if (localStorage.getItem(storageKey) === null) {
+                    localStorage.setItem(storageKey, checkbox.checked ? "true" : "false");
                 }
-                // Now adjust based on local storage
-                // set visibility based on current checkbox state
-                checkbox.checked = localStorage.getItem(storageKey) === "true";
-                document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
-                    // add hidden to class list
-                    if (checkbox.checked) {
-                        elem.classList.add("hidden");
-                    } else {
-                        elem.classList.remove("hidden");
-                    }
-                });
-                // Add event listener to toggle visibility
                 checkbox.addEventListener("change", async function() {
                     await pendingSettle;
                     localStorage.setItem(storageKey, this.checked);
-                    document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
-                        if (checkbox.checked) { elem.classList.add("hidden"); }
-                        else { elem.classList.remove("hidden"); }
-                    });
-                    if (checkbox.checked) {
-                        if (hasAuthoredPages) {
-                            // Eagerly merge every spillover page back into its previous
-                            // page, then let adjustWorkspaceOrRepaginate() shrink
-                            // workspace boxes to fit *before* measuring overflow, and
-                            // re-split with addSpilloverPages() only what still doesn't
-                            // fit after that. Checking fit before workspace gets a
-                            // chance to shrink back down is unreliable -- see
-                            // collapseSpilloverPages()'s comment for why.
-                            collapseSpilloverPages(margins);
-                            adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
-                            // Content just hidden (e.g. a long solution) can take a moment
-                            // to finish settling into its final, compact size, so an
-                            // immediate measurement can miss a page that's actually able
-                            // to collapse. Mirror the retry loop in the "show" branch
-                            // below: keep re-attempting for a couple of seconds.
-                            pendingSettle = (async () => {
-                                const deadline = Date.now() + 2000;
-                                while (Date.now() < deadline) {
-                                    await new Promise(r => setTimeout(r, 100));
-                                    collapseSpilloverPages(margins);
-                                    adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
-                                }
-                            })();
-                        } else {
-                            resetPrintoutPagination(margins);
-                            adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-                            // Same reasoning as the authored-pages branch above: content
-                            // just hidden can take a moment to settle, so keep re-checking
-                            // for a couple of seconds rather than pagination based on a
-                            // possibly-stale measurement.
-                            pendingSettle = (async () => {
-                                const deadline = Date.now() + 2000;
-                                while (Date.now() < deadline) {
-                                    await new Promise(r => setTimeout(r, 100));
-                                    resetPrintoutPagination(margins);
-                                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-                                }
-                            })();
-                        }
-                    } else {
-                        adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
-                        pendingSettle = (async () => {
-                            const deadline = Date.now() + 2000;
-                            while (Date.now() < deadline) {
-                                await new Promise(r => setTimeout(r, 100));
-                                if (pageOverflows()) {
-                                    if (hasAuthoredPages) {
-                                        addSpilloverPages(margins);
-                                    } else {
-                                        resetPrintoutPagination(margins);
-                                    }
-                                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-                                }
-                            }
-                        })();
-                    }
+                    pendingSettle = applySolutionVisibility(solutionType, this.checked, {paperSize, margins});
                 });
             }
         }
@@ -1564,10 +1649,8 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             await MathJax.typesetPromise([getPrintout()]);
         }
 
-        // If the printout has authored pages, there will be at least one .onepage element.
-        // Remember this so the hide/reveal checkbox handler below can pick the right
-        // strategy: preserve authored structure vs. safely recompute a computed layout.
-        const hasAuthoredPages = document.querySelectorAll('.onepage').length > 0;
+        // hasAuthoredPages (computed above) picks the right strategy here:
+        // preserve authored structure vs. safely recompute a computed layout.
         if (hasAuthoredPages) {
             adjustPrintoutPages();
         } else {
@@ -1626,30 +1709,48 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size),
         // falling back to a spillover page if content still overflows even with workspace at zero.
         adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: !hasAuthoredPages});
-        // Assign to pendingSettle (like every other retry loop) so a checkbox
-        // toggled within the next couple of seconds awaits this first, instead
-        // of racing it and potentially clobbering each other's pagination.
-        pendingSettle = (async () => {
-            const deadline = Date.now() + 2000;
-            while (Date.now() < deadline) {
-                await new Promise(r => setTimeout(r, 100));
-                if (hasAuthoredPages) {
-                    // Content still settling into its final size right after
-                    // load (e.g. a solution knowl, an embedded matrix) can make
-                    // the very first pass above split content onto a spillover
-                    // page it doesn't actually need once things settle down.
-                    // Eagerly try collapsing spillover pages back on every tick
-                    // and let addSpilloverPages() re-split only what still
-                    // doesn't fit -- see collapseSpilloverPages()'s comment for
-                    // why collapsing first, unconditionally, is the reliable order.
-                    collapseSpilloverPages(margins);
-                    adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
-                } else if (pageOverflows()) {
-                    resetPrintoutPagination(margins);
-                    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+        // Chain onto pendingSettle (rather than overwrite it) so this loop waits
+        // for the non-authored-pages safety net scheduled above, if one was
+        // scheduled, to finish first. Overwriting it would silently orphan that
+        // safety net's promise -- it would still fire on its own timer and mutate
+        // the printout unsynchronized with this loop and with whatever a checkbox
+        // toggled in the meantime is doing, despite the whole point of
+        // pendingSettle being to let a checkbox toggle await "settling in
+        // progress" as a single, serialized thing.
+        pendingSettle = pendingSettle.then(() => pollUntilSettled(() => {
+            if (hasAuthoredPages) {
+                // Content still settling into its final size right after
+                // load (e.g. a solution knowl, an embedded matrix) can make
+                // the very first pass above split content onto a spillover
+                // page it doesn't actually need once things settle down.
+                // Eagerly try collapsing spillover pages back on every tick
+                // and let addSpilloverPages() re-split only what still
+                // doesn't fit -- see collapseSpilloverPages()'s comment for
+                // why collapsing first, unconditionally, is the reliable order.
+                collapseSpilloverPages(margins);
+                adjustWorkspaceOrRepaginate({paperSize: paperSize, margins: margins, fullRecompute: false});
+            } else if (pageOverflows()) {
+                resetPrintoutPagination(margins);
+                adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+            }
+        }));
+
+        // Now that the base layout (built with every hint/answer/solution
+        // hidden -- see rewriteSolutions()) has fully settled, reveal
+        // whichever types should actually start visible per their stored/
+        // default preference, through the same incremental path a checkbox
+        // toggle uses. Chained onto pendingSettle so this waits for that
+        // settling to finish first -- revealing against a layout that's
+        // still being rebuilt out from under it would be measuring against
+        // a moving target -- and so a checkbox click in the meantime waits
+        // for this in turn, rather than raced against it.
+        pendingSettle = pendingSettle.then(async () => {
+            for (const solutionType of ["hint", "answer", "solution"]) {
+                if (!solutionTypeHidden(solutionType)) {
+                    await applySolutionVisibility(solutionType, false, {paperSize, margins});
                 }
             }
-        })();
+        });
 
         // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
         // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
