@@ -1442,6 +1442,71 @@
     }
     return [...elem.querySelectorAll(".workspace")];
   }
+  function flattenTasksIn(container) {
+    for (const child of [...container.children]) {
+      if (child.classList.contains("sidebyside")) {
+        continue;
+      }
+      const tasks = [...child.querySelectorAll(".task, .conclusion")].filter((el2) => !el2.closest(".sidebyside"));
+      if (tasks.length === 0) continue;
+      for (const task of tasks) {
+        const parent = task.parentElement;
+        const grandparent = parent.parentElement;
+        if (grandparent && grandparent.classList.contains("task")) {
+          task.classList.add("subsubtask");
+        } else if (parent.classList.contains("task")) {
+          task.classList.add("subtask");
+        }
+      }
+      for (let i = tasks.length - 1; i >= 0; i--) {
+        container.insertBefore(tasks[i], child.nextSibling);
+      }
+    }
+  }
+  function flattenIntroductionsIn(container) {
+    for (const child of [...container.children]) {
+      if (child.classList.contains("sidebyside")) {
+        continue;
+      }
+      const isTopLevelIntroduction = child.classList.contains("introduction");
+      const introductions = isTopLevelIntroduction ? [child] : [...child.querySelectorAll(".introduction")].filter((intro) => !intro.closest(".sidebyside"));
+      let insertionAnchor = child;
+      introductions.forEach((intro) => {
+        const introParent = intro.parentNode;
+        const introChildren = [...intro.children];
+        if (introChildren.length === 0) {
+          intro.remove();
+          return;
+        }
+        introParent.insertBefore(introChildren[0], intro);
+        const anchor = intro === child ? introChildren[0] : insertionAnchor;
+        for (let i = introChildren.length - 1; i >= 1; i--) {
+          container.insertBefore(introChildren[i], anchor.nextSibling);
+        }
+        intro.remove();
+        insertionAnchor = introChildren[introChildren.length - 1];
+      });
+    }
+  }
+  function flattenSolutionsIn(container) {
+    for (const child of [...container.children]) {
+      if (child.classList.contains("sidebyside") || child.classList.contains("solutions")) {
+        continue;
+      }
+      const solutionsBlocks = [...child.querySelectorAll(".solutions")].filter((solutions) => !solutions.closest(".sidebyside"));
+      let insertionAnchor = child;
+      solutionsBlocks.forEach((solutions) => {
+        const solChildren = [...solutions.children];
+        for (let i = solChildren.length - 1; i >= 0; i--) {
+          container.insertBefore(solChildren[i], insertionAnchor.nextSibling);
+        }
+        solutions.remove();
+        if (solChildren.length > 0) {
+          insertionAnchor = solChildren[solChildren.length - 1];
+        }
+      });
+    }
+  }
   function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll(".workspace");
     workspaces.forEach((ws) => {
@@ -1476,7 +1541,12 @@
       nextChild = nextChild.nextSibling;
       lastPage.appendChild(tempChild);
     }
-    console.log("Moved all content before the first page and after the last page into the respective pages.");
+    pages.forEach((page) => {
+      flattenTasksIn(page);
+      flattenIntroductionsIn(page);
+      flattenSolutionsIn(page);
+    });
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, and solutions for independent repagination.");
   }
   function createPrintoutPages(margins) {
     console.log("*** Creating printout pages with margins:", margins);
@@ -1487,35 +1557,16 @@
       console.warn("No printout found, exiting createPrintoutPages.");
       return;
     }
-    printout.style.width = toString(conservativeContentWidth + margins.left + margins.right) + "px";
+    printout.style.width = conservativeContentWidth + "px";
     setInitialWorkspaceHeights(printout);
-    let rows = [];
-    for (const child of printout.children) {
-      if (child.classList.contains("sidebyside")) {
-        rows.push(child);
-      } else if (child.querySelector(".task")) {
-        rows.push(child);
-        const tasks = child.querySelectorAll(".task, .conclusion");
-        for (let i = 0; i < tasks.length; i++) {
-          let parent = tasks[i].parentElement;
-          let grandparent = parent.parentElement;
-          if (grandparent.classList.contains("task")) {
-            tasks[i].classList.add("subsubtask");
-          } else if (parent.classList.contains("task")) {
-            tasks[i].classList.add("subtask");
-          }
-        }
-        for (let i = tasks.length - 1; i > 0; i--) {
-          printout.insertBefore(tasks[i], child.nextSibling);
-        }
-      } else {
-        rows.push(child);
-      }
-    }
+    flattenTasksIn(printout);
+    flattenIntroductionsIn(printout);
+    flattenSolutionsIn(printout);
+    let rows = [...printout.children];
     let blockList = [];
     for (const row of rows) {
       let blockHeight = getElementTotalHeight(row);
-      if (blockHeight === 0) {
+      if (blockHeight === 0 && !row.classList.contains("hidden")) {
         console.log("Skipping row with zero height:", row);
         continue;
       }
@@ -1526,6 +1577,7 @@
       blockList.push({ elem: row, height: blockHeight, workspaceHeight: totalWorkspaceHeight });
     }
     const pageBreaks = findPageBreaks(blockList, conservativeContentHeight);
+    printout.style.width = "";
     for (let i = 0; i < pageBreaks.length; i++) {
       const pageDiv = document.createElement("section");
       pageDiv.classList.add("onepage");
@@ -1550,6 +1602,115 @@
       }
     }
   }
+  function getPageContentBottom(page) {
+    const pRect = page.getBoundingClientRect();
+    const paddingBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
+    return pRect.bottom - paddingBottom;
+  }
+  function pageOverflows() {
+    const pages = document.querySelectorAll(".onepage");
+    for (const page of pages) {
+      for (const child of page.children) {
+        const r = child.getBoundingClientRect();
+        if (r.bottom > getPageContentBottom(page) + 1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  function adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute = false }) {
+    adjustWorkspaceToFitPage({ paperSize, margins });
+    if (pageOverflows()) {
+      if (fullRecompute) {
+        resetPrintoutPagination(margins);
+      } else {
+        addSpilloverPages(margins);
+      }
+      adjustWorkspaceToFitPage({ paperSize, margins });
+    }
+  }
+  function unwrapOnepages() {
+    const printout = getPrintout();
+    if (!printout) return;
+    const pages = [...printout.querySelectorAll(":scope > .onepage")];
+    pages.forEach((page) => {
+      page.querySelectorAll(":scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer").forEach((hf) => hf.remove());
+      while (page.firstChild) {
+        printout.insertBefore(page.firstChild, page);
+      }
+      printout.removeChild(page);
+    });
+  }
+  function resetPrintoutPagination(margins) {
+    unwrapOnepages();
+    createPrintoutPages(margins);
+    addHeadersAndFootersToPrintout();
+  }
+  function isHeaderFooterEl(el2) {
+    return el2.classList.contains("first-page-header") || el2.classList.contains("running-header") || el2.classList.contains("first-page-footer") || el2.classList.contains("running-footer");
+  }
+  function addSpilloverPages(margins) {
+    const printout = getPrintout();
+    if (!printout) return;
+    let pages = [...printout.querySelectorAll(":scope > .onepage")];
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i];
+      const contentChildren = [...page.children].filter((c) => !isHeaderFooterEl(c));
+      let overflowStartIndex = -1;
+      for (let j = 0; j < contentChildren.length; j++) {
+        const r = contentChildren[j].getBoundingClientRect();
+        if (r.bottom > getPageContentBottom(page) + 1) {
+          overflowStartIndex = j;
+          break;
+        }
+      }
+      if (overflowStartIndex === -1) continue;
+      if (overflowStartIndex === 0) {
+        if (contentChildren.length <= 1) continue;
+        overflowStartIndex = 1;
+      }
+      const overflowElems = contentChildren.slice(overflowStartIndex);
+      const newPage = document.createElement("section");
+      newPage.classList.add("onepage", "spillover");
+      if (page.classList.contains("lastpage")) {
+        page.classList.remove("lastpage");
+        newPage.classList.add("lastpage");
+      }
+      overflowElems.forEach((el2) => newPage.appendChild(el2));
+      page.parentNode.insertBefore(newPage, page.nextSibling);
+      [...page.children].filter(isHeaderFooterEl).forEach((hf) => hf.remove());
+      pages.splice(i + 1, 0, newPage);
+    }
+    printout.querySelectorAll(":scope > .onepage").forEach((p) => {
+      [...p.children].filter(isHeaderFooterEl).forEach((hf) => hf.remove());
+    });
+    addHeadersAndFootersToPrintout();
+  }
+  function appendPageContent(page, children2) {
+    const footer = [...page.children].find((c) => c.classList.contains("first-page-footer") || c.classList.contains("running-footer"));
+    children2.forEach((c) => page.insertBefore(c, footer || null));
+  }
+  function collapseSpilloverPages(margins) {
+    const printout = getPrintout();
+    if (!printout) return;
+    const pages = [...printout.querySelectorAll(":scope > .onepage")];
+    for (let i = pages.length - 1; i >= 1; i--) {
+      const page = pages[i];
+      if (!page.classList.contains("spillover")) continue;
+      const prevPage = pages[i - 1];
+      const contentChildren = [...page.children].filter((c) => !isHeaderFooterEl(c));
+      appendPageContent(prevPage, contentChildren);
+      if (page.classList.contains("lastpage")) {
+        prevPage.classList.add("lastpage");
+      }
+      page.remove();
+    }
+    printout.querySelectorAll(":scope > .onepage").forEach((p) => {
+      [...p.children].filter(isHeaderFooterEl).forEach((hf) => hf.remove());
+    });
+    addHeadersAndFootersToPrintout();
+  }
   function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
     if (!printout) {
@@ -1559,12 +1720,20 @@
     const pages = printout.querySelectorAll(".onepage");
     pages.forEach((page, index) => {
       const isFirstPage = index === 0;
+      const headerClass = isFirstPage ? "first-page-header" : "running-header";
+      const footerClass = isFirstPage ? "first-page-footer" : "running-footer";
       const headerDiv = document.createElement("div");
-      headerDiv.classList.add(isFirstPage ? "first-page-header" : "running-header", "hidden");
+      headerDiv.classList.add(headerClass);
+      if (localStorage.getItem(`print-${headerClass}`) !== "true") {
+        headerDiv.classList.add("hidden");
+      }
       headerDiv.innerHTML = `<div class="header-left" contenteditable="true"></div><div class="header-center" contenteditable="true"></div><div class="header-right" contenteditable="true"></div>`;
       page.insertBefore(headerDiv, page.firstChild);
       const footerDiv = document.createElement("div");
-      footerDiv.classList.add(isFirstPage ? "first-page-footer" : "running-footer", "hidden");
+      footerDiv.classList.add(footerClass);
+      if (localStorage.getItem(`print-${footerClass}`) !== "true") {
+        footerDiv.classList.add("hidden");
+      }
       footerDiv.innerHTML = `<div class="footer-left" contenteditable="true"></div><div class="footer-center" contenteditable="true"></div><div class="footer-right" contenteditable="true"></div>`;
       page.appendChild(footerDiv);
     });
@@ -1739,7 +1908,7 @@
         }
       }
     }
-    let nextPage = 1;
+    let nextPage = 0;
     while (nextPage < rows.length) {
       pageBreaks.push(nextPageBreak[nextPage]);
       nextPage = nextPageBreak[nextPage];
@@ -1875,6 +2044,13 @@
     existingSections.forEach((sec) => ptxContent.removeChild(sec));
     ptxContent.appendChild(printableSection);
   }
+  function solutionTypeHidden(solutionType) {
+    const stored = localStorage.getItem(`hide-${solutionType}`);
+    if (stored !== null) {
+      return stored === "true";
+    }
+    return solutionType === "answer" || solutionType === "solution";
+  }
   async function rewriteSolutions() {
     var born_hidden_knowls = document.querySelectorAll(".printout details");
     born_hidden_knowls.forEach(function(detail) {
@@ -1882,6 +2058,12 @@
       const content2 = detail.innerHTML.replace(summary.outerHTML, "");
       const div = document.createElement("div");
       div.classList = detail.classList;
+      for (const solutionType of ["hint", "answer", "solution"]) {
+        if (div.classList.contains(solutionType)) {
+          div.classList.add("hidden");
+          break;
+        }
+      }
       if (summary) {
         const title = document.createElement("h5");
         title.innerHTML = summary.innerHTML;
@@ -1914,8 +2096,53 @@
       return parseFloat(value) || 0;
     }
   }
+  function pageLayoutSignature() {
+    return [...document.querySelectorAll(".onepage")].map((page) => Math.round(page.getBoundingClientRect().height)).join(",");
+  }
+  async function pollUntilSettled(settle, { timeoutMs = 2e3, intervalMs = 100, stableTicks = 3 } = {}) {
+    const deadline = Date.now() + timeoutMs;
+    let lastSignature = null;
+    let stableCount = 0;
+    while (Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, intervalMs));
+      settle();
+      const signature = pageLayoutSignature();
+      if (signature === lastSignature) {
+        if (++stableCount >= stableTicks) return;
+      } else {
+        stableCount = 0;
+        lastSignature = signature;
+      }
+    }
+  }
+  async function applySolutionVisibility(solutionType, hidden, { paperSize, margins }) {
+    document.querySelectorAll(`div.${solutionType}`).forEach((elem) => {
+      if (hidden) {
+        elem.classList.add("hidden");
+      } else {
+        elem.classList.remove("hidden");
+      }
+    });
+    if (hidden) {
+      collapseSpilloverPages(margins);
+      adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+      await pollUntilSettled(() => {
+        collapseSpilloverPages(margins);
+        adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+      });
+    } else {
+      adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+      await pollUntilSettled(() => {
+        if (pageOverflows()) {
+          addSpilloverPages(margins);
+          adjustWorkspaceToFitPage({ paperSize, margins });
+        }
+      });
+    }
+  }
   window.addEventListener("DOMContentLoaded", async function(event2) {
     const urlParams = new URLSearchParams(window.location.search);
+    let pendingSettle = Promise.resolve();
     if (urlParams.has("printpreview")) {
       const printableSectionID = urlParams.get("printpreview");
       await loadPrintout(printableSectionID);
@@ -1924,6 +2151,7 @@
         console.warn("Nothing to preview for printpreview=" + printableSectionID + "; leaving the page as it is.");
         return;
       }
+      const hasAuthoredPages = document.querySelectorAll(".onepage").length > 0;
       const marginList = (printout.getAttribute("data-margins") || "").split(" ");
       const margins = {
         top: toPixels(marginList[0] || "0.75in"),
@@ -1943,7 +2171,7 @@
         document.body.classList.add(paperSize);
         setPageGeometryCSS({ paperSize, margins });
       } else {
-        console.warning("Bug: paperSize should always have a value here.");
+        console.warn("Bug: paperSize should always have a value here.");
       }
       const papersizeRadios = document.querySelectorAll('input[name="papersize"]');
       papersizeRadios.forEach((radio) => {
@@ -1959,34 +2187,26 @@
       });
       for (const solutionType of ["hint", "answer", "solution"]) {
         const checkbox = document.getElementById(`hide-${solutionType}-checkbox`);
-        if (checkbox) {
-          const storageKey = `hide-${solutionType}`;
-          if (solutionType === "answer" || solutionType === "solution") {
-            if (!localStorage.getItem(storageKey)) {
-              checkbox.checked = true;
-              localStorage.setItem(storageKey, "true");
-            }
-          }
-          checkbox.checked = localStorage.getItem(storageKey) === "true";
-          document.querySelectorAll(`div.${solutionType}`).forEach((elem) => {
-            if (checkbox.checked) {
-              elem.classList.add("hidden");
-            } else {
-              elem.classList.remove("hidden");
-            }
-          });
-          checkbox.addEventListener("change", function() {
-            localStorage.setItem(storageKey, this.checked);
-            document.querySelectorAll(`div.${solutionType}`).forEach((elem) => {
-              if (checkbox.checked) {
-                elem.classList.add("hidden");
-              } else {
-                elem.classList.remove("hidden");
-              }
-              adjustWorkspaceToFitPage({ paperSize, margins });
-            });
-          });
+        if (!checkbox) continue;
+        if (!printout.querySelector(`.${solutionType}`)) {
+          const row = checkbox.closest(".hide-option");
+          if (row) row.classList.add("hidden");
+          continue;
         }
+        const storageKey = `hide-${solutionType}`;
+        checkbox.checked = solutionTypeHidden(solutionType);
+        if (localStorage.getItem(storageKey) === null) {
+          localStorage.setItem(storageKey, checkbox.checked ? "true" : "false");
+        }
+        checkbox.addEventListener("change", async function() {
+          await pendingSettle;
+          localStorage.setItem(storageKey, this.checked);
+          pendingSettle = applySolutionVisibility(solutionType, this.checked, { paperSize, margins });
+        });
+      }
+      const hideSolutionsOptions = document.querySelector(".hide-solutions-options");
+      if (hideSolutionsOptions && !hideSolutionsOptions.querySelector(".hide-option:not(.hidden)")) {
+        hideSolutionsOptions.classList.add("hidden");
       }
       const printoutSection = getPrintout();
       if (printoutSection) {
@@ -1995,10 +2215,20 @@
       if (printoutSection) {
         await waitForImages(printoutSection);
       }
-      if (document.querySelector(".onepage")) {
+      if (typeof MathJax !== "undefined" && MathJax.typesetPromise) {
+        await MathJax.typesetPromise([getPrintout()]);
+      }
+      if (hasAuthoredPages) {
         adjustPrintoutPages();
       } else {
         createPrintoutPages(margins);
+        pendingSettle = (async () => {
+          await new Promise((r) => setTimeout(r, 300));
+          unwrapOnepages();
+          createPrintoutPages(margins);
+          addHeadersAndFootersToPrintout();
+          adjustWorkspaceToFitPage({ paperSize, margins });
+        })();
       }
       addHeadersAndFootersToPrintout();
       for (const hf of ["first-page-header", "running-header", "first-page-footer", "running-footer"]) {
@@ -2020,20 +2250,41 @@
               } else {
                 elem.classList.add("hidden");
               }
-              adjustWorkspaceToFitPage({ paperSize, margins });
             });
+            adjustWorkspaceToFitPage({ paperSize, margins });
           });
         }
       }
-      adjustWorkspaceToFitPage({ paperSize, margins });
+      adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: !hasAuthoredPages });
+      pendingSettle = pendingSettle.then(() => pollUntilSettled(() => {
+        if (hasAuthoredPages) {
+          collapseSpilloverPages(margins);
+          adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+        } else if (pageOverflows()) {
+          resetPrintoutPagination(margins);
+          adjustWorkspaceToFitPage({ paperSize, margins });
+        }
+      }));
+      pendingSettle = pendingSettle.then(async () => {
+        for (const solutionType of ["hint", "answer", "solution"]) {
+          if (printout.querySelector(`.${solutionType}`) && !solutionTypeHidden(solutionType)) {
+            await applySolutionVisibility(solutionType, false, { paperSize, margins });
+          }
+        }
+      });
       const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
       if (highlightWorkspaceCheckbox) {
-        highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
-        highlightWorkspaceCheckbox.addEventListener("change", function() {
-          localStorage.setItem("highlightWorkspace", this.checked);
-          toggleWorkspaceHighlight(this.checked);
-        });
-        toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
+        if (workspaceDivsIn(printout).length === 0) {
+          const row = highlightWorkspaceCheckbox.closest(".highlight-workspace-option");
+          if (row) row.classList.add("hidden");
+        } else {
+          highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
+          highlightWorkspaceCheckbox.addEventListener("change", function() {
+            localStorage.setItem("highlightWorkspace", this.checked);
+            toggleWorkspaceHighlight(this.checked);
+          });
+          toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
+        }
       }
       console.log("finished adjusting workspace");
     }
