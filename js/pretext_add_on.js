@@ -1614,21 +1614,40 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // see the applySolutionVisibility() call near the end of this handler.
         for (const solutionType of ["hint", "answer", "solution"]) {
             const checkbox = document.getElementById(`hide-${solutionType}-checkbox`);
-            if (checkbox) {
-                const storageKey = `hide-${solutionType}`;
-                checkbox.checked = solutionTypeHidden(solutionType);
-                // Persist the default immediately (not just once the user
-                // makes an explicit choice), so it's already on record the
-                // next time anything -- e.g. rewriteSolutions() -- needs it.
-                if (localStorage.getItem(storageKey) === null) {
-                    localStorage.setItem(storageKey, checkbox.checked ? "true" : "false");
-                }
-                checkbox.addEventListener("change", async function() {
-                    await pendingSettle;
-                    localStorage.setItem(storageKey, this.checked);
-                    pendingSettle = applySolutionVisibility(solutionType, this.checked, {paperSize, margins});
-                });
+            if (!checkbox) continue;
+            // The XSL only generates this checkbox at all if *some* worksheet
+            // on the page has this type of content, since one print-preview
+            // control panel can be shared by several worksheets (the one
+            // actually shown is picked at runtime via ?printpreview=<id>).
+            // Whether it applies to *this* worksheet specifically can only be
+            // decided here, against the printout that actually got loaded --
+            // if not, hide the whole row rather than leave a checkbox with
+            // nothing for it to toggle.
+            if (!printout.querySelector(`.${solutionType}`)) {
+                const row = checkbox.closest('.hide-option');
+                if (row) row.classList.add('hidden');
+                continue;
             }
+            const storageKey = `hide-${solutionType}`;
+            checkbox.checked = solutionTypeHidden(solutionType);
+            // Persist the default immediately (not just once the user
+            // makes an explicit choice), so it's already on record the
+            // next time anything -- e.g. rewriteSolutions() -- needs it.
+            if (localStorage.getItem(storageKey) === null) {
+                localStorage.setItem(storageKey, checkbox.checked ? "true" : "false");
+            }
+            checkbox.addEventListener("change", async function() {
+                await pendingSettle;
+                localStorage.setItem(storageKey, this.checked);
+                pendingSettle = applySolutionVisibility(solutionType, this.checked, {paperSize, margins});
+            });
+        }
+        // If none of the three applied to this worksheet, every row above
+        // just got hidden -- also hide the now-empty group container so it
+        // doesn't leave a stray gap in the print-options panel.
+        const hideSolutionsOptions = document.querySelector('.hide-solutions-options');
+        if (hideSolutionsOptions && !hideSolutionsOptions.querySelector('.hide-option:not(.hidden)')) {
+            hideSolutionsOptions.classList.add('hidden');
         }
 
         // Finally, with everything set up, we create or adjust the printout pages as needed.
@@ -1746,7 +1765,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // for this in turn, rather than raced against it.
         pendingSettle = pendingSettle.then(async () => {
             for (const solutionType of ["hint", "answer", "solution"]) {
-                if (!solutionTypeHidden(solutionType)) {
+                if (printout.querySelector(`.${solutionType}`) && !solutionTypeHidden(solutionType)) {
                     await applySolutionVisibility(solutionType, false, {paperSize, margins});
                 }
             }
@@ -1756,13 +1775,23 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
         const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
         if (highlightWorkspaceCheckbox) {
-            highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
-            highlightWorkspaceCheckbox.addEventListener("change", function() {
-                localStorage.setItem("highlightWorkspace", this.checked);
-                toggleWorkspaceHighlight(this.checked);
-            });
-            // Initial toggle to apply the highlight class if checked
-            toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
+            // Same reasoning as the hide-hint/answer/solution rows above: this
+            // control panel can be shared by several worksheets on the same
+            // page, so whether this worksheet actually has any workspace to
+            // highlight can only be decided here, against the printout that
+            // actually got loaded.
+            if (workspaceDivsIn(printout).length === 0) {
+                const row = highlightWorkspaceCheckbox.closest('.highlight-workspace-option');
+                if (row) row.classList.add('hidden');
+            } else {
+                highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
+                highlightWorkspaceCheckbox.addEventListener("change", function() {
+                    localStorage.setItem("highlightWorkspace", this.checked);
+                    toggleWorkspaceHighlight(this.checked);
+                });
+                // Initial toggle to apply the highlight class if checked
+                toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
+            }
         }
 
         console.log("finished adjusting workspace");
