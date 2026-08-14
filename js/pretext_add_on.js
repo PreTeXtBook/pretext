@@ -1596,9 +1596,18 @@ async function pollUntilSettled(settle, {timeoutMs = 2000, intervalMs = 100, sta
 // re-derive page breaks from whatever happens to be visible at the time,
 // which depends on which other types happen to be shown, so a show/hide
 // round trip on one type wasn't guaranteed to land back on the same layout
-// it started from. Collapsing always folds back toward that one base, and
-// showing only ever pushes overflow forward onto a new page, so hiding
-// reliably undoes exactly what showing did.
+// it started from.
+//
+// Tries both directions every tick, hiding or showing: collapseSpilloverPages()
+// to fold a spillover page back if it now fits, then adjustWorkspaceOrRepaginate()
+// to push overflow forward if it doesn't. Showing isn't purely additive --
+// revealing a solution collapses that exercise's own workspace (see
+// anySolutionTypeVisible()), which can free more room on its page than the
+// revealed content adds, so a page already marked spillover can become
+// foldable again on the very toggle that filled it. collapseSpilloverPages()
+// only commits a merge that actually fits (once a solution is visible; see
+// its own comment), so calling it unconditionally here is safe in either
+// direction.
 //
 // Runs under withIframesDetached() since the repagination/collapse work
 // below can move a row -- and any iframe inside it -- several times over
@@ -1609,25 +1618,17 @@ async function applySolutionVisibility(solutionType, hidden, {paperSize, margins
         else { elem.classList.remove("hidden"); }
     });
     await withIframesDetached(async () => {
-        if (hidden) {
+        collapseSpilloverPages(margins);
+        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        // Content just hidden or revealed (e.g. a long solution, or a
+        // workspace collapsing/expanding) can take a moment to finish
+        // settling into its final size, so an immediate measurement can
+        // miss a page that's actually able to collapse, or one that still
+        // needs to spill over.
+        await pollUntilSettled(() => {
             collapseSpilloverPages(margins);
             adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-            // Content just hidden (e.g. a long solution) can take a moment to
-            // finish settling into its final, compact size, so an immediate
-            // measurement can miss a page that's actually able to collapse.
-            await pollUntilSettled(() => {
-                collapseSpilloverPages(margins);
-                adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-            });
-        } else {
-            adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-            await pollUntilSettled(() => {
-                if (pageOverflows()) {
-                    addSpilloverPages(margins);
-                    adjustWorkspaceToFitPage({paperSize, margins});
-                }
-            });
-        }
+        });
     });
 }
 
