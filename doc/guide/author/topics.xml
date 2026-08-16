@@ -593,7 +593,7 @@
                 </paragraphs>
 
                 <!--
-                http://gcp.fcaglp.unlp.edu.ar/_media/integrantes:psantamaria:latex:textcomp.pdf
+                https://ctan.org/pkg/textcomp
                 + regular
                 - negative
                 - subtract \textminus
@@ -1526,7 +1526,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/" visual="www.mathjax.org">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex" visual="www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>. For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/" visual="docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/" visual="www.mathjax.org">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="https://www.ams.org/arc/resources/amslatex-about.html" visual="www.ams.org/arc/resources/amslatex-about.html">AMS-LaTeX page</url>. For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/" visual="docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1934,7 +1934,7 @@
 
             <p>Note that both attributes <attr>latex-name</attr> and <attr>mathjax-name</attr> must be present.  They may be identical (as above, and typical) or they may be different (rare).  There are situations where one might be empty.  Of course, you can use these macros in other definitions of mathematics macros you might make (<xref ref="mathematics-macros"/>).  However, we do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext/>.  Nor do we support debugging such conflicts.</p>
 
-            <p>If there are <latex/> macros you desire, but without a MathJax implementation, then there is not much we can do, short of suggesting you write your own extension (not recommended, see <url href="https://docs.mathjax.org/en/latest/web/webpack.html#custom-extension">A Custom Extension</url>).  There are some workarounds which we may document shortly.</p>
+            <p>If there are <latex/> macros you desire, but without a MathJax implementation, then there is not much we can do, short of suggesting you write your own extension (not recommended, see <url href="https://docs.mathjax.org/en/latest/advanced/webpack.html">A Custom Extension</url>).  There are some workarounds which we may document shortly.</p>
         </subsection>
 
         <subsection>
@@ -5075,7 +5075,7 @@
               We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle>  <xref ref="cmos" detail="Chapter 18"/>,
               <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle>
               <xref ref="indexing-guide"/>,
-              and Pilar Wyman of <url href="http://www.wymanindexing.com/" visual="www.wymanindexing.com/">Wyman Indexing</url>.
+              and Pilar Wyman of <url href="https://wymanindexing.wordpress.com/" visual="wymanindexing.wordpress.com/">Wyman Indexing</url>.
             </p>
 
             <paragraphs><title>Terminology</title>
@@ -5625,7 +5625,7 @@
 
                 <li><p>You can always place a Unicode character in your source using <init>XML</init> syntax.  The first thing an <init>XML</init> parser will do is convert this syntax into a character.  The number of the <c>SECTION SIGN</c> in hexadecimal is <c>A7</c>, so the syntax <c>&amp;#xA7;</c> is identical to the  character &#xA7;.  Of course, this will get tedious fast.</p></li>
 
-                <li><p>The <url href="https://www.cs.tut.fi/~jkorpela/fui.html8" visual="www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input</url> utility at <c>www.cs.tut.fi/~jkorpela/fui.html8</c> will allow you to specify a chunk of 256 consecutive Unicode numbers and then you can click on characters to make a string of several or many.  You can cut/paste these into your source, or convert the whole lot to <init>XML</init> syntax all at once.</p></li>
+                <li><p>The <url href="https://jkorpela.fi/fui.html8" visual="jkorpela.fi/fui.html8">Full Unicode Input</url> utility at <c>jkorpela.fi/fui.html8</c> will allow you to specify a chunk of 256 consecutive Unicode numbers and then you can click on characters to make a string of several or many.  You can cut/paste these into your source, or convert the whole lot to <init>XML</init> syntax all at once.</p></li>
 
                 <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="http://www.fileformat.info/info/unicode/" visual="www.fileformat.info/info/unicode/">FileFormat.info</url>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
 
@@ -5752,7 +5752,7 @@
         &lt;/program>
         </pre>
 
-        <p>There are some fancy <init>XSLT</init> tricks you can employ to use more complicated content repeatedly.  Your source will be less portable, and we do not support or recommend these techniques.  But if you want a go anyway, see hints at <url href="http://www.sagehill.net/docbookxsl/DuplicateIDs.html" visual="www.sagehill.net/docbookxsl/DuplicateIDs.html"/>.  Note the reliance on <c>xpointer()</c>, and that the final technique is restricted to DocBook, a different <init>XML</init> vocabulary.</p>
+        <p>There are some fancy <init>XSLT</init> tricks you can employ to use more complicated content repeatedly.  Your source will be less portable, and we do not support or recommend these techniques.  But if you want a go anyway, see hints at <url href="https://sagehill.net/docbookxsl/DuplicateIDs.html" visual="sagehill.net/docbookxsl/DuplicateIDs.html"/>.  Note the reliance on <c>xpointer()</c>, and that the final technique is restricted to DocBook, a different <init>XML</init> vocabulary.</p>
     </section>
 
     <section xml:id="topic-localization">
@@ -5814,7 +5814,7 @@
                 <title>Mathematics</title>
                 <idx><h>accessibility</h><h>mathematics</h></idx>
                 <idx><h>web accessibility</h><h>mathematics</h></idx>
-                <p>MathJax (<url href="https://www.mathjax.org/" visual="mathjax.org"/>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html" visual="docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
+                <p>MathJax (<url href="https://www.mathjax.org/" visual="mathjax.org"/>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="https://docs.mathjax.org/en/latest/basic/accessibility.html" visual="docs.mathjax.org/en/latest/basic/accessibility.html">Accessibility Features</url> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
                     <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
                     <li>Bring up the context menu on that display (a mouse right-click for most).</li>
                     <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
@@ -6097,7 +6097,7 @@
         <example>
           <title>Kernel and pre-image</title>
           <figure xml:id="fig-img-desc-kpi">
-            <caption>Kernel and pre-image diagram from <url href="http://linear.ups.edu/html/section-ILT.html"><pubtitle>A First Course in Linear Algebra</pubtitle></url></caption>
+            <caption>Kernel and pre-image diagram from <url href="https://linear.pugetsound.edu/html/section-ILT.html"><pubtitle>A First Course in Linear Algebra</pubtitle></url></caption>
             <image source="KPI" width="60%">
               <shortdescription>Two ovals representing vector spaces containing points representing vectors, with arrows associating points.</shortdescription>
               <description>
