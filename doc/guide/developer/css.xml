@@ -36,7 +36,7 @@
     <section xml:id="css-building" label="css-building">
         <title>Building the CSS</title>
 
-        <p>The distrubuted CSS files are build from <init>SCSS</init> (or <q>Sass</q>) source files. <init>SCSS</init> is a superset of <init>CSS</init> that adds variables, nesting, functions, and a module system (<c>@use</c>) for splitting styles across files. This source is built into ordinary <init>CSS</init> for use by the browser.
+        <p>The distributed CSS files are build from <init>SCSS</init> (or <q>Sass</q>) source files. <init>SCSS</init> is a superset of <init>CSS</init> that adds variables, nesting, functions, and a module system (<c>@use</c>) for splitting styles across files. This source is built into ordinary <init>CSS</init> for use by the browser.
         </p>
 
         <p>Plain <init>CSS</init> is valid <init>SCSS</init>, so for the most part, adding styles to elements just involves writing normal <init>CSS</init>. The extra features of <init>SCSS</init> are only needed when you want to differentiate the <init>CSS</init> output for different themes or integrate with the color palettes. The <url href="https://sass-lang.com/guide/">Sass basics guide</url> is a good resource for learning about <init>SCSS</init> features.
@@ -86,7 +86,7 @@
         </p>
 
         <note>
-            <p>If you want to have something be <c>white</c> or <c>black</c> (in light mode), you should generally used <c>var(--content-background)</c> or <c>var(--body-text-color)</c> respectively. Those are good semantic choices for <q>the color of the background</q> and <q>the color of forground content</q> and will change appropriately in different palettes.</p>
+            <p>If you want to have something be <c>white</c> or <c>black</c> (in light mode), you should generally used <c>var(--content-background)</c> or <c>var(--body-text-color)</c> respectively. Those are good semantic choices for <q>the color of the background</q> and <q>the color of foreground content</q> and will change appropriately in different palettes.</p>
         </note>
 
         <p>
@@ -98,7 +98,7 @@
         </program>
 
         <p>
-            This ensures that the new variable has a default value (the button background color). Any palatte that targets multiple colors or dark mode will already have a value for <c>--button-background</c>, so your new variable will automatically work with those. Then, to customize the new variable for a particular palette like <c>_palette-dual.scss</c>, you would add an entry to the palette file, such as:<cd>"dropdown-background": var(--secondary-color),</cd>
+            This ensures that the new variable has a default value (the button background color). Any palette that targets multiple colors or dark mode will already have a value for <c>--button-background</c>, so your new variable will automatically work with those. Then, to customize the new variable for a particular palette like <c>_palette-dual.scss</c>, you would add an entry to the palette file, such as:<cd>"dropdown-background": var(--secondary-color),</cd>
         </p>
 
         <p>

@@ -25,7 +25,7 @@
             <li>Good familiarity with basic <tex/> and <latex/>.</li>
             <li>The ability to debug <latex/> compilations gone bad.</li>
             <li>Willingness to study several <latex/> packages that may be new to you.</li>
-            <li>Willingess to mimic and experiment with basic eXtensible Stylsheet Language (<init>XSL</init>).</li>
+            <li>Willingness to mimic and experiment with basic eXtensible Stylesheet Language (<init>XSL</init>).</li>
         </ul>Fortunately, it is easy to start small, get good results, and expand your skills further.</p>
 
         <p>Begin by creating a file that is a new <init>XSL</init> stylesheet.  You can likely safely copy a mature one from the <c>xsl/latex</c> directory.  Be certain to keep the first few declarations.  The <tag>xsl:import</tag> is critical, since it will <q>pull in</q> all the basic code for the <pretext/> conversion to <latex/>.  You will be overriding and appending to that code (which <pretext/> has made straightforward).  You can start with an absolute path from your filesystem root, but once public a relative path will be necessary.  Remove all of the <tag>xsl:template</tag> elements, leaving a hollow shell to begin working with.</p>
@@ -99,7 +99,7 @@
 
         <p>The definition of this template will override (replace) the definition given in any imported stylesheet.  You can replace the value of the <attr>match</attr> attribute with <c>article</c> to make your style apply to a <pretext/> <tag>article</tag>.  If your style will be used for both books and articles, and you want the style to be identical for both, you can expand the <attr>match</attr> attribute to have the value <c>article|book</c>.  To have different styles for a book versus an article, make two separate templates.</p>
 
-        <p>The <c>titleps</c> package allows at least twelve options per page style:  even-numbered page versus odd-numbered page with two-sided printing; left, center, right; header or footer.  There are semi-automatic customizable rules, variable widths allowing hanging styles, choices of marks (division at page-start versus division at page-end versus new-division-mid-page, including combinations at the same time), and more.  Note that the <latex/> system of <c>\markleft</c> and <c>\markboth</c> has been abandonded.  (Did I hear you say, <q>Good riddance!</q>?)</p>
+        <p>The <c>titleps</c> package allows at least twelve options per page style:  even-numbered page versus odd-numbered page with two-sided printing; left, center, right; header or footer.  There are semi-automatic customizable rules, variable widths allowing hanging styles, choices of marks (division at page-start versus division at page-end versus new-division-mid-page, including combinations at the same time), and more.  Note that the <latex/> system of <c>\markleft</c> and <c>\markboth</c> has been abandoned.  (Did I hear you say, <q>Good riddance!</q>?)</p>
 
         <p>
           Some care must be taken with using <c>\thechapter</c> to get the chapter number, since strange things happen in the frontmatter and backmatter, where chapters are numberless.   One solution is to use <c>\ifthechapter{}{}</c> which allows you to control the behavior dependent on whether there is a current chapter number.  For example, if you wanted the center of the even-numbered pages to contain <q>Chapter 3: Derivatives</q> you would use
@@ -178,7 +178,7 @@
 
         <p>When things go bad, such as a non-obvious <latex/> compilation, it can help to stop working with <pretext/> source, and instead edit the generated <latex/> until the problem is understood.</p>
 
-        <p>We do not expect to provide great support for this process.  First, because new code and basic support already keeps us busy, and second, because you have the freedom to really make a mess, and thus you should take responsibility for the problem.  When you are certain that <pretext/> has done something wrong or inadvisable, please, please do post in the development forum with a careful explanation and a (minimal) example.  It will happen.  Just don't use the forums as a replacement for this documentation or a bit of sleuthing through the <latex/> that <em>you</em> are now creating.  With freedom comes responsibilty.  Thanks.</p>
+        <p>We do not expect to provide great support for this process.  First, because new code and basic support already keeps us busy, and second, because you have the freedom to really make a mess, and thus you should take responsibility for the problem.  When you are certain that <pretext/> has done something wrong or inadvisable, please, please do post in the development forum with a careful explanation and a (minimal) example.  It will happen.  Just don't use the forums as a replacement for this documentation or a bit of sleuthing through the <latex/> that <em>you</em> are now creating.  With freedom comes responsibility.  Thanks.</p>
     </section>
 
     <section xml:id="styling-justification">

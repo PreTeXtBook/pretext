@@ -162,7 +162,7 @@
         </p>
 
         <p>
-          When you first created your repository from the template, there were very few files included.  The first thing you will do when you open your Codespace is to create a new <pretext /> project.  As the directions in the repository indicate, you can do this by selecting the <q>PreTeXt: New Project</q> command from the <term>command pallette</term> (which you can open with <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>, among other options).
+          When you first created your repository from the template, there were very few files included.  The first thing you will do when you open your Codespace is to create a new <pretext /> project.  As the directions in the repository indicate, you can do this by selecting the <q>PreTeXt: New Project</q> command from the <term>command palette</term> (which you can open with <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>, among other options).
         </p>
 
         <p>

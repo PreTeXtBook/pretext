@@ -80,7 +80,7 @@
             <title>Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
 
-            <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to contol visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the
+            <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to control visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the
               <url href="https://www.geogebra.org/" visual="www.geogebra.org">GeoGebra Project</url>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
         </subsection>
 
@@ -339,7 +339,7 @@
             </li>
             <li>
                 <title>Reference</title>
-                <p>This assumes a document is more like a reference work and is accessed <q>randomly.</q>  Results are not in order of appearnce, but rather early results will likely be more relevant.</p>
+                <p>This assumes a document is more like a reference work and is accessed <q>randomly.</q>  Results are not in order of appearance, but rather early results will likely be more relevant.</p>
             </li>
         </dl></p>
 

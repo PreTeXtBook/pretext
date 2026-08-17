@@ -57,7 +57,7 @@
         <cline>cd webwork</cline>
         <cline>git clone https://github.com/openwebwork/pg</cline>
       </cd>
-      Note that you should end up with a verion of <c>pg</c> that is 2.19 or later. To check,
+      Note that you should end up with a version of <c>pg</c> that is 2.19 or later. To check,
       examine the <c>VERSION</c> file in the root of the repository.
     </p>
     <p>
@@ -430,12 +430,12 @@
         All of the <tag>webwork</tag> that you have written into your project can be
         <q>harvested</q> in such a way that you could send them to a <webwork/> server for use
         within <webwork/>. The components you would want are PG files for the exercises, PG macros
-        that you wrote, set defintion files corresponding to the sections (or other chunks) of your
+        that you wrote, set definition files corresponding to the sections (or other chunks) of your
         project, and header files for those sets. All of this was placed into your project's
         <c>generated/webwork/pg</c> folder when you executed <c>pretext -c webwork</c>, so you could
         find it there and package it all up to send to your <webwork/> server.      </p>
       <p>
-        Alternativley, you may run the following:
+        Alternatively, you may run the following:
       </p>
       <console>
         <input prompt="$ ">pretext -c all -f webwork-sets -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>

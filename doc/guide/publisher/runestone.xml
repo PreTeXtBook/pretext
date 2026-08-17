@@ -181,7 +181,7 @@
         <figure xml:id="img-edit-metadata">
             <caption>Editing a book's metadata</caption>
             <image source="edit-metadata.png" width="100%">
-                <description><p>Editing metatdata about a book</p></description>
+                <description><p>Editing metadata about a book</p></description>
             </image>
         </figure>
         </subsection>

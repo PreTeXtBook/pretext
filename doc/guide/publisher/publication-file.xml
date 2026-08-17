@@ -165,7 +165,7 @@
 
             <p>
                 Note that the presence of such an image will increase the raw size of QR codes,
-                which are then genreally shrunk to fit. This will result in a finer grain for the
+                which are then generally shrunk to fit. This will result in a finer grain for the
                 QR code pixels.
             </p>
         </subsection>
@@ -304,7 +304,7 @@
             <p>A <tag>book</tag> with <tag>part</tag> may have the parts numbered to reflect two different structures, <term>decorative</term> or <term>structural</term>.  Set the publication file entry<cd>
                 <cline>/publication/numbering/divisions/@part-structure</cline>
             </cd> to <c>decorative</c> (the default) or <c>structural</c>.</p>
-            <p>When a <tag>book</tag> is designed to have structural parts, then there is an expectation that the part divisions are important or relevant (at least moreso than in the case of decorative parts).  Then, to choose to number objects (blocks, equations, etc.) at level 0, crossing part boundaries, strikes us as an odd choice.  So odd that there is a <url href="https://github.com/PreTeXtBook/pretext/issues/1650" visual="github.com/PreTeXtBook/pretext/issues/1650">small bug at issue #1650</url>, which might be solved by simply banning this combination.</p>
+            <p>When a <tag>book</tag> is designed to have structural parts, then there is an expectation that the part divisions are important or relevant (at least more so than in the case of decorative parts).  Then, to choose to number objects (blocks, equations, etc.) at level 0, crossing part boundaries, strikes us as an odd choice.  So odd that there is a <url href="https://github.com/PreTeXtBook/pretext/issues/1650" visual="github.com/PreTeXtBook/pretext/issues/1650">small bug at issue #1650</url>, which might be solved by simply banning this combination.</p>
         </subsection>
     </section>
 
@@ -342,7 +342,7 @@
 
             <p>The conversion to <latex/> can produce a <init>PDF</init> optimized for print, or optimized for use electronically on a screen.  The<cd>
                 <cline>/publication/latex/@print</cline>
-            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.  Note that the use of page numbers in cross-references has different default behavior based on this option (which can be overidden, see <xref ref="latex-xref-page-number-options"/>).</p>
+            </cd>attribute can have the value <c>yes</c> to produce a print version, or the value <c>no</c> to produce an electronic version.  The default is an electronic version.  See <xref ref="electronic-or-print"/> for more detail.  Note that the use of page numbers in cross-references has different default behavior based on this option (which can be overridden, see <xref ref="latex-xref-page-number-options"/>).</p>
         </subsection>
 
         <subsection xml:id="latex-sides-options">
@@ -668,7 +668,7 @@
                 <cline>/publication/html/calculator</cline>
             </cd>element has the following attribute:<ul>
                 <li>
-                    <p><attr>activecode</attr>: used to control if an ActiveCode window is available on every page, and if so, which language it undestands.  Possible values are:<ul>
+                    <p><attr>activecode</attr>: used to control if an ActiveCode window is available on every page, and if so, which language it understands.  Possible values are:<ul>
                         <li><c>python</c> (Python)</li>
                         <li><c>javascript</c> (JavaScript)</li>
                         <li><c>html</c> (<init>HTML</init>)</li>
@@ -838,7 +838,7 @@
 
             <p>The<cd>
                 <cline>/publication/html/exercises</cline>
-            </cd>element can have a <attr>tabbed-tasks</attr> attribute.  The value is a space-separated, or comma-separated, list of types of <tag>exercise</tag> or PROJECT-LIKE.  The values in this list come specify up to four of the five possible types of exercises: <c>divisional</c>, <c>inline</c>, <c>reading</c>, <c>project</c>.  Note that exercises inside a <tag>worksheet</tag> are explicity ineligible.  See <xref ref="overview-exercises"/> for careful descriptions of these types.</p>
+            </cd>element can have a <attr>tabbed-tasks</attr> attribute.  The value is a space-separated, or comma-separated, list of types of <tag>exercise</tag> or PROJECT-LIKE.  The values in this list come specify up to four of the five possible types of exercises: <c>divisional</c>, <c>inline</c>, <c>reading</c>, <c>project</c>.  Note that exercises inside a <tag>worksheet</tag> are explicitly ineligible.  See <xref ref="overview-exercises"/> for careful descriptions of these types.</p>
             <!-- 2023-06-08: no good place for a general discussion of "task", perhaps it has not been written. -->
         </subsection>
 
@@ -1079,7 +1079,7 @@
                   <li><c>fixed-height</c> (default): interactives will maintain their initial height as the window size changes. When the content becomes too wide to display, a horizontal scrollbar will appear.</li>
                   <li><c>responsive</c>: interactives will resize dynamically as the window size changes to maintain their aspect ratio.</li>
               </ul>
-              In addition to this global setting, you can add child elemements to 
+              In addition to this global setting, you can add child elements to
               <cd>
                   <cline>/publication/html/interactives</cline>
               </cd>
@@ -1158,7 +1158,7 @@
             <p>The<cd>
                 <cline>/publication/revealjs/navigation</cline>
             </cd>element can have the following attribute:<ul>
-                <li><attr>mode</attr>: for the arrangement of the navigation through slides.  Values are <c>default</c>, <c>linear</c>, or <c>grid</c>.  The default is <c>default</c>.  The value <c>default</c> refers to the default mode of Reveal.js and is synonomous with <c>grid</c>.  In other words, the choice of <c>default</c> or <c>grid</c> results in identical behavior.</li>
+                <li><attr>mode</attr>: for the arrangement of the navigation through slides.  Values are <c>default</c>, <c>linear</c>, or <c>grid</c>.  The default is <c>default</c>.  The value <c>default</c> refers to the default mode of Reveal.js and is synonymous with <c>grid</c>.  In other words, the choice of <c>default</c> or <c>grid</c> results in identical behavior.</li>
             </ul>See <xref ref="publisher-revealjs"/> for more explanation of the two different navigation modes.</p>
         </subsection>
 

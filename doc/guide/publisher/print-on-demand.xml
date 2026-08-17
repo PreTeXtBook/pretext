@@ -36,7 +36,7 @@
         <li>
             <title><init>ISBN</init></title>
             <idx><init>ISBN</init></idx>
-            <p>An <term>International Standard Book Number</term> is a unique identifier of books and necessary for others to distibute and sell your book.  See details for each manufacturer below.  Much like a domain name for your book's website (see <xref ref="web-hosting" />), this may be something you wish to control and own, foregoing the convenience of someody else providing and owning it for you.</p>
+            <p>An <term>International Standard Book Number</term> is a unique identifier of books and necessary for others to distribute and sell your book.  See details for each manufacturer below.  Much like a domain name for your book's website (see <xref ref="web-hosting" />), this may be something you wish to control and own, foregoing the convenience of someody else providing and owning it for you.</p>
         </li>
     </dl></p>
 

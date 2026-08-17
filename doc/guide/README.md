@@ -29,7 +29,7 @@ If you wish to build from source, possibly as part of contributing improvements,
 1.  And for HTML output:
     cd /path/to/guide
     pretext build html -d -w
-1.  The preceeding two steps will attempt to build all of the webwork representations and diagrams needed for your book. You may be missing some of the prerequisites, such as Sage that will need to be installed before a full build can be completed.
+1.  The preceding two steps will attempt to build all of the webwork representations and diagrams needed for your book. You may be missing some of the prerequisites, such as Sage that will need to be installed before a full build can be completed.
 
 If you are contributing new material, note that there are three important elements in use. Please make use of them in your contribution.
 

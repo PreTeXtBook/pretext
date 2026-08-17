@@ -18,7 +18,7 @@
             <p>There is an optimal number of characters per line for human readers,
                based on research and centuries of book design.
                So we set a fixed width such that the default font comes close to achieving this optimal value.
-               We also use responsive design to accomodate the constraints of a small screen as best as possible.
+               We also use responsive design to accommodate the constraints of a small screen as best as possible.
                A reader will not want to have to carefully resize a browser window to achieve the optimal width,
                nor should a line of text spread to many, many characters across a very expansive screen.
                See <xref ref="principle-good-design" text="type-local">Principle</xref>.</p>
@@ -79,7 +79,7 @@
 
         <li>
             <title>Why does the HTML output load so many external resources?</title>
-            <p>The subtext perhaps being, <q>Why shouldn't I host these on my own server?</q>  A main goal for <pretext /> is to spare authors the headaches of learning new technologies just so they can get their content in front of readers.  That knowledge should be built into software, so an author can work at a higher level, explaining the intricacies of their discipline.  So we only assume an author can place locally-built HTML output onto some public server they have permission to use.  Any extra enabling techology we do not want to create ourselves gets pulled from other public servers.  MathJax, both code and fonts, is a good example, as one of the enabling projects.  Perhaps it is <em>the</em> enabling project.</p>
+            <p>The subtext perhaps being, <q>Why shouldn't I host these on my own server?</q>  A main goal for <pretext /> is to spare authors the headaches of learning new technologies just so they can get their content in front of readers.  That knowledge should be built into software, so an author can work at a higher level, explaining the intricacies of their discipline.  So we only assume an author can place locally-built HTML output onto some public server they have permission to use.  Any extra enabling technology we do not want to create ourselves gets pulled from other public servers.  MathJax, both code and fonts, is a good example, as one of the enabling projects.  Perhaps it is <em>the</em> enabling project.</p>
 
             <p>This way,<ul>
                 <li>Authors can concentrate on their writing, not updating services on their server.</li>
@@ -89,7 +89,7 @@
 
             <p>We get MathJax from a <term>content delivery network</term> (CDN).  Once we have that dependency, then fonts and search from Google, CSS and Javascript from the American Institute of Mathematics, and other components, all have the same dependency: a decent internet connection.  Our experience over several years is that these resources have good uptimes and good bandwidth, and so are not a source of problems.  A good offline version, with resources packaged via a script, would be a good long-term project.</p>
 
-            <p>Finally, we do not load minor resources indiscriminately.  Something in your source should suggest they are necessary and we perform those checks, document-wide.  However, since a cross-reference is usually implemented as a knowl, and we cannot be sure what a knowl might contain, we do tend to load resources on <em>every</em> page, even if only needed once.  We hope to improve this situation.  And you are enouraged to help if you have technical skills in these areas.</p>
+            <p>Finally, we do not load minor resources indiscriminately.  Something in your source should suggest they are necessary and we perform those checks, document-wide.  However, since a cross-reference is usually implemented as a knowl, and we cannot be sure what a knowl might contain, we do tend to load resources on <em>every</em> page, even if only needed once.  We hope to improve this situation.  And you are encouraged to help if you have technical skills in these areas.</p>
         </li>
 
         <li>

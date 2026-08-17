@@ -24,7 +24,7 @@
 
         <li>When the first draft of the conversion is ready, you will receive a pull request from David via GitHub. Go ahead and accept it, and now your repository will have new files that are the <pretext/> source.</li>
 
-        <li>Spend some time to review the files carefully, looking for consistent mis-interpretations of your intent. Convert to <init>HTML</init> and <init>PDF</init> and see how they look. There may be some back-and-forth with you explaining what your <latex/> was trying to do, and David improving the conversion to <pretext/>.</li>
+        <li>Spend some time to review the files carefully, looking for consistent misinterpretations of your intent. Convert to <init>HTML</init> and <init>PDF</init> and see how they look. There may be some back-and-forth with you explaining what your <latex/> was trying to do, and David improving the conversion to <pretext/>.</li>
 
         <li>At some point it will be up to you to take ownership of the <pretext/> source and finish the conversion.</li>
     </ol></p>

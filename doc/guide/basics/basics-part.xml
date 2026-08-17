@@ -1023,7 +1023,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 	<li><c>divisionalexercise</c> for an <tag>exercise</tag>
 	inside <tag>exercises</tag>, <tag>subexercises</tag>, or
 	<tag>exercisegroup</tag> with default <q>Exercise</q></li>
-	<li><c>inlineexercise</c> for an inline exerise with default
+	<li><c>inlineexercise</c> for an inline exercise with default
 	<q>Checkpoint</q></li>
 	<li><c>worksheetexercise</c> for an <tag>exercise</tag>
 	contained in a <tag>worksheet</tag> with default <q>Worksheet

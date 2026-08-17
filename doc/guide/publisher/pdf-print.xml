@@ -103,7 +103,7 @@
 
         <p>Suppose you are a publisher, or an author who is also your publisher, and you wish to manufacture a paperback copy of your book in a 6-inch wide by 9-inch tall version.  It is unlikely your printer has paper of this size.  Use the <c>geometry</c> option above to specify the logical size of the paper for your book and then set margins, etc. to determine exactly how the text block sits on the page.  Then there is a <attr>crop-marks</attr> option available though the publication file.  You set it to a paper size describing the paper in your printer, likely <c>letter</c> (US) or <c>a4</c> (Europe).  Then your logical page will be centered on the physical page, and indications in each corner will describe the boundaries of the page.</p>
 
-        <p>To see this in action, you need to explicity set a smaller page size.  So the value of the <c>geometry</c> could be set to<cd>
+        <p>To see this in action, you need to explicitly set a smaller page size.  So the value of the <c>geometry</c> could be set to<cd>
             <cline>paperwidth=6in,paperheight=9in,total={5in,7in}</cline>
         </cd>Do not forget to turn off any page-scaling in your printer configuration before printing onto paper.  See <xref ref="latex-page-options"/> for the exact syntax of how to enable crop marks.</p>
 
@@ -268,7 +268,7 @@
 
         <p>The <latex/> file created by <pretext/> will contain the majority of your content in a form that you could use it in a new standalone <latex/> document, in accordance with Principle <xref ref="principle-open" text="global"/>.  However some constructions which are not natural in <latex/>, such as a <tag>sidebyside</tag>, may be cumbersome to reuse.  We continue to improve and refine these situations, though.</p>
 
-        <p>Our philosophy is to create and use many new <latex/> environments, allowing styling and fine-tuning to occur in the preamble.  This makes the body look more like simple <latex/> and allows for much greater flexiblity in styling, along with greater reliability for successful <latex/> compilation.</p>
+        <p>Our philosophy is to create and use many new <latex/> environments, allowing styling and fine-tuning to occur in the preamble.  This makes the body look more like simple <latex/> and allows for much greater flexibility in styling, along with greater reliability for successful <latex/> compilation.</p>
 
         <p>The existence, variety, and quality of <latex/> packages changes continuously.  We can, and will, swap out some packages for replacements, as needed or desirable.  This is to your advantage, as you are absolved of the need to evaluate competing packages, and to insure that they do not clash with each other.  So resist the temptation to modify the <latex/> output significantly prior to compilation, as it will inevitably lead to frustration.  The <latex/> file is a means to an end<mdash/>it allows us to create a <init>PDF</init> with excellent typography, and especially for the demands of technical discplines, such as <acro>STEM</acro> and music.  It is meant to ephemeral, not archival.</p>
 
