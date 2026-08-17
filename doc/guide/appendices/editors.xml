@@ -107,7 +107,7 @@
             <p>Column selection allows you to select a rectangular area of a file.
             This is unbelievably useful when editing a structured document. There
             are lots of ways to do it (<url
-            href="http://docs.sublimetext.info/en/latest/editing/editing.html">see the Sublime Text documentation</url> for an almost exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
+            href="https://www.sublimetext.com/docs/column_selection.html">see the Sublime Text documentation</url> for an almost exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
             <p>Column selection becomes even more useful when used in combination with the keyboard shortcuts for moving and selecting, such as <c>Ctrl+Shift+Right</c> (select to end of word) and <c>Shift+End</c> (select to end of line).</p>
             <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your <pretext /> source.<ol>
                 <li>
