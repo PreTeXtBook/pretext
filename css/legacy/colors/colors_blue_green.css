@@ -73,7 +73,7 @@
   /* 
   We specify 6 color families (hues), each with 5 hue/lightness options, to be used by style files if they wish. 
 
-  The hues should roughly corrspond to red, orange, yellow, green, blue, violet, but should be consistent with the colors specified for titles and toc defined above. 
+  The hues should roughly correspond to red, orange, yellow, green, blue, violet, but should be consistent with the colors specified for titles and toc defined above.
   
   Each color has *light, *dark variants (adjusting the lightness of hsl) and *rich, *dull variants (adjusting the saturation). *light and *dull should work for a main background. The standard and *riche should work for borders. For a bold title background, the *dark could be used.
 

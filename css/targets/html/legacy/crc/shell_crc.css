@@ -353,7 +353,7 @@ body.pretext {
   .pretext .ptx-sidebar {
     display: none;
   }
-/* copied from shell_default.css   Wher is ptx-navbar set in the CRC style */
+/* copied from shell_default.css   Where is ptx-navbar set in the CRC style */
 .pretext .ptx-navbar {
     position: fixed;
     top: auto;

@@ -30,7 +30,7 @@ $top-level-containers: ".chapter, .section, .subsection, .subsubsection" !defaul
   @include expandable.expandable;
 }
 
-// get rid of indentation for tablular figures, interferes with centering wide elements
+// get rid of indentation for tabular figures, interferes with centering wide elements
 figure.table-like {
   margin-left: 0px;
   margin-right: 0px;

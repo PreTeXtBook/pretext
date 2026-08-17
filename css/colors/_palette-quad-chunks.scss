@@ -181,7 +181,7 @@ $fact-types: "definition-like", "proof-like", "theorem-like", "computation-like"
   );
 }
 
-$meta-types: "goal-like", "asside-like", "remark-like";
+$meta-types: "goal-like", "aside-like", "remark-like";
 @each $block in $meta-types {
   $colors: map.merge(
     $colors,

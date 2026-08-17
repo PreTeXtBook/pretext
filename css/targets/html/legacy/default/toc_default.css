@@ -122,7 +122,7 @@
 }
 
 /* Any toc item without a codenumber needs indentation
-   Can't select absence of a preceeding, so indent all titles
+   Can't select absence of a preceding, so indent all titles
    and then clear indent if there is a codenumber */
 .ptx-toc .toc-item .toc-title-box .title {
     margin-left: var(--toc-indent-first);

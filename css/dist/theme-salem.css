@@ -4389,8 +4389,8 @@ body.pretext {
   --color-fact: #0f80b0;
   --exercise-like-body-background: whitesmoke;
   --exercise-like-border-color: hsl(208, 7%, 45%);
-  --asside-like-body-background: #f8f2f2;
-  --asside-like-border-color: #a13838;
+  --aside-like-body-background: #f8f2f2;
+  --aside-like-border-color: #a13838;
 }
 :root.dark-mode {
   color-scheme: dark;

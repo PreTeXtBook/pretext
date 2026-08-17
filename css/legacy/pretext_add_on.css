@@ -1130,7 +1130,7 @@
         Vertical space before the next term.
 
    Description lists are more complicated.  The wider version
-   (refering to the horizontal indentation of the definition;
+   (referring to the horizontal indentation of the definition;
     this is the default)
    has the (wrapped) term inline with the definition.
 
@@ -2626,7 +2626,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading {
     display: inline;
     font-size: 1.1em;
 }
-/* becaues the worksheet has no side margins but the .onepage does */
+/* because the worksheet has no side margins but the .onepage does */
 body.standalone.worksheet .ptx-content section.worksheet > .heading,
 body.standalone.worksheet .ptx-content section.worksheet > .objectives,
 body.standalone.worksheet .ptx-content section.worksheet > .introduction,
@@ -3034,7 +3034,7 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
     margin-top: 0;
     display: inline;
 }
-/* next is realted to having exercises start in-line with their exercise number,
+/* next is related to having exercises start in-line with their exercise number,
    including when a static WW problem is made interactive */
 /* not sure this was the right way to do it */
 /* see https://opentext.uleth.ca/apex-calculus/sec_antider.html#exercise-722 */

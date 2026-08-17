@@ -1,4 +1,4 @@
-/* Since the detault style is loaded before the oscarlevin style, */
+/* Since the default style is loaded before the oscarlevin style, */
 /* some of the default style has to be undone */
 
 .ptx-content article.theorem-like::after, .ptx-content article.definition-like::after, .ptx-content article.example-like::after, .ptx-content article.project-like::after, .ptx-content article.remark-like::after, .ptx-content article.openproblem-like::after, .ptx-content article.openproblems-like::after, .ptx-content article.computation-like::after {
@@ -57,7 +57,7 @@
 
   (should we style aside-like?  Or just copy from style_default?)
 
-  We define the style of environments in three steps: first the shape, then the color, and finally the shape and color of the heading/title.  The only reason to group these as such is that we can then have a common shape for differet *-like elements, but still allow for different colors to distinguish them.
+  We define the style of environments in three steps: first the shape, then the color, and finally the shape and color of the heading/title.  The only reason to group these as such is that we can then have a common shape for different *-like elements, but still allow for different colors to distinguish them.
 
   Start with the important custom environments (theorem might be different from the other theorem-like, etc.), then clean up any standard *-like.
 

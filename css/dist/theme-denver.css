@@ -4508,8 +4508,8 @@ figure.table-like {
   --color-fact: #9a51b3;
   --exercise-like-body-background: #f3f7f6;
   --exercise-like-border-color: #51b39a;
-  --asside-like-body-background: #f7f3f4;
-  --asside-like-border-color: #b3516a;
+  --aside-like-body-background: #f7f3f4;
+  --aside-like-border-color: #b3516a;
 }
 :root.dark-mode {
   color-scheme: dark;
