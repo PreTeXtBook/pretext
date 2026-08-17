@@ -13958,7 +13958,16 @@ TODO:
 <xsl:template name="mathjax">
     <!-- MathJax 4 configuration via JavaScript module -->
     <script type="module">
-        <xsl:text>import { startMathJax } from './</xsl:text>
+        <!-- A module specifier is either an absolute URL or a relative      -->
+        <!-- reference beginning "/", "./", or "../" - a bare path will not  -->
+        <!-- resolve.  So a local build, where "html.js.dir" is relative,    -->
+        <!-- needs the "./", while a CDN build, where the prefix has already -->
+        <!-- made it absolute, must not have it: the "./" would make the     -->
+        <!-- whole URL relative to the page.                                 -->
+        <xsl:text>import { startMathJax } from '</xsl:text>
+        <xsl:if test="$cdn-prefix = ''">
+            <xsl:text>./</xsl:text>
+        </xsl:if>
         <xsl:value-of select="$html.js.dir"/>
         <xsl:text>/mathjax_startup.js';&#xa;</xsl:text>
         <xsl:text>startMathJax({&#xa;</xsl:text>
