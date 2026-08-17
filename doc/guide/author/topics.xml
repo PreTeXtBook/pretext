@@ -1526,7 +1526,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/" visual="www.mathjax.org">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="https://www.ams.org/arc/resources/amslatex-about.html" visual="www.ams.org/arc/resources/amslatex-about.html">AMS-LaTeX page</url>. For a complete and precise list of what MathJax supports, see MathJax's <url href="http://docs.mathjax.org/en/latest/input/tex/macros/" visual="docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/" visual="www.mathjax.org">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="https://www.ams.org/arc/resources/amslatex-about.html" visual="www.ams.org/arc/resources/amslatex-about.html">AMS-LaTeX page</url>. For a complete and precise list of what MathJax supports, see MathJax's <url href="https://docs.mathjax.org/en/latest/input/tex/macros/" visual="docs.mathjax.org/en/latest/input/tex/macros/">Supported <tex/>/<latex/> commands</url>. Once you have digested this more general section, be sure to also consult <xref ref="topic-mathematics-practices"/> for some very specific suggestions.</p>
         </introduction>
 
         <subsection>
@@ -1934,7 +1934,7 @@
 
             <p>Note that both attributes <attr>latex-name</attr> and <attr>mathjax-name</attr> must be present.  They may be identical (as above, and typical) or they may be different (rare).  There are situations where one might be empty.  Of course, you can use these macros in other definitions of mathematics macros you might make (<xref ref="mathematics-macros"/>).  However, we do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext/>.  Nor do we support debugging such conflicts.</p>
 
-            <p>If there are <latex/> macros you desire, but without a MathJax implementation, then there is not much we can do, short of suggesting you write your own extension (not recommended, see <url href="https://docs.mathjax.org/en/latest/advanced/webpack.html">A Custom Extension</url>).  There are some workarounds which we may document shortly.</p>
+            <p>If there are <latex/> macros you desire, but without a MathJax implementation, then there is not much we can do, short of suggesting you write your own extension (not recommended, see <url href="https://docs.mathjax.org/en/latest/advanced/webpack.html#custom-component">Building a Custom Component</url>).  There are some workarounds which we may document shortly.</p>
         </subsection>
 
         <subsection>
