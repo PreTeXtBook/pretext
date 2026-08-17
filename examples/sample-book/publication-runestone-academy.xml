@@ -42,7 +42,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- HTML-Specific Options -->
     <html>
-        <brandlogo url="http://abstract.pugetsound.edu" source="cover_aata_2014.png"/>
+        <brandlogo url="https://judsonbooks.org/abstract/" source="cover_aata_2014.png"/>
     </html>
 
     <html>

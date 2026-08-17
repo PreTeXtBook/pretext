@@ -10605,7 +10605,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- http://camendesign.com/code/video_for_everybody/test.html -->
 
                 <figure>
-                    <caption>Big Buck Bunny from  <url href="http://camendesign.com/code/video_for_everybody/test.htm" visual="camendesign.com/code/video_for_everybody/test.htm"><q>Video for Everybody</q> Test Page</url></caption>
+                    <caption>Big Buck Bunny from  <url href="https://camendesign.com/code/video_for_everybody/test.html" visual="camendesign.com/code/video_for_everybody/test.html"><q>Video for Everybody</q> Test Page</url></caption>
                     <video label="big-buck-bunny-frame-one" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg"/>
                 </figure>
 
