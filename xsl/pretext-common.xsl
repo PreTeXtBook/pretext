@@ -9735,7 +9735,7 @@ Book (with parts), "section" at level 3
 <!-- ################## -->
 
 <!-- Dashes and hyphens - worth reviewing       -->
-<!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
+<!-- https://jkorpela.fi/dashes.html -->
 
 <!-- An mdash may have thin space around it, otherwise it        -->
 <!-- should have none.  It might be difficult to enforce this    -->
