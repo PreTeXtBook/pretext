@@ -4204,6 +4204,8 @@
         <p>Here we collect all fragments that are still experimental and put them
                 in a rnc file that includes the stable schema.</p>
 
+        <p>The development schema must remain a <em>purely additive overlay</em> of the production schema: a bare <c>include</c> of <c>pretext.rnc</c> (never with a replacement body in braces), wholly new named patterns, and additions to production patterns only via <c>|=</c> (<c>combine="choice"</c>), with no override of <c>start</c>.  So every document valid under the production schema is valid under the development schema, <em>by construction</em>.  Validation depends on this: it reports messages from the development schema as genuine errors, and constructs valid only under the development schema as experimental, a classification that a replacement or restriction here would silently corrupt.  Validation checks the invariant on every run and warns of any departure.</p>
+
         <fragment filename="pretext-dev.rnc">
             <title>Development Schema</title>
             <code>
