@@ -10630,7 +10630,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
                 <figure>
-                    <caption><pubtitle>Sintel</pubtitle>, no extension, so the browser should choose among the formats offered.  Presently no <tag>source</tag> is produced at all for a complete <init>URL</init>, since the extension is sought after the last period of the whole string, which lands inside the host name.</caption>
+                    <caption><pubtitle>Sintel</pubtitle>, no extension, so every format is offered and the browser chooses.  Theora is no longer decoded, so the <c>*.ogv</c> source is passed over and the <c>*.webm</c> one is used<mdash />the fallback a list of <tag>source</tag> exists to provide.</caption>
                     <video label="sintel-trailer-best-format" href="https://media.w3.org/2010/05/sintel/trailer" width="30%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 

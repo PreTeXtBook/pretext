@@ -1131,11 +1131,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Add a question mark, then grab leading substring -->
     <!-- This will fail if "?" is encoded                 -->
     <xsl:variable name="no-query-string" select="substring-before(concat($filename, '?'), '?')" />
+    <!-- Reduce to the last path segment first, else a period in a host -->
+    <!-- name or a directory ("media.w3.org", "v1.2") would be read as  -->
+    <!-- the start of an extension.  The leading slash is what makes    -->
+    <!-- "substring-after-last" return a bare filename unchanged.       -->
+    <xsl:variable name="final-segment">
+        <xsl:call-template name="substring-after-last">
+            <xsl:with-param name="input" select="concat('/', $no-query-string)" />
+            <xsl:with-param name="substr" select="'/'" />
+        </xsl:call-template>
+    </xsl:variable>
     <!-- get extension after last period   -->
     <!-- will return empty if no extension -->
     <xsl:variable name="extension">
         <xsl:call-template name="substring-after-last">
-            <xsl:with-param name="input" select="$no-query-string" />
+            <xsl:with-param name="input" select="$final-segment" />
             <xsl:with-param name="substr" select="'.'" />
         </xsl:call-template>
     </xsl:variable>

@@ -325,6 +325,125 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!--========================================================================-->
+<!-- test file-extension -->
+<xsl:variable name="file-extension-bare">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'movie.mp4'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'mp4'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-bare'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-none">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'movie'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="''"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-none'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-uppercase">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'MOVIE.MP4'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'mp4'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-uppercase'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-relative-path">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'video/movie.webm'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'webm'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-relative-path'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-relative-none">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'video/ups-visitor-guide-360'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="''"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-relative-none'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-query-string">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'movie.mp4?start=16'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'mp4'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-query-string'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-url">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'https://media.w3.org/2010/05/sintel/trailer.mp4'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'mp4'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-url'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-url-none">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'https://media.w3.org/2010/05/sintel/trailer'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="''"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-url-none'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="file-extension-url-dotted-directory">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="file-extension">
+      <xsl:with-param name="filename" select="'https://example.org/v1.2/movie.webm'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'webm'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'file-extension-url-dotted-directory'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<!--========================================================================-->
 
 <!-- "main" -->
 <xsl:template match="/">
