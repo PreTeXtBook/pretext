@@ -2496,7 +2496,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="datafile|query" mode="representations">
+<xsl:template match="datafile|file|query" mode="representations">
     <xsl:choose>
         <!-- make a static version, in a PreTeXt style -->
         <!-- for use naturally by most conversions     -->
@@ -2947,6 +2947,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <dataurl>
         <xsl:apply-templates select="node()|@*" mode="repair"/>
     </dataurl>
+</xsl:template>
+
+<!-- 2026-08-08: deprecate "datafile" (with a @label) in favor of  -->
+<!-- the new "file" element.  Translation is a 1-for-1 replace-    -->
+<!-- ment, preserving @label/@xml:id and the @pi:* identification -->
+<!-- (stamped earlier), so the id passes stay coherent:           -->
+<!--    * @editable="yes"      -> @user-interaction="edit"        -->
+<!--    * @editable="no"/absent and no @hide -> @user-interaction  -->
+<!--                                              ="view"         -->
+<!--    * @hide="yes"          -> @user-interaction="none"         -->
+<!--    * "pre" child, authored content     -> "pre" child, no     -->
+<!--      @format (implies "pre")                                  -->
+<!--    * "pre" with @source (external text) -> @format="pre" and  -->
+<!--      @source                                                   -->
+<!--    * "image" child (external image)     -> @format="image"    -->
+<!--      and @source from the "image" child, @user-interaction="view" -->
+<xsl:template match="datafile[@label]" mode="repair">
+    <file>
+        <!-- all shared attributes, minus the two we consume here -->
+        <xsl:copy-of select="@*[not(local-name() = 'editable') and not(local-name() = 'hide')]"/>
+        <xsl:attribute name="user-interaction">
+            <xsl:choose>
+                <xsl:when test="@editable = 'yes'">
+                    <xsl:text>edit</xsl:text>
+                </xsl:when>
+                <xsl:when test="@hide = 'yes'">
+                    <xsl:text>none</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>view</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="image">
+                <!-- an image file: the "image" child's @source -->
+                <!-- names the file, and there is no child content -->
+                <xsl:attribute name="format">
+                    <xsl:text>image</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="source">
+                    <xsl:value-of select="image/@source"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="pre/@source">
+                <!-- an external text file, named by @source -->
+                <xsl:attribute name="format">
+                    <xsl:text>pre</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="source">
+                    <xsl:value-of select="pre/@source"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- an authored text file: keep the "pre" child -->
+                <xsl:apply-templates select="pre" mode="repair"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </file>
 </xsl:template>
 
 <xsl:template match="colophon/website[address]" mode="repair">
@@ -4860,7 +4919,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- — so the BUG fallback below can catch an unexpected           -->
 <!-- application.                                                  -->
 <xsl:template match="audio|video|interactive|image
-                   | datafile
+                   | datafile|file
                    | exercise/stack
                    | exercise[@pi:exercise-interactive='fillin' and setup]
                    | project[@pi:exercise-interactive='fillin' and setup]
@@ -5071,7 +5130,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with a path relative to the author's main source file, hence  -->
 <!-- the filename uses the directory name in author's source.      -->
 <!-- NB: identical code in static constructions.                   -->
-<xsl:template match="datafile" mode="datafile-filename">
+<xsl:template match="datafile|file" mode="datafile-filename">
     <xsl:value-of select="$generated-directory-source"/>
     <xsl:text>datafile/</xsl:text>
     <!-- context is "datafile", the basis for identifier -->
@@ -5108,6 +5167,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- The actual text contents of a "file", when it names an external -->
+<!-- file via @source.  Like "datafile/pre[@source]", the text comes -->
+<!-- back from the generated representation file, so the "file" must -->
+<!-- name text (a "pre" kind) to consult it.                        -->
+<xsl:template match="file[@source]" mode="datafile-text-contents">
+    <xsl:variable name="data-filename">
+        <xsl:apply-templates select="." mode="datafile-filename"/>
+    </xsl:variable>
+    <xsl:variable name="text-file-elt" select="document($data-filename, $original)/pi:text-file"/>
+    <xsl:value-of select="$text-file-elt"/>
+</xsl:template>
+
+<!-- The actual text contents of a "file", specified in a "pre" element.  -->
+<xsl:template match="file[pre]" mode="datafile-text-contents">
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text">
+            <xsl:value-of select="pre"/>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>

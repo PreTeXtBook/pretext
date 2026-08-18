@@ -9866,7 +9866,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Data Files -->
 
-<xsl:template match="datafile">
+<xsl:template match="datafile|file">
     <xsl:apply-templates select="." mode="runestone-to-interactive"/>
 </xsl:template>
 

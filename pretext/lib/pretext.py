@@ -902,6 +902,23 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             with open(data_file, "rb") as f:
                 base64version = base64.b64encode(f.read()).decode("utf8")
             xml_representation = image_info.format(mime_type, base64version)
+        elif file_type == "binary":
+            # best guess of the MIME type, based on the filename extension
+            _, extension = os.path.splitext(data_file)
+            # normalize, drop leading period
+            # in rough popularity order
+            lcext = extension[1:].lower()
+            if lcext == "zip":
+                mime_type = "application/zip"
+            elif lcext == "jar":
+                mime_type = "application/java-archive"
+            else:
+                mime_type = "application/octet-stream"
+
+            # Open binary file and encode in base64 with standard module
+            with open(data_file, "rb") as f:
+                base64version = base64.b64encode(f.read()).decode("utf8")
+            xml_representation = image_info.format(mime_type, base64version)
         elif file_type == "pre":
             with open(data_file, "rb") as f:
                 rawtext = f.read().decode("utf8")
