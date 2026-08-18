@@ -5447,7 +5447,7 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
 PI_SOURCE_URI = "{http://pretextbook.org/2020/pretext/internal}source-uri"
 
 
-def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
+def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, report_form):
     """Validate source against both RELAX-NG schemas, locally or via a server"""
 
     # Validation consults both grammars.  The development schema is a
@@ -5455,11 +5455,12 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     # is a strict superset: a message from the development run is a
     # genuine problem, while a message arising only under the production
     # schema locates an experimental construct -- one whose markup may
-    # change without a formal deprecation cycle.  "server" delegates
-    # both "jing" runs to a remote service; the consolidated report is
-    # identical.  "terse" is machine-readable output, one tab-separated
-    # message per line, meant for a program.
-    terse = method == "terse"
+    # change without a formal deprecation cycle.  The method says where
+    # the "jing" runs happen: "server" delegates both to a remote
+    # service; the consolidated report is identical.  The report form
+    # "full" is meant for an author, while "terse" is machine-readable
+    # output, one tab-separated message per line, meant for a program.
+    terse = report_form == "terse"
     server = method == "server"
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
