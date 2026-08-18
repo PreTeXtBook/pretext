@@ -65,8 +65,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <colophon xml:id="front-colophon">
                 <edition>Annual Edition 2015</edition>
                 <website>
-                    <name><c>abstract.pugetsound.edu</c></name>
-                    <address>http://abstract.pugetsound.edu</address>
+                    <name><c>judsonbooks.org/abstract</c></name>
+                    <address>https://judsonbooks.org/abstract/</address>
                 </website>
                 <copyright>
                     <year>1997<ndash />2015</year>

@@ -76,7 +76,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <edition>Annual Edition 2015</edition>
 
         <website>
-            <url href="http://abstract.pugetsound.edu" visual="abstract.pugetsound.edu"/>
+            <url href="https://judsonbooks.org/abstract/" visual="judsonbooks.org/abstract/"/>
         </website>
 
         <copyright>
@@ -263,7 +263,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>There are additional exercises or computer projects at the ends of many of the chapters. The computer projects usually require a knowledge of programming. All of these exercises and projects are more substantial in nature and allow the exploration of new results and theory.</p>
 
         <!-- % Added Sage blurb, RAB 2011/07/28 -->
-        <p>Sage (<url href="http://sagemath.org" visual="sagemath.org"/>) is a free, open source, software system for advanced mathematics, which is ideal for assisting with a study of abstract algebra. Sage can be used either on your own computer, a local server, or on SageMathCloud (<url href="https://cloud.sagemath.com" visual="cloud.sagemath.com"/>). Robert Beezer has written a comprehensive introduction to Sage and a selection of relevant exercises that appear at the end of each chapter, including live Sage cells in the web version of the book.</p>
+        <p>Sage (<url href="https://sagemath.org" visual="sagemath.org"/>) is a free, open source, software system for advanced mathematics, which is ideal for assisting with a study of abstract algebra. Sage can be used either on your own computer, a local server, or on SageMathCloud (<url href="https://cloud.sagemath.com" visual="cloud.sagemath.com"/>). Robert Beezer has written a comprehensive introduction to Sage and a selection of relevant exercises that appear at the end of each chapter, including live Sage cells in the web version of the book.</p>
 
         <attribution>
             <line>Thomas W. Judson</line>

@@ -32,7 +32,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <webwork server="https://webwork-ptx.aimath.org" course="anonymous" user="anonymous" password="anonymous" task-reveal="preceding-correct" />
 
     <html>
-        <brandlogo url="http://webwork.maa.org/" source="images/webwork-logo.png"/>
+        <brandlogo url="https://webwork.maa.org/" source="images/webwork-logo.png"/>
         <platform host="runestone"/>
         <!-- native search with Javascript -->
         <search variant="default"/>

@@ -44,7 +44,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Switch @short-answer-responses to "always" to have writable  -->
     <!-- text boxes even in output where they cannot be graded.       -->
     <html short-answer-responses="graded">
-        <brandlogo url="http://abstract.pugetsound.edu" source="cover_aata_2014.png"/>
+        <brandlogo url="https://judsonbooks.org/abstract/" source="cover_aata_2014.png"/>
         <!-- Turn on a Runestone ActiveCode window, both for show, -->
         <!-- and for testing purposes                              -->
         <calculator activecode="python"/>

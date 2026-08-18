@@ -55,9 +55,9 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
             <p><ol>
                 <li>Your source XML file should always have <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd> as the first line of the file to specify that your file contains Unicode characters.</li>
 
-                <li>You will need to determine how to make your operating system, keyboard and editor cooperate to create the Unicode characters you need.  The <url href="http://www.cs.tut.fi/~jkorpela/fui.html8">Full Unicode Input utility</url> can be useful for generating short snippets or you can copy/paste from the source of this document.</li>
+                <li>You will need to determine how to make your operating system, keyboard and editor cooperate to create the Unicode characters you need.  The <url href="https://jkorpela.fi/fui.html8">Full Unicode Input utility</url> can be useful for generating short snippets or you can copy/paste from the source of this document.</li>
 
-                <li>Generating variants of HTML for web browsers should work smoothly.  You can test your system and browser for font support by viewing samples at Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>.</li>
+                <li>Generating variants of HTML for web browsers should work smoothly.  You can test your system and browser for font support by viewing samples at Alan Wood’s <url href="https://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url>.</li>
             </ol></p>
 
             <p>Not finding what you are looking for?  Send us a request.  Even better, send us a snippet of text that I can use as a sample.  If you know of any subleties in the use of <latex /> for your desired font, please include those hints.</p>
@@ -231,7 +231,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
                     <title>I Can Eat Glass</title>
 
                     <introduction>
-                        <p>From the <url href="http://kermitproject.org/">Kermit Project</url> a <url href="http://kermitproject.org/utf8.html#notes">startling phrase</url> in many languages.</p>
+                        <p>From the <url href="https://kermitproject.org/">Kermit Project</url> a <url href="https://kermitproject.org/utf8.html#notes">startling phrase</url> in many languages.</p>
                     </introduction>
 
                     <ul>
@@ -253,7 +253,7 @@ and apply  xelatex  to  "fonts.tex"  in the current working directory.
         <section>
             <title>Font Tests</title>
 
-            <p>We place various blocks of Unicode characters here to determine the minimum configuration necessary to make them render.  Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> site has been helpful in formulating these tests.</p>
+            <p>We place various blocks of Unicode characters here to determine the minimum configuration necessary to make them render.  Alan Wood’s <url href="https://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> site has been helpful in formulating these tests.</p>
 
             <!-- 2019-01-01 Claimed support, (default) Latin Modern fonts -->
             <!-- "Supported Unicode Blocks"                               -->

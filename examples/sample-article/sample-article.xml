@@ -532,7 +532,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </sage>
 
             <!-- https://github.com/sagemath/sagecell/blob/master/contrib/vm/container_manager.py#L260 -->
-            <p>The Sage Cell server imports a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
+            <p>The Sage Cell server imports a few important R packages.  As of 2022-06-04 these are <c>deSolve</c>, <c>ggplot2</c>, <c>pracma</c>, <c>survey</c>, <c>swirl</c>, and <c>tidyverse</c>.  This next example uses the <c>ggplot</c> library for both a data set and the plotting capabilities.  Note the initial use of the <c>library()</c> function.  This is a modified version of the <articletitle>Bubble plot</articletitle> example at <url href="https://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html">Top 50 <c>ggplot2</c> Visualizations <mdash/>The Master List</url>.</p>
 
             <sage language="r">
                 <input>
@@ -1999,7 +1999,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Basic Mathematics</title>
 
-                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<md>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</md></p>
+                <p>The following is from the MathJax <url href="https://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<md>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</md></p>
 
                 <p>And again, from the MathJax demonstration page, Maxwell's equations:<idx>Maxwell's equations</idx><md>
                     <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
@@ -2958,7 +2958,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <obelus/><nbsp/><nbsp/>
                 <plusminus/></p>
 
-                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex/> with a slightly different mechanism.  These are due to <latex/>'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces" visual="latex-alive.tumblr.com/post/827168808">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex/>.</p>
+                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex/> with a slightly different mechanism.  These are due to <latex/>'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="https://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces" visual="latex-alive.tumblr.com/post/827168808">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex/>.</p>
 
                 <tabular>
                     <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
@@ -3393,7 +3393,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided. In producing the print version of a PDF, this will become a parenthetical with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
 
-                <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape"/>). </p>
+                <p>A long <init>URL</init> for testing:  <url href="https://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape"/>). </p>
 
                 <p>A <tag>url</tag> element in the print version of a PDF will get a trailing parenthetical containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
@@ -3931,7 +3931,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <idx sortby="latex"><latex/> image</idx>
                 <idx><h>image</h><h><latex/> image</h></idx>
 
-                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex/> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
+                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="https://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex/> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
@@ -4023,7 +4023,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>The next example began life in <url href="http://www.frontiernet.net/~eugene.ressler/" visual="www.frontiernet.net/~eugene.ressler/">Sketch</url>, which will output TikZ code (though the code has been edited by hand for readability).</p>
+                <p>The next example began life in <url href="https://www.frontiernet.net/~eugene.ressler/" visual="www.frontiernet.net/~eugene.ressler/">Sketch</url>, which will output TikZ code (though the code has been edited by hand for readability).</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/3d-cone.tex -->
                 <figure xml:id="figure-tikz-cone3D">
@@ -4297,7 +4297,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Asymptote, 2D</title>
 
-                <p>The Asymptote<idx><h>asymptote graphics language</h></idx> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" visual="asymptote.sourceforge.net"/>.</p>
+                <p>The Asymptote<idx><h>asymptote graphics language</h></idx> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="https://asymptote.sourceforge.net/" visual="asymptote.sourceforge.net"/>.</p>
 
                 <!--
                 See a different (more traditional) variant of URL usage
@@ -4417,7 +4417,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="graphics-asymptote-webgl">
                 <title>Asymptote, 3D via WebGL</title>
 
-                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/" visual="asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url>.</p>
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone"/> is from the <url href="https://asymptote.sourceforge.net/gallery/3Dwebgl/" visual="asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url>.</p>
 
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
@@ -4701,7 +4701,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html" visual="www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side"/>.</p>
+                <p>The following examples are from the <url href="https://www.sagemath.org/tour-graphics.html" visual="www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side"/>.</p>
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
@@ -6451,7 +6451,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
-            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex/> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext/> syntax.</p>
+            <p>Note that tables may be constructed using the <url href="https://www.latex-tables.com/" visual="www.latex-tables.com"><latex/> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext/> syntax.</p>
 
             <p>An example of aligning table cells' contents horizontally. See the source for comments.</p>
 
@@ -8931,7 +8931,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>JSXGraph</title>
                 <idx>JSXGraph</idx>
 
-                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html" visual="jsxgraph.uni-bayreuth.de">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext/> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
+                <p><url href="https://jsxgraph.uni-bayreuth.de/wp/index.html" visual="jsxgraph.uni-bayreuth.de">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext/> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
 
                 <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
 
@@ -8957,7 +8957,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">Archimedean Spiral</url> is taken from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="https://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">Archimedean Spiral</url> is taken from the <url href="https://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
 
                 <figure>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
@@ -8971,7 +8971,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/" visual="jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html" visual="jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
+                <p>Here is a more elaborate example, from the <url href="https://jsxgraph.uni-bayreuth.de/showcase/" visual="jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="https://jsxgraph.uni-bayreuth.de/showcase/infinity.html" visual="jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
 
                 <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60% and aspect ratio is the default, 1:1, <ie/> a square.</p>
 
@@ -9027,7 +9027,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/" visual="mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
+                <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="https://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/" visual="mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
             </subsection>
 
             <subsection>
@@ -10555,12 +10555,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure>
                 <caption>MP3 Piano Trill (<c>www.kozco.com/tech/soundtests.html</c>)</caption>
-                <audio xml:id="audio-piano-trill" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
+                <audio xml:id="audio-piano-trill" href="https://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
             </figure>
 
             <p>Now, naked, between a couple of paragraphs, with specified asymmetric margins, and a computed width.</p>
 
-            <audio xml:id="audio-piano-trill-two" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
+            <audio xml:id="audio-piano-trill-two" href="https://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
 
         </section>
 
@@ -10605,33 +10605,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- http://camendesign.com/code/video_for_everybody/test.html -->
 
                 <figure>
-                    <caption>Big Buck Bunny from  <url href="http://camendesign.com/code/video_for_everybody/test.htm" visual="camendesign.com/code/video_for_everybody/test.htm"><q>Video for Everybody</q> Test Page</url></caption>
-                    <video label="big-buck-bunny-frame-one" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle> trailer, by the <url href="https://durian.blender.org/" visual="durian.blender.org">Blender Foundation</url>, licensed <init>CC</init> <init>BY</init><nbsp />3.0.  The construction follows the <url href="https://camendesign.com/code/video_for_everybody/test.html" visual="camendesign.com/code/video_for_everybody/test.html"><q>Video for Everybody</q> Test Page</url>.</caption>
+                    <video label="sintel-trailer-frame-one" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="70%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video label="big-buck-bunny-margins" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, Controlled Start/End, Asymmetric Margins</caption>
+                    <video label="sintel-trailer-margins" href="https://media.w3.org/2010/05/sintel/trailer.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video label="big-buck-bunny-ogg" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, Ogg container, <c>*.ogv</c> extension.  Browsers have retired the Theora codec, so this one is expected <em>not</em> to play<mdash />it is here to exercise the markup, and to show what a reader sees when a format is no longer supported.</caption>
+                    <video label="sintel-trailer-ogg" href="https://upload.wikimedia.org/wikipedia/commons/0/06/Sintel_trailer-1080p.ogv" width="60%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, MP4 format</caption>
-                    <video label="big-buck-bunny-mp4" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, MP4 format</caption>
+                    <video label="sintel-trailer-mp4" href="https://media.w3.org/2010/05/sintel/trailer.mp4" width="50%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, WebM format</caption>
-                    <video label="big-buck-bunny-webm" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, WebM format</caption>
+                    <video label="sintel-trailer-webm" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="40%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video label="big-buck-bunny-best-format" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, no extension, so every format is offered and the browser chooses.  Theora is no longer decoded, so the <c>*.ogv</c> source is passed over and the <c>*.webm</c> one is used<mdash />the fallback a list of <tag>source</tag> exists to provide.</caption>
+                    <video label="sintel-trailer-best-format" href="https://media.w3.org/2010/05/sintel/trailer" width="30%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -10727,17 +10727,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
-                    <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
-                    <video label="big-buck-bunny-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                        <track kind="subtitles" listing="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                    <caption><pubtitle>Sintel</pubtitle> with a single subtitle track</caption>
+                    <video label="sintel-trailer-subtitles" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="75%" preview="preview/sintel-trailer-frame.jpg">
+                        <track kind="subtitles" listing="US English" xml:lang="en" source="video/sintel-trailer-captions-one.vtt"/>
                     </video>
                 </figure>
 
-                <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
+                <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  The two <tag>track</tag> use different files, whose text says which is which, so switching tracks in the player's menu is visible.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video label="big-buck-bunny-two-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                    <track kind="subtitles" listing="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
-                    <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
+                <video label="sintel-trailer-two-subtitles" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="75%" preview="preview/sintel-trailer-frame.jpg">
+                    <track kind="subtitles" listing="US English One" xml:lang="en" source="video/sintel-trailer-captions-one.vtt"/>
+                    <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/sintel-trailer-captions-two.vtt" default="yes"/>
                 </video>
 
             </subsection>
@@ -10877,7 +10877,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
+            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="https://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
             <p>For a link like the previous one, you might want to provide advice appropriate for your audience about using a context menu to download a file, or how to configure helper/viewer applications.</p>
 
@@ -10886,9 +10886,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc/>) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext/> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="data/spreadsheet/runningstatisticstemplate.ots" visual="data/spreadsheet/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
             <p>The next four paragraphs are each a single <tag>dataurl</tag> element.  Explore the source and the output from different conversions.  Strictly for testing as of 2022-11-04.</p>
-            <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
+            <p>Foo <dataurl href="https://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
             <p>Foo <dataurl source="data/spreadsheet/runningstatisticstemplate.ots" visual="http://example.com">Runners Template</dataurl> Bar</p>
-            <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
+            <p>Foo <dataurl href="https://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
             <p>Foo <dataurl source="data/spreadsheet/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
             <p>Testing of output positioning for xref's that are inside containers:</p>
             <table xml:id="self-referential-tabular-xref">
@@ -10938,7 +10938,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd>
                     as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
-                    <li><p>Alan Wood's <url href="http://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
+                    <li><p>Alan Wood's <url href="https://www.alanwood.net/unicode/unicode_samples.html" visual="www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
             </paragraphs>
 
@@ -11293,7 +11293,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:template>]]>
             </program>
 
-            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="http://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>
+            <p>Matlab is a commercial language for mathematics, while Octave in an open source version.  The <attr>language</attr> values of <c>matlab</c> and <c>octave</c> are somewhat interchangeable.  Following is a very slighlty edited version of an example from <url href="https://www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf" visual="www.public.asu.edu/~hhuang38/hph_matlab_basic2013_1.pdf"><articletitle>50 Basic Examples for Matlab</articletitle></url>.</p>
 
             <!-- Example 45: 50 Basic Examples for Matlab -->
             <program language="matlab">
@@ -11407,7 +11407,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<ca/> 276 BC<ndash/><ca/> 195/194 BC) by Nicomachus (<ca/> 60<ndash/><ca/> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" visual="en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<ca/> 276 BC<ndash/><ca/> 195/194 BC) by Nicomachus (<ca/> 60<ndash/><ca/> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes" visual="en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>
@@ -11995,7 +11995,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <image source="images/led-zeppelin-kashmir.jpg" archive="jpg"/>
                 </sidebyside>
 
-                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75%, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25% width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url>.</p>
+                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75%, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25% width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="https://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url>.</p>
 
                 <sidebyside widths="25% 25% 35%" margins="auto">
                     <!-- http://www.texample.net/tikz/examples/venn/ -->
@@ -12038,8 +12038,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                     <!--  -->
                     <p>Images by Stefan Kottwitz<ul>
-                        <li><url href="http://www.texample.net/tikz/examples/venn/" visual="www.texample.net/tikz/examples/venn/">Venn Diagram</url></li>
-                        <li><url href="http://www.texample.net/tikz/examples/smart-circle/" visual="www.texample.net/tikz/examples/smart-circle/">Work Flow</url></li>
+                        <li><url href="https://www.texample.net/tikz/examples/venn/" visual="www.texample.net/tikz/examples/venn/">Venn Diagram</url></li>
+                        <li><url href="https://www.texample.net/tikz/examples/smart-circle/" visual="www.texample.net/tikz/examples/smart-circle/">Work Flow</url></li>
                     </ul></p>
                  </sidebyside>
             </subsection>

@@ -735,7 +735,7 @@
 
         <p>We cannot stress enough the importance of setting up and performing regular validation and preventing many consistent errors of the same type.  You will learn what elements are allowed where, and which are not, from the messages produced by validation errors.  And when a conversion fails, or produces spectacularly incorrect output, validating your source should be your first reaction.  Always.</p>
 
-        <p>The other beauty of a schema is that you can supply it to a text editor (<xref ref="introduction-to-source-formatting" />) and then you will get context-sensitive help that greatly assists you in using only the tags and attributes that are allowed in a given location of your source.  <url href="http://xml-copy-editor.sourceforge.net/" visual="xml-copy-editor.sourceforge.net/">XML Copy Editor</url> is the one editor like this we have tried, but we do not have extensive experience.</p>
+        <p>The other beauty of a schema is that you can supply it to a text editor (<xref ref="introduction-to-source-formatting" />) and then you will get context-sensitive help that greatly assists you in using only the tags and attributes that are allowed in a given location of your source.  <url href="https://xml-copy-editor.sourceforge.net/" visual="xml-copy-editor.sourceforge.net/">XML Copy Editor</url> is the one editor like this we have tried, but we do not have extensive experience.</p>
 
         <p>We have devoted an entire chapter (<xref ref="schema" />) to amplifying this introduction and providing more details, such as where to find details on installing a validator.</p>
     </section>
