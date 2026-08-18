@@ -5557,6 +5557,12 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, rep
     schema_dir = os.path.join(common.get_ptx_path(), "schema")
     development_schema = os.path.join(schema_dir, "pretext-dev.rng")
     production_schema = os.path.join(schema_dir, "pretext.rng")
+    # the survey below is sound only while the development schema stays
+    # a purely additive overlay; a departure has drawn warnings already
+    if not _development_schema_additive(development_schema, production_schema):
+        log.warning(
+            "the survey of experimental constructs may misclassify until the overlay is repaired"
+        )
 
     # The RELAX-NG checks run "jing" twice against the assembled source,
     # once per schema, and yield each raw report as a list of lines.  A
@@ -5932,6 +5938,46 @@ def _validation_report_preamble(development_schema, production_schema, assembled
         "",
         "",
     ]
+
+
+def _development_schema_additive(development_schema, production_schema):
+    """Confirm the development schema only extends the production schema
+
+    The survey of experimental constructs is sound because the
+    development language is a strict superset of the production
+    language, and the overlay guarantees that by construction: a bare
+    "include" of the production schema, wholly new named patterns, and
+    additions to production patterns only by combine="choice".  Anything
+    else could restrict the language instead, and the survey would then
+    silently misclassify, so each departure draws a warning.  Returns
+    True when the overlay honors the invariant.
+    """
+    relaxng_namespace = "http://relaxng.org/ns/structure/1.0"
+    overlay = ET.parse(development_schema).getroot()
+    production = ET.parse(production_schema).getroot()
+    production_defines = {
+        define.get("name")
+        for define in production.iter("{{{}}}define".format(relaxng_namespace))
+    }
+    offenses = []
+    for include in overlay.findall("{{{}}}include".format(relaxng_namespace)):
+        if len(include) > 0:
+            offenses.append('the "include" carries replacement definitions')
+    for define in overlay.findall("{{{}}}define".format(relaxng_namespace)):
+        if define.get("combine") == "choice":
+            continue
+        name = define.get("name")
+        if name in production_defines:
+            offenses.append(
+                '"{}" redefines a production pattern without combine="choice"'.format(
+                    name
+                )
+            )
+    if overlay.findall("{{{}}}start".format(relaxng_namespace)):
+        offenses.append('the overlay overrides "start"')
+    for offense in offenses:
+        log.warning("development schema overlay: {}".format(offense))
+    return not offenses
 
 
 def _experimental_section_preface():
