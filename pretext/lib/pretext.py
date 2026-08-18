@@ -5781,6 +5781,9 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, rep
                     "",
                 ]
             )
+    advice_for = {}
+    if experimental_clusters and not terse:
+        advice_for = _experimental_advice()
     for elt, headline, folded in experimental_clusters:
         filename = file_of.get(elt, main_file)
         line_number = elt.sourceline
@@ -5809,6 +5812,25 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, rep
             excerpt = _excerpt(line_number)
             if excerpt:
                 report.append("    text: {}".format(excerpt))
+            # advice keyed by the located element, else by the element
+            # the message itself names (location is the nearest element
+            # to *open* on the line, which can be a neighbor)
+            paragraphs = advice_for.get(ET.QName(elt).localname)
+            if paragraphs is None:
+                named = re.match(r'element "([^"]+)"', headline)
+                if named:
+                    paragraphs = advice_for.get(named.group(1))
+            label = "    advice: "
+            for paragraph in paragraphs or []:
+                report.extend(
+                    textwrap.wrap(
+                        paragraph,
+                        width=70,
+                        initial_indent=label,
+                        subsequent_indent="            ",
+                    )
+                )
+                label = "            "
             report.append("    check: experimental")
             report.append("")
     if not terse and production_messages is not None and not experimental_clusters:
@@ -5938,6 +5960,33 @@ def _validation_report_preamble(development_schema, production_schema, assembled
         "",
         "",
     ]
+
+
+def _experimental_advice():
+    """Advisory prose for experimental constructs, keyed by name
+
+    The registry at schema/experimental-features.xml only decorates the
+    survey of experimental constructs: whether a construct is flagged
+    is decided by comparing the two grammars, so a stale or missing
+    entry costs nothing but prose.  Returns a dictionary keyed by
+    element name, of lists of paragraphs.
+    """
+    registry = os.path.join(
+        common.get_ptx_path(), "schema", "experimental-features.xml"
+    )
+    advice = {}
+    try:
+        root = ET.parse(registry).getroot()
+    except (OSError, ET.XMLSyntaxError) as e:
+        log.debug("experimental-features registry unavailable ({})".format(e))
+        return advice
+    for feature in root.iter("feature"):
+        paragraphs = [
+            " ".join("".join(p.itertext()).split()) for p in feature.iter("p")
+        ]
+        for element in (feature.get("elements") or "").split():
+            advice.setdefault(element, paragraphs)
+    return advice
 
 
 def _development_schema_additive(development_schema, production_schema):
