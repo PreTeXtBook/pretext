@@ -10605,33 +10605,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- http://camendesign.com/code/video_for_everybody/test.html -->
 
                 <figure>
-                    <caption>Big Buck Bunny from  <url href="https://camendesign.com/code/video_for_everybody/test.html" visual="camendesign.com/code/video_for_everybody/test.html"><q>Video for Everybody</q> Test Page</url></caption>
-                    <video label="big-buck-bunny-frame-one" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle> trailer, by the <url href="https://durian.blender.org/" visual="durian.blender.org">Blender Foundation</url>, licensed <init>CC</init> <init>BY</init><nbsp />3.0.  The construction follows the <url href="https://camendesign.com/code/video_for_everybody/test.html" visual="camendesign.com/code/video_for_everybody/test.html"><q>Video for Everybody</q> Test Page</url>.</caption>
+                    <video label="sintel-trailer-frame-one" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="70%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
-                    <video label="big-buck-bunny-margins" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, Controlled Start/End, Asymmetric Margins</caption>
+                    <video label="sintel-trailer-margins" href="https://media.w3.org/2010/05/sintel/trailer.webm" start="16" end="30" margins="25% 5%" width="70%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
-                    <video label="big-buck-bunny-ogg" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, Ogg container, <c>*.ogv</c> extension.  Browsers have retired the Theora codec, so this one is expected <em>not</em> to play<mdash />it is here to exercise the markup, and to show what a reader sees when a format is no longer supported.</caption>
+                    <video label="sintel-trailer-ogg" href="https://upload.wikimedia.org/wikipedia/commons/0/06/Sintel_trailer-1080p.ogv" width="60%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, MP4 format</caption>
-                    <video label="big-buck-bunny-mp4" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, MP4 format</caption>
+                    <video label="sintel-trailer-mp4" href="https://media.w3.org/2010/05/sintel/trailer.mp4" width="50%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, WebM format</caption>
-                    <video label="big-buck-bunny-webm" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, WebM format</caption>
+                    <video label="sintel-trailer-webm" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="40%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <figure>
-                    <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
-                    <video label="big-buck-bunny-best-format" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="preview/big-buck-bunny-frame-one.jpg"/>
+                    <caption><pubtitle>Sintel</pubtitle>, no extension, so the browser should choose among the formats offered.  Presently no <tag>source</tag> is produced at all for a complete <init>URL</init>, since the extension is sought after the last period of the whole string, which lands inside the host name.</caption>
+                    <video label="sintel-trailer-best-format" href="https://media.w3.org/2010/05/sintel/trailer" width="30%" preview="preview/sintel-trailer-frame.jpg"/>
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
@@ -10727,17 +10727,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Experimental support for captions and subtitles first.  Look at the source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT" visual="wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url> (<init>WEBVVT</init>) format.</p>
                 <figure>
-                    <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles" visual="https://sites.google.com/site/chrisfoo/subtitles"/></caption>
-                    <video label="big-buck-bunny-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                        <track kind="subtitles" listing="US English" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
+                    <caption><pubtitle>Sintel</pubtitle> with a single subtitle track</caption>
+                    <video label="sintel-trailer-subtitles" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="75%" preview="preview/sintel-trailer-frame.jpg">
+                        <track kind="subtitles" listing="US English" xml:lang="en" source="video/sintel-trailer-captions-one.vtt"/>
                     </video>
                 </figure>
 
-                <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  Test is a bit lame, the two <tag>track</tag> use the same file, but just have different labels for the player's menu.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
+                <p>This video is identical to the previous one, except it tests the use of a default <tag>track</tag>.  The <attr>default</attr> attribute on <tag>track</tag> can be set to the value <c>yes</c> to make one set of captions the default (and only one!).  The two <tag>track</tag> use different files, whose text says which is which, so switching tracks in the player's menu is visible.  Track named <c>US English Two</c> will show as in-use at start-up.</p>
 
-                <video label="big-buck-bunny-two-subtitles" href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="preview/big-buck-bunny-frame-one.jpg">
-                    <track kind="subtitles" listing="US English One" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt"/>
-                    <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/BigBuckBunnyAcapella.vtt" default="yes"/>
+                <video label="sintel-trailer-two-subtitles" href="https://media.w3.org/2010/05/sintel/trailer.webm" width="75%" preview="preview/sintel-trailer-frame.jpg">
+                    <track kind="subtitles" listing="US English One" xml:lang="en" source="video/sintel-trailer-captions-one.vtt"/>
+                    <track kind="subtitles" listing="US English Two" xml:lang="en" source="video/sintel-trailer-captions-two.vtt" default="yes"/>
                 </video>
 
             </subsection>

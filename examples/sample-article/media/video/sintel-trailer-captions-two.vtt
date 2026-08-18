@@ -1,0 +1,28 @@
+WEBVTT
+Kind: captions
+Language: en
+
+NOTE
+NOTE Demonstration captions for the PreTeXt "track" element, second track.  These are not a
+NOTE transcript of the film.  The text names the track, so that switching
+NOTE tracks in the player's menu is visible to a reader, and so that the
+NOTE "default" attribute on a sibling "track" can be seen to take effect.
+NOTE All cues fall inside the 52-second trailer.
+
+00:00:02.000 --> 00:00:08.000
+Track two: captions supplied by a "track" element.
+
+00:00:10.000 --> 00:00:16.000
+Track two: the file is in Web Video Text Tracks (WebVTT) format.
+
+00:00:18.000 --> 00:00:24.000
+Track two: "kind" is "subtitles" here; "captions" is the other choice.
+
+00:00:26.000 --> 00:00:32.000
+Track two: "listing" gives the name shown in the player's menu.
+
+00:00:34.000 --> 00:00:40.000
+Track two: "xml:lang" declares the language of these cues.
+
+00:00:42.000 --> 00:00:50.000
+Track two: this is the track marked "default", so it is in use at start-up.
