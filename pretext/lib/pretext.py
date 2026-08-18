@@ -5448,18 +5448,17 @@ PI_SOURCE_URI = "{http://pretextbook.org/2020/pretext/internal}source-uri"
 
 
 def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
-    """Validate source against the RELAX-NG schema, locally or via a server"""
+    """Validate source against both RELAX-NG schemas, locally or via a server"""
 
-    # "local" validates against the production schema and "local-dev"
-    # against the development schema, each with a report meant for an
-    # author.  "terse" is the production schema with machine-readable
-    # output, one tab-separated message per line, meant for a program.
-    # "server" is "local" with the "jing" run delegated to a remote
-    # service; the consolidated report is identical.
-    if method == "local-dev":
-        schema_file = "pretext-dev.rng"
-    else:
-        schema_file = "pretext.rng"
+    # Validation consults both grammars.  The development schema is a
+    # purely additive overlay of the production schema, so its language
+    # is a strict superset: a message from the development run is a
+    # genuine problem, while a message arising only under the production
+    # schema locates an experimental construct -- one whose markup may
+    # change without a formal deprecation cycle.  "server" delegates
+    # both "jing" runs to a remote service; the consolidated report is
+    # identical.  "terse" is machine-readable output, one tab-separated
+    # message per line, meant for a program.
     terse = method == "terse"
     server = method == "server"
     # to ensure provided stringparams aren't mutated unintentionally
@@ -5553,20 +5552,19 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     with open(assembled_source, encoding="utf-8") as f:
         source_lines = f.readlines()
 
-    # fresh schema from the PreTeXt distribution, in XML syntax
-    schema_filename = os.path.join(common.get_ptx_path(), "schema", schema_file)
+    # fresh schemas from the PreTeXt distribution, in XML syntax
+    schema_dir = os.path.join(common.get_ptx_path(), "schema")
+    development_schema = os.path.join(schema_dir, "pretext-dev.rng")
+    production_schema = os.path.join(schema_dir, "pretext.rng")
 
-    # The RELAX-NG check runs "jing" against the assembled source and
-    # yields its raw report as a list of lines.  A local run uses an
-    # installed "jing"; the "server" method sends the same assembled
-    # source to a remote "jing" service.  Either way the lines below feed
-    # an identical consolidated report.
-    if server:
-        jing_messages = _jing_server(schema_filename, assembled_source)
-        if jing_messages is None:
-            # the server could not be reached; a clear error was logged
-            return
-    else:
+    # The RELAX-NG checks run "jing" twice against the assembled source,
+    # once per schema, and yield each raw report as a list of lines.  A
+    # local run uses an installed "jing"; the "server" method sends the
+    # same assembled source to a remote "jing" service.  Either way the
+    # lines below feed an identical consolidated report.
+    def _jing_run(schema_filename):
+        if server:
+            return _jing_server(schema_filename, assembled_source)
         # "jing" is a Java program, so a configuration can be simply the
         # name of an executable ("jing", from a system package), or a
         # command with options ("java -jar /usr/share/java/jing.jar")
@@ -5576,11 +5574,19 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
         result = subprocess.run(full_cmd, capture_output=True, text=True,
                                 encoding="utf-8", errors="replace")
         # jing exits 0 when the document is valid, 1 when messages result
-        if result.returncode == 0:
-            log.info("the source validates with no schema errors")
-        elif result.returncode > 1:
+        if result.returncode > 1:
             log.warning('the "jing" program failed (code {})'.format(result.returncode))
-        jing_messages = result.stdout.splitlines()
+        return result.stdout.splitlines()
+
+    jing_messages = _jing_run(development_schema)
+    if jing_messages is None:
+        # the server could not be reached; a clear error was logged
+        return
+    if not jing_messages:
+        log.info("the source validates with no schema errors")
+    # None here means the server fell over between the two runs; the
+    # experimental survey is then reported as unavailable, not empty
+    production_messages = _jing_run(production_schema)
 
     # The "validation-plus" stylesheet performs checks the RELAX-NG
     # schema cannot express, and provides extra advice and explanation
@@ -5659,22 +5665,73 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
             return text
         return None
 
+    # "jing" messages lead with filename:line:column
+    location = re.compile(r"^.*?:(\d+):(\d+): (.*)$")
+
+    # Survey the experimental constructs.  A message from the production
+    # run whose position also carries a message from the development run
+    # is a genuine problem, already reported; the remainder locate
+    # experimental constructs.  One such construct commonly raises a
+    # cascade of messages (the element itself, then each part of its
+    # interior), so the messages are clustered: an element subsumes the
+    # messages located at its descendants, and one entry represents the
+    # whole construct.
+    experimental_clusters = []
+    if production_messages is not None:
+        genuine_positions = set()
+        for message in jing_messages:
+            match = location.match(message)
+            if match:
+                genuine_positions.add((int(match.group(1)), int(match.group(2))))
+        located = {}
+        for message in production_messages:
+            match = location.match(message)
+            if not match:
+                continue
+            line_number = int(match.group(1))
+            if (line_number, int(match.group(2))) in genuine_positions:
+                continue
+            near = max((n for n in opening if n <= line_number), default=None)
+            if near is None:
+                continue
+            located.setdefault(opening[near], []).append(match.group(3))
+        members_of = {}
+        for elt in located:
+            top = elt
+            ancestor = elt.getparent()
+            while ancestor is not None:
+                if ancestor in located:
+                    top = ancestor
+                ancestor = ancestor.getparent()
+            members_of.setdefault(top, []).append(elt)
+        for top in sorted(members_of, key=lambda e: e.sourceline):
+            folded = sum(len(located[member]) for member in members_of[top]) - 1
+            # "jing" labels each message an error, but in this survey it
+            # is evidence of an experimental construct, not a defect
+            headline = located[top][0]
+            if headline.startswith("error: "):
+                headline = headline[len("error: "):]
+            experimental_clusters.append((top, headline, folded))
+
     # assemble the consolidated report
     report = []
     banner = "=" * 70
 
     if not terse:
-        report.extend(_validation_report_preamble(schema_filename, assembled_source))
+        report.extend(
+            _validation_report_preamble(
+                development_schema, production_schema, assembled_source
+            )
+        )
         report.extend([banner, "Messages: RELAX-NG schema validation, from \"jing\"", banner, ""])
-    # "jing" messages lead with filename:line:column.  The line number
-    # refers to the assembled source (which is deposited alongside the
-    # report), so it is reported as such, supplemented by the
-    # originating file, a path into the assembled source, and an
-    # excerpt of the offending text.  An element's extent is not
-    # available, so for a message about a line where no element begins,
-    # the location is the closest element beginning on an earlier line:
-    # very often the container, and always a good place to start looking.
-    location = re.compile(r"^.*?:(\d+):(\d+): (.*)$")
+    # The line number of a "jing" message refers to the assembled source
+    # (which is deposited alongside the report), so it is reported as
+    # such, supplemented by the originating file, a path into the
+    # assembled source, and an excerpt of the offending text.  An
+    # element's extent is not available, so for a message about a line
+    # where no element begins, the location is the closest element
+    # beginning on an earlier line: very often the container, and always
+    # a good place to start looking.
     for message in jing_messages:
         match = location.match(message)
         if not match:
@@ -5704,6 +5761,51 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
             report.append("")
     if not terse and not jing_messages:
         report.extend(["(no messages)", ""])
+
+    if not terse:
+        report.extend([banner, "Messages: experimental constructs in use", banner, ""])
+        report.extend(_experimental_section_preface())
+    if production_messages is None:
+        if not terse:
+            report.extend(
+                [
+                    "(the production-schema examination could not be completed,",
+                    "so experimental constructs were not surveyed)",
+                    "",
+                ]
+            )
+    for elt, headline, folded in experimental_clusters:
+        filename = file_of.get(elt, main_file)
+        line_number = elt.sourceline
+        if terse:
+            path = _numbered_path(elt, False)
+            body = headline
+            if folded == 1:
+                body += " (plus 1 more message within this construct)"
+            elif folded:
+                body += " (plus {} more messages within this construct)".format(folded)
+            report.append(
+                "{}\t{}\t{}\texperimental\t{}".format(filename, path, line_number, body)
+            )
+        else:
+            path = _numbered_path(elt, True)
+            report.append(headline)
+            if folded == 1:
+                report.append("    (1 more message within this construct folded into this entry)")
+            elif folded:
+                report.append(
+                    "    ({} more messages within this construct folded into this entry)".format(folded)
+                )
+            report.append("    file: {}".format(filename))
+            report.append("    path: {}".format(path))
+            report.append("    line: {}".format(line_number))
+            excerpt = _excerpt(line_number)
+            if excerpt:
+                report.append("    text: {}".format(excerpt))
+            report.append("    check: experimental")
+            report.append("")
+    if not terse and production_messages is not None and not experimental_clusters:
+        report.extend(["(no messages: no experimental constructs are in use)", ""])
 
     if not terse:
         report.extend([banner, "Messages: PreTeXt \"validation-plus\" stylesheet", banner, ""])
@@ -5752,6 +5854,14 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
 
     if jing_messages:
         log.info("schema validation raised {} messages".format(len(jing_messages)))
+    if experimental_clusters:
+        log.info(
+            "experimental constructs are in use at {} locations".format(
+                len(experimental_clusters)
+            )
+        )
+    elif production_messages is not None:
+        log.info("no experimental constructs are in use")
     if plus_messages:
         log.info("validation-plus stylesheet raised {} messages".format(len(plus_messages)))
     else:
@@ -5760,20 +5870,26 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     log.info("locations refer to the assembled source in {}".format(assembled_source))
 
 
-def _validation_report_preamble(schema_filename, assembled_source):
+def _validation_report_preamble(development_schema, production_schema, assembled_source):
     """The fixed introductory text of a validation report"""
 
     return [
         "Validation Report",
         "=================",
         "",
-        "Two tools have examined an assembled version of your source:",
+        "Three examinations have been made of an assembled version of",
+        "your source:",
         "",
-        "  (1) \"jing\" checked conformance with the RELAX-NG schema at",
-        "      {}".format(schema_filename),
+        "  (1) \"jing\" checked conformance with the development RELAX-NG",
+        "      schema at",
+        "      {}".format(development_schema),
         "      (a schema can only describe parent-child relationships,",
         "      plus the attributes of each element)",
-        "  (2) the PreTeXt \"validation-plus\" stylesheet made checks that",
+        "  (2) a second \"jing\" run, against the production schema at",
+        "      {}".format(production_schema),
+        "      surveyed the experimental constructs in use; that section",
+        "      of this report begins with a fuller explanation",
+        "  (3) the PreTeXt \"validation-plus\" stylesheet made checks that",
         "      no RELAX-NG schema could ever express, and offers extra",
         "      advice and explanation besides",
         "",
@@ -5793,8 +5909,9 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "    path:   the location within the assembled source",
         "    line:   the line number within the assembled source",
         "    text:   an excerpt of the offending content",
-        "    check:  a short name for the check (\"schema\" for any",
-        "            message from \"jing\")",
+        "    check:  a short name for the check (\"schema\" for a message",
+        "            from \"jing\", \"experimental\" for the survey of",
+        "            experimental constructs)",
         "",
         "Only \"file\" points into your own source files.  In particular,",
         "\"line\" is a line number of the deposited assembled source named",
@@ -5812,6 +5929,28 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "above, is the only element of that name at its location, so a",
         "count would just be clutter.",
         "",
+        "",
+    ]
+
+
+def _experimental_section_preface():
+    """The fixed introductory text of the experimental-constructs section"""
+
+    return [
+        "Constructs reported here are part of the development schema, but",
+        "not the production schema.  They are experimental: their markup",
+        "may change at any time, without the usual deprecation cycle and",
+        "automatic conversion of your source.  So this section is not a",
+        "list of errors -- it is an inventory of the places where your",
+        "source relies on experimental parts of the PreTeXt vocabulary,",
+        "so you can weigh the risk, and recognize the cause if one of",
+        "these constructs changes underneath you.",
+        "",
+        "One caution: while genuine errors remain (the previous section),",
+        "the two schema examinations may recover from an error in",
+        "different ways, and then a few entries here can be echoes of",
+        "those errors, rather than experimental constructs.  Once the",
+        "previous section is clean, this inventory is exact.",
         "",
     ]
 
@@ -5850,7 +5989,6 @@ def _jing_server(schema_filename, assembled_source):
         "pf_schema.rng": os.path.join(schema_dir, "pf_schema.rng"),
         "pf-preamble-adapter.rng": os.path.join(schema_dir, "pf-preamble-adapter.rng"),
     }
-
     log.info("communicating with validation server at {}".format(server_url))
     # The service is expecting to receive the files as strings in form fields,
     # so read files into strings stored in the data dictionary.
@@ -5859,6 +5997,22 @@ def _jing_server(schema_filename, assembled_source):
     for field, path in field_paths.items():
         with open(path, "r", encoding="utf-8") as file:
             data[field] = file.read()
+
+    # The development schema is an overlay: its "include" pulls in the
+    # production schema, which must travel too.  Sent under its own
+    # name, the production schema displaces the overlay and the service
+    # validates with the production grammar alone (observed 2026-08-18),
+    # so the companion travels -- and the overlay's "include" points --
+    # under a name free of any collision.
+    if os.path.basename(schema_filename) == "pretext-dev.rng":
+        relaxng_namespace = "http://relaxng.org/ns/structure/1.0"
+        overlay = ET.parse(schema_filename)
+        for include in overlay.iter("{{{}}}include".format(relaxng_namespace)):
+            if include.get("href") == "pretext.rng":
+                include.set("href", "pretext-production.rng")
+        data["schema"] = ET.tostring(overlay.getroot(), encoding="unicode")
+        with open(os.path.join(schema_dir, "pretext.rng"), "r", encoding="utf-8") as file:
+            data["pretext-production.rng"] = file.read()
 
     try:
         r = requests.post(server_url, data=data, timeout=60)
