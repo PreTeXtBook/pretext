@@ -95,7 +95,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='convention'>Convenzione</localization>
     <localization string-id='note'>Nota</localization>
     <!-- <localization string-id='observation'>Observation</localization> -->
-    <localization string-id='warning'>Attenzione</localization>
+    <localization string-id='warning'>Avviso</localization>
     <localization string-id='insight'>Intuizione</localization>
     <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Computazione</localization>
@@ -152,7 +152,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Suggerimento</localization>
     <localization string-id='answer'>Risposta</localization>
     <localization string-id='solution'>Soluzione</localization>
-    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
+    <localization string-id='subexercises'>Sottoesercizi</localization>
     <localization string-id='exercisegroup'>Gruppo di esercizi</localization>
     <localization string-id='biblio'>Riferimento bibliografico</localization>
     <!-- Front matter components -->
@@ -199,7 +199,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='previous-short'>Prec</localization>
     <localization string-id='up-short'>Su</localization>
     <localization string-id='next-short'>Succ</localization>
-    <!-- <localization string-id='top'>Top</localization> -->
+    <localization string-id='top'>Inizio</localization>
     <localization string-id='annotations'>Annotazioni</localization>
     <localization string-id='feedback'>Feedback</localization>
     <localization string-id='authored'>Redatto in PreTeXt</localization>
@@ -225,12 +225,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>Nel Contesto</localization>
     <!-- <localization string-id='standalone'>Standalone</localization> -->
-    <localization string-id='embed'>Immergi</localization>
-    <localization string-id='embed-this-page'>Immergi questa pagina</localization>
+    <localization string-id='embed'>Incorpora</localization>
+    <localization string-id='embed-this-page'>Incorpora questa pagina</localization>
     <localization string-id='copy'>Copia</localization>
     <localization string-id='profile'>Profilo</localization>
-    <localization string-id='permalink-tooltip'>Copia descrizione e  permalink per</localization>
-    <localization string-id='calculator'>Calcolatore</localization>
+    <localization string-id='permalink-tooltip'>Copia titolo e permalink per</localization>
+    <localization string-id='calculator'>Calcolatrice</localization>
     <localization string-id='evaluate'>Calcola</localization>
     <localization string-id='code'>Codice</localization>
     <localization string-id='instructions'>Istruzioni</localization>
