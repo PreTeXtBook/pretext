@@ -2910,7 +2910,7 @@
                     </li>
                 </ul></p>
 
-                <p>Asymptote may be run as a program installed locally, but the project also has an on-demand online server written by Supakorn Jamie Rassameemasmuang.  By default, the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) will interface automatically with this server to create your diagrams.  Furthermore, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/" visual="asymptote.ualberta.ca/">web application</url> written by Pedram Emami.  This is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
+                <p>Asymptote may be run as a program installed locally, but the project also has an on-demand online server written by Supakorn Jamie Rassameemasmuang.  By default, the <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) will interface automatically with this server to create your diagrams.  Furthermore, Asymptote provides a very useful <url href="https://asymptote.ualberta.ca/" visual="asymptote.ualberta.ca/">web application</url> written by Pedram Emami.  This is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
 
                 <note>
                     <title>Build 3-D Asymptote Figures</title>
@@ -4386,7 +4386,7 @@
         <introduction>
             <p>A <tag>table</tag> is a container that houses a <tag>tabular</tag>, which is the actual rows and columns of table entries.</p>
 
-            <p>Note that <tag>tabular</tag> may be constructed using the <url href="http://www.latex-tables.com/" visual="www.latex-tables.com"><latex /> Complex Table Editor</url> tool online and then exported in <pretext/> syntax. This produces verbose <pretext/> syntax that is usually equivalent to much simpler <pretext/> syntax once you understand the borders and alignment considerations below.</p>
+            <p>Note that <tag>tabular</tag> may be constructed using the <url href="https://www.latex-tables.com/" visual="www.latex-tables.com"><latex /> Complex Table Editor</url> tool online and then exported in <pretext/> syntax. This produces verbose <pretext/> syntax that is usually equivalent to much simpler <pretext/> syntax once you understand the borders and alignment considerations below.</p>
         </introduction>
 
         <subsection>
@@ -5627,7 +5627,7 @@
 
                 <li><p>The <url href="https://jkorpela.fi/fui.html8" visual="jkorpela.fi/fui.html8">Full Unicode Input</url> utility at <c>jkorpela.fi/fui.html8</c> will allow you to specify a chunk of 256 consecutive Unicode numbers and then you can click on characters to make a string of several or many.  You can cut/paste these into your source, or convert the whole lot to <init>XML</init> syntax all at once.</p></li>
 
-                <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="http://www.fileformat.info/info/unicode/" visual="www.fileformat.info/info/unicode/">FileFormat.info</url>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
+                <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="https://www.fileformat.info/info/unicode/" visual="www.fileformat.info/info/unicode/">FileFormat.info</url>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
 
                 <li>
                     <p><alert>Warning</alert>: do not use Unicode characters as a way to get mathematical symbols (that is delegated to our use of <latex /> syntax).  And do not use Unicode when we have provided an empty element for a character.  These empty elements are conveniences, which spare you from looking up Unicode numbers and make your source more readable.  We also sometimes fine-tune these characters in ways that are not possible if you embed them as Unicode.  An example is <c>&lt;times /&gt;</c>, for use outside of a strictly mathematical setting:  <q>I bought a 2<times />4 at the lumberyard.</q></p>

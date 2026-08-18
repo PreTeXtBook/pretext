@@ -437,7 +437,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Two cone images borrowed from the <pretext /> Sample Article. The one on the left is written in TiZ, and the one on the right is written in Asymptote</caption>
                     <sidebyside widths="47% 47%">
                         <!-- <figure xml:id="fig-tikz-cone"> -->
-                            <!-- <caption>The cone from <url href="http://www.frontiernet.net/~eugene.ressler/" visual="www.frontiernet.net/~eugene.ressler/">Sketch</url> used in the Sample Article</caption> -->
+                            <!-- <caption>The cone from <url href="https://www.frontiernet.net/~eugene.ressler/" visual="www.frontiernet.net/~eugene.ressler/">Sketch</url> used in the Sample Article</caption> -->
                             <image>
                                 <shortdescription></shortdescription>
                                 <latex-image label="img-tikz">

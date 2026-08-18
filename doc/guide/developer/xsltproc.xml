@@ -59,7 +59,7 @@
     stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term>
     <idx>command-line</idx> inside of a <term>terminal</term>
     <idx>terminal</idx> or <term>console</term>
-    <idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/" visual="ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
+    <idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="https://ryanstutorials.net/linuxtutorial/" visual="ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
     <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />
     ,<xref ref="windows-subsystem-linux" />
     ).  One alternative is <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>

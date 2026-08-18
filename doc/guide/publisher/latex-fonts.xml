@@ -134,7 +134,7 @@
         </paragraphs>
 
         <exercise>
-            <p>Create a <latex/> file (from scratch) containing some Myanmar (Burmese) characters.  The <url href="http://kermitproject.org/utf8.html" visual="kermitproject.org/utf8.html"><pubtitle>Kermit Project UTF-* Sampler</pubtitle></url> is a great source for these sorts of experiments.  The Noto font is a project to make a huge collection of harmonious fonts for much of the world's languages.  Use what you have learned here to render your sample using a Noto font via both <c>pdflatex</c> and <c>xelatex</c>.  Extra credit if you can explain the name Noto.</p>
+            <p>Create a <latex/> file (from scratch) containing some Myanmar (Burmese) characters.  The <url href="https://kermitproject.org/utf8.html" visual="kermitproject.org/utf8.html"><pubtitle>Kermit Project UTF-* Sampler</pubtitle></url> is a great source for these sorts of experiments.  The Noto font is a project to make a huge collection of harmonious fonts for much of the world's languages.  Use what you have learned here to render your sample using a Noto font via both <c>pdflatex</c> and <c>xelatex</c>.  Extra credit if you can explain the name Noto.</p>
         </exercise>
 
         <paragraphs>
@@ -184,7 +184,7 @@
         </cd>The first points to the extensive Latin Modern fonts, which are an improved version of the original Computer Modern fonts, and are <pretext/>'s default font for out-of-the-box <latex/>.  We have never had a report of these not being available in an author's <tex/> distribution.  The file indicates that the fonts can be found at<cd>
             <cline>/usr/share/texmf/fonts/opentype/public/lm</cline>
             <cline>/usr/share/texmf/fonts/opentype/public/lm-math</cline>
-        </cd>The second configuration file points to multiple fonts from the <url href="http://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html" visual="www.gust.org.pl/projects/e-foundry/tex-gyre/">TeX Gyre Collection</url> of GUST: Polska Grupa Użytkowników Systemu <tex/>.  Examining the file indicates these fonts can be found at:<cd>
+        </cd>The second configuration file points to multiple fonts from the <url href="https://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html" visual="www.gust.org.pl/projects/e-foundry/tex-gyre/">TeX Gyre Collection</url> of GUST: Polska Grupa Użytkowników Systemu <tex/>.  Examining the file indicates these fonts can be found at:<cd>
             <cline>/usr/share/texmf/fonts/opentype/public/tex-gyre</cline>
             <cline>/usr/share/texmf/fonts/opentype/public/tex-gyre-math</cline>
         </cd></p>

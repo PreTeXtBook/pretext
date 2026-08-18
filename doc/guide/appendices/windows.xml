@@ -334,7 +334,7 @@
     <title>What's Missing</title>
     <p>Development of a Windows-compatible <c>pretext</c> script (<xref ref="pretext-script" />) is mostly complete. If you need help with <c>pretext</c>, contact Dave Rosoff. There are still a few use cases that haven't been tested, mostly those to do with Asymptote.</p>
     <p>A Windows installer for Sage is available from several mirrors at
-      <url href="http://www.sagemath.org/download-windows.html" visual="www.sagemath.org/download-windows.html"/>.
+      <url href="https://www.sagemath.org/download-windows.html" visual="www.sagemath.org/download-windows.html"/>.
       The installer provides Sage Math, the Sage Math Shell,
       and the Sage Math Notebook (Jupyter).</p>
   </section>

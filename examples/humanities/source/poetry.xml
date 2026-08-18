@@ -21,7 +21,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <chapter xml:id="poetry">
     <title>Poetry</title>
     <introduction>
-        <p>A collection of public domain poetry from: <url href="http://www.publicdomainpoems.com/index.html"><c>publicdomainpoems.com</c></url></p>
+        <p>A collection of public domain poetry from: <url href="https://www.publicdomainpoems.com/index.html"><c>publicdomainpoems.com</c></url></p>
     </introduction>
     <section xml:id="yeats">
         <title>William Butler Yeats</title>

@@ -348,7 +348,7 @@ ENDDOCUMENT();
       </p>
       <p>
         Some general information on authoring <webwork/> problems can be found in
-        a <url href="http://webwork.maa.org/wiki/Problem_Authoring_Videos" visual="webwork.maa.org/wiki/Problem_Authoring_Videos">set of videos at <c>webwork.maa.org/wiki/Problem_Authoring_Videos</c></url>.
+        a <url href="https://webwork.maa.org/wiki/Problem_Authoring_Videos" visual="webwork.maa.org/wiki/Problem_Authoring_Videos">set of videos at <c>webwork.maa.org/wiki/Problem_Authoring_Videos</c></url>.
         Not all of this is relevant to authoring within <pretext/>,
         but there are parts that will be helpful for constructing the Perl code necessary for randomized problems.
       </p>

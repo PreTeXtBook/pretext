@@ -109,9 +109,9 @@
 
             <preface>
                 <p>This is a sample book to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  It is structured as a book whose chapters are again structured with sections (no introductions or conclusions) so that it fits Ruestone's chaper/subchapter model and can be used for testing on Runestone Academy.</p>
-                <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
+                <p>This work was funded with grants from <url href="https://openoregon.org/">OpenOregon</url> and the <url href="https://pugetsound.edu">University of Puget Sound</url>.</p>
                 <p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext /> enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork /> end, and generally maintaining <webwork /> software.</p>
-                <p>This book assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
+                <p>This book assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="https://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
             </preface>
 
         </frontmatter>
@@ -669,7 +669,7 @@ ENDDOCUMENT();
                 <title>Open Problem Library</title>
 
 
-                    <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
+                    <p>The <url href="https://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
                     <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>pretext</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
@@ -1718,7 +1718,7 @@ ENDDOCUMENT();
             <section>
                 <title>Subject Area Templates</title>
 
-                <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
+                <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="https://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
                 <exercise label="number-or-function">
                     <title>Answer is a number or a function</title>
