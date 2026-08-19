@@ -138,6 +138,18 @@
         <p>The second step is easier, since it is an <init>XSL</init> transform.  In other words, it is just another stylesheet, which you run against your source, with a processor like <c>xsltproc</c>.  This stylesheet encoding additional restrictions is unique to <pretext/> and will report exceptions that are too difficult to express with <acro>RELAX-NG</acro>.  So validation is two complementary steps.  See <xref ref="validation-plus" /> for the exact syntax for using this stylesheet.</p>
     </section>
 
+    <section xml:id="schema-experimental">
+        <title>Experimental Constructs</title>
+        <idx><h>schema</h><h>experimental constructs</h></idx>
+        <idx><h>validation</h><h>experimental constructs</h></idx>
+
+        <p>The schema comes in two versions.  The <term>production schema</term><idx>production schema</idx> describes the stable <pretext/> vocabulary: constructs we expect to support indefinitely, and to change only through a formal deprecation cycle that announces the change and provides for a smooth conversion.  The <term>development schema</term><idx>development schema</idx> contains everything in the production schema, plus <term>experimental constructs</term>: features that work today, and may even be in wide use, but whose markup may still change<mdash/>possibly without notice, and without the usual deprecation machinery.  New features enter the development schema first, and are promoted to the production schema once their design settles.</p>
+
+        <p>Validation consults both versions, and its report keeps the two concerns separate.  Errors are judged against the <em>development</em> schema, so a document employing experimental features is not flooded with complaints about them, and a genuine mistake cannot hide in that flood.  A separate section of the report is an inventory of the experimental constructs in use: each is located precisely (file, path, line) and accompanied by advice about what it is and what is most likely to change.  The inventory is not a list of errors.  It is there so you can weigh the risk of relying on experimental features, and so you can recognize the cause if one of them changes underneath you.</p>
+
+        <p>If you validate within an editor using a schema file directly, you face a choice the report does not ask you to make: the production schema will complain about every experimental construct, while the development schema accepts them all without comment.  Point your editor at whichever matches your project's appetite for risk, and let the validation report be the authority on which construct is which.</p>
+    </section>
+
     <section xml:id="schema-browser">
         <title>Schema Browser</title>
 

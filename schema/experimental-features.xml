@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright (C) 2026  Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*****************************************************************-->
+
+<!--
+Advisory prose for the survey of experimental constructs that
+validation produces.  Each "feature" carries element names in
+@elements (space-separated), optionally attribute names in
+@attributes, and one or more "p" of plain-text advice shown with a
+flagged construct.  Whether a construct is flagged at all is decided
+by comparing the two RELAX-NG grammars, never by this file: an entry
+for a construct that has been promoted to the production schema
+simply never fires again, and a construct with no entry still gets
+the general explanation that prefaces the survey.  So prose here can
+only help, never mislead.
+-->
+
+<experimental-features>
+
+    <feature elements="interactive slate instructions">
+        <p>The "interactive" element embeds interactive material:
+        GeoGebra, Desmos, CircuitJS, JSXGraph, general JavaScript, or
+        an iframe.  It has been rendering in HTML output for years and
+        is widely used, but its large vocabulary of per-platform
+        attributes, and the mechanism for static representations in
+        print and PDF, are still evolving; expect attribute names,
+        defaults, and required companions to shift before it enters
+        the production schema.</p>
+    </feature>
+
+    <feature elements="eval">
+        <p>An "eval" element substitutes the value of a named object
+        from a dynamic (randomized) exercise into text or mathematics.
+        It is part of the dynamic exercise vocabulary, under active
+        development in concert with the Runestone platform, and both
+        its name and its reach are still settling.</p>
+    </feature>
+
+    <feature elements="setup variable formula condition evaluation
+                       evaluate test de-object de-random de-number
+                       de-expression de-evaluate jsimports jslibrary
+                       config-json setupScript postRenderScript">
+        <p>This element is part of the machinery for dynamic
+        (randomized) exercises: a "setup" defines randomized objects,
+        and an "evaluation" says how a reader's answers are checked.
+        The whole vocabulary is under active development in concert
+        with the Runestone platform and is among the most likely parts
+        of PreTeXt to change.</p>
+    </feature>
+
+    <feature elements="choices choice feedback">
+        <p>Multiple-choice and True/False exercises structure their
+        answers with "choices", "choice", and per-choice "feedback".
+        This interactive exercise vocabulary is aligned with the
+        Runestone platform; the markup is reasonably stable in
+        practice, but the details (attributes, feedback placement)
+        remain subject to change.</p>
+    </feature>
+
+    <feature elements="blocks block">
+        <p>Parsons problems (re-ordering blocks of code or prose)
+        structure their content with "blocks" and "block".  This
+        interactive exercise vocabulary is aligned with the Runestone
+        platform and its markup, particularly around program languages
+        and indentation, is still subject to change.</p>
+    </feature>
+
+    <feature elements="matching matches match premise response cardsort">
+        <p>Matching and card-sorting exercises pair premises with
+        responses.  This interactive exercise vocabulary is aligned
+        with the Runestone platform, and the markup for expressing the
+        pairs is still subject to change.</p>
+    </feature>
+
+    <feature elements="areas area select itself for logic numcmp
+                       strcmp mathcmp jscmp">
+        <p>This element supports the evaluation of fill-in-the-blank
+        exercises: "areas"/"area" mark the blanks and the comparison
+        elements say how a response is judged.  The vocabulary is
+        under active development in concert with the Runestone
+        platform.</p>
+    </feature>
+
+    <feature elements="fillin">
+        <p>The "fillin" element itself is standard, but attributes
+        supporting interactive fill-in exercises (such as a mode, a
+        name binding the blank to an evaluation, or a width) are part
+        of the dynamic exercise vocabulary still under development.</p>
+    </feature>
+
+    <feature elements="var">
+        <p>Within WeBWorK problems a "var" is standard.  Elsewhere it
+        marks a fill-in blank bound to the evaluation machinery of a
+        dynamic exercise, and that use is part of the dynamic exercise
+        vocabulary still under development.</p>
+    </feature>
+
+    <feature elements="program datafile query program-preamble
+                       program-postamble">
+        <p>Coding exercises place a "program" (typically rendered as an
+        interactive ActiveCode) inside an exercise, possibly with
+        attached data ("datafile") or unit tests; a "query" is an
+        in-page poll or survey.  These are aligned with the Runestone
+        platform and their markup is still subject to change.</p>
+    </feature>
+
+    <feature elements="exercise task statement solution">
+        <p>Several attributes here are experimental switches for
+        interactive exercises (for example a programming language, or
+        adaptive behavior).  The attribute names and their values are
+        aligned with the Runestone platform and may change.</p>
+    </feature>
+
+    <feature elements="dynamic static">
+        <p>A "static" or "dynamic" element supplies an alternate
+        representation of an interactive exercise, for outputs (print,
+        PDF, EPUB) that cannot run it.  How representations are
+        expressed and generated is still being worked out.</p>
+    </feature>
+
+    <feature elements="solutions">
+        <p>Attributes giving finer control over which solutions appear
+        (selecting treatment of worksheet and reading questions, or
+        limiting scope) are experimental; the attribute names and
+        their value vocabularies may change.</p>
+    </feature>
+
+    <feature elements="myopenmath">
+        <p>A "myopenmath" element embeds a problem hosted by the
+        MyOpenMath service.  Support is functional but narrow, and the
+        markup may change as the integration matures.</p>
+    </feature>
+
+    <feature elements="stack">
+        <p>A "stack" element carries a STACK question (server-graded
+        mathematics, backed by a Moodle/STACK server).  The embedding
+        markup is developing along with the server integration.</p>
+    </feature>
+
+    <feature elements="shortlicense website address">
+        <p>Richer front matter is under development: a "shortlicense"
+        may carry footnotes, and a "website" may be structured with a
+        name and an address.  The final shape of structured
+        bibliographic front matter is still being designed.</p>
+    </feature>
+
+    <feature elements="argument justification reasoning explanation">
+        <p>This element is an alternate flavor of "proof", intended to
+        signal a different level of rigor.  The eventual list of
+        proof-like elements, and their names, are still under
+        discussion.</p>
+    </feature>
+
+</experimental-features>

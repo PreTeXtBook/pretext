@@ -187,16 +187,10 @@ def sanitize_method(method, component, format, validate):
         # unset by command-line, use default
         if not (method):
             return "local"
-        # set, but illegal
-        elif not (method in ["local", "local-dev", "server", "terse"]):
-            msg = "\n".join(
-                [
-                    'the method given for validation ("{}") is not "local", "local-dev", "server", or "terse",',
-                    '              so using the default method instead ("local")',
-                ]
-            )
-            log.warning(msg.format(method))
-            return "local"
+        # set, but illegal: halt, naming the allowed possibilities
+        elif not (method in ["local", "server"]):
+            msg = 'the method given for validation ("{}") must be "local" or "server"'
+            log.fatal(msg.format(method))
         # set correctly
         else:
             return method
@@ -541,19 +535,23 @@ def get_cli_arguments():
         dest="tgz",
     )
     validate_info = [
-        ("local", 'employs an installed "jing" program (default)'),
-        ("local-dev", 'as "local", but checks against the development schema'),
-        ("server", "a round-trip to a validation server"),
+        ("full", "a readable report: locations, excerpts, explanations"),
         ("terse", "machine-readable, one tab-separated message per line"),
     ]
-    validate_help = "validate source, methods are:\n" + "\n".join(
-        ["  {} - {}".format(info[0], info[1]) for info in validate_info]
+    validate_help = "\n".join(
+        [
+            "validate source, and survey experimental constructs in use;",
+            "report forms are:",
+        ]
+        + ["  {} - {}".format(info[0], info[1]) for info in validate_info]
+        + ['(where the "jing" runs happen is chosen by "-M local|server")']
     )
     parser.add_argument(
         "-V",
         "--validate",
         help=validate_help,
-        action="store_true",
+        choices=["full", "terse"],
+        default=None,
         dest="validate",
     )
     parser.add_argument(
@@ -681,7 +679,7 @@ def main():
     # The big switch
     # Validation trumps everything, since it is an easy switch
     if args.validate:
-        ptx.validate(xml_source, publication_file, stringparams, out_file, dest_dir, method)
+        ptx.validate(xml_source, publication_file, stringparams, out_file, dest_dir, method, args.validate)
     elif args.component == "prefigure":
         if args.format in ["source", "svg", "pdf", "png", "tactile", "all"]:
             ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, None)

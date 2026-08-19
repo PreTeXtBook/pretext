@@ -28,6 +28,20 @@ A RELAX-NG schema is the formal specification of the PreTeXt vocabulary.  Read t
    against this version only, all the others are derived copies.
 * `pretext.rnc`: direct product from `pretext.xml`, RELAX-NG compact syntax
 * `pretext.rng`: conversion from `pretext.xml` via `trang`, RELAX-NG XML syntax
+* `pretext-dev.rnc`, `pretext-dev.rng`: the development schema, an overlay
+  of the production schema holding experimental constructs.  The overlay
+  must stay *purely additive*: a bare `include` of the production schema
+  (never with a replacement body), wholly new named patterns, and additions
+  to production patterns only via `|=` (`combine="choice"`).  This makes
+  the development language a strict superset of the production language,
+  by construction, which is what lets validation report development-schema
+  messages as genuine errors and production-only messages as experimental
+  constructs.  Validation checks the invariant on every run.
+* `experimental-features.xml`: advisory prose that validation attaches to
+  experimental constructs it reports.  Purely decorative: what gets
+  flagged is decided by comparing the two grammars, so a stale entry
+  never misleads.  When a construct is promoted to the production schema,
+  its entry simply stops firing (and can be deleted at leisure).
 
 ## Build Script
 
