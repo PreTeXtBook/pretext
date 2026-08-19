@@ -2020,6 +2020,57 @@
     ev.stopPropagation();
     window.location.assign(link.href);
   });
+  function hydrateMultipleChoice() {
+    document.querySelectorAll('[data-hydrate="multiplechoice"]').forEach((container) => {
+      const id = container.id;
+      const statement = container.querySelector(":scope > .exercise-statement");
+      const choices = container.querySelectorAll(":scope > ol.runestone-static-choices > li");
+      if (!id || !statement || choices.length === 0) return;
+      const section = document.createElement("div");
+      section.className = "runestone multiplechoice_section";
+      section.appendChild(statement);
+      const list = document.createElement("ul");
+      list.id = id;
+      list.className = "exercise-interactives";
+      list.dataset.component = "multiplechoice";
+      if (container.dataset.multipleanswers) {
+        list.dataset.multipleanswers = container.dataset.multipleanswers;
+      }
+      if ("random" in container.dataset) {
+        list.dataset.random = "";
+      }
+      choices.forEach((choice, index) => {
+        const letter = String.fromCharCode("a".charCodeAt(0) + index);
+        const choiceId = `${id}_opt_${letter}`;
+        const feedback = choice.querySelector(":scope > .choice-feedback");
+        const answerItem = document.createElement("li");
+        answerItem.id = choiceId;
+        answerItem.dataset.component = "answer";
+        if ("correct" in choice.dataset) {
+          answerItem.dataset.correct = "";
+        }
+        while (choice.firstChild) {
+          if (choice.firstChild === feedback) {
+            choice.removeChild(feedback);
+            continue;
+          }
+          answerItem.appendChild(choice.firstChild);
+        }
+        list.appendChild(answerItem);
+        const feedbackItem = document.createElement("li");
+        feedbackItem.id = choiceId;
+        feedbackItem.dataset.component = "feedback";
+        if (feedback) {
+          while (feedback.firstChild) {
+            feedbackItem.appendChild(feedback.firstChild);
+          }
+        }
+        list.appendChild(feedbackItem);
+      });
+      section.appendChild(list);
+      container.replaceChildren(section);
+    });
+  }
   async function loadPrintout(printableSectionID) {
     const themeStylesheetLink = document.querySelector('link[rel="stylesheet"][href*="theme"]');
     const themeStylesheetHref = themeStylesheetLink ? themeStylesheetLink.getAttribute("href") : null;
@@ -2143,6 +2194,9 @@
   window.addEventListener("DOMContentLoaded", async function(event2) {
     const urlParams = new URLSearchParams(window.location.search);
     let pendingSettle = Promise.resolve();
+    if (!urlParams.has("printpreview")) {
+      hydrateMultipleChoice();
+    }
     if (urlParams.has("printpreview")) {
       const printableSectionID = urlParams.get("printpreview");
       await loadPrintout(printableSectionID);

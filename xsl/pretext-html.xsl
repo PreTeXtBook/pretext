@@ -4665,7 +4665,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-solution" />
 
     <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+        <xsl:apply-templates select="." mode="runestone-to-interactive">
+            <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+        </xsl:apply-templates>
     </xsl:if>
     <xsl:apply-templates select="." mode="solutions-div">
         <xsl:with-param name="b-original" select="$b-original"/>
