@@ -2069,6 +2069,9 @@
       });
       section.appendChild(list);
       container.replaceChildren(section);
+      if (window.runestoneComponents) {
+        window.runestoneComponents.renderOneComponent(container);
+      }
     });
   }
   async function loadPrintout(printableSectionID) {

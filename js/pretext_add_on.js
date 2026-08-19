@@ -1342,20 +1342,19 @@ document.addEventListener("click", (ev) => {
 // and a hidden/visible .choice-feedback div per choice) so that the exercise
 // is always usable as-is: in print preview, or for a reader without JS. On a
 // normal page, this rebuilds -- in place, from that same static HTML -- the
-// data-component skeleton Runestone's own JS expects, and lets Runestone
-// enhance it into the interactive widget exactly as it does today.
+// data-component skeleton Runestone's own JS expects, then explicitly asks
+// Runestone to render it via window.runestoneComponents.renderOneComponent().
+// That's the same public entry point knowl.js's addKnowl() already relies on
+// for interactives injected into a knowl after page load: Runestone's own
+// automatic page-load scan only ever sees markup that was already present
+// when *it* ran (well before this DOMContentLoaded handler gets a turn), so
+// anything built afterward -- ours included -- needs this explicit call, or
+// it's never picked up.
 //
 // This mutates each container in place rather than hiding one version and
 // showing another, so there's no separate CSS toggle: skip this call (as the
 // printpreview DOMContentLoaded handler below does) and the static markup is
 // simply what's left on the page.
-//
-// Must run synchronously, before this module's DOMContentLoaded handler
-// hits its first `await`: the <head> loads this bundle before Runestone's
-// own script, so Runestone's component scan can only be deferred to some
-// later event (almost certainly DOMContentLoaded itself) -- same-event
-// listeners fire in registration order, so running this before any `await`
-// here guarantees it wins the race against Runestone's own listener.
 function hydrateMultipleChoice() {
     document.querySelectorAll('[data-hydrate="multiplechoice"]').forEach(container => {
         const id = container.id;
@@ -1411,6 +1410,10 @@ function hydrateMultipleChoice() {
 
         section.appendChild(list);
         container.replaceChildren(section);
+
+        if (window.runestoneComponents) {
+            window.runestoneComponents.renderOneComponent(container);
+        }
     });
 }
 
@@ -1620,9 +1623,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
     const urlParams = new URLSearchParams(window.location.search);
     let pendingSettle = Promise.resolve();
     // Print preview shows the static, plain-HTML exercise markup as-is; every
-    // other page hydrates it into the interactive Runestone widget. Must run
-    // here, synchronously, before this handler's first `await` below -- see
-    // hydrateMultipleChoice()'s docstring for why that ordering matters.
+    // other page hydrates it into the interactive Runestone widget.
     if (!urlParams.has("printpreview")) {
         hydrateMultipleChoice();
     }
