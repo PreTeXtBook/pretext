@@ -43,5 +43,6 @@ $navbar-breakpoint: 800px !default;
 @use 'interactives/calculators' with (
   $navbar-breakpoint: $navbar-breakpoint,
 );
+@use 'interactives/image-dialog';
 
 @use 'elements/permalinks';
