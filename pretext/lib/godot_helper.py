@@ -204,8 +204,10 @@ def _cached_binary_path() -> str | None:
         candidate = os.path.join(CACHE_DIR,
                                  "Godot_v{}_win64.exe".format(GODOT_VERSION_TAG))
     else:
+        machine = platform.machine().lower()
+        arch = "arm64" if machine in ("aarch64", "arm64") else "x86_64"
         candidate = os.path.join(CACHE_DIR,
-                                 "Godot_v{}_linux.x86_64".format(GODOT_VERSION_TAG))
+                                 "Godot_v{}_linux.{}".format(GODOT_VERSION_TAG, arch))
     return candidate if os.path.exists(candidate) else None
 
 
