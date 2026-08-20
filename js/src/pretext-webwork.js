@@ -340,6 +340,7 @@ async function handleWW(ww_id, action) {
         if (runestone_logged_in){
             courseUrlBase = '/ns/books/published/' + eBookConfig.basecourse + '/';
         }
+
         let iframeContents = '<!DOCTYPE html><head>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
             `<script>
@@ -430,8 +431,11 @@ async function handleWW(ww_id, action) {
                 .graphtool-answer-container .graphtool-number-line { height: 57px; }
                 .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
             </style>` +
-            '</head><body>' +
-            '<main class="pretext-content problem-content" data-iframe-height="1">' + form.outerHTML + '</main></body>' +
+            '</head>' +
+            '<body><main class="pretext-content problem-content" data-iframe-height="1">' +
+            (typeof window.PTX_MACROS !== 'undefined' ? `<span class="process-math" style="display:none;">${window.PTX_MACROS}</span>` : '') +
+            form.outerHTML +
+            '</main></body>' +
             '</html>';
 
         let iframe;
