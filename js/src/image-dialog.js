@@ -11,6 +11,7 @@ let imageDialogNumber = 0;
 function initializeImageDialogs() {
     const magnifiableImageSelector = [
         '.image-box > img',
+        '.image-box > pre.mermaid',
         '.sbspanel > img',
         'figure > img',
         'figure > div > img'
@@ -23,8 +24,11 @@ function initializeImageDialogs() {
 
         const imageBox = image.closest('.image-box');
         const figure = imageBox?.parentElement?.matches('figure') ? imageBox.parentElement : null;
-        const isSVG = image instanceof HTMLImageElement &&
-            new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg');
+        const isMermaid = image.matches('pre.mermaid');
+        const isSVG = isMermaid || (
+            image instanceof HTMLImageElement &&
+            new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg')
+        );
         if (image instanceof HTMLImageElement && !isSVG) {
             if (!image.naturalWidth || !image.naturalHeight) {
                 image.addEventListener('load', initializeImageDialogs, { once: true });
@@ -54,6 +58,9 @@ function initializeImageDialogs() {
         let dialogContentRoot = null;
 
         const refreshDialogContent = () => {
+            // Mermaid renders after the page load event, so clone at
+            // activation time to capture its rendered SVG rather than source.
+            // A direct-child image-box includes the full figure and caption.
             let dialogContent = (figure || image).cloneNode(true);
             if (dialogContent.matches('img')) {
                 const dialogImageBox = document.createElement('div');
@@ -62,11 +69,26 @@ function initializeImageDialogs() {
                 dialogContent = dialogImageBox;
             }
             dialogContent.removeAttribute('id');
-            dialogContent.querySelectorAll('[id]').forEach((element) => element.removeAttribute('id'));
+            dialogContent.querySelectorAll('[id]').forEach((element) => {
+                // Mermaid's generated SVG styles and references rely on IDs.
+                if (!element.closest('svg')) {
+                    element.removeAttribute('id');
+                }
+            });
             dialogContent.querySelectorAll('.ptx-image-expand-button').forEach((button) => button.remove());
+            const clonedMermaids = [
+                ...(dialogContent.matches('pre.mermaid') ? [dialogContent] : []),
+                ...dialogContent.querySelectorAll('pre.mermaid')
+            ];
+            clonedMermaids.forEach((mermaid) => {
+                // Do not let Mermaid re-parse its already-rendered SVG.
+                mermaid.classList.replace('mermaid', 'ptx-mermaid-dialog');
+            });
             dialogContentContainer.replaceChildren(dialogContent);
             dialogContentRoot = dialogContent;
-            dialogImage = dialogContent.matches('img') ? dialogContent : dialogContent.querySelector('img');
+            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog')
+                ? dialogContent
+                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog');
             dialogFigure = dialogContent.matches('figure') ? dialogContent : null;
             if (dialogImage instanceof HTMLImageElement) {
                 dialogImage.addEventListener('load', fitDialogToFigure);
@@ -80,10 +102,16 @@ function initializeImageDialogs() {
 
             const maxWidth = window.innerWidth * 0.9;
             const maxHeight = window.innerHeight * 0.9;
-            const naturalWidth = dialogImage.naturalWidth || maxWidth;
-            const intrinsicAspectRatio = dialogImage.naturalWidth && dialogImage.naturalHeight
-                ? dialogImage.naturalWidth / dialogImage.naturalHeight
-                : null;
+            const naturalWidth = dialogImage instanceof HTMLImageElement ? (dialogImage.naturalWidth || maxWidth) : maxWidth;
+            const renderedSVG = dialogImage instanceof SVGSVGElement
+                ? dialogImage
+                : dialogImage.querySelector?.('svg');
+            const viewBox = renderedSVG?.viewBox?.baseVal;
+            const intrinsicAspectRatio = viewBox?.width && viewBox?.height
+                ? viewBox.width / viewBox.height
+                : (dialogImage instanceof HTMLImageElement && dialogImage.naturalWidth && dialogImage.naturalHeight
+                    ? dialogImage.naturalWidth / dialogImage.naturalHeight
+                    : null);
             let imageWidth = isSVG
                 ? Math.min(maxWidth, maxHeight * (intrinsicAspectRatio || 1))
                 : Math.min(naturalWidth, maxWidth);
@@ -111,8 +139,9 @@ function initializeImageDialogs() {
         const trigger = document.createElement('button');
         trigger.type = 'button';
         trigger.classList.add('ptx-image-expand-button');
-        const description = image.getAttribute('alt')?.trim();
-        trigger.setAttribute('aria-label', description ? `Expand image: ${description}` : 'Expand image');
+        const description = image.getAttribute('alt')?.trim() || (isMermaid ? 'Mermaid diagram' : '');
+        const contentType = isMermaid ? 'diagram' : 'image';
+        trigger.setAttribute('aria-label', description ? `Expand ${contentType}: ${description}` : `Expand ${contentType}`);
         trigger.setAttribute('title', trigger.getAttribute('aria-label'));
         trigger.innerHTML = '<span class="material-symbols-outlined">open_in_full</span>';
         const triggerContainer = imageBox || image.parentElement;
