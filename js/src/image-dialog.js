@@ -12,6 +12,7 @@ function initializeImageDialogs() {
     const magnifiableImageSelector = [
         '.image-box > img',
         '.image-box > pre.mermaid',
+        '.image-box > .ChemAccess-element',
         '.sbspanel > img',
         'figure > img',
         'figure > div > img'
@@ -25,7 +26,8 @@ function initializeImageDialogs() {
         const imageBox = image.closest('.image-box');
         const figure = imageBox?.parentElement?.matches('figure') ? imageBox.parentElement : null;
         const isMermaid = image.matches('pre.mermaid');
-        const isSVG = isMermaid || (
+        const isDiagcess = image.matches('.ChemAccess-element');
+        const isSVG = isMermaid || isDiagcess || (
             image instanceof HTMLImageElement &&
             new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg')
         );
@@ -57,12 +59,33 @@ function initializeImageDialogs() {
         let dialogFigure = null;
         let dialogContentRoot = null;
 
+        const initializeDialogDiagcess = (diagrams) => {
+            if (!diagrams.length || !window.diagcess?.Base) {
+                return;
+            }
+
+            // Diagcess installs its interaction after it has fetched the SVG
+            // and annotations. Fit the dialog when that rendered SVG arrives.
+            const observer = new MutationObserver(() => {
+                if (diagrams.some((diagram) => diagram.querySelector('svg'))) {
+                    observer.disconnect();
+                    requestAnimationFrame(fitDialogToFigure);
+                }
+            });
+            diagrams.forEach((diagram) => {
+                observer.observe(diagram, { childList: true, subtree: true });
+            });
+            window.diagcess.Base.init();
+        };
+
         const refreshDialogContent = () => {
             // Mermaid renders after the page load event, so clone at
             // activation time to capture its rendered SVG rather than source.
             // A direct-child image-box includes the full figure and caption.
-            let dialogContent = (figure || image).cloneNode(true);
-            if (dialogContent.matches('img')) {
+            // Diagcess needs its entire image-box, which can contain more
+            // than its interactive SVG.
+            let dialogContent = (figure || (isDiagcess ? imageBox : image)).cloneNode(true);
+            if (dialogContent.matches('img, .ChemAccess-element')) {
                 const dialogImageBox = document.createElement('div');
                 dialogImageBox.classList.add('image-box');
                 dialogImageBox.append(dialogContent);
@@ -84,33 +107,54 @@ function initializeImageDialogs() {
                 // Do not let Mermaid re-parse its already-rendered SVG.
                 mermaid.classList.replace('mermaid', 'ptx-mermaid-dialog');
             });
+            const clonedDiagcess = [
+                ...(dialogContent.matches('.ChemAccess-element') ? [dialogContent] : []),
+                ...dialogContent.querySelectorAll('.ChemAccess-element')
+            ].map((diagram) => {
+                // A clone of an initialized Diagcess diagram lacks its event
+                // handlers. Recreate its source placeholder so Diagcess can
+                // build an independent, fully interactive diagram here.
+                const placeholder = document.createElement('div');
+                placeholder.classList.add('ChemAccess-element');
+                [...diagram.attributes].forEach((attribute) => {
+                    if (attribute.name.startsWith('data-') || attribute.name === 'aria-label') {
+                        placeholder.setAttribute(attribute.name, attribute.value);
+                    }
+                });
+                diagram.replaceWith(placeholder);
+                return placeholder;
+            });
             dialogContentContainer.replaceChildren(dialogContent);
             dialogContentRoot = dialogContent;
-            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog')
+            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog, .ChemAccess-element')
                 ? dialogContent
-                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog');
+                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog, .ChemAccess-element');
             dialogFigure = dialogContent.matches('figure') ? dialogContent : null;
             if (dialogImage instanceof HTMLImageElement) {
                 dialogImage.addEventListener('load', fitDialogToFigure);
             }
+            initializeDialogDiagcess(clonedDiagcess);
         };
 
         const fitDialogToFigure = () => {
-            if (!dialog.open || !dialogImage) {
+            const displayedImage = isDiagcess
+                ? dialogContentContainer.querySelector('.ChemAccess-element svg')
+                : dialogImage;
+            if (!dialog.open || !displayedImage) {
                 return;
             }
 
             const maxWidth = window.innerWidth * 0.9;
             const maxHeight = window.innerHeight * 0.9;
-            const naturalWidth = dialogImage instanceof HTMLImageElement ? (dialogImage.naturalWidth || maxWidth) : maxWidth;
-            const renderedSVG = dialogImage instanceof SVGSVGElement
-                ? dialogImage
-                : dialogImage.querySelector?.('svg');
+            const naturalWidth = displayedImage instanceof HTMLImageElement ? (displayedImage.naturalWidth || maxWidth) : maxWidth;
+            const renderedSVG = displayedImage instanceof SVGSVGElement
+                ? displayedImage
+                : displayedImage.querySelector?.('svg');
             const viewBox = renderedSVG?.viewBox?.baseVal;
             const intrinsicAspectRatio = viewBox?.width && viewBox?.height
                 ? viewBox.width / viewBox.height
-                : (dialogImage instanceof HTMLImageElement && dialogImage.naturalWidth && dialogImage.naturalHeight
-                    ? dialogImage.naturalWidth / dialogImage.naturalHeight
+                : (displayedImage instanceof HTMLImageElement && displayedImage.naturalWidth && displayedImage.naturalHeight
+                    ? displayedImage.naturalWidth / displayedImage.naturalHeight
                     : null);
             let imageWidth = isSVG
                 ? Math.min(maxWidth, maxHeight * (intrinsicAspectRatio || 1))
@@ -118,14 +162,14 @@ function initializeImageDialogs() {
 
             for (let attempt = 0; attempt < 2; attempt += 1) {
                 dialog.style.width = `${imageWidth}px`;
-                dialogImage.style.setProperty('width', `${imageWidth}px`, 'important');
-                dialogImage.style.setProperty('max-height', `${maxHeight}px`, 'important');
+                displayedImage.style.setProperty('width', `${imageWidth}px`, 'important');
+                displayedImage.style.setProperty('max-height', `${maxHeight}px`, 'important');
 
-                const imageRect = dialogImage.getBoundingClientRect();
+                const imageRect = displayedImage.getBoundingClientRect();
                 if (!imageRect.width || !imageRect.height) {
                     return;
                 }
-                const contentRect = (dialogFigure || dialogContentRoot || dialogImage).getBoundingClientRect();
+                const contentRect = (dialogFigure || dialogContentRoot || displayedImage).getBoundingClientRect();
                 const nonImageHeight = Math.max(0, contentRect.height - imageRect.height);
                 const availableImageHeight = Math.max(0, maxHeight - nonImageHeight);
                 const aspectRatio = intrinsicAspectRatio || (imageRect.width / imageRect.height);
@@ -133,14 +177,16 @@ function initializeImageDialogs() {
             }
 
             dialog.style.width = `${imageWidth}px`;
-            dialogImage.style.setProperty('width', `${imageWidth}px`, 'important');
+            displayedImage.style.setProperty('width', `${imageWidth}px`, 'important');
         };
 
         const trigger = document.createElement('button');
         trigger.type = 'button';
         trigger.classList.add('ptx-image-expand-button');
-        const description = image.getAttribute('alt')?.trim() || (isMermaid ? 'Mermaid diagram' : '');
-        const contentType = isMermaid ? 'diagram' : 'image';
+        const description = image.getAttribute('alt')?.trim() || (
+            isMermaid ? 'Mermaid diagram' : (isDiagcess ? 'interactive diagram' : '')
+        );
+        const contentType = (isMermaid || isDiagcess) ? 'diagram' : 'image';
         trigger.setAttribute('aria-label', description ? `Expand ${contentType}: ${description}` : `Expand ${contentType}`);
         trigger.setAttribute('title', trigger.getAttribute('aria-label'));
         trigger.innerHTML = '<span class="material-symbols-outlined">open_in_full</span>';
@@ -148,16 +194,19 @@ function initializeImageDialogs() {
         triggerContainer.classList.add('ptx-image-dialog-trigger-container');
         image.after(trigger);
 
-        image.setAttribute('tabindex', '0');
-        image.setAttribute('role', 'button');
-        image.setAttribute('aria-label', trigger.getAttribute('aria-label'));
-        image.addEventListener('click', () => trigger.click());
-        image.addEventListener('keydown', (keyEvent) => {
-            if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
-                keyEvent.preventDefault();
-                image.click();
-            }
-        });
+        // Diagcess owns click and keyboard input on its application widget.
+        if (!isDiagcess) {
+            image.setAttribute('tabindex', '0');
+            image.setAttribute('role', 'button');
+            image.setAttribute('aria-label', trigger.getAttribute('aria-label'));
+            image.addEventListener('click', () => trigger.click());
+            image.addEventListener('keydown', (keyEvent) => {
+                if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+                    keyEvent.preventDefault();
+                    image.click();
+                }
+            });
+        }
 
         trigger.addEventListener('click', () => {
             refreshDialogContent();

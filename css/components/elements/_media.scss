@@ -79,7 +79,7 @@ img.contained {
 .ptx-image-dialog-trigger-container {
   position: relative;
 
-  &:has(> :is(img, pre.mermaid):hover) .ptx-image-expand-button {
+  &:has(> :is(img, pre.mermaid, .ChemAccess-element):hover) .ptx-image-expand-button {
     opacity: 1;
   }
 }
@@ -157,6 +157,19 @@ img.contained {
       max-width: 100% !important;
       max-height: 100%;
     }
+  }
+
+  .ChemAccess-element {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .ChemAccess-element .svg,
+  .ChemAccess-element svg {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
   }
 }
 
