@@ -453,31 +453,57 @@ def asymptote_conversion(
             outformats = [outformat]
         else:
             outformats = []
+        # The version does not vary with the output format, so we ask for it
+        # once rather than once per format, and any advisory about a version
+        # we cannot read is then issued just once as well.
+        asy_executable_cmd = []
+        asyversion = ""
+        rendering_option = []
+        if outformats and (method == "local"):
+            asy_executable_cmd = common.get_executable_cmd("asy")
+            proc = subprocess.Popen(
+                [asy_executable_cmd[0], "--version"], stderr=subprocess.PIPE
+            )
+            # bytes -> ASCII, strip final newline
+            asyversion = proc.stderr.read().decode("ascii")[:-1]
+            version_numbers = asymptote_version_numbers(asyversion)
+            if version_numbers is None:
+                msg = [
+                    "the version of Asymptote could not be determined, so a current version",
+                    "             is assumed and offscreen rendering requested.  If no images are built,",
+                    "             and your Asymptote lies between 2.66 and 3.11, that is the explanation.",
+                    "             A version query replied:",
+                    "             {}".format(asyversion),
+                ]
+                log.warning("\n".join(msg))
+                version_numbers = (3, 13)
+            # "-offscreen" has come and gone: Asymptote introduced it at 2.11,
+            # dropped it at 2.66, and restored it at 3.12.  (Checked against
+            # every release from 1.67 to 3.13.)  A version lacking the option
+            # does not say so.  Its parser reads "-offscreen" as "-o ffscreen",
+            # so every image is written to a file of that name, and Asymptote
+            # exits successfully and silently: only the missing file betrays
+            # it.  "-iconify" is understood by every release, and so serves
+            # wherever offscreen rendering cannot be asked for.
+            if ((2, 11) <= version_numbers < (2, 66)) or ((3, 12) <= version_numbers):
+                rendering_option = ["-offscreen"]
+            else:
+                rendering_option = ["-iconify"]
         for outform in outformats:
             # initialize variables for each method
             asy_cli = []
             alberta = ""
-            asyversion = ""
             # setup, depending on the method
             if method == "local":
-                asy_executable_cmd = common.get_executable_cmd("asy")
-                # perhaps replace following stock advisory
-                # with a real version check.  Perhaps see:
-                # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
-                proc = subprocess.Popen(
-                    [asy_executable_cmd[0], "--version"], stderr=subprocess.PIPE
-                )
-                # bytes -> ASCII, strip final newline
-                asyversion = proc.stderr.read().decode("ascii")[:-1]
                 # build command line to suit
                 # 2021-12-10, Michael Doob: "-noprc" is default for the server,
                 # and newer CLI versions.  Retain for explicit use locally when
                 # perhaps an older version is being employed
                 asy_cli = asy_executable_cmd + ["-f", outform, "-noV"]
                 if outform in ["pdf", "eps"]:
-                    asy_cli += ["-noprc", "-offscreen", "-tex", "xelatex", "-batchMask"]
+                    asy_cli += ["-noprc"] + rendering_option + ["-tex", "xelatex", "-batchMask"]
                 elif outform in ["svg", "png"]:
-                    asy_cli += ["-render=4", "-tex", "xelatex", "-offscreen"]
+                    asy_cli += ["-render=4", "-tex", "xelatex"] + rendering_option
             if method == "server":
                 alberta = "http://asymptote.ualberta.ca:10007?f={}".format(outform)
             # loop over .asy files, doing conversions
@@ -486,6 +512,17 @@ def asymptote_conversion(
                     ext_converter(asydiagram, outform, method, asy_cli, asyversion, alberta, dest_dir)
                 else:
                     individual_asymptote_conversion(asydiagram, outform, method, asy_cli, asyversion, alberta, dest_dir)
+
+def asymptote_version_numbers(version_banner):
+    """Asymptote's version as a tuple of integers, or None if not discernable"""
+    # Asked for "--version", Asymptote replies on standard error with a
+    # banner whose first line reads, for example,
+    #     Asymptote version 3.12 [(C) 2004 Andy Hammerlindl, ...
+    # Integers, and not the string, so that 3.9 precedes 3.11
+    version_match = re.search(r"Asymptote version ([0-9]+(?:\.[0-9]+)*)", version_banner)
+    if not version_match:
+        return None
+    return tuple(int(number) for number in version_match.group(1).split("."))
 
 def individual_asymptote_conversion(asydiagram, outform, method, asy_cli, asyversion, alberta, dest_dir):
     try:
@@ -518,8 +555,8 @@ def individual_asymptote_conversion(asydiagram, outform, method, asy_cli, asyver
         ]
         if method == "local":
             msg += [
-                "             Or your local copy of Asymtote may precede version 2.66 that we expect.",
-                "             In this case, not every image can be built in every possible format.",
+                "             Or your local copy of Asymptote may be too old to build this format,",
+                "             since not every version can produce every format.",
                 "",
                 "             Your Asymptote reports its version within the following:",
                 "             {}".format(asyversion),
