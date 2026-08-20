@@ -110,6 +110,7 @@ loadMacros(
   "PGML.pl",
   "AnswerFormatHelp.pl",
   "contextForm.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

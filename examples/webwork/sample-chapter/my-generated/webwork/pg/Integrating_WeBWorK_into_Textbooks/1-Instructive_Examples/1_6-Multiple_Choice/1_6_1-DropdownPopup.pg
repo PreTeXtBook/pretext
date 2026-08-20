@@ -28,6 +28,7 @@ loadMacros(
   "PGML.pl",
   "AnswerFormatHelp.pl",
   "parserPopUp.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

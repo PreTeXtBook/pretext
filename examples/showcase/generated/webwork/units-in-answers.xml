@@ -66,6 +66,7 @@ loadMacros(
   "parserNumberWithUnits.pl",
   "contextCurrency.pl",
   "contextPercent.pl",
+  "PTXSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

@@ -36,6 +36,7 @@ loadMacros(
   "PGML.pl",
   "AnswerFormatHelp.pl",
   "PGessaymacros.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -54,7 +55,7 @@ Context('Numeric');
 ############################################################
 
 BEGIN_PGML
-Explain how we can use Corollary[$NBSP]*1.4.3 to say that every continuous function _always_ has a derivative. (And we will demonstrate here that you can use a  macro from [|docinfo|]*: [`\newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)\text{.}`] It will work in the WeBWorK problem, regardless of whether you are using images, MathJax, or hardcopy.)
+Explain how we can use Corollary[$NBSP]*1.4.3 to say that every continuous function _always_ has a derivative. (And we will demonstrate here that you can use a  macro from [|docinfo|]*: [`\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)\text{.}`] It will work in the WeBWorK problem, regardless of whether you are using images, MathJax, or hardcopy.)
 
 [@ANS(essay_cmp()); essay_box(6,76)@]* [@essay_help()@]*
 

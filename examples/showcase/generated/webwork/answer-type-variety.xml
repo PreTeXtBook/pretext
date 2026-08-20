@@ -124,6 +124,7 @@ loadMacros(
   "contextForm.pl",
   "contextLimitedRadical.pl",
   "contextRestrictedDomains.pl",
+  "PTXSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

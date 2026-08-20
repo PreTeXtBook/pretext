@@ -54,6 +54,7 @@ loadMacros(
   "PGgraphmacros.pl",
   "contextFiniteSolutionSets.pl",
   "contextForm.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

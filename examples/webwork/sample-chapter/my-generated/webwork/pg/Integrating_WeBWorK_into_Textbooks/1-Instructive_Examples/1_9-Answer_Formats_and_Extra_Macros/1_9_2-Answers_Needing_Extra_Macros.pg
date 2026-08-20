@@ -30,6 +30,7 @@ loadMacros(
   "parserNumberWithUnits.pl",
   "contextFraction.pl",
   "contextInequalities.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
