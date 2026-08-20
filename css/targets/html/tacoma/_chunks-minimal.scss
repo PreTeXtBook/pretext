@@ -78,8 +78,9 @@ $border-radius: 8px !default;
 }
 
 .solution-like {
+  @include inline-heading-mixin.heading;
+
   .heading {
-    display: inline;
     font-style: italic;
     font-size: unset;
   }
