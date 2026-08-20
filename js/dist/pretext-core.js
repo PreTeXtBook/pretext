@@ -409,7 +409,7 @@
         this.close = () => this.closeDialogFallback();
         this.toggle = () => this.toggleDialogFallback();
       }
-      if (!_PTXDialog.hasNativeCommandInvokers() && this.kind === "light-close") {
+      if (this.kind === "light-close") {
         this.dialog.addEventListener("click", (event2) => {
           if (event2.target === this.dialog) {
             const rect = this.dialog.getBoundingClientRect();
@@ -505,6 +505,106 @@
     }
   };
   window.PTXDialog = PTXDialog2;
+
+  // ../../js/src/image-dialog.js
+  window.addEventListener("load", () => {
+    const magnifiableImageSelector = [
+      ".image-box > img",
+      ".image-box > pre.mermaid",
+      ".sbspanel > img",
+      "figure > img",
+      "figure > div > img"
+    ].join(", ");
+    let imageDialogNumber = 0;
+    document.querySelectorAll(magnifiableImageSelector).forEach((image) => {
+      if (image.classList.contains("draw_on_me")) {
+        return;
+      }
+      const imageBox = image.closest(".image-box");
+      const figure = imageBox?.parentElement?.matches("figure") ? imageBox.parentElement : null;
+      const dialog = document.createElement("dialog");
+      dialog.id = `ptx-image-dialog-${++imageDialogNumber}`;
+      dialog.classList.add("ptx-image-dialog");
+      const isMermaid = image.matches("pre.mermaid");
+      const isSVG = isMermaid || image instanceof HTMLImageElement && new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith(".svg");
+      dialog.setAttribute("aria-label", "Expanded image");
+      const dialogContentContainer = document.createElement("div");
+      dialogContentContainer.classList.add("ptx-image-dialog-content");
+      dialog.append(dialogContentContainer);
+      document.body.append(dialog);
+      let dialogImage = null;
+      let dialogFigure = null;
+      const refreshDialogContent = () => {
+        let dialogContent = (figure || image).cloneNode(true);
+        if (dialogContent.matches("img")) {
+          const imageBox2 = document.createElement("div");
+          imageBox2.classList.add("image-box");
+          imageBox2.append(dialogContent);
+          dialogContent = imageBox2;
+        }
+        dialogContent.removeAttribute("id");
+        dialogContent.querySelectorAll("[id]").forEach((element) => {
+          if (!element.closest("svg")) {
+            element.removeAttribute("id");
+          }
+        });
+        const clonedMermaids = [
+          ...dialogContent.matches("pre.mermaid") ? [dialogContent] : [],
+          ...dialogContent.querySelectorAll("pre.mermaid")
+        ];
+        clonedMermaids.forEach((mermaid) => {
+          mermaid.classList.replace("mermaid", "ptx-mermaid-dialog");
+        });
+        dialogContentContainer.replaceChildren(dialogContent);
+        dialogImage = dialogContent.matches("img, pre.ptx-mermaid-dialog") ? dialogContent : dialogContent.querySelector("img, pre.ptx-mermaid-dialog");
+        dialogFigure = dialogContent.matches("figure") ? dialogContent : null;
+        if (dialogImage instanceof HTMLImageElement) {
+          dialogImage.addEventListener("load", fitDialogToFigure);
+        }
+      };
+      const fitDialogToFigure = () => {
+        if (!dialog.open || !dialogImage) {
+          return;
+        }
+        const maxWidth = window.innerWidth * 0.9;
+        const maxHeight = window.innerHeight * 0.9;
+        const naturalWidth = dialogImage instanceof HTMLImageElement ? dialogImage.naturalWidth || maxWidth : maxWidth;
+        let imageWidth = isSVG ? maxWidth : Math.min(naturalWidth, maxWidth);
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          dialog.style.width = `${imageWidth}px`;
+          dialogImage.style.setProperty("width", `${imageWidth}px`, "important");
+          dialogImage.style.setProperty("max-height", `${maxHeight}px`, "important");
+          const imageRect = dialogImage.getBoundingClientRect();
+          if (!imageRect.width || !imageRect.height) {
+            return;
+          }
+          const figureRect = (dialogFigure || dialogImage).getBoundingClientRect();
+          const nonImageHeight = Math.max(0, figureRect.height - imageRect.height);
+          const availableImageHeight = Math.max(0, maxHeight - nonImageHeight);
+          const aspectRatio = imageRect.width / imageRect.height;
+          imageWidth = Math.min(imageWidth, availableImageHeight * aspectRatio);
+        }
+        dialog.style.width = `${imageWidth}px`;
+        dialogImage.style.setProperty("width", `${imageWidth}px`, "important");
+      };
+      image.setAttribute("tabindex", "0");
+      image.setAttribute("role", "button");
+      const description = image.getAttribute("alt")?.trim() || (isMermaid ? "Mermaid diagram" : "");
+      image.setAttribute("aria-label", description ? `Expand image: ${description}` : "Expand image");
+      image.addEventListener("keydown", (keyEvent) => {
+        if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+          keyEvent.preventDefault();
+          image.click();
+        }
+      });
+      image.addEventListener("click", () => {
+        refreshDialogContent();
+        requestAnimationFrame(fitDialogToFigure);
+      });
+      window.addEventListener("resize", fitDialogToFigure);
+      new window.PTXDialog(dialog, image, { kind: "light-close" });
+    });
+  });
 
   // ../../js/src/pretext-dropdown.js
   var PTXDropdown2 = class {
@@ -1162,34 +1262,6 @@
   window.addEventListener(
     "load",
     function(event2) {
-      $("body").on("click", ".image-box > img:not(.draw_on_me):not(.mag_popup), .sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)", function() {
-        var img_big = document.createElement("div");
-        const content_element = document.getElementById("ptx-content");
-        img_big.setAttribute("class", "mag_popup_container");
-        img_big.innerHTML = `<img src="${$(this).attr("src")}" style="width:100%;" class="mag_popup"/>`;
-        place_to_put_big_img = $(this).parents(".image-box, .sbsrow, figure, li, .cols2 article:nth-of-type(2n)").last();
-        if (place_to_put_big_img.prop("tagName") == "ARTICLE") {
-          place_to_put_big_img = place_to_put_big_img.prev().children().first();
-        }
-        var img_big_parent = place_to_put_big_img[0].parentElement;
-        while (img_big_parent.id !== "ptx-content") {
-          const computed_position = getComputedStyle(img_big_parent).position;
-          if (computed_position !== "static") {
-            break;
-          }
-          img_big_parent = img_big_parent.parentElement;
-        }
-        const content_element_computed_style = getComputedStyle(content_element);
-        const content_padding_left = parseFloat(content_element_computed_style.paddingLeft);
-        const content_padding_right = parseFloat(content_element_computed_style.paddingRight);
-        const img_big_offset = content_element.getBoundingClientRect().left - img_big_parent.getBoundingClientRect().left + content_padding_left;
-        const doc_width = content_element.offsetWidth - content_padding_left - content_padding_right;
-        img_big.setAttribute("style", `width:${doc_width.toString()}px; left:${img_big_offset.toString()}px;`);
-        $(img_big).insertBefore(place_to_put_big_img);
-      });
-      $("body").on("click", "img.mag_popup", function() {
-        this.parentNode.remove();
-      });
       p_no_id = document.querySelectorAll(".main p:not([id])");
       for (var n = p_no_id.length - 1; n >= 0; --n) {
         e = p_no_id[n];
