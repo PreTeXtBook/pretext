@@ -42,6 +42,10 @@
       & > .para.logical:first-child > .para:first-child {
         display: inline;
       }
+      // Disable the autopermalink for this first child that is now inline
+      & .autopermalink {
+        display: none;
+      }
     }
   }
 }
