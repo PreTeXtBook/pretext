@@ -51,6 +51,7 @@ loadMacros(
   "AnswerFormatHelp.pl",
   "bizarroArithmetic.pl",
   "contextForm.pl",
+  "PTXSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -115,7 +116,7 @@ END_PGML_HINT
 BEGIN_PGML_SOLUTION
 To simplify the product of two powers of the same base, add the exponents.
 
-[```\newcommand{\amp}{&}
+[```
 \begin{aligned}
 [$given]\amp=x^{2+5}\\
 \amp=[$answer]

@@ -60,6 +60,7 @@ loadMacros(
   "contextFiniteSolutionSets.pl",
   "contextForm.pl",
   "contextFraction.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

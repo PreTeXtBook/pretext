@@ -54,6 +54,7 @@ loadMacros(
   "PGML.pl",
   "AnswerFormatHelp.pl",
   "parserRadioButtons.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

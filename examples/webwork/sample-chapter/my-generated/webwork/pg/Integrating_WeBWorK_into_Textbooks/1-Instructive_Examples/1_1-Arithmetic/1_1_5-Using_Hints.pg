@@ -29,6 +29,7 @@ loadMacros(
   "AnswerFormatHelp.pl",
   "contextForm.pl",
   "contextLimitedRadical.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

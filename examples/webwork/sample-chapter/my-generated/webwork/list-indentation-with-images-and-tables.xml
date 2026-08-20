@@ -114,6 +114,7 @@ loadMacros(
   "AnswerFormatHelp.pl",
   "niceTables.pl",
   "PGgraphmacros.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

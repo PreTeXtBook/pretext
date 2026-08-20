@@ -95,6 +95,7 @@ loadMacros(
   "parserCheckboxList.pl",
   "parserPopUp.pl",
   "parserRadioButtons.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
