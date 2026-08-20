@@ -1337,6 +1337,86 @@ document.addEventListener("click", (ev) => {
     window.location.assign(link.href);
 });
 
+// PreTeXt emits multiple-choice exercises as static, readable HTML (a
+// statement plus a lettered <ol> of choices, annotated with @data-correct
+// and a hidden/visible .choice-feedback div per choice) so that the exercise
+// is always usable as-is: in print preview, or for a reader without JS. On a
+// normal page, this rebuilds -- in place, from that same static HTML -- the
+// data-component skeleton Runestone's own JS expects, then explicitly asks
+// Runestone to render it via window.runestoneComponents.renderOneComponent().
+// That's the same public entry point knowl.js's addKnowl() already relies on
+// for interactives injected into a knowl after page load: Runestone's own
+// automatic page-load scan only ever sees markup that was already present
+// when *it* ran (well before this DOMContentLoaded handler gets a turn), so
+// anything built afterward -- ours included -- needs this explicit call, or
+// it's never picked up.
+//
+// This mutates each container in place rather than hiding one version and
+// showing another, so there's no separate CSS toggle: skip this call (as the
+// printpreview DOMContentLoaded handler below does) and the static markup is
+// simply what's left on the page.
+function hydrateMultipleChoice() {
+    document.querySelectorAll('[data-hydrate="multiplechoice"]').forEach(container => {
+        const id = container.id;
+        const statement = container.querySelector(':scope > .exercise-statement');
+        const choices = container.querySelectorAll(':scope > ol.runestone-static-choices > li');
+        if (!id || !statement || choices.length === 0) return;
+
+        const section = document.createElement('div');
+        section.className = 'runestone multiplechoice_section';
+        section.appendChild(statement);
+
+        const list = document.createElement('ul');
+        list.id = id;
+        list.className = 'exercise-interactives';
+        list.dataset.component = 'multiplechoice';
+        if (container.dataset.multipleanswers) {
+            list.dataset.multipleanswers = container.dataset.multipleanswers;
+        }
+        if ('random' in container.dataset) {
+            list.dataset.random = '';
+        }
+
+        choices.forEach((choice, index) => {
+            const letter = String.fromCharCode('a'.charCodeAt(0) + index);
+            const choiceId = `${id}_opt_${letter}`;
+            const feedback = choice.querySelector(':scope > .choice-feedback');
+
+            const answerItem = document.createElement('li');
+            answerItem.id = choiceId;
+            answerItem.dataset.component = 'answer';
+            if ('correct' in choice.dataset) {
+                answerItem.dataset.correct = '';
+            }
+            while (choice.firstChild) {
+                if (choice.firstChild === feedback) {
+                    choice.removeChild(feedback);
+                    continue;
+                }
+                answerItem.appendChild(choice.firstChild);
+            }
+            list.appendChild(answerItem);
+
+            const feedbackItem = document.createElement('li');
+            feedbackItem.id = choiceId;
+            feedbackItem.dataset.component = 'feedback';
+            if (feedback) {
+                while (feedback.firstChild) {
+                    feedbackItem.appendChild(feedback.firstChild);
+                }
+            }
+            list.appendChild(feedbackItem);
+        });
+
+        section.appendChild(list);
+        container.replaceChildren(section);
+
+        if (window.runestoneComponents) {
+            window.runestoneComponents.renderOneComponent(container);
+        }
+    });
+}
+
 // Function to load the printout section and switch to print stylesheet.  This will run whenever a user clicks on a print preview link (which adds ?printpreview=sectionID to the URL).
 async function loadPrintout(printableSectionID) {
 
@@ -1542,6 +1622,11 @@ async function applySolutionVisibility(solutionType, hidden, {paperSize, margins
 window.addEventListener("DOMContentLoaded", async function(event) {
     const urlParams = new URLSearchParams(window.location.search);
     let pendingSettle = Promise.resolve();
+    // Print preview shows the static, plain-HTML exercise markup as-is; every
+    // other page hydrates it into the interactive Runestone widget.
+    if (!urlParams.has("printpreview")) {
+        hydrateMultipleChoice();
+    }
     // We condition on the existence of the papersize radio buttons, which only appear in the printout print preview.
     if (urlParams.has("printpreview")) {
         const printableSectionID = urlParams.get("printpreview");
