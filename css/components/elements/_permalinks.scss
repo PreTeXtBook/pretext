@@ -86,14 +86,19 @@ li > .autopermalink {
   left: -2.9em;
 }
 
-
-.axiom-like, .example-like, .exercise-like, .solution-like, .assemblage-like, .definition-like, .remark-like, .project-like, .openproblem-like, .computation-like, .theorem-like, .proof, .case, li, dd {
+// Hide the autopermalink for the first para of a list item or definition term
+li, dd {
   > .para:first-of-type > .autopermalink {
     display:none;
   }
+}
 
+// An unheaded solution-like or assemblage-like block and its first paragraph
+// occupy the same starting position.  Show only the block permalink there.
+:is(.solution-like, .assemblage-like):not(:has(> .heading)) {
+  > .para:first-of-type > .autopermalink,
   > .introduction > .para:first-of-type > .autopermalink {
-    display:none;
+    display: none;
   }
 }
 
