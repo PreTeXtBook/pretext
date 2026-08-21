@@ -350,12 +350,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
-    <!-- custom ol marker css production -->
-    <!-- A CDN cannot host these styles, since they are derived from the -->
-    <!-- source.  CDN builds get them inline instead, see "css-common".  -->
-    <xsl:if test="not($b-subsetting) and not($b-cdn-resources)">
-        <xsl:call-template name="ol-marker-styles"/>
-    </xsl:if>
 </xsl:template>
 
 <!-- However, some PTX document types do not have    -->
@@ -6225,6 +6219,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$cols-class-name"/>
             </xsl:if>
         </xsl:attribute>
+        <!-- a custom marker is a named "@counter-style" rule, inlined -->
+        <!-- with the page's CSS, referenced from right here           -->
+        <xsl:variable name="ol-marker-name">
+            <xsl:apply-templates select="." mode="ol-marker-name"/>
+        </xsl:variable>
+        <xsl:if test="not($ol-marker-name = '')">
+            <xsl:attribute name="style">
+                <xsl:text>list-style: </xsl:text>
+                <xsl:value-of select="$ol-marker-name"/>
+                <xsl:text>;</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
@@ -6240,14 +6246,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="ol[@marker]" mode="ol-marker-class">
+<xsl:template match="ol[@marker]" mode="ol-marker-name">
     <xsl:variable name="marker-value" select="./@marker" />
     <xsl:for-each select="exsl:node-set($ol-markers)">
         <!-- Should be only one match since ol marker -->
         <!-- index node set contains no duplicates    -->
-        <xsl:value-of select="key('marker-key', $marker-value)[1]/@classname"/>
+        <xsl:value-of select="key('marker-key', $marker-value)[1]/@name"/>
     </xsl:for-each >
 </xsl:template>
+
+<xsl:template match="ol|ul" mode="ol-marker-name"/>
 
 <xsl:template match="ol[not(@marker) and @pi:format-code = 'a' and @pi:ordered-list-level = '1']" mode="ol-marker-class">
     <xsl:text>lower-alpha-level-1</xsl:text>
@@ -6261,38 +6269,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:copy-of select="@marker"/>
         <xsl:copy-of select="@pi:marker-prefix"/>
         <xsl:copy-of select="@pi:marker-suffix"/>
-        <xsl:attribute name="classname">
-            <xsl:text>ol-marker-</xsl:text>
+        <xsl:attribute name="name">
+            <xsl:text>ptx-marker-</xsl:text>
             <xsl:value-of select="position()" />
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
 
-<!-- Creates custom formatting for each unique ol/@marker -->
+<!-- One "@counter-style" rule per distinct marker.  The author's     -->
+<!-- prefix and suffix become CSS strings, escaped; the suffix gains  -->
+<!-- the trailing space that separates a marker from its item.  Each  -->
+<!-- list references its rule by name from a "style" attribute, so    -->
+<!-- these rules are the only shared CSS a custom marker needs.       -->
+<!-- They cannot be per-list: an at-rule only lives in a stylesheet.  -->
+<!-- Should WebKit ever support "content" on "::marker" (WebKit bug   -->
+<!-- 204163), one static theme rule reading custom properties could   -->
+<!-- replace all of this, and markers would be entirely per-list      -->
+<!-- inline, with no shared rules and no marker index at all.         -->
 <xsl:template match="ol-marker" mode="ol-marker-style">
-    <!-- format child li elements according to marker prefix/code/suffix -->
-    <xsl:text>ol.</xsl:text>
-    <xsl:value-of select="./@classname"/>
-    <xsl:text> &gt; li::marker { content: &quot;</xsl:text>
-    <xsl:value-of select="./@pi:marker-prefix" />
-    <xsl:text>&quot;counter(list-item,</xsl:text>
+    <xsl:text>@counter-style </xsl:text>
+    <xsl:value-of select="./@name"/>
+    <xsl:text> { system: extends </xsl:text>
     <xsl:apply-templates select="." mode="html-list-class" />
-    <xsl:text>)&quot;</xsl:text>
-    <xsl:value-of select="./@pi:marker-suffix" />
-    <xsl:text> &quot;; }&#xa;</xsl:text>
+    <xsl:text>; prefix: '</xsl:text>
+    <xsl:call-template name="css-string-escape">
+        <xsl:with-param name="text" select="./@pi:marker-prefix"/>
+    </xsl:call-template>
+    <xsl:text>'; suffix: '</xsl:text>
+    <xsl:call-template name="css-string-escape">
+        <xsl:with-param name="text" select="./@pi:marker-suffix"/>
+    </xsl:call-template>
+    <xsl:text> '; }&#xa;</xsl:text>
 </xsl:template>
 
-<!-- CSS file for custom ol markers -->
-<xsl:template name="ol-marker-styles">
-    <!-- We don't produce a file if it will be empty. This would  -->
-    <!-- "naturally" be the case, but we have a boolean anyway.   -->
-    <xsl:if test="$b-needs-custom-marker-css">
-        <xsl:variable name="ol-marker-nodes" select="exsl:node-set($ol-markers)" />
-        <exsl:document href="{$html.css.dir}/ol-markers.css" method="text">
-            <xsl:apply-templates select="$ol-marker-nodes//ol-marker" mode="ol-marker-style" />
-        </exsl:document>
-    </xsl:if>
-</xsl:template>
 
 <!-- We let CSS react to narrow titles for dl -->
 <!-- But no support for multiple columns      -->
@@ -14647,22 +14656,16 @@ TODO:
 
 <!-- CSS header -->
 <xsl:template name="css-common">
-    <!-- Temporary until css handling overhaul by ascholer complete -->
+    <!-- Custom list markers are "@counter-style" rules derived from the -->
+    <!-- source, one per distinct marker, referenced by name from each   -->
+    <!-- list's "style" attribute.  Inlined unconditionally: they are    -->
+    <!-- tiny, they cannot live on a CDN, and portable HTML has no place -->
+    <!-- to link out to anyway.                                          -->
     <xsl:if test="$b-needs-custom-marker-css">
-        <xsl:choose>
-            <!-- These styles are derived from the source, so they are not on  -->
-            <!-- the CDN and "$html.css.dir" does not point at them.  Inline   -->
-            <!-- them: there is one short rule per unique author-supplied      -->
-            <!-- marker, and portable HTML has no place to link out to anyway. -->
-            <xsl:when test="$b-cdn-resources">
-                <style>
-                    <xsl:apply-templates select="exsl:node-set($ol-markers)//ol-marker" mode="ol-marker-style"/>
-                </style>
-            </xsl:when>
-            <xsl:otherwise>
-                <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <style>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($ol-markers)//ol-marker" mode="ol-marker-style"/>
+        </style>
     </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <xsl:if test="not($html.css.extra = '')">
