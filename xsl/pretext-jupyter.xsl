@@ -354,6 +354,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>.mathbook-content table tr.header-vertical th {writing-mode: vertical-rl; padding-left: 2em;}&#xa;</xsl:text>
             <xsl:text>.mathbook-content .sbspanel img {max-width: 100%;}&#xa;</xsl:text>
             <xsl:text>.mathbook-content .tablenotes {list-style: none; padding-left: 0;}&#xa;</xsl:text>
+            <!-- custom list markers, one "@counter-style" rule per -->
+            <!-- distinct marker, referenced from each list's       -->
+            <!-- "style" attribute                                  -->
+            <xsl:apply-templates select="exsl:node-set($ol-markers)//ol-marker" mode="ol-marker-style"/>
             <xsl:text>&lt;/style&gt;</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
