@@ -12313,6 +12313,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="matching//*" mode="permalink"/>
 <xsl:template match="areas//*" mode="permalink"/>
 
+<!-- 2026-08-12: no permalink for first p in the introduction to an exercisegroup -->
+<xsl:template match="exercisegroup/introduction/p[1]" mode="permalink"/>
+
 
 <!--                     -->
 <!-- Navigation Sections -->
