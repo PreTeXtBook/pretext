@@ -1099,6 +1099,60 @@
             </p>
         </subsection>
 
+        <subsection xml:id="online-doenetml-options">
+            <title>DoenetML Options</title>
+            <idx><h>publisher options</h><h>DoenetML</h></idx>
+            <idx><h>DoenetML</h><h>coordinator</h></idx>
+
+            <p>
+                A DoenetML activity is a substantial piece of software.  A page carrying a dozen of them once started every one the moment the page opened, and held every one in memory for as long as the reader stayed<mdash/>enough, on a modest machine, that the activities could be slow to appear, or fail to appear at all.  So a page carrying DoenetML activities loads a small <term>coordinator</term> script, served from the same place as the activities themselves, which takes charge of them: it starts them a couple at a time as the reader nears them, so an activity the reader never scrolls to is never started, and it puts away the ones the reader has left well behind.  A reader's work is saved before an activity is put away and restored if the reader returns to it, and the space the activity occupies on the page is held while it is away, so nothing shifts.
+            </p>
+
+            <p>
+                This is on by default and needs nothing from an author.  The
+                <cd>
+                    <cline>/publication/html/interactives/doenetml</cline>
+                </cd>
+                element can have an attribute <attr>coordinator</attr> with values:<ul>
+                    <li><c>yes</c>: the default, let the coordinator manage the DoenetML activities on a page.</li>
+                    <li><c>no</c>: start every activity on a page at once, and keep every one of them running.</li>
+                </ul>
+            </p>
+
+            <p>
+                The same element can have an attribute <attr>shared-core-workers</attr> with values:<ul>
+                    <li><c>yes</c>: the default, let the activities on a page share a pool of the background workers they compute in.  A worker is the largest part of what an activity costs in memory.</li>
+                    <li><c>no</c>: give each activity a worker of its own.</li>
+                </ul>
+                It has no effect when <attr>coordinator</attr> is <c>no</c>, since the coordinator is what owns the pool.
+            </p>
+
+            <p>
+                Two attributes tune how much the coordinator allows at once, should the defaults not suit a particular book: <attr>max-live-viewers</attr>, the number of activities kept running (default <c>3</c>), and <attr>max-concurrent-boots</attr>, the number allowed to be starting up at the same time (default <c>2</c>).  Both take a positive integer; any other value is reported during the build and the default used.  Raising them asks more of the reader's machine, which is what the coordinator exists to avoid; the defaults suit a reader on modest hardware.
+            </p>
+
+            <p>
+                An example, for a book whose activities are small enough that more of them can be alive at once:
+                <cd>
+                    <cline>&lt;publication&gt;</cline>
+                    <cline>    &lt;html&gt;</cline>
+                    <cline>        &lt;interactives&gt;</cline>
+                    <cline>            &lt;doenetml max-live-viewers="6" max-concurrent-boots="3"/&gt;</cline>
+                    <cline>        &lt;/interactives&gt;</cline>
+                    <cline>    &lt;/html&gt;</cline>
+                    <cline>&lt;/publication&gt;</cline>
+                </cd>
+            </p>
+
+            <p>
+                The version of DoenetML in use, including the version of the coordinator, comes from the <tag>doenetml</tag> element of <tag>docinfo</tag> rather than from the publication file, since it is a property of the source: see <xref ref="topic-docinfo"/>.  A book that names no version, or names a partial one such as <c>0.7</c>, gets the newest release, which is what these options are written for.  A book that pins an exact version should pin <c>0.7.25</c> or later.
+            </p>
+
+            <p>
+                Two earlier boundaries matter to a book that does pin one.  The coordinator first shipped with DoenetML <c>0.7.21</c>, so a book pinned before that will not find the script at all and behaves as if <attr>coordinator</attr> were <c>no</c>.  From <c>0.7.21</c> through <c>0.7.24</c> the script is there, but it does not yet share a page well with a book that saves the reader's work itself, as a Runestone or <init>SCORM</init> deployment does.  Two parties then answer an activity's request for its saved work<mdash/>the coordinator, from what it took down when it put the activity away, and the book's own saving<mdash/>and before <c>0.7.25</c> each answer rebuilt the activity in turn, so every restore built the document twice over.  That is the very cost the coordinator is there to avoid.  And since the answer that arrived last was the one kept, a book whose saving answers out of storage it has to go and fetch could have the fresher copy the coordinator was holding overwritten by an older one, leaving the reader to find work they had just done replaced.  A book pinned into that range should set <attr>coordinator</attr> to <c>no</c>.
+            </p>
+        </subsection>
+
         <subsection xml:id="online-read-aloud-options">
             <title>Read Aloud Options</title>
             <idx><h>read aloud</h><h>publisher options</h></idx>

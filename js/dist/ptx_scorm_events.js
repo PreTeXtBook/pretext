@@ -190,15 +190,23 @@
     return null;
   }
   function respondToGetState(sourceWindow, messageId) {
+    if (!sourceWindow) {
+      console.log("[PTX-SCORM] SPLICE.getState: requesting frame is gone; skipping response");
+      return;
+    }
     var divId = resolveIframeId(sourceWindow);
     var stateObj = divId ? loadDoenetState(divId) : null;
     console.log('[PTX-SCORM] SPLICE.getState from "' + (divId || "?") + '" \u2014 ' + (stateObj ? "sending saved state (cid: " + (stateObj.cid || "?") + ")" : "no saved state (first visit)"));
     if (divId) _doenetSentStateAt[divId] = Date.now();
-    sourceWindow.postMessage({
-      subject: "SPLICE.getState.response",
-      message_id: messageId,
-      state: stateObj || null
-    }, "*");
+    try {
+      sourceWindow.postMessage({
+        subject: "SPLICE.getState.response",
+        message_id: messageId,
+        state: stateObj || null
+      }, "*");
+    } catch (e) {
+      console.log("[PTX-SCORM] SPLICE.getState: could not reach the requesting frame: " + e);
+    }
   }
   function initSession() {
     if (_initialized || !_api) return;
