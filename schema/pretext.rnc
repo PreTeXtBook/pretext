@@ -1268,21 +1268,8 @@
             AttributesVimeo =
                 attribute vimeo {text}
 
-            ExerciseOrderedList =
-                element ol {
-                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute marker {text}?,
-                    ExerciseListItem+
-                }
-            ExerciseListItem = element li {
-                MetaDataTarget,
-                (TextParagraph | BlockText+)
-            }
             ExerciseBody =
-                (
-                    BlockStatement |
-                    ExerciseOrderedList
-                )+
+                BlockStatement+
             StatementExercise =
                 element statement { ExerciseBody }
             Exercise =

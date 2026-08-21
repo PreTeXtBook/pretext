@@ -3370,44 +3370,9 @@
   <define name="AttributesVimeo">
     <attribute name="vimeo"/>
   </define>
-  <define name="ExerciseOrderedList">
-    <element name="ol">
-      <optional>
-        <attribute name="cols">
-          <choice>
-            <value>2</value>
-            <value>3</value>
-            <value>4</value>
-            <value>5</value>
-            <value>6</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="marker"/>
-      </optional>
-      <oneOrMore>
-        <ref name="ExerciseListItem"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="ExerciseListItem">
-    <element name="li">
-      <ref name="MetaDataTarget"/>
-      <choice>
-        <ref name="TextParagraph"/>
-        <oneOrMore>
-          <ref name="BlockText"/>
-        </oneOrMore>
-      </choice>
-    </element>
-  </define>
   <define name="ExerciseBody">
     <oneOrMore>
-      <choice>
-        <ref name="BlockStatement"/>
-        <ref name="ExerciseOrderedList"/>
-      </choice>
+      <ref name="BlockStatement"/>
     </oneOrMore>
   </define>
   <define name="StatementExercise">
