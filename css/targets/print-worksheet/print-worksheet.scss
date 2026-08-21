@@ -228,38 +228,33 @@ article.printout {
 }
 
 
-// Style solutions divs, which the javascript transforms from knowls to divs with titles
-
-.solutions {
+// Style solution-like divs, which the javascript transforms from knowls to divs with titles
+.solution-like.born-hidden-knowl {
   margin-top: 1em;
+  padding: unset;
 
-  .solution-like.born-hidden-knowl {
-    margin-top: 1em;
-    padding: unset;
+  h5 {
+    font-weight: bolder;
+    display: inline;
+    font-size: 1em;
+  }
 
-    h5 {
-      font-weight: bolder;
+  > div {
+    display: inline;
+  }
+
+  .knowl__content {
+    display: inline;
+    border: none;
+    background-color: unset;
+    padding: 0;
+
+    >:first-child {
       display: inline;
-      font-size: 1em;
     }
 
-    > div {
-      display: inline;
-    }
-
-    .knowl__content {
-      display: inline;
-      border: none;
-      background-color: unset;
-      padding: 0;
-
-      >:first-child {
-        display: inline;
-      }
-
-      .para {
-        margin-top: 0.5em;
-      }
+    .para {
+      margin-top: 0.5em;
     }
   }
 }
@@ -292,13 +287,29 @@ article.printout {
 }
 
 // tasks might be "free-floating" articles, in which case they should get the same indenting as tasks inside exercises.
-section article.task, .conclusion.subtask {
+//
+// The javascript hoists a task out of its exercise, and a task's solutions and
+// writing space out of the task, so that pagination can place each on its own
+// (see flattenTasksIn/flattenSolutionsIn).  That flattening throws away the
+// nesting the indentation came from, so on the way out each row is stamped
+// with the depth it sat at and these rules put the indentation back.
+//
+// A task indents one step past the task it came out of; everything else --
+// a conclusion, a hoisted hint/answer/solution, the writing space -- belongs
+// at its owner's own level, which is why the same class name appears one row
+// further down for those than it does for a task.  A .workspace and its
+// .workspace-container overlay wrapper both appear because the indent moves
+// to whichever of the two is currently acting as the row.
+section article.task, .conclusion.subtask,
+.solution-like.subtask, .workspace.subtask, .workspace-container.subtask {
   margin-left: 20px;
 }
-section article.subtask, .conclusion.subsubtask {
+section article.subtask, .conclusion.subsubtask,
+.solution-like.subsubtask, .workspace.subsubtask, .workspace-container.subsubtask {
   margin-left: 40px;
 }
-section article.subsubtask {
+section article.subsubtask,
+.solution-like.subsubsubtask, .workspace.subsubsubtask, .workspace-container.subsubsubtask {
   margin-left: 60px;
 }
 
