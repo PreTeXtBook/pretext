@@ -462,6 +462,40 @@ function waitForImages(container, timeoutMs = 5000) {
     ]);
 }
 
+// Moving a row between .onepage containers makes any <iframe> inside it
+// (e.g. a YouTube video or GeoGebra applet) reload, even when it lands back
+// in the same parent. A single settle loop (repagination/spillover-collapse
+// running repeatedly until layout stabilizes) can move a row several times,
+// so detach every iframe -- swapped for a same-sized placeholder, to keep
+// height measurements accurate -- before a batch of repagination work and
+// reattach afterward, capping each toggle at reloading a video once instead
+// of once per move.
+async function withIframesDetached(fn) {
+    const printout = getPrintout();
+    const parked = [];
+    if (printout) {
+        printout.querySelectorAll('iframe').forEach(iframe => {
+            const rect = iframe.getBoundingClientRect();
+            const placeholder = document.createElement('div');
+            placeholder.className = 'iframe-placeholder';
+            placeholder.style.width = rect.width + 'px';
+            placeholder.style.height = rect.height + 'px';
+            placeholder.style.display = getComputedStyle(iframe).display;
+            iframe.parentNode.insertBefore(placeholder, iframe);
+            iframe.remove();
+            parked.push({iframe, placeholder});
+        });
+    }
+    try {
+        return await fn();
+    } finally {
+        parked.forEach(({iframe, placeholder}) => {
+            placeholder.parentNode.insertBefore(iframe, placeholder);
+            placeholder.remove();
+        });
+    }
+}
+
 // The workspace divs in, or at, an element.  In a worksheet a workspace is
 // always nested inside an exercise or task, but a project-like standalone
 // printout can carry @workspace on itself, and then the block *is* the
@@ -618,11 +652,33 @@ function flattenSolutionsIn(container) {
     }
 }
 
-// This is used multiple places to set height of workspace divs to their author-provided heights
+// Workspace boxes are blank space reserved for a student to write in, so
+// stretching them to soak up a page's unused space (see
+// adjustWorkspaceToFitPage()) is only useful while that's genuinely blank
+// writing room. Once any hint/answer/solution has been revealed, that same
+// stretch just shoves the revealed content away from its question, so once
+// anything is visible, workspace should collapse instead of grow.
+//
+// Checks effective visibility -- the element and every ancestor free of
+// "hidden" -- rather than `:not(.hidden)` on the element alone. A live
+// PreTeXt knowl (e.g. a solution reached via an in-text cross-reference)
+// nests its content in a `.knowl__content` div that never carries "hidden"
+// itself; only its `.born-hidden-knowl` wrapper does. `:not(.hidden)` alone
+// matches that inner div regardless of the collapsed ancestor, so any
+// worksheet with such a knowl would read as "solution visible" before the
+// reader revealed anything.
+function anySolutionTypeVisible() {
+    return [...document.querySelectorAll('.hint, .answer, .solution')].some(el => !el.closest('.hidden'));
+}
+
+// Set workspace divs to their author-provided heights. If a hint/answer/
+// solution is visible, that blank writing room is no longer needed, so
+// collapse workspace to 0 instead and free the space for pagination.
 function setInitialWorkspaceHeights() {
+    const collapse = anySolutionTypeVisible();
     const workspaces = document.querySelectorAll('.workspace');
     workspaces.forEach(ws => {
-        ws.style.height = ws.getAttribute('data-space') || '0px';
+        ws.style.height = collapse ? '0px' : (ws.getAttribute('data-space') || '0px');
         ws.setAttribute("contenteditable", "true");
     });
 }
@@ -890,8 +946,8 @@ function appendPageContent(page, children) {
 }
 
 // Eagerly fold every spillover page's content back into the page before it,
-// unconditionally -- i.e. without checking whether the merged page fits yet.
-// That check is intentionally left to the caller (via adjustWorkspaceOrRepaginate,
+// normally without checking whether the merged page fits yet -- that check
+// is intentionally left to the caller (via adjustWorkspaceOrRepaginate,
 // which shrinks workspace boxes to fit before measuring overflow, then
 // re-splits with addSpilloverPages() if something still doesn't fit).
 // Deciding here, before workspace has a chance to shrink back down from
@@ -899,6 +955,13 @@ function appendPageContent(page, children) {
 // is unreliable: a page can measure as overflowing purely because its
 // workspace boxes are still sized for the old layout, when shrinking them
 // would actually make room.
+//
+// But once a hint/answer/solution is visible, workspace is pinned at its
+// authored floor and never shrinks further (see anySolutionTypeVisible()
+// and setInitialWorkspaceHeights()), so "wait for it to shrink" never
+// resolves -- merging anyway just gets undone by addSpilloverPages() right
+// after, oscillating every settle tick. So in that case, check fit before
+// merging instead of after.
 //
 // Processing pages highest-index-first guarantees that a spillover page's
 // merge target (the page right before it) hasn't itself already been
@@ -908,6 +971,7 @@ function collapseSpilloverPages(margins) {
   const printout = getPrintout();
   if (!printout) return;
   const pages = [...printout.querySelectorAll(':scope > .onepage')];
+  const workspaceIsFixed = anySolutionTypeVisible();
 
   for (let i = pages.length - 1; i >= 1; i--) {
     const page = pages[i];
@@ -915,7 +979,20 @@ function collapseSpilloverPages(margins) {
     const prevPage = pages[i - 1];
 
     const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
-    appendPageContent(prevPage, contentChildren);
+
+    if (workspaceIsFixed) {
+      appendPageContent(prevPage, contentChildren);
+      const overflows = contentChildren.some(c => c.getBoundingClientRect().bottom > getPageContentBottom(prevPage) + 1);
+      if (overflows) {
+        // Doesn't fit and nothing will make more room -- put it back and
+        // leave this page split off on its own instead of flip-flopping.
+        const footer = [...page.children].find(c => c.classList.contains('first-page-footer') || c.classList.contains('running-footer'));
+        contentChildren.forEach(c => page.insertBefore(c, footer || null));
+        continue;
+      }
+    } else {
+      appendPageContent(prevPage, contentChildren);
+    }
     if (page.classList.contains('lastpage')) {
       prevPage.classList.add('lastpage');
     }
@@ -1041,39 +1118,49 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
     // Reset the heights of workspace divs to their author-provided heights
     setInitialWorkspaceHeights();
 
-    const pages = document.querySelectorAll('.onepage');
-    pages.forEach(page => {
-        console.log("Adjusting workspace height for page:", page);
-        // Set width to get accurate calculations
-        page.style.width = paperWidth + 'px';
-        const rows = page.children;
-        let totalContentHeight = 0;
-        let totalWorkspaceHeight = 0;
-        for (const row of rows) {
-            totalContentHeight += getElementTotalHeight(row);
-            totalWorkspaceHeight += getElemWorkspaceHeight(row);
-        }
-        if (totalWorkspaceHeight === 0) {
-            console.log("No workspaces on this page, skipping workspace adjustment.");
+    // With a solution/answer/hint revealed somewhere, leave every workspace
+    // at that authored height (already collapsed to 0 by
+    // setInitialWorkspaceHeights() above) rather than inflating it to fill
+    // the page -- otherwise the freshly-revealed content ends up shoved far
+    // below its question by blank writing space nobody needs anymore. See
+    // anySolutionTypeVisible()'s comment.
+    if (anySolutionTypeVisible()) {
+        console.log("A hint/answer/solution is visible; leaving workspaces at their authored heights instead of stretching them.");
+    } else {
+        const pages = document.querySelectorAll('.onepage');
+        pages.forEach(page => {
+            console.log("Adjusting workspace height for page:", page);
+            // Set width to get accurate calculations
+            page.style.width = paperWidth + 'px';
+            const rows = page.children;
+            let totalContentHeight = 0;
+            let totalWorkspaceHeight = 0;
+            for (const row of rows) {
+                totalContentHeight += getElementTotalHeight(row);
+                totalWorkspaceHeight += getElemWorkspaceHeight(row);
+            }
+            if (totalWorkspaceHeight === 0) {
+                console.log("No workspaces on this page, skipping workspace adjustment.");
+                // Reset the style for the page
+                page.style.width = "";
+                return;
+            }
+            const extraHeight = paperContentHeight - totalContentHeight;
+            console.log("Extra height to distribute across workspaces:", extraHeight, "px.");
+            // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight
+            const workspaceAdjustmentFactor = (totalWorkspaceHeight + extraHeight) / totalWorkspaceHeight;
+            console.log("Workspace adjustment factor for page:", workspaceAdjustmentFactor);
+            // Now adjust each workspace in the page by this factor
+            const pageWorkspaces = page.querySelectorAll('.workspace');
+            pageWorkspaces.forEach(ws => {
+                const originalHeight = ws.offsetHeight;
+                const newHeight = originalHeight * workspaceAdjustmentFactor;
+                ws.style.height = newHeight + "px";
+            });
             // Reset the style for the page
             page.style.width = "";
-            return;
-        }
-        const extraHeight = paperContentHeight - totalContentHeight;
-        console.log("Extra height to distribute across workspaces:", extraHeight, "px.");
-        // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight
-        const workspaceAdjustmentFactor = (totalWorkspaceHeight + extraHeight) / totalWorkspaceHeight;
-        console.log("Workspace adjustment factor for page:", workspaceAdjustmentFactor);
-        // Now adjust each workspace in the page by this factor
-        const pageWorkspaces = page.querySelectorAll('.workspace');
-        pageWorkspaces.forEach(ws => {
-            const originalHeight = ws.offsetHeight;
-            const newHeight = originalHeight * workspaceAdjustmentFactor;
-            ws.style.height = newHeight + "px";
         });
-        // Reset the style for the page
-        page.style.width = "";
-    });
+    }
     console.log("Set page sizes to content area of paper size.");
 
     // Reset the highlight workspace checkbox state
@@ -1509,33 +1596,40 @@ async function pollUntilSettled(settle, {timeoutMs = 2000, intervalMs = 100, sta
 // re-derive page breaks from whatever happens to be visible at the time,
 // which depends on which other types happen to be shown, so a show/hide
 // round trip on one type wasn't guaranteed to land back on the same layout
-// it started from. Collapsing always folds back toward that one base, and
-// showing only ever pushes overflow forward onto a new page, so hiding
-// reliably undoes exactly what showing did.
+// it started from.
+//
+// Tries both directions every tick, hiding or showing: collapseSpilloverPages()
+// to fold a spillover page back if it now fits, then adjustWorkspaceOrRepaginate()
+// to push overflow forward if it doesn't. Showing isn't purely additive --
+// revealing a solution collapses that exercise's own workspace (see
+// anySolutionTypeVisible()), which can free more room on its page than the
+// revealed content adds, so a page already marked spillover can become
+// foldable again on the very toggle that filled it. collapseSpilloverPages()
+// only commits a merge that actually fits (once a solution is visible; see
+// its own comment), so calling it unconditionally here is safe in either
+// direction.
+//
+// Runs under withIframesDetached() since the repagination/collapse work
+// below can move a row -- and any iframe inside it -- several times over
+// the course of one toggle.
 async function applySolutionVisibility(solutionType, hidden, {paperSize, margins}) {
     document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
         if (hidden) { elem.classList.add("hidden"); }
         else { elem.classList.remove("hidden"); }
     });
-    if (hidden) {
+    await withIframesDetached(async () => {
         collapseSpilloverPages(margins);
         adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-        // Content just hidden (e.g. a long solution) can take a moment to
-        // finish settling into its final, compact size, so an immediate
-        // measurement can miss a page that's actually able to collapse.
+        // Content just hidden or revealed (e.g. a long solution, or a
+        // workspace collapsing/expanding) can take a moment to finish
+        // settling into its final size, so an immediate measurement can
+        // miss a page that's actually able to collapse, or one that still
+        // needs to spill over.
         await pollUntilSettled(() => {
             collapseSpilloverPages(margins);
             adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
         });
-    } else {
-        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-        await pollUntilSettled(() => {
-            if (pageOverflows()) {
-                addSpilloverPages(margins);
-                adjustWorkspaceToFitPage({paperSize, margins});
-            }
-        });
-    }
+    });
 }
 
 // Event listener for page load to handle print preview setup
