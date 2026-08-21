@@ -30,14 +30,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="1">
         <statement>
             <p>Find all <m>x \in {\mathbb Z}</m> satisfying each of the following equations.</p>
-            <ol cols="2">
+            <p><ol marker="(a)" cols="2">
                 <li><p><m>3x \equiv 2 \pmod{7}</m></p></li>
                 <li><p><m>5x + 1 \equiv 13 \pmod{23}</m></p></li>
                 <li><p><m>5x + 1 \equiv 13 \pmod{26}</m></p></li>
                 <li><p><m>9x \equiv 3 \pmod{5}</m></p></li>
                 <li><p><m>5x \equiv 1 \pmod{6}</m></p></li>
                 <li><p><m>3x \equiv 1 \pmod{6}</m></p></li>
-            </ol>
+            </ol></p>
         </statement>
         <hint>
             <p>(a) <m>3 + 7 \mathbb Z = \{ \ldots, -4, 3, 10, \ldots \}</m>;  (c) <m>18 + 26 \mathbb Z</m>;  (e) <m>5 + 6 \mathbb Z</m>.</p>
@@ -47,7 +47,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="2">
     <statement>
         <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.</p>
-        <ol cols="2">
+        <p><ol marker="(a)" cols="2">
 
             <li><p><md>\begin{array}{c|cccc}
             \circ &amp; a &amp; b &amp; c &amp; d \\
@@ -85,7 +85,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             d &amp; d &amp; d &amp; b &amp; c
             \end{array}</md></p></li>
 
-        </ol>
+        </ol></p>
     </statement>
     <hint>
         <p>(a) Not a group; (c) a group.</p>

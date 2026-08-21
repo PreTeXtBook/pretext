@@ -44,12 +44,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>C &amp; = \{ x : x \in \mathbb N \text{ and } x \text{ is a multiple of 5}\}.</mrow>
                 </md></p>
                 <p>Describe each of the following sets.</p>
-                <ol cols="2">
+                <p><ol marker="(a)" cols="2">
                     <li><p><m>A \cap B</m></p></li>
                     <li><p><m>B \cap C</m></p></li>
                     <li><p><m>A \cup B</m></p></li>
                     <li><p><m>A \cap (B \cup C)</m></p></li>
-                </ol>
+                </ol></p>
             </statement>
             <!-- commented out for testing, so that only even hints, answers, solutions may appear in the "solutions" -->
             <!-- <hint>
@@ -60,12 +60,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="2">
             <statement>
                 <p>If <m>A = \{ a, b, c \}</m>, <m>B = \{ 1, 2, 3 \}</m>, <m>C = \{ x \}</m>, and <m>D = \emptyset</m>, list all of the elements in each of the following sets.</p>
-                <ol cols="2">
+                <p><ol marker="(a)" cols="2">
                     <li><p><m>A \times B</m></p></li>
                     <li><p><m>B \times A</m></p></li>
                     <li><p><m>A \times B \times C</m></p></li>
                     <li><p><m>A \times D</m></p></li>
-                </ol>
+                </ol></p>
             </statement>
             <hint>
                 <p>(a) <m>A \times B = \{ (a,1), (a,2), (a,3), (b,1), (b,2), (b,3), (c,1), (c,2), (c,3) \}</m>; (d) <m>A \times D = \emptyset</m>.</p>
@@ -177,12 +177,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="17">
             <statement>
                 <p>Which of the following relations <m>f: {\mathbb Q} \rightarrow {\mathbb Q}</m> define a mapping? In each case, supply a reason why <m>f</m> is or is not a mapping.</p>
-                <ol cols="2">
+                <p><ol marker="(a)" cols="2">
                     <li><p><m>\displaystyle f(p/q) = \frac{p+ 1}{p - 2}</m></p></li>
                     <li><p><m>\displaystyle f(p/q) = \frac{3p}{3q}</m></p></li>
                     <li><p><m>\displaystyle f(p/q) = \frac{p+q}{q^2}</m></p></li>
                     <li><p><m>\displaystyle f(p/q) = \frac{3 p^2}{7 q^2} - \frac{p}{q}</m></p></li>
-                </ol>
+                </ol></p>
             </statement>
             <!-- commented out for testing, so that only even hints, answers, solutions may appear in the "solutions" -->
             <!-- <hint>
@@ -193,12 +193,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="18">
             <statement>
                 <p>Determine which of the following functions are one-to-one and which are onto.  If the function is not onto, determine its range.</p>
-                <ol>
+                <p><ol marker="(a)">
                     <li><p><m>f: {\mathbb R} \rightarrow {\mathbb R}</m> defined by <m>f(x) = e^x</m></p></li>
                     <li><p><m>f: {\mathbb Z} \rightarrow {\mathbb Z}</m> defined by <m>f(n) = n^2 + 3</m></p></li>
                     <li><p><m>f: {\mathbb R} \rightarrow {\mathbb R}</m> defined by <m>f(x) = \sin x</m></p></li>
                     <li><p><m>f: {\mathbb Z} \rightarrow {\mathbb Z}</m> defined by <m>f(x) = x^2</m></p></li>
-                </ol>
+                </ol></p>
             </statement>
             <hint>
                 <p>(a) <m>f</m> is one-to-one but not onto. <m>f({\mathbb R} ) = \{ x \in {\mathbb R} : x \gt 0 \}</m>.  (c) <m>f</m> is neither one-to-one nor onto.  <m>f(\mathbb R) = \{ x : -1 \leq x \leq 1 \}</m>.</p>
@@ -213,10 +213,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <exercise number="20">
             <statement>
-                <ol>
+                <p><ol marker="(a)">
                     <li><p>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is one-to-one but not onto.</p></li>
                      <li><p>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is onto but not one-to-one.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <hint>
                 <p>(a) <m>f(n) = n + 1</m>.</p>
@@ -232,13 +232,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="22">
             <statement>
                 <p>Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be maps.</p>
-                <ol>
+                <p><ol marker="(a)">
                     <li><p>If <m>f</m> and <m>g</m> are both one-to-one functions, show that <m>g \circ f</m> is one-to-one.</p></li>
                     <li><p>If <m>g \circ f</m> is onto, show that <m>g</m> is onto.</p></li>
                     <li><p>If <m>g \circ f</m> is one-to-one, show that <m>f</m> is one-to-one.</p></li>
                     <li><p>If <m>g \circ f</m> is one-to-one and <m>f</m> is onto, show that <m>g</m> is one-to-one.</p></li>
                     <li><p>If <m>g \circ f</m> is onto and <m>g</m> is one-to-one, show that <m>f</m> is onto.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <hint>
                 <p>(a) Let <m>x, y \in A</m>. Then <m>g(f(x)) = (g \circ f)(x) = (g \circ f)(y) = g(f(y))</m>.  Thus, <m>f(x) = f(y)</m> and <m>x = y</m>,  so <m>g \circ f</m> is one-to-one. (b) Let <m>c \in C</m>, then <m>c = (g \circ f)(x) = g(f(x))</m> for some <m>x \in A</m>. Since <m>f(x) \in B</m>, <m>g</m> is onto.</p>
@@ -260,13 +260,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="24">
             <statement>
                 <p>Let <m>f: X \rightarrow Y</m> be a map with <m>A_1, A_2 \subset X</m> and <m>B_1, B_2 \subset Y</m>.</p>
-                <ol>
+                <p><ol marker="(a)">
                     <li><p>Prove <m>f( A_1 \cup A_2 ) = f( A_1) \cup f( A_2 )</m>.</p></li>
                     <li><p>Prove <m>f( A_1 \cap A_2 ) \subset f( A_1) \cap f( A_2 )</m>.  Give an example in which equality fails.</p></li>
                     <li><p>Prove <m>f^{-1}( B_1 \cup B_2 ) = f^{-1}( B_1) \cup f^{-1}(B_2 )</m>, where <md>f^{-1}(B) = \{ x \in X : f(x) \in B \}.</md></p></li>
                     <li><p>Prove <m>f^{-1}( B_1 \cap B_2 ) = f^{-1}( B_1) \cap f^{-1}( B_2 )</m>.</p></li>
                     <li><p>Prove <m>f^{-1}( Y \setminus B_1 ) = X \setminus f^{-1}( B_1)</m>.</p></li>
-                </ol>
+                </ol></p>
             </statement>
             <hint>
                 <p>(a) Let <m>y \in f(A_1 \cup A_2)</m>.  Then there exists an <m>x \in A_1 \cup A_2</m> such that <m>f(x) = y</m>.  Hence, <m> y \in f(A_1)</m> or <m>f(A_2) </m>.  Therefore, <m> y \in f(A_1) \cup f(A_2)</m>. Consequently, <m> f(A_1 \cup A_2) \subset f(A_1) \cup f(A_2)</m>. Conversely, if <m>y \in f(A_1) \cup f(A_2)</m>, then <m> y \in f(A_1)</m> or <m>f(A_2)</m>.  Hence, there exists an <m>x \in A_1</m> or there exists an <m>x \in A_2</m> such that <m>f(x) = y</m>.  Thus, there exists an <m>x \in A_1 \cup A_2</m> such that <m>f(x) = y</m>.  Therefore, <m> f(A_1) \cup f(A_2) \subset f(A_1 \cup A_2)</m>, and <m>f(A_1 \cup A_2) = f(A_1) \cup f(A_2)</m>.</p>
@@ -276,12 +276,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="25">
             <statement>
                 <p>Determine whether or not the following relations are equivalence relations on the given set.  If the relation is an equivalence relation, describe the partition given by it.  If the relation is not an equivalence relation, state why it fails to be one.</p>
-                <ol cols="2">
+                <p><ol marker="(a)" cols="2">
                     <li><p><m>x \sim y</m> in <m>{\mathbb R}</m> if <m>x \geq y</m></p></li>
                     <li><p><m>m \sim n</m> in <m>{\mathbb Z}</m> if <m>mn &gt; 0</m></p></li>
                     <li><p><m>x \sim y</m> in <m>{\mathbb R}</m> if <m>|x - y| \leq 4</m></p></li>
                     <li><p><m>m \sim n</m> in <m>{\mathbb Z}</m> if <m>m \equiv n \pmod{6}</m></p></li>
-                </ol>
+                </ol></p>
             </statement>
             <!-- commented out for testing, so that only even hints, answers, solutions may appear in the "solutions" -->
             <!-- <hint>
