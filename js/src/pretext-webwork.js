@@ -342,61 +342,12 @@ async function handleWW(ww_id, action) {
         }
 
         let iframeContents = '<!DOCTYPE html><head>' +
-            '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
-            `<script>
-                window.MathJax = {
-                    tex: { packages: { '[+]': ['noerrors'] } },
-                    loader: { load: ['input/asciimath', '[tex]/noerrors'] },
-                    startup: {
-                        ready() {
-                            const AM = MathJax.InputJax.AsciiMath.AM;
-
-                            // Modify existing AsciiMath triggers.
-                            AM.symbols[AM.names.indexOf('**')] = {
-                                input: '**',
-                                tag: 'msup',
-                                output: '^',
-                                tex: null,
-                                ttype: AM.TOKEN.INFIX
-                            };
-
-                            const i = AM.names.indexOf('infty');
-                            AM.names[i] = 'infinity';
-                            AM.symbols[i] = { input: 'infinity', tag: 'mo', output: '\u221E', tex: 'infty', ttype: AM.TOKEN.CONST };
-
-                            return MathJax.startup.defaultReady();
-                        }
-                    },
-                    options: {
-                        processHtmlClass: "process-math",
-                        renderActions: {
-                            findScript: [
-                                10,
-                                (doc) => {
-                                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
-                                        const math = new doc.options.MathItem(
-                                            node.textContent,
-                                            doc.inputJax[0],
-                                            !!node.type.match(/; *mode=display/)
-                                        );
-                                        const text = document.createTextNode('');
-                                        node.parentNode.replaceChild(text, node);
-                                        math.start = { node: text, delim: '', n: 0 };
-                                        math.end = { node: text, delim: '', n: 0 };
-                                        doc.math.push(math);
-                                    }
-                                },
-                                ''
-                            ]
-                        },
-                        ignoreHtmlClass: 'tex2jax_ignore'
-                    }
-                };
-            </script>` +
-            '<script src="' + ww_domain + '/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>' +
+            `<script src="${ww_domain}/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>` +
+            `<script src="${ww_domain}/webwork2_files/js/MathJaxConfig/mathjax-config.js"></script>` +
+            `<script src="${ww_domain}/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>` +
             `<script src="${courseUrlBase}_static/pretext/js/dist/knowl.js" defer></script>` +
-            '<link rel="stylesheet" href="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/>' +
-            '<script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>';
+            `<link rel="stylesheet" href="${ww_domain}/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/>` +
+            `<script src="${ww_domain}/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>`;
 
         // Determine javascript and css dependencies
         const extra_css_files = [];
