@@ -3660,6 +3660,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- whole, and the deprecation warning says so plainly         -->
 <xsl:template match="references/conclusion" mode="repair"/>
 
+<!-- 2026-08-20  "ol" structuring an "exercise" is deprecated -->
+
+<!-- An "ol" as a child of an "exercise", or of its "statement",  -->
+<!-- once lettered its items like exercise parts.  The list is    -->
+<!-- wrapped in a "p" here, like any other list in running prose. -->
+<!-- Within the divisions that historically lettered these lists, -->
+<!-- a stamp preserves the extra list level for existing sources; -->
+<!-- new sources letter a list with marker="(a)", or structure    -->
+<!-- real parts with "task".  The deprecation warning says so.    -->
+<xsl:template match="exercise/ol|exercise/statement/ol" mode="repair">
+    <p>
+        <xsl:copy>
+            <xsl:if test="ancestor::exercises or ancestor::reading-questions or ancestor::worksheet or ancestor::handout">
+                <xsl:attribute name="pi:legacy-parts">
+                    <xsl:text>yes</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates select="node()|@*" mode="repair"/>
+        </xsl:copy>
+    </p>
+</xsl:template>
+
 <!-- ########## -->
 <!-- Enrichment -->
 <!-- ########## -->
