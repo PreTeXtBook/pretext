@@ -444,6 +444,88 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!--========================================================================-->
+<!-- test css-string-escape -->
+<xsl:variable name="css-string-escape-plain">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="css-string-escape">
+      <xsl:with-param name="text" select="'(a)'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'(a)'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'css-string-escape-plain'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="css-string-escape-empty">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="css-string-escape">
+      <xsl:with-param name="text" select="''"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="''"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'css-string-escape-empty'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="css-string-escape-apostrophe">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="css-string-escape">
+      <xsl:with-param name="text">don't</xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected">don\'t</xsl:with-param>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'css-string-escape-apostrophe'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="css-string-escape-backslash">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="css-string-escape">
+      <xsl:with-param name="text">a\b</xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected">a\\b</xsl:with-param>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'css-string-escape-backslash'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<!-- less-than becomes its code point with a delimiting space, so -->
+<!-- escaped text can never close an enclosing "style" element    -->
+<xsl:variable name="css-string-escape-less-than">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="css-string-escape">
+      <xsl:with-param name="text">a&lt;b</xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected">a\3c b</xsl:with-param>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'css-string-escape-less-than'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="css-string-escape-hostile">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="css-string-escape">
+      <xsl:with-param name="text">'a\&lt;/style></xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected">\'a\\\3c /style></xsl:with-param>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'css-string-escape-hostile'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<!--========================================================================-->
 
 <!-- "main" -->
 <xsl:template match="/">
