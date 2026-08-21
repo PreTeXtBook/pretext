@@ -12030,6 +12030,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'a &quot;references&quot; division no longer has a &quot;conclusion&quot;.  The element is discarded entirely: its content will not appear in any output.  Please relocate the content, perhaps following the &quot;references&quot;'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-08-20  "ol" as a child of "exercise" is obsolete -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//exercise/ol&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-20'" />
+        <xsl:with-param name="message" select="'an &quot;ol&quot; is no longer a child of an &quot;exercise&quot;; a list belongs inside a &quot;p&quot;.  We will wrap it for you, and lettered exercise parts will letter as before.  Please convert: structure true parts with &quot;task&quot;, letter a plain list with marker=&quot;(a)&quot;, or consider an &quot;exercisegroup&quot; and its cols attribute for a compact multi-column layout'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-20  "ol" as a child of an exercise "statement" is obsolete -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//exercise/statement/ol&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-20'" />
+        <xsl:with-param name="message" select="'an &quot;ol&quot; is no longer a child of an &quot;exercise&quot; &quot;statement&quot;; a list belongs inside a &quot;p&quot;.  We will wrap it for you, and lettered exercise parts will letter as before.  Please convert: structure true parts with &quot;task&quot;, letter a plain list with marker=&quot;(a)&quot;, or consider an &quot;exercisegroup&quot; and its cols attribute for a compact multi-column layout'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
