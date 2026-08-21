@@ -482,13 +482,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
-    <xsl:param name="ordered-list-level" select="0"/>
 
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$parent-struct"/>
             <xsl:with-param name="level" select="$level"/>
-            <xsl:with-param name="ordered-list-level" select="$ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -4056,7 +4054,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
-    <xsl:param name="ordered-list-level" />
 
     <xsl:variable name="the-serial">
         <xsl:apply-templates select="." mode="division-serial-number"/>
@@ -4106,16 +4103,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="next-level" select="$level + 1"/>
-    <xsl:variable name="next-ordered-list-level">
-        <xsl:choose>
-            <xsl:when test="self::exercises or self::worksheet or self::handout or self::reading-questions or self::references">
-                <xsl:number value="1" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:number value="0" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:copy>
         <xsl:attribute name="pi:struct">
             <xsl:value-of select="$parent-struct"/>
@@ -4136,7 +4123,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$new-struct"/>
             <xsl:with-param name="level" select="$next-level"/>
-            <xsl:with-param name="ordered-list-level" select="$next-ordered-list-level"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -4152,7 +4138,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="''"/>
             <xsl:with-param name="level" select="0"/>
-            <xsl:with-param name="ordered-list-level" select="0"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -4223,7 +4208,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$level='2'">i</xsl:when>
                 <xsl:when test="$level='3'">A</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
+                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />; a legacy exercise-parts list counts one level extra)</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
@@ -4231,8 +4216,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ol" mode="augment">
-    <xsl:param name="ordered-list-level"/>
-    <xsl:variable name="next-level" select="$ordered-list-level + 1" />
+    <!-- The list level is intrinsic: a count of enclosing ordered   -->
+    <!-- lists, raised by one within a list the repair phase stamped -->
+    <!-- as a legacy exercise-parts list (the stamp lifts the whole  -->
+    <!-- nest, so sublists letter as they always have).              -->
+    <xsl:variable name="ordered-list-level" select="count(ancestor::ol) + number(boolean(ancestor-or-self::ol[@pi:legacy-parts]))"/>
     <xsl:variable name="format-code">
         <xsl:apply-templates select="." mode="format-code">
             <xsl:with-param name="level" select="$ordered-list-level"/>
@@ -4278,11 +4266,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="pi:marker-suffix">
             <xsl:value-of select="$marker-suffix"/>
         </xsl:attribute>
-        <xsl:apply-templates select="node()|@*" mode="augment">
-            <xsl:with-param name="ordered-list-level" select="$next-level"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates select="node()|@*" mode="augment"/>
     </xsl:copy>
 </xsl:template>
+
+<!-- The stamp has served its purpose once the level is recorded, -->
+<!-- so it does not survive into the assembled tree.              -->
+<xsl:template match="@pi:legacy-parts" mode="augment"/>
 
 <!-- ##################### -->
 <!-- Serial Stamp Pass     -->
