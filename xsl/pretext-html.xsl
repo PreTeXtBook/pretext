@@ -6184,9 +6184,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul" mode="html-list-class">
-    <xsl:variable name="mbx-format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="mbx-format-code" select="./@pi:format-code"/>
     <xsl:choose>
         <xsl:when test="$mbx-format-code = 'disc'">disc</xsl:when>
         <xsl:when test="$mbx-format-code = 'circle'">circle</xsl:when>
@@ -6205,18 +6203,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="heading-level"/>
-    <!-- need to switch on 0-1 for ol Arabic -->
-    <!-- no harm if called on "ul"           -->
-    <xsl:variable name="mbx-format-code">
-        <xsl:choose>
-            <xsl:when test="self::ol">
-                <xsl:value-of select="./@pi:format-code" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="format-code" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="mbx-format-code" select="./@pi:format-code"/>
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:element name="{local-name(.)}">

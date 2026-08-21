@@ -5733,9 +5733,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul" mode="latex-list-label">
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="format-code" select="./@pi:format-code"/>
    <xsl:choose>
         <xsl:when test="$format-code = 'disc'">\ptxlistdisc</xsl:when>
         <xsl:when test="$format-code = 'circle'">\ptxlistcircle</xsl:when>

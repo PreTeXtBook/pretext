@@ -4274,6 +4274,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so it does not survive into the assembled tree.              -->
 <xsl:template match="@pi:legacy-parts" mode="augment"/>
 
+<!-- List levels and format codes are ancestor-axis computations    -->
+<!-- that *could* be made at conversion time in -common; we simply  -->
+<!-- choose to make them once, here in assembly, and stamp the      -->
+<!-- results.  Unordered lists follow the pattern of ordered lists  -->
+<!-- above: an authored @marker wins, else defaults cycle by depth. -->
+
+<!-- Labels of unordered lists have format codes:   -->
+<!-- disc, circle, square, or none.  Default order: -->
+<!-- disc, circle, square, disc.                    -->
+<xsl:template match="ul" mode="format-code">
+    <xsl:param name="level"/>
+    <xsl:choose>
+        <xsl:when test="@marker">
+            <xsl:choose>
+                <xsl:when test="@marker='disc'">disc</xsl:when>
+                <xsl:when test="@marker='circle'">circle</xsl:when>
+                <xsl:when test="@marker='square'">square</xsl:when>
+                <xsl:when test="@marker=''">none</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$level='0'">disc</xsl:when>
+                <xsl:when test="$level='1'">circle</xsl:when>
+                <xsl:when test="$level='2'">square</xsl:when>
+                <xsl:when test="$level='3'">disc</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ul" mode="augment">
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="." mode="format-code">
+            <xsl:with-param name="level" select="count(ancestor::ul)"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:copy>
+        <xsl:attribute name="pi:format-code">
+            <xsl:value-of select="$format-code"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- ##################### -->
 <!-- Serial Stamp Pass     -->
 <!-- ##################### -->

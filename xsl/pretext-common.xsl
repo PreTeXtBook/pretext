@@ -5122,29 +5122,6 @@ Book (with parts), "section" at level 3
 <!-- Utility templates to determine the depth      -->
 <!-- of a list, relative to nesting in other lists -->
 
-<!-- We determine the depth of an unordered     -->
-<!-- list, relative only to other unordered     -->
-<!-- lists in a nesting, so as to determine     -->
-<!-- the right label to apply, esp. as defaults -->
-<!-- The recursive template should be called    -->
-<!-- without a level, since it defaults to zero -->
-<xsl:template match="ul" mode="unordered-list-level">
-    <!-- Start with level zero, and increment on successive calls -->
-    <xsl:param name="level" select="0"/>
-    <xsl:choose>
-        <!-- Another unordered list above, add one and recurse -->
-        <xsl:when test="ancestor::ul">
-            <xsl:apply-templates select="ancestor::ul[1]" mode="unordered-list-level">
-                <xsl:with-param name="level" select="$level + 1" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- No unordered list above, done, so return level -->
-        <xsl:otherwise>
-            <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- To indent properly in markdown, we  -->
 <!-- need to count every type of list    -->
 <xsl:template match="*" mode="list-level">
@@ -5169,41 +5146,6 @@ Book (with parts), "section" at level 3
         <!-- now done, report level -->
         <xsl:otherwise>
             <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Labels of unordered list have formatting codes, which -->
-<!-- we detect here and pass on to other more specialized  -->
-<!-- templates for implementation specifics                -->
-<!-- disc, circle, square or blank are the options         -->
-<!-- Default order: disc, circle, square, disc             -->
-<xsl:template match="ul" mode="format-code">
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:choose>
-                <xsl:when test="@marker='disc'">disc</xsl:when>
-                <xsl:when test="@marker='circle'">circle</xsl:when>
-                <xsl:when test="@marker='square'">square</xsl:when>
-                <xsl:when test="@marker=''">none</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:variable name="level">
-                <xsl:apply-templates select="." mode="unordered-list-level" />
-            </xsl:variable>
-            <xsl:choose>
-                <xsl:when test="$level='0'">disc</xsl:when>
-                <xsl:when test="$level='1'">circle</xsl:when>
-                <xsl:when test="$level='2'">square</xsl:when>
-                <xsl:when test="$level='3'">disc</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
