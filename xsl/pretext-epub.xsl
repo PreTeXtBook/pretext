@@ -819,6 +819,14 @@
             <link href="../{$css-dir}/epub.css" rel="stylesheet" type="text/css"/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- Custom list markers are "@counter-style" rules derived from -->
+    <!-- the source, so they ride along in every content file's head -->
+    <xsl:if test="$b-needs-custom-marker-css">
+        <style>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:apply-templates select="exsl:node-set($ol-markers)//ol-marker" mode="ol-marker-style"/>
+        </style>
+    </xsl:if>
 </xsl:template>
 
 <!-- ############# -->
