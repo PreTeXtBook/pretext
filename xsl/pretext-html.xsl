@@ -244,6 +244,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="ol-markers">
     <ol-markers>
         <xsl:apply-templates select="$document-root//ol[@marker and count(. | key('marker-key', @marker)[1]) = 1]" mode="ol-markers"/>
+        <!-- A legacy exercise-parts list letters as "(a)" with no     -->
+        <!-- authored @marker; it joins the index as a reserved entry, -->
+        <!-- so one mechanism serves it, unless an authored "(a)" is   -->
+        <!-- already present to share.  The parenthesized letters are  -->
+        <!-- LaTeX's custom for second-level lists, which PreTeXt      -->
+        <!-- matches in every output (assembly stamps the adornments). -->
+        <xsl:if test="$document-root//ol[not(@marker) and @pi:format-code = 'a' and @pi:ordered-list-level = '1'] and not($document-root//ol[@marker = '(a)'])">
+            <ol-marker pi:format-code="a" marker="(a)" pi:marker-prefix="(" pi:marker-suffix=")" name="ptx-marker-0"/>
+        </xsl:if>
     </ol-markers>
 </xsl:variable>
 <!-- Following should be more efficient than 'select="boolean($document-root//ol[@marker])"' -->
@@ -6203,13 +6212,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{local-name(.)}">
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
-            <xsl:variable name="ol-marker-class">
-                <xsl:apply-templates select="." mode="ol-marker-class" />
-            </xsl:variable>
-            <xsl:if test="not($ol-marker-class = '')">
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="$ol-marker-class"/>
-            </xsl:if>
             <xsl:variable name="cols-class-name">
                 <!-- HTML-specific, but in pretext-common.xsl -->
                 <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
@@ -6255,13 +6257,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each >
 </xsl:template>
 
-<xsl:template match="ol|ul" mode="ol-marker-name"/>
-
-<xsl:template match="ol[not(@marker) and @pi:format-code = 'a' and @pi:ordered-list-level = '1']" mode="ol-marker-class">
-    <xsl:text>lower-alpha-level-1</xsl:text>
+<!-- the reserved "(a)" entry, or an authored twin, by the same lookup -->
+<xsl:template match="ol[not(@marker) and @pi:format-code = 'a' and @pi:ordered-list-level = '1']" mode="ol-marker-name">
+    <xsl:for-each select="exsl:node-set($ol-markers)">
+        <xsl:value-of select="key('marker-key', '(a)')[1]/@name"/>
+    </xsl:for-each>
 </xsl:template>
 
-<xsl:template match="ol|ul" mode="ol-marker-class"/>
+<xsl:template match="ol|ul" mode="ol-marker-name"/>
 
 <xsl:template match="ol[@marker]" mode="ol-markers">
     <xsl:element name="ol-marker">
