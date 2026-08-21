@@ -176,6 +176,8 @@
 
         <p>If an <tag>exercise</tag> is simply a statement of the question, then it may be authored with paragraphs (<tag>p</tag>) and similar elements.  If an <tag>exercise</tag> has hints, answers, or solutions, then it must be structured with a <tag>statement</tag>, followed by (possibly several) optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.  A title is strongly encouraged for inline exercises, and nearly-mandatory if you plan to have inline exercises rendered in knowls in a conversion to <init>HTML</init>.</p>
 
+        <p>An <tag>exercise</tag> with several parts is structured as a sequence of <tag>task</tag>, optionally preceded by an <tag>introduction</tag> and followed by a <tag>conclusion</tag>.  Tasks letter as (a), (b), (c), may be subdivided by further <tag>task</tag>, and each may be structured with its own <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag>.</p>
+
         <p>There is a wide variety of interactive exercise types you may specify, such as multiple choice, Parson problems, matching, and more.  See <xref ref="topic-interactive-exercises"/> for descriptions of each type and the details of markup for each.</p>
 
         <p>You need (and want) to have the hints, answers and solutions grouped with the statement as you author, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
