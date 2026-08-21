@@ -1209,9 +1209,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul/li" mode="unicode-list-marker">
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="parent::ul" mode="format-code"/>
-    </xsl:variable>
+    <xsl:variable name="format-code" select="parent::ul/@pi:format-code"/>
     <!-- The list label.  The file  en-ueb-chardefs.uti        -->
     <!-- associates these Unicode values with the indicated    -->
     <!-- dot patterns.  This jibes with [BANA-2016, 8.6.2],    -->

@@ -6169,14 +6169,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utility templates to translate PTX              -->
 <!-- enumeration style to HTML list-style-type       -->
 <xsl:template match="ol|ol-marker" mode="html-list-class">
-    <xsl:variable name="mbx-format-code" select="./@pi:format-code" />
+    <xsl:variable name="ptx-format-code" select="./@pi:format-code" />
     <xsl:choose>
-        <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
-        <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
-        <xsl:when test="$mbx-format-code = 'a'">lower-alpha</xsl:when>
-        <xsl:when test="$mbx-format-code = 'A'">upper-alpha</xsl:when>
-        <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
-        <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
+        <xsl:when test="$ptx-format-code = '0'">decimal</xsl:when>
+        <xsl:when test="$ptx-format-code = '1'">decimal</xsl:when>
+        <xsl:when test="$ptx-format-code = 'a'">lower-alpha</xsl:when>
+        <xsl:when test="$ptx-format-code = 'A'">upper-alpha</xsl:when>
+        <xsl:when test="$ptx-format-code = 'i'">lower-roman</xsl:when>
+        <xsl:when test="$ptx-format-code = 'I'">upper-roman</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
@@ -6184,14 +6184,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul" mode="html-list-class">
-    <xsl:variable name="mbx-format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="ptx-format-code" select="./@pi:format-code"/>
     <xsl:choose>
-        <xsl:when test="$mbx-format-code = 'disc'">disc</xsl:when>
-        <xsl:when test="$mbx-format-code = 'circle'">circle</xsl:when>
-        <xsl:when test="$mbx-format-code = 'square'">square</xsl:when>
-        <xsl:when test="$mbx-format-code = 'none'">no-marker</xsl:when>
+        <xsl:when test="$ptx-format-code = 'disc'">disc</xsl:when>
+        <xsl:when test="$ptx-format-code = 'circle'">circle</xsl:when>
+        <xsl:when test="$ptx-format-code = 'square'">square</xsl:when>
+        <xsl:when test="$ptx-format-code = 'none'">no-marker</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad unordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
@@ -6205,18 +6203,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="heading-level"/>
-    <!-- need to switch on 0-1 for ol Arabic -->
-    <!-- no harm if called on "ul"           -->
-    <xsl:variable name="mbx-format-code">
-        <xsl:choose>
-            <xsl:when test="self::ol">
-                <xsl:value-of select="./@pi:format-code" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="format-code" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="ptx-format-code" select="./@pi:format-code"/>
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:element name="{local-name(.)}">
@@ -6241,7 +6228,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
-        <xsl:if test="$mbx-format-code = '0'">
+        <xsl:if test="$ptx-format-code = '0'">
             <xsl:attribute name="start">
                 <xsl:text>0</xsl:text>
             </xsl:attribute>

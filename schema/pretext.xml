@@ -2390,26 +2390,13 @@
     <section>
         <title>Exercises</title>
 
-        <p>Inline, divisional, and <webwork/>.  Exercises use task to structure parts, where before they used ordered lists for parts of a statement (to eventually be deprecated).</p>
+        <p>Inline, divisional, and <webwork/>.  Exercises use task to structure parts.</p>
 
         <fragment xml:id="exercise">
             <title>Exercises</title>
             <code>
-            ExerciseOrderedList =
-                element ol {
-                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    attribute marker {text}?,
-                    ExerciseListItem+
-                }
-            ExerciseListItem = element li {
-                MetaDataTarget,
-                (TextParagraph | BlockText+)
-            }
             ExerciseBody =
-                (
-                    BlockStatement |
-                    ExerciseOrderedList
-                )+
+                BlockStatement+
             StatementExercise =
                 element statement { ExerciseBody }
             Exercise =

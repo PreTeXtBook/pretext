@@ -5733,9 +5733,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul" mode="latex-list-label">
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code" />
-    </xsl:variable>
+    <xsl:variable name="format-code" select="./@pi:format-code"/>
    <xsl:choose>
         <xsl:when test="$format-code = 'disc'">\ptxlistdisc</xsl:when>
         <xsl:when test="$format-code = 'circle'">\ptxlistcircle</xsl:when>
@@ -5747,26 +5745,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-
-<!-- Utility template to translate unordered    -->
-<!-- list level to HTML list-style-type         -->
-<!-- This is similar to Firefox default choices -->
-<!-- but different in the fourth slot           -->
-<!-- disc, circle, square, disc                 -->
-<xsl:template match="*" mode="latex-unordered-list-label-default">
-    <xsl:variable name="level">
-        <xsl:apply-templates select="." mode="unordered-list-level" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$level='0'">\ptxlistdisc</xsl:when>
-        <xsl:when test="$level='1'">\ptxlistcircle</xsl:when>
-        <xsl:when test="$level='2'">\ptxlistsquare</xsl:when>
-        <xsl:when test="$level='3'">\ptxlistdisc</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 <!-- Lists themselves -->
 <!-- If columns are specified, we        -->

@@ -2046,13 +2046,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="parent::ol/@pi:marker-suffix"/>
 </xsl:template>
 
-<!-- Bullets via the "format-code" machinery of pretext-common.xsl, -->
-<!-- which cycles disc, circle, square by level, and honors an      -->
-<!-- authored @marker (the empty @marker giving no bullet at all).  -->
+<!-- Bullets via the format code stamped during assembly, which    -->
+<!-- cycles disc, circle, square by level, and honors an authored  -->
+<!-- @marker (the empty @marker giving no bullet at all).          -->
 <xsl:template match="ul/li" mode="list-label">
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="parent::ul" mode="format-code"/>
-    </xsl:variable>
+    <xsl:variable name="format-code" select="parent::ul/@pi:format-code"/>
     <xsl:choose>
         <xsl:when test="$format-code = 'disc'">
             <xsl:text>&#x2022;</xsl:text>

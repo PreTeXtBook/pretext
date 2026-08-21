@@ -5122,61 +5122,6 @@ Book (with parts), "section" at level 3
 <!-- Utility templates to determine the depth      -->
 <!-- of a list, relative to nesting in other lists -->
 
-<!-- We determine the depth of an unordered     -->
-<!-- list, relative only to other unordered     -->
-<!-- lists in a nesting, so as to determine     -->
-<!-- the right label to apply, esp. as defaults -->
-<!-- The recursive template should be called    -->
-<!-- without a level, since it defaults to zero -->
-<xsl:template match="ul" mode="unordered-list-level">
-    <!-- Start with level zero, and increment on successive calls -->
-    <xsl:param name="level" select="0"/>
-    <xsl:choose>
-        <!-- Another unordered list above, add one and recurse -->
-        <xsl:when test="ancestor::ul">
-            <xsl:apply-templates select="ancestor::ul[1]" mode="unordered-list-level">
-                <xsl:with-param name="level" select="$level + 1" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- No unordered list above, done, so return level -->
-        <xsl:otherwise>
-            <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Ordered lists follow the same strategy,           -->
-<!-- except we implement exercises and references      -->
-<!-- elements as ordered lists, so we need to absorb   -->
-<!-- them into the general treatment of nested lists   -->
-<!-- They do only occur as top-level elements, so that -->
-<!-- assumption allows for some economy                -->
-<xsl:template match="ol" mode="ordered-list-level">
-    <xsl:param name="level" select="0"/>
-    <xsl:choose>
-        <!-- Since exercises divisions and references are top-level -->
-        <!-- ordered lists, when these are the only interesting     -->
-        <!-- ancestor, we add one to the level and return           -->
-        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::handout or ancestor::reading-questions or ancestor::references) and not(ancestor::ol)">
-            <xsl:value-of select="$level + 1" />
-        </xsl:when>
-        <xsl:when test="ancestor::ol">
-            <xsl:apply-templates select="ancestor::ol[1]" mode="ordered-list-level">
-                <xsl:with-param name="level" select="$level + 1" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Exercises and References are        -->
-<!-- specialized top-level ordered lists -->
-<xsl:template match="exercises|worksheet|handout|reading-questions|references" mode="ordered-list-level">
-    <xsl:value-of select="0" />
-</xsl:template>
-
 <!-- To indent properly in markdown, we  -->
 <!-- need to count every type of list    -->
 <xsl:template match="*" mode="list-level">
@@ -5201,41 +5146,6 @@ Book (with parts), "section" at level 3
         <!-- now done, report level -->
         <xsl:otherwise>
             <xsl:value-of select="$level" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Labels of unordered list have formatting codes, which -->
-<!-- we detect here and pass on to other more specialized  -->
-<!-- templates for implementation specifics                -->
-<!-- disc, circle, square or blank are the options         -->
-<!-- Default order: disc, circle, square, disc             -->
-<xsl:template match="ul" mode="format-code">
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:choose>
-                <xsl:when test="@marker='disc'">disc</xsl:when>
-                <xsl:when test="@marker='circle'">circle</xsl:when>
-                <xsl:when test="@marker='square'">square</xsl:when>
-                <xsl:when test="@marker=''">none</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:variable name="level">
-                <xsl:apply-templates select="." mode="unordered-list-level" />
-            </xsl:variable>
-            <xsl:choose>
-                <xsl:when test="$level='0'">disc</xsl:when>
-                <xsl:when test="$level='1'">circle</xsl:when>
-                <xsl:when test="$level='2'">square</xsl:when>
-                <xsl:when test="$level='3'">disc</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -12028,6 +11938,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$document-root//references/conclusion&quot;" />
         <xsl:with-param name="date-string" select="'2026-08-06'" />
         <xsl:with-param name="message" select="'a &quot;references&quot; division no longer has a &quot;conclusion&quot;.  The element is discarded entirely: its content will not appear in any output.  Please relocate the content, perhaps following the &quot;references&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-20  "ol" as a child of "exercise" is obsolete -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//exercise/ol&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-20'" />
+        <xsl:with-param name="message" select="'an &quot;ol&quot; is no longer a child of an &quot;exercise&quot;; a list belongs inside a &quot;p&quot;.  We will wrap it for you, and lettered exercise parts will letter as before.  Please convert: structure true parts with &quot;task&quot;, letter a plain list with marker=&quot;(a)&quot;, or consider an &quot;exercisegroup&quot; and its cols attribute for a compact multi-column layout'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-20  "ol" as a child of an exercise "statement" is obsolete -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//exercise/statement/ol&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-20'" />
+        <xsl:with-param name="message" select="'an &quot;ol&quot; is no longer a child of an &quot;exercise&quot; &quot;statement&quot;; a list belongs inside a &quot;p&quot;.  We will wrap it for you, and lettered exercise parts will letter as before.  Please convert: structure true parts with &quot;task&quot;, letter a plain list with marker=&quot;(a)&quot;, or consider an &quot;exercisegroup&quot; and its cols attribute for a compact multi-column layout'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
