@@ -115,8 +115,9 @@ $chunk-heading-font-size: 1.125em !default;
 }
 
 .solution-like {
+  @include inline-heading-mixin.heading;
+
   .heading {
-    display: inline;
     font-style: italic;
     font-size: unset;
   }
