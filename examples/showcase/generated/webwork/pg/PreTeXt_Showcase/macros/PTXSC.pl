@@ -4,6 +4,22 @@
 #############################################################################
 
 
+TEXT(
+    MODES(
+        HTML => '<div style="display:none;">' . general_math_ev3(<<'EOF') . '</div>',
+\newcommand{\order}[1]{\left\lvert#1\right\rvert}
+\newcommand{\amp}{&}
+EOF
+        TeX => '\ifdefined\ptxmacros\else ' . <<'EOF'
+\newcommand{\order}[1]{\left\lvert#1\right\rvert}
+\newcommand{\amp}{&}
+\def\ptxmacros{}
+EOF
+. '\fi',
+        PTX => ''
+    )
+);
+
 # Return a string containing the latex-image-preamble contents.
 # To be used by LaTeXImage objects as in:
 # $image->addToPreamble(latexImagePreamble())
@@ -19,3 +35,5 @@ return <<'END_LATEX_IMAGE_PREAMBLE'
 
 END_LATEX_IMAGE_PREAMBLE
 }
+
+1;

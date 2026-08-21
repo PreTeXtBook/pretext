@@ -27,6 +27,7 @@ loadMacros(
   "PGstandard.pl",
   "PGML.pl",
   "AnswerFormatHelp.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -47,7 +48,7 @@ Context('Numeric');
 BEGIN_PGML
 Here, we solve an equation.
 
-[```\newcommand{\amp}{&}
+[```
 \begin{aligned}
 2x+1 \amp= 3
 \end{aligned}
@@ -55,7 +56,7 @@ Here, we solve an equation.
 
 Now subtract [`1`] from each side.
 
-[```\newcommand{\amp}{&}
+[```
 \begin{aligned}
 2x   \amp= 2
 \end{aligned}
@@ -63,7 +64,7 @@ Now subtract [`1`] from each side.
 
 Now divide by [`2`] on each side.
 
-[```\newcommand{\amp}{&}
+[```
 \begin{aligned}
 x    \amp= 1
 \end{aligned}
@@ -74,7 +75,7 @@ a.  Start a list.
 
 a.  [$NBSP]*
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     2x+1 \amp= 3
     \end{aligned}
@@ -82,7 +83,7 @@ a.  [$NBSP]*
 
     Now subtract [`1`] from each side.
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     2x   \amp= 2
     \end{aligned}
@@ -90,7 +91,7 @@ a.  [$NBSP]*
 
     Now divide by [`2`] on each side.
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     x    \amp= 1
     \end{aligned}

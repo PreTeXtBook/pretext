@@ -372,6 +372,7 @@ loadMacros(
   "PGstandard.pl",
   "PGML.pl",
   "AnswerFormatHelp.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -618,7 +619,7 @@ And after.
 Text before.
 a.  Structured
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     1+1\amp=2\\
     2\amp=2
@@ -629,7 +630,7 @@ a.  Structured
 
     Second paragraph
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     1+1\amp=2\\
     2\amp=2
@@ -638,7 +639,7 @@ a.  Structured
 
 a.  [$NBSP]*
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     1+1\amp=2\\
     2\amp=2
@@ -648,7 +649,7 @@ a.  [$NBSP]*
     Text before.
     i.  Sublist
 
-        [```\newcommand{\amp}{&}
+        [```
         \begin{aligned}
         1+1\amp=2\\
         2\amp=2
@@ -659,7 +660,7 @@ a.  [$NBSP]*
 
         Second paragraph
 
-        [```\newcommand{\amp}{&}
+        [```
         \begin{aligned}
         1+1\amp=2\\
         2\amp=2
@@ -668,7 +669,7 @@ a.  [$NBSP]*
 
     i.  [$NBSP]*
 
-        [```\newcommand{\amp}{&}
+        [```
         \begin{aligned}
         1+1\amp=2\\
         2\amp=2
@@ -679,7 +680,7 @@ a.  [$NBSP]*
 
         Second
 
-        [```\newcommand{\amp}{&}
+        [```
         \begin{aligned}
         1+1\amp=2\\
         2\amp=2
@@ -690,7 +691,7 @@ a.  [$NBSP]*
 
     i.  Sublist Item
 
-        [```\newcommand{\amp}{&}
+        [```
         \begin{aligned}
         1+1\amp=2\\
         2\amp=2
@@ -699,7 +700,7 @@ a.  [$NBSP]*
 
         
 
-        [```\newcommand{\amp}{&}
+        [```
         \begin{aligned}
         1+1\amp=2\\
         2\amp=2
@@ -710,7 +711,7 @@ a.  [$NBSP]*
 
     And
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     1+1\amp=2\\
     2\amp=2
@@ -721,7 +722,7 @@ a.  [$NBSP]*
 
 a.  Structured item
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     1+1\amp=2\\
     2\amp=2
@@ -730,7 +731,7 @@ a.  Structured item
 
     
 
-    [```\newcommand{\amp}{&}
+    [```
     \begin{aligned}
     1+1\amp=2\\
     2\amp=2

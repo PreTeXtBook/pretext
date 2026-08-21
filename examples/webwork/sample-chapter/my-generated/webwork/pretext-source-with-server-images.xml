@@ -57,6 +57,7 @@ loadMacros(
   "AnswerFormatHelp.pl",
   "PGgraphmacros.pl",
   "scaffold.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
