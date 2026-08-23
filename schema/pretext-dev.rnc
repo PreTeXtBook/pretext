@@ -44,7 +44,10 @@
 
                 }
 
-            Stack |=
+            # A "stack" occupying a panel of an interactive's
+            # "sidebyside" may also stack slates; a narrative
+            # "stack" may not
+            StackInteractive =
                 element stack {
                     (
                         Tabular |
@@ -65,7 +68,7 @@
             SideBySideInteractive =
                 element sidebyside {
                     SidebySideAttributes,
-                    (PanelNoNumber+ | Slate+)
+                    ((PanelNoNumber | StackInteractive)+ | Slate+)
                 }
             SideBySideGroupInteractive =
                 element sbsgroup {

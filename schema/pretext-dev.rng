@@ -118,7 +118,12 @@
       </interleave>
     </element>
   </define>
-  <define name="Stack" combine="choice">
+  <!--
+    A "stack" occupying a panel of an interactive's
+    "sidebyside" may also stack slates; a narrative
+    "stack" may not
+  -->
+  <define name="StackInteractive">
     <element name="stack">
       <oneOrMore>
         <choice>
@@ -145,7 +150,10 @@
       <ref name="SidebySideAttributes"/>
       <choice>
         <oneOrMore>
-          <ref name="PanelNoNumber"/>
+          <choice>
+            <ref name="PanelNoNumber"/>
+            <ref name="StackInteractive"/>
+          </choice>
         </oneOrMore>
         <oneOrMore>
           <ref name="Slate"/>
