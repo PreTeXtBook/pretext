@@ -466,6 +466,31 @@ function waitForImages(container, timeoutMs = 5000) {
 // always nested inside an exercise or task, but a project-like standalone
 // printout can carry @workspace on itself, and then the block *is* the
 // workspace div -- which querySelectorAll, looking only at descendants, misses.
+// Whether a top-level row *is* blank writing space, in either of the two
+// shapes it can take.  The "highlight workspace" overlay wraps every
+// `.workspace` in a `.workspace-container` (see toggleWorkspaceHighlight()),
+// and since flattenSolutionsIn() has by then made the workspace a row in its
+// own right, that wrapper becomes the row.  The wrapper carries neither the
+// `workspace` class nor the group stamp, so testing for `.workspace` alone
+// means every workspace rule below -- never opening a page with writing
+// space, keeping a question with its own workspace, suppressing a stranded
+// one -- silently stops applying the moment the reader ticks that checkbox.
+function isWorkspaceRow(elem) {
+    return elem.classList.contains('workspace') || elem.classList.contains('workspace-container');
+}
+
+// A workspace row that is *actually* blank writing space on the page.  Both
+// pagination paths refuse to open a page with writing space -- findPageBreaks()
+// when it plans from scratch, addSpilloverPages() when it splits at runtime --
+// because a slab of empty space above the question it belongs to reads as a
+// mistake.  A row suppressed by hideWidowedWorkspaces() carries `hidden` and
+// occupies nothing, so there is no slab to protect the reader from, and
+// applying the rule to it only retreats to an earlier break and pushes real
+// content onto a later page to make room for something invisible.
+function isVisibleWorkspaceRow(elem) {
+    return isWorkspaceRow(elem) && !elem.classList.contains('hidden');
+}
+
 function workspaceDivsIn(elem) {
     if (elem.classList.contains('workspace')) {
         return [elem];
@@ -578,6 +603,62 @@ function flattenIntroductionsIn(container) {
     }
 }
 
+// The classes flattenTasksIn() and flattenSolutionsIn() stamp on a row before
+// hoisting it, so the print stylesheet can re-create the indentation the hoist
+// destroys.  Ordered shallowest first.
+const DEPTH_CLASSES = ['subtask', 'subsubtask', 'subsubsubtask'];
+
+// The depth class a row hoisted out of `owner` needs to keep lining up with
+// it.  Read off `owner`'s own classes rather than its ancestry: flattenTasksIn()
+// has already run, so the nesting that would have said how deep `owner` sat is
+// gone, and the class it stamped on the way out is the only record left.
+//
+// The names mean the same thing here as they do there -- "subtask" is "I came
+// out of a task" -- so a row out of a plain task takes `subtask`, one out of a
+// task that was itself a subtask takes `subsubtask`, and so on.  A row belongs
+// at its owner's own level, not one step further in, exactly as a `.conclusion`
+// does; the print stylesheet is what turns that into the matching margin.
+function depthClassForRowOut(owner) {
+    if (owner.classList.contains('subsubtask')) return 'subsubsubtask';
+    if (owner.classList.contains('subtask')) return 'subsubtask';
+    if (owner.classList.contains('task')) return 'subtask';
+    return null;
+}
+
+// Move whichever depth class `from` carries onto `to`.  Used when the
+// "highlight workspace" overlay wraps a workspace, since the wrapper then
+// stands in as the row: the indent has to move with that role.  A margin left
+// on the workspace itself would not do -- it is `width: 100%` of the wrapper,
+// so a margin widens it past the wrapper's right edge instead of shifting it
+// over, and with both elements carrying the class the indent would double.
+function moveDepthClass(from, to) {
+    for (const cls of DEPTH_CLASSES) {
+        if (from.classList.contains(cls)) {
+            from.classList.remove(cls);
+            to.classList.add(cls);
+        }
+    }
+}
+
+// Serial number behind the `data-block-group` stamps below.  Module-level and
+// monotonic, deliberately: an id has to be unique among every row that could
+// ever share a page, and a counter local to the call does not achieve that.
+// adjustPrintoutPages() runs flattenSolutionsIn() once per authored page, so a
+// call-local counter hands every page its own `bg-0` -- and hideWidowedWorkspaces(),
+// which decides whether a workspace still has its question by looking that id
+// up among the page's rows, would accept a completely unrelated group's
+// question as the answer if two such pages were ever merged onto one.  Nothing
+// merges them today (a full recompute only runs when there are no authored
+// pages, and collapseSpilloverPages() folds a spillover page back only into
+// the page it was split from), but nothing declares that they cannot be.
+//
+// Surviving a repagination costs nothing, because the ids are meant to persist
+// anyway: a second createPrintoutPages() finds the `.solutions` wrappers
+// already consumed by the first pass, reissues nothing, and the stamps left
+// behind by that first pass are what keep the groups intact.  It is the
+// stamping *not* being redone that makes the scheme work.
+let blockGroupSeq = 0;
+
 // Split a `.solutions` block up so each hint/answer/solution knowl becomes
 // an independent top-level row, the same way flattenTasksIn splits out
 // `.task` and flattenIntroductionsIn splits out `.introduction`. Otherwise
@@ -592,6 +673,23 @@ function flattenIntroductionsIn(container) {
 // a task rather than directly to an exercise, `child` is already that task
 // (a top-level row in its own right) -- keeping the extracted solution
 // content ordered right after its own task instead of after a sibling task.
+//
+// The block's `.workspace` is hoisted out along with the solutions, and
+// lands after them.  The XSL emits an exercise as statement, then
+// `div.solutions`, then `div.workspace` (the workspace is applied after
+// "wrapped-content" and so is the block's last real child).  Extracting only
+// the solutions would leave the workspace behind *inside* the block, which
+// renders it before the rows just hoisted out -- so a revealed hint or
+// solution would appear below a slab of blank writing space instead of
+// directly under its question.  Moving the workspace out too, after the
+// solution rows, restores the authored reading order and makes the blank
+// space an independently placeable row like every other.
+//
+// Rows split out of one block are stamped with a shared `data-block-group`
+// so pagination can try to keep a question with its solutions and workspace
+// (see findPageBreaks(), which will not start a page with a workspace row,
+// and hideWidowedWorkspaces(), which suppresses writing space stranded away
+// from its question).
 function flattenSolutionsIn(container) {
     for (const child of [...container.children]) {
         if (child.classList.contains('sidebyside') || child.classList.contains('solutions')) {
@@ -606,13 +704,60 @@ function flattenSolutionsIn(container) {
         // block's content must land after an earlier block's, not before it.
         let insertionAnchor = child;
         solutionsBlocks.forEach(solutions => {
+            // Captured before the block is removed below.  This is the
+            // exercise or task the solutions belong to -- after
+            // flattenTasksIn() that is usually `child` itself, but for an
+            // exercisegroup `child` holds several such owners, each with
+            // its own solutions and its own workspace to keep together.
+            const owner = solutions.parentElement;
+            // Captured for the same reason, and before the rows move for the
+            // same reason: once they are top-level children of `container`
+            // nothing about them says they came out of a task.  See
+            // depthClassForRowOut().
+            const depthClass = depthClassForRowOut(owner);
+            const group = `bg-${blockGroupSeq++}`;
             const solChildren = [...solutions.children];
             for (let i = solChildren.length - 1; i >= 0; i--) {
                 container.insertBefore(solChildren[i], insertionAnchor.nextSibling);
+                if (depthClass) {
+                    solChildren[i].classList.add(depthClass);
+                }
             }
             solutions.remove();
             if (solChildren.length > 0) {
                 insertionAnchor = solChildren[solChildren.length - 1];
+            }
+            // Follow the solutions out, so reading order stays
+            // statement -> hint/answer/solution -> blank writing space.
+            const workspace = owner.querySelector(':scope > .workspace');
+            if (workspace) {
+                container.insertBefore(workspace, insertionAnchor.nextSibling);
+                // Indented along with them: a task's writing space is only
+                // hoisted when that task has solutions, so leaving it flush
+                // left would set it apart from the workspace of every sibling
+                // task that has none and so stayed put, indented, inside.
+                if (depthClass) {
+                    workspace.classList.add(depthClass);
+                }
+                insertionAnchor = workspace;
+            }
+            // Tag the whole set, including the question row that stayed put,
+            // so the group can be kept together (or deliberately broken)
+            // later.  When `owner` is nested deeper than `child` (the
+            // exercisegroup case) the question row is the whole group and
+            // is shared by several owners, so it is left untagged rather
+            // than bound to whichever owner happened to be processed last.
+            const questionRow = owner === child ? child : null;
+            const anchors = [questionRow, ...solChildren].filter(el => el && el.parentElement === container);
+            // A group needs at least one row that is not the workspace for it
+            // to be anchored to; otherwise (an empty `.solutions` inside an
+            // exercisegroup, say) hideWidowedWorkspaces() would find no
+            // question on the page and suppress perfectly good writing space.
+            if (anchors.length === 0) return;
+            for (const el of [...anchors, workspace]) {
+                if (el && el.parentElement === container) {
+                    el.dataset.blockGroup = group;
+                }
             }
         });
     }
@@ -704,6 +849,29 @@ function createPrintoutPages(margins) {
     flattenIntroductionsIn(printout);
     flattenSolutionsIn(printout);
     let rows = [...printout.children];
+    // Measure the rows in the context they will actually be rendered in.
+    //
+    // The print stylesheet scopes a good deal to `.onepage` -- most sharply
+    // `.onepage .instructions { display: none }`, which suppresses tool chrome
+    // such as diagcess's "Diagram Exploration Keyboard Controls" panel. Taking
+    // heights while the rows are still children of the printout means none of
+    // those rules are in force, so such a row measures as real content, is
+    // given space in the page-break plan, and then renders as nothing once it
+    // lands in a `.onepage` -- which is how a worksheet ends up with a
+    // completely blank sheet in the middle of it.
+    //
+    // So park the rows in a throwaway `.onepage` for the duration of the
+    // measuring loop. Its width is pinned to the conservative content width
+    // for the same reason the printout's was: so text wraps at least as much
+    // as it will in the real, narrower page box.
+    const measuringPage = document.createElement('section');
+    measuringPage.classList.add('onepage');
+    measuringPage.style.width = conservativeContentWidth + 'px';
+    // The real page box is a fixed height; this one has to grow with whatever
+    // it holds, or every row past the first page's worth would measure clipped.
+    measuringPage.style.height = 'auto';
+    printout.appendChild(measuringPage);
+    rows.forEach(row => measuringPage.appendChild(row));
     // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
     let blockList = [];
     for (const row of rows) {
@@ -720,7 +888,15 @@ function createPrintoutPages(margins) {
         // Keeping it in blockList with height 0 costs nothing towards
         // findPageBreaks()'s page-height budget -- it just rides along onto
         // whichever page its neighbors land on, ready to be revealed in place.
-        if (blockHeight === 0 && !row.classList.contains('hidden')) {
+        // Tested against the row's own rendered box rather than blockHeight,
+        // which adds the margins on: an autopermalink has no box at all
+        // (offsetHeight 0) but does carry vertical margin, so measured the
+        // margin-inclusive way it looks like a ~22px row and survives this
+        // filter -- defeating the "remove autopermalinks" intent above. It
+        // then goes on to claim a page of its own whenever its neighbour is a
+        // block too tall to share with (findPageBreaks() gives such a block a
+        // page to itself), and the reader gets a completely blank sheet.
+        if (row.offsetHeight === 0 && !row.classList.contains('hidden')) {
             console.log("Skipping row with zero height:", row);
             continue;
         }
@@ -729,11 +905,35 @@ function createPrintoutPages(margins) {
             // Workspace height is not just sum of workspace heights; we need to be careful with sidebyside and columns
             totalWorkspaceHeight = getElemWorkspaceHeight(row);
         }
-        blockList.push({elem: row, height: blockHeight, workspaceHeight: totalWorkspaceHeight});
+        blockList.push({
+            elem: row,
+            height: blockHeight,
+            workspaceHeight: totalWorkspaceHeight,
+            // Set by flattenSolutionsIn() on the rows split out of a single
+            // exercise or task, so findPageBreaks() can tell which rows want
+            // to stay together on one page.  Undefined for rows that were
+            // never split out of anything.
+            group: row.dataset.blockGroup,
+            // A row that *is* a hoisted workspace, as opposed to one that
+            // merely contains a workspace nested inside it.  Such a row is
+            // pure blank writing space, so it must never be what a page
+            // opens with -- see findPageBreaks().  Suppressed writing space
+            // does not count; see isVisibleWorkspaceRow().
+            isWorkspace: isVisibleWorkspaceRow(row),
+        });
     }
 
+    // Done measuring: return the rows to the printout and drop the scaffold,
+    // so the page-building loop below distributes them as it always has.
+    rows.forEach(row => printout.appendChild(row));
+    measuringPage.remove();
+
     // Now find pageBreaks so that extra workspace is as uniform as possible.
-    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight);
+    // Squeezing blank writing space below its authored height is only on the
+    // table once something is revealed that needs the room (see pageCost()).
+    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight, {
+        allowSqueeze: anySolutionShown(),
+    });
 
     // Done measuring; let the printout go back to its normal width so the
     // .onepage sections built below render at their real page size.
@@ -762,7 +962,13 @@ function createPrintoutPages(margins) {
     }
 
     // remove any old content that is not in a page
-    for (const child of printout.children) {
+    // Snapshot the children first: `printout.children` is a live collection,
+    // so removing through its own iterator shifts every later element down one
+    // and skips the next candidate.  A row that survives this loop by accident
+    // is left outside every page -- and now that rows carry group stamps that
+    // pagination relies on, one going missing takes its group's cohesion with
+    // it.
+    for (const child of [...printout.children]) {
         if (!child.classList.contains('onepage')) {
             console.log("Removing old child not in a page:", child);
             printout.removeChild(child);
@@ -794,6 +1000,69 @@ function pageOverflows() {
     return false;
 }
 
+// Blank writing space only means something directly beneath the question it
+// was authored for.  findPageBreaks() will not plan a page that opens with a
+// workspace row, but a group can still be pulled apart afterwards -- most
+// often by addSpilloverPages(), which pushes whatever overflows onto a fresh
+// page at runtime.  When that leaves a workspace on a page without the
+// question it belongs to, a slab of blank space with no prompt above it is
+// worse than no writing space at all, so it is suppressed.
+//
+// Hidden rather than removed, and recomputed from scratch on every call, so
+// that a later toggle which brings the group back onto one page brings the
+// writing space back with it.  Suppressing a workspace only ever frees
+// vertical space, so this can never introduce a new overflow.
+// Only applies while something is revealed, for the same reason pageCost()
+// will not squeeze: with nothing shown, the authored writing space is what the
+// reader is meant to get, and suppressing it would quietly take that away.
+//
+// Suppression is the `hidden` class, not an inline `display`, and every pass
+// clears it from every workspace and wrapper in the printout before deciding
+// again.  Clearing everything first is what makes "recomputed from scratch"
+// above actually true: a workspace is the row only until the reader ticks
+// "highlight workspace", after which toggleWorkspaceHighlight() wraps it and
+// the `.workspace-container` is the row instead (see isWorkspaceRow()).
+// Writing only to whichever element holds that role at the time leaves the
+// suppression stranded on the other one -- hide a workspace while unwrapped,
+// tick the box, and un-hiding restores the container while the `.workspace`
+// inside it stays suppressed for the rest of the session.
+//
+// The class rather than an inline style because createPrintoutPages() skips
+// zero-height rows and then deletes whatever never landed in a `.onepage`,
+// exempting only `.hidden`.  A workspace suppressed with `display:none`
+// measures zero, carries no such exemption, and would be destroyed outright
+// by the next full recompute instead of restored by it.  Nothing reaches that
+// today -- every recompute is chained ahead of the first reveal, so nothing is
+// ever suppressed while one runs -- but that is an accident of ordering, not
+// an invariant.  `.hidden` also measures 0 in getElemWorkspaceHeight(), which
+// reads offsetHeight, so pagination correctly stops reserving room for writing
+// space the reader cannot see.
+function hideWidowedWorkspaces() {
+    const printout = getPrintout();
+    if (!printout) return;
+    const stranding = anySolutionShown();
+    // Start from a clean slate, so no earlier pass's decision can survive on an
+    // element that is no longer the row.  Safe to own the class outright here:
+    // nothing else in the printout ever hides a workspace -- solutions and
+    // headers/footers carry `hidden` on their own elements.
+    printout.querySelectorAll('.workspace, .workspace-container').forEach(ws => ws.classList.remove('hidden'));
+    printout.querySelectorAll(':scope > .onepage').forEach(page => {
+        const rows = [...page.children].filter(c => !isHeaderFooterEl(c));
+        const questionGroupsOnPage = new Set(
+            rows.filter(r => !isWorkspaceRow(r))
+                .map(r => r.dataset.blockGroup)
+                .filter(Boolean)
+        );
+        for (const row of rows) {
+            if (!isWorkspaceRow(row) || !row.dataset.blockGroup) continue;
+            if (stranding && !questionGroupsOnPage.has(row.dataset.blockGroup)) {
+                console.log("Hiding workspace stranded from its question:", row);
+                row.classList.add('hidden');
+            }
+        }
+    });
+}
+
 function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}) {
     adjustWorkspaceToFitPage({paperSize, margins});
     if (pageOverflows()) {
@@ -804,6 +1073,9 @@ function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}
         }
         adjustWorkspaceToFitPage({paperSize, margins});
     }
+    // After the layout has settled, drop writing space that ended up separated
+    // from its question by whichever repagination path ran above.
+    hideWidowedWorkspaces();
 }
 
 function unwrapOnepages() {
@@ -855,6 +1127,22 @@ function addSpilloverPages(margins) {
       // after the oversized first row onto a fresh page.
       if (contentChildren.length <= 1) continue; // truly nothing else to move
       overflowStartIndex = 1;
+    }
+    // This is the runtime counterpart of the rules findPageBreaks() applies
+    // when it plans pages from scratch, and it has to enforce them too: a
+    // reveal goes through here (applySolutionVisibility() repaginates with
+    // fullRecompute false), so without this a revealed solution can push its
+    // own workspace onto the next page and open that page with a slab of
+    // blank writing space, or tear a question away from its solutions.
+    // Both are fixed the same way -- retreat to an earlier, legal split.
+    while (overflowStartIndex > 1) {
+      const row = contentChildren[overflowStartIndex];
+      const prev = contentChildren[overflowStartIndex - 1];
+      const opensWithWorkspace = isVisibleWorkspaceRow(row);
+      const splitsGroup = !!(row.dataset.blockGroup &&
+                             row.dataset.blockGroup === prev.dataset.blockGroup);
+      if (!opensWithWorkspace && !splitsGroup) break;
+      overflowStartIndex--;
     }
 
     const overflowElems = contentChildren.slice(overflowStartIndex);
@@ -1137,8 +1425,86 @@ function getElemWorkspaceHeight(elem) {
     return totalHeight / columns; // Divide by columns if sidebyside to get average height per column
 }
 
-// Functions for finding the optimal page breaks
-function findPageBreaks(rows, pageHeight) {
+// Cost of one candidate page holding rows [i..j], in the same units as the
+// original objective: (px of wasted space)^2, so that the penalties below
+// trade off directly against blank space -- a penalty of P is "worth" about
+// sqrt(P) px of waste at the foot of a page.
+//
+//   naturalHeight   total height with every workspace at its authored size
+//   workspaceHeight how much of that is blank writing space, i.e. how much
+//                   can be given back by squeezing (adjustWorkspaceToFitPage()
+//                   scales workspaces by a factor below 1 when a page is over
+//                   budget, so a page may legitimately be planned as "fits
+//                   only once squeezed")
+//   splitsGroup     true when the break after row j separates a question from
+//                   its own solutions or workspace
+//
+// Returns Infinity for a page that cannot be made to fit at all.
+//
+// NB the two constants are the tuning knobs for "keep an exercise with its
+// solutions and workspace together, and only spill over if absolutely
+// necessary": raising GROUP_BREAK_PENALTY_PAGES buys cohesion at the price of
+// more blank space, and lowering SQUEEZE_COST_SCALE makes the layout more
+// willing to eat into writing space before it gives up and splits.
+//
+// The group penalty is expressed in whole wasted pages rather than as a raw
+// number so that it scales with paper size instead of being tuned for one:
+// at 1, separating a question from its own solutions or workspace is judged
+// exactly as costly as leaving a whole page blank, which is what makes the
+// optimiser exhaust every other option -- including squeezing away all the
+// writing space, and pushing the whole group to the next page -- first.
+const GROUP_BREAK_PENALTY_PAGES = 1;
+const SQUEEZE_COST_SCALE = 0.25;        // squeezing s px of workspace costs 0.25*s^2
+
+// Whether any hint/answer/solution is currently revealed in the printout.
+// Checks effective visibility -- the element and every ancestor free of
+// "hidden" -- because rewriteSolutions() puts the "hidden" class on the
+// wrapper it builds, while the original `.knowl__content` div inside it never
+// carries the class itself.
+function anySolutionShown() {
+    const printout = getPrintout();
+    if (!printout) return false;
+    return [...printout.querySelectorAll('.hint, .answer, .solution')].some(el => !el.closest('.hidden'));
+}
+
+function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced }) {
+    const groupPenalty = splitsGroup ? GROUP_BREAK_PENALTY_PAGES * pageHeight ** 2 : 0;
+    if (naturalHeight <= pageHeight) {
+        // Fits as authored; the classic objective, minimise wasted space.
+        return (pageHeight - naturalHeight) ** 2 + groupPenalty;
+    }
+    // Over budget at the authored workspace sizes.  Blank writing space is
+    // compressible, but eating into it to merely pack pages tighter is only
+    // acceptable once a hint/answer/solution is on the page taking up the
+    // room -- with nothing revealed, the author asked for that much space to
+    // write in and must get at least that much, even at the cost of extra
+    // pages.
+    //
+    // The exception is a page holding a row that is taller than the page all
+    // by itself.  There, squeezing is not an optimisation, it is the only way
+    // that row is ever going to fit, and refusing it does not preserve any
+    // writing space -- it just strands the row on a page of its own and, worse,
+    // leaves whatever small thing preceded it (a worksheet title, typically)
+    // alone on the page before.  So allow it whenever it is forced.
+    if (!allowSqueeze && !squeezeIsForced) {
+        return Infinity;
+    }
+    const squeeze = naturalHeight - pageHeight;
+    if (squeeze > workspaceHeight) {
+        return Infinity; // no amount of squeezing saves this page
+    }
+    // Nothing is wasted (the page is exactly full), but squeezing writing
+    // space has its own cost, so a merely-tight page still loses to a roomy one.
+    return SQUEEZE_COST_SCALE * squeeze ** 2 + groupPenalty;
+}
+
+// Functions for finding the optimal page breaks.
+//
+// `allowSqueeze` permits planning a page that only fits once its blank
+// writing space is compressed.  It is off unless a hint/answer/solution is
+// actually being shown: a worksheet with nothing revealed must honour the
+// authored workspace heights in full.
+function findPageBreaks(rows, pageHeight, { allowSqueeze = false } = {}) {
     console.log("*** Finding page breaks for", rows.length, "rows with page height:", pageHeight);
     // An array for the page breaks.  The nth element will be the index of the first row on page n+1.
     let pageBreaks = [];
@@ -1152,28 +1518,56 @@ function findPageBreaks(rows, pageHeight) {
     for (let i = rows.length - 1; i >= 0; i--) {
         let cumulativeHeight = 0;
         let cumulativeWorkspaceHeight = 0;
+        let tallestRow = 0;
         // Loop through the rows starting from i to find the best page break
         for (let j = i; j < rows.length; j++) {
             cumulativeHeight += rows[j].height;
             cumulativeWorkspaceHeight += rows[j].workspaceHeight;
-            if (cumulativeHeight > pageHeight) {
+            // A row taller than a whole page cannot be placed at its authored
+            // size no matter how the breaks fall, so squeezing is forced for
+            // any page that has to hold it -- see pageCost().
+            tallestRow = Math.max(tallestRow, rows[j].height);
+            const next = rows[j + 1];
+
+            const thisPage = pageCost({
+                pageHeight,
+                naturalHeight: cumulativeHeight,
+                workspaceHeight: cumulativeWorkspaceHeight,
+                splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
+                allowSqueeze,
+                squeezeIsForced: tallestRow > pageHeight,
+            });
+            if (thisPage === Infinity) {
+                // This page overflows even with all its writing space squeezed
+                // away, and every longer page would too, so stop extending it.
                 if (j === i) {
                     // The page height is too big for a single row.  We make this row its own page and move on.
                     console.log("Row", i, "exceeds page height by itself, setting as its own page.");
                     minCost[i] = 0; // No cost for a single row
                     nextPageBreak[i] = i + 1; // The next page break is after this row
-                    break; // Move to the next row
-                } else {
-                    // We have already set minCost and NextPageBreak at an earlier point in the loop.  This means we have done the best we can for this row so we stop and move to the next earlier row.
-                    break; // Stop if we exceed the page height
                 }
+                break;
             }
+            // A page must never open with blank writing space: a workspace
+            // row belongs under the question it was authored for, so breaking
+            // right before one is simply not a legal break.  (When the group
+            // genuinely cannot be held together, the workspace is suppressed
+            // later instead -- see hideWidowedWorkspaces().)
+            if (next && next.isWorkspace) continue;
 
-            const cost = (pageHeight - cumulativeHeight)**2 + minCost[j+1]; // Cost is how much space is left on the page, plus the cost of the following pages.
+            const cost = thisPage + minCost[j + 1]; // plus the cost of the following pages
             if (cost < minCost[i]) {
                 minCost[i] = cost;
-                nextPageBreak[i] = j+1; // Set the next page break to be after row j
+                nextPageBreak[i] = j + 1; // Set the next page break to be after row j
             }
+        }
+        // Every candidate break was illegal (e.g. the only places to break
+        // were immediately before a workspace row).  Fall back to giving row i
+        // a page of its own so backtracking below always makes progress
+        // rather than looping on nextPageBreak === -1.
+        if (nextPageBreak[i] === -1) {
+            nextPageBreak[i] = i + 1;
+            minCost[i] = minCost[i + 1];
         }
     }
     // Backtrack to find the actual page breaks based on nextPageBreak
@@ -1231,23 +1625,63 @@ function toggleWorkspaceHighlight(isChecked) {
                 // Create a container div to hold the workspace div and the original div
                 const container = document.createElement('div');
                 container.classList.add('workspace-container');
-                // Set the container height to the current workspace height
-                container.style.height = window.getComputedStyle(workspace).height;
+                // Deliberately no fixed height on the container.
+                //
+                // A height snapshotted here goes stale the moment
+                // adjustWorkspaceToFitPage() resizes the workspace -- and
+                // because flattenSolutionsIn() has already hoisted the
+                // workspace out to be a top-level row, this container *is*
+                // that row, so the stale value is what createPrintoutPages()
+                // measures.  setInitialWorkspaceHeights() resets the
+                // `.workspace` back to its authored height but knows nothing
+                // about the wrapper, so pagination would plan against the
+                // previous, stretched size, hand each page more slack than it
+                // really has, and stretch the workspaces again -- a feedback
+                // loop that made the whole layout depend on whether the
+                // "highlight workspace" box happened to be ticked.
+                //
+                // Letting the container size to its content keeps it exactly
+                // as tall as the workspace at all times, with no value to
+                // synchronise.  The marker below is taken out of flow so that
+                // it cannot contribute height either.
+                container.style.position = 'relative';
                 const original = document.createElement('div');
                 original.classList.add('original-workspace');
                 const originalHeight = workspace.getAttribute('data-space') || '0px';
                 original.setAttribute('title', 'Author-specified workspace height (' + originalHeight + ')');
                 // Use the data-space attribute for height of original workspace
                 original.style.height = originalHeight;
+                // Overlaid rather than laid out beside the workspace: it still
+                // shows the authored height (overflowing visibly when that is
+                // taller than what the workspace was squeezed to, which is the
+                // point of the marker) without affecting the row's own height.
+                original.style.position = 'absolute';
+                original.style.top = '0';
+                original.style.left = '0';
                 // insert original div before the workspace content
                 container.appendChild(original);
-                // Add a warning class if the original height is greater than the current height
-                if (original.offsetHeight > workspace.offsetHeight) {
-                    original.classList.add('warning');
+                // The container stands in for the workspace as a pagination
+                // row while the overlay is on, so it has to carry the group
+                // stamp too -- otherwise the question and its writing space
+                // stop being seen as one unit.  See isWorkspaceRow().
+                if (workspace.dataset.blockGroup) {
+                    container.dataset.blockGroup = workspace.dataset.blockGroup;
                 }
+                // ...and, for the same reason, the indent that keeps a hoisted
+                // workspace lined up with its task.  See moveDepthClass().
+                moveDepthClass(workspace, container);
                 // Move the workspace into the container
                 workspace.parentNode.insertBefore(container, workspace);
                 container.appendChild(workspace);
+                // Flag the marker when the author asked for more room than the
+                // workspace was ultimately given.  Measured only now that both
+                // elements are actually in the document -- offsetHeight on a
+                // detached node is always 0, so checking this before the insert
+                // above (as this did previously) could never be true, and the
+                // warning never appeared.
+                if (original.offsetHeight > workspace.offsetHeight) {
+                    original.classList.add('warning');
+                }
             });
         }
     } else {
@@ -1255,6 +1689,9 @@ function toggleWorkspaceHighlight(isChecked) {
         // Remove the original workspace divs.  We don't want to keep these in, as they interfere with changing page sizes and workspace heights.
         document.querySelectorAll('.workspace-container').forEach(container => {
             const workspace = container.querySelector('.workspace');
+            // The workspace is about to be the row again, so it takes the
+            // indent back with the role.
+            moveDepthClass(container, workspace);
             // Move the workspace out of the container
             container.parentNode.insertBefore(workspace, container);
             // Remove the container

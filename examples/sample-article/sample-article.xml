@@ -16107,6 +16107,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
                         <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                     </statement>
+                    <solution>
+                        <p>This is a sample solution for a full-width exercise.  Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                    </solution>
                 </exercise>
 
                 <p>Another two-line paragraph interspersed to check on spacing, breaks and all that.</p>
@@ -16309,6 +16312,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         Here is the first task.
                       </p>
                     </statement>
+                    <solution>
+                      <p>
+                        Here is a solution for the first task.  It should get indented the same amount as the task.
+                      </p>
+                    </solution>
                   </task>
                   <task workspace="0.25in">
                     <statement>
