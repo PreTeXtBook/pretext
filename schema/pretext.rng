@@ -2707,41 +2707,53 @@
       <ref name="FigureList"/>
     </choice>
   </define>
+  <!--
+    The panels themselves; a narrative "sidebyside" holds at
+    least two, else nothing is side by side
+  -->
+  <define name="Panel">
+    <choice>
+      <ref name="FigurePanel"/>
+      <ref name="Poem"/>
+      <ref name="Tabular"/>
+      <ref name="Image"/>
+      <ref name="Program"/>
+      <ref name="Console"/>
+      <ref name="Paragraph"/>
+      <ref name="Preformatted"/>
+      <ref name="List"/>
+      <ref name="Stack"/>
+      <ref name="Exercise"/>
+    </choice>
+  </define>
+  <define name="PanelNoNumber">
+    <choice>
+      <ref name="Poem"/>
+      <ref name="Tabular"/>
+      <ref name="Image"/>
+      <ref name="Program"/>
+      <ref name="Console"/>
+      <ref name="Paragraph"/>
+      <ref name="Preformatted"/>
+      <ref name="List"/>
+      <ref name="Stack"/>
+    </choice>
+  </define>
   <define name="SideBySide">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
+      <ref name="Panel"/>
       <oneOrMore>
-        <choice>
-          <ref name="FigurePanel"/>
-          <ref name="Poem"/>
-          <ref name="Tabular"/>
-          <ref name="Image"/>
-          <ref name="Program"/>
-          <ref name="Console"/>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="List"/>
-          <ref name="Stack"/>
-          <ref name="Exercise"/>
-        </choice>
+        <ref name="Panel"/>
       </oneOrMore>
     </element>
   </define>
   <define name="SideBySideNoNumber">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
+      <ref name="PanelNoNumber"/>
       <oneOrMore>
-        <choice>
-          <ref name="Poem"/>
-          <ref name="Tabular"/>
-          <ref name="Image"/>
-          <ref name="Program"/>
-          <ref name="Console"/>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="List"/>
-          <ref name="Stack"/>
-        </choice>
+        <ref name="PanelNoNumber"/>
       </oneOrMore>
     </element>
   </define>

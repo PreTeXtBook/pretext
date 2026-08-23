@@ -994,37 +994,39 @@
                     )
                 } |
                 FigureTable | FigureListing | FigureList
+            # The panels themselves; a narrative "sidebyside" holds at
+            # least two, else nothing is side by side
+            Panel =
+                FigurePanel |
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack |
+                Exercise
+            PanelNoNumber =
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        FigurePanel |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        Exercise
-                    )+
+                    Panel, Panel+
                 }
             SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack
-                    )+
+                    PanelNoNumber, PanelNoNumber+
                 }
             SideBySideGroup =
                 element sbsgroup {

@@ -83,8 +83,8 @@
         <zeroOrMore>
           <choice>
             <ref name="Slate"/>
-            <ref name="SideBySideNoNumber"/>
-            <ref name="SideBySideGroupNoNumber"/>
+            <ref name="SideBySideInteractive"/>
+            <ref name="SideBySideGroupInteractive"/>
           </choice>
         </zeroOrMore>
         <zeroOrMore>
@@ -134,6 +134,36 @@
       </oneOrMore>
     </element>
   </define>
+  <!--
+    Within an "interactive" or a "slate", a "sidebyside" is
+    scaffolding: it arranges slates, or narrows a lone panel
+    to a chosen width, so the two-panel minimum of a
+    narrative "sidebyside" is not imposed here
+  -->
+  <define name="SideBySideInteractive">
+    <element name="sidebyside">
+      <ref name="SidebySideAttributes"/>
+      <choice>
+        <oneOrMore>
+          <ref name="PanelNoNumber"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Slate"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="SideBySideGroupInteractive">
+    <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <ref name="SidebySideAttributes"/>
+      <oneOrMore>
+        <ref name="SideBySideInteractive"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="Slate">
     <element name="slate">
       <optional>
@@ -165,7 +195,7 @@
             <choice>
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
-              <ref name="SideBySideNoNumber"/>
+              <ref name="SideBySideInteractive"/>
               <ref name="AnyXHTML"/>
               <zeroOrMore>
                 <text/>

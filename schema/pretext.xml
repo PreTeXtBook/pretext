@@ -1865,7 +1865,7 @@
     <section>
         <title>Side-By-Side Layout</title>
 
-        <p>Page width or screen width, both are at a premium.  Height goes on forever (barring physical page breaks) and we have many devices for demarcating that flow.  But sometimes you need to organize items horizontally, <ie/> side-by-side.  We place the components of a <c>sidebyside</c> into generic regions of specified width called <term>panels</term>.</p>
+        <p>Page width or screen width, both are at a premium.  Height goes on forever (barring physical page breaks) and we have many devices for demarcating that flow.  But sometimes you need to organize items horizontally, <ie/> side-by-side.  We place the components of a <c>sidebyside</c> into generic regions of specified width called <term>panels</term>.  There are at least two panels<mdash/>a lone component has nothing to sit beside.</p>
 
         <p>This is a pure layout device.  So you cannot title it, nor caption it.  It does not admit a <c>xml:id</c> attribute, since you cannot make it the target of a cross-reference.  Nor can you reference it from the index (but you can point to its surroundings from the index).</p>
 
@@ -1924,37 +1924,39 @@
                     )
                 } |
                 FigureTable | FigureListing | FigureList
+            # The panels themselves; a narrative "sidebyside" holds at
+            # least two, else nothing is side by side
+            Panel =
+                FigurePanel |
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack |
+                Exercise
+            PanelNoNumber =
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        FigurePanel |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        Exercise
-                    )+
+                    Panel, Panel+
                 }
             SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack
-                    )+
+                    PanelNoNumber, PanelNoNumber+
                 }
             SideBySideGroup =
                 element sbsgroup {
@@ -2176,8 +2178,8 @@
                       ImageDescription? &amp;
                       (
                         Slate |
-                        SideBySideNoNumber |
-                        SideBySideGroupNoNumber
+                        SideBySideInteractive |
+                        SideBySideGroupInteractive
                       )* &amp;
                       element script { attribute type { text }?, text }* &amp;
                       element source { text }? &amp;
@@ -2201,6 +2203,22 @@
                     )+
                 }
 
+            # Within an "interactive" or a "slate", a "sidebyside" is
+            # scaffolding: it arranges slates, or narrows a lone panel
+            # to a chosen width, so the two-panel minimum of a
+            # narrative "sidebyside" is not imposed here
+            SideBySideInteractive =
+                element sidebyside {
+                    SidebySideAttributes,
+                    (PanelNoNumber+ | Slate+)
+                }
+            SideBySideGroupInteractive =
+                element sbsgroup {
+                    UniqueID?,
+                    SidebySideAttributes,
+                    SideBySideInteractive+
+                }
+
             Slate =
                 element slate {
                     UniqueID?,
@@ -2219,7 +2237,7 @@
                         (
                           Paragraph |
                           Tabular |
-                          SideBySideNoNumber |
+                          SideBySideInteractive |
                           AnyXHTML |
                           text*
                         )*
