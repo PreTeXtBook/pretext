@@ -1436,6 +1436,12 @@
       new Promise((resolve) => setTimeout(resolve, timeoutMs))
     ]);
   }
+  function isWorkspaceRow(elem) {
+    return elem.classList.contains("workspace") || elem.classList.contains("workspace-container");
+  }
+  function isVisibleWorkspaceRow(elem) {
+    return isWorkspaceRow(elem) && !elem.classList.contains("hidden");
+  }
   function workspaceDivsIn(elem) {
     if (elem.classList.contains("workspace")) {
       return [elem];
@@ -1488,6 +1494,22 @@
       });
     }
   }
+  var DEPTH_CLASSES = ["subtask", "subsubtask", "subsubsubtask"];
+  function depthClassForRowOut(owner) {
+    if (owner.classList.contains("subsubtask")) return "subsubsubtask";
+    if (owner.classList.contains("subtask")) return "subsubtask";
+    if (owner.classList.contains("task")) return "subtask";
+    return null;
+  }
+  function moveDepthClass(from, to) {
+    for (const cls of DEPTH_CLASSES) {
+      if (from.classList.contains(cls)) {
+        from.classList.remove(cls);
+        to.classList.add(cls);
+      }
+    }
+  }
+  var blockGroupSeq = 0;
   function flattenSolutionsIn(container) {
     for (const child of [...container.children]) {
       if (child.classList.contains("sidebyside") || child.classList.contains("solutions")) {
@@ -1496,13 +1518,35 @@
       const solutionsBlocks = [...child.querySelectorAll(".solutions")].filter((solutions) => !solutions.closest(".sidebyside"));
       let insertionAnchor = child;
       solutionsBlocks.forEach((solutions) => {
+        const owner = solutions.parentElement;
+        const depthClass = depthClassForRowOut(owner);
+        const group = `bg-${blockGroupSeq++}`;
         const solChildren = [...solutions.children];
         for (let i = solChildren.length - 1; i >= 0; i--) {
           container.insertBefore(solChildren[i], insertionAnchor.nextSibling);
+          if (depthClass) {
+            solChildren[i].classList.add(depthClass);
+          }
         }
         solutions.remove();
         if (solChildren.length > 0) {
           insertionAnchor = solChildren[solChildren.length - 1];
+        }
+        const workspace = owner.querySelector(":scope > .workspace");
+        if (workspace) {
+          container.insertBefore(workspace, insertionAnchor.nextSibling);
+          if (depthClass) {
+            workspace.classList.add(depthClass);
+          }
+          insertionAnchor = workspace;
+        }
+        const questionRow = owner === child ? child : null;
+        const anchors = [questionRow, ...solChildren].filter((el2) => el2 && el2.parentElement === container);
+        if (anchors.length === 0) return;
+        for (const el2 of [...anchors, workspace]) {
+          if (el2 && el2.parentElement === container) {
+            el2.dataset.blockGroup = group;
+          }
         }
       });
     }
@@ -1563,10 +1607,16 @@
     flattenIntroductionsIn(printout);
     flattenSolutionsIn(printout);
     let rows = [...printout.children];
+    const measuringPage = document.createElement("section");
+    measuringPage.classList.add("onepage");
+    measuringPage.style.width = conservativeContentWidth + "px";
+    measuringPage.style.height = "auto";
+    printout.appendChild(measuringPage);
+    rows.forEach((row) => measuringPage.appendChild(row));
     let blockList = [];
     for (const row of rows) {
       let blockHeight = getElementTotalHeight(row);
-      if (blockHeight === 0 && !row.classList.contains("hidden")) {
+      if (row.offsetHeight === 0 && !row.classList.contains("hidden")) {
         console.log("Skipping row with zero height:", row);
         continue;
       }
@@ -1574,9 +1624,28 @@
       if (workspaceDivsIn(row).length > 0) {
         totalWorkspaceHeight = getElemWorkspaceHeight(row);
       }
-      blockList.push({ elem: row, height: blockHeight, workspaceHeight: totalWorkspaceHeight });
+      blockList.push({
+        elem: row,
+        height: blockHeight,
+        workspaceHeight: totalWorkspaceHeight,
+        // Set by flattenSolutionsIn() on the rows split out of a single
+        // exercise or task, so findPageBreaks() can tell which rows want
+        // to stay together on one page.  Undefined for rows that were
+        // never split out of anything.
+        group: row.dataset.blockGroup,
+        // A row that *is* a hoisted workspace, as opposed to one that
+        // merely contains a workspace nested inside it.  Such a row is
+        // pure blank writing space, so it must never be what a page
+        // opens with -- see findPageBreaks().  Suppressed writing space
+        // does not count; see isVisibleWorkspaceRow().
+        isWorkspace: isVisibleWorkspaceRow(row)
+      });
     }
-    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight);
+    rows.forEach((row) => printout.appendChild(row));
+    measuringPage.remove();
+    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight, {
+      allowSqueeze: anySolutionShown()
+    });
     printout.style.width = "";
     for (let i = 0; i < pageBreaks.length; i++) {
       const pageDiv = document.createElement("section");
@@ -1595,7 +1664,7 @@
       }
       printout.appendChild(pageDiv);
     }
-    for (const child of printout.children) {
+    for (const child of [...printout.children]) {
       if (!child.classList.contains("onepage")) {
         console.log("Removing old child not in a page:", child);
         printout.removeChild(child);
@@ -1619,6 +1688,25 @@
     }
     return false;
   }
+  function hideWidowedWorkspaces() {
+    const printout = getPrintout();
+    if (!printout) return;
+    const stranding = anySolutionShown();
+    printout.querySelectorAll(".workspace, .workspace-container").forEach((ws) => ws.classList.remove("hidden"));
+    printout.querySelectorAll(":scope > .onepage").forEach((page) => {
+      const rows = [...page.children].filter((c) => !isHeaderFooterEl(c));
+      const questionGroupsOnPage = new Set(
+        rows.filter((r) => !isWorkspaceRow(r)).map((r) => r.dataset.blockGroup).filter(Boolean)
+      );
+      for (const row of rows) {
+        if (!isWorkspaceRow(row) || !row.dataset.blockGroup) continue;
+        if (stranding && !questionGroupsOnPage.has(row.dataset.blockGroup)) {
+          console.log("Hiding workspace stranded from its question:", row);
+          row.classList.add("hidden");
+        }
+      }
+    });
+  }
   function adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute = false }) {
     adjustWorkspaceToFitPage({ paperSize, margins });
     if (pageOverflows()) {
@@ -1629,6 +1717,7 @@
       }
       adjustWorkspaceToFitPage({ paperSize, margins });
     }
+    hideWidowedWorkspaces();
   }
   function unwrapOnepages() {
     const printout = getPrintout();
@@ -1669,6 +1758,14 @@
       if (overflowStartIndex === 0) {
         if (contentChildren.length <= 1) continue;
         overflowStartIndex = 1;
+      }
+      while (overflowStartIndex > 1) {
+        const row = contentChildren[overflowStartIndex];
+        const prev = contentChildren[overflowStartIndex - 1];
+        const opensWithWorkspace = isVisibleWorkspaceRow(row);
+        const splitsGroup = !!(row.dataset.blockGroup && row.dataset.blockGroup === prev.dataset.blockGroup);
+        if (!opensWithWorkspace && !splitsGroup) break;
+        overflowStartIndex--;
       }
       const overflowElems = contentChildren.slice(overflowStartIndex);
       const newPage = document.createElement("section");
@@ -1879,7 +1976,28 @@
     });
     return totalHeight / columns;
   }
-  function findPageBreaks(rows, pageHeight) {
+  var GROUP_BREAK_PENALTY_PAGES = 1;
+  var SQUEEZE_COST_SCALE = 0.25;
+  function anySolutionShown() {
+    const printout = getPrintout();
+    if (!printout) return false;
+    return [...printout.querySelectorAll(".hint, .answer, .solution")].some((el2) => !el2.closest(".hidden"));
+  }
+  function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced }) {
+    const groupPenalty = splitsGroup ? GROUP_BREAK_PENALTY_PAGES * pageHeight ** 2 : 0;
+    if (naturalHeight <= pageHeight) {
+      return (pageHeight - naturalHeight) ** 2 + groupPenalty;
+    }
+    if (!allowSqueeze && !squeezeIsForced) {
+      return Infinity;
+    }
+    const squeeze = naturalHeight - pageHeight;
+    if (squeeze > workspaceHeight) {
+      return Infinity;
+    }
+    return SQUEEZE_COST_SCALE * squeeze ** 2 + groupPenalty;
+  }
+  function findPageBreaks(rows, pageHeight, { allowSqueeze = false } = {}) {
     console.log("*** Finding page breaks for", rows.length, "rows with page height:", pageHeight);
     let pageBreaks = [];
     let minCost = Array(rows.length + 1).fill(Infinity);
@@ -1888,24 +2006,38 @@
     for (let i = rows.length - 1; i >= 0; i--) {
       let cumulativeHeight = 0;
       let cumulativeWorkspaceHeight = 0;
+      let tallestRow = 0;
       for (let j = i; j < rows.length; j++) {
         cumulativeHeight += rows[j].height;
         cumulativeWorkspaceHeight += rows[j].workspaceHeight;
-        if (cumulativeHeight > pageHeight) {
+        tallestRow = Math.max(tallestRow, rows[j].height);
+        const next = rows[j + 1];
+        const thisPage = pageCost({
+          pageHeight,
+          naturalHeight: cumulativeHeight,
+          workspaceHeight: cumulativeWorkspaceHeight,
+          splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
+          allowSqueeze,
+          squeezeIsForced: tallestRow > pageHeight
+        });
+        if (thisPage === Infinity) {
           if (j === i) {
             console.log("Row", i, "exceeds page height by itself, setting as its own page.");
             minCost[i] = 0;
             nextPageBreak[i] = i + 1;
-            break;
-          } else {
-            break;
           }
+          break;
         }
-        const cost = (pageHeight - cumulativeHeight) ** 2 + minCost[j + 1];
+        if (next && next.isWorkspace) continue;
+        const cost = thisPage + minCost[j + 1];
         if (cost < minCost[i]) {
           minCost[i] = cost;
           nextPageBreak[i] = j + 1;
         }
+      }
+      if (nextPageBreak[i] === -1) {
+        nextPageBreak[i] = i + 1;
+        minCost[i] = minCost[i + 1];
       }
     }
     let nextPage = 0;
@@ -1948,24 +2080,32 @@
         document.querySelectorAll(".workspace").forEach((workspace) => {
           const container = document.createElement("div");
           container.classList.add("workspace-container");
-          container.style.height = window.getComputedStyle(workspace).height;
+          container.style.position = "relative";
           const original = document.createElement("div");
           original.classList.add("original-workspace");
           const originalHeight = workspace.getAttribute("data-space") || "0px";
           original.setAttribute("title", "Author-specified workspace height (" + originalHeight + ")");
           original.style.height = originalHeight;
+          original.style.position = "absolute";
+          original.style.top = "0";
+          original.style.left = "0";
           container.appendChild(original);
+          if (workspace.dataset.blockGroup) {
+            container.dataset.blockGroup = workspace.dataset.blockGroup;
+          }
+          moveDepthClass(workspace, container);
+          workspace.parentNode.insertBefore(container, workspace);
+          container.appendChild(workspace);
           if (original.offsetHeight > workspace.offsetHeight) {
             original.classList.add("warning");
           }
-          workspace.parentNode.insertBefore(container, workspace);
-          container.appendChild(workspace);
         });
       }
     } else {
       document.body.classList.remove("highlight-workspace");
       document.querySelectorAll(".workspace-container").forEach((container) => {
         const workspace = container.querySelector(".workspace");
+        moveDepthClass(container, workspace);
         container.parentNode.insertBefore(workspace, container);
         container.remove();
       });
