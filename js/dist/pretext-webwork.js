@@ -343,7 +343,7 @@ async function handleWW(ww_id, action) {
                 .graphtool-answer-container .graphtool-graph { margin: 0; width: 300px; height: 300px; }
                 .graphtool-answer-container .graphtool-number-line { height: 57px; }
                 .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
-            </style></head><body><main class="pretext-content problem-content" data-iframe-height="1">` + form.outerHTML + "</main></body></html>";
+            </style></head><body><main class="pretext-content problem-content" data-iframe-height="1">` + (typeof window.PTX_MACROS !== "undefined" ? `<span class="process-math" style="display:none;">${window.PTX_MACROS}</span>` : "") + form.outerHTML + "</main></body></html>";
     let iframe2;
     if (!action) {
       iframe2 = document.createElement("iframe");
