@@ -267,22 +267,6 @@
       <ref name="Interactive"/>
     </element>
   </define>
-  <define name="SideBySide" combine="choice">
-    <element name="sidebyside">
-      <ref name="SidebySideAttributes"/>
-      <oneOrMore>
-        <ref name="Slate"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="SideBySideNoNumber" combine="choice">
-    <element name="sidebyside">
-      <ref name="SidebySideAttributes"/>
-      <oneOrMore>
-        <ref name="Slate"/>
-      </oneOrMore>
-    </element>
-  </define>
   <define name="Exercises" combine="choice">
     <element name="exercises">
       <ref name="MetaDataAltTitleOptional"/>

@@ -2272,16 +2272,6 @@
 
             Figure |= element figure { MetaDataCaption, Interactive }
 
-            SideBySide |= element sidebyside {
-                SidebySideAttributes,
-                Slate+
-            }
-
-            SideBySideNoNumber |= element sidebyside {
-                SidebySideAttributes,
-                Slate+
-            }
-
             Exercises |= element exercises {
                 MetaDataAltTitleOptional,
                 IntroductionDivision?,
