@@ -1299,4 +1299,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Escape arbitrary text for a single-quoted CSS string:          -->
+<!-- backslash and apostrophe by a backslash, and a less-than by    -->
+<!-- its code point (with delimiting space).  The last means the    -->
+<!-- text can never terminate an enclosing HTML "style" element     -->
+<!-- prematurely, since an HTML parser ends such an element at a    -->
+<!-- literal "</style" no matter the surrounding CSS syntax.        -->
+<xsl:template name="css-string-escape">
+    <xsl:param name="text"/>
+    <xsl:if test="not($text = '')">
+        <xsl:variable name="first" select="substring($text, 1, 1)"/>
+        <xsl:choose>
+            <xsl:when test="$first = '\'">
+                <xsl:text>\\</xsl:text>
+            </xsl:when>
+            <xsl:when test='$first = "&apos;"'>
+                <xsl:text>\&apos;</xsl:text>
+            </xsl:when>
+            <xsl:when test="$first = '&lt;'">
+                <xsl:text>\3c </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$first"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:call-template name="css-string-escape">
+            <xsl:with-param name="text" select="substring($text, 2)"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
 </xsl:stylesheet>
