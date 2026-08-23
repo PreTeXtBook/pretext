@@ -1436,6 +1436,31 @@
       new Promise((resolve) => setTimeout(resolve, timeoutMs))
     ]);
   }
+  async function withIframesDetached(fn) {
+    const printout = getPrintout();
+    const parked = [];
+    if (printout) {
+      printout.querySelectorAll("iframe").forEach((iframe) => {
+        const rect = iframe.getBoundingClientRect();
+        const placeholder = document.createElement("div");
+        placeholder.className = "iframe-placeholder";
+        placeholder.style.width = rect.width + "px";
+        placeholder.style.height = rect.height + "px";
+        placeholder.style.display = getComputedStyle(iframe).display;
+        iframe.parentNode.insertBefore(placeholder, iframe);
+        iframe.remove();
+        parked.push({ iframe, placeholder });
+      });
+    }
+    try {
+      return await fn();
+    } finally {
+      parked.forEach(({ iframe, placeholder }) => {
+        placeholder.parentNode.insertBefore(iframe, placeholder);
+        placeholder.remove();
+      });
+    }
+  }
   function isWorkspaceRow(elem) {
     return elem.classList.contains("workspace") || elem.classList.contains("workspace-container");
   }
@@ -2263,22 +2288,24 @@
         elem.classList.remove("hidden");
       }
     });
-    if (hidden) {
-      collapseSpilloverPages(margins);
-      adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
-      await pollUntilSettled(() => {
+    await withIframesDetached(async () => {
+      if (hidden) {
         collapseSpilloverPages(margins);
         adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
-      });
-    } else {
-      adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
-      await pollUntilSettled(() => {
-        if (pageOverflows()) {
-          addSpilloverPages(margins);
-          adjustWorkspaceToFitPage({ paperSize, margins });
-        }
-      });
-    }
+        await pollUntilSettled(() => {
+          collapseSpilloverPages(margins);
+          adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+        });
+      } else {
+        adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+        await pollUntilSettled(() => {
+          if (pageOverflows()) {
+            addSpilloverPages(margins);
+            adjustWorkspaceToFitPage({ paperSize, margins });
+          }
+        });
+      }
+    });
   }
   window.addEventListener("DOMContentLoaded", async function(event2) {
     const urlParams = new URLSearchParams(window.location.search);
