@@ -484,16 +484,34 @@
     // Subject must be "SPLICE.getState.response" with the message_id echoed back.
     // State must be a JS object (not a JSON string) because Doenet checks state.cid directly.
     function respondToGetState(sourceWindow, messageId) {
+        // A request that arrives before the restore data is ready is queued and
+        // answered later, by which time its frame may be gone.  The DoenetML
+        // coordinator parks an activity the reader has scrolled well past by
+        // pointing its iframe at about:blank, and that discards the browsing
+        // context the request came from: the MessageEvent.source captured when
+        // the request arrived reads back as null (verified in Chrome; the
+        // iframe's own contentWindow stays valid, it is the captured source
+        // that goes), so posting to it throws.  Unguarded, that throw escapes
+        // the loop draining the queue and every activity still behind it
+        // loses its saved state.
+        if (!sourceWindow) {
+            console.log('[PTX-SCORM] SPLICE.getState: requesting frame is gone; skipping response');
+            return;
+        }
         var divId = resolveIframeId(sourceWindow);
         var stateObj = divId ? loadDoenetState(divId) : null;  // JS object; Doenet checks state.cid
         console.log('[PTX-SCORM] SPLICE.getState from "' + (divId || '?') + '" — ' +
                     (stateObj ? 'sending saved state (cid: ' + (stateObj.cid || '?') + ')' : 'no saved state (first visit)'));
         if (divId) _doenetSentStateAt[divId] = Date.now();
-        sourceWindow.postMessage({
-            subject:    'SPLICE.getState.response',
-            message_id: messageId,
-            state:      stateObj || null
-        }, '*');
+        try {
+            sourceWindow.postMessage({
+                subject:    'SPLICE.getState.response',
+                message_id: messageId,
+                state:      stateObj || null
+            }, '*');
+        } catch (e) {
+            console.log('[PTX-SCORM] SPLICE.getState: could not reach the requesting frame: ' + e);
+        }
     }
 
     /**
