@@ -462,6 +462,40 @@ function waitForImages(container, timeoutMs = 5000) {
     ]);
 }
 
+// Moving a row between .onepage containers makes any <iframe> inside it
+// (e.g. a YouTube video or GeoGebra applet) reload, even when it lands back
+// in the same parent.  A single settle loop (repagination/spillover-collapse
+// running repeatedly until layout stabilizes) can move a row several times,
+// so detach every iframe -- swapped for a same-sized placeholder, to keep
+// height measurements accurate -- before a batch of repagination work and
+// reattach afterward, capping each toggle at reloading a video once instead
+// of once per move.
+async function withIframesDetached(fn) {
+    const printout = getPrintout();
+    const parked = [];
+    if (printout) {
+        printout.querySelectorAll('iframe').forEach(iframe => {
+            const rect = iframe.getBoundingClientRect();
+            const placeholder = document.createElement('div');
+            placeholder.className = 'iframe-placeholder';
+            placeholder.style.width = rect.width + 'px';
+            placeholder.style.height = rect.height + 'px';
+            placeholder.style.display = getComputedStyle(iframe).display;
+            iframe.parentNode.insertBefore(placeholder, iframe);
+            iframe.remove();
+            parked.push({iframe, placeholder});
+        });
+    }
+    try {
+        return await fn();
+    } finally {
+        parked.forEach(({iframe, placeholder}) => {
+            placeholder.parentNode.insertBefore(iframe, placeholder);
+            placeholder.remove();
+        });
+    }
+}
+
 // The workspace divs in, or at, an element.  In a worksheet a workspace is
 // always nested inside an exercise or task, but a project-like standalone
 // printout can carry @workspace on itself, and then the block *is* the
@@ -1949,30 +1983,36 @@ async function pollUntilSettled(settle, {timeoutMs = 2000, intervalMs = 100, sta
 // it started from. Collapsing always folds back toward that one base, and
 // showing only ever pushes overflow forward onto a new page, so hiding
 // reliably undoes exactly what showing did.
+//
+// Runs under withIframesDetached() since the repagination and collapse work
+// below can move a row -- and any iframe inside it -- several times over the
+// course of one toggle.
 async function applySolutionVisibility(solutionType, hidden, {paperSize, margins}) {
     document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
         if (hidden) { elem.classList.add("hidden"); }
         else { elem.classList.remove("hidden"); }
     });
-    if (hidden) {
-        collapseSpilloverPages(margins);
-        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-        // Content just hidden (e.g. a long solution) can take a moment to
-        // finish settling into its final, compact size, so an immediate
-        // measurement can miss a page that's actually able to collapse.
-        await pollUntilSettled(() => {
+    await withIframesDetached(async () => {
+        if (hidden) {
             collapseSpilloverPages(margins);
             adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-        });
-    } else {
-        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
-        await pollUntilSettled(() => {
-            if (pageOverflows()) {
-                addSpilloverPages(margins);
-                adjustWorkspaceToFitPage({paperSize, margins});
-            }
-        });
-    }
+            // Content just hidden (e.g. a long solution) can take a moment to
+            // finish settling into its final, compact size, so an immediate
+            // measurement can miss a page that's actually able to collapse.
+            await pollUntilSettled(() => {
+                collapseSpilloverPages(margins);
+                adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+            });
+        } else {
+            adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+            await pollUntilSettled(() => {
+                if (pageOverflows()) {
+                    addSpilloverPages(margins);
+                    adjustWorkspaceToFitPage({paperSize, margins});
+                }
+            });
+        }
+    });
 }
 
 // Event listener for page load to handle print preview setup
