@@ -193,6 +193,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </li>
                 </dl></p>
             </slide>
+
+            <slide>
+                <title>A Bare List</title>
+
+                <p>A list may stand bare on a slide, outside of any paragraph<mdash/>lighter markup for a genre that is mostly lists.</p>
+
+                <!-- this list is authored bare: no "p" wraps it -->
+                <ul>
+                    <li>This list has no <tag>p</tag> around it in the source</li>
+                    <li>Legal at the top level of a <tag>slide</tag> or <tag>subslide</tag>, and only there</li>
+                    <li>A nested list still lives inside a paragraph</li>
+                    <li>Rendered identically to the wrapped form</li>
+                </ul>
+            </slide>
         </section>
 
         <section>

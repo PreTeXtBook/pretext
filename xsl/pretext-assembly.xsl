@@ -3611,6 +3611,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- A list ("ol", "ul", "dl") may stand bare at the top level   -->
+<!-- of a "slide" or "subslide", an authoring convenience        -->
+<!-- particular to the slideshow genre.  Internally we keep the  -->
+<!-- main grammar's single shape - a list lives within a         -->
+<!-- paragraph - so every later consumer of the tree meets only  -->
+<!-- one form.  The manufactured paragraph does not survive to   -->
+<!-- output as an HTML "p": the Reveal.js conversion explodes    -->
+<!-- any paragraph containing displays, and for a paragraph that -->
+<!-- is exactly one list the explosion is precisely the bare     -->
+<!-- list again.  A @pause stays on the list itself, where the   -->
+<!-- list item templates consult it.                             -->
+<xsl:template match="slide/ol|slide/ul|slide/dl|subslide/ol|subslide/ul|subslide/dl" mode="repair">
+    <p>
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="repair"/>
+        </xsl:copy>
+    </p>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->

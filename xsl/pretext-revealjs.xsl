@@ -525,6 +525,107 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </p>
 </xsl:template>
 
+<!-- A paragraph containing displays - lists ("ol", "ul", "dl"),   -->
+<!-- display mathematics ("md"), or code display ("cd") - cannot   -->
+<!-- be realized as a single HTML "p".  Each display renders as    -->
+<!-- an element that HTML forbids inside a "p" (a list, a "pre",   -->
+<!-- a "div" of online mathematics), and a browser recovers by     -->
+<!-- closing the paragraph at the display, leaving the remainder   -->
+<!-- orphaned outside any paragraph.  So, just as in the HTML      -->
+<!-- conversion, such a paragraph is exploded: each maximal run    -->
+<!-- of inline content becomes a "p" (an empty run produces        -->
+<!-- nothing at all), with the displays standing in between.       -->
+<!-- (With embedded mathematics a display is a "span", legal       -->
+<!-- within a "p" and block-level only by styling, but it is       -->
+<!-- exploded identically: the presentation is the same and the    -->
+<!-- template stays uniform.)                                      -->
+<!--                                                               -->
+<!-- This realization is demanded by the output format alone; it   -->
+<!-- is not the undoing of upstream normalization.  An author may  -->
+<!-- place a display mid-paragraph, so the explosion is necessary  -->
+<!-- even when no paragraph is ever manufactured.  Conversely,     -->
+<!-- when the assembly wraps a bare list on a "slide" in a         -->
+<!-- paragraph, so the internal tree presents the main grammar's   -->
+<!-- one shape to every consumer, that paragraph's inline runs     -->
+<!-- are all empty and the exploded output is exactly the bare     -->
+<!-- list again.  The two maneuvers are complementary: normalize   -->
+<!-- toward the grammar internally, adapt to the medium at output. -->
+<!--                                                               -->
+<!-- A paused paragraph must advance as a single unit, so its      -->
+<!-- exploded parts ride together in one container carrying the    -->
+<!-- "fragment" class.                                             -->
+<xsl:template match="p[ol|ul|dl|md[mrow]|cd]">
+    <xsl:choose>
+        <xsl:when test="@pause = 'yes'">
+            <div class="fragment">
+                <xsl:apply-templates select="." mode="exploded-paragraph"/>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="exploded-paragraph"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The explosion itself, patterned on the HTML conversion's      -->
+<!-- template for a "p" with displays, simplified: no HTML id, no  -->
+<!-- permalink, no knowl machinery on the pieces of a slide.       -->
+<xsl:template match="p" mode="exploded-paragraph">
+    <xsl:variable name="displays" select="ol|ul|dl|md[mrow]|cd"/>
+    <!-- content prior to the first display; if empty -->
+    <!-- we do not manufacture an empty paragraph     -->
+    <xsl:variable name="initial" select="$displays[1]/preceding-sibling::*|$displays[1]/preceding-sibling::text()"/>
+    <xsl:variable name="initial-content">
+        <xsl:apply-templates select="$initial"/>
+    </xsl:variable>
+    <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+    <xsl:if test="not($initial-content = '')">
+        <p>
+            <xsl:copy-of select="$initial-content"/>
+        </p>
+    </xsl:if>
+    <!-- for each display: the display itself, then trailing content -->
+    <xsl:for-each select="$displays">
+        <xsl:apply-templates select="."/>
+        <xsl:variable name="rightward" select="following-sibling::*|following-sibling::text()"/>
+        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::md[mrow] or self::cd][1]"/>
+        <xsl:choose>
+            <xsl:when test="$next-display">
+                <xsl:variable name="leftward" select="$next-display/preceding-sibling::*|$next-display/preceding-sibling::text()"/>
+                <!-- device below forms set intersection -->
+                <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]"/>
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$common"/>
+                </xsl:variable>
+                <xsl:if test="not($common-content = '')">
+                    <p>
+                        <!-- interstitial content arising from an authored -->
+                        <!-- "intertext" is marked, as in the HTML         -->
+                        <!-- conversion, for styling purposes              -->
+                        <xsl:if test="$common[self::pi:intertext]">
+                            <xsl:attribute name="class">
+                                <xsl:text>intertext</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:copy-of select="$common-content"/>
+                    </p>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- finish the trailing content, if nonempty -->
+                <xsl:variable name="common-content">
+                    <xsl:apply-templates select="$rightward"/>
+                </xsl:variable>
+                <xsl:if test="not($common-content = '')">
+                    <p>
+                        <xsl:copy-of select="$common-content"/>
+                    </p>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+
 <!-- Images get wrapped in a div with @class="fragment" if they are  -->
 <!-- paused                                                          -->
 <xsl:template match="image[not(ancestor::sidebyside) and (@pause='yes')]">
