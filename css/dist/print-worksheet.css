@@ -2142,31 +2142,28 @@ article.printout::after {
   margin-top: 1em;
   border-top: 1px dashed lightgray;
 }
-.solutions {
-  margin-top: 1em;
-}
-.solutions .solution-like.born-hidden-knowl {
+.solution-like.born-hidden-knowl {
   margin-top: 1em;
   padding: unset;
 }
-.solutions .solution-like.born-hidden-knowl h5 {
+.solution-like.born-hidden-knowl h5 {
   font-weight: bolder;
   display: inline;
   font-size: 1em;
 }
-.solutions .solution-like.born-hidden-knowl > div {
+.solution-like.born-hidden-knowl > div {
   display: inline;
 }
-.solutions .solution-like.born-hidden-knowl .knowl__content {
+.solution-like.born-hidden-knowl .knowl__content {
   display: inline;
   border: none;
   background-color: unset;
   padding: 0;
 }
-.solutions .solution-like.born-hidden-knowl .knowl__content > :first-child {
+.solution-like.born-hidden-knowl .knowl__content > :first-child {
   display: inline;
 }
-.solutions .solution-like.born-hidden-knowl .knowl__content .para {
+.solution-like.born-hidden-knowl .knowl__content .para {
   margin-top: 0.5em;
 }
 .code-inline {
@@ -2188,14 +2185,23 @@ article.printout::after {
   margin-top: 0;
 }
 section article.task,
-.conclusion.subtask {
+.conclusion.subtask,
+.solution-like.subtask,
+.workspace.subtask,
+.workspace-container.subtask {
   margin-left: 20px;
 }
 section article.subtask,
-.conclusion.subsubtask {
+.conclusion.subsubtask,
+.solution-like.subsubtask,
+.workspace.subsubtask,
+.workspace-container.subsubtask {
   margin-left: 40px;
 }
-section article.subsubtask {
+section article.subsubtask,
+.solution-like.subsubsubtask,
+.workspace.subsubsubtask,
+.workspace-container.subsubsubtask {
   margin-left: 60px;
 }
 section.worksheet > .heading,
