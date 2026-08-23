@@ -94,6 +94,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         \usepackage{circuitikz}             % for Virgil P's worksheet
         \usepackage{nicematrix}             % for multi-run latex-image (label="latex-three-pass")
         \usepackage{siunitx}                % swim speeds in shark attack image
+        \usepackage{qrcode}                 % QR code from a URL, placed in a TikZ picture
         </latex-image-preamble>
         <!--
         The Sage Notebook has its own interface and worksheet list.
@@ -3930,6 +3931,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title><latex/> images</title>
                 <idx sortby="latex"><latex/> image</idx>
                 <idx><h>image</h><h><latex/> image</h></idx>
+                <idx>QR code</idx>
 
                 <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="https://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex/> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
 
@@ -4262,6 +4264,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 \end{axis}
                             \end{tikzpicture}
                         </latex-image>
+                    </image>
+                </figure>
+
+                <p>A QR code is a way to send a reader of a printed copy off to an online resource.  The <c>qrcode</c> package, by Anders O. F. Hendrickson, will draw one from a <init>URL</init> with no other graphics package required (<url href="https://ctan.org/pkg/qrcode" visual="ctan.org/pkg/qrcode"/>).  It is loaded in <c>docinfo/latex-image-preamble</c>, and here the code sits on a white rectangle drawn by TikZ, so it stays readable whatever color the page behind it might be.  The automatic cropping of a <latex/> image trims away the excess, so there is no need to size that rectangle carefully.  The <c>nolinks</c> option keeps the code black<mdash/>without it, the <c>hyperref</c> package would also make the code a live link in PDF output, colored like any other link.  This example is courtesy of Lenore Horner.</p>
+
+                <figure xml:id="figure-tikz-qrcode">
+                    <caption>A QR code for the <c>example.com</c> website, drawn by TikZ</caption>
+                    <image xml:id="tikz-qrcode" width="30%">
+                        <shortdescription>
+                            a QR code holding the address of the example.com website
+                        </shortdescription>
+                        <latex-image>
+                        \begin{tikzpicture}
+                        \fill[white] (-1.4,-1.4) rectangle (1.4,1.4);
+                        \node at (0,0) {\qrcode[nolinks]{https://example.com}};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p><pretext/> also makes QR codes of its own, for the print version of a video or an interactive element, so a reader holding paper can still reach the live version.  The <c>pretext</c> script does that with the <c>qrcode</c> Python package, by Lincoln Loop, distributed under a BSD license (<url href="https://pypi.org/project/qrcode/" visual="pypi.org/project/qrcode/"/>).  You can drive that same package yourself, as in the short program below.  Notice that its result is a <init>PNG</init> file, which we made ahead of time and stored with the other images of this document, since the <c>pretext</c> script does not run an author's programs.  A <init>PNG</init> is the robust choice here, since every conversion will use it as-is.</p>
+
+                <listing xml:id="listing-qrcode-python">
+                    <title>A Python driver for the <c>qrcode</c> package</title>
+                    <program language="python">
+                        <code>
+                        import qrcode
+
+                        code = qrcode.QRCode(box_size=10, border=4)
+                        code.add_data("https://example.com")
+                        image = code.make_image()
+                        image.save("qrcode-example-website.png")
+                        </code>
+                    </program>
+                </listing>
+
+                <figure xml:id="figure-python-qrcode">
+                    <caption>A QR code for the same website, made by the Python <c>qrcode</c> package</caption>
+                    <image source="images/qrcode-example-website.png" width="30%">
+                        <shortdescription>
+                            a QR code holding the address of the example.com website
+                        </shortdescription>
                     </image>
                 </figure>
 
