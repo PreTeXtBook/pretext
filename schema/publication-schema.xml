@@ -539,13 +539,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     calcplot3d |
                     circuitjs |
                     d3 |
-                    doenetml |
                     iframe |
                     javascript |
                     jsxgraph |
                     sage
                 ) {
                     attribute resize-behavior { "fixed-height" | "responsive" }?
+                }
+                | Doenetml
+
+            # DoenetML activities are additionally managed on the page by a
+            # "coordinator" script, which starts them a few at a time as the
+            # reader nears them and puts away the ones left well behind.
+            Doenetml =
+                element doenetml {
+                    attribute resize-behavior { "fixed-height" | "responsive" }?,
+                    attribute coordinator { "yes" | "no" }?,
+                    attribute shared-core-workers { "yes" | "no" }?,
+                    attribute max-live-viewers { xsd:positiveInteger }?,
+                    attribute max-concurrent-boots { xsd:positiveInteger }?
                 }
 
             Knowls =

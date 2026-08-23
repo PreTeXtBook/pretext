@@ -960,25 +960,70 @@
     </element>
   </define>
   <define name="InteractiveTypes">
-    <element>
-      <choice>
-        <name>geogebra</name>
-        <name>desmos</name>
-        <name>calcplot3d</name>
-        <name>circuitjs</name>
-        <name>d3</name>
-        <name>doenetml</name>
-        <name>iframe</name>
-        <name>javascript</name>
-        <name>jsxgraph</name>
-        <name>sage</name>
-      </choice>
+    <choice>
+      <element>
+        <choice>
+          <name>geogebra</name>
+          <name>desmos</name>
+          <name>calcplot3d</name>
+          <name>circuitjs</name>
+          <name>d3</name>
+          <name>iframe</name>
+          <name>javascript</name>
+          <name>jsxgraph</name>
+          <name>sage</name>
+        </choice>
+        <optional>
+          <attribute name="resize-behavior">
+            <choice>
+              <value>fixed-height</value>
+              <value>responsive</value>
+            </choice>
+          </attribute>
+        </optional>
+      </element>
+      <ref name="Doenetml"/>
+    </choice>
+  </define>
+  <!--
+    DoenetML activities are additionally managed on the page by a
+    "coordinator" script, which starts them a few at a time as the
+    reader nears them and puts away the ones left well behind.
+  -->
+  <define name="Doenetml">
+    <element name="doenetml">
       <optional>
         <attribute name="resize-behavior">
           <choice>
             <value>fixed-height</value>
             <value>responsive</value>
           </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="coordinator">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="shared-core-workers">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="max-live-viewers">
+          <data type="positiveInteger"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="max-concurrent-boots">
+          <data type="positiveInteger"/>
         </attribute>
       </optional>
     </element>
