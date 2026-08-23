@@ -27,7 +27,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <exercises xml:id="exercises-groups">
     <title>Exercises</title>
 
-    <exercise number="1">
+    <exercise>
         <statement>
             <p>Find all <m>x \in {\mathbb Z}</m> satisfying each of the following equations.</p>
             <p><ol marker="(a)" cols="2">
@@ -44,7 +44,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="2">
+    <exercise>
     <statement>
         <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.</p>
         <p><ol marker="(a)" cols="2">
@@ -92,25 +92,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </hint>
     </exercise>
 
-    <exercise number="3" xml:id="exercise-groups-rectangle-symmetries">
+    <exercise xml:id="exercise-groups-rectangle-symmetries">
         <statement>
             <p>Write out Cayley tables for groups formed by the symmetries of a rectangle and for <m>({\mathbb Z}_4, +)</m>. How many elements are in each group? Are the groups the same? Why or why not? </p>
         </statement>
     </exercise>
 
-    <exercise number="4">
+    <exercise>
         <statement>
             <p>Describe the symmetries of a rhombus and prove that the set of symmetries forms a group. Give Cayley tables for both the symmetries of a rectangle and the symmetries of a rhombus. Are the symmetries of a rectangle and those of a rhombus the same?</p>
         </statement>
     </exercise>
 
-    <exercise number="5">
+    <exercise>
         <statement>
             <p>Describe the symmetries of a square and prove that the set of symmetries is a group. Give a Cayley table for the symmetries. How many ways can the vertices of a square be permuted? Is each permutation necessarily a symmetry of the square?  The symmetry group of the square is denoted by <m>D_4</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="6">
+    <exercise>
         <statement>
             <p>Give a multiplication table for the group <m>U(12)</m>.</p>
         </statement>
@@ -124,13 +124,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
     </exercise>
 
-    <exercise number="7">
+    <exercise>
         <statement>
             <p>Let <m>S = {\mathbb R} \setminus \{ -1 \}</m> and define a binary operation on <m>S</m> by <m>a \ast b = a + b + ab</m>. Prove that <m>(S, \ast)</m> is an abelian group.</p>
         </statement>
     </exercise>
 
-    <exercise number="8">
+    <exercise>
         <statement>
             <p>Give an example of two elements <m>A</m> and <m>B</m> in <m>GL_2({\mathbb R})</m> with <m>AB \neq BA</m>.</p>
         </statement>
@@ -139,7 +139,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="9">
+    <exercise>
         <statement>
         <p>Prove that the product of two matrices in <m>SL_2({\mathbb R})</m> has determinant one.</p>
         </statement>
@@ -147,7 +147,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- todo: Check references to Heisenberg group -->
 
-    <exercise number="10">
+    <exercise>
         <statement>
             <p>Prove that the set of matrices of the form
                 <md>\begin{pmatrix}
@@ -176,13 +176,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <exercise number="11">
+    <exercise>
         <statement>
             <p>Prove that <m>\det(AB) = \det(A) \det(B)</m> in <m>GL_2({\mathbb R})</m>. Use this result to show that the binary operation in the group <m>GL_2({\mathbb R})</m> is closed; that is, if <m>A</m> and <m>B</m> are in <m>GL_2({\mathbb R})</m>, then <m>AB \in GL_2({\mathbb R})</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="12">
+    <exercise>
         <statement>
             <p>Let <m>{\mathbb Z}_2^n = \{ (a_1, a_2, \ldots, a_n) : a_i \in {\mathbb Z}_2 \}</m>. Define a binary operation on <m>{\mathbb Z}_2^n</m> by
                 <md>(a_1, a_2, \ldots, a_n) + (b_1, b_2, \ldots, b_n) = (a_1 + b_1, a_2 + b_2, \ldots, a_n + b_n).</md>
@@ -190,19 +190,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <exercise number="13">
+    <exercise>
         <statement>
             <p>Show that <m>{\mathbb R}^{\ast} = {\mathbb R} \setminus \{0 \}</m> is a group under the operation of multiplication. </p>
         </statement>
     </exercise>
 
-    <exercise number="14">
+    <exercise>
         <statement>
             <p>Given the groups  <m>{\mathbb R}^{\ast}</m> and <m>{\mathbb Z}</m>, let <m>G = {\mathbb R}^{\ast}  \times {\mathbb Z}</m>. Define a binary operation <m>\circ</m> on <m>G</m> by <m>(a,m) \circ (b,n) = (ab, m + n)</m>. Show that <m>G</m> is a group under this operation.</p>
         </statement>
     </exercise>
 
-    <exercise number="15">
+    <exercise>
         <statement>
             <p>Prove or disprove that every group containing six elements is abelian.</p>
         </statement>
@@ -211,7 +211,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="16">
+    <exercise>
         <statement>
             <p>Give a specific example of some group <m>G</m> and elements <m>g, h \in G</m> where <m>(gh)^n \neq g^nh^n</m>.</p>
         </statement>
@@ -220,7 +220,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="17">
+    <exercise>
         <statement>
             <p>Give an example of three different groups with eight elements. Why are the groups different?</p>
         </statement>
@@ -229,7 +229,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="18">
+    <exercise>
         <statement>
             <p>Show that there are <m>n!</m> permutations of a set containing <m>n</m> items. </p>
         </statement>
@@ -243,7 +243,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="19">
+    <exercise>
         <statement>
             <p>Show that 
                 <md>0 + a  \equiv a + 0  \equiv a \pmod{ n }</md>
@@ -251,40 +251,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <exercise number="20">
+    <exercise>
         <statement>
             <p>Prove that there is  a multiplicative identity for the integers modulo <m>n</m>: 
                 <md>a \cdot  1   \equiv  a \pmod{n}.</md></p>
         </statement>
     </exercise>
 
-    <exercise number="21">
+    <exercise>
         <statement>
             <p>For each <m>a \in {\mathbb Z}_n</m> find an element <m>b \in {\mathbb Z}_n</m> such that
                 <md>a + b \equiv b + a  \equiv 0 \pmod{ n}.</md></p>
         </statement>
     </exercise>
 
-    <exercise number="22">
+    <exercise>
         <statement>
             <p>Show that addition and multiplication mod $n$ are well defined operations.  That is, show that the operations do not depend on the choice of the representative from the equivalence classes mod <m>n</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="23">
+    <exercise>
         <statement>
             <p>Show that addition and multiplication mod <m>n</m> are associative operations.</p>
         </statement>
     </exercise>
 
-    <exercise number="24">
+    <exercise>
         <statement>
             <p>Show that multiplication distributes over addition modulo <m>n</m>:
                 <md>a(b  + c)  \equiv ab + ac  \pmod{n}.</md></p>
         </statement>
     </exercise>
 
-    <exercise number="25">
+    <exercise>
         <statement>
             <p>Let <m>a</m> and <m>b</m> be elements in a group <m>G</m>.  Prove that <m>ab^na^{-1} = (aba^{-1})^n</m> for <m>n \in \mathbb Z</m>. </p>
         </statement>
@@ -297,37 +297,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="26">
+    <exercise>
         <statement>
             <p>Let <m>U(n)</m> be the group of units in <m>{\mathbb Z}_n</m>. If <m>n \gt 2</m>, prove that there is an element <m>k \in U(n)</m> such that <m>k^2 = 1</m> and <m>k \neq 1</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="27">
+    <exercise>
         <statement>
             <p>Prove that the inverse of <m>g _1 g_2 \cdots g_n</m> is <m>g_n^{-1} g_{n-1}^{-1} \cdots g_1^{-1}</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="28">
+    <exercise>
         <statement>
             <p>Prove the remainder of <xref ref="proposition-group-equations"/>: if <m>G</m> is a group and <m>a, b \in G</m>, then the equation <m>xa = b</m> has a unique solution in <m>G</m>. </p>
         </statement>
     </exercise>
 
-    <exercise number="29">
+    <exercise>
         <statement>
             <p>Prove <xref ref="theorem-exponent-laws"/>.</p>
         </statement>
     </exercise>
 
-    <exercise number="30">
+    <exercise>
         <statement>
             <p>Prove the right and left cancellation laws for a group <m>G</m>; that is, show that in the group <m>G</m>, <m>ba = ca</m> implies <m>b = c</m> and <m>ab = ac</m> implies <m>b = c</m> for elements <m>a, b, c \in G</m>.  </p>
         </statement>
     </exercise>
 
-    <exercise number="31">
+    <exercise>
         <statement>
             <p>Show that if <m>a^2 = e</m> for all elements <m>a</m> in a group <m>G</m>, then <m>G</m> must be abelian. </p>
         </statement>
@@ -336,25 +336,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="32">
+    <exercise>
         <statement>
             <p>Show that if <m>G</m> is a finite group of even order, then there is an <m>a \in G</m> such that <m>a</m> is not the identity and <m>a^2 = e</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="33">
+    <exercise>
         <statement>
             <p>Let <m>G</m> be a group and suppose that <m>(ab)^2 = a^2b^2</m> for all <m>a</m> and <m>b</m> in <m>G</m>.  Prove that <m>G</m> is an abelian group. </p>
         </statement>
     </exercise>
 
-    <exercise number="34">
+    <exercise>
         <statement>
             <p>Find all the subgroups of <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m>. Use this information to show that <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m> is not the same group as <m>{\mathbb Z}_9</m>.  (See <xref ref="example-groups-z2xz2"/>  for a short description of the product of groups.)</p>
         </statement>
     </exercise>
 
-    <exercise number="35">
+    <exercise>
         <statement>
             <p>Find all the subgroups of the symmetry group of an equilateral triangle.</p>
         </statement>
@@ -363,31 +363,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="36">
+    <exercise>
         <statement>
             <p>Compute the subgroups of the symmetry group of a square.</p>
         </statement>
     </exercise>
 
-    <exercise number="37">
+    <exercise>
         <statement>
             <p>Let <m>H = \{2^k : k \in {\mathbb Z} \}</m>. Show that <m>H</m> is a subgroup of <m>{\mathbb Q}^*</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="38">
+    <exercise>
         <statement>
             <p>Let <m>n = 0, 1, 2, \ldots</m> and <m>n {\mathbb Z} = \{ nk : k \in  {\mathbb Z} \}</m>. Prove that <m>n {\mathbb Z}</m> is a subgroup of <m>{\mathbb Z}</m>.  Show that these subgroups are the only subgroups of <m>\mathbb{Z}</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="39" xml:id="exercise-groups-circle-group">
+    <exercise xml:id="exercise-groups-circle-group">
         <statement>
             <p>Let <m>{\mathbb T} = \{ z \in  {\mathbb C}^* : |z| =1 \}</m>. Prove that <m>{\mathbb T}</m> is a subgroup of <m>{\mathbb C}^*</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="40">
+    <exercise>
         <statement>
             <p><md>\begin{pmatrix}
                 \cos \theta &amp; -\sin \theta \\
@@ -397,7 +397,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <exercise number="41">
+    <exercise>
         <statement>
             <p>Prove that
                 <md>G = \{ a + b \sqrt{2} : a, b \in {\mathbb Q} \text{ and } a \text{ and } b \text{ are not both zero} \}</md>
@@ -408,7 +408,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="42">
+    <exercise>
         <statement>
             <p>Let <m>G</m> be the group of <m>2 \times 2</m> matrices under addition and
                 <md>H =
@@ -423,25 +423,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <exercise number="43">
+    <exercise>
         <statement>
             <p>Prove or disprove: <m>SL_2( {\mathbb Z} )</m>, the set of <m>2 \times 2</m> matrices with integer entries and determinant one, is a subgroup of <m>SL_2( {\mathbb R} )</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="44">
+    <exercise>
         <statement>
             <p>List the subgroups of the quaternion group, <m>Q_8</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="45">
+    <exercise>
         <statement>
             <p>Prove that the intersection of two subgroups of a group <m>G</m> is also a subgroup of <m>G</m>.</p>
         </statement>
     </exercise>
 
-    <exercise number="46">
+    <exercise>
         <statement>
             <p>Prove or disprove:  If <m>H</m> and <m>K</m> are subgroups of a group <m>G</m>, then <m>H \cup K</m> is a subgroup of <m>G</m>. </p>
         </statement>
@@ -450,20 +450,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="47">
+    <exercise>
         <statement>
             <p>Prove or disprove: If <m>H</m> and <m>K</m> are subgroups of a group <m>G</m>, then <m>H K = \{hk : h \in H \text{ and } k \in K \}</m> is a subgroup of <m>G</m>. What if <m>G</m> is abelian?</p>
         </statement>
     </exercise>
 
-    <exercise number="48">
+    <exercise>
         <statement>
             <p>Let <m>G</m> be a group and <m>g \in G</m>. Show that
             <md>Z(G) = \{ x \in G : gx = xg \text{ for all } g \in G \}</md> is a subgroup of <m>G</m>. This subgroup is called the <term>center</term> of <m>G</m>. <notation><usage><m>Z(G)</m></usage><description>the center of a group</description></notation></p>
         </statement>
     </exercise>
 
-    <exercise number="49">
+    <exercise>
         <statement>
             <p>Let <m>a</m> and <m>b</m> be elements of a group <m>G</m>. If <m>a^4b = ba</m> and <m>a^3 = e</m>, prove that <m>ab = ba</m>.</p>
         </statement>
@@ -472,7 +472,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </hint>
     </exercise>
 
-    <exercise number="50">
+    <exercise>
         <statement>
             <p>Give an example of an infinite group in which every nontrivial subgroup is infinite.</p>
         </statement>
@@ -481,7 +481,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Todo: Move the old Exercise 50 to struct.xml -->
 
     <!--
-    <exercise number="50">
+    <exercise>
         <statement>
             <p>Give an example of an infinite group in which every proper subgroup is finite.</p>
         </statement>
@@ -491,19 +491,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </exercise>
     -->
 
-    <exercise number="51">
+    <exercise>
         <statement>
             <p>If <m>xy = x^{-1} y^{-1}</m> for all <m>x</m> and <m>y</m> in <m>G</m>, prove that <m>G</m> must be abelian.</p>
         </statement>
     </exercise>
 
-    <exercise number="52">
+    <exercise>
         <statement>
             <p>Prove or disprove: Every proper subgroup of an nonabelian group is nonabelian.</p>
         </statement>
     </exercise>
 
-    <exercise number="53">
+    <exercise>
         <statement>
             <p>Let <m>H</m> be a subgroup of <m>G</m> and
                 <md>C(H) = \{ g \in G : gh = hg \text{ for all } h \in H \}.</md>
@@ -511,7 +511,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <exercise number="54">
+    <exercise>
         <statement>
             <p>Let <m>H</m> be a subgroup of <m>G</m>.  If <m>g \in G</m>, show that <m>gHg^{-1} =  \{g^{-1}hg : h\in H\}</m> is also a subgroup of <m>G</m>.</p>
         </statement>
@@ -524,7 +524,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </p>
         </introduction>
 
-        <exercise number="55">
+        <exercise>
             <statement>
                 <p>
                     <m>C_n</m>, <m>n</m> odd.
@@ -537,7 +537,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </answer>
         </exercise>
 
-        <exercise number="56">
+        <exercise>
             <statement>
                 <p>
                     <m>C_n</m>, <m>n</m> even.
@@ -550,7 +550,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </answer>
         </exercise>
 
-        <exercise number="57">
+        <exercise>
             <statement>
                 <p>
                     <m>D_n</m>, <m>n</m> odd.
@@ -563,7 +563,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </answer>
         </exercise>
 
-        <exercise number="58">
+        <exercise>
             <statement>
                 <p>
                     <m>D_n</m>, <m>n</m> even.
@@ -577,7 +577,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </exercise>
     </exercisegroup>
 
-    <exercise number="59">
+    <exercise>
         <introduction>
             <p>
                 This is an odd-numbered exercise with tasks.
@@ -628,7 +628,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </task>
     </exercise>
 
-    <exercise number="60">
+    <exercise>
         <introduction>
             <p>
                 This is an even-numbered exercise with tasks.

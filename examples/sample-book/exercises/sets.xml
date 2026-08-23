@@ -36,7 +36,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </p>
         </introduction>
 
-        <exercise number="1">
+        <exercise>
             <statement>
                 <p>Suppose that<md>
                     <mrow>A &amp; = \{ x : x \in \mathbb N \text{ and } x \text{ is even} \},</mrow>
@@ -57,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint> -->
         </exercise>
 
-        <exercise number="2">
+        <exercise>
             <statement>
                 <p>If <m>A = \{ a, b, c \}</m>, <m>B = \{ 1, 2, 3 \}</m>, <m>C = \{ x \}</m>, and <m>D = \emptyset</m>, list all of the elements in each of the following sets.</p>
                 <p><ol marker="(a)" cols="2">
@@ -72,25 +72,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="3">
+        <exercise>
             <statement>
                 <p>Find an example of two nonempty sets <m>A</m> and <m>B</m> for which <m>A \times B = B \times A</m> is true.</p>
             </statement>
         </exercise>
 
-        <exercise number="4">
+        <exercise>
             <statement>
                 <p>Prove  <m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="5">
+        <exercise>
             <statement>
                 <p>Prove <m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="6">
+        <exercise>
             <statement>
                 <p>Prove <m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>.</p>
             </statement>
@@ -99,25 +99,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="7">
+        <exercise>
             <statement>
                 <p>Prove <m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="8">
+        <exercise>
             <statement>
                 <p>Prove  <m>A \subset B</m> if and only if <m>A \cap B = A</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="9">
+        <exercise>
             <statement>
                 <p>Prove <m>(A \cap B)' = A' \cup B'</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="10">
+        <exercise>
             <statement>
                 <p>Prove  <m>A \cup B = (A \cap B) \cup (A \setminus B) \cup (B \setminus A)</m>.</p>
             </statement>
@@ -126,25 +126,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="11">
+        <exercise>
             <statement>
                 <p>Prove  <m>(A \cup B) \times C = (A \times C ) \cup (B \times C)</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="12">
+        <exercise>
             <statement>
                 <p>Prove  <m>(A \cap B) \setminus B = \emptyset</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="13">
+        <exercise>
             <statement>
                 <p>Prove  <m>(A \cup B) \setminus B = A \setminus B</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="14">
+        <exercise>
             <statement>
                 <p>Prove  <m>A \setminus (B \cup C) = (A \setminus B) \cap (A \setminus C)</m>.</p>
             </statement>
@@ -162,19 +162,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </p>
         </introduction>
 
-        <exercise number="15">
+        <exercise>
             <statement>
                 <p>Prove  <m>A \cap (B \setminus C) = (A \cap B) \setminus (A \cap C)</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="16">
+        <exercise>
             <statement>
                 <p>Prove  <m>(A \setminus B) \cup (B \setminus A) = (A \cup B) \setminus (A \cap B)</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="17">
+        <exercise>
             <statement>
                 <p>Which of the following relations <m>f: {\mathbb Q} \rightarrow {\mathbb Q}</m> define a mapping? In each case, supply a reason why <m>f</m> is or is not a mapping.</p>
                 <p><ol marker="(a)" cols="2">
@@ -190,7 +190,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint> -->
         </exercise>
 
-        <exercise number="18">
+        <exercise>
             <statement>
                 <p>Determine which of the following functions are one-to-one and which are onto.  If the function is not onto, determine its range.</p>
                 <p><ol marker="(a)">
@@ -205,13 +205,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="19">
+        <exercise>
             <statement>
                 <p>Let <m>f :A \rightarrow B</m> and <m>g : B \rightarrow C</m> be invertible mappings; that is, mappings such that <m>f^{-1}</m> and <m>g^{-1}</m> exist. Show that <m>(g \circ f)^{-1} =f^{-1} \circ g^{-1}</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="20">
+        <exercise>
             <statement>
                 <p><ol marker="(a)">
                     <li><p>Define a function <m>f: {\mathbb N} \rightarrow {\mathbb N}</m> that is one-to-one but not onto.</p></li>
@@ -223,13 +223,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="21">
+        <exercise>
             <statement>
                 <p>Prove the relation defined on <m>{\mathbb R}^2</m> by <m>(x_1, y_1 ) \sim (x_2, y_2)</m> if <m>x_1^2 + y_1^2 = x_2^2 + y_2^2</m> is  an equivalence relation.</p>
             </statement>
         </exercise>
 
-        <exercise number="22">
+        <exercise>
             <statement>
                 <p>Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be maps.</p>
                 <p><ol marker="(a)">
@@ -245,7 +245,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="23">
+        <exercise>
             <statement>
                 <p>Define a function on the real numbers by
                     <md>f(x) = \frac{x + 1}{x - 1}.</md>
@@ -257,7 +257,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint> -->
         </exercise>
 
-        <exercise number="24">
+        <exercise>
             <statement>
                 <p>Let <m>f: X \rightarrow Y</m> be a map with <m>A_1, A_2 \subset X</m> and <m>B_1, B_2 \subset Y</m>.</p>
                 <p><ol marker="(a)">
@@ -273,7 +273,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="25">
+        <exercise>
             <statement>
                 <p>Determine whether or not the following relations are equivalence relations on the given set.  If the relation is an equivalence relation, describe the partition given by it.  If the relation is not an equivalence relation, state why it fails to be one.</p>
                 <p><ol marker="(a)" cols="2">
@@ -289,19 +289,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint> -->
         </exercise>
 
-        <exercise number="26">
+        <exercise>
             <statement>
                 <p>Define a relation <m>\sim</m> on <m>{\mathbb R}^2</m> by stating that <m>(a, b) \sim (c, d)</m> if and only if <m>a^2 + b^2 \leq c^2 + d^2</m>. Show that <m>\sim</m> is reflexive and transitive but not symmetric.</p>
             </statement>
         </exercise>
 
-        <exercise number="27">
+        <exercise>
             <statement>
                 <p>Show that an <m>m \times n</m> matrix gives rise to a well-defined  map from <m>{\mathbb R}^n</m> to <m>{\mathbb R}^m</m>.</p>
             </statement>
         </exercise>
 
-        <exercise number="28">
+        <exercise>
             <statement>
                 <p>Find the error in the following argument by providing a counterexample. <q>The reflexive property is redundant in the axioms for an equivalence relation.  If <m>x \sim y</m>, then <m>y \sim x</m> by the symmetric property.  Using the transitive property, we can deduce that <m>x \sim x</m>.</q> </p>
             </statement>
@@ -310,7 +310,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </hint>
         </exercise>
 
-        <exercise number="29">
+        <exercise>
             <title>Projective Real Line</title>
             <statement>
                 <p>Define a relation on <m>{\mathbb R}^2 \setminus  \{ (0,0) \}</m> by letting <m>(x_1, y_1) \sim (x_2, y_2)</m> if there exists a nonzero real number <m>\lambda</m> such that <m>(x_1, y_1)  = ( \lambda x_2, \lambda y_2)</m>.  Prove that <m>\sim</m> defines an equivalence relation on <m>{\mathbb R}^2 \setminus (0,0)</m>.  What are the corresponding  equivalence classes?  This equivalence relation defines the projective line, denoted by  <m>{\mathbb P}({\mathbb R}) </m>, which is very important in geometry.</p>
