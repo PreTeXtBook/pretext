@@ -1099,6 +1099,51 @@
             </p>
         </subsection>
 
+        <subsection xml:id="online-doenetml-options">
+            <title>DoenetML Options</title>
+            <idx><h>publisher options</h><h>DoenetML</h></idx>
+            <idx><h>DoenetML</h><h>coordinator</h></idx>
+
+            <p>
+                A page carrying DoenetML activities loads a small <term>coordinator</term> script that manages them, so that a page carrying many activities need not run them all at once.  The
+                <cd>
+                    <cline>/publication/html/interactives/doenetml</cline>
+                </cd>
+                element can have an attribute <attr>coordinator</attr> with values:<ul>
+                    <li><c>yes</c>: the default, let the coordinator manage the DoenetML activities on a page.</li>
+                    <li><c>no</c>: start every activity on a page at once, and keep every one of them running.</li>
+                </ul>
+            </p>
+
+            <p>
+                The same element can have an attribute <attr>shared-core-workers</attr> with values:<ul>
+                    <li><c>yes</c>: the default, let the activities on a page share a pool of the background workers they compute in.</li>
+                    <li><c>no</c>: give each activity a worker of its own.</li>
+                </ul>
+            </p>
+
+            <p>
+                Two attributes tune how much the coordinator allows at once: <attr>max-live-viewers</attr>, the number of activities kept running (default <c>3</c>), and <attr>max-concurrent-boots</attr>, the number allowed to be starting up at the same time (default <c>2</c>).  Both take a positive integer; any other value is reported during the build and the default used.
+            </p>
+
+            <p>
+                An example, for a book whose activities are small enough that more of them can be alive at once:
+                <cd>
+                    <cline>&lt;publication&gt;</cline>
+                    <cline>    &lt;html&gt;</cline>
+                    <cline>        &lt;interactives&gt;</cline>
+                    <cline>            &lt;doenetml max-live-viewers="6" max-concurrent-boots="3"/&gt;</cline>
+                    <cline>        &lt;/interactives&gt;</cline>
+                    <cline>    &lt;/html&gt;</cline>
+                    <cline>&lt;/publication&gt;</cline>
+                </cd>
+            </p>
+
+            <p>
+                See <xref ref="online-html-doenetml"/> for more information, including a caution for a book that pins its DoenetML version.
+            </p>
+        </subsection>
+
         <subsection xml:id="online-read-aloud-options">
             <title>Read Aloud Options</title>
             <idx><h>read aloud</h><h>publisher options</h></idx>

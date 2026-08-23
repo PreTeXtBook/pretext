@@ -2672,6 +2672,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-video-privacy" select="$embedded-video-privacy = 'yes'"/>
 
+<!--                           -->
+<!-- HTML DoenetML Coordinator -->
+<!--                           -->
+
+<!-- A page carrying many DoenetML activities used to start every one of  -->
+<!-- them the moment the page loaded, and then hold every one of them in  -->
+<!-- memory for as long as the reader stayed.  The "coordinator" is a     -->
+<!-- small script, served from the same CDN as the activities themselves, -->
+<!-- which takes charge of the activity "iframe"s on a page: it starts    -->
+<!-- them a couple at a time as the reader nears them, and puts away the  -->
+<!-- ones the reader has left well behind (saving a reader's work, and    -->
+<!-- restoring it on the way back).  A publisher who prefers the older    -->
+<!-- behavior can say "no" here.                                          -->
+<xsl:variable name="doenetml-coordinator">
+    <xsl:apply-templates select="$publisher-attribute-options/html/interactives/doenetml/pi:pub-attribute[@name='coordinator']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-doenetml-coordinator" select="$doenetml-coordinator = 'yes'"/>
+
+<!-- Each DoenetML activity ordinarily gets a dedicated web worker to run -->
+<!-- in, which is the largest part of what an activity costs.  With the   -->
+<!-- coordinator in charge, the activities on a page can instead share a  -->
+<!-- pool of workers that the coordinator owns.  Only consulted when the  -->
+<!-- coordinator is in use.                                               -->
+<xsl:variable name="doenetml-shared-core-workers">
+    <xsl:apply-templates select="$publisher-attribute-options/html/interactives/doenetml/pi:pub-attribute[@name='shared-core-workers']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-doenetml-shared-core-workers" select="$doenetml-shared-core-workers = 'yes'"/>
+
+<!-- How many DoenetML activities the coordinator keeps running at once,  -->
+<!-- and how many it allows to be starting up at once.  The defaults suit -->
+<!-- a reader on modest hardware; a publisher whose activities are small, -->
+<!-- or whose readers are known to have capable machines, may raise them. -->
+<!-- Freeform entries, validated here to positive integers: the script    -->
+<!-- reads each one as a number, and an unusable number would leave it    -->
+<!-- forever waiting for room, never starting any activity at all.        -->
+<xsl:variable name="doenetml-max-live-viewers-entered">
+    <xsl:apply-templates select="$publisher-attribute-options/html/interactives/doenetml/pi:pub-attribute[@name='max-live-viewers']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="doenetml-max-live-viewers">
+    <xsl:choose>
+        <xsl:when test="(number($doenetml-max-live-viewers-entered) = round(number($doenetml-max-live-viewers-entered))) and (number($doenetml-max-live-viewers-entered) &gt; 0)">
+            <xsl:value-of select="round(number($doenetml-max-live-viewers-entered))"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:FALLBACK: the DoenetML "max-live-viewers" in the publication file ("<xsl:value-of select="$doenetml-max-live-viewers-entered"/>") must be a positive whole number of activities, using the default, 3</xsl:message>
+            <xsl:text>3</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="doenetml-max-concurrent-boots-entered">
+    <xsl:apply-templates select="$publisher-attribute-options/html/interactives/doenetml/pi:pub-attribute[@name='max-concurrent-boots']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="doenetml-max-concurrent-boots">
+    <xsl:choose>
+        <xsl:when test="(number($doenetml-max-concurrent-boots-entered) = round(number($doenetml-max-concurrent-boots-entered))) and (number($doenetml-max-concurrent-boots-entered) &gt; 0)">
+            <xsl:value-of select="round(number($doenetml-max-concurrent-boots-entered))"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:FALLBACK: the DoenetML "max-concurrent-boots" in the publication file ("<xsl:value-of select="$doenetml-max-concurrent-boots-entered"/>") must be a positive whole number of activities, using the default, 2</xsl:message>
+            <xsl:text>2</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                       -->
 <!-- HTML Platform Options -->
 <!--                       -->
@@ -3608,6 +3672,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </desmos>
             <doenetml>
                 <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+                <pi:pub-attribute name="coordinator" default="yes" options="no"/>
+                <pi:pub-attribute name="shared-core-workers" default="yes" options="no"/>
+                <pi:pub-attribute name="max-live-viewers" default="3" freeform="yes"/>
+                <pi:pub-attribute name="max-concurrent-boots" default="2" freeform="yes"/>
             </doenetml>
             <geogebra>
                 <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>

@@ -228,6 +228,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
+<xsl:variable name="b-has-doenetml"     select="boolean($document-root//interactive[@platform='doenetml'])"/>
 <xsl:variable name="b-has-mermaid"      select="boolean($document-root//image[mermaid]|/image[mermaid])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
@@ -10199,6 +10200,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
+        <!-- how the coordinator script recognizes an activity it manages -->
+        <xsl:if test="(@platform = 'doenetml') and $b-doenetml-coordinator">
+            <xsl:attribute name="data-doenet-coordinate">true</xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="." mode="iframe-accessibility-attributes"/>
     </iframe>
     <!-- possibly give a long description -->
@@ -10359,6 +10364,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <script src="{$d3-library-url}"></script>
 </xsl:template>
 
+<!-- The version of DoenetML a document asks for, absent any request from -->
+<!-- an individual "interactive".  Also the version of the coordinator    -->
+<!-- script a page carrying DoenetML activities loads.                    -->
+<xsl:variable name="doenetml-document-version">
+    <xsl:choose>
+        <xsl:when test="$docinfo/doenetml/@version">
+            <xsl:value-of select="$docinfo/doenetml/@version"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>latest</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- DoenetML header libraries -->
 <xsl:template match="interactive[@platform = 'doenetml']" mode="header-libraries">
     <xsl:variable name="doenet-version">
@@ -10366,11 +10385,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="@version">
                 <xsl:value-of select="@version"/>
             </xsl:when>
-            <xsl:when test="$docinfo/doenetml/@version">
-                <xsl:value-of select="$docinfo/doenetml/@version"/>
-            </xsl:when>
             <xsl:otherwise>
-                <xsl:text>latest</xsl:text>
+                <xsl:value-of select="$doenetml-document-version"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -11526,6 +11542,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="scorm-js"/>
     <xsl:call-template name="diagcess-header"/>
     <xsl:call-template name="lti-iframe-resizer"/>
+    <!-- NB: deliberately not in the iframe head cache above - the      -->
+    <!-- coordinator belongs on the page that *holds* the activities,   -->
+    <!-- and a standalone page holds the one it was extracted for.      -->
+    <xsl:call-template name="doenetml-coordinator" />
 </xsl:variable>
 
 <!-- Content used by simple-file-wrap -->
@@ -14600,6 +14620,51 @@ TODO:
 <xsl:template name="geogebra">
     <xsl:if test="$b-has-calculator and contains($html-calculator,'geogebra')">
         <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- DoenetML coordinator -->
+<!-- A "coordinator" script, served alongside the DoenetML bundle that   -->
+<!-- the activities already load, takes charge of a page's activity      -->
+<!-- "iframe"s so that a page carrying many of them need not run them    -->
+<!-- all at once.  See publisher-variables.xsl for what it does and for  -->
+<!-- the publisher's control over it.  The activity pages need no        -->
+<!-- cooperation - the coordinator marks each activity's URL and the     -->
+<!-- bundle recognizes the mark - so this one script tag is all of it.   -->
+<xsl:template name="doenetml-coordinator">
+    <xsl:if test="$b-has-doenetml and $b-doenetml-coordinator">
+        <xsl:variable name="doenet-coordinator-url">
+            <xsl:text>https://cdn.jsdelivr.net/npm/@doenet/standalone@</xsl:text>
+            <xsl:value-of select="$doenetml-document-version"/>
+            <xsl:text>/coordinator.js</xsl:text>
+        </xsl:variable>
+        <!-- A document pinned to a DoenetML version from 0.7.21 through    -->
+        <!-- 0.7.24 gets a coordinator that restores a parked activity's    -->
+        <!-- work itself, racing a host that restores saved work of its     -->
+        <!-- own - and the older copy can win, replacing work a reader      -->
+        <!-- just did.  The publisher may not have read the paragraph in    -->
+        <!-- the Guide that says so, and both facts are visible here, so    -->
+        <!-- warn.  A partial pin like "0.7" floats to the newest release   -->
+        <!-- and is safe; its patch part is empty, and fails the numeric    -->
+        <!-- comparisons below.                                             -->
+        <xsl:if test="$b-host-runestone or $b-host-scorm">
+            <xsl:variable name="doenetml-pin-patch" select="substring-after(substring-after($doenetml-document-version, '.'), '.')"/>
+            <xsl:if test="(substring-before($doenetml-document-version, '.') = '0') and (substring-before(substring-after($doenetml-document-version, '.'), '.') = '7') and (number($doenetml-pin-patch) &gt;= 21) and (number($doenetml-pin-patch) &lt;= 24)">
+                <xsl:message>PTX:WARNING: this document pins DoenetML version <xsl:value-of select="$doenetml-document-version"/>, whose activity coordinator can replace a reader's saved work with an older copy when the book is hosted on Runestone or as SCORM.  Pin version 0.7.25 or later, or set the "coordinator" attribute of the "doenetml" element of the publication file to "no"</xsl:message>
+            </xsl:if>
+        </xsl:if>
+        <!-- The selector confines the script to DoenetML activities (see   -->
+        <!-- the "data-doenet-coordinate" attribute placed on their         -->
+        <!-- "iframe"s); the script's own default would also sweep up every -->
+        <!-- "-if.html" iframe, which for PreTeXt means every other         -->
+        <!-- platform's interactive too.                                    -->
+        <!-- Two notes on the tag itself: it is a classic script, so        -->
+        <!-- "document.currentScript" still supplies its options under      -->
+        <!-- "defer", which keeps a CDN fetch from blocking every page of   -->
+        <!-- the book; and the script reads the shared-core-workers value   -->
+        <!-- as anything but the string "false", so the publisher's "no"    -->
+        <!-- must be stringified as "false" rather than passed through.     -->
+        <script defer="defer" src="{$doenet-coordinator-url}" data-iframe-selector="iframe[data-doenet-coordinate]" data-max-live-viewers="{$doenetml-max-live-viewers}" data-max-concurrent-boots="{$doenetml-max-concurrent-boots}" data-shared-core-workers="{$b-doenetml-shared-core-workers}"></script>
     </xsl:if>
 </xsl:template>
 
