@@ -2757,12 +2757,17 @@
       </oneOrMore>
     </element>
   </define>
+  <!--
+    a group of one "sidebyside" is no group: the layout
+    attributes might as well sit on the lone "sidebyside"
+  -->
   <define name="SideBySideGroup">
     <element name="sbsgroup">
       <optional>
         <ref name="UniqueID"/>
       </optional>
       <ref name="SidebySideAttributes"/>
+      <ref name="SideBySide"/>
       <oneOrMore>
         <ref name="SideBySide"/>
       </oneOrMore>
@@ -2774,6 +2779,7 @@
         <ref name="UniqueID"/>
       </optional>
       <ref name="SidebySideAttributes"/>
+      <ref name="SideBySideNoNumber"/>
       <oneOrMore>
         <ref name="SideBySideNoNumber"/>
       </oneOrMore>

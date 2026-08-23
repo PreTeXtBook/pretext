@@ -159,6 +159,7 @@
         <ref name="UniqueID"/>
       </optional>
       <ref name="SidebySideAttributes"/>
+      <ref name="SideBySideInteractive"/>
       <oneOrMore>
         <ref name="SideBySideInteractive"/>
       </oneOrMore>

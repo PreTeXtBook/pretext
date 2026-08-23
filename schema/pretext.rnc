@@ -1028,17 +1028,19 @@
                     SidebySideAttributes,
                     PanelNoNumber, PanelNoNumber+
                 }
+            # a group of one "sidebyside" is no group: the layout
+            # attributes might as well sit on the lone "sidebyside"
             SideBySideGroup =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySide+
+                    SideBySide, SideBySide+
                 }
             SideBySideGroupNoNumber =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoNumber+
+                    SideBySideNoNumber, SideBySideNoNumber+
                 }
 
             Image = ImageRaster | ImageCode | ImagePG

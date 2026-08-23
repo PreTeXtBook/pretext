@@ -71,7 +71,7 @@
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySideInteractive+
+                    SideBySideInteractive, SideBySideInteractive+
                 }
 
             Slate =
