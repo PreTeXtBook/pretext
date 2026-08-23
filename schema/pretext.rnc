@@ -928,12 +928,15 @@
                         Paragraph
                     )
                 } |
-                # the one route to a numbered, titled "tabular"
+                FigureTable | FigureListing | FigureList
+            # the one route to a numbered, titled "tabular"
+            FigureTable =
                 element table {
                     MetaDataAltTitle,
                     Landscape?,
                     Tabular
-                } |
+                }
+            FigureListing =
                 element listing {
                     MetaDataAltTitle,
                     Landscape?,
@@ -941,7 +944,8 @@
                         Program |
                         Console
                     )
-                } |
+                }
+            FigureList =
                 element list {
                     MetaDataAltTitle,
                     Landscape?,
@@ -973,11 +977,28 @@
                     AlignmentVertical |
                     attribute valigns { list { ("top" | "middle" | "bottom")+ } }
                 )?
+            # A "figure" occupying a panel is restricted: the layout
+            # elements ("sidebyside", "sbsgroup") may not nest, and a
+            # static conversion realizes the media elements ("video",
+            # "audio") as a manufactured "sidebyside", so none of these
+            # may appear.  The schema stops these immediate routes; the
+            # validation-plus stylesheet polices arbitrary depth.
+            FigurePanel =
+                element figure {
+                    MetaDataCaption,
+                    Landscape?,
+                    (
+                        Image |
+                        MuseScore |
+                        Paragraph
+                    )
+                } |
+                FigureTable | FigureListing | FigureList
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
                     (
-                        Figure |
+                        FigurePanel |
                         Poem |
                         Tabular |
                         Image |

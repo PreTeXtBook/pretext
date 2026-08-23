@@ -2577,38 +2577,47 @@
           <ref name="Paragraph"/>
         </choice>
       </element>
-      <!-- the one route to a numbered, titled "tabular" -->
-      <element name="table">
-        <ref name="MetaDataAltTitle"/>
-        <optional>
-          <ref name="Landscape"/>
-        </optional>
-        <ref name="Tabular"/>
-      </element>
-      <element name="listing">
-        <ref name="MetaDataAltTitle"/>
-        <optional>
-          <ref name="Landscape"/>
-        </optional>
-        <choice>
-          <ref name="Program"/>
-          <ref name="Console"/>
-        </choice>
-      </element>
-      <element name="list">
-        <ref name="MetaDataAltTitle"/>
-        <optional>
-          <ref name="Landscape"/>
-        </optional>
-        <optional>
-          <ref name="IntroductionText"/>
-        </optional>
-        <ref name="List"/>
-        <optional>
-          <ref name="ConclusionText"/>
-        </optional>
-      </element>
+      <ref name="FigureTable"/>
+      <ref name="FigureListing"/>
+      <ref name="FigureList"/>
     </choice>
+  </define>
+  <!-- the one route to a numbered, titled "tabular" -->
+  <define name="FigureTable">
+    <element name="table">
+      <ref name="MetaDataAltTitle"/>
+      <optional>
+        <ref name="Landscape"/>
+      </optional>
+      <ref name="Tabular"/>
+    </element>
+  </define>
+  <define name="FigureListing">
+    <element name="listing">
+      <ref name="MetaDataAltTitle"/>
+      <optional>
+        <ref name="Landscape"/>
+      </optional>
+      <choice>
+        <ref name="Program"/>
+        <ref name="Console"/>
+      </choice>
+    </element>
+  </define>
+  <define name="FigureList">
+    <element name="list">
+      <ref name="MetaDataAltTitle"/>
+      <optional>
+        <ref name="Landscape"/>
+      </optional>
+      <optional>
+        <ref name="IntroductionText"/>
+      </optional>
+      <ref name="List"/>
+      <optional>
+        <ref name="ConclusionText"/>
+      </optional>
+    </element>
   </define>
   <define name="Stack">
     <element name="stack">
@@ -2672,12 +2681,38 @@
       </choice>
     </optional>
   </define>
+  <!--
+    A "figure" occupying a panel is restricted: the layout
+    elements ("sidebyside", "sbsgroup") may not nest, and a
+    static conversion realizes the media elements ("video",
+    "audio") as a manufactured "sidebyside", so none of these
+    may appear.  The schema stops these immediate routes; the
+    validation-plus stylesheet polices arbitrary depth.
+  -->
+  <define name="FigurePanel">
+    <choice>
+      <element name="figure">
+        <ref name="MetaDataCaption"/>
+        <optional>
+          <ref name="Landscape"/>
+        </optional>
+        <choice>
+          <ref name="Image"/>
+          <ref name="MuseScore"/>
+          <ref name="Paragraph"/>
+        </choice>
+      </element>
+      <ref name="FigureTable"/>
+      <ref name="FigureListing"/>
+      <ref name="FigureList"/>
+    </choice>
+  </define>
   <define name="SideBySide">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <choice>
-          <ref name="Figure"/>
+          <ref name="FigurePanel"/>
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
