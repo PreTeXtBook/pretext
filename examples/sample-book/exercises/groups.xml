@@ -28,68 +28,108 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <title>Exercises</title>
 
     <exercise>
-        <statement>
+        <introduction>
             <p>Find all <m>x \in {\mathbb Z}</m> satisfying each of the following equations.</p>
-            <p><ol marker="(a)" cols="2">
-                <li><p><m>3x \equiv 2 \pmod{7}</m></p></li>
-                <li><p><m>5x + 1 \equiv 13 \pmod{23}</m></p></li>
-                <li><p><m>5x + 1 \equiv 13 \pmod{26}</m></p></li>
-                <li><p><m>9x \equiv 3 \pmod{5}</m></p></li>
-                <li><p><m>5x \equiv 1 \pmod{6}</m></p></li>
-                <li><p><m>3x \equiv 1 \pmod{6}</m></p></li>
-            </ol></p>
-        </statement>
-        <hint>
-            <p>(a) <m>3 + 7 \mathbb Z = \{ \ldots, -4, 3, 10, \ldots \}</m>;  (c) <m>18 + 26 \mathbb Z</m>;  (e) <m>5 + 6 \mathbb Z</m>.</p>
-        </hint>
+        </introduction>
+        <task>
+            <statement>
+                <p><m>3x \equiv 2 \pmod{7}</m></p>
+            </statement>
+            <hint>
+                <p><m>3 + 7 \mathbb Z = \{ \ldots, -4, 3, 10, \ldots \}</m></p>
+            </hint>
+        </task>
+        <task>
+            <statement>
+                <p><m>5x + 1 \equiv 13 \pmod{23}</m></p>
+            </statement>
+        </task>
+        <task>
+            <statement>
+                <p><m>5x + 1 \equiv 13 \pmod{26}</m></p>
+            </statement>
+            <hint>
+                <p><m>18 + 26 \mathbb Z</m></p>
+            </hint>
+        </task>
+        <task>
+            <statement>
+                <p><m>9x \equiv 3 \pmod{5}</m></p>
+            </statement>
+        </task>
+        <task>
+            <statement>
+                <p><m>5x \equiv 1 \pmod{6}</m></p>
+            </statement>
+            <hint>
+                <p><m>5 + 6 \mathbb Z</m></p>
+            </hint>
+        </task>
+        <task>
+            <statement>
+                <p><m>3x \equiv 1 \pmod{6}</m></p>
+            </statement>
+        </task>
     </exercise>
 
     <exercise>
-    <statement>
-        <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.</p>
-        <p><ol marker="(a)" cols="2">
-
-            <li><p><md>\begin{array}{c|cccc}
-            \circ &amp; a &amp; b &amp; c &amp; d \\
-            \hline
-            a &amp; a &amp; c &amp; d &amp; a \\
-            b &amp; b &amp; b &amp; c &amp; d \\
-            c &amp; c &amp; d &amp; a &amp; b \\
-            d &amp; d &amp; a &amp; b &amp; c
-            \end{array}</md></p></li>
-
-            <li><p><md>\begin{array}{c|cccc}
-            \circ &amp; a &amp; b &amp; c &amp; d \\
-            \hline
-            a &amp; a &amp; b &amp; c &amp; d \\
-            b &amp; b &amp; a &amp; d &amp; c \\
-            c &amp; c &amp; d &amp; a &amp; b \\
-            d &amp; d &amp; c &amp; b &amp; a
-            \end{array}</md></p></li>
-
-            <li><p><md>\begin{array}{c|cccc}
-            \circ &amp; a &amp; b &amp; c &amp; d \\
-            \hline
-            a &amp; a &amp; b &amp; c &amp; d \\
-            b &amp; b &amp; c &amp; d &amp; a \\
-            c &amp; c &amp; d &amp; a &amp; b \\
-            d &amp; d &amp; a &amp; b &amp; c
-            \end{array}</md></p></li>
-
-            <li><p><md>\begin{array}{c|cccc}
-            \circ &amp; a &amp; b &amp; c &amp; d \\
-            \hline
-            a &amp; a &amp; b &amp; c &amp; d \\
-            b &amp; b &amp; a &amp; c &amp; d \\
-            c &amp; c &amp; b &amp; a &amp; d \\
-            d &amp; d &amp; d &amp; b &amp; c
-            \end{array}</md></p></li>
-
-        </ol></p>
-    </statement>
-    <hint>
-        <p>(a) Not a group; (c) a group.</p>
-    </hint>
+        <introduction>
+            <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.</p>
+        </introduction>
+        <task>
+            <statement>
+                <p><md>\begin{array}{c|cccc}
+                \circ &amp; a &amp; b &amp; c &amp; d \\
+                \hline
+                a &amp; a &amp; c &amp; d &amp; a \\
+                b &amp; b &amp; b &amp; c &amp; d \\
+                c &amp; c &amp; d &amp; a &amp; b \\
+                d &amp; d &amp; a &amp; b &amp; c
+                \end{array}</md></p>
+            </statement>
+            <hint>
+                <p>Not a group.</p>
+            </hint>
+        </task>
+        <task>
+            <statement>
+                <p><md>\begin{array}{c|cccc}
+                \circ &amp; a &amp; b &amp; c &amp; d \\
+                \hline
+                a &amp; a &amp; b &amp; c &amp; d \\
+                b &amp; b &amp; a &amp; d &amp; c \\
+                c &amp; c &amp; d &amp; a &amp; b \\
+                d &amp; d &amp; c &amp; b &amp; a
+                \end{array}</md></p>
+            </statement>
+        </task>
+        <task>
+            <statement>
+                <p><md>\begin{array}{c|cccc}
+                \circ &amp; a &amp; b &amp; c &amp; d \\
+                \hline
+                a &amp; a &amp; b &amp; c &amp; d \\
+                b &amp; b &amp; c &amp; d &amp; a \\
+                c &amp; c &amp; d &amp; a &amp; b \\
+                d &amp; d &amp; a &amp; b &amp; c
+                \end{array}</md></p>
+            </statement>
+            <hint>
+                <p>A group.</p>
+            </hint>
+        </task>
+        <task>
+            <statement>
+                <p><md>\begin{array}{c|cccc}
+                \circ &amp; a &amp; b &amp; c &amp; d \\
+                \hline
+                a &amp; a &amp; b &amp; c &amp; d \\
+                b &amp; b &amp; a &amp; c &amp; d \\
+                c &amp; c &amp; b &amp; a &amp; d \\
+                d &amp; d &amp; d &amp; b &amp; c
+                \end{array}</md></p>
+            </statement>
+        </task>
     </exercise>
 
     <exercise xml:id="exercise-groups-rectangle-symmetries">
