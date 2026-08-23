@@ -45,6 +45,7 @@ loadMacros(
   "PGstandard.pl",
   "PGML.pl",
   "AnswerFormatHelp.pl",
+  "WeBWorK_Minimal_Example.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

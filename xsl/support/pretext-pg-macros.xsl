@@ -49,6 +49,37 @@
 <!-- necessity of this scheme.                                -->
 <xsl:variable name="b-extracting-pg" select="true()"/>
 
+<!-- We need latex packages and macros, but we must exclude   -->
+<!-- \lt and \gt. This is because WeBWorK/PG already loads    -->
+<!-- those. And their duplication in WeBWorK hardcopy output  -->
+<!-- is not permitted.                                        -->
+<xsl:variable name="latex-macros">
+    <xsl:variable name="latex-left-justified">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text">
+                <xsl:value-of select="$docinfo/macros" />
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="latex-macro-first-percent">
+        <xsl:with-param name="latex-code">
+            <xsl:value-of select="$latex-left-justified" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+</xsl:variable>
+
+<xsl:variable name="latex-packages">
+    <xsl:for-each select="$docinfo/math-package">
+        <xsl:if test="not(normalize-space(@mathjax-name) = '')">
+            <xsl:text>\require{</xsl:text>
+            <xsl:value-of select="@mathjax-name"/>
+            <xsl:apply-templates/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:variable>
+
 <!-- We are outputting perl code, and there is no reason to output         -->
 <!-- anything other than "text"                                            -->
 <xsl:output method="text" encoding="UTF-8" />
@@ -71,7 +102,9 @@
     </xsl:variable>
     <xsl:variable name="macro-file-content">
         <xsl:call-template name="header"/>
+        <xsl:apply-templates select="$document-root" mode="latex-macros"/>
         <xsl:apply-templates select="$document-root" mode="latex-image-preamble"/>
+        <xsl:text>1;&#xa;</xsl:text>
     </xsl:variable>
     <exsl:document href="{$macro-file-name}" method="text">
         <xsl:call-template name="sanitize-text">
@@ -95,6 +128,24 @@
         <xsl:text>END_LATEX_IMAGE_PREAMBLE&#xa;</xsl:text>
         <xsl:text>}&#xa;&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="book|article" mode="latex-macros">
+    <xsl:text>TEXT(&#xa;</xsl:text>
+    <xsl:text>    MODES(&#xa;</xsl:text>
+    <xsl:text>        HTML => '&lt;div style="display:none;">' . general_math_ev3(&lt;&lt;'EOF') . '&lt;/div>',&#xa;</xsl:text>
+    <xsl:value-of select="$latex-packages"/>
+    <xsl:value-of select="$latex-macros"/>
+    <xsl:text>EOF&#xa;</xsl:text>
+    <xsl:text>        TeX => '\ifdefined\ptxmacros\else ' . &lt;&lt;'EOF'&#xa;</xsl:text>
+    <xsl:value-of select="$latex-packages"/>
+    <xsl:value-of select="$latex-macros"/>
+    <xsl:text>\def\ptxmacros{}&#xa;</xsl:text>
+    <xsl:text>EOF&#xa;</xsl:text>
+    <xsl:text>. '\fi',&#xa;</xsl:text>
+    <xsl:text>        PTX => ''&#xa;</xsl:text>
+    <xsl:text>    )&#xa;</xsl:text>
+    <xsl:text>);&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="header">

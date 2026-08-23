@@ -54,6 +54,7 @@ loadMacros(
   "PGstandard.pl",
   "PGML.pl",
   "AnswerFormatHelp.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -78,7 +79,7 @@ If [`a=5`] and [`b=12\text{,}`] then
 
 Here, we solve an equation.
 
-[```\newcommand{\amp}{&}
+[```
 \begin{aligned}
 2x+1 \amp= 3\\
 2x   \amp= 2\\
@@ -88,7 +89,7 @@ x    \amp= 1
 
 Here we have a three-way inequality to solve.
 
-[```\newcommand{\lt}{<}
+[```
 \begin{gathered}
 1 \lt 2x+1 \lt 3\\
 0 \lt 2x   \lt 2\\
@@ -98,7 +99,7 @@ Here we have a three-way inequality to solve.
 
 And here, we see a system of equations.
 
-[```\newcommand{\amp}{&}
+[```
 \begin{alignedat}{3}
 2x + 2y \amp {}+{} \amp z \amp {}={} \amp 10\\
 y \amp {}-{} \amp  4z \amp {}={} \amp 9\\

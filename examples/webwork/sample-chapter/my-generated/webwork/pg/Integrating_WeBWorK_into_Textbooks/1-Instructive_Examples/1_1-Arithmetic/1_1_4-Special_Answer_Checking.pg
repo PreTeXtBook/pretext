@@ -31,6 +31,7 @@ loadMacros(
   "answerHints.pl",
   "contextForm.pl",
   "contextLimitedPolynomial.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');

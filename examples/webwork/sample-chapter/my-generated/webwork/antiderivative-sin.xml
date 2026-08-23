@@ -43,6 +43,7 @@ loadMacros(
   "AnswerFormatHelp.pl",
   "parserFormulaUpToConstant.pl",
   "contextForm.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
@@ -62,7 +63,7 @@ $answer = FormulaUpToConstant("-cos(x)");
 ############################################################
 
 BEGIN_PGML
-For the given function [`f\text{,}`] find [`\newcommand{\indefiniteintegral}[2]{\int#1\,d#2}\indefiniteintegral{f(x)}{x}\text{.}`]
+For the given function [`f\text{,}`] find [`\indefiniteintegral{f(x)}{x}\text{.}`]
 
 Note that these common instructions are phrased in such a way that they would read well if they were applied to only one exercise at a time. That will happen if these exercises are exported as [|.pg|]* files, for example to be used in online homework from a WeBWorK server.
 

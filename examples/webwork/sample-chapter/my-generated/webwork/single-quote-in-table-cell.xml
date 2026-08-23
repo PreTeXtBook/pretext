@@ -42,6 +42,7 @@ loadMacros(
   "PGML.pl",
   "AnswerFormatHelp.pl",
   "niceTables.pl",
+  "WWSC.pl",
   "PGcourse.pl",
 );
 COMMENT('Authored in PreTeXt');
