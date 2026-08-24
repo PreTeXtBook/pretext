@@ -2269,12 +2269,33 @@ async function loadPrintout(printableSectionID) {
     if (themeStylesheetHref) {
         // replace 'theme.css' with 'print-worksheet.css' in the href
         const printStylesheetHref = themeStylesheetHref.replace(/theme.*\.css/, 'print-worksheet.css');
-        // update the href of the theme stylesheet link
-        themeStylesheetLink.setAttribute('href', printStylesheetHref);
-        // Wait for the new stylesheet to load.  This is important to ensure the styles are applied before the calling function tries to compute workspace sizes.
-        await new Promise((resolve) => {
-            themeStylesheetLink.addEventListener('load', resolve, { once: true });
+        // Swap stylesheets by replacing the <link> element rather than by
+        // rewriting the href of the existing one.
+        //
+        // Everything below depends on the print stylesheet actually being in
+        // force -- every height this file measures is measured under it -- so
+        // the swap has to be waited on.  But Chromium does not fire "load" on a
+        // link whose href is rewritten in place: the new stylesheet is fetched
+        // and applied, and no event is ever dispatched, so waiting on one hangs
+        // here forever and the preview is left as an unpaginated page.  A
+        // freshly created element fires load, and error, reliably.
+        //
+        // The new link goes in alongside the old one and the old one comes out
+        // only once the new one has loaded, so the preview is never briefly
+        // unstyled.  Resolving on "error" too means a print stylesheet that is
+        // missing or fails to fetch degrades to a preview styled by the theme,
+        // rather than to no preview at all.
+        const printStylesheetLink = document.createElement('link');
+        printStylesheetLink.setAttribute('rel', 'stylesheet');
+        printStylesheetLink.setAttribute('type', 'text/css');
+        const stylesheetSettled = new Promise((resolve) => {
+            printStylesheetLink.addEventListener('load', resolve, { once: true });
+            printStylesheetLink.addEventListener('error', resolve, { once: true });
         });
+        printStylesheetLink.setAttribute('href', printStylesheetHref);
+        themeStylesheetLink.after(printStylesheetLink);
+        await stylesheetSettled;
+        themeStylesheetLink.remove();
     }
 
     // Find the element with this ID.  For a worksheet or handout this is the
