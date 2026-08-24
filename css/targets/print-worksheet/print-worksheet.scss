@@ -259,6 +259,148 @@ article.printout {
   }
 }
 
+// A list too tall to fit on one page is cut into one single-item list per row,
+// so that pagination has somewhere to break inside it (see
+// flattenOversizedListsIn()).  The pieces have to go on reading as the one list
+// they were, which means the space between two of them must be the space
+// between two items -- `li` carries that (`_lists.scss`) -- and not that plus a
+// list's own outer margins on top.  So the pieces give up their outer margins;
+// the first piece is left behind inside whatever held the list, where it keeps
+// the margins the original had.
+.onepage > .split-list {
+  // The gap between two items lives on the piece, not on the item inside it.
+  //
+  // `li` normally carries that spacing (see _lists.scss), but a margin on the
+  // item collapses straight out through the piece's border-free top edge: the
+  // space is there on screen, while the piece's offsetHeight does not include
+  // it.  Pagination measures rows with offsetHeight plus margins, so every
+  // piece then measured about 7px short -- nothing on its own, but once per
+  // item it put a whole page's budget out by well over an inch, which
+  // over-filled pages and left the footnote block below them hanging off the
+  // bottom of the sheet.
+  //
+  // Carried as a top margin rather than a bottom one so that it collapses with
+  // the piece before it to a single gap, which is exactly what the row
+  // measurement then counts once.
+  margin-top: 0.5em;
+  margin-bottom: 0;
+
+  // ...and not on the item, where it would be both invisible to that
+  // measurement and added on top of the gap above.  `:first-child` rather than
+  // `li` so that a description list's leading <dt> is covered too.
+  > :first-child {
+    margin-top: 0;
+  }
+}
+
+// The block a split list was cut out of keeps only the list's first piece, the
+// rest being rows outside it.  Any panel decoration it carries would then frame
+// one item out of many, reading as though the list stopped there, so drop it
+// and let the block's heading simply introduce the run of items that follows.
+.onepage .split-block {
+  border: none;
+  background: none;
+
+  &::before,
+  &::after {
+    all: unset;
+  }
+}
+
+// Footnotes
+//
+// A printout sets footnotes the way a book does: the marker stays inline where
+// the reference is, and the text is collected into a .footnotes block at the
+// foot of whichever page that reference lands on (see rebuildFootnotes()).
+//
+// That block holds a *clone* of the text, so the original -- still sitting
+// inline inside its <details>, which is what lets the paginator move rows
+// around without anything needing to be put back -- has to stay out of sight.
+// A closed <details> already shows nothing but its summary, but the [open]
+// rules are repeated below so that a reader who manages to toggle one open
+// cannot inject the text back into the middle of a sentence and invalidate a
+// page plan computed without it.  For the same reason the marker is inert: down
+// here it is a reference to text already on the page, not a control.
+.printout {
+  .ptx-footnote,
+  .ptx-footnote[open] {
+    display: inline;
+  }
+
+  .ptx-footnote__number,
+  .ptx-footnote[open] .ptx-footnote__number {
+    display: inline;
+    min-width: 0;
+    cursor: inherit;
+    pointer-events: none;
+
+    sup {
+      display: inline;
+    }
+
+    // the "[x]" close affordance the body of the page shows on an open footnote
+    &::before {
+      content: none;
+    }
+  }
+
+  .ptx-footnote__contents {
+    display: none;
+  }
+}
+
+// Hiding the contents element is not enough on its own: a browser that
+// implements <details> with a ::details-content wrapper puts a *block* box
+// inside the inline <details> above, and a block inside an inline splits the
+// line it sits on -- so every footnote reference broke its sentence in three,
+// even though the only thing visible was the marker.  Kept as a rule of its own
+// so that a browser which does not know the pseudo-element throws out just this
+// one rule and not the whole block above it.
+.printout .ptx-footnote::details-content {
+  display: none;
+}
+
+// The collected footnote text, at the foot of a page.
+.onepage > .footnotes {
+  margin-top: 1em;
+  font-size: 0.85em;
+
+  // The separating rule, set short as a book sets it rather than across the
+  // full measure.  A pseudo-element rather than a border on the block itself,
+  // so that only the rule is short and the text below still runs full width.
+  &::before {
+    content: "";
+    display: block;
+    width: 30%;
+    border-top: 1px solid black;
+    margin-bottom: 0.4em;
+  }
+
+  // Hanging indent, as a book sets footnotes: the number sits out in the
+  // margin and every line of the text lines up with the first.
+  .footnote-item {
+    margin-top: 0.25em;
+    padding-left: 1.2em;
+    text-indent: -1.2em;
+  }
+
+  .footnote-item__number {
+    margin-right: 0.35em;
+  }
+
+  // The clone arrives shorn of .ptx-footnote__contents (buildFootnoteItem()
+  // takes the class off), so none of that class's knowl-box styling applies
+  // here.  All that is left to do is run the text on after the number.
+  .footnote-item__contents {
+    display: inline;
+
+    > .para {
+      display: inline;
+    }
+  }
+}
+
+
 // Additional styling tweaks for print
 
 .code-inline {
