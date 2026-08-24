@@ -807,7 +807,7 @@ function setInitialWorkspaceHeights() {
 }
 
 // If a printout (worksheet or handout) includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
-function adjustPrintoutPages() {
+function adjustPrintoutPages(margins) {
     console.log("*** Adjusting printout pages.");
     const printout = getPrintout();
     if (!printout) {
@@ -842,12 +842,22 @@ function adjustPrintoutPages() {
     // spilled onto a new page instead of dragging the whole exercise along
     // as one unsplittable block. Then do the same for introductions (see
     // flattenIntroductionsIn); must run second so reading order stays correct.
+    // The authored pages are real page boxes already, so a row too tall for one
+    // is measured against the same budget a computed page is planned against.
+    const contentHeight = 1056 - (margins.top + margins.bottom);
     pages.forEach(page => {
         flattenTasksIn(page);
         flattenIntroductionsIn(page);
         flattenSolutionsIn(page);
+        // Last, so it sees the rows the three above have just made: a list
+        // inside a task only becomes splittable once that task is a row.
+        // Nothing here re-plans the page breaks -- the author fixed those --
+        // so the gain is that addSpilloverPages() can push part of an
+        // over-long list onto a spillover page instead of being handed one
+        // unsplittable row and giving up on it.
+        flattenOversizedListsIn(page, contentHeight);
     });
-    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, and solutions for independent repagination.");
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists for independent repagination.");
 }
 
 // This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
@@ -858,19 +868,36 @@ function createPrintoutPages(margins) {
 
     // For purposes of finding page breaks, we will use 794 as our width and 1056 as our height (so A4 width and letter height).  Then we will rescale workspace on each page to fit the actual paper size selected.
 
+    // The paper a plan is made against: A4's width and Letter's height, the
+    // narrower and the shorter of the two, so that a plan made here holds on
+    // either.  The content box is what is left of that once the print margins
+    // are taken off.
+    const conservativePaperWidth = 794;   // A4 is narrower than Letter's 816
     const conservativeContentHeight = 1056 - (margins.top + margins.bottom); // in pixels
-    const conservativeContentWidth = 794 - (margins.left + margins.right); // in pixels
+    const conservativeContentWidth = conservativePaperWidth - (margins.left + margins.right); // in pixels
 
     const printout = getPrintout();
     if (!printout) {
         console.warn("No printout found, exiting createPrintoutPages.");
         return;
     }
-    // Narrow the printout to our conservative width while we measure row
-    // heights below, so text wraps at least as much as it will once placed
-    // in the real, narrower, padded .onepage box -- otherwise rows measure
-    // shorter than their actual rendered height and pagination overflows.
-    printout.style.width = conservativeContentWidth + 'px';
+    // Narrow the printout to our conservative paper width while we measure row
+    // heights below, so text wraps at least as much as it will once placed in
+    // the real .onepage box -- otherwise rows measure shorter than their
+    // actual rendered height and pagination overflows.
+    //
+    // The *paper* width, not the content width.  A `.onepage` is `border-box`
+    // and pads itself by the print margins, so it takes its content width from
+    // the paper width by subtracting them itself; handing it a width that has
+    // already had them taken off subtracts them twice.  That is not merely
+    // conservative, it is wrong by a wide margin -- at 0.75in margins the rows
+    // were measured in a 506px column and then laid out in a 672px one -- and
+    // since every row measures taller than it renders, each page was planned
+    // full and came out a third empty.  The error scales with how many rows a
+    // page holds, so it went unnoticed while rows were whole exercises and
+    // became glaring as soon as an over-long list was cut into one row per
+    // item (see flattenOversizedListsIn()).
+    printout.style.width = conservativePaperWidth + 'px';
     // Set the height of each workspace based on its data-space attribute
     setInitialWorkspaceHeights(printout);
 
@@ -895,17 +922,26 @@ function createPrintoutPages(margins) {
     // completely blank sheet in the middle of it.
     //
     // So park the rows in a throwaway `.onepage` for the duration of the
-    // measuring loop. Its width is pinned to the conservative content width
-    // for the same reason the printout's was: so text wraps at least as much
-    // as it will in the real, narrower page box.
+    // measuring loop. Its width is pinned to the conservative paper width for
+    // the same reason the printout's was, and in the same units: this element
+    // carries the real `.onepage` padding, so it is the paper width that leaves
+    // it the content width the rows will really be laid out in.
     const measuringPage = document.createElement('section');
     measuringPage.classList.add('onepage');
-    measuringPage.style.width = conservativeContentWidth + 'px';
+    measuringPage.style.width = conservativePaperWidth + 'px';
     // The real page box is a fixed height; this one has to grow with whatever
     // it holds, or every row past the first page's worth would measure clipped.
     measuringPage.style.height = 'auto';
     printout.appendChild(measuringPage);
     rows.forEach(row => measuringPage.appendChild(row));
+    // A row that is taller than a page cannot be placed whole, and gets clipped
+    // rather than broken.  Now that the rows are parked where their real
+    // rendered heights can be read, cut up the lists inside any such row so
+    // there is something for a page break to fall between -- and re-read the
+    // rows, since doing so replaces one of them with several.
+    if (flattenOversizedListsIn(measuringPage, conservativeContentHeight)) {
+        rows = [...measuringPage.children];
+    }
     // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
     let blockList = [];
     for (const row of rows) {
@@ -1250,6 +1286,149 @@ function collapseSpilloverPages(margins) {
   addHeadersAndFootersToPrintout();
 }
 
+// Lists //
+
+// Pagination places whole rows, so a list can only break across a page
+// boundary if it is several rows.  Splitting one is destructive in ways that
+// matter -- the pieces leave the block that held them, so a list inside a
+// decorated block (an "objectives" panel, say) loses that decoration, and a
+// list the reader sees as one thing becomes several -- so it is done only for
+// a list that cannot fit on a page whole, where the alternative is not an
+// intact list but a clipped one.  Everything below is reached only from
+// flattenOversizedListsIn(), which applies that test.
+
+// The element that starts each piece a list is cut into: every item of an
+// ol/ul, and every term of a dl (whose items the XSL renders as a <dt>/<dd>
+// pair, which has to stay together).
+function isListChunkStart(elem, list) {
+    return list.tagName === 'DL' ? elem.tagName === 'DT' : elem.tagName === 'LI';
+}
+
+// Whether `elem` is a list element at all.
+function isListEl(elem) {
+    return elem.tagName === 'OL' || elem.tagName === 'UL' || elem.tagName === 'DL';
+}
+
+// The lists in `row` that may be cut up.  Nested lists are left to their
+// outermost ancestor, which takes them along inside whichever item holds them;
+// a list laid out in columns is left alone entirely, since cutting it into
+// single-item lists would throw the columns away.
+//
+// The row may *be* a list rather than contain one -- flattenIntroductionsIn()
+// hoists an introduction's children up to be rows in their own right, and a
+// list among them arrives here as a top-level row -- and querySelectorAll, which
+// looks only at descendants, does not see that case at all.
+function splittableListsIn(row) {
+    const candidates = isListEl(row) ? [row] : [...row.querySelectorAll('ol, ul, dl')];
+    return candidates.filter(list =>
+        !list.closest('.sidebyside') &&
+        !(list !== row && list.parentElement.closest('ol, ul, dl')) &&
+        ![...list.classList].some(cls => /^cols\d+$/.test(cls))
+    );
+}
+
+// Cut `list` into one list per item and hoist the pieces out to be top-level
+// rows of `container`, immediately after the row `child` that held it, so that
+// pagination can weigh -- and break between -- each item on its own.
+//
+// Each piece is a list element of its own, cloned from the original's tag and
+// classes rather than an <li> hoisted bare, so an item keeps its marker and its
+// indentation; an ordered list's pieces carry `start`, so the numbering runs on
+// through the break instead of restarting at 1 on every page.
+//
+// Whatever followed the list inside `child` has to come out too, at every level
+// between the two.  Otherwise it stays behind inside `child` -- which is still
+// a row *above* the pieces just hoisted -- and a closing sentence after a list
+// would be rendered before the list it closes.  Only elements are taken: in
+// this HTML every run of text is inside a .para of its own, and a bare text
+// node hoisted to be a row would be stray inline content in a page box.
+function hoistListOut(container, child, list) {
+    // When the row *is* the list there is no block around it to come out of,
+    // so the pieces stand exactly where it stood and inherit its classes --
+    // including whatever indent it was carrying -- by the clone below.
+    const isRowItself = list === child;
+    // Read before anything moves; see depthClassForRowOut().
+    const depthClass = isRowItself ? null : depthClassForRowOut(child);
+    // Collected bottom-up, which is reading order: everything after the list
+    // itself, then everything after the wrapper that held the list, and so on
+    // out to `child`.
+    const tail = [];
+    for (let node = list; node !== child; node = node.parentElement) {
+        for (let sib = node.nextElementSibling; sib; sib = sib.nextElementSibling) {
+            tail.push(sib);
+        }
+    }
+    const pieces = [];
+    let piece = null;
+    // `start` counts items, not children, so a dl's <dd> must not advance it.
+    let itemNumber = parseInt(list.getAttribute('start'), 10) || 1;
+    for (const item of [...list.children]) {
+        if (isListChunkStart(item, list) || piece === null) {
+            piece = document.createElement(list.tagName);
+            piece.className = list.className;
+            piece.classList.add('split-list');
+            if (list.tagName === 'OL') {
+                piece.setAttribute('start', String(itemNumber));
+            }
+            itemNumber++;
+            pieces.push(piece);
+        }
+        piece.appendChild(item);
+    }
+    if (pieces.length === 0) return;
+    // The first piece stays where the list was, rather than being hoisted with
+    // the rest.  It keeps the block it came from non-empty, so a heading that
+    // introduces the list -- an exercise number, typically -- cannot be left
+    // stranded at the foot of a page with the list it belongs to starting on
+    // the next one.  When the row is the list itself this simply puts the first
+    // piece in the row's own place.
+    list.parentNode.insertBefore(pieces[0], list);
+    list.remove();
+    if (!isRowItself) {
+        // The block now holds one item of a list that runs on outside it, so
+        // its own decoration -- a panel border, a tinted background -- would be
+        // drawn around that single item and read as though the list ended
+        // there.  The print stylesheet drops it; see `.split-block`.
+        child.classList.add('split-block');
+    }
+    let anchor = isRowItself ? pieces[0] : child;
+    for (const row of [...pieces.slice(1), ...tail]) {
+        container.insertBefore(row, anchor.nextSibling);
+        if (depthClass) {
+            row.classList.add(depthClass);
+        }
+        anchor = row;
+    }
+}
+
+// Split up the lists inside any row of `container` that is taller than a page.
+//
+// Such a row cannot be placed whole however the breaks fall: findPageBreaks()
+// hands it a page of its own and addSpilloverPages() declines to touch it, and
+// then `overflow: hidden` on the page box silently cuts off everything past the
+// bottom of the sheet.  A list is the one part of such a row that can be broken
+// up without loss, so it is, and only then.
+//
+// Returns whether anything moved, since the caller has to re-read its rows and
+// measure again if so.
+function flattenOversizedListsIn(container, pageHeight) {
+    let split = false;
+    for (const child of [...container.children]) {
+        if (getElementTotalHeight(child) <= pageHeight) continue;
+        const lists = splittableListsIn(child);
+        if (lists.length === 0) continue;
+        // Innermost-last, so hoisting one cannot invalidate the position of
+        // another still to be done: each hoist only moves nodes at or after
+        // `list`, and taking the last one first leaves the earlier ones, and
+        // the ancestors they hang off, exactly where they were.
+        for (let i = lists.length - 1; i >= 0; i--) {
+            hoistListOut(container, child, lists[i]);
+        }
+        split = true;
+    }
+    return split;
+}
+
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
 function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
@@ -1469,9 +1648,14 @@ function getElemWorkspaceHeight(elem) {
 //                   can be given back by squeezing (adjustWorkspaceToFitPage()
 //                   scales workspaces by a factor below 1 when a page is over
 //                   budget, so a page may legitimately be planned as "fits
-//                   only once squeezed")
+//                   only once squeezed") -- and, on a page that fits, how much
+//                   of the leftover room will be soaked up rather than left
+//                   blank, since the same function stretches the workspaces on
+//                   an under-full page to fill it
 //   splitsGroup     true when the break after row j separates a question from
 //                   its own solutions or workspace
+//   isLastPage      true when this page ends the printout, so the room left at
+//                   its foot is where the remainder is *meant* to collect
 //
 // Returns Infinity for a page that cannot be made to fit at all.
 //
@@ -1490,6 +1674,15 @@ function getElemWorkspaceHeight(elem) {
 const GROUP_BREAK_PENALTY_PAGES = 1;
 const SQUEEZE_COST_SCALE = 0.25;        // squeezing s px of workspace costs 0.25*s^2
 
+// How leftover room at the foot of a page is charged when nothing on that page
+// will grow into it -- see deadSpaceCost().  Below 1 the cost is concave, which
+// is what makes the optimiser pack the early pages full and let the remainder
+// gather at the end: of two layouts that waste the same total, the one that
+// wastes it all in a single gap is cheaper than the one that spreads it evenly.
+// (The squared cost used for room a workspace will soak up does the opposite,
+// deliberately -- see pageCost().)
+const DEAD_SPACE_EXPONENT = 0.75;
+
 // Whether any hint/answer/solution is currently revealed in the printout.
 // Checks effective visibility -- the element and every ancestor free of
 // "hidden" -- because rewriteSolutions() puts the "hidden" class on the
@@ -1501,11 +1694,49 @@ function anySolutionShown() {
     return [...printout.querySelectorAll('.hint, .answer, .solution')].some(el => !el.closest('.hidden'));
 }
 
-function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced }) {
+// What `slack` px of unused room at the foot of a page costs when no workspace
+// on the page will grow into it -- blank paper the reader gets nothing for.
+//
+// Free on the final page: a printout almost never ends exactly at a page
+// boundary, so *some* page has to carry the remainder, and the last one is
+// where a reader expects it.  Charging for it is what used to make a long list
+// come out halved, with a matching gap at the foot of both pages: with the cost
+// squared, two gaps of h/2 beat one gap of h, so the optimiser preferred to
+// split the difference rather than fill the first page.
+//
+// Everywhere else the cost is concave (DEAD_SPACE_EXPONENT below 1), so that
+// preference is reversed at every page count, not just the last: leaving a
+// little room on each of several pages costs more than leaving all of it on
+// one, so each page is filled as far as the rows allow and what is left over
+// is pushed towards the end.
+//
+// Scaled so that a wholly blank page still costs pageHeight^2 -- exactly one
+// wasted page, the same as before -- which keeps GROUP_BREAK_PENALTY_PAGES
+// calibrated: no single page's blank space can outweigh keeping a question
+// with its own solutions and workspace, whatever the paper size.
+function deadSpaceCost(slack, pageHeight, isLastPage) {
+    if (isLastPage) return 0;
+    return pageHeight ** 2 * (slack / pageHeight) ** DEAD_SPACE_EXPONENT;
+}
+
+function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced, isLastPage }) {
     const groupPenalty = splitsGroup ? GROUP_BREAK_PENALTY_PAGES * pageHeight ** 2 : 0;
     if (naturalHeight <= pageHeight) {
-        // Fits as authored; the classic objective, minimise wasted space.
-        return (pageHeight - naturalHeight) ** 2 + groupPenalty;
+        // Fits as authored.  What the room left over is worth depends on what
+        // becomes of it once the page is built.
+        const slack = pageHeight - naturalHeight;
+        if (workspaceHeight > 0) {
+            // adjustWorkspaceToFitPage() will hand every px of it to the
+            // writing space on this page, so none of it is actually wasted --
+            // it turns into room the author asked for.  Squared, as it always
+            // has been, precisely because that spreads the extra evenly over a
+            // run of such pages: every workspace grows a little, rather than
+            // one page's workspace growing enormously so that another's can
+            // stay at its authored size.
+            return slack ** 2 + groupPenalty;
+        }
+        // Nothing here grows, so the room is simply blank paper.
+        return deadSpaceCost(slack, pageHeight, isLastPage) + groupPenalty;
     }
     // Over budget at the authored workspace sizes.  Blank writing space is
     // compressible, but eating into it to merely pack pages tighter is only
@@ -1570,6 +1801,7 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false } = {}) {
                 splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
                 allowSqueeze,
                 squeezeIsForced: tallestRow > pageHeight,
+                isLastPage: j === rows.length - 1,
             });
             if (thisPage === Infinity) {
                 // This page overflows even with all its writing space squeezed
@@ -2148,7 +2380,7 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         // hasAuthoredPages (computed above) picks the right strategy here:
         // preserve authored structure vs. safely recompute a computed layout.
         if (hasAuthoredPages) {
-            adjustPrintoutPages();
+            adjustPrintoutPages(margins);
         } else {
             createPrintoutPages(margins);
             // Safety net: content heights (e.g. proof knowls, large matrices) can
