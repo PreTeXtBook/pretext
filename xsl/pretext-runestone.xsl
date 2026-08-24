@@ -1049,76 +1049,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Multiple Choice -->
 
+<!-- Static-first, JS-hydrated: this emits genuine, readable HTML (a       -->
+<!-- statement plus a lettered list of choices) that is fully usable as-is -->
+<!-- (print, no-JS).  It is annotated with just enough data (@data-correct, -->
+<!-- @data-hydrate, the multipleanswers/random flags) for client-side JS    -->
+<!-- (hydrateMultipleChoice() in pretext_add_on.js) to rebuild, in place,   -->
+<!-- the exact data-component skeleton Runestone's own JS expects, before  -->
+<!-- Runestone's script has a chance to scan the page.  If that JS never   -->
+<!-- runs (print preview, or JS disabled), this static markup is simply    -->
+<!-- what the reader sees.                                                  -->
 <xsl:template match="*[@pi:exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
-    <div class="ptx-runestone-container">
-        <div class="runestone multiplechoice_section">
-            <!-- overall statement, not per-choice -->
-            <div class="exercise-statement">
-                <xsl:apply-templates select="statement"/>
-            </div>
-            <!-- ul can have multiple answer attribute -->
-            <ul data-component="multiplechoice" class="exercise-interactives">
-                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
-                <xsl:attribute name="data-multipleanswers">
-                    <xsl:choose>
-                        <xsl:when test="choices/@multiple-correct = 'yes'">
-                            <xsl:text>true</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="choices/@multiple-correct = 'no'">
-                            <xsl:text>false</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="$ncorrect > 1">
-                            <xsl:text>true</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>false</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <!-- bare attribute, iff requested -->
-                <xsl:if test="choices/@randomize = 'yes'">
-                    <xsl:attribute name="data-random"/>
-                </xsl:if>
-                <xsl:apply-templates select="choices/choice">
-                    <xsl:with-param name="the-id">
-                        <xsl:apply-templates select="." mode="runestone-id"/>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </ul>
+    <xsl:param name="b-has-solution" select="false()"/>
+    <div class="ptx-runestone-container" data-hydrate="multiplechoice">
+        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+        <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
+        <xsl:attribute name="data-multipleanswers">
+            <xsl:choose>
+                <xsl:when test="choices/@multiple-correct = 'yes'">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="choices/@multiple-correct = 'no'">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <xsl:when test="$ncorrect > 1">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>false</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- bare attribute, iff requested -->
+        <xsl:if test="choices/@randomize = 'yes'">
+            <xsl:attribute name="data-random"/>
+        </xsl:if>
+        <!-- overall statement, not per-choice -->
+        <div class="exercise-statement">
+            <xsl:apply-templates select="statement"/>
         </div>
+        <ol class="runestone-static-choices" type="A">
+            <xsl:apply-templates select="choices/choice">
+                <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </ol>
     </div>
 </xsl:template>
 
 <xsl:template match="choices/choice">
-    <xsl:param name="the-id"/>
+    <xsl:param name="b-has-solution" select="false()"/>
 
-    <!-- id for each "choice"                  -->
-    <!-- with common base, then a, b, c suffix -->
-    <!-- Used *twice* on adjacent "li"?        -->
-    <xsl:variable name="choice-id">
-        <xsl:value-of select="$the-id"/>
-        <xsl:text>_opt_</xsl:text>
-        <!-- will count preceding "choice" only -->
-        <xsl:number format="a"/>
-    </xsl:variable>
-    <li data-component="answer">
-        <xsl:attribute name="id">
-            <xsl:value-of select="$choice-id"/>
-        </xsl:attribute>
-        <!-- mark correct answers (empty attribute value) -->
+    <li>
+        <!-- mark correct answers, consumed by hydrateMultipleChoice() -->
         <xsl:if test="@correct = 'yes'">
-            <xsl:attribute name="data-correct"/>
+            <xsl:attribute name="data-correct">yes</xsl:attribute>
         </xsl:if>
         <!-- per-choice statement -->
         <xsl:apply-templates select="statement"/>
-    </li>
-    <li data-component="feedback">
-        <xsl:attribute name="id">
-            <xsl:value-of select="$choice-id"/>
-        </xsl:attribute>
-        <!-- per-choice explanation -->
-        <xsl:apply-templates select="feedback"/>
+        <!-- per-choice explanation: visible here only when solutions are   -->
+        <!-- visible in this exercise's context, matching every other       -->
+        <!-- exercise type; otherwise present but hidden, for JS to move    -->
+        <!-- into the hydrated widget's feedback reveal.                    -->
+        <div class="choice-feedback">
+            <xsl:if test="not($b-has-solution)">
+                <xsl:attribute name="hidden"/>
+            </xsl:if>
+            <xsl:apply-templates select="feedback"/>
+        </div>
     </li>
 </xsl:template>
 
