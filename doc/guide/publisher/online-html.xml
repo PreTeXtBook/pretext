@@ -109,6 +109,23 @@
             <p>A window that allows for entering, and executing, computer programs can be made available for every page.  The reader can click on a pencil icon to activate this window.  Some languages can run in a web browser as part of any <init>HTML</init> output, while some other languages require infrastructure on a Runestone server to execute, and so are only available when you specify that hosting option.  Note that the publisher will select a single language for use with the entire document. See <xref ref="online-activecode"/> for details on specifying this option.</p>
         </subsection>
 
+        <subsection xml:id="online-html-doenetml">
+            <title>DoenetML Activities</title>
+            <idx><h>DoenetML</h><h>coordinator</h></idx>
+
+            <p>A DoenetML activity is a substantial piece of software.  A page carrying a dozen of them once started every one the moment the page opened, and held every one in memory for as long as the reader stayed<mdash/>enough, on a modest machine, that the activities could be slow to appear, or fail to appear at all.  So a page carrying DoenetML activities loads a small <term>coordinator</term> script, served from the same place as the activities themselves, which takes charge of them: it starts them a couple at a time as the reader nears them, so an activity the reader never scrolls to is never started, and it puts away the ones the reader has left well behind.  A reader's work is saved before an activity is put away and restored if the reader returns to it, and the space the activity occupies on the page is held while it is away, so nothing shifts.  This is on by default and needs nothing from an author, though a publisher can turn it off (<xref ref="online-doenetml-options"/>).</p>
+
+            <p>The coordinator also lets the activities on a page share a pool of the background workers they compute in.  A worker is the largest part of what an activity costs in memory, so the pool is most of the coordinator's saving; it too can be turned off, giving each activity a worker of its own.  Turning the coordinator off turns the pool off with it, since the coordinator is what owns the pool.</p>
+
+            <p>Two limits tune how much the coordinator allows at once: the number of activities kept running, and the number allowed to be starting up at the same time.  A book whose activities are small might raise them; but raising them asks more of the reader's machine, which is what the coordinator exists to avoid, and the defaults suit a reader on modest hardware.</p>
+
+            <p>The version of DoenetML in use, including the version of the coordinator, comes from the <tag>doenetml</tag> element of <tag>docinfo</tag> rather than from the publication file, since it is a property of the source: see <xref ref="topic-docinfo"/>.  A book that names no version, or names a partial one such as <c>0.7</c>, gets the newest release, which is what this machinery is written for.  A book that pins an exact version should pin <c>0.7.25</c> or later.</p>
+
+            <p>Two earlier boundaries matter to a book that does pin one.  The coordinator first shipped with DoenetML <c>0.7.21</c>, so a book pinned before that will not find the script at all and behaves as if the coordinator were turned off.  From <c>0.7.21</c> through <c>0.7.24</c> the script is there, but it does not yet share a page well with a book that saves the reader's work itself, as a Runestone or <init>SCORM</init> deployment does.  Two parties then answer an activity's request for its saved work<mdash/>the coordinator, from what it took down when it put the activity away, and the book's own saving<mdash/>and before <c>0.7.25</c> each answer rebuilt the activity in turn, so every restore built the document twice over.  That is the very cost the coordinator is there to avoid.  And since the answer that arrived last was the one kept, a book whose saving answers out of storage it has to go and fetch could have the fresher copy the coordinator was holding overwritten by an older one, leaving the reader to find work they had just done replaced.  A book pinned into that range should turn the coordinator off; a build that can see the combination will say so.</p>
+
+            <p>See <xref ref="online-doenetml-options"/> for the publication file entries controlling all of the above.</p>
+        </subsection>
+
         <subsection xml:id="online-base-url">
             <title>Base URL</title>
             <idx>base URL</idx>
