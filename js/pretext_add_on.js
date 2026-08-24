@@ -942,6 +942,10 @@ function createPrintoutPages(margins) {
     if (flattenOversizedListsIn(measuringPage, conservativeContentHeight)) {
         rows = [...measuringPage.children];
     }
+    // Measure the footnote block here too, while the rows are parked in the
+    // same scaffold, for the same reason: it has to wrap at the real page width
+    // and under the rules that only apply inside a .onepage.
+    const footnoteMetrics = measureFootnotes(rows, measuringPage);
     // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
     let blockList = [];
     for (const row of rows) {
@@ -990,6 +994,12 @@ function createPrintoutPages(margins) {
             // opens with -- see findPageBreaks().  Suppressed writing space
             // does not count; see isVisibleWorkspaceRow().
             isWorkspace: isVisibleWorkspaceRow(row),
+            // How much room this row's own footnotes will take at the foot of
+            // whichever page it lands on.  Charged to the row rather than to
+            // the page because that is what makes the cost move with the row:
+            // the DP in findPageBreaks() then accumulates it over exactly the
+            // rows a candidate page holds, with no circularity to resolve.
+            footnoteHeight: footnoteMetrics.heights.get(row) || 0,
         });
     }
 
@@ -1003,6 +1013,7 @@ function createPrintoutPages(margins) {
     // table once something is revealed that needs the room (see pageCost()).
     const pageBreaks = findPageBreaks(blockList, conservativeContentHeight, {
         allowSqueeze: anySolutionShown(),
+        footnoteChrome: footnoteMetrics.chrome,
     });
 
     // Done measuring; let the printout go back to its normal width so the
@@ -1117,7 +1128,7 @@ function hideWidowedWorkspaces() {
     // headers/footers carry `hidden` on their own elements.
     printout.querySelectorAll('.workspace, .workspace-container').forEach(ws => ws.classList.remove('hidden'));
     printout.querySelectorAll(':scope > .onepage').forEach(page => {
-        const rows = [...page.children].filter(c => !isHeaderFooterEl(c));
+        const rows = [...page.children].filter(c => !isPageFurnitureEl(c));
         const questionGroupsOnPage = new Set(
             rows.filter(r => !isWorkspaceRow(r))
                 .map(r => r.dataset.blockGroup)
@@ -1153,7 +1164,7 @@ function unwrapOnepages() {
     if (!printout) return;
     const pages = [...printout.querySelectorAll(':scope > .onepage')];
     pages.forEach(page => {
-        page.querySelectorAll(':scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer').forEach(hf => hf.remove());
+        [...page.children].filter(isPageFurnitureEl).forEach(el => el.remove());
         while (page.firstChild) {
             printout.insertBefore(page.firstChild, page);
         }
@@ -1167,24 +1178,63 @@ function resetPrintoutPagination(margins) {
     addHeadersAndFootersToPrintout();
 }
 
-function isHeaderFooterEl(el) {
-  return el.classList.contains('first-page-header') || el.classList.contains('running-header') ||
+// Furniture that trails a page's content: the block of collected footnote text
+// and the footer band, in that order.
+function isPageTailEl(el) {
+  return el.classList.contains('footnotes') ||
          el.classList.contains('first-page-footer') || el.classList.contains('running-footer');
+}
+
+// Everything a page carries that is not authored content: the header band, and
+// the tail furniture above.  None of it is a movable row -- it is a property of
+// whatever content ends up on the page, not content in its own right -- so
+// pagination must never push it onto a spillover page or merge it into a
+// previous one.  All of it is destroyed and rebuilt from scratch by
+// addHeadersAndFootersToPrintout() after every repagination.
+function isPageFurnitureEl(el) {
+  return el.classList.contains('first-page-header') || el.classList.contains('running-header') ||
+         isPageTailEl(el);
 }
 
 function addSpilloverPages(margins) {
   const printout = getPrintout();
   if (!printout) return;
+  // Drop any bottom-anchoring offset before measuring.  adjustWorkspaceToFitPage()
+  // grows a footnote block's top margin to push it to the foot of a page that
+  // has room to spare; that padding is slack, not content, and reserving room
+  // for it below would split a page that already fits.  The blocks are torn
+  // down and rebuilt at the end of this function anyway.
+  printout.querySelectorAll(':scope > .onepage > .footnotes').forEach(block => {
+    block.style.marginTop = "";
+  });
   let pages = [...printout.querySelectorAll(':scope > .onepage')];
 
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
-    const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
+    const contentChildren = [...page.children].filter(c => !isPageFurnitureEl(c));
+
+    // The footnote block sits below every row, so the room a page has for
+    // content is its own height less whatever that block takes.  Measuring the
+    // rows against that reduced bottom is what makes a page carrying footnotes
+    // split early enough to hold them.
+    //
+    // This is the only thing reserving that room on an authored-page printout:
+    // those pages are the author's, so they never go through findPageBreaks(),
+    // where the same budget is applied when pages are planned from scratch.
+    // Without it the block simply rendered past the foot of the sheet -- and
+    // since a page box only clips when actually printing, on screen it spilled
+    // into the gap below and read as the top of the next page.
+    //
+    // Reserving the block's *current* height is always enough, and never traps
+    // the layout in a cycle: rows only ever move off this page, and every
+    // footnote leaving with one makes the block smaller, never bigger.
+    const footnotes = [...page.children].find(c => c.classList.contains('footnotes'));
+    const contentBottom = getPageContentBottom(page) - (footnotes ? getElementTotalHeight(footnotes) : 0);
 
     let overflowStartIndex = -1;
     for (let j = 0; j < contentChildren.length; j++) {
       const r = contentChildren[j].getBoundingClientRect();
-      if (r.bottom > getPageContentBottom(page) + 1) {
+      if (r.bottom > contentBottom + 1) {
         overflowStartIndex = j;
         break;
       }
@@ -1225,26 +1275,26 @@ function addSpilloverPages(margins) {
     overflowElems.forEach(el => newPage.appendChild(el));
     page.parentNode.insertBefore(newPage, page.nextSibling);
 
-    [...page.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+    [...page.children].filter(isPageFurnitureEl).forEach(hf => hf.remove());
 
     pages.splice(i + 1, 0, newPage); // let the loop also check the new page for cascading overflow
   }
 
   printout.querySelectorAll(':scope > .onepage').forEach(p => {
-    [...p.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+    [...p.children].filter(isPageFurnitureEl).forEach(hf => hf.remove());
   });
   addHeadersAndFootersToPrintout();
 }
 
-// Append `children` onto the end of a page's *content*, i.e. before its
-// running/first-page footer if one is already attached. Pages being merged
-// in collapseSpilloverPages() still have their old footer in place (footers
-// aren't stripped until after the whole merge pass finishes), so a plain
-// appendChild would land new content after the footer -- corrupting both
+// Append `children` onto the end of a page's *content*, i.e. ahead of whatever
+// tail furniture is already attached. Pages being merged in
+// collapseSpilloverPages() still have their old footnote block and footer in
+// place (furniture isn't stripped until after the whole merge pass finishes),
+// so a plain appendChild would land new content after them -- corrupting both
 // the reading order and the overflow measurement used to judge the merge.
 function appendPageContent(page, children) {
-    const footer = [...page.children].find(c => c.classList.contains('first-page-footer') || c.classList.contains('running-footer'));
-    children.forEach(c => page.insertBefore(c, footer || null));
+    const tail = [...page.children].find(isPageTailEl);
+    children.forEach(c => page.insertBefore(c, tail || null));
 }
 
 // Eagerly fold every spillover page's content back into the page before it,
@@ -1272,7 +1322,7 @@ function collapseSpilloverPages(margins) {
     if (!page.classList.contains('spillover')) continue;
     const prevPage = pages[i - 1];
 
-    const contentChildren = [...page.children].filter(c => !isHeaderFooterEl(c));
+    const contentChildren = [...page.children].filter(c => !isPageFurnitureEl(c));
     appendPageContent(prevPage, contentChildren);
     if (page.classList.contains('lastpage')) {
       prevPage.classList.add('lastpage');
@@ -1281,7 +1331,7 @@ function collapseSpilloverPages(margins) {
   }
 
   printout.querySelectorAll(':scope > .onepage').forEach(p => {
-    [...p.children].filter(isHeaderFooterEl).forEach(hf => hf.remove());
+    [...p.children].filter(isPageFurnitureEl).forEach(hf => hf.remove());
   });
   addHeadersAndFootersToPrintout();
 }
@@ -1429,6 +1479,127 @@ function flattenOversizedListsIn(container, pageHeight) {
     return split;
 }
 
+// Footnotes //
+
+// A printout sets footnotes the way a book does: the marker stays inline where
+// the reference is, and the text is collected into a block at the foot of
+// whichever page that reference lands on.  Everything below is built on
+// *cloning* the text into that block rather than moving it there, which is what
+// keeps the whole scheme compatible with a paginator that moves rows around
+// freely: the authored DOM is never touched, so a row can be pushed onto a
+// spillover page, merged back, or re-measured without anything needing to be
+// restored, and the block is simply thrown away and rebuilt from scratch on the
+// far side (see rebuildFootnotes(), called from addHeadersAndFootersToPrintout()
+// alongside the header and footer bands, which are handled exactly this way).
+//
+// The original footnote stays inline as a closed <details>, showing its marker
+// and nothing else; the print stylesheet keeps its contents out of sight even
+// if the <details> is somehow opened.
+
+// The footnotes referenced somewhere inside `root`, in document order.
+//
+// A footnote inside a hidden hint/answer/solution is not on the page, so it
+// gets no entry at the foot of it -- and picks one up, through the ordinary
+// repagination that a reveal already triggers, as soon as it is shown.
+function footnoteDetailsIn(root) {
+    return [...root.querySelectorAll('details.ptx-footnote')].filter(fn => !fn.closest('.hidden'));
+}
+
+// The number a footnote is marked with inline, which is also what its entry at
+// the foot of the page is labelled with.  Read off the marker the XSL emitted
+// rather than counted here, so the numbering in a printout is the same
+// numbering the same footnote carries everywhere else in the book.
+function footnoteMark(details) {
+    const sup = details.querySelector('.ptx-footnote__number sup');
+    return sup ? sup.textContent.trim() : '';
+}
+
+// One entry -- number plus text -- for the block at the foot of the page.
+function buildFootnoteItem(details) {
+    const item = document.createElement('div');
+    item.classList.add('footnote-item');
+    const number = document.createElement('sup');
+    number.classList.add('footnote-item__number');
+    number.textContent = footnoteMark(details);
+    item.appendChild(number);
+    const contents = details.querySelector('.ptx-footnote__contents');
+    if (contents) {
+        const clone = contents.cloneNode(true);
+        // The original stays in the document, so every id in the copy would be
+        // a duplicate of one still live elsewhere on the page -- including the
+        // footnote's own, which the XSL already puts on both the <details> and
+        // the contents div.  Nothing needs to address the copy, and
+        // getElementById() picking it over the real element (loadPrintout()
+        // resolves ?printpreview= that way) is a real hazard, so drop them all.
+        clone.removeAttribute('id');
+        clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+        // Down here it is a run of text after a number, not the bordered knowl
+        // box the class styles it as in the body of the page.
+        clone.classList.remove('ptx-footnote__contents');
+        clone.classList.add('footnote-item__contents');
+        item.appendChild(clone);
+    }
+    return item;
+}
+
+function buildFootnotesBlock(detailsList) {
+    const block = document.createElement('div');
+    block.classList.add('footnotes');
+    detailsList.forEach(details => block.appendChild(buildFootnoteItem(details)));
+    return block;
+}
+
+// Give every page the footnote text its own content references, replacing
+// whatever it was given last time.  Idempotent by construction -- it clears
+// before it builds -- so it is safe to call after any repagination, however
+// much or little actually moved.
+function rebuildFootnotes() {
+    const printout = getPrintout();
+    if (!printout) return;
+    printout.querySelectorAll(':scope > .onepage > .footnotes').forEach(block => block.remove());
+    printout.querySelectorAll(':scope > .onepage').forEach(page => {
+        const notes = footnoteDetailsIn(page);
+        if (notes.length === 0) return;
+        appendPageContent(page, [buildFootnotesBlock(notes)]);
+    });
+}
+
+// What the footnote block will cost a page, measured in the same throwaway
+// .onepage the rows themselves are being measured in (see createPrintoutPages())
+// so that it wraps at the real page width and under the real print stylesheet.
+//
+// Footnote text does not sit where its reference does, so it is not part of any
+// row's own height, and a page planned without it overflows by exactly the
+// amount it takes.  Returns the height each row's own footnotes contribute,
+// which findPageBreaks() charges to that row, and separately the block's fixed
+// overhead -- its rule, padding and margins -- which a page pays once if it
+// carries any footnote at all.
+function measureFootnotes(rows, measuringPage) {
+    const heights = new Map();
+    const owners = [];
+    for (const row of rows) {
+        for (const details of footnoteDetailsIn(row)) {
+            owners.push({details, row});
+        }
+    }
+    if (owners.length === 0) return {heights, chrome: 0};
+    const probe = buildFootnotesBlock(owners.map(o => o.details));
+    measuringPage.appendChild(probe);
+    let itemTotal = 0;
+    [...probe.children].forEach((item, i) => {
+        const height = getElementTotalHeight(item);
+        itemTotal += height;
+        const row = owners[i].row;
+        heights.set(row, (heights.get(row) || 0) + height);
+    });
+    // Whatever the block costs beyond its entries.  Derived by subtraction
+    // rather than read off the stylesheet so that restyling the block cannot
+    // quietly desynchronise the budget from what actually gets rendered.
+    const chrome = Math.max(0, getElementTotalHeight(probe) - itemTotal);
+    probe.remove();
+    return {heights, chrome};
+}
+
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
 function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
@@ -1436,6 +1607,11 @@ function addHeadersAndFootersToPrintout() {
         console.warn("No printout found, exiting addHeadersAndFootersToPrintout.");
         return;
     }
+    // The footnote block is page furniture on the same terms as the bands
+    // below -- derived from whatever content the page ended up with, and so
+    // rebuilt whenever that changes -- and it goes on first, since it belongs
+    // between the content and the footer.
+    rebuildFootnotes();
     const pages = printout.querySelectorAll('.onepage');
     // Loop through pages and add header and footer divs. This function gets
     // called every time pagination is rebuilt (resetPrintoutPagination(),
@@ -1541,6 +1717,13 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
 
     // Reset the heights of workspace divs to their author-provided heights
     setInitialWorkspaceHeights();
+    // Bottom-anchoring a footnote block (below) is done by growing its top
+    // margin, so clear that first: left in place it measures as content, and
+    // each pass would push the block down by the slack the previous pass had
+    // already taken up.
+    document.querySelectorAll('.onepage > .footnotes').forEach(block => {
+        block.style.marginTop = "";
+    });
 
     const pages = document.querySelectorAll('.onepage');
     pages.forEach(page => {
@@ -1555,6 +1738,26 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
             totalWorkspaceHeight += getElemWorkspaceHeight(row);
         }
         if (totalWorkspaceHeight === 0) {
+            // With no writing space to stretch, nothing else on this page will
+            // grow to fill it, so a footnote block would sit directly beneath
+            // the last line of content, stranded mid-page.  A book sets its
+            // footnotes at the foot of the page, so push the block down into
+            // whatever room is left over.  Only ever into slack that already
+            // exists -- and a pixel short of it -- so this can never be what
+            // makes a page overflow.
+            const footnotes = [...page.children].find(c => c.classList.contains('footnotes'));
+            if (footnotes) {
+                // Measured from where the block has actually been laid out,
+                // rather than from the summed row heights: read off the page
+                // itself, the push can only ever close a gap that is really
+                // there, so no error in that accounting can drive the block
+                // off the foot of the sheet.
+                const gap = getPageContentBottom(page) - footnotes.getBoundingClientRect().bottom - 1;
+                if (gap > 0) {
+                    const baseMargin = parseFloat(getComputedStyle(footnotes).marginTop) || 0;
+                    footnotes.style.marginTop = (baseMargin + gap) + "px";
+                }
+            }
             console.log("No workspaces on this page, skipping workspace adjustment.");
             // Reset the style for the page
             page.style.width = "";
@@ -1769,7 +1972,10 @@ function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, all
 // writing space is compressed.  It is off unless a hint/answer/solution is
 // actually being shown: a worksheet with nothing revealed must honour the
 // authored workspace heights in full.
-function findPageBreaks(rows, pageHeight, { allowSqueeze = false } = {}) {
+//
+// `footnoteChrome` is the fixed overhead of the footnote block (see
+// measureFootnotes()), charged once to any page that carries a footnote.
+function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome = 0 } = {}) {
     console.log("*** Finding page breaks for", rows.length, "rows with page height:", pageHeight);
     // An array for the page breaks.  The nth element will be the index of the first row on page n+1.
     let pageBreaks = [];
@@ -1783,20 +1989,33 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false } = {}) {
     for (let i = rows.length - 1; i >= 0; i--) {
         let cumulativeHeight = 0;
         let cumulativeWorkspaceHeight = 0;
+        let cumulativeFootnoteHeight = 0;
         let tallestRow = 0;
         // Loop through the rows starting from i to find the best page break
         for (let j = i; j < rows.length; j++) {
             cumulativeHeight += rows[j].height;
             cumulativeWorkspaceHeight += rows[j].workspaceHeight;
+            cumulativeFootnoteHeight += rows[j].footnoteHeight || 0;
+            // The footnote block is only on the page if something on the page
+            // referenced a footnote, and then it costs its own rule and padding
+            // once, however many entries it ends up holding.
+            const footnotesHeight = cumulativeFootnoteHeight > 0
+                ? cumulativeFootnoteHeight + footnoteChrome
+                : 0;
             // A row taller than a whole page cannot be placed at its authored
             // size no matter how the breaks fall, so squeezing is forced for
-            // any page that has to hold it -- see pageCost().
-            tallestRow = Math.max(tallestRow, rows[j].height);
+            // any page that has to hold it -- see pageCost().  A row drags its
+            // own footnotes onto the page with it, so it is the pair that has
+            // to fit, not the row alone.
+            const rowWithNotes = rows[j].footnoteHeight
+                ? rows[j].height + rows[j].footnoteHeight + footnoteChrome
+                : rows[j].height;
+            tallestRow = Math.max(tallestRow, rowWithNotes);
             const next = rows[j + 1];
 
             const thisPage = pageCost({
                 pageHeight,
-                naturalHeight: cumulativeHeight,
+                naturalHeight: cumulativeHeight + footnotesHeight,
                 workspaceHeight: cumulativeWorkspaceHeight,
                 splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
                 allowSqueeze,
@@ -2098,7 +2317,13 @@ function solutionTypeHidden(solutionType) {
 
 // Function to redo solutions details to divs with summary as title
 async function rewriteSolutions() {
-    var born_hidden_knowls = document.querySelectorAll('.printout details');
+    // A footnote is a <details> too, but it is not a knowl to be unfolded in
+    // place: rebuildFootnotes() clones its text into a block at the foot of
+    // whichever page the reference lands on, the way a book sets footnotes, and
+    // only the marker stays inline.  Rewriting one here would instead drop its
+    // number into the text as an <h5> heading and its contents as a bordered
+    // box, in the middle of the sentence that referenced it.
+    var born_hidden_knowls = document.querySelectorAll('.printout details:not(.ptx-footnote)');
     born_hidden_knowls.forEach(function(detail) {
         const summary = detail.querySelector('summary');
         const content = detail.innerHTML.replace(summary.outerHTML, '');
