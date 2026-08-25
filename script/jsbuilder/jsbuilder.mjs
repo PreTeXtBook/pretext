@@ -14,7 +14,7 @@
  * four categories based on how they are loaded and whether they need bundling:
  *
  *  IIFE bundles  — multiple source files combined into one IIFE.
- *    pretext-core        js/src/pretext-core.js  (pretext.js + pretext_add_on.js + knowl.js)
+ *    pretext-core        js/src/pretext-core.js  (pretext.js + pretext_add_on.js + pretext-printouts.js + knowl.js)
  *    pretext-read-aloud  js/src/read-aloud/index.js  (embedded text-to-speech)
  *
  *  ES module     — loaded via `import` from an inline <script type="module">.
