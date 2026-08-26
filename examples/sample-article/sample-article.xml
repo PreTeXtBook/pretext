@@ -3551,6 +3551,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <image source="images/nz-landscape.jpg" width="80%"/>
                 </figure>
 
+                <p>Raster formats are not ideal in that they do not scale well. But sometimes they are the only option. An ideal size (in pixels) for a raster image is at least 150 pixels per inch (PPI). If you have a raster image that is too small, then it will be scaled up and will look pixelated.  If you have a raster image that is larger than the content width, then it will be scaled down and will generally look fine. And in some presentations there may be a way for the reader to see the high-resolution version. Providing an image that is significantly larger than needed can bloat your book and increase loading times, so avoid providing images that are many multiples of the required size.</p>
+
+                <p>Here is a small raster image based on a screenshot, as a test of scaling. The natural size of the image is 139 pixels by 127 pixels but many presentations will scale it beyond the natural size.</p>
+
+                <figure>
+                    <caption>A portion of the UI for the PreTeXt tools plugin for VSCode.</caption>
+                    <image source="images/vscode-pretext-raster-sample.png" width="60%">
+                        <shortdescription>
+                            a row of toolbar buttons from the PreTeXt plugin for VSCode
+                        </shortdescription>
+                    </image>
+                </figure>
+
                 <p>If you have existing images that are vector graphics, then PDF format works best for <latex/> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filename, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
 
                 <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.  It has a <tag>description</tag>, but no <tag>shortdescription</tag>, so is testing that scenario.</p>
