@@ -108,8 +108,9 @@ class PTXDialog {
             this.toggle = () => this.toggleDialogFallback();
         }
 
-        if (!PTXDialog.hasNativeCommandInvokers() && this.kind === "light-close") {
-            // Add event listener to close the dialog if the user clicks outside of it
+        if (this.kind === "light-close") {
+            // Native light-dismiss support is not yet consistent across
+            // browsers, so always provide the outside-click behavior here.
             this.dialog.addEventListener("click", (event) => {
                 if (event.target === this.dialog) {
                     // need to ask for bounding rext and do manual check
