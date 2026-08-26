@@ -409,7 +409,7 @@
         this.close = () => this.closeDialogFallback();
         this.toggle = () => this.toggleDialogFallback();
       }
-      if (!_PTXDialog.hasNativeCommandInvokers() && this.kind === "light-close") {
+      if (this.kind === "light-close") {
         this.dialog.addEventListener("click", (event2) => {
           if (event2.target === this.dialog) {
             const rect = this.dialog.getBoundingClientRect();
@@ -505,6 +505,239 @@
     }
   };
   window.PTXDialog = PTXDialog2;
+
+  // ../../js/src/image-dialog.js
+  window.addEventListener("load", () => {
+    requestAnimationFrame(initializeImageDialogs);
+  });
+  var initializedImageDialogs = /* @__PURE__ */ new WeakSet();
+  var imageDialogNumber = 0;
+  function initializeImageDialogs() {
+    const magnifiableImageSelector = [
+      ".image-box > img",
+      ".image-box > pre.mermaid",
+      ".image-box > .ChemAccess-element",
+      // Prefigure interactive diagram
+      ".image-box > .asymptote-box",
+      ".sbspanel > img",
+      "figure > img",
+      "figure > div > img"
+    ].join(", ");
+    document.querySelectorAll(magnifiableImageSelector).forEach((image) => {
+      if (initializedImageDialogs.has(image)) {
+        return;
+      }
+      const imageBox = image.closest(".image-box");
+      const figure = imageBox?.parentElement?.matches("figure") ? imageBox.parentElement : null;
+      const isMermaid = image.matches("pre.mermaid");
+      const isDiagcess = image.matches(".ChemAccess-element");
+      const asymptoteIframe = image.querySelector?.("iframe.asymptote");
+      const asymptoteSVG = asymptoteIframe?.contentDocument?.querySelector("svg");
+      const asymptoteCanvas = asymptoteIframe?.contentDocument?.querySelector("canvas");
+      if (image.matches(".asymptote-box") && !asymptoteSVG && !asymptoteCanvas) {
+        if (asymptoteIframe?.contentDocument?.readyState !== "complete") {
+          asymptoteIframe?.addEventListener("load", initializeImageDialogs, { once: true });
+        }
+        return;
+      }
+      const isAsymptote2D = !!asymptoteSVG;
+      const isAsymptote3D = !!asymptoteCanvas;
+      const isAsymptote = isAsymptote2D || isAsymptote3D;
+      initializedImageDialogs.add(image);
+      const dialog = document.createElement("dialog");
+      dialog.id = `ptx-image-dialog-${++imageDialogNumber}`;
+      dialog.classList.add("ptx-image-dialog");
+      dialog.setAttribute("aria-label", "Expanded image");
+      const dialogContentContainer = document.createElement("div");
+      dialogContentContainer.classList.add("ptx-image-dialog-content");
+      dialog.append(dialogContentContainer);
+      document.body.append(dialog);
+      let dialogImage = null;
+      let dialogFigure = null;
+      let dialogContentRoot = null;
+      const initializeDialogDiagcess = (diagrams) => {
+        if (!diagrams.length || !window.diagcess?.Base) {
+          return;
+        }
+        const observer = new MutationObserver(() => {
+          if (diagrams.some((diagram) => diagram.querySelector("svg"))) {
+            observer.disconnect();
+            requestAnimationFrame(fitDialogToFigure);
+          }
+        });
+        diagrams.forEach((diagram) => {
+          observer.observe(diagram, { childList: true, subtree: true });
+        });
+        window.diagcess.Base.init();
+      };
+      const refreshDialogContent = () => {
+        let dialogContent = (figure || (isDiagcess ? imageBox : image)).cloneNode(true);
+        if (dialogContent.matches("img, .ChemAccess-element")) {
+          const dialogImageBox = document.createElement("div");
+          dialogImageBox.classList.add("image-box");
+          dialogImageBox.append(dialogContent);
+          dialogContent = dialogImageBox;
+        }
+        dialogContent.removeAttribute("id");
+        dialogContent.querySelectorAll("[id]").forEach((element) => {
+          if (!element.closest("svg")) {
+            element.removeAttribute("id");
+          }
+        });
+        dialogContent.querySelectorAll(".ptx-image-expand-button").forEach((button) => button.remove());
+        const clonedMermaids = [
+          ...dialogContent.matches("pre.mermaid") ? [dialogContent] : [],
+          ...dialogContent.querySelectorAll("pre.mermaid")
+        ];
+        clonedMermaids.forEach((mermaid) => {
+          mermaid.classList.replace("mermaid", "ptx-mermaid-dialog");
+        });
+        if (isAsymptote2D) {
+          const clonedAsymptoteBox = dialogContent.matches(".asymptote-box") ? dialogContent : dialogContent.querySelector(".asymptote-box");
+          const dialogAsymptoteSVG = asymptoteSVG.cloneNode(true);
+          dialogAsymptoteSVG.classList.add("ptx-asymptote-dialog");
+          clonedAsymptoteBox.replaceChildren(dialogAsymptoteSVG);
+          clonedAsymptoteBox.style.removeProperty("padding-top");
+        }
+        const clonedDiagcess = [
+          ...dialogContent.matches(".ChemAccess-element") ? [dialogContent] : [],
+          ...dialogContent.querySelectorAll(".ChemAccess-element")
+        ].map((diagram) => {
+          const placeholder = document.createElement("div");
+          placeholder.classList.add("ChemAccess-element");
+          [...diagram.attributes].forEach((attribute) => {
+            if (attribute.name.startsWith("data-") || attribute.name === "aria-label") {
+              placeholder.setAttribute(attribute.name, attribute.value);
+            }
+          });
+          diagram.replaceWith(placeholder);
+          return placeholder;
+        });
+        dialogContentContainer.replaceChildren(dialogContent);
+        dialogContentRoot = dialogContent;
+        dialogImage = dialogContent.matches("img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog, iframe.asymptote") ? dialogContent : dialogContent.querySelector("img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog, iframe.asymptote");
+        dialogFigure = dialogContent.matches("figure") ? dialogContent : null;
+        if (dialogImage instanceof HTMLImageElement || dialogImage instanceof HTMLIFrameElement) {
+          dialogImage.addEventListener("load", fitDialogToFigure);
+        }
+        initializeDialogDiagcess(clonedDiagcess);
+      };
+      const fitDialogToFigure = () => {
+        const displayedImage = isDiagcess ? dialogContentContainer.querySelector(".ChemAccess-element svg") : dialogImage;
+        if (!dialog.open || !displayedImage) {
+          return;
+        }
+        const maxWidth = window.innerWidth * 0.9;
+        const maxHeight = window.innerHeight * 0.9;
+        const dialogStyle = getComputedStyle(dialog);
+        const horizontalPadding = parseFloat(dialogStyle.paddingLeft) + parseFloat(dialogStyle.paddingRight);
+        const verticalPadding = parseFloat(dialogStyle.paddingTop) + parseFloat(dialogStyle.paddingBottom);
+        const maxContentWidth = Math.max(0, maxWidth - horizontalPadding);
+        const maxContentHeight = Math.max(0, maxHeight - verticalPadding);
+        const renderedSVG = displayedImage instanceof SVGSVGElement ? displayedImage : displayedImage.querySelector?.("svg");
+        const viewBox = renderedSVG?.viewBox?.baseVal;
+        const intrinsicAspectRatio = viewBox?.width && viewBox?.height ? viewBox.width / viewBox.height : isAsymptote3D && asymptoteCanvas.width && asymptoteCanvas.height ? asymptoteCanvas.width / asymptoteCanvas.height : displayedImage instanceof HTMLImageElement && displayedImage.naturalWidth && displayedImage.naturalHeight ? displayedImage.naturalWidth / displayedImage.naturalHeight : null;
+        let imageWidth = Math.min(maxContentWidth, maxContentHeight * (intrinsicAspectRatio || 1));
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          dialog.style.width = `${imageWidth + horizontalPadding}px`;
+          displayedImage.style.setProperty("width", `${imageWidth}px`, "important");
+          displayedImage.style.setProperty("max-height", `${maxContentHeight}px`, "important");
+          const imageRect = displayedImage.getBoundingClientRect();
+          if (!imageRect.width || !imageRect.height) {
+            return;
+          }
+          const contentRect = (dialogFigure || dialogContentRoot || displayedImage).getBoundingClientRect();
+          const nonImageHeight = Math.max(0, contentRect.height - imageRect.height);
+          const availableImageHeight = Math.max(0, maxContentHeight - nonImageHeight);
+          const aspectRatio = intrinsicAspectRatio || imageRect.width / imageRect.height;
+          imageWidth = Math.min(imageWidth, availableImageHeight * aspectRatio);
+        }
+        dialog.style.width = `${imageWidth + horizontalPadding}px`;
+        displayedImage.style.setProperty("width", `${imageWidth}px`, "important");
+      };
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.classList.add("ptx-image-expand-button");
+      const description = image.getAttribute("alt")?.trim() || (isMermaid ? "Mermaid diagram" : isDiagcess ? "interactive diagram" : isAsymptote ? asymptoteIframe.title?.trim() || "Asymptote diagram" : "");
+      const contentType = isMermaid || isDiagcess || isAsymptote ? "diagram" : "image";
+      trigger.setAttribute("aria-label", description ? `Expand ${contentType}: ${description}` : `Expand ${contentType}`);
+      trigger.setAttribute("title", trigger.getAttribute("aria-label"));
+      trigger.innerHTML = '<span class="material-symbols-outlined">open_in_full</span>';
+      const triggerContainer = imageBox || image.parentElement;
+      triggerContainer.classList.add("ptx-image-dialog-trigger-container");
+      image.after(trigger);
+      image.setAttribute("tabindex", "0");
+      image.setAttribute("role", "button");
+      image.setAttribute("aria-label", trigger.getAttribute("aria-label"));
+      if (isDiagcess) {
+        image.addEventListener("click", (clickEvent) => {
+          clickEvent.preventDefault();
+          clickEvent.stopImmediatePropagation();
+          trigger.click();
+        }, true);
+        image.addEventListener("keydown", (keyEvent) => {
+          keyEvent.stopImmediatePropagation();
+          if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+            keyEvent.preventDefault();
+            trigger.click();
+          }
+        }, true);
+      } else if (isAsymptote) {
+        asymptoteIframe.tabIndex = -1;
+        asymptoteSVG?.setAttribute("aria-hidden", "true");
+        if (isAsymptote3D) {
+          let pointerStart = null;
+          const clickMovementThreshold = 5;
+          asymptoteIframe.contentDocument.addEventListener("pointerdown", (pointerEvent) => {
+            if (pointerEvent.button === 0) {
+              pointerStart = { x: pointerEvent.clientX, y: pointerEvent.clientY };
+            }
+          });
+          asymptoteIframe.contentDocument.addEventListener("pointerup", (pointerEvent) => {
+            if (pointerEvent.button === 0 && pointerStart) {
+              const distance = Math.hypot(
+                pointerEvent.clientX - pointerStart.x,
+                pointerEvent.clientY - pointerStart.y
+              );
+              if (distance <= clickMovementThreshold) {
+                trigger.click();
+              }
+            }
+            pointerStart = null;
+          });
+          asymptoteIframe.contentDocument.addEventListener("pointercancel", () => {
+            pointerStart = null;
+          });
+        } else {
+          asymptoteIframe.contentDocument.addEventListener("click", (clickEvent) => {
+            clickEvent.preventDefault();
+            trigger.click();
+          });
+        }
+        image.addEventListener("click", () => trigger.click());
+        image.addEventListener("keydown", (keyEvent) => {
+          if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+            keyEvent.preventDefault();
+            trigger.click();
+          }
+        });
+      } else {
+        image.addEventListener("click", () => trigger.click());
+        image.addEventListener("keydown", (keyEvent) => {
+          if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+            keyEvent.preventDefault();
+            image.click();
+          }
+        });
+      }
+      trigger.addEventListener("click", () => {
+        refreshDialogContent();
+        requestAnimationFrame(fitDialogToFigure);
+      });
+      window.addEventListener("resize", fitDialogToFigure);
+      new window.PTXDialog(dialog, trigger, { kind: "light-close" });
+    });
+  }
 
   // ../../js/src/pretext-dropdown.js
   var PTXDropdown2 = class {
@@ -1162,34 +1395,6 @@
   window.addEventListener(
     "load",
     function(event2) {
-      $("body").on("click", ".image-box > img:not(.draw_on_me):not(.mag_popup), .sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)", function() {
-        var img_big = document.createElement("div");
-        const content_element = document.getElementById("ptx-content");
-        img_big.setAttribute("class", "mag_popup_container");
-        img_big.innerHTML = `<img src="${$(this).attr("src")}" style="width:100%;" class="mag_popup"/>`;
-        place_to_put_big_img = $(this).parents(".image-box, .sbsrow, figure, li, .cols2 article:nth-of-type(2n)").last();
-        if (place_to_put_big_img.prop("tagName") == "ARTICLE") {
-          place_to_put_big_img = place_to_put_big_img.prev().children().first();
-        }
-        var img_big_parent = place_to_put_big_img[0].parentElement;
-        while (img_big_parent.id !== "ptx-content") {
-          const computed_position = getComputedStyle(img_big_parent).position;
-          if (computed_position !== "static") {
-            break;
-          }
-          img_big_parent = img_big_parent.parentElement;
-        }
-        const content_element_computed_style = getComputedStyle(content_element);
-        const content_padding_left = parseFloat(content_element_computed_style.paddingLeft);
-        const content_padding_right = parseFloat(content_element_computed_style.paddingRight);
-        const img_big_offset = content_element.getBoundingClientRect().left - img_big_parent.getBoundingClientRect().left + content_padding_left;
-        const doc_width = content_element.offsetWidth - content_padding_left - content_padding_right;
-        img_big.setAttribute("style", `width:${doc_width.toString()}px; left:${img_big_offset.toString()}px;`);
-        $(img_big).insertBefore(place_to_put_big_img);
-      });
-      $("body").on("click", "img.mag_popup", function() {
-        this.parentNode.remove();
-      });
       p_no_id = document.querySelectorAll(".main p:not([id])");
       for (var n = p_no_id.length - 1; n >= 0; --n) {
         e = p_no_id[n];
