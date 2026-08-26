@@ -1406,6 +1406,42 @@
       }
     }
   });
+  document.addEventListener("click", (ev) => {
+    const codeBox = ev.target.closest(".clipboardable");
+    if (!navigator.clipboard || !codeBox) return;
+    const button = ev.target.closest(".code-copy");
+    const pre = codeBox.querySelector("pre").cloneNode(true);
+    pre.querySelectorAll(".unselectable").forEach((el2) => el2.remove());
+    const preContent = pre.textContent;
+    navigator.clipboard.writeText(preContent);
+    button.classList.toggle("copied");
+    setTimeout(() => button.classList.toggle("copied"), 1e3);
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".clipboardable");
+    for (el of elements) {
+      const div = document.createElement("div");
+      div.classList.add("clipboardable");
+      el.classList.remove("clipboardable");
+      el.replaceWith(div);
+      div.insertAdjacentElement("afterbegin", el);
+      div.insertAdjacentHTML("beforeend", `
+    <button class="code-copy" title="Copy code" role="button" aria-label="Copy code" >
+        <span class="copyicon material-symbols-outlined">content_copy</span>
+        <span class="checkmark material-symbols-outlined">check</span>
+    </button>
+            `.trim());
+    }
+  });
+  window.addEventListener("DOMContentLoaded", () => {
+    const userDropdownButton = document.getElementById("ptx-user-dropdown-button");
+    const userDropdownContent = document.getElementById("ptx-user-dropdown-content");
+    if (userDropdownButton && userDropdownContent) {
+      new PTXDropdown(userDropdownContent, userDropdownButton);
+    }
+  });
+
+  // ../../js/src/pretext-printouts.js
   function getPrintout() {
     return document.querySelector(".printout");
   }
@@ -2637,40 +2673,6 @@
         }
       }
       console.log("finished adjusting workspace");
-    }
-  });
-  document.addEventListener("click", (ev) => {
-    const codeBox = ev.target.closest(".clipboardable");
-    if (!navigator.clipboard || !codeBox) return;
-    const button = ev.target.closest(".code-copy");
-    const pre = codeBox.querySelector("pre").cloneNode(true);
-    pre.querySelectorAll(".unselectable").forEach((el2) => el2.remove());
-    const preContent = pre.textContent;
-    navigator.clipboard.writeText(preContent);
-    button.classList.toggle("copied");
-    setTimeout(() => button.classList.toggle("copied"), 1e3);
-  });
-  document.addEventListener("DOMContentLoaded", () => {
-    const elements = document.querySelectorAll(".clipboardable");
-    for (el of elements) {
-      const div = document.createElement("div");
-      div.classList.add("clipboardable");
-      el.classList.remove("clipboardable");
-      el.replaceWith(div);
-      div.insertAdjacentElement("afterbegin", el);
-      div.insertAdjacentHTML("beforeend", `
-    <button class="code-copy" title="Copy code" role="button" aria-label="Copy code" >
-        <span class="copyicon material-symbols-outlined">content_copy</span>
-        <span class="checkmark material-symbols-outlined">check</span>
-    </button>
-            `.trim());
-    }
-  });
-  window.addEventListener("DOMContentLoaded", () => {
-    const userDropdownButton = document.getElementById("ptx-user-dropdown-button");
-    const userDropdownContent = document.getElementById("ptx-user-dropdown-content");
-    if (userDropdownButton && userDropdownContent) {
-      new PTXDropdown(userDropdownContent, userDropdownButton);
     }
   });
 
