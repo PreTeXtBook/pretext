@@ -30,15 +30,18 @@ function initializeImageDialogs() {
         const isDiagcess = image.matches('.ChemAccess-element');
         const asymptoteIframe = image.querySelector?.('iframe.asymptote');
         const asymptoteSVG = asymptoteIframe?.contentDocument?.querySelector('svg');
-        if (image.matches('.asymptote-box') && !asymptoteSVG) {
-            // 2-D Asymptote diagrams are SVGs inside same-origin iframes.
-            // Wait for an unloaded iframe, but leave 3-D canvas diagrams alone.
-            if (!asymptoteIframe?.contentDocument) {
+        const asymptoteCanvas = asymptoteIframe?.contentDocument?.querySelector('canvas');
+        if (image.matches('.asymptote-box') && !asymptoteSVG && !asymptoteCanvas) {
+            // Wait for an unloaded Asymptote iframe. Once it is available, its
+            // SVG or canvas identifies the 2-D or 3-D variant respectively.
+            if (asymptoteIframe?.contentDocument?.readyState !== 'complete') {
                 asymptoteIframe?.addEventListener('load', initializeImageDialogs, { once: true });
             }
             return;
         }
         const isAsymptote2D = !!asymptoteSVG;
+        const isAsymptote3D = !!asymptoteCanvas;
+        const isAsymptote = isAsymptote2D || isAsymptote3D;
         const isSVG = isMermaid || isDiagcess || isAsymptote2D || (
             image instanceof HTMLImageElement &&
             new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg')
@@ -133,11 +136,11 @@ function initializeImageDialogs() {
             });
             dialogContentContainer.replaceChildren(dialogContent);
             dialogContentRoot = dialogContent;
-            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog')
+            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog, iframe.asymptote')
                 ? dialogContent
-                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog');
+                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog, iframe.asymptote');
             dialogFigure = dialogContent.matches('figure') ? dialogContent : null;
-            if (dialogImage instanceof HTMLImageElement) {
+            if (dialogImage instanceof HTMLImageElement || dialogImage instanceof HTMLIFrameElement) {
                 dialogImage.addEventListener('load', fitDialogToFigure);
             }
             initializeDialogDiagcess(clonedDiagcess);
@@ -153,6 +156,11 @@ function initializeImageDialogs() {
 
             const maxWidth = window.innerWidth * 0.9;
             const maxHeight = window.innerHeight * 0.9;
+            const dialogStyle = getComputedStyle(dialog);
+            const horizontalPadding = parseFloat(dialogStyle.paddingLeft) + parseFloat(dialogStyle.paddingRight);
+            const verticalPadding = parseFloat(dialogStyle.paddingTop) + parseFloat(dialogStyle.paddingBottom);
+            const maxContentWidth = Math.max(0, maxWidth - horizontalPadding);
+            const maxContentHeight = Math.max(0, maxHeight - verticalPadding);
             const naturalWidth = displayedImage instanceof HTMLImageElement ? (displayedImage.naturalWidth || maxWidth) : maxWidth;
             const renderedSVG = displayedImage instanceof SVGSVGElement
                 ? displayedImage
@@ -160,18 +168,20 @@ function initializeImageDialogs() {
             const viewBox = renderedSVG?.viewBox?.baseVal;
             const intrinsicAspectRatio = viewBox?.width && viewBox?.height
                 ? viewBox.width / viewBox.height
+                : (isAsymptote3D && asymptoteCanvas.width && asymptoteCanvas.height
+                    ? asymptoteCanvas.width / asymptoteCanvas.height
                 : (displayedImage instanceof HTMLImageElement && displayedImage.naturalWidth && displayedImage.naturalHeight
                     ? displayedImage.naturalWidth / displayedImage.naturalHeight
-                    : null);
+                    : null));
             // Limit raster images to 3x normal size
-            let imageWidth = isSVG
-                ? Math.min(maxWidth, maxHeight * (intrinsicAspectRatio || 1))
-                : Math.min(naturalWidth * 3, maxWidth);
+            let imageWidth = (isSVG || isAsymptote3D)
+                ? Math.min(maxContentWidth, maxContentHeight * (intrinsicAspectRatio || 1))
+                : Math.min(naturalWidth * 3, maxContentWidth);
 
             for (let attempt = 0; attempt < 2; attempt += 1) {
-                dialog.style.width = `${imageWidth}px`;
+                dialog.style.width = `${imageWidth + horizontalPadding}px`;
                 displayedImage.style.setProperty('width', `${imageWidth}px`, 'important');
-                displayedImage.style.setProperty('max-height', `${maxHeight}px`, 'important');
+                displayedImage.style.setProperty('max-height', `${maxContentHeight}px`, 'important');
 
                 const imageRect = displayedImage.getBoundingClientRect();
                 if (!imageRect.width || !imageRect.height) {
@@ -179,12 +189,12 @@ function initializeImageDialogs() {
                 }
                 const contentRect = (dialogFigure || dialogContentRoot || displayedImage).getBoundingClientRect();
                 const nonImageHeight = Math.max(0, contentRect.height - imageRect.height);
-                const availableImageHeight = Math.max(0, maxHeight - nonImageHeight);
+                const availableImageHeight = Math.max(0, maxContentHeight - nonImageHeight);
                 const aspectRatio = intrinsicAspectRatio || (imageRect.width / imageRect.height);
                 imageWidth = Math.min(imageWidth, availableImageHeight * aspectRatio);
             }
 
-            dialog.style.width = `${imageWidth}px`;
+            dialog.style.width = `${imageWidth + horizontalPadding}px`;
             displayedImage.style.setProperty('width', `${imageWidth}px`, 'important');
         };
 
@@ -193,10 +203,10 @@ function initializeImageDialogs() {
         trigger.classList.add('ptx-image-expand-button');
         const description = image.getAttribute('alt')?.trim() || (
             isMermaid ? 'Mermaid diagram' : (isDiagcess ? 'interactive diagram' : (
-                isAsymptote2D ? asymptoteIframe.title?.trim() || 'Asymptote diagram' : ''
+                isAsymptote ? asymptoteIframe.title?.trim() || 'Asymptote diagram' : ''
             ))
         );
-        const contentType = (isMermaid || isDiagcess || isAsymptote2D) ? 'diagram' : 'image';
+        const contentType = (isMermaid || isDiagcess || isAsymptote) ? 'diagram' : 'image';
         trigger.setAttribute('aria-label', description ? `Expand ${contentType}: ${description}` : `Expand ${contentType}`);
         trigger.setAttribute('title', trigger.getAttribute('aria-label'));
         trigger.innerHTML = '<span class="material-symbols-outlined">open_in_full</span>';
@@ -222,16 +232,41 @@ function initializeImageDialogs() {
                     trigger.click();
                 }
             }, true);
-        } else if (isAsymptote2D) {
+        } else if (isAsymptote) {
             // Pointer events inside an iframe do not bubble to its parent.
-            // Make its SVG a mouse trigger, while keyboard activation stays
-            // on the enclosing asymptote box.
+            // Make the embedded diagram a mouse trigger, while keyboard
+            // activation stays on the enclosing asymptote box.
             asymptoteIframe.tabIndex = -1;
-            asymptoteSVG.setAttribute('aria-hidden', 'true');
-            asymptoteIframe.contentDocument.addEventListener('click', (clickEvent) => {
-                clickEvent.preventDefault();
-                trigger.click();
-            });
+            asymptoteSVG?.setAttribute('aria-hidden', 'true');
+            if (isAsymptote3D) {
+                let pointerStart = null;
+                const clickMovementThreshold = 5;
+                asymptoteIframe.contentDocument.addEventListener('pointerdown', (pointerEvent) => {
+                    if (pointerEvent.button === 0) {
+                        pointerStart = { x: pointerEvent.clientX, y: pointerEvent.clientY };
+                    }
+                });
+                asymptoteIframe.contentDocument.addEventListener('pointerup', (pointerEvent) => {
+                    if (pointerEvent.button === 0 && pointerStart) {
+                        const distance = Math.hypot(
+                            pointerEvent.clientX - pointerStart.x,
+                            pointerEvent.clientY - pointerStart.y
+                        );
+                        if (distance <= clickMovementThreshold) {
+                            trigger.click();
+                        }
+                    }
+                    pointerStart = null;
+                });
+                asymptoteIframe.contentDocument.addEventListener('pointercancel', () => {
+                    pointerStart = null;
+                });
+            } else {
+                asymptoteIframe.contentDocument.addEventListener('click', (clickEvent) => {
+                    clickEvent.preventDefault();
+                    trigger.click();
+                });
+            }
             image.addEventListener('click', () => trigger.click());
             image.addEventListener('keydown', (keyEvent) => {
                 if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
