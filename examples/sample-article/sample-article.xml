@@ -16243,7 +16243,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                     <exercise workspace="3in">
                         <statement>
-                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec b = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec b = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.<fn>Here is a footnote.</fn></p>
                             <figure xml:id="prefigure-vectors">
                                 <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
                                 <image width="100%">
@@ -16316,7 +16316,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </md>.</p>
                         </introduction>
                         <task workspace="2in">
-                            <p>Write the system in vector form.</p>
+                            <p>Write the system in vector form.<fn>Another footnote</fn></p>
                         </task>
                         <task workspace="3.9in">
                             <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
@@ -16851,6 +16851,80 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </statement>
                 </example>
             </page>
+        </handout>
+
+        <handout>
+            <title>A handout with a long list</title>
+            <p>
+                It is common for a handout, especially a set of lecture notes, to consist of a long list of bullets, possibly more than would fit on a page.  This handout should test that such a handout can have its items split between pages even if they belong to the same paragraph.
+
+                <ul>
+                    <li>
+                        <p>
+                            This is the first item in a long list.  It should be on the first page of the handout.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            This is the second item in a long list.  It should be on the first page of the handout.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            This is the third item in a long list.  It should be on the second page of the handout.
+                        </p>
+                        <p>
+                            Maybe we have a second paragraph in the same list item.  This is really just to help fill up space.  Maybe I should have used some of that standard space filler, but I'm just typing now because I can't remember what is call.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            I suppose I could just start copy/pasting now.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<fn>A late footnote</fn> Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            See, I figured it out!
+                        </p>
+                    </li>
+                </ul>
+                And that's the end of the list.  Did this go onto a second page?
+            </p>
         </handout>
         </section>
 
