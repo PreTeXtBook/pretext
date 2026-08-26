@@ -13,6 +13,7 @@ function initializeImageDialogs() {
         '.image-box > img',
         '.image-box > pre.mermaid',
         '.image-box > .ChemAccess-element',  // Prefigure interactive diagram
+        '.image-box > .asymptote-box',
         '.sbspanel > img',
         'figure > img',
         'figure > div > img'
@@ -27,7 +28,18 @@ function initializeImageDialogs() {
         const figure = imageBox?.parentElement?.matches('figure') ? imageBox.parentElement : null;
         const isMermaid = image.matches('pre.mermaid');
         const isDiagcess = image.matches('.ChemAccess-element');
-        const isSVG = isMermaid || isDiagcess || (
+        const asymptoteIframe = image.querySelector?.('iframe.asymptote');
+        const asymptoteSVG = asymptoteIframe?.contentDocument?.querySelector('svg');
+        if (image.matches('.asymptote-box') && !asymptoteSVG) {
+            // 2-D Asymptote diagrams are SVGs inside same-origin iframes.
+            // Wait for an unloaded iframe, but leave 3-D canvas diagrams alone.
+            if (!asymptoteIframe?.contentDocument) {
+                asymptoteIframe?.addEventListener('load', initializeImageDialogs, { once: true });
+            }
+            return;
+        }
+        const isAsymptote2D = !!asymptoteSVG;
+        const isSVG = isMermaid || isDiagcess || isAsymptote2D || (
             image instanceof HTMLImageElement &&
             new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg')
         );
@@ -93,6 +105,15 @@ function initializeImageDialogs() {
                 // Do not let Mermaid re-parse its already-rendered SVG.
                 mermaid.classList.replace('mermaid', 'ptx-mermaid-dialog');
             });
+            if (isAsymptote2D) {
+                const clonedAsymptoteBox = dialogContent.matches('.asymptote-box')
+                    ? dialogContent
+                    : dialogContent.querySelector('.asymptote-box');
+                const dialogAsymptoteSVG = asymptoteSVG.cloneNode(true);
+                dialogAsymptoteSVG.classList.add('ptx-asymptote-dialog');
+                clonedAsymptoteBox.replaceChildren(dialogAsymptoteSVG);
+                clonedAsymptoteBox.style.removeProperty('padding-top');
+            }
             const clonedDiagcess = [
                 ...(dialogContent.matches('.ChemAccess-element') ? [dialogContent] : []),
                 ...dialogContent.querySelectorAll('.ChemAccess-element')
@@ -112,9 +133,9 @@ function initializeImageDialogs() {
             });
             dialogContentContainer.replaceChildren(dialogContent);
             dialogContentRoot = dialogContent;
-            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog, .ChemAccess-element')
+            dialogImage = dialogContent.matches('img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog')
                 ? dialogContent
-                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog, .ChemAccess-element');
+                : dialogContent.querySelector('img, pre.ptx-mermaid-dialog, .ChemAccess-element, svg.ptx-asymptote-dialog');
             dialogFigure = dialogContent.matches('figure') ? dialogContent : null;
             if (dialogImage instanceof HTMLImageElement) {
                 dialogImage.addEventListener('load', fitDialogToFigure);
@@ -171,9 +192,11 @@ function initializeImageDialogs() {
         trigger.type = 'button';
         trigger.classList.add('ptx-image-expand-button');
         const description = image.getAttribute('alt')?.trim() || (
-            isMermaid ? 'Mermaid diagram' : (isDiagcess ? 'interactive diagram' : '')
+            isMermaid ? 'Mermaid diagram' : (isDiagcess ? 'interactive diagram' : (
+                isAsymptote2D ? asymptoteIframe.title?.trim() || 'Asymptote diagram' : ''
+            ))
         );
-        const contentType = (isMermaid || isDiagcess) ? 'diagram' : 'image';
+        const contentType = (isMermaid || isDiagcess || isAsymptote2D) ? 'diagram' : 'image';
         trigger.setAttribute('aria-label', description ? `Expand ${contentType}: ${description}` : `Expand ${contentType}`);
         trigger.setAttribute('title', trigger.getAttribute('aria-label'));
         trigger.innerHTML = '<span class="material-symbols-outlined">open_in_full</span>';
@@ -199,6 +222,23 @@ function initializeImageDialogs() {
                     trigger.click();
                 }
             }, true);
+        } else if (isAsymptote2D) {
+            // Pointer events inside an iframe do not bubble to its parent.
+            // Make its SVG a mouse trigger, while keyboard activation stays
+            // on the enclosing asymptote box.
+            asymptoteIframe.tabIndex = -1;
+            asymptoteSVG.setAttribute('aria-hidden', 'true');
+            asymptoteIframe.contentDocument.addEventListener('click', (clickEvent) => {
+                clickEvent.preventDefault();
+                trigger.click();
+            });
+            image.addEventListener('click', () => trigger.click());
+            image.addEventListener('keydown', (keyEvent) => {
+                if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+                    keyEvent.preventDefault();
+                    trigger.click();
+                }
+            });
         } else {
             image.addEventListener('click', () => trigger.click());
             image.addEventListener('keydown', (keyEvent) => {
