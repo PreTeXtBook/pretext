@@ -203,7 +203,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- figure that contains two sub-figures side by side.       -->
                 <figure xml:id="fg-1-chA">
                     <caption>First figure in chapter A.</caption>
-                    <sidebyside><p>A placeholder.</p></sidebyside>
+                    <p>A placeholder.</p>
                 </figure>
                 <figure xml:id="fg-2-chA">
                     <caption>A figure of two sub-figures.</caption>
@@ -307,7 +307,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p><md><mrow xml:id="eq-2-chB" number="yes">b_2 = c_2</mrow></md></p>
                 <figure xml:id="fg-1-chB">
                     <caption>Figure in chapter B.</caption>
-                    <sidebyside><p>A placeholder.</p></sidebyside>
+                    <p>A placeholder.</p>
                 </figure>
                 <table xml:id="tb-1-chB">
                     <title>Table in chapter B.</title>
@@ -333,7 +333,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- figure-likes and a project: exercise the "distinct" counters in a terminal specialized scope -->
                         <figure xml:id="fg-intro-1-exs-chB">
                             <caption>Figure in the exercises introduction.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <table xml:id="tb-intro-1-exs-chB">
                             <title>Table in the exercises introduction.</title>
@@ -481,11 +481,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <openproblem xml:id="op-intro-2-chC"><statement><p>Second open problem in the chapter C introduction.</p></statement></openproblem>
                     <figure xml:id="fg-intro-1-chC">
                         <caption>First figure in the chapter C introduction.</caption>
-                        <sidebyside><p>A placeholder.</p></sidebyside>
+                        <p>A placeholder.</p>
                     </figure>
                     <figure xml:id="fg-intro-2-chC">
                         <caption>Second figure in the chapter C introduction.</caption>
-                        <sidebyside><p>A placeholder.</p></sidebyside>
+                        <p>A placeholder.</p>
                     </figure>
                     <p>Two introduction footnotes<fn xml:id="fn-intro-1-chC">First.</fn><fn xml:id="fn-intro-2-chC">Second.</fn>.</p>
                     <exercise xml:id="ix-intro-1-chC"><statement><p>First inline exercise in the chapter C introduction.</p></statement></exercise>
@@ -508,11 +508,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p><md><mrow xml:id="eq-2-chC-sA" number="yes">u_2 = v_2</mrow></md></p>
                     <figure xml:id="fg-1-chC-sA">
                         <caption>First figure in section A.</caption>
-                        <sidebyside><p>A placeholder.</p></sidebyside>
+                        <p>A placeholder.</p>
                     </figure>
                     <figure xml:id="fg-2-chC-sA">
                         <caption>Second figure in section A.</caption>
-                        <sidebyside><p>A placeholder.</p></sidebyside>
+                        <p>A placeholder.</p>
                     </figure>
                     <table xml:id="tb-1-chC-sA">
                         <title>First table in section A.</title>
@@ -544,7 +544,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p><md><mrow xml:id="eq-2-chC-sB" number="yes">s + t = u</mrow></md></p>
                     <figure xml:id="fg-1-chC-sB">
                         <caption>Figure in section B.</caption>
-                        <sidebyside><p>A placeholder.</p></sidebyside>
+                        <p>A placeholder.</p>
                     </figure>
                     <p>A footnote at section depth<fn xml:id="fn-1-chC-sB">Footnote in section B.</fn>.</p>
                     <exercise xml:id="ix-1-chC-sB"><statement><p>Inline exercise in section B.</p></statement></exercise>
@@ -612,7 +612,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <theorem xml:id="t-intro-1-chC-sC"><statement><p>Theorem in the section C introduction.</p></statement></theorem>
                         <figure xml:id="fg-intro-1-chC-sC">
                             <caption>Figure in the section C introduction.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <p>A footnote in the section C introduction<fn xml:id="fn-intro-1-chC-sC">Intro footnote.</fn>.</p>
                     </introduction>
@@ -631,11 +631,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p><md><mrow xml:id="eq-2-chC-sC-ssA" number="yes">\alpha_2 = \beta_2</mrow></md></p>
                         <figure xml:id="fg-1-chC-sC-ssA">
                             <caption>First figure in subsection A.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <figure xml:id="fg-2-chC-sC-ssA">
                             <caption>Second figure in subsection A.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <table xml:id="tb-1-chC-sC-ssA">
                             <title>First table in subsection A.</title>
@@ -665,7 +665,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p><md><mrow xml:id="eq-2-chC-sC-ssB" number="yes">u_2 = w_2</mrow></md></p>
                         <figure xml:id="fg-1-chC-sC-ssB">
                             <caption>Figure in subsection B.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <p>A footnote at subsection depth<fn xml:id="fn-1-chC-sC-ssB">Footnote in subsection B.</fn>.</p>
                         <exercise xml:id="ix-1-chC-sC-ssB"><statement><p>Inline exercise in subsection B.</p></statement></exercise>
@@ -744,11 +744,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <p><md><mrow xml:id="eq-2-chC-sC-ssC-sssA" number="yes">\gamma_2 = \delta_2</mrow></md></p>
                             <figure xml:id="fg-1-chC-sC-ssC-sssA">
                                 <caption>First figure at subsubsection depth.</caption>
-                                <sidebyside><p>A placeholder.</p></sidebyside>
+                                <p>A placeholder.</p>
                             </figure>
                             <figure xml:id="fg-2-chC-sC-ssC-sssA">
                                 <caption>Second figure at subsubsection depth.</caption>
-                                <sidebyside><p>A placeholder.</p></sidebyside>
+                                <p>A placeholder.</p>
                             </figure>
                             <table xml:id="tb-1-chC-sC-ssC-sssA">
                                 <title>First table at subsubsection depth.</title>
@@ -778,7 +778,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <p><md><mrow xml:id="eq-2-chC-sC-ssC-sssB" number="yes">k_2 = l_2</mrow></md></p>
                             <figure xml:id="fg-1-chC-sC-ssC-sssB">
                                 <caption>Figure at subsubsection depth.</caption>
-                                <sidebyside><p>A placeholder.</p></sidebyside>
+                                <p>A placeholder.</p>
                             </figure>
                             <p>A footnote at subsubsection depth<fn xml:id="fn-1-chC-sC-ssC-sssB">Footnote.</fn>.</p>
                             <exercise xml:id="ix-1-chC-sC-ssC-sssB"><statement><p>Inline exercise at subsubsection depth.</p></statement></exercise>
@@ -833,7 +833,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <theorem xml:id="t-concl-1-chC-sC"><statement><p>Theorem in the section C conclusion.</p></statement></theorem>
                         <figure xml:id="fg-concl-1-chC-sC">
                             <caption>Figure in the section C conclusion.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <p>A footnote in the section C conclusion<fn xml:id="fn-concl-1-chC-sC">Conclusion footnote.</fn>.</p>
                     </conclusion>
@@ -868,7 +868,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <openproblem xml:id="op-concl-1-chC"><statement><p>Open problem in the chapter C conclusion.</p></statement></openproblem>
                     <figure xml:id="fg-concl-1-chC">
                         <caption>Figure in the chapter C conclusion.</caption>
-                        <sidebyside><p>A placeholder.</p></sidebyside>
+                        <p>A placeholder.</p>
                     </figure>
                     <p>Two footnotes in the chapter C conclusion<fn xml:id="fn-concl-1-chC">First.</fn><fn xml:id="fn-concl-2-chC">Second.</fn>.</p>
                     <exercise xml:id="ix-concl-1-chC"><statement><p>Inline exercise in the chapter C conclusion.</p></statement></exercise>
@@ -976,7 +976,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p><md><mrow xml:id="eq-2-thin" number="yes">a_2 + b_2 = c_2</mrow></md></p>
                 <figure xml:id="fg-1-thin">
                     <caption>Figure in the thin part.</caption>
-                    <sidebyside><p>A placeholder.</p></sidebyside>
+                    <p>A placeholder.</p>
                 </figure>
                 <p>Two footnotes across the part boundary<fn xml:id="fn-1-thin">First.</fn><fn xml:id="fn-2-thin">Second.</fn>.</p>
                 <exercise xml:id="ix-1-thin"><statement><p>Inline exercise in the thin part.</p></statement></exercise>
@@ -1024,7 +1024,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p><md><mrow xml:id="eq-2-apxA" number="yes">A_2 = A_2</mrow></md></p>
                 <figure xml:id="fg-1-apxA">
                     <caption>First figure in appendix A.</caption>
-                    <sidebyside><p>A placeholder.</p></sidebyside>
+                    <p>A placeholder.</p>
                 </figure>
                 <table xml:id="tb-1-apxA">
                     <title>First table in appendix A.</title>
@@ -1079,7 +1079,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p><md><mrow xml:id="eq-2-apxC-sA" number="yes">L_2 = M_2</mrow></md></p>
                         <figure xml:id="fg-1-apxC-sA">
                             <caption>Figure at appendix-section depth.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <p>A footnote at appendix-section depth<fn xml:id="fn-1-apxC-sA">Footnote.</fn>.</p>
                         <exercise xml:id="ix-1-apxC-sA"><statement><p>Inline exercise at appendix-section depth.</p></statement></exercise>
@@ -1092,7 +1092,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p><md><mrow xml:id="eq-2-apxC-sA-ssA" number="yes">C_1 = C_1</mrow></md></p>
                         <figure xml:id="fg-1-apxC-sA-ssA">
                             <caption>Figure at appendix-subsection depth.</caption>
-                            <sidebyside><p>A placeholder.</p></sidebyside>
+                            <p>A placeholder.</p>
                         </figure>
                         <p>A footnote at appendix-subsection depth<fn xml:id="fn-1-apxC-sA-ssA">Footnote.</fn>.</p>
                     </subsection>

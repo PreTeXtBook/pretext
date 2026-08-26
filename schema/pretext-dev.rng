@@ -83,8 +83,8 @@
         <zeroOrMore>
           <choice>
             <ref name="Slate"/>
-            <ref name="SideBySideNoNumber"/>
-            <ref name="SideBySideGroupNoNumber"/>
+            <ref name="SideBySideInteractive"/>
+            <ref name="SideBySideGroupInteractive"/>
           </choice>
         </zeroOrMore>
         <zeroOrMore>
@@ -118,7 +118,12 @@
       </interleave>
     </element>
   </define>
-  <define name="Stack" combine="choice">
+  <!--
+    A "stack" occupying a panel of an interactive's
+    "sidebyside" may also stack slates; a narrative
+    "stack" may not
+  -->
+  <define name="StackInteractive">
     <element name="stack">
       <oneOrMore>
         <choice>
@@ -131,6 +136,40 @@
           <ref name="List"/>
           <ref name="Slate"/>
         </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <!--
+    Within an "interactive" or a "slate", a "sidebyside" is
+    scaffolding: it arranges slates, or narrows a lone panel
+    to a chosen width, so the two-panel minimum of a
+    narrative "sidebyside" is not imposed here
+  -->
+  <define name="SideBySideInteractive">
+    <element name="sidebyside">
+      <ref name="SidebySideAttributes"/>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="PanelNoNumber"/>
+            <ref name="StackInteractive"/>
+          </choice>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Slate"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="SideBySideGroupInteractive">
+    <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <ref name="SidebySideAttributes"/>
+      <ref name="SideBySideInteractive"/>
+      <oneOrMore>
+        <ref name="SideBySideInteractive"/>
       </oneOrMore>
     </element>
   </define>
@@ -165,7 +204,7 @@
             <choice>
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
-              <ref name="SideBySideNoNumber"/>
+              <ref name="SideBySideInteractive"/>
               <ref name="AnyXHTML"/>
               <zeroOrMore>
                 <text/>
@@ -235,22 +274,6 @@
     <element name="figure">
       <ref name="MetaDataCaption"/>
       <ref name="Interactive"/>
-    </element>
-  </define>
-  <define name="SideBySide" combine="choice">
-    <element name="sidebyside">
-      <ref name="SidebySideAttributes"/>
-      <oneOrMore>
-        <ref name="Slate"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="SideBySideNoNumber" combine="choice">
-    <element name="sidebyside">
-      <ref name="SidebySideAttributes"/>
-      <oneOrMore>
-        <ref name="Slate"/>
-      </oneOrMore>
     </element>
   </define>
   <define name="Exercises" combine="choice">

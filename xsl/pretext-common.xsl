@@ -11954,6 +11954,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;ol&quot; is no longer a child of an &quot;exercise&quot; &quot;statement&quot;; a list belongs inside a &quot;p&quot;.  We will wrap it for you, and lettered exercise parts will letter as before.  Please convert: structure true parts with &quot;task&quot;, letter a plain list with marker=&quot;(a)&quot;, or consider an &quot;exercisegroup&quot; and its cols attribute for a compact multi-column layout'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-08-23  a "sidebyside" requires at least two panels -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//sidebyside[count(*) = 1][not(ancestor::interactive)]&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-23'" />
+        <xsl:with-param name="message" select="'a &quot;sidebyside&quot; now requires at least two panels.  Conversions will continue to honor a single panel until at least 2028-08-23.  Please convert: to size or center a lone &quot;image&quot;, use its &quot;width&quot; attribute; otherwise place the lone item outside any &quot;sidebyside&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-23  one "sidebyside" may not nest within another -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//sidebyside//sidebyside&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-23'" />
+        <xsl:with-param name="message" select="'one &quot;sidebyside&quot; may not appear within another, no matter how much structure intervenes.  A nested &quot;sidebyside&quot; may behave unpredictably.  Please relocate the inner &quot;sidebyside&quot; outside the outer one'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-08-23  an "sbsgroup" requires at least two "sidebyside" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//sbsgroup[count(sidebyside) = 1]&quot;" />
+        <xsl:with-param name="date-string" select="'2026-08-23'" />
+        <xsl:with-param name="message" select="'an &quot;sbsgroup&quot; now requires at least two &quot;sidebyside&quot;.  A group of one behaves exactly like the &quot;sidebyside&quot; alone, so use the &quot;sidebyside&quot; by itself, with the layout attributes moved onto it'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

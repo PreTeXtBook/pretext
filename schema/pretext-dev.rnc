@@ -33,8 +33,8 @@
                       ImageDescription? &
                       (
                         Slate |
-                        SideBySideNoNumber |
-                        SideBySideGroupNoNumber
+                        SideBySideInteractive |
+                        SideBySideGroupInteractive
                       )* &
                       element script { attribute type { text }?, text }* &
                       element source { text }? &
@@ -44,7 +44,10 @@
 
                 }
 
-            Stack |=
+            # A "stack" occupying a panel of an interactive's
+            # "sidebyside" may also stack slates; a narrative
+            # "stack" may not
+            StackInteractive =
                 element stack {
                     (
                         Tabular |
@@ -56,6 +59,22 @@
                         List |
                         Slate
                     )+
+                }
+
+            # Within an "interactive" or a "slate", a "sidebyside" is
+            # scaffolding: it arranges slates, or narrows a lone panel
+            # to a chosen width, so the two-panel minimum of a
+            # narrative "sidebyside" is not imposed here
+            SideBySideInteractive =
+                element sidebyside {
+                    SidebySideAttributes,
+                    ((PanelNoNumber | StackInteractive)+ | Slate+)
+                }
+            SideBySideGroupInteractive =
+                element sbsgroup {
+                    UniqueID?,
+                    SidebySideAttributes,
+                    SideBySideInteractive, SideBySideInteractive+
                 }
 
             Slate =
@@ -76,7 +95,7 @@
                         (
                           Paragraph |
                           Tabular |
-                          SideBySideNoNumber |
+                          SideBySideInteractive |
                           AnyXHTML |
                           text*
                         )*
@@ -110,16 +129,6 @@
             BlockStatement |= Interactive
 
             Figure |= element figure { MetaDataCaption, Interactive }
-
-            SideBySide |= element sidebyside {
-                SidebySideAttributes,
-                Slate+
-            }
-
-            SideBySideNoNumber |= element sidebyside {
-                SidebySideAttributes,
-                Slate+
-            }
 
             Exercises |= element exercises {
                 MetaDataAltTitleOptional,

@@ -1754,12 +1754,15 @@
                         Paragraph
                     )
                 } |
-                # the one route to a numbered, titled "tabular"
+                FigureTable | FigureListing | FigureList
+            # the one route to a numbered, titled "tabular"
+            FigureTable =
                 element table {
                     MetaDataAltTitle,
                     Landscape?,
                     Tabular
-                } |
+                }
+            FigureListing =
                 element listing {
                     MetaDataAltTitle,
                     Landscape?,
@@ -1767,7 +1770,8 @@
                         Program |
                         Console
                     )
-                } |
+                }
+            FigureList =
                 element list {
                     MetaDataAltTitle,
                     Landscape?,
@@ -1861,7 +1865,7 @@
     <section>
         <title>Side-By-Side Layout</title>
 
-        <p>Page width or screen width, both are at a premium.  Height goes on forever (barring physical page breaks) and we have many devices for demarcating that flow.  But sometimes you need to organize items horizontally, <ie/> side-by-side.  We place the components of a <c>sidebyside</c> into generic regions of specified width called <term>panels</term>.</p>
+        <p>Page width or screen width, both are at a premium.  Height goes on forever (barring physical page breaks) and we have many devices for demarcating that flow.  But sometimes you need to organize items horizontally, <ie/> side-by-side.  We place the components of a <c>sidebyside</c> into generic regions of specified width called <term>panels</term>.  There are at least two panels<mdash/>a lone component has nothing to sit beside.</p>
 
         <p>This is a pure layout device.  So you cannot title it, nor caption it.  It does not admit a <c>xml:id</c> attribute, since you cannot make it the target of a cross-reference.  Nor can you reference it from the index (but you can point to its surroundings from the index).</p>
 
@@ -1873,7 +1877,7 @@
 
         <p>An <tag>exercise</tag> may be a panel, in support of compact layout of a <tag>worksheet</tag> or a <tag>handout</tag>, where workspace is relevant.  The schema does not restrict the arrangement to those locations, but the validation-plus stylesheet warns about others.</p>
 
-        <p>An <tag>audio</tag>, <tag>video</tag>, or <tag>interactive</tag> may never be a panel, nor part of a <tag>stack</tag>.  Static conversions represent each of these elements as a <c>sidebyside</c> holding a preview image, a QR code, and links, and one <c>sidebyside</c> must never nest inside another.  The schema precludes these elements as children; the validation-plus stylesheet checks every depth (such as within a <tag>figure</tag> occupying a panel).</p>
+        <p>An <tag>audio</tag>, <tag>video</tag>, or <tag>interactive</tag> may never be a panel, nor part of a <tag>stack</tag>.  Static conversions represent each of these elements as a <c>sidebyside</c> holding a preview image, a QR code, and links, and one <c>sidebyside</c> must never nest inside another.  The schema precludes these elements as children, and a <tag>figure</tag> occupying a panel is restricted the same way (no layout elements, no media elements); the validation-plus stylesheet checks arbitrary depth.</p>
 
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
@@ -1903,49 +1907,70 @@
                     AlignmentVertical |
                     attribute valigns { list { ("top" | "middle" | "bottom")+ } }
                 )?
+            # A "figure" occupying a panel is restricted: the layout
+            # elements ("sidebyside", "sbsgroup") may not nest, and a
+            # static conversion realizes the media elements ("video",
+            # "audio") as a manufactured "sidebyside", so none of these
+            # may appear.  The schema stops these immediate routes; the
+            # validation-plus stylesheet polices arbitrary depth.
+            FigurePanel =
+                element figure {
+                    MetaDataCaption,
+                    Landscape?,
+                    (
+                        Image |
+                        MuseScore |
+                        Paragraph
+                    )
+                } |
+                FigureTable | FigureListing | FigureList
+            # The panels themselves; a narrative "sidebyside" holds at
+            # least two, else nothing is side by side
+            Panel =
+                FigurePanel |
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack |
+                Exercise
+            PanelNoNumber =
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        Figure |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        Exercise
-                    )+
+                    Panel, Panel+
                 }
             SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack
-                    )+
+                    PanelNoNumber, PanelNoNumber+
                 }
+            # a group of one "sidebyside" is no group: the layout
+            # attributes might as well sit on the lone "sidebyside"
             SideBySideGroup =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySide+
+                    SideBySide, SideBySide+
                 }
             SideBySideGroupNoNumber =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoNumber+
+                    SideBySideNoNumber, SideBySideNoNumber+
                 }
             </code>
         </fragment>
@@ -2155,8 +2180,8 @@
                       ImageDescription? &amp;
                       (
                         Slate |
-                        SideBySideNoNumber |
-                        SideBySideGroupNoNumber
+                        SideBySideInteractive |
+                        SideBySideGroupInteractive
                       )* &amp;
                       element script { attribute type { text }?, text }* &amp;
                       element source { text }? &amp;
@@ -2166,7 +2191,10 @@
 
                 }
 
-            Stack |=
+            # A "stack" occupying a panel of an interactive's
+            # "sidebyside" may also stack slates; a narrative
+            # "stack" may not
+            StackInteractive =
                 element stack {
                     (
                         Tabular |
@@ -2178,6 +2206,22 @@
                         List |
                         Slate
                     )+
+                }
+
+            # Within an "interactive" or a "slate", a "sidebyside" is
+            # scaffolding: it arranges slates, or narrows a lone panel
+            # to a chosen width, so the two-panel minimum of a
+            # narrative "sidebyside" is not imposed here
+            SideBySideInteractive =
+                element sidebyside {
+                    SidebySideAttributes,
+                    ((PanelNoNumber | StackInteractive)+ | Slate+)
+                }
+            SideBySideGroupInteractive =
+                element sbsgroup {
+                    UniqueID?,
+                    SidebySideAttributes,
+                    SideBySideInteractive, SideBySideInteractive+
                 }
 
             Slate =
@@ -2198,7 +2242,7 @@
                         (
                           Paragraph |
                           Tabular |
-                          SideBySideNoNumber |
+                          SideBySideInteractive |
                           AnyXHTML |
                           text*
                         )*
@@ -2232,16 +2276,6 @@
             BlockStatement |= Interactive
 
             Figure |= element figure { MetaDataCaption, Interactive }
-
-            SideBySide |= element sidebyside {
-                SidebySideAttributes,
-                Slate+
-            }
-
-            SideBySideNoNumber |= element sidebyside {
-                SidebySideAttributes,
-                Slate+
-            }
 
             Exercises |= element exercises {
                 MetaDataAltTitleOptional,

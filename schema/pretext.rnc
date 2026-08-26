@@ -928,12 +928,15 @@
                         Paragraph
                     )
                 } |
-                # the one route to a numbered, titled "tabular"
+                FigureTable | FigureListing | FigureList
+            # the one route to a numbered, titled "tabular"
+            FigureTable =
                 element table {
                     MetaDataAltTitle,
                     Landscape?,
                     Tabular
-                } |
+                }
+            FigureListing =
                 element listing {
                     MetaDataAltTitle,
                     Landscape?,
@@ -941,7 +944,8 @@
                         Program |
                         Console
                     )
-                } |
+                }
+            FigureList =
                 element list {
                     MetaDataAltTitle,
                     Landscape?,
@@ -973,49 +977,70 @@
                     AlignmentVertical |
                     attribute valigns { list { ("top" | "middle" | "bottom")+ } }
                 )?
+            # A "figure" occupying a panel is restricted: the layout
+            # elements ("sidebyside", "sbsgroup") may not nest, and a
+            # static conversion realizes the media elements ("video",
+            # "audio") as a manufactured "sidebyside", so none of these
+            # may appear.  The schema stops these immediate routes; the
+            # validation-plus stylesheet polices arbitrary depth.
+            FigurePanel =
+                element figure {
+                    MetaDataCaption,
+                    Landscape?,
+                    (
+                        Image |
+                        MuseScore |
+                        Paragraph
+                    )
+                } |
+                FigureTable | FigureListing | FigureList
+            # The panels themselves; a narrative "sidebyside" holds at
+            # least two, else nothing is side by side
+            Panel =
+                FigurePanel |
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack |
+                Exercise
+            PanelNoNumber =
+                Poem |
+                Tabular |
+                Image |
+                Program |
+                Console |
+                Paragraph |
+                Preformatted |
+                List |
+                Stack
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        Figure |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        Exercise
-                    )+
+                    Panel, Panel+
                 }
             SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
-                    (
-                        Poem |
-                        Tabular |
-                        Image |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack
-                    )+
+                    PanelNoNumber, PanelNoNumber+
                 }
+            # a group of one "sidebyside" is no group: the layout
+            # attributes might as well sit on the lone "sidebyside"
             SideBySideGroup =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySide+
+                    SideBySide, SideBySide+
                 }
             SideBySideGroupNoNumber =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoNumber+
+                    SideBySideNoNumber, SideBySideNoNumber+
                 }
 
             Image = ImageRaster | ImageCode | ImagePG
