@@ -831,11 +831,12 @@ img.contained {
   text-align: center;
   font-size: 0.9em;
 }
-.ptx-content img,
-.ptx-content svg {
+.image-box img,
+.image-box svg {
   background: var(--ptx-image-bg);
 }
-.mermaid > svg {
+.image-box .mermaid > svg,
+.image-box .ptx-mermaid-dialog > svg {
   background: none;
 }
 .image-description summary {
@@ -848,21 +849,6 @@ img.contained {
   justify-content: center;
   display: flex;
   gap: 0.5em;
-}
-.image-box > img:not(.mag_popup) {
-  cursor: zoom-in;
-}
-img.mag_popup {
-  border: 1px solid #666;
-  box-shadow: 4px 6px 4px #999;
-  cursor: zoom-out;
-}
-.mag_popup_container {
-  background: var(--content-background);
-  width: 100%;
-  position: absolute;
-  z-index: 1001;
-  overflow-x: visible;
 }
 .audio {
   width: 100%;
@@ -2147,6 +2133,155 @@ label.incorrect .feedback {
 }
 .ptx-geogebra-calculator .button {
   all: unset;
+}
+.ptx-image-dialog-trigger-container {
+  position: relative;
+}
+.ptx-image-dialog-trigger-container:has(> :is(img, pre.mermaid, .ChemAccess-element, .asymptote-box):hover) .ptx-image-expand-button {
+  opacity: 1;
+}
+.ptx-image-expand-button {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  opacity: 0;
+}
+.ptx-image-expand-button:hover,
+.ptx-image-expand-button:focus {
+  opacity: 0.8;
+}
+.ptx-image-dialog {
+  width: fit-content;
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 20px;
+  overflow: auto;
+  border: 1px solid var(--dialog-border-color);
+  border-radius: 0;
+  background: var(--dialog-background);
+  box-shadow: 0 0 5px var(--dialog-shadow-color);
+  color: var(--dialog-text-color);
+}
+.ptx-image-dialog .ptx-dialog-close-button {
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+  color: var(--button-text-color);
+  background-color: var(--button-background);
+  border-width: 0;
+  border-color: var(--button-border-color);
+  border-style: solid;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+}
+.ptx-image-dialog .ptx-dialog-close-button:hover:not(.disabled) {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-image-dialog .ptx-dialog-close-button:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: -2px;
+}
+.ptx-image-dialog .ptx-dialog-close-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ptx-image-dialog .ptx-dialog-close-button.hidden {
+  display: none;
+}
+.ptx-image-dialog .ptx-dialog-close-button.open {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-image-dialog .ptx-dialog-topbar {
+  min-height: 15px;
+  user-select: none;
+}
+.ptx-image-dialog .heading:is(h2) {
+  font-size: 1.5em;
+  margin: 0.5em 0;
+}
+.ptx-image-dialog::backdrop {
+  background: var(--dialog-background);
+  opacity: 0.6;
+}
+.ptx-image-dialog {
+  background: var(--content-background);
+}
+.ptx-image-dialog .image-box * + * {
+  margin-top: 0.5em;
+}
+.ptx-image-dialog .ptx-image-dialog-content {
+  display: contents;
+}
+.ptx-image-dialog .ptx-dialog-topbar {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 0;
+}
+.ptx-image-dialog .ptx-dialog-close-button {
+  opacity: 0;
+}
+.ptx-image-dialog .ptx-dialog-close-button:hover,
+.ptx-image-dialog .ptx-dialog-close-button:focus {
+  opacity: 0.8;
+}
+.ptx-image-dialog figure,
+.ptx-image-dialog .image-box {
+  width: auto !important;
+  margin: 0 !important;
+}
+.ptx-image-dialog img {
+  display: block;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100%;
+  max-height: 100%;
+}
+.ptx-image-dialog pre.ptx-mermaid-dialog {
+  width: auto !important;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 !important;
+  overflow: hidden;
+}
+.ptx-image-dialog pre.ptx-mermaid-dialog svg {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100%;
+}
+.ptx-image-dialog svg.ptx-asymptote-dialog {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100%;
+}
+.ptx-image-dialog .ChemAccess-element {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.ptx-image-dialog .ChemAccess-element .svg,
+.ptx-image-dialog .ChemAccess-element svg {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
 }
 section,
 article,
@@ -4144,7 +4279,7 @@ article > .heading:first-child + :is(.para, .para.logical, .introduction) > .par
   --toclevel3-text-color: var(--toc-text-color);
   --body-text-color: #000;
   --body-title-color: var(--primary-color-black-20);
-  --ptx-image-bg: transparent;
+  --ptx-image-bg: white;
   --activated-content-bg: rgba(241, 185, 255, 0.3);
   --summary-link-background: var(--button-background);
   --summary-link-text-color: var(--button-text-color);

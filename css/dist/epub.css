@@ -828,11 +828,12 @@ img.contained {
   text-align: center;
   font-size: 0.9em;
 }
-.ptx-content img,
-.ptx-content svg {
+.image-box img,
+.image-box svg {
   background: var(--ptx-image-bg);
 }
-.mermaid > svg {
+.image-box .mermaid > svg,
+.image-box .ptx-mermaid-dialog > svg {
   background: none;
 }
 .image-description summary {
@@ -845,21 +846,6 @@ img.contained {
   justify-content: center;
   display: flex;
   gap: 0.5em;
-}
-.image-box > img:not(.mag_popup) {
-  cursor: zoom-in;
-}
-img.mag_popup {
-  border: 1px solid #666;
-  box-shadow: 4px 6px 4px #999;
-  cursor: zoom-out;
-}
-.mag_popup_container {
-  background: var(--content-background);
-  width: 100%;
-  position: absolute;
-  z-index: 1001;
-  overflow-x: visible;
 }
 .audio {
   width: 100%;
