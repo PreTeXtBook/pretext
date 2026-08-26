@@ -42,10 +42,6 @@ function initializeImageDialogs() {
         const isAsymptote2D = !!asymptoteSVG;
         const isAsymptote3D = !!asymptoteCanvas;
         const isAsymptote = isAsymptote2D || isAsymptote3D;
-        const isSVG = isMermaid || isDiagcess || isAsymptote2D || (
-            image instanceof HTMLImageElement &&
-            new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg')
-        );
         initializedImageDialogs.add(image);
         const dialog = document.createElement('dialog');
         dialog.id = `ptx-image-dialog-${++imageDialogNumber}`;
@@ -161,7 +157,6 @@ function initializeImageDialogs() {
             const verticalPadding = parseFloat(dialogStyle.paddingTop) + parseFloat(dialogStyle.paddingBottom);
             const maxContentWidth = Math.max(0, maxWidth - horizontalPadding);
             const maxContentHeight = Math.max(0, maxHeight - verticalPadding);
-            const naturalWidth = displayedImage instanceof HTMLImageElement ? (displayedImage.naturalWidth || maxWidth) : maxWidth;
             const renderedSVG = displayedImage instanceof SVGSVGElement
                 ? displayedImage
                 : displayedImage.querySelector?.('svg');
@@ -173,10 +168,11 @@ function initializeImageDialogs() {
                 : (displayedImage instanceof HTMLImageElement && displayedImage.naturalWidth && displayedImage.naturalHeight
                     ? displayedImage.naturalWidth / displayedImage.naturalHeight
                     : null));
-            // Limit raster images to 3x normal size
-            let imageWidth = (isSVG || isAsymptote3D)
-                ? Math.min(maxContentWidth, maxContentHeight * (intrinsicAspectRatio || 1))
-                : Math.min(naturalWidth * 3, maxContentWidth);
+            // Every kind of image fills the same space, so a low-resolution
+            // raster enlarges as far as a vector one does rather than stopping
+            // at some multiple of its natural size.  It will be soft at that
+            // size, which is the honest presentation of a small source image.
+            let imageWidth = Math.min(maxContentWidth, maxContentHeight * (intrinsicAspectRatio || 1));
 
             for (let attempt = 0; attempt < 2; attempt += 1) {
                 dialog.style.width = `${imageWidth + horizontalPadding}px`;
