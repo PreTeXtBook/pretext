@@ -1583,7 +1583,7 @@
       ws.setAttribute("contenteditable", "true");
     });
   }
-  function adjustPrintoutPages() {
+  function adjustPrintoutPages(margins) {
     console.log("*** Adjusting printout pages.");
     const printout = getPrintout();
     if (!printout) {
@@ -1610,23 +1610,26 @@
       nextChild = nextChild.nextSibling;
       lastPage.appendChild(tempChild);
     }
+    const contentHeight = 1056 - (margins.top + margins.bottom);
     pages.forEach((page) => {
       flattenTasksIn(page);
       flattenIntroductionsIn(page);
       flattenSolutionsIn(page);
+      flattenOversizedListsIn(page, contentHeight);
     });
-    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, and solutions for independent repagination.");
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists for independent repagination.");
   }
   function createPrintoutPages(margins) {
     console.log("*** Creating printout pages with margins:", margins);
+    const conservativePaperWidth = 794;
     const conservativeContentHeight = 1056 - (margins.top + margins.bottom);
-    const conservativeContentWidth = 794 - (margins.left + margins.right);
+    const conservativeContentWidth = conservativePaperWidth - (margins.left + margins.right);
     const printout = getPrintout();
     if (!printout) {
       console.warn("No printout found, exiting createPrintoutPages.");
       return;
     }
-    printout.style.width = conservativeContentWidth + "px";
+    printout.style.width = conservativePaperWidth + "px";
     setInitialWorkspaceHeights(printout);
     flattenTasksIn(printout);
     flattenIntroductionsIn(printout);
@@ -1634,10 +1637,14 @@
     let rows = [...printout.children];
     const measuringPage = document.createElement("section");
     measuringPage.classList.add("onepage");
-    measuringPage.style.width = conservativeContentWidth + "px";
+    measuringPage.style.width = conservativePaperWidth + "px";
     measuringPage.style.height = "auto";
     printout.appendChild(measuringPage);
     rows.forEach((row) => measuringPage.appendChild(row));
+    if (flattenOversizedListsIn(measuringPage, conservativeContentHeight)) {
+      rows = [...measuringPage.children];
+    }
+    const footnoteMetrics = measureFootnotes(rows, measuringPage);
     let blockList = [];
     for (const row of rows) {
       let blockHeight = getElementTotalHeight(row);
@@ -1663,13 +1670,20 @@
         // pure blank writing space, so it must never be what a page
         // opens with -- see findPageBreaks().  Suppressed writing space
         // does not count; see isVisibleWorkspaceRow().
-        isWorkspace: isVisibleWorkspaceRow(row)
+        isWorkspace: isVisibleWorkspaceRow(row),
+        // How much room this row's own footnotes will take at the foot of
+        // whichever page it lands on.  Charged to the row rather than to
+        // the page because that is what makes the cost move with the row:
+        // the DP in findPageBreaks() then accumulates it over exactly the
+        // rows a candidate page holds, with no circularity to resolve.
+        footnoteHeight: footnoteMetrics.heights.get(row) || 0
       });
     }
     rows.forEach((row) => printout.appendChild(row));
     measuringPage.remove();
     const pageBreaks = findPageBreaks(blockList, conservativeContentHeight, {
-      allowSqueeze: anySolutionShown()
+      allowSqueeze: anySolutionShown(),
+      footnoteChrome: footnoteMetrics.chrome
     });
     printout.style.width = "";
     for (let i = 0; i < pageBreaks.length; i++) {
@@ -1719,7 +1733,7 @@
     const stranding = anySolutionShown();
     printout.querySelectorAll(".workspace, .workspace-container").forEach((ws) => ws.classList.remove("hidden"));
     printout.querySelectorAll(":scope > .onepage").forEach((page) => {
-      const rows = [...page.children].filter((c) => !isHeaderFooterEl(c));
+      const rows = [...page.children].filter((c) => !isPageFurnitureEl(c));
       const questionGroupsOnPage = new Set(
         rows.filter((r) => !isWorkspaceRow(r)).map((r) => r.dataset.blockGroup).filter(Boolean)
       );
@@ -1749,7 +1763,7 @@
     if (!printout) return;
     const pages = [...printout.querySelectorAll(":scope > .onepage")];
     pages.forEach((page) => {
-      page.querySelectorAll(":scope > .first-page-header, :scope > .running-header, :scope > .first-page-footer, :scope > .running-footer").forEach((hf) => hf.remove());
+      [...page.children].filter(isPageFurnitureEl).forEach((el2) => el2.remove());
       while (page.firstChild) {
         printout.insertBefore(page.firstChild, page);
       }
@@ -1761,20 +1775,28 @@
     createPrintoutPages(margins);
     addHeadersAndFootersToPrintout();
   }
-  function isHeaderFooterEl(el2) {
-    return el2.classList.contains("first-page-header") || el2.classList.contains("running-header") || el2.classList.contains("first-page-footer") || el2.classList.contains("running-footer");
+  function isPageTailEl(el2) {
+    return el2.classList.contains("footnotes") || el2.classList.contains("first-page-footer") || el2.classList.contains("running-footer");
+  }
+  function isPageFurnitureEl(el2) {
+    return el2.classList.contains("first-page-header") || el2.classList.contains("running-header") || isPageTailEl(el2);
   }
   function addSpilloverPages(margins) {
     const printout = getPrintout();
     if (!printout) return;
+    printout.querySelectorAll(":scope > .onepage > .footnotes").forEach((block) => {
+      block.style.marginTop = "";
+    });
     let pages = [...printout.querySelectorAll(":scope > .onepage")];
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
-      const contentChildren = [...page.children].filter((c) => !isHeaderFooterEl(c));
+      const contentChildren = [...page.children].filter((c) => !isPageFurnitureEl(c));
+      const footnotes = [...page.children].find((c) => c.classList.contains("footnotes"));
+      const contentBottom = getPageContentBottom(page) - (footnotes ? getElementTotalHeight(footnotes) : 0);
       let overflowStartIndex = -1;
       for (let j = 0; j < contentChildren.length; j++) {
         const r = contentChildren[j].getBoundingClientRect();
-        if (r.bottom > getPageContentBottom(page) + 1) {
+        if (r.bottom > contentBottom + 1) {
           overflowStartIndex = j;
           break;
         }
@@ -1801,17 +1823,17 @@
       }
       overflowElems.forEach((el2) => newPage.appendChild(el2));
       page.parentNode.insertBefore(newPage, page.nextSibling);
-      [...page.children].filter(isHeaderFooterEl).forEach((hf) => hf.remove());
+      [...page.children].filter(isPageFurnitureEl).forEach((hf) => hf.remove());
       pages.splice(i + 1, 0, newPage);
     }
     printout.querySelectorAll(":scope > .onepage").forEach((p) => {
-      [...p.children].filter(isHeaderFooterEl).forEach((hf) => hf.remove());
+      [...p.children].filter(isPageFurnitureEl).forEach((hf) => hf.remove());
     });
     addHeadersAndFootersToPrintout();
   }
   function appendPageContent(page, children2) {
-    const footer = [...page.children].find((c) => c.classList.contains("first-page-footer") || c.classList.contains("running-footer"));
-    children2.forEach((c) => page.insertBefore(c, footer || null));
+    const tail = [...page.children].find(isPageTailEl);
+    children2.forEach((c) => page.insertBefore(c, tail || null));
   }
   function collapseSpilloverPages(margins) {
     const printout = getPrintout();
@@ -1821,7 +1843,7 @@
       const page = pages[i];
       if (!page.classList.contains("spillover")) continue;
       const prevPage = pages[i - 1];
-      const contentChildren = [...page.children].filter((c) => !isHeaderFooterEl(c));
+      const contentChildren = [...page.children].filter((c) => !isPageFurnitureEl(c));
       appendPageContent(prevPage, contentChildren);
       if (page.classList.contains("lastpage")) {
         prevPage.classList.add("lastpage");
@@ -1829,9 +1851,137 @@
       page.remove();
     }
     printout.querySelectorAll(":scope > .onepage").forEach((p) => {
-      [...p.children].filter(isHeaderFooterEl).forEach((hf) => hf.remove());
+      [...p.children].filter(isPageFurnitureEl).forEach((hf) => hf.remove());
     });
     addHeadersAndFootersToPrintout();
+  }
+  function isListChunkStart(elem, list) {
+    return list.tagName === "DL" ? elem.tagName === "DT" : elem.tagName === "LI";
+  }
+  function isListEl(elem) {
+    return elem.tagName === "OL" || elem.tagName === "UL" || elem.tagName === "DL";
+  }
+  function splittableListsIn(row) {
+    const candidates = isListEl(row) ? [row] : [...row.querySelectorAll("ol, ul, dl")];
+    return candidates.filter(
+      (list) => !list.closest(".sidebyside") && !(list !== row && list.parentElement.closest("ol, ul, dl")) && ![...list.classList].some((cls) => /^cols\d+$/.test(cls))
+    );
+  }
+  function hoistListOut(container, child, list) {
+    const isRowItself = list === child;
+    const depthClass = isRowItself ? null : depthClassForRowOut(child);
+    const tail = [];
+    for (let node = list; node !== child; node = node.parentElement) {
+      for (let sib = node.nextElementSibling; sib; sib = sib.nextElementSibling) {
+        tail.push(sib);
+      }
+    }
+    const pieces = [];
+    let piece = null;
+    let itemNumber = parseInt(list.getAttribute("start"), 10) || 1;
+    for (const item of [...list.children]) {
+      if (isListChunkStart(item, list) || piece === null) {
+        piece = document.createElement(list.tagName);
+        piece.className = list.className;
+        piece.classList.add("split-list");
+        if (list.tagName === "OL") {
+          piece.setAttribute("start", String(itemNumber));
+        }
+        itemNumber++;
+        pieces.push(piece);
+      }
+      piece.appendChild(item);
+    }
+    if (pieces.length === 0) return;
+    list.parentNode.insertBefore(pieces[0], list);
+    list.remove();
+    if (!isRowItself) {
+      child.classList.add("split-block");
+    }
+    let anchor = isRowItself ? pieces[0] : child;
+    for (const row of [...pieces.slice(1), ...tail]) {
+      container.insertBefore(row, anchor.nextSibling);
+      if (depthClass) {
+        row.classList.add(depthClass);
+      }
+      anchor = row;
+    }
+  }
+  function flattenOversizedListsIn(container, pageHeight) {
+    let split = false;
+    for (const child of [...container.children]) {
+      if (getElementTotalHeight(child) <= pageHeight) continue;
+      const lists = splittableListsIn(child);
+      if (lists.length === 0) continue;
+      for (let i = lists.length - 1; i >= 0; i--) {
+        hoistListOut(container, child, lists[i]);
+      }
+      split = true;
+    }
+    return split;
+  }
+  function footnoteDetailsIn(root) {
+    return [...root.querySelectorAll("details.ptx-footnote")].filter((fn) => !fn.closest(".hidden"));
+  }
+  function footnoteMark(details) {
+    const sup = details.querySelector(".ptx-footnote__number sup");
+    return sup ? sup.textContent.trim() : "";
+  }
+  function buildFootnoteItem(details) {
+    const item = document.createElement("div");
+    item.classList.add("footnote-item");
+    const number = document.createElement("sup");
+    number.classList.add("footnote-item__number");
+    number.textContent = footnoteMark(details);
+    item.appendChild(number);
+    const contents = details.querySelector(".ptx-footnote__contents");
+    if (contents) {
+      const clone = contents.cloneNode(true);
+      clone.removeAttribute("id");
+      clone.querySelectorAll("[id]").forEach((el2) => el2.removeAttribute("id"));
+      clone.classList.remove("ptx-footnote__contents");
+      clone.classList.add("footnote-item__contents");
+      item.appendChild(clone);
+    }
+    return item;
+  }
+  function buildFootnotesBlock(detailsList) {
+    const block = document.createElement("div");
+    block.classList.add("footnotes");
+    detailsList.forEach((details) => block.appendChild(buildFootnoteItem(details)));
+    return block;
+  }
+  function rebuildFootnotes() {
+    const printout = getPrintout();
+    if (!printout) return;
+    printout.querySelectorAll(":scope > .onepage > .footnotes").forEach((block) => block.remove());
+    printout.querySelectorAll(":scope > .onepage").forEach((page) => {
+      const notes = footnoteDetailsIn(page);
+      if (notes.length === 0) return;
+      appendPageContent(page, [buildFootnotesBlock(notes)]);
+    });
+  }
+  function measureFootnotes(rows, measuringPage) {
+    const heights = /* @__PURE__ */ new Map();
+    const owners = [];
+    for (const row of rows) {
+      for (const details of footnoteDetailsIn(row)) {
+        owners.push({ details, row });
+      }
+    }
+    if (owners.length === 0) return { heights, chrome: 0 };
+    const probe = buildFootnotesBlock(owners.map((o) => o.details));
+    measuringPage.appendChild(probe);
+    let itemTotal = 0;
+    [...probe.children].forEach((item, i) => {
+      const height = getElementTotalHeight(item);
+      itemTotal += height;
+      const row = owners[i].row;
+      heights.set(row, (heights.get(row) || 0) + height);
+    });
+    const chrome = Math.max(0, getElementTotalHeight(probe) - itemTotal);
+    probe.remove();
+    return { heights, chrome };
   }
   function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
@@ -1839,6 +1989,7 @@
       console.warn("No printout found, exiting addHeadersAndFootersToPrintout.");
       return;
     }
+    rebuildFootnotes();
     const pages = printout.querySelectorAll(".onepage");
     pages.forEach((page, index) => {
       const isFirstPage = index === 0;
@@ -1922,6 +2073,9 @@
     }
     const paperContentHeight = paperHeight - (margins.top + margins.bottom);
     setInitialWorkspaceHeights();
+    document.querySelectorAll(".onepage > .footnotes").forEach((block) => {
+      block.style.marginTop = "";
+    });
     const pages = document.querySelectorAll(".onepage");
     pages.forEach((page) => {
       console.log("Adjusting workspace height for page:", page);
@@ -1934,6 +2088,14 @@
         totalWorkspaceHeight += getElemWorkspaceHeight(row);
       }
       if (totalWorkspaceHeight === 0) {
+        const footnotes = [...page.children].find((c) => c.classList.contains("footnotes"));
+        if (footnotes) {
+          const gap = getPageContentBottom(page) - footnotes.getBoundingClientRect().bottom - 1;
+          if (gap > 0) {
+            const baseMargin = parseFloat(getComputedStyle(footnotes).marginTop) || 0;
+            footnotes.style.marginTop = baseMargin + gap + "px";
+          }
+        }
         console.log("No workspaces on this page, skipping workspace adjustment.");
         page.style.width = "";
         return;
@@ -2003,15 +2165,24 @@
   }
   var GROUP_BREAK_PENALTY_PAGES = 1;
   var SQUEEZE_COST_SCALE = 0.25;
+  var DEAD_SPACE_EXPONENT = 0.75;
   function anySolutionShown() {
     const printout = getPrintout();
     if (!printout) return false;
     return [...printout.querySelectorAll(".hint, .answer, .solution")].some((el2) => !el2.closest(".hidden"));
   }
-  function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced }) {
+  function deadSpaceCost(slack, pageHeight, isLastPage) {
+    if (isLastPage) return 0;
+    return pageHeight ** 2 * (slack / pageHeight) ** DEAD_SPACE_EXPONENT;
+  }
+  function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced, isLastPage }) {
     const groupPenalty = splitsGroup ? GROUP_BREAK_PENALTY_PAGES * pageHeight ** 2 : 0;
     if (naturalHeight <= pageHeight) {
-      return (pageHeight - naturalHeight) ** 2 + groupPenalty;
+      const slack = pageHeight - naturalHeight;
+      if (workspaceHeight > 0) {
+        return slack ** 2 + groupPenalty;
+      }
+      return deadSpaceCost(slack, pageHeight, isLastPage) + groupPenalty;
     }
     if (!allowSqueeze && !squeezeIsForced) {
       return Infinity;
@@ -2022,7 +2193,7 @@
     }
     return SQUEEZE_COST_SCALE * squeeze ** 2 + groupPenalty;
   }
-  function findPageBreaks(rows, pageHeight, { allowSqueeze = false } = {}) {
+  function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome = 0 } = {}) {
     console.log("*** Finding page breaks for", rows.length, "rows with page height:", pageHeight);
     let pageBreaks = [];
     let minCost = Array(rows.length + 1).fill(Infinity);
@@ -2031,19 +2202,24 @@
     for (let i = rows.length - 1; i >= 0; i--) {
       let cumulativeHeight = 0;
       let cumulativeWorkspaceHeight = 0;
+      let cumulativeFootnoteHeight = 0;
       let tallestRow = 0;
       for (let j = i; j < rows.length; j++) {
         cumulativeHeight += rows[j].height;
         cumulativeWorkspaceHeight += rows[j].workspaceHeight;
-        tallestRow = Math.max(tallestRow, rows[j].height);
+        cumulativeFootnoteHeight += rows[j].footnoteHeight || 0;
+        const footnotesHeight = cumulativeFootnoteHeight > 0 ? cumulativeFootnoteHeight + footnoteChrome : 0;
+        const rowWithNotes = rows[j].footnoteHeight ? rows[j].height + rows[j].footnoteHeight + footnoteChrome : rows[j].height;
+        tallestRow = Math.max(tallestRow, rowWithNotes);
         const next = rows[j + 1];
         const thisPage = pageCost({
           pageHeight,
-          naturalHeight: cumulativeHeight,
+          naturalHeight: cumulativeHeight + footnotesHeight,
           workspaceHeight: cumulativeWorkspaceHeight,
           splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
           allowSqueeze,
-          squeezeIsForced: tallestRow > pageHeight
+          squeezeIsForced: tallestRow > pageHeight,
+          isLastPage: j === rows.length - 1
         });
         if (thisPage === Infinity) {
           if (j === i) {
@@ -2190,10 +2366,17 @@
     const themeStylesheetHref = themeStylesheetLink ? themeStylesheetLink.getAttribute("href") : null;
     if (themeStylesheetHref) {
       const printStylesheetHref = themeStylesheetHref.replace(/theme.*\.css/, "print-worksheet.css");
-      themeStylesheetLink.setAttribute("href", printStylesheetHref);
-      await new Promise((resolve) => {
-        themeStylesheetLink.addEventListener("load", resolve, { once: true });
+      const printStylesheetLink = document.createElement("link");
+      printStylesheetLink.setAttribute("rel", "stylesheet");
+      printStylesheetLink.setAttribute("type", "text/css");
+      const stylesheetSettled = new Promise((resolve) => {
+        printStylesheetLink.addEventListener("load", resolve, { once: true });
+        printStylesheetLink.addEventListener("error", resolve, { once: true });
       });
+      printStylesheetLink.setAttribute("href", printStylesheetHref);
+      themeStylesheetLink.after(printStylesheetLink);
+      await stylesheetSettled;
+      themeStylesheetLink.remove();
     }
     let printableSection = document.getElementById(printableSectionID);
     if (!printableSection) {
@@ -2217,7 +2400,7 @@
     return solutionType === "answer" || solutionType === "solution";
   }
   async function rewriteSolutions() {
-    var born_hidden_knowls = document.querySelectorAll(".printout details");
+    var born_hidden_knowls = document.querySelectorAll(".printout details:not(.ptx-footnote)");
     born_hidden_knowls.forEach(function(detail) {
       const summary = detail.querySelector("summary");
       const content2 = detail.innerHTML.replace(summary.outerHTML, "");
@@ -2386,7 +2569,7 @@
         await MathJax.typesetPromise([getPrintout()]);
       }
       if (hasAuthoredPages) {
-        adjustPrintoutPages();
+        adjustPrintoutPages(margins);
       } else {
         createPrintoutPages(margins);
         pendingSettle = (async () => {
