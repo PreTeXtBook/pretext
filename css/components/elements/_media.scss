@@ -53,6 +53,11 @@ img.contained {
   // as most transparent images will assume that the background is white
   background: var(--ptx-image-bg);
 }
+// Mermaid SVGs should always have a transparent background.
+.image-box .mermaid > svg,
+.image-box .ptx-mermaid-dialog > svg {
+  background: none;
+}
 
 .image-description {
   summary {
@@ -74,7 +79,7 @@ img.contained {
 .ptx-image-dialog-trigger-container {
   position: relative;
 
-  &:has(> img:hover) .ptx-image-expand-button {
+  &:has(> :is(img, pre.mermaid):hover) .ptx-image-expand-button {
     opacity: 1;
   }
 }
@@ -136,6 +141,22 @@ img.contained {
     height: auto !important;
     max-width: 100%;
     max-height: 100%;
+  }
+
+  pre.ptx-mermaid-dialog {
+    width: auto !important;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 !important;
+    overflow: hidden;
+
+    svg {
+      display: block;
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100% !important;
+      max-height: 100%;
+    }
   }
 }
 
