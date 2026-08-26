@@ -8325,17 +8325,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="effective-top"/>
     </xsl:variable>
 
-    <!-- a cell of a header row needs to be "th" -->
-    <!-- else the HTML mark up is "td"           -->
+    <!-- A nonempty cell of a header row needs to be "th".  Empty cells -->
+    <!-- are data cells, even when their row supplies headers.           -->
+    <!-- All other HTML table cells are "td".                            -->
     <xsl:variable name="header-row-elt">
+        <xsl:variable name="b-has-contents" select="*[not(self::nbsp)] or normalize-space(.) != ''"/>
         <xsl:choose>
-            <xsl:when test="parent::row/@header = 'yes'">
+            <xsl:when test="$b-has-contents and parent::row/@header = 'yes'">
                 <xsl:text>th</xsl:text>
             </xsl:when>
-            <xsl:when test="parent::row/@header = 'vertical'">
+            <xsl:when test="$b-has-contents and parent::row/@header = 'vertical'">
                 <xsl:text>th</xsl:text>
             </xsl:when>
-            <xsl:when test="$b-row-header">
+            <xsl:when test="$b-has-contents and $b-row-header">
                 <xsl:text>th</xsl:text>
             </xsl:when>
             <!-- "no" is other choice, or no attribute at all -->
