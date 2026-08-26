@@ -15,7 +15,7 @@
 .ptx-image-dialog-trigger-container {
   position: relative;
 
-  &:has(> :is(img, pre.mermaid, .ChemAccess-element):hover) .ptx-image-expand-button {
+  &:has(> :is(img, pre.mermaid, .ChemAccess-element, .asymptote-box):hover) .ptx-image-expand-button {
     opacity: 1;
   }
 }
@@ -103,6 +103,14 @@
       max-width: 100% !important;
       max-height: 100%;
     }
+  }
+
+  svg.ptx-asymptote-dialog {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100%;
   }
 
   .ChemAccess-element {
