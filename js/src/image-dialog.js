@@ -31,20 +31,6 @@ function initializeImageDialogs() {
             image instanceof HTMLImageElement &&
             new URL(image.currentSrc || image.src, document.baseURI).pathname.toLowerCase().endsWith('.svg')
         );
-        if (image instanceof HTMLImageElement && !isSVG) {
-            if (!image.naturalWidth || !image.naturalHeight) {
-                image.addEventListener('load', initializeImageDialogs, { once: true });
-                return;
-            }
-            const renderedSize = image.getBoundingClientRect();
-            if (
-                renderedSize.width >= image.naturalWidth &&
-                renderedSize.height >= image.naturalHeight
-            ) {
-                return;
-            }
-        }
-
         initializedImageDialogs.add(image);
         const dialog = document.createElement('dialog');
         dialog.id = `ptx-image-dialog-${++imageDialogNumber}`;
@@ -156,9 +142,10 @@ function initializeImageDialogs() {
                 : (displayedImage instanceof HTMLImageElement && displayedImage.naturalWidth && displayedImage.naturalHeight
                     ? displayedImage.naturalWidth / displayedImage.naturalHeight
                     : null);
+            // Limit raster images to 3x normal size
             let imageWidth = isSVG
                 ? Math.min(maxWidth, maxHeight * (intrinsicAspectRatio || 1))
-                : Math.min(naturalWidth, maxWidth);
+                : Math.min(naturalWidth * 3, maxWidth);
 
             for (let attempt = 0; attempt < 2; attempt += 1) {
                 dialog.style.width = `${imageWidth}px`;
