@@ -39,7 +39,7 @@
   max-width: 90vw;
   max-height: 90vh;
   padding: 20px;
-  overflow: hidden;
+  overflow: auto;
   @include dialogs.ptx-dialog-modal;
 
   & {
