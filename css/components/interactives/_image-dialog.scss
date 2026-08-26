@@ -1,0 +1,128 @@
+//********************************************************************
+// Copyright (C) 2026  Robert A. Beezer
+//
+// This file is part of PreTeXt.
+//
+// PreTeXt is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 or version 3 of the
+// License, or (at your option) any later version.
+//********************************************************************
+
+@use 'components/helpers/dialogs' as dialogs;
+
+// Dialog controls float over the upper-right corner of their images.
+.ptx-image-dialog-trigger-container {
+  position: relative;
+
+  &:has(> :is(img, pre.mermaid, .ChemAccess-element, .asymptote-box):hover) .ptx-image-expand-button {
+    opacity: 1;
+  }
+}
+
+.ptx-image-expand-button {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  opacity: 0;
+
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+  }
+}
+
+// Keep an enlarged image within the viewport.
+.ptx-image-dialog {
+  width: fit-content;
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 20px;
+  overflow: auto;
+  @include dialogs.ptx-dialog-modal;
+
+  & {
+    // Override dialog background to match normal page content
+    background: var(--content-background);
+  }
+
+  // little space between image and description
+  .image-box * + *{
+    margin-top: 0.5em;
+  }
+
+  .ptx-image-dialog-content {
+    display: contents;
+  }
+
+  .ptx-dialog-topbar {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    min-height: 0;
+  }
+
+  .ptx-dialog-close-button {
+    opacity: 0;
+
+    &:hover,
+    &:focus {
+      opacity: 0.8;
+    }
+  }
+
+  figure,
+  .image-box {
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  img {
+    display: block;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  pre.ptx-mermaid-dialog {
+    width: auto !important;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 !important;
+    overflow: hidden;
+
+    svg {
+      display: block;
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100% !important;
+      max-height: 100%;
+    }
+  }
+
+  svg.ptx-asymptote-dialog {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100%;
+  }
+
+  .ChemAccess-element {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .ChemAccess-element .svg,
+  .ChemAccess-element svg {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+}
