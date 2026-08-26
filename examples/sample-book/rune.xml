@@ -4040,6 +4040,85 @@ TEST_CASE( "Test the add function" ) {
                 </match>
             </cardsort>
         </exercise>
+
+        <exercise label="matching-graph-types">
+            <title>Cardsort Problem, Graphs of Functions</title>
+            <idx>matching graphs to function types</idx>
+            <statement>
+                <p>Each figure below shows the graph of a single function.  Match each graph with the type of function it pictures.</p>
+                <sidebyside widths="30% 30% 30%">
+                    <figure xml:id="cardsort-graph-one">
+                        <caption>Graph One</caption>
+                        <image>
+                            <shortdescription>a smooth curve that rises, falls, and rises again, crossing the horizontal axis three times</shortdescription>
+                            <prefigure xmlns="https://prefigure.org"
+                                       label="prefigure-cardsort-cubic">
+                                <diagram dimensions="(300,300)" margins="5">
+                                    <definition>f(x) = (x^3 - 4*x)/2</definition>
+                                    <coordinates bbox="[-4,-4,4,4]">
+                                        <grid-axes xlabel="x" ylabel="y"/>
+                                        <graph at="graph" function="f"/>
+                                    </coordinates>
+                                </diagram>
+                            </prefigure>
+                        </image>
+                    </figure>
+                    <figure xml:id="cardsort-graph-two">
+                        <caption>Graph Two</caption>
+                        <image>
+                            <shortdescription>a wave oscillating steadily between one high value and one low value, three full times across the view</shortdescription>
+                            <prefigure xmlns="https://prefigure.org"
+                                       label="prefigure-cardsort-sine">
+                                <diagram dimensions="(300,300)" margins="5">
+                                    <definition>g(x) = 2*sin(3*pi*(x - 1)/4)</definition>
+                                    <coordinates bbox="[-4,-4,4,4]">
+                                        <grid-axes xlabel="x" ylabel="y"/>
+                                        <graph at="graph" function="g"/>
+                                    </coordinates>
+                                </diagram>
+                            </prefigure>
+                        </image>
+                    </figure>
+                    <figure xml:id="cardsort-graph-three">
+                        <caption>Graph Three</caption>
+                        <image>
+                            <shortdescription>three branches split by two dashed vertical lines; the central branch rises to a single peak between them</shortdescription>
+                            <prefigure xmlns="https://prefigure.org"
+                                       label="prefigure-cardsort-rational">
+                                <diagram dimensions="(300,300)" margins="5">
+                                    <definition>h(x) = 4/(x^2 - 4)</definition>
+                                    <coordinates bbox="[-4,-4,4,4]">
+                                        <grid-axes xlabel="x" ylabel="y"/>
+                                        <line endpoints="((-2,-4),(-2,4))" stroke="red" dash="9 6"/>
+                                        <line endpoints="((2,-4),(2,4))" stroke="red" dash="9 6"/>
+                                        <graph at="branch-left" function="h" domain="(-4, -2.2)"/>
+                                        <graph at="branch-center" function="h" domain="(-1.73, 1.73)"/>
+                                        <graph at="branch-right" function="h" domain="(2.2, 4)"/>
+                                    </coordinates>
+                                </diagram>
+                            </prefigure>
+                        </image>
+                    </figure>
+                </sidebyside>
+            </statement>
+            <feedback>
+                <p>A polynomial is defined everywhere, with no breaks and no repetition.  A trigonometric function repeats itself at regular intervals.  A rational function may have vertical asymptotes where its denominator vanishes<mdash/>and while the central branch of <xref ref="cardsort-graph-three"/> may resemble a downward-opening parabola, a parabola has no asymptotes.</p>
+            </feedback>
+            <cardsort>
+                <match>
+                    <premise order="1">Graph Two (<xref ref="cardsort-graph-two"/>)</premise>
+                    <response>Trigonometric Function</response>
+                </match>
+                <match>
+                    <premise order="3">Graph One (<xref ref="cardsort-graph-one"/>)</premise>
+                    <response>Polynomial Function</response>
+                </match>
+                <match>
+                    <premise order="2">Graph Three (<xref ref="cardsort-graph-three"/>)</premise>
+                    <response>Rational Function</response>
+                </match>
+            </cardsort>
+        </exercise>
     </exercises>
 
     <exercises xml:id="clickable-area-exercises">
