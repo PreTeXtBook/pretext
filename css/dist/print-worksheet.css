@@ -2166,6 +2166,71 @@ article.printout::after {
 .solution-like.born-hidden-knowl .knowl__content .para {
   margin-top: 0.5em;
 }
+.onepage > .split-list {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+.onepage > .split-list > :first-child {
+  margin-top: 0;
+}
+.onepage .split-block {
+  border: none;
+  background: none;
+}
+.onepage .split-block::before,
+.onepage .split-block::after {
+  all: unset;
+}
+.printout .ptx-footnote,
+.printout .ptx-footnote[open] {
+  display: inline;
+}
+.printout .ptx-footnote__number,
+.printout .ptx-footnote[open] .ptx-footnote__number {
+  display: inline;
+  min-width: 0;
+  cursor: inherit;
+  pointer-events: none;
+}
+.printout .ptx-footnote__number sup,
+.printout .ptx-footnote[open] .ptx-footnote__number sup {
+  display: inline;
+}
+.printout .ptx-footnote__number::before,
+.printout .ptx-footnote[open] .ptx-footnote__number::before {
+  content: none;
+}
+.printout .ptx-footnote__contents {
+  display: none;
+}
+.printout .ptx-footnote::details-content {
+  display: none;
+}
+.onepage > .footnotes {
+  margin-top: 1em;
+  font-size: 0.85em;
+}
+.onepage > .footnotes::before {
+  content: "";
+  display: block;
+  width: 30%;
+  border-top: 1px solid black;
+  margin-bottom: 0.4em;
+}
+.onepage > .footnotes .footnote-item {
+  margin-top: 0.25em;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+.onepage > .footnotes .footnote-item__number {
+  margin-right: 0.35em;
+}
+.onepage > .footnotes .footnote-item__contents {
+  display: inline;
+}
+.onepage > .footnotes .footnote-item__contents > .para {
+  display: inline;
+}
 .code-inline {
   border: unset;
   background: unset;
