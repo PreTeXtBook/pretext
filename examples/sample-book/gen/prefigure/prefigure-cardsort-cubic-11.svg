@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="prefigure-cardsort-cubic-figure" width="310" height="310" viewBox="0 0 310 310">
+  <defs>
+    <clipPath id="prefigure-cardsort-cubic-__clipPath-0">
+      <rect x="5.0" y="5.0" width="300.0" height="300.0"/>
+    </clipPath>
+    <clipPath id="prefigure-cardsort-cubic-__clipPath-1">
+      <rect x="5.0" y="5.0" width="300.0" height="300.0"/>
+    </clipPath>
+  </defs>
+  <g id="prefigure-cardsort-cubic-grid-axes">
+    <g id="prefigure-cardsort-cubic-grid" stroke="#ccc" stroke-width="1">
+      <line x1="5.0" y1="305.0" x2="5.0" y2="5.0"/>
+      <line x1="42.5" y1="305.0" x2="42.5" y2="5.0"/>
+      <line x1="80.0" y1="305.0" x2="80.0" y2="5.0"/>
+      <line x1="117.5" y1="305.0" x2="117.5" y2="5.0"/>
+      <line x1="155.0" y1="305.0" x2="155.0" y2="5.0"/>
+      <line x1="192.5" y1="305.0" x2="192.5" y2="5.0"/>
+      <line x1="230.0" y1="305.0" x2="230.0" y2="5.0"/>
+      <line x1="267.5" y1="305.0" x2="267.5" y2="5.0"/>
+      <line x1="305.0" y1="305.0" x2="305.0" y2="5.0"/>
+      <line x1="5.0" y1="305.0" x2="305.0" y2="305.0"/>
+      <line x1="5.0" y1="267.5" x2="305.0" y2="267.5"/>
+      <line x1="5.0" y1="230.0" x2="305.0" y2="230.0"/>
+      <line x1="5.0" y1="192.5" x2="305.0" y2="192.5"/>
+      <line x1="5.0" y1="155.0" x2="305.0" y2="155.0"/>
+      <line x1="5.0" y1="117.5" x2="305.0" y2="117.5"/>
+      <line x1="5.0" y1="80.0" x2="305.0" y2="80.0"/>
+      <line x1="5.0" y1="42.5" x2="305.0" y2="42.5"/>
+      <line x1="5.0" y1="5.0" x2="305.0" y2="5.0"/>
+    </g>
+    <g id="prefigure-cardsort-cubic-axes" stroke="black" stroke-width="2">
+      <line id="prefigure-cardsort-cubic-__line-18" x1="5.0" y1="155.0" x2="305.0" y2="155.0" stroke="black" stroke-width="2"/>
+      <g>
+        <line id="prefigure-cardsort-cubic-__line-19" x1="80.0" y1="158.0" x2="80.0" y2="152.0"/>
+        <line id="prefigure-cardsort-cubic-__line-20" x1="230.0" y1="158.0" x2="230.0" y2="152.0"/>
+      </g>
+      <line id="prefigure-cardsort-cubic-__line-21" x1="155.0" y1="305.0" x2="155.0" y2="5.0" stroke="black" stroke-width="2"/>
+      <g>
+        <line id="prefigure-cardsort-cubic-__line-22" x1="152.0" y1="230.0" x2="158.0" y2="230.0"/>
+        <line id="prefigure-cardsort-cubic-__line-23" x1="152.0" y1="80.0" x2="158.0" y2="80.0"/>
+      </g>
+    </g>
+    <g id="prefigure-cardsort-cubic-__label-0" transform="translate(301.0,151.0) translate(-10.4,-8.2)">
+      <g id="prefigure-cardsort-cubic-__g-0">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.200px" width="10.352px" height="8.200px" role="img" focusable="false" viewBox="0 -442 572 453" x="0.0" y="0.0">
+          <defs>
+            <path id="prefigure-cardsort-cubic-MJX-2-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mi" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="0" data-semantic-speech="x">
+                <use data-c="1D465" xlink:href="#prefigure-cardsort-cubic-MJX-2-TEX-I-1D465"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="prefigure-cardsort-cubic-__label-1" transform="translate(159.0,9.0) translate(0.0,-0.0)">
+      <g id="prefigure-cardsort-cubic-__g-1">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -3.712px" width="8.872px" height="11.712px" role="img" focusable="false" viewBox="0 -442 490 647" x="0.0" y="0.0">
+          <defs>
+            <path id="prefigure-cardsort-cubic-MJX-3-TEX-I-1D466" d="M21 287Q21 301 36 335T84 406T158 442Q199 442 224 419T250 355Q248 336 247 334Q247 331 231 288T198 191T182 105Q182 62 196 45T238 27Q261 27 281 38T312 61T339 94Q339 95 344 114T358 173T377 247Q415 397 419 404Q432 431 462 431Q475 431 483 424T494 412T496 403Q496 390 447 193T391 -23Q363 -106 294 -155T156 -205Q111 -205 77 -183T43 -117Q43 -95 50 -80T69 -58T89 -48T106 -45Q150 -45 150 -87Q150 -107 138 -122T115 -142T102 -147L99 -148Q101 -153 118 -160T152 -167H160Q177 -167 186 -165Q219 -156 247 -127T290 -65T313 -9T321 21L315 17Q309 13 296 6T270 -6Q250 -11 231 -11Q185 -11 150 11T104 82Q103 89 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mi" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple" data-semantic-id="0" data-semantic-speech="y">
+                <use data-c="1D466" xlink:href="#prefigure-cardsort-cubic-MJX-3-TEX-I-1D466"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="prefigure-cardsort-cubic-__label-2" transform="translate(80.0,166.0) translate(-7.5,-0.0)">
+      <g id="prefigure-cardsort-cubic-__g-2">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="15.080px" height="12.056px" role="img" focusable="false" viewBox="0 -666 833 666" x="0.0" y="0.0">
+          <defs>
+            <path id="prefigure-cardsort-cubic-MJX-4-TEX-N-2D" d="M11 179V252H277V179H11Z"/>
+            <path id="prefigure-cardsort-cubic-MJX-4-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mtext" data-semantic-type="text" data-semantic-role="unknown" data-semantic-font="normal" data-semantic-annotation="clearspeak:unit" data-semantic-id="0" data-semantic-speech="hyphen 2">
+                <use data-c="2D" xlink:href="#prefigure-cardsort-cubic-MJX-4-TEX-N-2D"/>
+                <use data-c="32" xlink:href="#prefigure-cardsort-cubic-MJX-4-TEX-N-32" transform="translate(333,0)"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="prefigure-cardsort-cubic-__label-3" transform="translate(230.0,166.0) translate(-4.5,-0.0)">
+      <g id="prefigure-cardsort-cubic-__g-3">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="9.048px" height="12.056px" role="img" focusable="false" viewBox="0 -666 500 666" x="0.0" y="0.0">
+          <defs>
+            <path id="prefigure-cardsort-cubic-MJX-5-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mtext" data-semantic-type="text" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:unit" data-semantic-id="0" data-semantic-speech="2">
+                <use data-c="32" xlink:href="#prefigure-cardsort-cubic-MJX-5-TEX-N-32"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="prefigure-cardsort-cubic-__label-4" transform="translate(144.0,230.0) translate(-15.1,-6.0)">
+      <g id="prefigure-cardsort-cubic-__g-4">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="15.080px" height="12.056px" role="img" focusable="false" viewBox="0 -666 833 666" x="0.0" y="0.0">
+          <defs>
+            <path id="prefigure-cardsort-cubic-MJX-6-TEX-N-2D" d="M11 179V252H277V179H11Z"/>
+            <path id="prefigure-cardsort-cubic-MJX-6-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mtext" data-semantic-type="text" data-semantic-role="unknown" data-semantic-font="normal" data-semantic-annotation="clearspeak:unit" data-semantic-id="0" data-semantic-speech="hyphen 2">
+                <use data-c="2D" xlink:href="#prefigure-cardsort-cubic-MJX-6-TEX-N-2D"/>
+                <use data-c="32" xlink:href="#prefigure-cardsort-cubic-MJX-6-TEX-N-32" transform="translate(333,0)"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+    <g id="prefigure-cardsort-cubic-__label-5" transform="translate(144.0,80.0) translate(-9.0,-6.0)">
+      <g id="prefigure-cardsort-cubic-__g-5">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="9.048px" height="12.056px" role="img" focusable="false" viewBox="0 -666 500 666" x="0.0" y="0.0">
+          <defs>
+            <path id="prefigure-cardsort-cubic-MJX-7-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/>
+          </defs>
+          <g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+            <g data-mml-node="math">
+              <g data-mml-node="mtext" data-semantic-type="text" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:unit" data-semantic-id="0" data-semantic-speech="2">
+                <use data-c="32" xlink:href="#prefigure-cardsort-cubic-MJX-7-TEX-N-32"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </g>
+    </g>
+  </g>
+  <path id="prefigure-cardsort-cubic-graph" stroke="blue" stroke-width="2" fill="none" d="M 29.6 604.8 L 32.0 570.6 L 35.0 529.4 L 38.0 490.5 L 41.0 453.8 L 44.0 419.3 L 47.0 386.9 L 50.0 356.6 L 53.0 328.3 L 56.0 302.0 L 59.0 277.6 L 62.0 255.0 L 65.0 234.2 L 68.0 215.1 L 71.0 197.7 L 74.0 182.0 L 77.0 167.7 L 80.0 155.0 L 83.0 143.7 L 86.0 133.8 L 89.0 125.2 L 92.0 117.9 L 95.0 111.8 L 98.0 106.8 L 101.0 103.0 L 104.0 100.2 L 107.0 98.3 L 110.0 97.4 L 113.0 97.3 L 116.0 98.1 L 119.0 99.6 L 122.0 101.8 L 125.0 104.6 L 128.0 108.0 L 131.0 111.9 L 134.0 116.3 L 137.0 121.1 L 140.0 126.2 L 143.0 131.6 L 146.0 137.3 L 149.0 143.1 L 152.0 149.0 L 155.0 155.0 L 158.0 161.0 L 161.0 166.9 L 164.0 172.7 L 167.0 178.4 L 170.0 183.8 L 173.0 188.9 L 176.0 193.7 L 179.0 198.1 L 182.0 202.0 L 185.0 205.4 L 188.0 208.2 L 191.0 210.4 L 194.0 211.9 L 197.0 212.7 L 200.0 212.6 L 203.0 211.7 L 206.0 209.8 L 209.0 207.0 L 212.0 203.2 L 215.0 198.2 L 218.0 192.1 L 221.0 184.8 L 224.0 176.2 L 227.0 166.3 L 230.0 155.0 L 233.0 142.3 L 236.0 128.0 L 239.0 112.3 L 242.0 94.9 L 245.0 75.8 L 248.0 55.0 L 251.0 32.4 L 254.0 8.0 L 257.0 -18.3 L 260.0 -46.6 L 263.0 -76.9 L 266.0 -109.3 L 269.0 -143.8 L 272.0 -180.5 L 275.0 -219.4 L 278.0 -260.6" clip-path="url(#prefigure-cardsort-cubic-__clipPath-1)"/>
+</svg>
