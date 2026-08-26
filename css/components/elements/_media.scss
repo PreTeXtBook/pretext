@@ -17,6 +17,8 @@
 // along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 //********************************************************************
 
+@use 'components/helpers/dialogs' as dialogs;
+
 // ---------------------------------------------
 // containers for images, audio, video, and asymptote
 .image-box,
@@ -46,14 +48,10 @@ img.contained {
 
 // ---------------------------------------------
 // images
-.ptx-content img, .ptx-content svg {
+.image-box img, .image-box svg {
   // for body images in dark mode, we want to be able to force a light colored background
   // as most transparent images will assume that the background is white
   background: var(--ptx-image-bg);
-}
-// but mermaid svg should always have a transparent background
-.mermaid > svg {
-  background: none;
 }
 
 .image-description {
@@ -72,24 +70,73 @@ img.contained {
   gap: 0.5em;
 }
 
-// TODO - refactor mag_popup JS and CSS
-// was .ptx-content .image-box > img:not(.draw_on_me):not(.mag_popup)
-.image-box > img:not(.mag_popup) {
-  cursor: zoom-in;
+// Dialog controls float over the upper-right corner of their images.
+.ptx-image-dialog-trigger-container {
+  position: relative;
+
+  &:has(> img:hover) .ptx-image-expand-button {
+    opacity: 1;
+  }
 }
 
-img.mag_popup {
-  border: 1px solid #666;
-  box-shadow: 4px 6px 4px #999;
-  cursor: zoom-out;
+.ptx-image-expand-button {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  opacity: 0;
+
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+  }
 }
 
-.mag_popup_container {
-  background: var(--content-background);
-  width:100%;
-  position:absolute;
-  z-index:1001;
-  overflow-x: visible;
+// Keep an enlarged image within the viewport.
+.ptx-image-dialog {
+  width: fit-content;
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 20px;
+  overflow: hidden;
+  @include dialogs.ptx-dialog-modal;
+
+  .ptx-image-dialog-content {
+    display: contents;
+  }
+
+  .ptx-dialog-topbar {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    min-height: 0;
+  }
+
+  .ptx-dialog-close-button {
+    opacity: 0;
+
+    &:hover,
+    &:focus {
+      opacity: 0.8;
+    }
+  }
+
+  figure,
+  .image-box {
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  img {
+    display: block;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100%;
+    max-height: 100%;
+  }
 }
 
 // ---------------------------------------------
