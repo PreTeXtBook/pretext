@@ -4106,15 +4106,15 @@ TEST_CASE( "Test the add function" ) {
             </feedback>
             <cardsort>
                 <match>
-                    <premise order="1">Graph Two (<xref ref="cardsort-graph-two"/>)</premise>
+                    <premise order="1">Graph Two</premise>
                     <response>Trigonometric Function</response>
                 </match>
                 <match>
-                    <premise order="3">Graph One (<xref ref="cardsort-graph-one"/>)</premise>
+                    <premise order="3">Graph One</premise>
                     <response>Polynomial Function</response>
                 </match>
                 <match>
-                    <premise order="2">Graph Three (<xref ref="cardsort-graph-three"/>)</premise>
+                    <premise order="2">Graph Three</premise>
                     <response>Rational Function</response>
                 </match>
             </cardsort>
