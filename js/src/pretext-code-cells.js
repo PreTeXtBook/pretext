@@ -1,26 +1,26 @@
 // Import/export the contents of Sage code cells as a JSON file.
 //
-// SageMathCell's own runtime JavaScript (loaded externally, not part of
-// this repo) assigns each cell it initializes an id like "document-0",
-// "document-1", ... -- a page-wide counter unrelated to any PreTeXt id.
-// The exported/imported JSON is keyed by that id, and only ever touches
-// the *code* currently in a cell's editor, never its evaluated output.
+// Each cell is a "div.ptx-sagecell" with the stable id PreTeXt itself
+// assigns (from the source's xml:id, or a generated one). SageMathCell's
+// own runtime JavaScript (loaded externally, not part of this repo) adds
+// an "output_<hex>" class to that same div once it initializes the cell --
+// but that hex string is a fresh random id generated on every page load,
+// not something that survives a reload, so it can't be used as an export
+// key. The PreTeXt id is what's stable, so the exported/imported JSON is
+// keyed by that. Only the *code* currently in a cell's editor is touched,
+// never its evaluated output.
 
 // CodeMirror 5 (what SageMathCell embeds) exposes the editor instance as a
-// ".CodeMirror" property on the wrapper element it builds. SageMathCell
-// nests that wrapper somewhere under the cell's own "document-N" container,
-// so check the container itself first, then search its descendants.
+// ".CodeMirror" property on the wrapper element it builds, nested inside
+// the "div.ptx-sagecell" alongside the eval button and output area.
 function findCodeMirror(container) {
-    if (container.CodeMirror) {
-        return container.CodeMirror;
-    }
     const wrapper = container.querySelector(".CodeMirror");
     return wrapper ? wrapper.CodeMirror : null;
 }
 
 function collectCodeCells() {
     const cells = {};
-    document.querySelectorAll('[id^="document-"]').forEach((el) => {
+    document.querySelectorAll(".ptx-sagecell").forEach((el) => {
         const cm = findCodeMirror(el);
         if (cm) {
             cells[el.id] = cm.getValue();
