@@ -2078,6 +2078,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- this message, locate the apply-templates chain    -->
                 <!-- that omitted the parameter and add it.            -->
                 <xsl:message>PTX:BUG:     "hN" template reached without a $heading-level parameter on element &lt;<xsl:value-of select="local-name(.)"/>&gt; at <xsl:for-each select="ancestor::*"><xsl:value-of select="local-name(.)"/><xsl:text>/</xsl:text></xsl:for-each><xsl:value-of select="local-name(.)"/>; defaulting to h1</xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
                 <xsl:text>1</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
