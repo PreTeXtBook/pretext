@@ -2974,14 +2974,15 @@
     const cells = collectCodeCells();
     const count = Object.keys(cells).length;
     if (count === 0) {
-      statusElement.textContent = "No code cells found on this page.";
-      return;
+        statusElement.textContent = "No code cells found on this page.";
+        return;
     }
     const blob = new Blob([JSON.stringify(cells, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
+    const filename = window.location.pathname.split('/').pop().split('.').shift || "pretext"
     link.href = url;
-    link.download = "code-cells.json";
+    link.download = filename + "-code-cells.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
