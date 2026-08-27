@@ -351,6 +351,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='embed'>Embed</localization>
     <localization string-id='embed-this-page'>Embed this page</localization>
     <localization string-id='copy'>Copy</localization>
+    <!-- Code cell import/export button, HTML only, utilized by JavaScript -->
+    <localization string-id='code-cells'>Code</localization>
+    <localization string-id='code-cells-description'>Export or import the code in this page's cells as a JSON file.</localization>
+    <localization string-id='code-cells-export'>Export</localization>
+    <localization string-id='code-cells-import'>Import</localization>
     <localization string-id='profile'>Profile</localization>
     <!-- A permalink icon in HTML output will have a tooltip (on hover) -->
     <!-- that says something like                                       -->

@@ -21,4 +21,5 @@ import '../pretext.js';
 import '../pretext_add_on.js';
 import './pretext-printouts.js';
 import './pretext-embed.js';
+import './pretext-code-cells.js';
 import '../knowl.js';
