@@ -13169,14 +13169,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-read-aloud">
             <xsl:call-template name="read-aloud-controls" />
         </xsl:if>
-        <!-- Button to import/export the contents of Sage code cells.       -->
-        <!-- $b-has-sage (book-wide) gates loading of the sagecell.js       -->
-        <!-- library itself, since a knowl anywhere could reveal a cell;    -->
-        <!-- the button itself only needs to appear on pages that actually -->
-        <!-- have a cell in their own content, either a "sage" element      -->
-        <!-- or a "slate" with @surface='sage' (an interact widget).        -->
-        <xsl:if test="$b-has-sage and boolean(.//sage or .//slate[@surface = 'sage'])">
-            <xsl:call-template name="code-cells-button" />
+        <!-- Button to import/export the contents of Sage code cells.        -->
+        <!-- $b-has-sage (book-wide) gates loading of the sagecell.js        -->
+        <!-- library itself, since a knowl anywhere could reveal a cell; the -->
+        <!-- button itself only needs to appear on pages that actually      -->
+        <!-- render an editable "sage" cell inline. ("slate" @surface=sage   -->
+        <!-- cells only ever appear inside an "interactive", which always   -->
+        <!-- renders as an iframe to its own standalone page rather than    -->
+        <!-- inline, so those are never reachable from this page's own DOM  -->
+        <!-- and are excluded here.) A summary ("intermediate" in PreTeXt's -->
+        <!-- chunking terms) page's own subtree can still contain cells     -->
+        <!-- that actually render on a deeper child page instead, so        -->
+        <!-- compare each candidate's containing page to this one rather    -->
+        <!-- than just testing for a descendant.                            -->
+        <xsl:if test="$b-has-sage">
+            <xsl:variable name="this-page-filename">
+                <xsl:apply-templates select="." mode="containing-filename" />
+            </xsl:variable>
+            <xsl:variable name="b-page-has-sage-cell">
+                <xsl:for-each select=".//sage">
+                    <xsl:variable name="cell-page-filename">
+                        <xsl:apply-templates select="." mode="containing-filename" />
+                    </xsl:variable>
+                    <xsl:if test="$cell-page-filename = $this-page-filename">
+                        <xsl:text>true</xsl:text>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:if test="normalize-space($b-page-has-sage-cell) != ''">
+                <xsl:call-template name="code-cells-button" />
+            </xsl:if>
         </xsl:if>
         <xsl:call-template name="readability-options" />
     </span>
