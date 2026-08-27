@@ -13169,8 +13169,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-read-aloud">
             <xsl:call-template name="read-aloud-controls" />
         </xsl:if>
-        <!-- Button to import/export the contents of Sage code cells -->
-        <xsl:if test="$b-has-sage">
+        <!-- Button to import/export the contents of Sage code cells.       -->
+        <!-- $b-has-sage (book-wide) gates loading of the sagecell.js       -->
+        <!-- library itself, since a knowl anywhere could reveal a cell;    -->
+        <!-- the button itself only needs to appear on pages that actually -->
+        <!-- have a cell in their own content, either a "sage" element      -->
+        <!-- or a "slate" with @surface='sage' (an interact widget).        -->
+        <xsl:if test="$b-has-sage and boolean(.//sage or .//slate[@surface = 'sage'])">
             <xsl:call-template name="code-cells-button" />
         </xsl:if>
         <xsl:call-template name="readability-options" />
