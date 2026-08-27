@@ -39,7 +39,7 @@ function exportCodeCells(statusElement) {
     const blob = new Blob([JSON.stringify(cells, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    const filename = window.location.pathname.split('/').pop().split('.').shift || "pretext"
+    const filename = window.location.pathname.split('/').pop().split('.').shift() || "pretext"
     link.href = url;
     link.download = filename + "-code-cells.json";
     document.body.appendChild(link);
