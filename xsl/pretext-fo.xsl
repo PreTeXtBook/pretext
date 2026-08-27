@@ -585,6 +585,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               role="H1">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="." mode="title-full"/>
+        <!-- A subtitle belongs to the heading, as it does in HTML, so it  -->
+        <!-- sits inside this block rather than following it.  Lighter and -->
+        <!-- smaller than the title, and on a line of its own.             -->
+        <xsl:if test="subtitle">
+            <fo:block font-size="60%"
+                      font-weight="normal"
+                      space-before="0.5em">
+                <xsl:apply-templates select="." mode="subtitle"/>
+            </fo:block>
+        </xsl:if>
     </fo:block>
 </xsl:template>
 
