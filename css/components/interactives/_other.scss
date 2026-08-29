@@ -30,6 +30,19 @@
   }
 }
 
+// A publisher may hold a GeoGebra applet behind a play button, and then
+// GeoGebra draws a preview image in the applet's place.  We supply that
+// image, the same screenshot static output uses, but GeoGebra draws it at
+// whatever size it happens to be rather than at the size of the applet,
+// which for an applet authored larger than the page allows leaves a small
+// picture in a large white box.  So it is told to fill the space instead.
+// A one pixel inset of GeoGebra's own remains, which is what its border
+// wants.
+.geogebra-applet .ggb_preview img {
+  width: 100%;
+  height: 100%;
+}
+
 .interactive__instructions {
   // ensure interactive instructions stay normal width
   max-width: var(--base-content-width);
