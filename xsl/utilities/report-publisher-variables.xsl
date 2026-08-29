@@ -152,6 +152,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$baseurl"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- -->
+    <!-- 2026-08-28 percent widths are relative to this, and an interactive  -->
+    <!-- is built at this width, so preview screenshots need to know it      -->
+    <xsl:text>html-design-width</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$html-design-width"/>
+    <xsl:text>&#xa;</xsl:text>
+    <!-- -->
     <!-- 2026-06-25 platform host for html -->
     <xsl:text>host-platform</xsl:text>
     <xsl:text> </xsl:text>

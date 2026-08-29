@@ -2108,17 +2108,32 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
 
     # Interior asynchronous routine to manage the Chromium headless browser.
     # Use the same page instance for the generation of all interactive previews
-    async def generate_previews(interactives, baseurl, dest_dir, timeout):
+    async def generate_previews(interactives, baseurl, dest_dir, timeout, design_width):
 
         # interactives:  list containing the interactive hash/fragment ids [1:]
         # baseurl:       local server's base url (includes local port)
         # dest_dir:      folder where images are saved
         # timeout:       delay in milliseconds to wait for the interactive to load
+        # design_width:  publisher's design width, the browser width to use
 
         # Open playwright's asynchronous api to load a browser and page
         async with playwright.async_api.async_playwright() as pw:
             browser = await pw.chromium.launch()
-            page = await browser.new_page()
+            # A standalone page sizes its "iframe" to the width of the browser
+            # showing it, while the interactive inside is built at a width the
+            # publisher's design width determines.  A default browser width is
+            # much the larger of the two, and then the screenshot is a small
+            # interactive marooned in a wide blank field.  Giving the browser
+            # the design width instead makes the frame and the interactive
+            # inside it the same size, so the picture is of the interactive.
+            viewport_height = 1000
+            page = await browser.new_page(viewport={"width": design_width, "height": viewport_height})
+            # A standalone page also carries the usual page furniture, which
+            # takes a little of the browser width for itself.  The amount is
+            # the same on every one of these pages, so it is measured on the
+            # first that loads and then given back, and each interactive is
+            # photographed at exactly the width it was designed for.
+            calibrated = False
             # One uncooperative interactive should warn and be skipped, not
             # abort the whole batch.  "fail_ms" bounds how long we wait on a
             # broken interactive before abandoning it; it is separate from the
@@ -2142,6 +2157,16 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
                 try:
                     # goto page and wait for content to load
                     await page.goto(input_page, wait_until='domcontentloaded', timeout=fail_ms)
+                    if not calibrated:
+                        # the "iframe" sits alone in a container that is as
+                        # wide as the page allows an interactive to be
+                        measure = "id => document.getElementById(id).parentElement.getBoundingClientRect().width"
+                        available = await page.evaluate(measure, preview_fragment)
+                        shortfall = round(design_width - available)
+                        if shortfall > 0:
+                            await page.set_viewport_size({"width": design_width + shortfall, "height": viewport_height})
+                            await page.goto(input_page, wait_until='domcontentloaded', timeout=fail_ms)
+                        calibrated = True
                     # wait again, according to the value of the timeout,
                     # for more than just splash screens, etc
                     await page.wait_for_timeout(timeout)
@@ -2234,6 +2259,10 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     with open(id_filename, "r", encoding="utf-8") as id_file:
         interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
+    # the browser width to use, see the screenshot routine above
+    pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
+    design_width = int(common.get_publisher_variable(pub_vars, "html-design-width"))
+
     # Copy in external resources (e.g., js code)
     _, external_abs = common.get_managed_directories(xml_source, pub_file)
     common.copy_managed_directories(tmp_dir, external_abs=external_abs)
@@ -2249,7 +2278,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
             log.debug("Starting event loop for playwright, after starting server")
             port, server = start_server()
             baseurl = "http://localhost:{}".format(port)
-            asyncio.run(generate_previews(interactives, baseurl, dest_dir, timeout))
+            asyncio.run(generate_previews(interactives, baseurl, dest_dir, timeout, design_width))
         finally:
             # close the server
             log.info("Closing http.server thread")
