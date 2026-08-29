@@ -10716,6 +10716,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
             <xsl:text>,&#xa;</xsl:text>
         </xsl:if>
+        <!-- Unlike the parameters above, this one is the publisher's rather than  -->
+        <!-- the author's.  GeoGebra renders a preview image and a play button in  -->
+        <!-- place of the applet, and only starts the applet when a reader presses -->
+        <!-- it, so a page carrying several applets need not start them all at     -->
+        <!-- once.  GeoGebra's own default is no button, which is also ours, so    -->
+        <!-- nothing is emitted unless a publisher asks for it.                    -->
+        <xsl:if test="$b-geogebra-play-button">
+            <xsl:text>playButton: true,&#xa;</xsl:text>
+        </xsl:if>
         <xsl:text>width:</xsl:text><xsl:value-of select="$material-width" />
         <xsl:text>,&#xa;</xsl:text>
         <xsl:text>height:</xsl:text><xsl:value-of select="$material-height" />
