@@ -1097,6 +1097,14 @@
                 <li>sage</li>
               </ul>
             </p>
+
+             <p>
+                The
+                <cd>
+                    <cline>/publication/html/interactives/geogebra/@play-button</cline>
+                </cd>
+                attribute can have the value <c>yes</c>, so that each GeoGebra applet is replaced by a preview image and a play button, and starts only when a reader presses it.  The default is <c>no</c>.  See <xref ref="online-html-geogebra-play-button"/> for when this is worth electing.
+             </p>
         </subsection>
 
         <subsection xml:id="online-doenetml-options">

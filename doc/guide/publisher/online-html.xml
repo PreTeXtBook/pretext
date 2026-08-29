@@ -126,6 +126,22 @@
             <p>See <xref ref="online-doenetml-options"/> for the publication file entries controlling all of the above.</p>
         </subsection>
 
+        <subsection xml:id="online-html-geogebra-play-button">
+            <title>GeoGebra Applets Behind a Play Button</title>
+            <idx><h>GeoGebra</h><h>play button</h></idx>
+            <idx><h>play button</h><h>GeoGebra</h></idx>
+
+            <p>A GeoGebra applet starts as soon as the page holding it does.  One or two of these is nothing a reader will notice, but a page carrying a dozen starts a dozen at once, and on a modest machine that can leave the page slow to settle, or an applet slow to appear.</p>
+
+            <p>A publisher may instead ask GeoGebra to put a preview image and a play button in place of each applet, so that an applet starts only when a reader presses its button.  This is GeoGebra's own feature rather than something <pretext/> draws, and it is elected with the <attr>play-button</attr> attribute described at <xref ref="online-interactives-options"/>.</p>
+
+            <p>The image standing behind the button is the same screenshot <pretext/> makes of each interactive for the static versions, such as the <init>PDF</init>.  A publisher electing the button will want those images to have been generated, since GeoGebra has a preview of its own only for an applet it hosts, and offers nothing at all for one built from a file or written from scratch.</p>
+
+            <p>That makes the order of work matter.  While a diagram is still being written and adjusted, leave the button off: an applet that starts by itself is exactly what an author wants to see, and a preview taken from an unfinished diagram is only going to be taken again.  Once a page has matured, generate its preview images, and elect the button then.</p>
+
+            <p>It is off by default, since the cost only becomes noticeable when a page carries several applets, and a reader who must click to see a single diagram is worse off than one who does not.  A publisher whose pages are dense with GeoGebra is the one who stands to gain.</p>
+        </subsection>
+
         <subsection xml:id="online-base-url">
             <title>Base URL</title>
             <idx>base URL</idx>
