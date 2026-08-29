@@ -4934,13 +4934,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we want the stylesheet to be independent, and the template is    -->
 <!-- also applied here.                                               -->
 
-<!-- Every element carrying an "@pi:assembly-id" stamp reports it  -->
-<!-- through this single template.  The match list is deliberately -->
-<!-- explicit — media and images, data files, STACK problems, and  -->
-<!-- the fill-in dynamic-substitution owners (the exercise-like    -->
-<!-- elements, or a "task" they contain, whichever holds "setup")  -->
-<!-- — so the BUG fallback below can catch an unexpected           -->
-<!-- application.                                                  -->
+<!-- Every element carrying an "@pi:assembly-id" stamp reports it    -->
+<!-- through this single template.  The match list is deliberately   -->
+<!-- explicit — media and images, data files, STACK problems, and    -->
+<!-- the fill-in dynamic-substitution owners (the exercise-like      -->
+<!-- elements, or a "task" they contain, whichever holds "setup")    -->
+<!-- — so the BUG fallback below can catch an unexpected             -->
+<!-- application.                                                    -->
+<!--                                                                 -->
+<!-- The stamp belongs to the assembly, laid down partway through    -->
+<!-- the phases so that the later ones can coordinate on it.  It is  -->
+<!-- read here, and in the extraction stylesheets that feed those    -->
+<!-- phases, and nowhere else.  A conversion wants the "unique-id"   -->
+<!-- template instead: the two agree for most elements but not for   -->
+<!-- all, so a conversion reading this value can form a name that    -->
+<!-- nothing else in the build uses.                                 -->
 <xsl:template match="audio|video|interactive|image
                    | datafile
                    | exercise/stack
