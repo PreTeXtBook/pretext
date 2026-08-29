@@ -963,7 +963,6 @@
     <choice>
       <element>
         <choice>
-          <name>geogebra</name>
           <name>desmos</name>
           <name>calcplot3d</name>
           <name>circuitjs</name>
@@ -983,7 +982,32 @@
         </optional>
       </element>
       <ref name="Doenetml"/>
+      <ref name="Geogebra"/>
     </choice>
+  </define>
+  <!--
+    A GeoGebra applet is costly to start, so a page carrying several
+    can hold each one behind a play button until a reader asks for it.
+  -->
+  <define name="Geogebra">
+    <element name="geogebra">
+      <optional>
+        <attribute name="resize-behavior">
+          <choice>
+            <value>fixed-height</value>
+            <value>responsive</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="play-button">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
   </define>
   <!--
     DoenetML activities are additionally managed on the page by a

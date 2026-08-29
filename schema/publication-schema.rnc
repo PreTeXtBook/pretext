@@ -332,7 +332,6 @@
 
             InteractiveTypes =
                 element (
-                    geogebra |
                     desmos |
                     calcplot3d |
                     circuitjs |
@@ -345,6 +344,15 @@
                     attribute resize-behavior { "fixed-height" | "responsive" }?
                 }
                 | Doenetml
+                | Geogebra
+
+            # A GeoGebra applet is costly to start, so a page carrying several
+            # can hold each one behind a play button until a reader asks for it.
+            Geogebra =
+                element geogebra {
+                    attribute resize-behavior { "fixed-height" | "responsive" }?,
+                    attribute play-button { "yes" | "no" }?
+                }
 
             # DoenetML activities are additionally managed on the page by a
             # "coordinator" script, which starts them a few at a time as the
