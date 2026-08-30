@@ -10716,6 +10716,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
             <xsl:text>,&#xa;</xsl:text>
         </xsl:if>
+        <!-- Unlike the parameters above, this one is the publisher's rather than  -->
+        <!-- the author's.  GeoGebra renders a preview image and a play button in  -->
+        <!-- place of the applet, and only starts the applet when a reader presses -->
+        <!-- it, so a page carrying several applets need not start them all at     -->
+        <!-- once.  GeoGebra's own default is no button, which is also ours, so    -->
+        <!-- nothing is emitted unless a publisher asks for it.                    -->
+        <xsl:if test="$b-geogebra-play-button">
+            <xsl:text>playButton: true,&#xa;</xsl:text>
+        </xsl:if>
         <xsl:text>width:</xsl:text><xsl:value-of select="$material-width" />
         <xsl:text>,&#xa;</xsl:text>
         <xsl:text>height:</xsl:text><xsl:value-of select="$material-height" />
@@ -10732,6 +10741,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> = new GGBApplet(</xsl:text>
             <xsl:value-of select="$applet-parameters" />
         <xsl:text>, true);&#xa;</xsl:text>
+
+        <!-- GeoGebra draws its play button in front of a preview image, and it  -->
+        <!-- has one to offer only for an applet it hosts itself.  An applet     -->
+        <!-- built from a file, or written from scratch, gets an empty box.  A   -->
+        <!-- screenshot of every interactive is made for static output, so we    -->
+        <!-- hand GeoGebra that one, and then every applet alike shows what a    -->
+        <!-- reader is being invited to start.  The second and third arguments   -->
+        <!-- would be a loading indicator and the button's own image; GeoGebra   -->
+        <!-- supplies the button, and no indicator is wanted in front of a       -->
+        <!-- picture of the applet itself.                                       -->
+        <xsl:if test="$b-geogebra-play-button">
+            <xsl:value-of select="$applet-name"/>
+            <xsl:text>.setPreviewImage('</xsl:text>
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:text>preview/</xsl:text>
+            <xsl:apply-templates select="ancestor::interactive" mode="unique-id"/>
+            <xsl:text>-preview.png', null, null);&#xa;</xsl:text>
+        </xsl:if>
 
       <xsl:text>resolve(</xsl:text><xsl:value-of select="$applet-name" /><xsl:text>);})&#xa;</xsl:text>
       <xsl:text>.then((</xsl:text><xsl:value-of select="$applet-name" /><xsl:text>) => {&#xa;</xsl:text>

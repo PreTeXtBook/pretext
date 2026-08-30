@@ -2736,6 +2736,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- A GeoGebra applet starts as soon as its page does, and a page carrying    -->
+<!-- several of them can be slow to settle on a modest machine.  A publisher   -->
+<!-- may instead hold each one behind a play button, so an applet starts only  -->
+<!-- when a reader asks for it.  Off by default: the reader of a page with one -->
+<!-- or two applets should not have to click to see them.                      -->
+<xsl:variable name="geogebra-play-button">
+    <xsl:apply-templates select="$publisher-attribute-options/html/interactives/geogebra/pi:pub-attribute[@name='play-button']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-geogebra-play-button" select="$geogebra-play-button = 'yes'"/>
+
 <!--                       -->
 <!-- HTML Platform Options -->
 <!--                       -->
@@ -3679,6 +3689,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </doenetml>
             <geogebra>
                 <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+                <pi:pub-attribute name="play-button" default="no" options="yes"/>
             </geogebra>
             <iframe>
                 <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>

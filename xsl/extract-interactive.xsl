@@ -50,6 +50,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- available for extraction.                                           -->
 <xsl:variable name="exercise-style" select="'dynamic'"/>
 
+<!-- A second Catch-22, of the same shape.  A publisher may hold GeoGebra   -->
+<!-- applets behind a play button, but then this pass would photograph the  -->
+<!-- button rather than the applet, and the resulting image is what stands  -->
+<!-- in for the applet in static output.  Worse, that image is exactly what -->
+<!-- would be wanted to fill the empty preview a play button leaves for an  -->
+<!-- applet GeoGebra does not host.  So the election is overridden here.    -->
+<xsl:variable name="b-geogebra-play-button" select="false()"/>
+
 <!-- @preview indicates custom image is present    -->
 <!-- Stylesheet output is text, with "unique-id"   -->
 <!-- of each interactive, one per line, to be      -->
