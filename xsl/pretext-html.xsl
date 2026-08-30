@@ -12901,6 +12901,77 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </dialog>
 </xsl:template>
 
+<xsl:template name="code-cells-button">
+    <xsl:variable name="code-cells-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'code-cells'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="code-cells-description-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'code-cells-description'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="code-cells-export-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'code-cells-export'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="code-cells-import-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'code-cells-import'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="close-code-cells-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'close'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button id="ptx-code-cells-button" class="ptx-code-cells-button button" title="{$code-cells-localization}">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'terminal'"/>
+        </xsl:call-template>
+        <span class="name">
+            <xsl:value-of select="$code-cells-localization"/>
+        </span>
+    </button>
+    <dialog class="ptx-dialog ptx-code-cells-popup" id="ptx-code-cells-popup">
+        <div class="ptx-code-cells-popup-controls">
+            <h2 class="heading">
+                <xsl:value-of select="$code-cells-localization"/>
+            </h2>
+            <button class="ptx-code-cells-close-button button" id="ptx-code-cells-close-button" title="{$close-code-cells-localization}">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'close'"/>
+                </xsl:call-template>
+            </button>
+        </div>
+        <p>
+            <xsl:value-of select="$code-cells-description-localization"/>
+        </p>
+        <div class="ptx-code-cells-actions">
+            <button type="button" class="ptx-code-cells-export-button button" id="ptx-code-cells-export-button">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'download'"/>
+                </xsl:call-template>
+                <span class="name">
+                    <xsl:value-of select="$code-cells-export-localization"/>
+                </span>
+            </button>
+            <button type="button" class="ptx-code-cells-import-button button" id="ptx-code-cells-import-button">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'upload'"/>
+                </xsl:call-template>
+                <span class="name">
+                    <xsl:value-of select="$code-cells-import-localization"/>
+                </span>
+            </button>
+            <input type="file" id="ptx-code-cells-import-input" accept="application/json" class="ptx-code-cells-import-input hidden" aria-label="{$code-cells-import-localization}"/>
+        </div>
+        <p class="ptx-code-cells-status" id="ptx-code-cells-status" aria-live="polite"></p>
+    </dialog>
+</xsl:template>
+
 <xsl:template match="*" mode="print-button">
     <xsl:variable name="print-text">
         <xsl:apply-templates select="." mode="type-name">
@@ -13125,6 +13196,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Read-aloud button and expanding player  -->
         <xsl:if test="$b-read-aloud">
             <xsl:call-template name="read-aloud-controls" />
+        </xsl:if>
+        <!-- Button to import/export the contents of Sage code cells.        -->
+        <!-- $b-has-sage (book-wide) gates loading of the sagecell.js        -->
+        <!-- library itself, since a knowl anywhere could reveal a cell; the -->
+        <!-- button itself only needs to appear on pages that actually      -->
+        <!-- render an editable "sage" cell inline. ("slate" @surface=sage   -->
+        <!-- cells only ever appear inside an "interactive", which always   -->
+        <!-- renders as an iframe to its own standalone page rather than    -->
+        <!-- inline, so those are never reachable from this page's own DOM  -->
+        <!-- and are excluded here.) A summary ("intermediate" in PreTeXt's -->
+        <!-- chunking terms) page's own subtree can still contain cells     -->
+        <!-- that actually render on a deeper child page instead, so        -->
+        <!-- compare each candidate's containing page to this one rather    -->
+        <!-- than just testing for a descendant.                            -->
+        <xsl:if test="$b-has-sage">
+            <xsl:variable name="this-page-filename">
+                <xsl:apply-templates select="." mode="containing-filename" />
+            </xsl:variable>
+            <xsl:variable name="b-page-has-sage-cell">
+                <xsl:for-each select=".//sage">
+                    <xsl:variable name="cell-page-filename">
+                        <xsl:apply-templates select="." mode="containing-filename" />
+                    </xsl:variable>
+                    <xsl:if test="$cell-page-filename = $this-page-filename">
+                        <xsl:text>true</xsl:text>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:if test="normalize-space($b-page-has-sage-cell) != ''">
+                <xsl:call-template name="code-cells-button" />
+            </xsl:if>
         </xsl:if>
         <xsl:call-template name="readability-options" />
     </span>
