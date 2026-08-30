@@ -1499,4 +1499,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </sidebyside>
 </xsl:template>
 
+<!-- The "file" element is the successor to "datafile".  It names  -->
+<!-- its kind with @format (binary, image, pre) rather than a child -->
+<!-- element.  A "pre" child implies @format = 'pre', which is the -->
+<!-- default when @format is omitted.  A "file" is invisible by    -->
+<!-- default: its content is provided to programs, not to the      -->
+<!-- reader.  Only a text file with @user-interaction set to       -->
+<!-- "view" or "edit" is shown here (as a read-only viewport);     -->
+<!-- images are displayed via a sibling "image" element, and       -->
+<!-- binary files have no static form.                             -->
+<xsl:template match="file" mode="runestone-to-static">
+    <!-- Only text files with a view/edit request are displayed -->
+    <xsl:if test="(not(@format) or @format = 'pre') and (@user-interaction = 'view' or @user-interaction = 'edit')">
+        <sidebyside>
+            <stack>
+                <!-- faux title -->
+                <p>
+                    <xsl:element name="pi:localize">
+                        <xsl:attribute name="string-id">data</xsl:attribute>
+                    </xsl:element>
+                    <xsl:text>: </xsl:text>
+                    <c>
+                        <xsl:value-of select="@filename"/>
+                    </c>
+                </p>
+                <pre>
+                    <!-- provide default rows and cols, sync with dynamic version -->
+                    <xsl:variable name="desired-rows">
+                        <xsl:choose>
+                            <xsl:when test="@rows">
+                                <xsl:value-of select="@rows"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-rows"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="desired-cols">
+                        <xsl:choose>
+                            <xsl:when test="@cols">
+                                <xsl:value-of select="@cols"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-cols"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <!-- form an "upper-left-corner" view -->
+                    <xsl:call-template name="text-viewport">
+                        <xsl:with-param name="nrows" select="$desired-rows"/>
+                        <xsl:with-param name="ncols" select="$desired-cols"/>
+                        <xsl:with-param name="text">
+                            <!-- defined in -common -->
+                            <xsl:apply-templates select="." mode="datafile-text-contents"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </pre>
+            </stack>
+        </sidebyside>
+    </xsl:if>
+</xsl:template>
+
 </xsl:stylesheet>
