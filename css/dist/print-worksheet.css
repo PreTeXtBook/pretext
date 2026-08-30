@@ -2055,6 +2055,7 @@ body.pretext > a.assistive,
   display: none;
 }
 .image-description,
+.ptx-image-expand-button,
 .ptx-content .webwork-button,
 .ptx-runestone-container button.btn {
   display: none;
