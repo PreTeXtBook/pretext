@@ -150,6 +150,7 @@ $runestone-light-colors: (
 //   buttons in general (to remove Runestone "Check Me" button)
 // We remove these here.
 .image-description,
+.ptx-image-expand-button,
 .ptx-content .webwork-button,
 .ptx-runestone-container button.btn {
   display: none;
