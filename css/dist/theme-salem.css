@@ -3585,6 +3585,10 @@ ul[data-component=timedAssessment] {
   margin-right: auto;
   display: block;
 }
+.geogebra-applet .ggb_preview img {
+  width: 100%;
+  height: 100%;
+}
 .interactive__instructions {
   max-width: var(--base-content-width);
 }
