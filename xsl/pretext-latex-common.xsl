@@ -5406,6 +5406,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- The LaTeX realization of some elements ends with a paragraph -->
+<!-- still open: a "p" never closes its own paragraph, and the    -->
+<!-- run-in heading of a proof "case" opens one for the text that -->
+<!-- follows it.  A follower that starts a fresh paragraph must   -->
+<!-- close its predecessor's with "\par" - separation is the      -->
+<!-- FOLLOWER's job.  It cannot be the other way around: an       -->
+<!-- environment may legitimately append to its final paragraph   -->
+<!-- (a "proof" ends with a tombstone riding the last line, a     -->
+<!-- workspace ends with a strut) or open its first one (an       -->
+<!-- "introduction" begins with a run-in title), so no element    -->
+<!-- may close its own paragraphs unconditionally.  This template -->
+<!-- is the single authority on which elements leave a paragraph  -->
+<!-- open; to admit a new element, extend the match here - never  -->
+<!-- grow a private list at a call site.                          -->
+<xsl:template match="p|paragraphs|sidebyside|case" mode="leaves-paragraph-open">
+    <xsl:text>true</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="leaves-paragraph-open">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 <!-- Paragraphs -->
 <!-- \par *separates* paragraphs So look backward for          -->
 <!-- cases where a paragraph would have been the previous      -->
@@ -5424,8 +5446,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="p">
     <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="node-preceding-current" select="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1]" />
-    <xsl:if test="$node-preceding-current[self::p or self::paragraphs or self::sidebyside or self::case]">
+    <xsl:variable name="predecessor-leaves-paragraph-open">
+        <xsl:apply-templates select="$node-preceding-current" mode="leaves-paragraph-open"/>
+    </xsl:variable>
+    <xsl:if test="$predecessor-leaves-paragraph-open = 'true'">
         <xsl:text>\par</xsl:text>
+        <!-- spacing policy, not separation: a bit of extra room -->
+        <!-- after these two, in addition to the paragraph break -->
         <xsl:if test="$node-preceding-current[self::paragraphs or self::case]">
             <xsl:text>\medskip</xsl:text>
         </xsl:if>
