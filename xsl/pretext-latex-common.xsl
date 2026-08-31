@@ -2355,6 +2355,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tcolorbox would *automatically* be made unbreakable, and the result  -->
 <!-- was really bad page breaks, or worse, the potential for the interior -->
 <!-- box dribbling off the bottom of the page.                            -->
+<!-- The begin-clauses open a paragraph with a run-in title, and -->
+<!-- the first "p" inside continues that very line.  This idiom  -->
+<!-- is why a "p" may not open with an unconditional "\par" - it -->
+<!-- would strand every run-in title on a line of its own.  Note -->
+<!-- the division of labor: the conclusion's own "\par\medskip"  -->
+<!-- closes its predecessor, boundary material belonging to the  -->
+<!-- environment, not to the neighbors.                          -->
 <xsl:template match="introduction|conclusion" mode="environment">
     <xsl:variable name="environment-name">
         <xsl:value-of select="local-name(.)"/>
@@ -2547,6 +2554,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cross-reference.  Not stylable, though we      -->
 <!-- could use a macro for the tombstone/Halmos/QED -->
 <!-- so that could be set.                          -->
+<!-- The end-clause appends the tombstone to the last paragraph -->
+<!-- of the proof: stretchy glue and the symbol ride the final  -->
+<!-- line.  This idiom is why no element may end its content    -->
+<!-- with "\par" - a closing "\par" here would strand the       -->
+<!-- tombstone on a line of its own.                            -->
 <xsl:template match="*[&PROOF-FILTER;][&SOLUTION-PROOF-FILTER;]" mode="environment">
     <xsl:text>\NewDocumentEnvironment{solution</xsl:text>
     <xsl:value-of select="local-name(.)"/>
@@ -2559,6 +2571,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title comes with punctuation, always.              -->
 <!-- TODO: move implication definitions here, and       -->
 <!-- pass semantic strings out of the construction      -->
+<!-- The begin-clause opens a paragraph with a run-in heading    -->
+<!-- (implication arrows, or a title); the "case" text continues -->
+<!-- that line.  So "case" appears in the leaves-paragraph-open  -->
+<!-- authority, and a following "p" closes the paragraph.        -->
 <xsl:template match="case" mode="environment">
     <xsl:text>\NewDocumentEnvironment{case}{mmmm}&#xa;</xsl:text>
     <xsl:text>{\par\medskip\noindent\notblank{#2}{#2\space{}}{}\textit{\notblank{#3}{#3\space{}}{}\notblank{#2#3}{}{#1.\space{}}}</xsl:text>
@@ -5406,6 +5422,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- The LaTeX realization of some elements ends with a paragraph -->
+<!-- still open: a "p" never closes its own paragraph, and the    -->
+<!-- run-in heading of a proof "case" opens one for the text that -->
+<!-- follows it.  A follower that starts a fresh paragraph must   -->
+<!-- close its predecessor's with "\par" - separation is the      -->
+<!-- FOLLOWER's job.  It cannot be the other way around: an       -->
+<!-- environment may legitimately append to its final paragraph   -->
+<!-- (a "proof" ends with a tombstone riding the last line, a     -->
+<!-- workspace ends with a strut) or open its first one (an       -->
+<!-- "introduction" begins with a run-in title), so no element    -->
+<!-- may close its own paragraphs unconditionally.  This template -->
+<!-- is the single authority on which elements leave a paragraph  -->
+<!-- open; to admit a new element, extend the match here - never  -->
+<!-- grow a private list at a call site.                          -->
+<xsl:template match="p|paragraphs|sidebyside|case" mode="leaves-paragraph-open">
+    <xsl:text>true</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="leaves-paragraph-open">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 <!-- Paragraphs -->
 <!-- \par *separates* paragraphs So look backward for          -->
 <!-- cases where a paragraph would have been the previous      -->
@@ -5424,8 +5462,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="p">
     <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="node-preceding-current" select="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1]" />
-    <xsl:if test="$node-preceding-current[self::p or self::paragraphs or self::sidebyside or self::case]">
+    <xsl:variable name="predecessor-leaves-paragraph-open">
+        <xsl:apply-templates select="$node-preceding-current" mode="leaves-paragraph-open"/>
+    </xsl:variable>
+    <xsl:if test="$predecessor-leaves-paragraph-open = 'true'">
         <xsl:text>\par</xsl:text>
+        <!-- spacing policy, not separation: a bit of extra room -->
+        <!-- after these two, in addition to the paragraph break -->
         <xsl:if test="$node-preceding-current[self::paragraphs or self::case]">
             <xsl:text>\medskip</xsl:text>
         </xsl:if>
@@ -7082,17 +7125,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip\centerline{A deprecated JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-<!-- We sometimes need to explicitly leave LaTeX's vertical mode.     -->
-<!-- But we try to be judicious about using this.  Overuse makes      -->
-<!-- for bad spacing.                                                 -->
-<!-- Explanation:  http://tex.stackexchange.com/questions/22852/      -->
-<!-- function-and-usage-of-leavevmode                                 -->
-<!--   "Use \leavevmode for all macros which could be used at         -->
-<!--   the begin of the paragraph and add horizontal boxes            -->
-<!--   by themselves (e.g. in form of text)."                         -->
-<!-- Potential alternate solution: write a leading "empty" \mbox{}    -->
-<!-- http://tex.stackexchange.com/questions/171220/                   -->
-<!-- include-non-floating-graphic-in-a-theorem-environment            -->
+<!-- A "sidebyside" as the first content of "paragraphs" follows -->
+<!-- the run-in title, and each token below is load-bearing, by  -->
+<!-- measurement: dropping "\leavevmode" un-indents the first    -->
+<!-- panel line, and reducing the whole to "\par" tightens the   -->
+<!-- layout by one "\parskip".  Together they mean: break the    -->
+<!-- title's line, add a paragraph of separation, and set the    -->
+<!-- panels at the paragraph-indent position.  Whether that is   -->
+<!-- the intended look has never been decided deliberately, so   -->
+<!-- change this only on purpose, re-measuring.                  -->
+<!-- Background on the primitive:                                -->
+<!-- http://tex.stackexchange.com/questions/22852/               -->
+<!-- function-and-usage-of-leavevmode                            -->
 <xsl:template match="sidebyside" mode="leave-vertical-mode">
     <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs">
         <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
@@ -7345,42 +7389,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- An "image" or a "tabular" in a side-by-side panel is set as a  -->
-<!-- bare box, so if a paragraph is already in progress the box is  -->
-<!-- appended to it, hanging off that paragraph final line, and the -->
-<!-- leading "\noindent" is a no-op.  So break the paragraph, and   -->
-<!-- start a fresh one for whatever follows.  Two panels need no    -->
-<!-- break: one that *is* the object, and a "figure" or "table",    -->
-<!-- whose "caption" is a sibling but is deferred to the bottom of  -->
-<!-- its box.  The panels that do are the containers holding        -->
-<!-- several things: a "stack", a list item, and the "statement"    -->
-<!-- of an "exercise" (or of its "task") in a worksheet or handout. -->
-<xsl:template match="image|tabular" mode="panel-paragraph-break">
-    <xsl:param name="side"/>
-
-    <!-- neighbors that would otherwise share the paragraph, skipping -->
-    <!-- a "caption" or "title" that is not set here.  Another image  -->
-    <!-- or tabular breaks on its own account, so a trailing break    -->
-    <!-- before one would just be a second, redundant "\par".         -->
-    <xsl:variable name="lead" select="preceding-sibling::*[not(&METADATA-FILTER;)]"/>
-    <xsl:variable name="trail" select="following-sibling::*[not(&METADATA-FILTER;)][1]"/>
-    <xsl:if test="not(parent::sidebyside) and
-                  ((($side = 'before') and $lead) or
-                   (($side = 'after') and $trail[not(self::image or self::tabular)]))">
-        <xsl:text>\par&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
+<!-- An "image" or a "tabular" in a side-by-side panel is set as a   -->
+<!-- bare box with a leading "\noindent", so a paragraph already in  -->
+<!-- progress must be broken before it, and the box's own line must  -->
+<!-- be closed before any successor.  Within a panel this needs no   -->
+<!-- analysis of the neighbors: panels hold no run-in headings and   -->
+<!-- no trailing tombstones, so a redundant "\par" lands in vertical -->
+<!-- mode, where it is a no-op.  So bracket every such box with a    -->
+<!-- "\par" on each side, unconditionally.                           -->
 
 <!-- Second: images already constrained by side-by-side panels -->
 <xsl:template match="image[ancestor::sidebyside]">
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'before'"/>
-    </xsl:apply-templates>
+    <xsl:text>\par&#xa;</xsl:text>
     <xsl:text>\noindent</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'after'"/>
-    </xsl:apply-templates>
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Various versions of images have their width set to the         -->
@@ -7623,18 +7646,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="tabular[ancestor::sidebyside]">
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'before'"/>
-    </xsl:apply-templates>
+    <!-- bracketing "\par" pair: see the panel rule at the "image" -->
+    <!-- template for side-by-side panels                          -->
+    <xsl:text>\par&#xa;</xsl:text>
     <!-- with layout control (inside sidebyside), scale down, but not up  -->
     <!-- https://tex.stackexchange.com/questions/327887/                  -->
     <!-- resizing-or-scaling-table-only-if-it-is-larger-than-column-width -->
     <xsl:text>\noindent\resizebox{\ifdim\width > \linewidth\linewidth\else\width\fi}{!}{%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="tabular-inclusion"/>
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'after'"/>
-    </xsl:apply-templates>
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="tabular" mode="tabular-inclusion">
