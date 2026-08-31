@@ -6686,6 +6686,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
+            <p>Generating empty header cells as <tag>th</tag> elements is an accessibility issue. They should render as <tag>td</tag> elements instead.  This next table tests that behavior.</p>
+
+            <table>
+                <title>Empty Header Stress Test</title>
+                <tabular row-headers="yes">
+                    <row header="yes">
+                        <cell><fillin characters="5"/></cell>
+                        <cell><nbsp/></cell>
+                        <cell></cell>
+                    </row>
+                    <row>
+                        <cell></cell>
+                        <cell>??</cell>
+                        <cell>??</cell>
+                    </row>
+                    <row>
+                        <cell>??</cell>
+                        <cell>??</cell>
+                        <cell>??</cell>
+                    </row>
+                </tabular>
+            </table>
+
             <table>
                 <title>Column Span Example</title>
                 <tabular top="minor" left="minor" halign="center">
