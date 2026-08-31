@@ -2355,6 +2355,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tcolorbox would *automatically* be made unbreakable, and the result  -->
 <!-- was really bad page breaks, or worse, the potential for the interior -->
 <!-- box dribbling off the bottom of the page.                            -->
+<!-- The begin-clauses open a paragraph with a run-in title, and -->
+<!-- the first "p" inside continues that very line.  This idiom  -->
+<!-- is why a "p" may not open with an unconditional "\par" - it -->
+<!-- would strand every run-in title on a line of its own.  Note -->
+<!-- the division of labor: the conclusion's own "\par\medskip"  -->
+<!-- closes its predecessor, boundary material belonging to the  -->
+<!-- environment, not to the neighbors.                          -->
 <xsl:template match="introduction|conclusion" mode="environment">
     <xsl:variable name="environment-name">
         <xsl:value-of select="local-name(.)"/>
@@ -2547,6 +2554,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cross-reference.  Not stylable, though we      -->
 <!-- could use a macro for the tombstone/Halmos/QED -->
 <!-- so that could be set.                          -->
+<!-- The end-clause appends the tombstone to the last paragraph -->
+<!-- of the proof: stretchy glue and the symbol ride the final  -->
+<!-- line.  This idiom is why no element may end its content    -->
+<!-- with "\par" - a closing "\par" here would strand the       -->
+<!-- tombstone on a line of its own.                            -->
 <xsl:template match="*[&PROOF-FILTER;][&SOLUTION-PROOF-FILTER;]" mode="environment">
     <xsl:text>\NewDocumentEnvironment{solution</xsl:text>
     <xsl:value-of select="local-name(.)"/>
@@ -2559,6 +2571,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title comes with punctuation, always.              -->
 <!-- TODO: move implication definitions here, and       -->
 <!-- pass semantic strings out of the construction      -->
+<!-- The begin-clause opens a paragraph with a run-in heading    -->
+<!-- (implication arrows, or a title); the "case" text continues -->
+<!-- that line.  So "case" appears in the leaves-paragraph-open  -->
+<!-- authority, and a following "p" closes the paragraph.        -->
 <xsl:template match="case" mode="environment">
     <xsl:text>\NewDocumentEnvironment{case}{mmmm}&#xa;</xsl:text>
     <xsl:text>{\par\medskip\noindent\notblank{#2}{#2\space{}}{}\textit{\notblank{#3}{#3\space{}}{}\notblank{#2#3}{}{#1.\space{}}}</xsl:text>
@@ -7109,17 +7125,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip\centerline{A deprecated JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-<!-- We sometimes need to explicitly leave LaTeX's vertical mode.     -->
-<!-- But we try to be judicious about using this.  Overuse makes      -->
-<!-- for bad spacing.                                                 -->
-<!-- Explanation:  http://tex.stackexchange.com/questions/22852/      -->
-<!-- function-and-usage-of-leavevmode                                 -->
-<!--   "Use \leavevmode for all macros which could be used at         -->
-<!--   the begin of the paragraph and add horizontal boxes            -->
-<!--   by themselves (e.g. in form of text)."                         -->
-<!-- Potential alternate solution: write a leading "empty" \mbox{}    -->
-<!-- http://tex.stackexchange.com/questions/171220/                   -->
-<!-- include-non-floating-graphic-in-a-theorem-environment            -->
+<!-- A "sidebyside" as the first content of "paragraphs" follows -->
+<!-- the run-in title, and each token below is load-bearing, by  -->
+<!-- measurement: dropping "\leavevmode" un-indents the first    -->
+<!-- panel line, and reducing the whole to "\par" tightens the   -->
+<!-- layout by one "\parskip".  Together they mean: break the    -->
+<!-- title's line, add a paragraph of separation, and set the    -->
+<!-- panels at the paragraph-indent position.  Whether that is   -->
+<!-- the intended look has never been decided deliberately, so   -->
+<!-- change this only on purpose, re-measuring.                  -->
+<!-- Background on the primitive:                                -->
+<!-- http://tex.stackexchange.com/questions/22852/               -->
+<!-- function-and-usage-of-leavevmode                            -->
 <xsl:template match="sidebyside" mode="leave-vertical-mode">
     <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs">
         <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
