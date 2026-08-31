@@ -7372,42 +7372,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- An "image" or a "tabular" in a side-by-side panel is set as a  -->
-<!-- bare box, so if a paragraph is already in progress the box is  -->
-<!-- appended to it, hanging off that paragraph final line, and the -->
-<!-- leading "\noindent" is a no-op.  So break the paragraph, and   -->
-<!-- start a fresh one for whatever follows.  Two panels need no    -->
-<!-- break: one that *is* the object, and a "figure" or "table",    -->
-<!-- whose "caption" is a sibling but is deferred to the bottom of  -->
-<!-- its box.  The panels that do are the containers holding        -->
-<!-- several things: a "stack", a list item, and the "statement"    -->
-<!-- of an "exercise" (or of its "task") in a worksheet or handout. -->
-<xsl:template match="image|tabular" mode="panel-paragraph-break">
-    <xsl:param name="side"/>
-
-    <!-- neighbors that would otherwise share the paragraph, skipping -->
-    <!-- a "caption" or "title" that is not set here.  Another image  -->
-    <!-- or tabular breaks on its own account, so a trailing break    -->
-    <!-- before one would just be a second, redundant "\par".         -->
-    <xsl:variable name="lead" select="preceding-sibling::*[not(&METADATA-FILTER;)]"/>
-    <xsl:variable name="trail" select="following-sibling::*[not(&METADATA-FILTER;)][1]"/>
-    <xsl:if test="not(parent::sidebyside) and
-                  ((($side = 'before') and $lead) or
-                   (($side = 'after') and $trail[not(self::image or self::tabular)]))">
-        <xsl:text>\par&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
+<!-- An "image" or a "tabular" in a side-by-side panel is set as a   -->
+<!-- bare box with a leading "\noindent", so a paragraph already in  -->
+<!-- progress must be broken before it, and the box's own line must  -->
+<!-- be closed before any successor.  Within a panel this needs no   -->
+<!-- analysis of the neighbors: panels hold no run-in headings and   -->
+<!-- no trailing tombstones, so a redundant "\par" lands in vertical -->
+<!-- mode, where it is a no-op.  So bracket every such box with a    -->
+<!-- "\par" on each side, unconditionally.                           -->
 
 <!-- Second: images already constrained by side-by-side panels -->
 <xsl:template match="image[ancestor::sidebyside]">
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'before'"/>
-    </xsl:apply-templates>
+    <xsl:text>\par&#xa;</xsl:text>
     <xsl:text>\noindent</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'after'"/>
-    </xsl:apply-templates>
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Various versions of images have their width set to the         -->
@@ -7650,18 +7629,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="tabular[ancestor::sidebyside]">
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'before'"/>
-    </xsl:apply-templates>
+    <!-- bracketing "\par" pair: see the panel rule at the "image" -->
+    <!-- template for side-by-side panels                          -->
+    <xsl:text>\par&#xa;</xsl:text>
     <!-- with layout control (inside sidebyside), scale down, but not up  -->
     <!-- https://tex.stackexchange.com/questions/327887/                  -->
     <!-- resizing-or-scaling-table-only-if-it-is-larger-than-column-width -->
     <xsl:text>\noindent\resizebox{\ifdim\width > \linewidth\linewidth\else\width\fi}{!}{%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="tabular-inclusion"/>
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="panel-paragraph-break">
-        <xsl:with-param name="side" select="'after'"/>
-    </xsl:apply-templates>
+    <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="tabular" mode="tabular-inclusion">
