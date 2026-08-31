@@ -4235,8 +4235,14 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = common.get_temporary_directory()
 
+    # Two variants of limiting the files produced for HTML: CDN resources are
+    # used for portable HTML as well as resources/@host="cdn", either of which
+    # set b-cdn-resources to "true" in the publisher file.  Some generated
+    # assets are inlined for the portable HTML (but not for CDN resources),
+    # which is indicated by portable-html="yes"
     pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
     include_static_files = common.get_publisher_variable(pub_vars, 'b-cdn-resources') != "true"
+    include_generated_svgs = common.get_publisher_variable(pub_vars, 'portable-html') != "yes"
     time_logger.log("pubvars loaded")
 
     if include_static_files:
@@ -4288,7 +4294,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         common.xsltproc(runestone_page_template_xslt, xml, None, tmp_dir, stringparams)
         time_logger.log("runestone page template extraction complete")
 
-    if not(include_static_files):
+    if not(include_generated_svgs):
         # remove latex-image generated directories for portable builds
         shutil.rmtree(os.path.join(tmp_dir, "generated", "latex-image"), ignore_errors=True)
 
@@ -6207,7 +6213,7 @@ def _jing_server(schema_filename, assembled_source):
 ###################
 
 
-        
+
 
 def python_version():
     """Return 'major.minor' version number as string/info"""
