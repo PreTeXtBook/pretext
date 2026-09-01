@@ -48,7 +48,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:math="http://www.w3.org/1998/Math/MathML"
-    exclude-result-prefixes="svg"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    exclude-result-prefixes="svg xhtml"
 >
 
 <xsl:output method="xml" encoding="UTF-8"/>
@@ -70,10 +71,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We explicitly kill the LaTeX macro div, lest  -->
 <!-- it get picked up as similar to the other math -->
-<xsl:template match="div[@id = 'latex-macros']"/>
+<xsl:template match="xhtml:div[@id = 'latex-macros']"/>
 
 <!-- Body has what we want/need -->
-<xsl:template match="body">
+<xsl:template match="xhtml:body">
     <pi:math-representations>
         <xsl:apply-templates select="node()|@*"/>
         <xsl:text>&#xa;&#xa;</xsl:text>
@@ -83,14 +84,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Replace PreTeXt "div" w/ location info plus MJ "mjx-data" -->
 <!-- container by a consolidated PreteXt "pi:math" container   -->
 <!-- with location info                                        -->
-<xsl:template match="div/mjx-data">
+<xsl:template match="xhtml:div/xhtml:mjx-data">
     <xsl:text>&#xa;&#xa;</xsl:text>
     <pi:math>
         <!-- duplicate location, context info -->
         <xsl:copy-of select="../@*"/>
         <!-- pickup whatever gets produced by MJ/SRE script with    -->
         <!-- its own containerization: MathML, SVG, braille, speech -->
-        <xsl:apply-templates select="math:math|svg:svg|mjx-braille|mjx-speech"/>
+        <xsl:apply-templates select="math:math|svg:svg|xhtml:mjx-braille|xhtml:mjx-speech"/>
     </pi:math>
 </xsl:template>
 
@@ -109,13 +110,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<xsl:template match="mjx-braille">
+<xsl:template match="xhtml:mjx-braille">
     <div class="braille">
         <xsl:copy-of select="node()"/>
     </div>
 </xsl:template>
 
-<xsl:template match="mjx-speech">
+<xsl:template match="xhtml:mjx-speech">
     <div class="speech">
         <xsl:copy-of select="node()"/>
     </div>
@@ -129,7 +130,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: need to have this prefixed with "body" to   -->
 <!-- identify it as top-level, global situation,     -->
 <!-- rather than local to each individual SVG        -->
-<xsl:template match="body/svg:svg[svg:defs]">
+<xsl:template match="xhtml:body/svg:svg[svg:defs]">
     <xsl:copy>
         <xsl:attribute name="id">
             <xsl:text>font-data</xsl:text>
