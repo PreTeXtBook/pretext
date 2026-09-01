@@ -407,7 +407,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <code>
             Pdf =
                 element pdf {
-                    attribute font { "latin-modern" }?
+                    attribute font { "latin-modern" | "alegreya" }?
                 }
             </code>
         </fragment>
