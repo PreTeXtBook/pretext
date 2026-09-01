@@ -1249,6 +1249,26 @@
                 <li><attr>theme</attr>: the name of a Beamer theme, as it would appear in a <c>\usetheme</c> command, such as <c>Singapore</c> or <c>Madrid</c>.  The default is <c>Boadilla</c>.  Any theme your <latex/> installation provides may be named, including a locally-installed custom theme.  A name the <latex/> installation cannot find stops the build with an error repeating the name; capitalization is the first thing to check.  See <xref ref="publisher-beamer"/>.</li>
             </ul></p>
         </subsection>
+
+        <subsection xml:id="beamer-page-options" label="beamer-page-options">
+            <title>Beamer Slide Shape</title>
+            <idx><h>publisher options</h><h>Beamer slide shape</h></idx>
+            <idx><h>Beamer</h><h>aspect ratio</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/beamer/page/@aspect-ratio</cline>
+            </cd>attribute can have the value <c>16:9</c> (the default), <c>4:3</c>, <c>16:10</c>, <c>14:9</c>, <c>5:4</c>, or <c>3:2</c>.  Elect the shape of the display you will present on.  See <xref ref="publisher-beamer"/> for the effect this has on the room available for content.</p>
+        </subsection>
+
+        <subsection xml:id="beamer-font-size-options" label="beamer-font-size-options">
+            <title>Beamer Font Sizes</title>
+            <idx><h>font size options</h><h>Beamer</h></idx>
+            <idx><h>Beamer</h><h>font size option</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/beamer/@font-size</cline>
+            </cd>attribute can have the value <c>8</c>, <c>9</c>, <c>10</c>, <c>11</c>, <c>12</c>, <c>14</c>, <c>17</c>, or <c>20</c>, which are interpreted in points (<q>pt</q>) as the unit of measure.  The default value is <c>11</c>, which is also Beamer's own default.  A value other than <c>10</c>, <c>11</c>, or <c>12</c> requires the <c>extsizes</c> package to be part of your <latex/> installation.  This is the control to reach for when slides are too crowded<mdash/>see <xref ref="publisher-beamer"/>.</p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-epub">
