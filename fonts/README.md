@@ -89,6 +89,45 @@ LaTeX route (`lmodern`), so the two PDF routes share a body typeface.
   legally equivalent to the LaTeX Project Public License; it permits
   redistribution and imposes nothing on a document that embeds the font.
 
+## Alegreya — the second body face
+
+`Alegreya-{Regular,Bold,Italic,BoldItalic}.otf` set the body text when a
+publication file elects `<pdf font="alegreya"/>`: a book face for
+text-heavy documents — proposals, reports, writing in the humanities —
+that want a page recognizably unlike a word processor's and unlike
+TeX's.  From **huertatipografica/Alegreya**
+(<https://github.com/huertatipografica/Alegreya>), release **v2.008**
+(2018-10-30), the `fonts/otf` static faces.  Alegreya was designed by
+Juan Pablo del Peral for literature: a calligraphic humanist serif made
+for sustained reading, sturdy at text sizes, with a true italic and bold
+italic.  One optical design serves every body size.
+
+- **Coverage.**  Latin with the full accented repertoire, plus Greek and
+  Cyrillic; the symbol companion and the STIX fallback fill in the rest
+  exactly as they do for Latin Modern.
+- **Lining figures.**  Alegreya's default figures are oldstyle, with the
+  lining set behind its `lnum` feature — which FOP cannot switch on.
+  The bundled faces are therefore produced by `make-lining-figures.py`,
+  which re-points the ten digits in the character map to the glyphs the
+  font's own `lnum` feature substitutes, and marks the version string;
+  outlines, metrics, kerning, features and names are the release's.
+  Regenerate with
+
+  ```
+  python3 make-lining-figures.py Alegreya-Regular.otf Alegreya-Bold.otf \
+      Alegreya-Italic.otf Alegreya-BoldItalic.otf
+  ```
+
+  naming the upstream files (the release's `fonts/otf` directory); the
+  output lands beside the script.  It needs the `fonttools` package, a
+  maintainer-only dependency.
+- **Maturity.**  Release 2.008 has stood since 2018.
+- **Size.**  About 460 KB per face; a document embeds only the faces it
+  uses.
+- **License.**  SIL Open Font License 1.1 (`LICENSE-Alegreya.txt`).  It
+  declares no Reserved Font Name, so the modified faces keep the family
+  name; embedding imposes nothing on the document.
+
 ## Inconsolata — the monospace face
 
 `Inconsolata-Regular.otf` and `Inconsolata-Bold.otf` set code and
@@ -138,8 +177,8 @@ coverage that DejaVu used to provide implicitly before it was dropped.
 ## `PreTeXtSymbols.otf` — the symbol companion
 
 `PreTeXtSymbols.otf` is the fallback face for the `pdf-fo` route.  FOP
-is configured to consult it for any glyph the body font (Latin Modern)
-lacks, and `xsl/pretext-fo.xsl` also names it explicitly for the
+is configured to consult it for any glyph the body font (Latin Modern
+or Alegreya) lacks, and `xsl/pretext-fo.xsl` also names it explicitly for the
 end-of-block marks and a handful of named symbols.
 
 - **Source.**  A subset of **GNU FreeFont — FreeSerif**
