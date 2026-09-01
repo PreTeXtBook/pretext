@@ -3542,6 +3542,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/beamer/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Beamer Aspect Ratio -->
+
+<!-- Beamer builds a slide as a small page, which a viewer scales up -->
+<!-- to fill a screen, so the shape of that page is all a publisher  -->
+<!-- chooses.  The Beamer class realizes a shape as a class option,  -->
+<!-- spelled without the separator, and the conversion does that     -->
+<!-- translation; here we only record the publisher's choice.        -->
+<xsl:variable name="beamer-aspect-ratio">
+    <xsl:apply-templates select="$publisher-attribute-options/beamer/page/pi:pub-attribute[@name='aspect-ratio']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+<!-- Beamer Font Size -->
+
+<!-- The Beamer class accepts the same eight point sizes as the    -->
+<!-- LaTeX document classes, and 11 points is its own default.  A  -->
+<!-- size other than 10, 11, or 12 points needs the "extsizes"     -->
+<!-- package.  As with the LaTeX conversion, this variable carries -->
+<!-- "pt" as part of its value.                                    -->
+<xsl:variable name="beamer-font-size">
+    <xsl:choose>
+        <xsl:when test="$publication/beamer/@font-size">
+            <xsl:call-template name="validate-font-size">
+                <xsl:with-param name="candidate" select="$publication/beamer/@font-size"/>
+                <xsl:with-param name="fallback" select="'11'"/>
+                <xsl:with-param name="entry" select="'Beamer @font-size'"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>11</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>pt</xsl:text>
+</xsl:variable>
+
 
 <!-- ########################################### -->
 <!-- Set Values/Defaults for Publisher Variables -->
@@ -3799,6 +3833,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <appearance>
             <pi:pub-attribute name="theme" default="Boadilla" freeform="yes"/>
         </appearance>
+        <page>
+            <pi:pub-attribute name="aspect-ratio" default="16:9" options="4:3 16:10 14:9 5:4 3:2"/>
+        </page>
     </beamer>
 </pi:publisher>
 
