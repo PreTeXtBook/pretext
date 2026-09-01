@@ -150,6 +150,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             Theme names are case-sensitive<mdash/>it is <c>Singapore</c>, never <c>singapore</c><mdash/>so check capitalization before anything else.
         </p>
         <p>
+            Beamer builds each slide as a small page<mdash/>16 centimeters by 9 centimeters for the default shape<mdash/>which a <init>PDF</init> viewer then scales up to fill whatever screen you present on.
+            So a point size is never what a viewer sees.
+            What a viewer sees is the size of the type <em>relative to the slide</em>, and that is what the two options below control.
+        </p>
+        <p>
+            Elect the shape with the <attr>aspect-ratio</attr> attribute of the <tag>page</tag> element within the <tag>beamer</tag> element of the publication file (<xref ref="beamer-page-options"/>).
+            The default is <c>16:9</c>, which matches most projectors and displays made this century.
+            Choose <c>4:3</c> for an older projector, or one of the other shapes on offer to match a particular room.
+            A wider shape buys width for your content and gives back a little height, so slides that are already tall may need attention after a change<mdash/>in particular an image sized as a percentage of the width will grow taller as the slide grows wider.
+        </p>
+        <p>
+            Beamer's default type is large, which is right for a lecture hall and can be too large when you want room to write on a slide, or when you have a lot to show at once.
+            Reduce it with the <attr>font-size</attr> attribute of the <tag>beamer</tag> element (<xref ref="beamer-font-size-options"/>).
+            The default is <c>11</c>, and a smaller value scales everything together<mdash/>body text, slide titles, blocks, and mathematics<mdash/>so the whole slide simply holds more.
+            Going from <c>11</c> to <c>9</c>, for instance, leaves the type a fifth smaller on screen, whatever the screen.
+        </p>
+        <p>
             Beamer's own habit is to center a frame's content vertically.
             A <pretext/> slideshow instead places content at the top of every frame by default, in agreement with the Reveal.js conversion.
             For the classic centered look<mdash/>title page, section pages, and every slide<mdash/>set a document-wide default of <c>middle</c> with the <attr>valign</attr> attribute described in <xref ref="topic-slides"/>.

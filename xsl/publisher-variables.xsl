@@ -3122,6 +3122,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="substring-after($join-latex-pagebreaks, ' ')"/>
 </xsl:variable>
 
+<!-- The document classes of the LaTeX conversions, and the Beamer   -->
+<!-- class, accept the same eight point sizes as a class option, so  -->
+<!-- the check on a publisher's choice is shared.  A caller provides -->
+<!-- the value to test, the value to use when the test fails, and    -->
+<!-- the name of the publication file entry, for the message.        -->
+<xsl:template name="validate-font-size">
+    <xsl:param name="candidate"/>
+    <xsl:param name="fallback"/>
+    <xsl:param name="entry"/>
+    <xsl:choose>
+        <xsl:when test="($candidate =  '8') or
+                        ($candidate =  '9') or
+                        ($candidate = '10') or
+                        ($candidate = '11') or
+                        ($candidate = '12') or
+                        ($candidate = '14') or
+                        ($candidate = '17') or
+                        ($candidate = '20')">
+            <xsl:value-of select="$candidate"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:FALLBACK: <xsl:value-of select="$entry"/> in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$candidate"/>".  Proceeding with default value: "<xsl:value-of select="$fallback"/>"</xsl:message>
+            <xsl:value-of select="$fallback"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- For historical reasons, this variable has "pt" as part -->
 <!-- of its value.  A change would need to be coordinated   -->
 <!-- with every application in the -latex conversion.       -->
@@ -3129,25 +3156,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- via publication file -->
         <xsl:when test="$publication/latex/@font-size">
-            <!-- provisional, convenience -->
-            <xsl:variable name="fs" select="$publication/latex/@font-size"/>
-            <xsl:choose>
-                <xsl:when test="($fs =  '8') or
-                                ($fs =  '9') or
-                                ($fs = '10') or
-                                ($fs = '11') or
-                                ($fs = '12') or
-                                ($fs = '14') or
-                                ($fs = '17') or
-                                ($fs = '20')">
-                    <xsl:value-of select="$fs"/>
-                    <xsl:text>pt</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:FALLBACK: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
-                    <xsl:text>10pt</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="validate-font-size">
+                <xsl:with-param name="candidate" select="$publication/latex/@font-size"/>
+                <xsl:with-param name="fallback" select="'10'"/>
+                <xsl:with-param name="entry" select="'LaTeX @font-size'"/>
+            </xsl:call-template>
+            <xsl:text>pt</xsl:text>
         </xsl:when>
         <!-- via deprecated stringparam: assumes "pt" as the unit of measure   -->
         <!-- (this is recycled code, so no real attempt to do better)          -->
@@ -3528,6 +3542,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/beamer/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Beamer Aspect Ratio -->
+
+<!-- Beamer builds a slide as a small page, which a viewer scales up -->
+<!-- to fill a screen, so the shape of that page is all a publisher  -->
+<!-- chooses.  The Beamer class realizes a shape as a class option,  -->
+<!-- spelled without the separator, and the conversion does that     -->
+<!-- translation; here we only record the publisher's choice.        -->
+<xsl:variable name="beamer-aspect-ratio">
+    <xsl:apply-templates select="$publisher-attribute-options/beamer/page/pi:pub-attribute[@name='aspect-ratio']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+<!-- Beamer Font Size -->
+
+<!-- The Beamer class accepts the same eight point sizes as the    -->
+<!-- LaTeX document classes, and 11 points is its own default.  A  -->
+<!-- size other than 10, 11, or 12 points needs the "extsizes"     -->
+<!-- package.  As with the LaTeX conversion, this variable carries -->
+<!-- "pt" as part of its value.                                    -->
+<xsl:variable name="beamer-font-size">
+    <xsl:choose>
+        <xsl:when test="$publication/beamer/@font-size">
+            <xsl:call-template name="validate-font-size">
+                <xsl:with-param name="candidate" select="$publication/beamer/@font-size"/>
+                <xsl:with-param name="fallback" select="'11'"/>
+                <xsl:with-param name="entry" select="'Beamer @font-size'"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>11</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>pt</xsl:text>
+</xsl:variable>
+
 
 <!-- ########################################### -->
 <!-- Set Values/Defaults for Publisher Variables -->
@@ -3785,6 +3833,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <appearance>
             <pi:pub-attribute name="theme" default="Boadilla" freeform="yes"/>
         </appearance>
+        <page>
+            <pi:pub-attribute name="aspect-ratio" default="16:9" options="4:3 16:10 14:9 5:4 3:2"/>
+        </page>
     </beamer>
 </pi:publisher>
 

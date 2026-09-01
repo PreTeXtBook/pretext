@@ -49,9 +49,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <navigation mode="default"/>
     </revealjs>
 
-    <beamer>
+    <!-- font-size="11" is the default, and is Beamer's own default -->
+    <beamer font-size="11">
         <!-- theme="Boadilla" is the default -->
         <appearance theme="Singapore"/>
+        <!-- aspect-ratio="16:9" is the default; "4:3", "16:10",   -->
+        <!-- "14:9", "5:4" and "3:2" are the other shapes on offer -->
+        <page aspect-ratio="16:9"/>
     </beamer>
 
 </publication>

@@ -555,6 +555,7 @@
       <optional>
         <attribute name="font-size">
           <choice>
+            <value>8</value>
             <value>9</value>
             <value>10</value>
             <value>11</value>
@@ -1426,13 +1427,48 @@
   <define name="Beamer">
     <element name="beamer">
       <optional>
-        <ref name="AppearanceBeamer"/>
+        <attribute name="font-size">
+          <choice>
+            <value>8</value>
+            <value>9</value>
+            <value>10</value>
+            <value>11</value>
+            <value>12</value>
+            <value>14</value>
+            <value>17</value>
+            <value>20</value>
+          </choice>
+        </attribute>
       </optional>
+      <interleave>
+        <optional>
+          <ref name="AppearanceBeamer"/>
+        </optional>
+        <optional>
+          <ref name="PageBeamer"/>
+        </optional>
+      </interleave>
     </element>
   </define>
   <define name="AppearanceBeamer">
     <element name="appearance">
       <attribute name="theme"/>
+    </element>
+  </define>
+  <define name="PageBeamer">
+    <element name="page">
+      <optional>
+        <attribute name="aspect-ratio">
+          <choice>
+            <value>4:3</value>
+            <value>16:9</value>
+            <value>16:10</value>
+            <value>14:9</value>
+            <value>5:4</value>
+            <value>3:2</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="Epub">
