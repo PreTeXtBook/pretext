@@ -477,8 +477,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Beamer-specific treatment of \alert and no styling hooks) and     -->
 <!-- the engine/font setup (fontenc/fontspec, where the regular        -->
 <!-- "font-support" prescribes document fonts a theme should control). -->
+
+<!-- The Beamer class names a slide's shape with the digits of the   -->
+<!-- aspect ratio run together, so "16:9" becomes "aspectratio=169". -->
+<!-- The publisher expresses the ratio in its readable form, and the -->
+<!-- options the publication file admits are exactly those the class -->
+<!-- recognizes, so no value can reach here without a translation.   -->
+<xsl:template name="beamer-aspect-ratio-option">
+    <xsl:choose>
+        <xsl:when test="$beamer-aspect-ratio = '4:3'">
+            <xsl:text>43</xsl:text>
+        </xsl:when>
+        <xsl:when test="$beamer-aspect-ratio = '16:9'">
+            <xsl:text>169</xsl:text>
+        </xsl:when>
+        <xsl:when test="$beamer-aspect-ratio = '16:10'">
+            <xsl:text>1610</xsl:text>
+        </xsl:when>
+        <xsl:when test="$beamer-aspect-ratio = '14:9'">
+            <xsl:text>149</xsl:text>
+        </xsl:when>
+        <xsl:when test="$beamer-aspect-ratio = '5:4'">
+            <xsl:text>54</xsl:text>
+        </xsl:when>
+        <xsl:when test="$beamer-aspect-ratio = '3:2'">
+            <xsl:text>32</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template name="beamer-preamble">
-    <xsl:text>\documentclass[11pt, compress]{beamer}&#xa;</xsl:text>
+    <xsl:text>\documentclass[</xsl:text>
+    <xsl:value-of select="$beamer-font-size"/>
+    <xsl:text>, aspectratio=</xsl:text>
+    <xsl:call-template name="beamer-aspect-ratio-option"/>
+    <xsl:text>, compress]{beamer}&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.early != ''">
         <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
         <xsl:value-of select="$latex.preamble.early" />
