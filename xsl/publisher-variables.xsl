@@ -3122,6 +3122,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="substring-after($join-latex-pagebreaks, ' ')"/>
 </xsl:variable>
 
+<!-- The document classes of the LaTeX conversions, and the Beamer   -->
+<!-- class, accept the same eight point sizes as a class option, so  -->
+<!-- the check on a publisher's choice is shared.  A caller provides -->
+<!-- the value to test, the value to use when the test fails, and    -->
+<!-- the name of the publication file entry, for the message.        -->
+<xsl:template name="validate-font-size">
+    <xsl:param name="candidate"/>
+    <xsl:param name="fallback"/>
+    <xsl:param name="entry"/>
+    <xsl:choose>
+        <xsl:when test="($candidate =  '8') or
+                        ($candidate =  '9') or
+                        ($candidate = '10') or
+                        ($candidate = '11') or
+                        ($candidate = '12') or
+                        ($candidate = '14') or
+                        ($candidate = '17') or
+                        ($candidate = '20')">
+            <xsl:value-of select="$candidate"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:FALLBACK: <xsl:value-of select="$entry"/> in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$candidate"/>".  Proceeding with default value: "<xsl:value-of select="$fallback"/>"</xsl:message>
+            <xsl:value-of select="$fallback"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- For historical reasons, this variable has "pt" as part -->
 <!-- of its value.  A change would need to be coordinated   -->
 <!-- with every application in the -latex conversion.       -->
@@ -3129,25 +3156,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- via publication file -->
         <xsl:when test="$publication/latex/@font-size">
-            <!-- provisional, convenience -->
-            <xsl:variable name="fs" select="$publication/latex/@font-size"/>
-            <xsl:choose>
-                <xsl:when test="($fs =  '8') or
-                                ($fs =  '9') or
-                                ($fs = '10') or
-                                ($fs = '11') or
-                                ($fs = '12') or
-                                ($fs = '14') or
-                                ($fs = '17') or
-                                ($fs = '20')">
-                    <xsl:value-of select="$fs"/>
-                    <xsl:text>pt</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:FALLBACK: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
-                    <xsl:text>10pt</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="validate-font-size">
+                <xsl:with-param name="candidate" select="$publication/latex/@font-size"/>
+                <xsl:with-param name="fallback" select="'10'"/>
+                <xsl:with-param name="entry" select="'LaTeX @font-size'"/>
+            </xsl:call-template>
+            <xsl:text>pt</xsl:text>
         </xsl:when>
         <!-- via deprecated stringparam: assumes "pt" as the unit of measure   -->
         <!-- (this is recycled code, so no real attempt to do better)          -->
