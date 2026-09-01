@@ -386,15 +386,14 @@ if (!(argv.svg || argv.svgenhanced)) {
   //
   await html.renderPromise();
   //
-  //  Output the resulting document.  This is deliberately the HTML
-  //  serialization: the XML serialization would add the XHTML
-  //  namespace to the bare "html" root of the mock page, and every
-  //  namespace-less element match in the packaging stylesheet
-  //  (xsl/support/package-math.xsl) would then miss.  The attribute
-  //  escaping it would add is not needed: no output attribute can
-  //  hold a raw "<" now that the "data-latex" attributes are
-  //  filtered away.
+  //  Output the resulting document as XML.  Speech enrichment writes
+  //  the author's LaTeX into "data-semantic-attributes", which nothing
+  //  filters, so a macro such as \newcommand{\lt}{<} would put a raw
+  //  "<" into an attribute value; the XML serialization escapes it,
+  //  where the HTML serialization does not.  The XHTML namespace this
+  //  puts on the mock page's "html" root is expected by the packaging
+  //  stylesheet (xsl/support/package-math.xsl), which matches on it.
   //
-  console.log(adaptor.outerHTML(adaptor.root(html.document)));
+  console.log(adaptor.serializeXML(adaptor.root(html.document)));
 })()
   .catch((err) => console.error(err));
