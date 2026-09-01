@@ -360,7 +360,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     attribute print { "yes" | "no" }?,
                     attribute sides { "one" | "two" }?,
                     attribute open-odd { "add-blanks" | "skip-pages" | "no" }?,
-                    attribute font-size { "9" | "10" | "11" | "12" | "14" | "17" | "20" }?,
+                    attribute font-size { "8" | "9" | "10" | "11" | "12" | "14" | "17" | "20" }?,
                     attribute page-ref { "yes" | "no" }?,
                     attribute draft { "yes" | "no" }?,
                     attribute snapshow { "yes" | "no" }?,

@@ -555,6 +555,7 @@
       <optional>
         <attribute name="font-size">
           <choice>
+            <value>8</value>
             <value>9</value>
             <value>10</value>
             <value>11</value>
