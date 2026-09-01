@@ -165,13 +165,16 @@ end-of-block marks and a handful of named symbols.
   letterlike marks, number forms, arrows, mathematical operators,
   technical and control pictures, enclosed and geometric shapes (the
   end-marks), dingbats, and the symbol blocks of the Supplementary
-  Multilingual Plane — about 1900 glyphs, 230 KB.  The full FreeSerif is
-  roughly 2 MB; both render the PreTeXt symbol set identically, so the
-  subset is what each PDF carries.  Entire blocks are kept on purpose,
-  rather than the exact code points in use today, so a newly-used symbol
-  almost always works without regenerating.  Base Latin letters are
-  deliberately dropped: the body font supplies those, and this face is
-  only ever consulted for a glyph the body font is missing.
+  Multilingual Plane — plus the currency signs that live in a script's
+  own block (the Thai baht, the Indic rupee signs, the rial and the
+  Armenian dram), which a body font seldom carries — about 1900 glyphs,
+  230 KB.  The full FreeSerif is roughly 2 MB; both render the PreTeXt
+  symbol set identically, so the subset is what each PDF carries.
+  Entire blocks are kept on purpose, rather than the exact code points
+  in use today, so a newly-used symbol almost always works without
+  regenerating.  Base Latin letters are deliberately dropped: the body
+  font supplies those, and this face is only ever consulted for a glyph
+  the body font is missing.
 
 - **Regeneration.**  Run
 
