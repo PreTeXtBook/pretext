@@ -6283,8 +6283,6 @@
       </paragraphs>
     </subsection>
     <conclusion>
-        <title>Conclusion</title>
-
         <p>Watching a blind reader navigate a web page can be a very enlightening experience.  Or you might even undertake learning one yourself.  Here are some suggestions for getting started (current on 2018-05-31).<ul>
             <li><init>NVDA</init>, <url href="https://www.nvaccess.org/" visual="www.nvaccess.org"/>, Windows, open source via GPL</li>
             <li>Orca, <url href="https://help.gnome.org/users/orca/stable/" visual="help.gnome.org/users"/>, Linux, open source via LGPL</li>
