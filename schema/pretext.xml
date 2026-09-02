@@ -1317,10 +1317,7 @@
                     attribute continuation {text}?,
                     attribute width {text}?,
                     attribute margins {text}?,
-                    (
-                        ConsoleInput,
-                        ConsoleOutput?
-                    )+
+                    ( ConsoleInput  |  ConsoleOutput  )+
                 }
             ProgramPreamble =
                 element preamble {
