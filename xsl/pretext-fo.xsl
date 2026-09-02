@@ -3997,10 +3997,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- FO "alignment-adjust": FOP raises the object by the length,  -->
 <!-- so the (negative) drop lowers it below the baseline, exactly -->
 <!-- as in CSS (verified empirically, 2026-06-11).                -->
-<xsl:template match="m|me|men|md|mdn">
+<!-- Music notation ("n", "scaledeg", "timesignature", "chord") is   -->
+<!-- LaTeX built by the -common templates and set as inline math,   -->
+<!-- so it has a representation, and a placeholder, just as "m".    -->
+<xsl:template match="m|me|men|md|mdn|n|scaledeg|timesignature|chord">
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>
+    <xsl:variable name="b-inline" select="self::m or self::n or self::scaledeg or self::timesignature or self::chord"/>
     <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
     <xsl:variable name="speech" select="normalize-space($speech-repr/pi:math[@id = $id]/div[@class = 'speech'])"/>
     <!-- A display fills the full text measure only when no     -->
@@ -4069,7 +4073,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$svg and self::m">
+        <xsl:when test="$svg and $b-inline">
             <!-- for math sitting on the baseline (e.g. a lone digit),  -->
             <!-- MathJax writes "vertical-align: 0;", unitless, and the -->
             <!-- parse of the "ex" quantity comes up empty, not zero    -->
@@ -4191,6 +4195,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:inline font-family="{$font-family-monospace}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
         <xsl:value-of select="."/>
     </fo:inline>
+</xsl:template>
+<!-- The LaTeX of a music element is built by the "inner-music"  -->
+<!-- templates of the -common stylesheet, the same LaTeX MathJax -->
+<!-- receives; this mode only boxes it, as for "m" above.        -->
+<xsl:template match="n|scaledeg|timesignature|chord" mode="math-placeholder">
+    <fo:inline font-family="{$font-family-monospace}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
+        <xsl:apply-templates select="." mode="inner-music"/>
+    </fo:inline>
+</xsl:template>
+
+<!-- Accidentals in prose ("sharp", "flat", and so on, outside any  -->
+<!-- note or chord); the -common templates for the elements call    -->
+<!-- these by name.  The body fonts lack the glyphs, and FOP falls  -->
+<!-- back to another face only for a whole word, so each is set     -->
+<!-- outright in the symbol font, as the end-marks are.  FOP cannot -->
+<!-- address a character beyond the Basic Multilingual Plane (it    -->
+<!-- mangles the surrogate pair), so the double sharp and double    -->
+<!-- flat, U+1D12A and U+1D12B, are the single characters doubled,  -->
+<!-- as the MathJax representations also render them.               -->
+<xsl:template name="doublesharp">
+    <fo:inline font-family="{$font-family-symbol}">&#x266F;&#x266F;</fo:inline>
+</xsl:template>
+<xsl:template name="sharp">
+    <fo:inline font-family="{$font-family-symbol}">&#x266F;</fo:inline>
+</xsl:template>
+<xsl:template name="natural">
+    <fo:inline font-family="{$font-family-symbol}">&#x266E;</fo:inline>
+</xsl:template>
+<xsl:template name="flat">
+    <fo:inline font-family="{$font-family-symbol}">&#x266D;</fo:inline>
+</xsl:template>
+<xsl:template name="doubleflat">
+    <fo:inline font-family="{$font-family-symbol}">&#x266D;&#x266D;</fo:inline>
 </xsl:template>
 
 <!-- Assembly rewrites every display to "md", so that is the only    -->
@@ -4643,6 +4680,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         self::nbsp or self::ndash or self::mdash or self::lsq or self::rsq or self::lq or self::rq or self::ldblbracket or self::rdblbracket or self::langle or self::rangle or self::ellipsis or self::midpoint or self::swungdash or self::permille or self::pilcrow or self::section-mark or self::minus or self::times or self::solidus or self::obelus or self::plusminus or self::copyright or self::phonomark or self::copyleft or self::registered or self::trademark or self::servicemark or self::degree or self::prime or self::dblprime or
         self::q or self::sq or self::dblbrackets or self::angles or
         self::c or self::cline or self::tag or self::tage or self::attr or self::today or self::timeofday or self::pi:localize or
+        self::sharp or self::flat or self::natural or self::doublesharp or self::doubleflat or
         self::xref or self::index-list or self::notation-list or self::list-of)]">
     <xsl:message>PTX:FO-TODO: <xsl:value-of select="local-name()"/> (child of "<xsl:value-of select="local-name(parent::*)"/>")</xsl:message>
     <xsl:apply-templates select="*"/>
