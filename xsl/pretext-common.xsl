@@ -11975,6 +11975,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;sbsgroup&quot; now requires at least two &quot;sidebyside&quot;.  A group of one behaves exactly like the &quot;sidebyside&quot; alone, so use the &quot;sidebyside&quot; by itself, with the layout attributes moved onto it'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- End of the chronological sequence: a new entry goes just above. -->
 </xsl:template>
 
 <!-- Miscellaneous -->

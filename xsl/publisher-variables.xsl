@@ -3974,7 +3974,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is to allow deprecation warnings to flag (and often react        -->
 <!-- favorably) to attempted uses. Dated, and in chronological        -->
 <!-- order.  Grep, or the git pickaxe (log -S) using the date strings -->
- <!-- is often effective in locating all the pieces of a deprecation. -->
+<!-- is often effective in locating all the pieces of a deprecation.  -->
+<!-- A NEW ENTRY GOES AT THE END OF THE BANK, just above the marker   -->
+<!-- that closes it, never beside a similar parameter higher up.      -->
 
 <!-- Conversion specific parameters that die will   -->
 <!-- live on in warnings, which are isolated in the -->
@@ -4199,6 +4201,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- html/annotation/@platform  in publisher file -->
 <xsl:param name="html.annotation" select="''" />
 
+<!-- End of the bank: a new retired parameter goes just above. -->
+
 <!-- ###################################### -->
 <!-- Parameter Deprecation Warning Messages -->
 <!-- ###################################### -->
@@ -4240,6 +4244,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="document-root" select="./*[not(self::docinfo)]"/>
 
 
+    <!-- The messages below are in the order the parameters were deprecated, -->
+    <!-- and they print in that order, so A NEW ENTRY GOES AT THE END OF THE -->
+    <!-- SEQUENCE, just above the marker that closes it.  Placing one beside -->
+    <!-- a similar message instead lands it among far older dates, where the -->
+    <!-- next reader will not think to look for it.                          -->
+    <!--  -->
     <!-- 2017-07-05  sidebyside cannot be cross-referenced anymore, so not knowlizable -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2017-07-05'" />
@@ -4871,6 +4881,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="incorrect-use" select="($directory.images != '')" />
     </xsl:call-template>
     <!--  -->
+    <!-- End of the chronological sequence: a new entry goes just above. -->
 </xsl:template>
 
 </xsl:stylesheet>
