@@ -1361,7 +1361,7 @@
   <define name="Controls">
     <element name="controls">
       <optional>
-        <attribute name="backarrow">
+        <attribute name="backarrows">
           <choice>
             <value>faded</value>
             <value>hidden</value>

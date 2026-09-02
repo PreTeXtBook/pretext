@@ -439,7 +439,7 @@
 
             Controls =
                 element controls {
-                    attribute backarrow { "faded" | "hidden" | "visible" }?,
+                    attribute backarrows { "faded" | "hidden" | "visible" }?,
                     attribute display { "yes" | "no" }?,
                     attribute layout { "edges" | "bottom-right" }?,
                     attribute tutorial { "yes" | "no" }?
