@@ -24,10 +24,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it-IT, Italian (Italy) -->
 <!-- Valerio Monti, gedeonedepaperoni@gmail.com, 2020-07-27   -->
 
+<!-- Quotation marks: the English style is a deliberate choice for   -->
+<!-- Italian, not a default (Valerio Monti, pretext-dev, 2026-09-02) -->
 <locale language="it-IT" direction="ltr"
         quote-primary="english-double" quote-secondary="english-single">
     <!-- THEOREM-LIKE blocks -->
-    <!-- The english quotation style above is just a default, it needs adjustment -->
     <localization string-id='theorem'>Teorema</localization>
     <localization string-id='corollary'>Corollario</localization>
     <localization string-id='lemma'>Lemma</localization>
