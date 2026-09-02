@@ -76,7 +76,19 @@ RANGES = [
 # rule; they are kept so a fallback run that happens to include a space (a
 # symbol with an adjacent space) sets it instead of reporting a missing glyph.
 SPACES = [0x0020, 0x00A0]
-unicodes = SPACES + [cp for lo, hi in RANGES for cp in range(lo, hi + 1)]
+# Currency signs that Unicode places in a script's own block rather than in
+# Currency Symbols (general category Sc outside U+20A0-U+20CF): the Thai baht,
+# the rupee signs of the Indic scripts, the Khmer riel, the Armenian dram, the
+# Afghani, the rial ligature, and the fullwidth forms.  A body font rarely
+# carries these (Latin Modern happens to have the baht, which the sample
+# article shows; Alegreya does not), so they ride along with the symbol
+# blocks.  FreeSerif lacks some of them; the subsetter simply skips those.
+SCRIPT_BLOCK_CURRENCY = [
+    0x058F, 0x060B, 0x07FE, 0x07FF, 0x09F2, 0x09F3, 0x09FB, 0x0AF1, 0x0BF9,
+    0x0E3F, 0x17DB, 0xA838, 0xFDFC, 0xFE69, 0xFF04, 0xFFE0, 0xFFE1, 0xFFE5,
+    0xFFE6,
+]
+unicodes = SPACES + SCRIPT_BLOCK_CURRENCY + [cp for lo, hi in RANGES for cp in range(lo, hi + 1)]
 
 # The GNU font exception, re-stated for this modified (subset) version so it
 # travels with the file -- the upstream exception explicitly allows a modifier

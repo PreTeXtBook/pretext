@@ -102,22 +102,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we will map the *intent* of such requests as this conversion      -->
 <!-- matures.                                                          -->
 
-<!-- PDF/UA (ISO 14289) requires every font to be embedded, so    -->
-<!-- each font family must name a real, available font: a generic -->
-<!-- family (serif, monospace) would fall back to a base-14 PDF   -->
+<!-- PDF/UA (ISO 14289) requires every font to be embedded, so     -->
+<!-- each font family must name a real, available font: a generic  -->
+<!-- family (serif, monospace) would fall back to a base-14 PDF    -->
 <!-- font, which is never embedded.  Each named family must have a -->
-<!-- matching declaration in  pretext/fop.xconf.  The body is      -->
-<!-- Latin Modern Roman and the monospace face Inconsolata; the     -->
-<!-- symbol family is "PreTeXt Symbols", the bundled FreeSerif      -->
-<!-- subset (see  fonts/README.md ), which carries the currency     -->
-<!-- signs, primes, geometric end-marks, and dingbats that Latin    -->
-<!-- Modern lacks.  It is named after the body font on  fo:root ,   -->
-<!-- so FOP falls back to it for any glyph the body font is         -->
-<!-- missing, and named outright where a specific symbol is drawn.  -->
-<!-- the 12-point optical design is used for a body font size of   -->
-<!-- 12pt or more; smaller sizes (and 11pt) use the 10-point face  -->
+<!-- matching declaration in  pretext/fop.xconf.  The body face    -->
+<!-- follows the publication file's  pdf/@font  key ($pdf-font):   -->
+<!-- Latin Modern Roman by default, matching the LaTeX route, in   -->
+<!-- its 12-point optical design for a body font size of 12pt or   -->
+<!-- more; or Alegreya, a book face for text-heavy documents, in   -->
+<!-- one design for every size.  The monospace face is Inconsolata -->
+<!-- for every key.  The symbol family is "PreTeXt Symbols", the   -->
+<!-- bundled FreeSerif subset (see  fonts/README.md ), which       -->
+<!-- carries the currency signs, primes, geometric end-marks, and  -->
+<!-- dingbats that the body faces lack.  It is named after the     -->
+<!-- body font on  fo:root , so FOP falls back to it for any glyph -->
+<!-- the body font is missing, and named outright where a specific -->
+<!-- symbol is drawn.                                              -->
 <xsl:variable name="font-family-main">
     <xsl:choose>
+        <xsl:when test="$pdf-font = 'alegreya'">
+            <xsl:text>Alegreya</xsl:text>
+        </xsl:when>
         <xsl:when test="number(substring-before($font-size, 'pt')) &gt;= 12">
             <xsl:text>Latin Modern Roman 12</xsl:text>
         </xsl:when>

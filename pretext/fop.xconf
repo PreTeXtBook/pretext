@@ -114,6 +114,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <font embedding-mode="full" embed-url="fonts/lmroman10-bolditalic.otf">
                     <font-triplet name="Latin Modern Roman 12" style="italic" weight="bold"/>
                 </font>
+                <!-- Alegreya: body face of the "alegreya" key, a book         -->
+                <!-- face for text-heavy documents (fonts/README.md).          -->
+                <!-- One optical design serves every body size.                -->
+                <font embedding-mode="full" embed-url="fonts/Alegreya-Regular.otf">
+                    <font-triplet name="Alegreya" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="fonts/Alegreya-Bold.otf">
+                    <font-triplet name="Alegreya" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="fonts/Alegreya-Italic.otf">
+                    <font-triplet name="Alegreya" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="fonts/Alegreya-BoldItalic.otf">
+                    <font-triplet name="Alegreya" style="italic" weight="bold"/>
+                </font>
                 <!-- Latin Modern Sans answers the  sans-serif  generic used   -->
                 <!-- by author SVGs (e.g. Mermaid and MyOpenMath labels) and   -->
                 <!-- the Helvetica/Arial/Verdana/Trebuchet legacy names.       -->

@@ -701,7 +701,10 @@
     <element name="pdf">
       <optional>
         <attribute name="font">
-          <value>latin-modern</value>
+          <choice>
+            <value>latin-modern</value>
+            <value>alegreya</value>
+          </choice>
         </attribute>
       </optional>
     </element>

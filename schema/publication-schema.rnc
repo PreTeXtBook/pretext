@@ -222,7 +222,7 @@
 
             Pdf =
                 element pdf {
-                    attribute font { "latin-modern" }?
+                    attribute font { "latin-modern" | "alegreya" }?
                 }
 
             Html =

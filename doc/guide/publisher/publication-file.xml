@@ -528,9 +528,9 @@
             <idx><h>font selection</h><h>PDF, XSL-FO</h></idx>
             <idx><h>XSL-FO</h><h>font selection</h></idx>
 
-            <p>The text and monospace fonts of the <init>PDF</init> are chosen with the<cd>
+            <p>The text font of the <init>PDF</init> is chosen with the<cd>
                 <cline>/publication/pdf/@font</cline>
-            </cd>attribute.  Its only value at present is <c>latin-modern</c> (also the default), which matches the fonts of the <latex/> conversion.  A small number of symbols absent from these fonts are supplied from a fallback font.  Every font is fully embedded, as required for the accessible (<init>PDF/UA</init>) output this conversion produces.</p>
+            </cd>attribute.  The value <c>latin-modern</c> (the default) matches the fonts of the <latex/> conversion; the value <c>alegreya</c> is a book face for text-heavy documents.  See <xref ref="pdf-xsl-fo"/>.</p>
         </subsection>
     </section>
 

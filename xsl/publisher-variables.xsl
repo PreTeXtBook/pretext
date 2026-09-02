@@ -3190,18 +3190,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!-- Font selection for the XSL-FO PDF route ("pdf-fo").  A key names a -->
-<!-- tested font set; the FO conversion maps the key to concrete font  -->
-<!-- family names, which  pretext/fop.xconf  embeds.  Guaranteed to be  -->
-<!-- currently only 'latin-modern' (default, matches the LaTeX route).  -->
+<!-- tested font set; the FO conversion maps the key to concrete font   -->
+<!-- family names, which  pretext/fop.xconf  embeds.  The keys are      -->
+<!-- 'latin-modern' (the default, matching the LaTeX route) and         -->
+<!-- 'alegreya' (a book face for text-heavy documents).                 -->
 <xsl:variable name="pdf-font">
     <xsl:variable name="default-pdf-font" select="'latin-modern'"/>
     <xsl:choose>
         <xsl:when test="$publication/pdf/@font = 'latin-modern'">
             <xsl:text>latin-modern</xsl:text>
         </xsl:when>
+        <xsl:when test="$publication/pdf/@font = 'alegreya'">
+            <xsl:text>alegreya</xsl:text>
+        </xsl:when>
         <!-- attempted to set, but not a recognized key -->
         <xsl:when test="$publication/pdf/@font">
-            <xsl:message>PTX:FALLBACK: PDF (XSL-FO) font setting in publisher file should be "latin-modern", not "<xsl:value-of select="$publication/pdf/@font"/>". Proceeding with default value: "<xsl:value-of select="$default-pdf-font"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: PDF (XSL-FO) font setting in publisher file should be "latin-modern" or "alegreya", not "<xsl:value-of select="$publication/pdf/@font"/>". Proceeding with default value: "<xsl:value-of select="$default-pdf-font"/>"</xsl:message>
             <xsl:value-of select="$default-pdf-font"/>
         </xsl:when>
         <!-- no attempt at all, so default -->
