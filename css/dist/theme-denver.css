@@ -1745,6 +1745,12 @@ summary.knowl__link {
   padding-top: calc(20px + 0.25ex);
   margin-top: 2.5em !important;
 }
+.theorem-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.theorem-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
+}
 .theorem-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--theorem-like-border-color);
   display: block;
@@ -1771,6 +1777,12 @@ summary.knowl__link {
   padding-top: calc(20px + 0.25ex);
   margin-top: 2.5em !important;
 }
+.definition-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.definition-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
+}
 .definition-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--definition-like-border-color);
   display: block;
@@ -1796,6 +1808,12 @@ summary.knowl__link {
   padding: 20px;
   padding-top: calc(20px + 0.25ex);
   margin-top: 2.5em !important;
+}
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
 }
 .assemblage-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--assemblage-like-border-color);
@@ -1829,6 +1847,12 @@ summary.knowl__link {
   padding: 20px;
   padding-top: calc(20px + 0.25ex);
   margin-top: 2.5em !important;
+}
+.project-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.project-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
 }
 .project-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--content-background);
@@ -1916,6 +1940,12 @@ summary.knowl__link {
   border-left: 6px solid var(--remark-like-border-color);
   background-color: var(--remark-like-body-background);
 }
+.remark-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (6px + 2em));
+}
+.remark-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (21px + 2em));
+}
 .remark-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   margin-top: 0;
 }
@@ -1951,6 +1981,12 @@ summary.knowl__link {
   background-color: var(--content-background-background);
   padding: 0 20px 20px 20px;
 }
+.example-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.example-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
+}
 .example-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--example-like-border-color);
   display: inline-block;
@@ -1976,6 +2012,12 @@ summary.knowl__link {
   border-bottom: 3px solid var(--exercise-like-border-color);
   background-color: var(--content-background-background);
   padding: 0 20px 20px 20px;
+}
+.exercise-like.born-hidden-knowl:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.exercise-like.born-hidden-knowl:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
 }
 .exercise-like.born-hidden-knowl:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--exercise-like-border-color);
@@ -2003,6 +2045,12 @@ summary.knowl__link {
   background-color: var(--content-background-background);
   padding: 0 20px 20px 20px;
 }
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
+}
 .exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--exercise-like-border-color);
   display: inline-block;
@@ -2028,6 +2076,12 @@ summary.knowl__link {
   border-bottom: 3px solid var(--computation-like-border-color);
   background-color: var(--content-background-background);
   padding: 0 20px 20px 20px;
+}
+.computation-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (3px + 2em));
+}
+.computation-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (23px + 2em));
 }
 .computation-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--computation-like-border-color);
@@ -4360,16 +4414,6 @@ li > .autopermalink {
 .references > .autopermalink,
 .exercises > .autopermalink {
   top: 1.5ex;
-}
-.assemblage-like > .para > .autopermalink,
-.example-like > .para > .autopermalink,
-.example-like > .exercise-like > .autopermalink,
-.project-like > .para > .autopermalink,
-.project-like > .exercise-like > .autopermalink,
-.project-like > .exercise-like > .introduction > .para > .autopermalink,
-.project-like > .exercise-like > .conclusion > .para > .autopermalink,
-.remark-like > .para > .autopermalink {
-  left: -2.9em;
 }
 li > .para:first-of-type > .autopermalink,
 dd > .para:first-of-type > .autopermalink {

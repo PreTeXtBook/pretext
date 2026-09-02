@@ -1536,6 +1536,14 @@ summary.knowl__link {
   border-left: 4px solid var(--block-border-color);
   background-color: var(--goal-body-background);
 }
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink,
+.goal-like:not(.knowl__content, .born-hidden-knowl) > .autopermalink {
+  left: calc(-1 * (4px + 2em));
+}
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink,
+.goal-like:not(.knowl__content, .born-hidden-knowl) > * > .autopermalink {
+  left: calc(-1 * (19px + 2em));
+}
 .assemblage-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child,
 .goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   margin-top: 0;
@@ -3836,16 +3844,6 @@ li > .autopermalink {
 .references > .autopermalink,
 .exercises > .autopermalink {
   top: 1.5ex;
-}
-.assemblage-like > .para > .autopermalink,
-.example-like > .para > .autopermalink,
-.example-like > .exercise-like > .autopermalink,
-.project-like > .para > .autopermalink,
-.project-like > .exercise-like > .autopermalink,
-.project-like > .exercise-like > .introduction > .para > .autopermalink,
-.project-like > .exercise-like > .conclusion > .para > .autopermalink,
-.remark-like > .para > .autopermalink {
-  left: -2.9em;
 }
 li > .para:first-of-type > .autopermalink,
 dd > .para:first-of-type > .autopermalink {
