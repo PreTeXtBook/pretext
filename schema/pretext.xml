@@ -3621,7 +3621,7 @@
     <section>
         <title>Front Matter</title>
 
-        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg/> <init>URL</init>s).  <c>bibinfo</c> is like a very small database whose content migrates to a titlepage and colophon if <c>titlepage/titlepage-items</c> or <c>colophon/colophon-items</c> are present. For HTML, titlepage means the page for the <c>frontmatter</c> , and for <latex/> these items migrate to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
+        <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg/> <init>URL</init>s) and an <attr>xml:lang</attr> attribute, since a license is usually reproduced verbatim in its original language, whatever the language of the surrounding document.  <c>bibinfo</c> is like a very small database whose content migrates to a titlepage and colophon if <c>titlepage/titlepage-items</c> or <c>colophon/colophon-items</c> are present. For HTML, titlepage means the page for the <c>frontmatter</c> , and for <latex/> these items migrate to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepage</c> does not allow an <c>@xml:id</c> attribute.</p>
 
         <p>Some notes about new additions to <c>bibinfo</c>.
         <ul>
@@ -3764,7 +3764,11 @@
                     element role {TextShort},
                     element entity {TextLong}
                 }
-            ShortLicense = element shortlicense {TextLong}
+            ShortLicense =
+                element shortlicense {
+                    XMLLang?,
+                    TextLong
+                }
             Website = element website {Url}
             Copyright =
                 element copyright {
@@ -3825,8 +3829,8 @@
             <code>
             ShortLicense_X =
                 element shortlicense {
-                    TextLong &amp;
-                    Footnote*
+                    XMLLang?,
+                    (TextLong &amp; Footnote*)
                 }
             ShortLicense |= ShortLicense_X
             Website_X = element website {

@@ -322,7 +322,11 @@
                     element role {TextShort},
                     element entity {TextLong}
                 }
-            ShortLicense = element shortlicense {TextLong}
+            ShortLicense =
+                element shortlicense {
+                    XMLLang?,
+                    TextLong
+                }
             Website = element website {Url}
             Copyright =
                 element copyright {

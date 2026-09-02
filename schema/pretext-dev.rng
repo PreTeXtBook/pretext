@@ -427,6 +427,9 @@
   </define>
   <define name="ShortLicense_X">
     <element name="shortlicense">
+      <optional>
+        <ref name="XMLLang"/>
+      </optional>
       <interleave>
         <ref name="TextLong"/>
         <zeroOrMore>

@@ -1018,6 +1018,9 @@
   </define>
   <define name="ShortLicense">
     <element name="shortlicense">
+      <optional>
+        <ref name="XMLLang"/>
+      </optional>
       <ref name="TextLong"/>
     </element>
   </define>
