@@ -2096,7 +2096,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     Generate preview images for interactive elements using playwright.
     'method' is expected to be "fast" or "slow", corresponding to a 5000 or 10000 ms timeout.
     """
-    import asyncio  # get_event_loop()
+    import asyncio  # run()
 
     # external module, often forgotten
     # imported here, used only in interior
