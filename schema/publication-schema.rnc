@@ -434,7 +434,8 @@
 
             Appearance =
                 element appearance {
-                    attribute theme { text }
+                    attribute theme { text }?,
+                    attribute custom-css { text }?
                 }
 
             Controls =

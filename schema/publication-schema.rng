@@ -1355,7 +1355,12 @@
   </define>
   <define name="Appearance">
     <element name="appearance">
-      <attribute name="theme"/>
+      <optional>
+        <attribute name="theme"/>
+      </optional>
+      <optional>
+        <attribute name="custom-css"/>
+      </optional>
     </element>
   </define>
   <define name="Controls">

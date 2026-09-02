@@ -650,7 +650,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             Appearance =
                 element appearance {
-                    attribute theme { text }
+                    attribute theme { text }?,
+                    attribute custom-css { text }?
                 }
 
             Controls =
