@@ -167,10 +167,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag the context as "inline" v. "displaymath"     -->
 <!-- so that we can do things like place a CSS class   -->
 <!-- for MathJax to see when processing the math bits. -->
-<xsl:template match="m|md" mode="extraction">
+<!-- Music notation ("n", "scaledeg", "timesignature", "chord") is  -->
+<!-- LaTeX built by the -common templates and set as inline math, so -->
+<!-- it needs a representation exactly as an "m" does.               -->
+<xsl:template match="m|md|n|scaledeg|timesignature|chord" mode="extraction">
     <xsl:variable name="context">
         <xsl:choose>
-            <xsl:when test="self::m">
+            <xsl:when test="self::m or self::n or self::scaledeg or self::timesignature or self::chord">
                 <xsl:text>inline</xsl:text>
             </xsl:when>
             <xsl:when test="self::md">
