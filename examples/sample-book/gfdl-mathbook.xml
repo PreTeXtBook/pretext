@@ -24,7 +24,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- addition of the MathBook XML elements employed to   -->
 <!-- render the license within a MathBook XML document   -->
 
-<appendix xml:id="appendix-gfdl">
+<!-- A license is presented verbatim, so its text is always English,   -->
+<!-- whatever the language of the document.  The @xml:lang keeps       -->
+<!-- language features, such as quotation marks, from changing with it -->
+
+<appendix xml:id="appendix-gfdl" xml:lang="en-US">
     <title>GNU Free Documentation License</title>
 
     <p>Version 1.3, 3 November 2008</p>

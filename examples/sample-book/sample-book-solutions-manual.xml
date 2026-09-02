@@ -72,7 +72,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <year>1997<ndash />2015</year>
                     <holder>Thomas W. Judson, Robert A. Beezer</holder>
                     <minilicense>GFDL License</minilicense>
-                    <shortlicense>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license is included in the appendix entitled <q>GNU Free Documentation License.</q>  All trademarks<trademark /> are the registered<registered /> marks of their respective owners.</shortlicense>
+                    <!-- A license is presented verbatim, so its text is always English,   -->
+                    <!-- whatever the language of the document.  The @xml:lang keeps       -->
+                    <!-- language features, such as quotation marks, from changing with it -->
+                    <shortlicense xml:lang="en-US">Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license is included in the appendix entitled <q>GNU Free Documentation License.</q>  All trademarks<trademark /> are the registered<registered /> marks of their respective owners.</shortlicense>
                 </copyright>
             </colophon>
 
