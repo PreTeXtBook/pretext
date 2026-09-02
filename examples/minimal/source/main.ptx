@@ -55,7 +55,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </titlepage>
 
             <abstract>
-                <p>This is a very short article, but it still exercises some advanced features of MathBook XML.</p>
+                <p>This is a very short article, but it still exercises some advanced features of <pretext/>.</p>
             </abstract>
 
         </frontmatter>
