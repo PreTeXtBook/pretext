@@ -91,6 +91,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <footnotes level="1"/>
     </numbering>
 
+    <!-- PDF-Specific Options (the XSL-FO route) -->
+    <!-- "latin-modern" is the default, and matches the fonts of  -->
+    <!-- the LaTeX conversion.  Stated here to advertise the      -->
+    <!-- option;  publication-alegreya.xml  is the same file with -->
+    <!-- the other choice, "alegreya".                            -->
+    <pdf font="latin-modern"/>
+
     <!-- HTML-Specific Options -->
     <!-- favicon "simple" scheme expects -->
     <!--     favicon/favicon-32x32.png   -->
