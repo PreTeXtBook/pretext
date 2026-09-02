@@ -2761,6 +2761,59 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </investigation>
             </subsection>
 
+            <subsection xml:id="block-samples-closing-with-blocks" label="block-samples-closing-with-blocks">
+                <title>Blocks Closing with a List or a Display</title>
+                <p>Some blocks end with a mark, such as the filled square that closes a proof.  In print the mark rides the last line of the block's final paragraph, pushed to the right margin.  A paragraph may also hold a list, a code display, or displayed mathematics, and then the mark cannot ride the paragraph's last line without disturbing the layout of the paragraph and of the list, so it takes a line of its own.  Each block here ends with such a paragraph.</p>
+                <example>
+                    <title>Closing with a Bulleted List</title>
+                    <p>This <tag>example</tag> ends with a paragraph whose final child is an unordered list, and the first item has two words so that a justified last line would be visible.<ul>
+                        <li><p>first item</p></li>
+                        <li><p>second</p></li>
+                        <li><p>third</p></li>
+                    </ul></p>
+                </example>
+                <example>
+                    <title>A List, Then More Text</title>
+                    <p>Here the paragraph continues after the list, so its last line is running text, but the list is still inside the paragraph.<ol>
+                        <li><p>one item</p></li>
+                        <li><p>another item</p></li>
+                    </ol>The paragraph resumes here and ends with words, not a list.</p>
+                </example>
+                <example>
+                    <title>Closing with a Code Display</title>
+                    <p>A paragraph can also end with a <tag>cd</tag>, a short display of code, as in<cd>
+                        <cline>print("the last thing")</cline>
+                    </cd></p>
+                </example>
+                <example>
+                    <title>Closing with Displayed Mathematics</title>
+                    <p>And a paragraph can end with displayed mathematics, the case that has always placed the mark on its own line, given here for comparison:<md>
+                        <mrow>a^2 + b^2 \amp = c^2</mrow>
+                    </md></p>
+                </example>
+                <definition>
+                    <title>A Statement Closing with a Description List</title>
+                    <statement>
+                        <p>A <term>closing list</term> is a list that is the final child of a block's final paragraph, of any of three kinds; here the paragraph closes a <tag>statement</tag>.<dl>
+                            <li><title>ordered</title><p>numbered or lettered</p></li>
+                            <li><title>unordered</title><p>bulleted</p></li>
+                            <li><title>description</title><p>this one, with a term for each item</p></li>
+                        </dl></p>
+                    </statement>
+                </definition>
+                <theorem>
+                    <title>A Proof Closing with a List</title>
+                    <statement>
+                        <p>Every proof that ends with a list is followed by its mark on a line of its own.</p>
+                    </statement>
+                    <proof>
+                        <p>The proof has two cases.<ol>
+                            <li><p>The proof ends with running text, and the mark rides its last line.</p></li>
+                            <li><p>The proof ends with a list, as this one does, and the mark takes the next line.</p></li>
+                        </ol></p>
+                    </proof>
+                </theorem>
+            </subsection>
             <subsection>
                 <title>Miscellaneous Blocks</title>
                 <assemblage>

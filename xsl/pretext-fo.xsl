@@ -1273,13 +1273,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="idx | notation"/>
     <xsl:variable name="content" select="*[not(self::title) and not(self::idx) and not(self::notation)]"/>
     <xsl:variable name="last" select="$content[last()]"/>
-    <!-- The mark rides a closing paragraph only when that paragraph   -->
-    <!-- holds running text alone.  A paragraph that carries a display  -->
-    <!-- ("...written as <md/>") would otherwise have its line          -->
-    <!-- justified (to push the mark to the margin), spreading the text -->
-    <!-- around the display; such a block takes the mark on its own     -->
-    <!-- line instead.                                                  -->
-    <xsl:variable name="b-mark-rides" select="boolean(($last[self::p] and not($last/md)) or ($last[self::statement] and $last/*[last()][self::p] and not($last/*[last()]/md)))"/>
+    <!-- The mark rides the paragraph that closes the block (directly,   -->
+    <!-- or by closing a "statement") only when that paragraph holds     -->
+    <!-- running text alone.  A paragraph carrying a block-level child   -->
+    <!-- (a display "md", a code display "cd", or a list "ol", "ul",     -->
+    <!-- "dl") would otherwise have "text-align-last" justified to push  -->
+    <!-- the mark to the margin, which spreads the text line before the  -->
+    <!-- block and, since the property inherits, the last line of every  -->
+    <!-- list item; such a block takes the mark on its own line instead. -->
+    <xsl:variable name="closing-paragraph" select="$last[self::p] | $last[self::statement]/*[last()][self::p]"/>
+    <xsl:variable name="b-mark-rides" select="$closing-paragraph and not($closing-paragraph/*[self::md or self::cd or self::ol or self::ul or self::dl])"/>
     <!-- the heading runs in to a leading paragraph, plain or in a "statement" -->
     <xsl:choose>
         <xsl:when test="$content[1][self::p] or ($content[1][self::statement] and $content[1]/*[1][self::p])">
