@@ -32,19 +32,21 @@
     // For now limit to logical paragraphs and introductions as they seem to cover
     // the plain text cases. Not clear we would want same treatment for other
     // kinds of content
-    & + :is(.para, .para.logical, .introduction) {
+    & + :is(.para, .para.logical, .introduction):nth-child(2) {
       display: inline;
-      // possible first child that is the actual text
-      & > .para:first-child {
-        display: inline;
-        }
-      // an introduction could have a para.logical with a para
+      // Disable the autopermalink for this first child that is now inline
+      & > .autopermalink {
+          display: none;
+      }
+      
+      // possible first child that is the actual text also needs to be inlined
+      // and have permalink suppressed.
+      & > .para:first-child,
       & > .para.logical:first-child > .para:first-child {
         display: inline;
-      }
-      // Disable the autopermalink for this first child that is now inline
-      & .autopermalink {
-        display: none;
+        & > .autopermalink {
+          display: none;
+        }
       }
     }
   }
