@@ -1263,6 +1263,28 @@ body.pretext.ptx-embedded .ptx-navbar .nav-other-controls > .button {
 .exercise-like > *:is(.solutions) {
   margin-top: 0.5em;
 }
+.exercisegroup > .heading:first-child {
+  display: inline;
+  line-height: initial;
+  border-bottom: 0;
+}
+.exercisegroup > .heading:first-child:after {
+  content: "\2009";
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) {
+  display: inline;
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink {
+  display: none;
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child {
+  display: inline;
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
+  display: none;
+}
 .exercisegroup .exercise-like {
   margin-top: 1em;
 }
@@ -1270,13 +1292,6 @@ body.pretext.ptx-embedded .ptx-navbar .nav-other-controls > .button {
   font-size: 1.1em;
   line-height: 1.05em;
   margin-top: 0.75em;
-  display: inline;
-}
-.exercisegroup > .heading + .introduction {
-  display: inline;
-}
-.exercisegroup > .heading + .introduction > .para:first-child {
-  display: inline;
 }
 .exercisegroup .exercisegroup-exercises {
   margin-top: 1em;
@@ -1434,20 +1449,22 @@ section.solutions section > h6.heading {
 .discussion-like > .heading:first-child:after {
   content: "\2009";
 }
-.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) {
   display: inline;
 }
-.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink {
+  display: none;
+}
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child {
   display: inline;
 }
-.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
-  display: inline;
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
+  display: none;
 }
 .discussion-like > .heading ::after {
   content: "\2009";
-}
-.discussion-like > .heading + .para {
-  display: inline;
 }
 .discussion-like > .heading .space,
 .discussion-like > .heading .codenumber,
@@ -1549,7 +1566,6 @@ summary.knowl__link {
   font-style: italic;
 }
 .solution-like .heading {
-  display: inline;
   font-style: italic;
   font-size: unset;
 }
@@ -1561,14 +1577,19 @@ summary.knowl__link {
 .paragraphs > .heading:first-child:after {
   content: "\2009";
 }
-.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) {
   display: inline;
 }
-.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink {
+  display: none;
+}
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child {
   display: inline;
 }
-.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
-  display: inline;
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
+  display: none;
 }
 * {
   box-sizing: border-box;
@@ -3826,38 +3847,12 @@ li > .autopermalink {
 .remark-like > .para > .autopermalink {
   left: -2.9em;
 }
-.axiom-like > .para:first-of-type > .autopermalink,
-.example-like > .para:first-of-type > .autopermalink,
-.exercise-like > .para:first-of-type > .autopermalink,
-.solution-like > .para:first-of-type > .autopermalink,
-.assemblage-like > .para:first-of-type > .autopermalink,
-.definition-like > .para:first-of-type > .autopermalink,
-.remark-like > .para:first-of-type > .autopermalink,
-.project-like > .para:first-of-type > .autopermalink,
-.openproblem-like > .para:first-of-type > .autopermalink,
-.computation-like > .para:first-of-type > .autopermalink,
-.theorem-like > .para:first-of-type > .autopermalink,
-.proof > .para:first-of-type > .autopermalink,
-.case > .para:first-of-type > .autopermalink,
 li > .para:first-of-type > .autopermalink,
 dd > .para:first-of-type > .autopermalink {
   display: none;
 }
-.axiom-like > .introduction > .para:first-of-type > .autopermalink,
-.example-like > .introduction > .para:first-of-type > .autopermalink,
-.exercise-like > .introduction > .para:first-of-type > .autopermalink,
-.solution-like > .introduction > .para:first-of-type > .autopermalink,
-.assemblage-like > .introduction > .para:first-of-type > .autopermalink,
-.definition-like > .introduction > .para:first-of-type > .autopermalink,
-.remark-like > .introduction > .para:first-of-type > .autopermalink,
-.project-like > .introduction > .para:first-of-type > .autopermalink,
-.openproblem-like > .introduction > .para:first-of-type > .autopermalink,
-.computation-like > .introduction > .para:first-of-type > .autopermalink,
-.theorem-like > .introduction > .para:first-of-type > .autopermalink,
-.proof > .introduction > .para:first-of-type > .autopermalink,
-.case > .introduction > .para:first-of-type > .autopermalink,
-li > .introduction > .para:first-of-type > .autopermalink,
-dd > .introduction > .para:first-of-type > .autopermalink {
+:is(.solution-like, .assemblage-like):not(:has(> .heading)) > .para:first-of-type > .autopermalink,
+:is(.solution-like, .assemblage-like):not(:has(> .heading)) > .introduction > .para:first-of-type > .autopermalink {
   display: none;
 }
 .ptx-content:has(.autopermalink:hover) .autopermalink {

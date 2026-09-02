@@ -136,6 +136,28 @@
 .exercise-like > *:is(.solutions) {
   margin-top: 0.5em;
 }
+.exercisegroup > .heading:first-child {
+  display: inline;
+  line-height: initial;
+  border-bottom: 0;
+}
+.exercisegroup > .heading:first-child:after {
+  content: "\2009";
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) {
+  display: inline;
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink {
+  display: none;
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child {
+  display: inline;
+}
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+.exercisegroup > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
+  display: none;
+}
 .exercisegroup .exercise-like {
   margin-top: 1em;
 }
@@ -143,13 +165,6 @@
   font-size: 1.1em;
   line-height: 1.05em;
   margin-top: 0.75em;
-  display: inline;
-}
-.exercisegroup > .heading + .introduction {
-  display: inline;
-}
-.exercisegroup > .heading + .introduction > .para:first-child {
-  display: inline;
 }
 .exercisegroup .exercisegroup-exercises {
   margin-top: 1em;
@@ -307,20 +322,22 @@ section.solutions section > h6.heading {
 .discussion-like > .heading:first-child:after {
   content: "\2009";
 }
-.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) {
   display: inline;
 }
-.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink {
+  display: none;
+}
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child {
   display: inline;
 }
-.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
-  display: inline;
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
+  display: none;
 }
 .discussion-like > .heading ::after {
   content: "\2009";
-}
-.discussion-like > .heading + .para {
-  display: inline;
 }
 .discussion-like > .heading .space,
 .discussion-like > .heading .codenumber,
@@ -443,17 +460,25 @@ article > .heading:first-child {
 article > .heading:first-child:after {
   content: "\2009";
 }
-.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction),
-article > .heading:first-child + :is(.para, .para.logical, .introduction) {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2),
+article > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) {
   display: inline;
 }
-.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child,
-article > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink,
+article > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .autopermalink {
+  display: none;
+}
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child,
+article > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child,
+article > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child {
   display: inline;
 }
-.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child,
-article > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
-  display: inline;
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink,
+article > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para:first-child > .autopermalink,
+article > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
+  display: none;
 }
 .assemblage-like:not(.knowl__content, .born-hidden-knowl) {
   border: 1px solid var(--assemblage-like-border-color);
