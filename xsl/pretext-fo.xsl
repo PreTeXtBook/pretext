@@ -3997,10 +3997,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- FO "alignment-adjust": FOP raises the object by the length,  -->
 <!-- so the (negative) drop lowers it below the baseline, exactly -->
 <!-- as in CSS (verified empirically, 2026-06-11).                -->
-<xsl:template match="m|me|men|md|mdn">
+<!-- Music notation ("n", "scaledeg", "timesignature", "chord") is   -->
+<!-- LaTeX built by the -common templates and set as inline math,   -->
+<!-- so it has a representation, and a placeholder, just as "m".    -->
+<xsl:template match="m|me|men|md|mdn|n|scaledeg|timesignature|chord">
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>
+    <xsl:variable name="b-inline" select="self::m or self::n or self::scaledeg or self::timesignature or self::chord"/>
     <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
     <xsl:variable name="speech" select="normalize-space($speech-repr/pi:math[@id = $id]/div[@class = 'speech'])"/>
     <!-- A display fills the full text measure only when no     -->
@@ -4069,7 +4073,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$svg and self::m">
+        <xsl:when test="$svg and $b-inline">
             <!-- for math sitting on the baseline (e.g. a lone digit),  -->
             <!-- MathJax writes "vertical-align: 0;", unitless, and the -->
             <!-- parse of the "ex" quantity comes up empty, not zero    -->
@@ -4192,6 +4196,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="."/>
     </fo:inline>
 </xsl:template>
+<!-- The LaTeX of a music element is built by the "inner-music"  -->
+<!-- templates of the -common stylesheet, the same LaTeX MathJax -->
+<!-- receives; this mode only boxes it, as for "m" above.        -->
+<xsl:template match="n|scaledeg|timesignature|chord" mode="math-placeholder">
+    <fo:inline font-family="{$font-family-monospace}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
+        <xsl:apply-templates select="." mode="inner-music"/>
+    </fo:inline>
+</xsl:template>
+
 
 <!-- Assembly rewrites every display to "md", so that is the only    -->
 <!-- form seen here.  Each "mrow" is one line of the display: emit    -->
