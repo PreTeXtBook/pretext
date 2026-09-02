@@ -144,6 +144,8 @@
             <cline>  &lt;/colophon&gt;</cline>
             <cline>&lt;/frontmatter&gt;</cline>
         </cd>The <init>GFDL</init> is also explicit about including the complete license with your document.  You can find various places a version formatted for inclusion in a <pretext /> project, including as part of the source for this document.</p>
+
+        <p>A license should appear verbatim.  Some features of text, such as quotation marks, follow the language in effect (see <xref ref="topic-localization"/>), so a license written in a language other than that of your document needs its own language, not the document's: place an <attr>xml:lang</attr> attribute, with the code for the language the license is written in, on the <tag>shortlicense</tag> element of your <tag>copyright</tag> and on the appendix holding the complete license.  For example, the <init>GFDL</init> in English gets <c>xml:lang="en-US"</c>.  This is harmless when your document is already in the language of the license, and the source of this document does exactly this.</p>
     </section>
 
     <section>

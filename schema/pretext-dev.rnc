@@ -176,8 +176,8 @@
 
             ShortLicense_X =
                 element shortlicense {
-                    TextLong &
-                    Footnote*
+                    XMLLang?,
+                    (TextLong & Footnote*)
                 }
             ShortLicense |= ShortLicense_X
             Website_X = element website {
