@@ -583,7 +583,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="snapshow">
+        <attribute name="snapshot">
           <choice>
             <value>yes</value>
             <value>no</value>
