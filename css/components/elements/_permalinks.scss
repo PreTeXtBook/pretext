@@ -72,19 +72,6 @@ li > .autopermalink {
   top: 1.5ex;
 }
 
-// In some styles, the autopermalink for paras land right on the border line.
-// This is an attempt to fix that.  TODO: find a more robust solution, maybe
-// using a variable for the left offset of paras inside blocks.
-.assemblage-like > .para > .autopermalink,
-.example-like > .para > .autopermalink,
-.example-like > .exercise-like > .autopermalink,
-.project-like > .para > .autopermalink,
-.project-like > .exercise-like > .autopermalink,
-.project-like > .exercise-like > .introduction > .para > .autopermalink,
-.project-like > .exercise-like > .conclusion > .para > .autopermalink,
-.remark-like > .para > .autopermalink {
-  left: -2.9em;
-}
 
 
 .axiom-like, .example-like, .exercise-like, .solution-like, .assemblage-like, .definition-like, .remark-like, .project-like, .openproblem-like, .computation-like, .theorem-like, .proof, .case, li, dd {

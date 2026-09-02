@@ -40,6 +40,19 @@ $pad: 10px !default;
       color: $head-color;
     }
 
+    // Note - once inherit() is widely supported, refactor permalinks
+    @if $L-side == left {
+      & > .autopermalink {
+        // own permalink is offset by border width
+        left: calc(-1 * ($border-width + 2em));
+      }
+
+      & > * > .autopermalink {
+        // child element permalink is offset by border width and padding on side with border
+        left: calc(-1 * ($padding + $border-width + 2em));
+      }
+    }
+
     &::after {
       content: '';
       border-bottom: $border-width $style $border-color;

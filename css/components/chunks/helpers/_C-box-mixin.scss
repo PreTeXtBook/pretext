@@ -61,6 +61,17 @@ $heading-color: var(--block-head-color) !default;
       border-bottom-left-radius: $border-radius;
     }
 
+    // Note - once inherit() is widely supported, refactor permalinks
+    & > .autopermalink {
+      // own permalink is offset by border width
+      left: calc(-1 * ($border-width + 2em));
+    }
+
+    & > * > .autopermalink {
+      // child element permalink is offset by border width and padding on side with border
+      left: calc(-1 * ($padding-left + $border-width + 2em));
+    }
+
     & > .heading:first-child {
       background-color: $heading-background;
       display: inline-block;
