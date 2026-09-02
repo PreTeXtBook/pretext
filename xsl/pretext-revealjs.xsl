@@ -757,7 +757,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match covers all mathematics.  Slides never link to an         -->
 <!-- equation (a cross-reference renders as its text), so no HTML   -->
 <!-- id is placed, unlike EPUB.                                     -->
-<xsl:template match="m|md[mrow]">
+<!-- Music notation ("n", "scaledeg", "timesignature", "chord")     -->
+<!-- is set as inline math, so it has a representation as well.     -->
+<xsl:template match="m|md[mrow]|n|scaledeg|timesignature|chord">
     <xsl:choose>
         <xsl:when test="$b-reveal-embedded-math">
             <!-- NB: math-representation file writes with "unique-id" -->
