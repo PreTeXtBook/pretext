@@ -105,6 +105,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and package math for subsequent processing, so no such            -->
 <!-- contortions are necessary and a simpler wrapping is possible.     -->
 
+<!-- Accidentals inside music notation are the Unicode characters    -->
+<!-- the HTML conversion writes, which MathJax renders from its own  -->
+<!-- fonts, except the double sharp and double flat, for which it    -->
+<!-- has no glyph: it emits them as fallback text in a generic serif -->
+<!-- face, which a PDF or EPUB font may lack (FOP prints a "#"), and -->
+<!-- the Speech Rule Engine can neither speak nor braille them.  So  -->
+<!-- the extracted LaTeX doubles the single characters instead,      -->
+<!-- braced so that a superscript takes both.  Written as characters -->
+<!-- rather than \sharp and \flat, they are legal inside the \text{} -->
+<!-- that holds a chord's alterations.                               -->
+<xsl:template name="doublesharp">
+    <xsl:text>{&#x266F;&#x266F;}</xsl:text>
+</xsl:template>
+<xsl:template name="doubleflat">
+    <xsl:text>{&#x266D;&#x266D;}</xsl:text>
+</xsl:template>
+
 <!-- Inline math does not need a "span", just delimiters -->
 <xsl:template name="inline-math-wrapper">
      <xsl:param name="math"/>
