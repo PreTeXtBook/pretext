@@ -19,6 +19,17 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- Variant of  publication.xml  strictly for the XSL-FO PDF    -->
+<!-- ("pdf-fo") set in the Alegreya font.  The website builds    -->
+<!-- the sample article twice by this route, once with each of   -->
+<!-- the two available text fonts, so a reader can compare them. -->
+<!--   *  "common", "source", "stack", "numbering", and "latex"  -->
+<!--      sections should match  publication.xml  exactly.       -->
+<!--   *  the "pdf" section is the entire point of this file.    -->
+<!--   *  "html" section has been removed, the XSL-FO conversion -->
+<!--      reads nothing from it.                                 -->
+<!-- Doing a diff might help sync-up edits.                      -->
+
 <publication>
 
     <!-- Common Options -->
@@ -92,107 +103,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </numbering>
 
     <!-- PDF-Specific Options (the XSL-FO route) -->
-    <!-- "latin-modern" is the default, and matches the fonts of  -->
-    <!-- the LaTeX conversion.  Stated here to advertise the      -->
-    <!-- option;  publication-alegreya.xml  is the same file with -->
-    <!-- the other choice, "alegreya".                            -->
-    <pdf font="latin-modern"/>
-
-    <!-- HTML-Specific Options -->
-    <!-- favicon "simple" scheme expects -->
-    <!--     favicon/favicon-32x32.png   -->
-    <!--     favicon/favicon-16x16.png   -->
-    <!-- in external images directory    -->
-    <html favicon="simple" embed-button="yes">
-        <!-- A picture or logo for the upper-left corner of each page.    -->
-        <!-- An image of a cover for a physical version is a good choice: -->
-        <!-- 16th Century Art Book Cover, 176x240 pixels, Public Domain,  -->
-        <!-- commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg -->
-        <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
-        <!-- Images may carry a discreet list of links to "archival"     -->
-        <!-- versions in a variety of formats; the author supplies the   -->
-        <!-- actual files.  A global request lists suffixes/formats:     -->
-        <!--
-        <images>
-            <archive>One Two Three</archive>
-        </images>
-        -->
-        <!-- Subtree-scoped requests: each "archive" applies to images   -->
-        <!-- within the element whose "xml:id" its "from" names, the     -->
-        <!-- last containing "archive" winning.  (Do not use in concert  -->
-        <!-- with the global form above.)  Fake "A B" links throughout   -->
-        <!-- the graphics chapter; one image turned off; one image a     -->
-        <!-- single "exceptional" link.                                  -->
-        <!--
-        <images>
-            <archive from="graphics">A B</archive>
-            <archive from="figure-asymptote-levers"/>
-            <archive from="figure-asymptote-contour-plot">exceptional</archive>
-        </images>
-        -->
-        <!-- links below images to open full-size, must be elected -->
-        <asymptote links="yes"/>
-        <!-- Several embedded calculators are available            -->
-        <!-- Use "none" to turn this off (or remove the element)   -->
-        <calculator model="geogebra-classic"/>
-        <!-- A location for a hosted HTML version, as certain      -->
-        <!-- aspects of the LaTeX/PDF version will link to         -->
-        <!-- corresponding aspects of the HTML version              -->
-        <baseurl href="https://pretextbook.org/examples/sample-article/html/"/>
-        <!-- @xml:id of a page to be target of index.html redirect -->
-        <!-- This is the @xml:id of the "article", which is not    -->
-        <!-- default behavior, but we do this as a test and as an  -->
-        <!-- illustration                                          -->
-        <index-page ref="derivatives"/>
-        <!-- Certain blocks may be electively knowled.  Defaults   -->
-        <!-- are variable.  We exercise two such switches here,    -->
-        <!-- the values are defaults so should make no discernable -->
-        <!-- difference.                                           -->
-        <knowl example="no" remark="no" proof="no" example-solution="no"/>
-        <!-- While testing themes, it can be useful to turn off    -->
-        <!-- all knowls. This next line attempts to do so.         -->
-        <!-- Uncomment it to activate it.                          -->
-        <!-- <knowl proof="no" example="no" example-solution="no" exercise-inline="no"/> -->
-        <!-- Specify the theme for the HTML.                       -->
-        <!-- See the guide for options                             -->
-        <css theme="default-modern"/>
-        <!-- <css theme="default-modern" palette="blue-red"/> -->
-        <!-- Magic IDs identify HTML pages to analytics services   -->
-        <!-- Presence implies relevant Javascript will be added    -->
-        <!-- StatCounter requires both values to be set            -->
-        <analytics google-gst="UA-48811660-1"
-                   statcounter-project="9664088"
-                   statcounter-security="6e60c510"/>
-        <!-- Google search, via masthead textbox is switched on    -->
-        <!-- and associated with a Google account via CX number    -->
-        <!-- <search google-cx=""/> -->
-        <!-- Request fewer tracking cookies for YouTube videos     -->
-        <!-- This is the default, here for documentation/testing   -->
-        <video privacy="yes"/>
-        <!-- native search via Javascript library -->
-        <search variant="default"/>
-        <!-- With a <feedback> element, in the HTML version, you get a button     -->
-        <!-- for reporting typos and errors.  You might link to a Google Docs     -->
-        <!-- spreadsheet or something similar.  Default is to get a button        -->
-        <!-- labeled "Feedback", which will be localized to your target language. -->
-        <!-- You can override this with some text of your choosing, but then you  -->
-        <!-- lose the localization feature.                                       -->
-        <!-- (The feedback element could be empty, we place text in a comment to  -->
-        <!-- suggest how the text can be changed/specified.)                      -->
-        <feedback href="http://example.com/not-implemented.html"><!-- My Button Text --></feedback>
-        <!-- A "portable" build is meant to be a single file that is transportable -->
-        <!-- <platform portable="yes"/> -->
-        <!-- Banner options, these default to "yes" but can be set to -->
-        <!-- "no" toremove the indicated element from the top banner  -->
-        <banner byline="yes" subtitle="yes"/>
-        <interactives resize-behavior="responsive">
-            <javascript resize-behavior="fixed-height"/>
-            <jsxgraph resize-behavior="fixed-height"/>
-            <sage resize-behavior="fixed-height"/>
-            <circuitjs resize-behavior="fixed-height"/>
-            <d3 resize-behavior="fixed-height"/>
-        </interactives>
-    </html>
+    <!-- Alegreya is a book face for text-heavy documents.  The -->
+    <!-- default, "latin-modern", matches the LaTeX conversion  -->
+    <!-- and is what  publication.xml  gets.                    -->
+    <pdf font="alegreya"/>
 
     <!-- 10pt font is the default   -->
     <!-- draft mode default is "no" -->
