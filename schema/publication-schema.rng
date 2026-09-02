@@ -583,7 +583,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="snapshow">
+        <attribute name="snapshot">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -1355,13 +1355,18 @@
   </define>
   <define name="Appearance">
     <element name="appearance">
-      <attribute name="theme"/>
+      <optional>
+        <attribute name="theme"/>
+      </optional>
+      <optional>
+        <attribute name="custom-css"/>
+      </optional>
     </element>
   </define>
   <define name="Controls">
     <element name="controls">
       <optional>
-        <attribute name="backarrow">
+        <attribute name="backarrows">
           <choice>
             <value>faded</value>
             <value>hidden</value>

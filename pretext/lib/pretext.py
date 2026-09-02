@@ -2096,7 +2096,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     Generate preview images for interactive elements using playwright.
     'method' is expected to be "fast" or "slow", corresponding to a 5000 or 10000 ms timeout.
     """
-    import asyncio  # get_event_loop()
+    import asyncio  # run()
 
     # external module, often forgotten
     # imported here, used only in interior
@@ -4859,6 +4859,11 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
         latex_cmd = latex_exec_cmd + ["-halt-on-error", sourcename]
         logname = basename + ".log"
         result = _latex_compile(latex_cmd, logname, sourcename)
+        # A failed compilation leaves no PDF behind, so say so here.  Copying
+        # the absent file would raise instead, and the author would read a
+        # Python traceback rather than a sentence naming the log to consult.
+        if result.returncode != 0:
+            raise OSError("the LaTeX compilation of {} failed, so no PDF was produced.  Consult {} for the errors reported by the LaTeX engine".format(sourcename, logname))
 
         # If we want all outputs, we copy the entire build directory now that the PDF is built
         # so we can get the *.log, *.aux, etc build files.

@@ -5819,10 +5819,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::handout or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label={</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
+        <xsl:text>}</xsl:text>
+        <!-- The braces delimit the replacement text of the "label" key. -->
+        <!-- "start" is a key in its own right, so it follows them.      -->
         <xsl:if test="$format-code = '0'">
             <xsl:text>, start=0</xsl:text>
         </xsl:if>
-        <xsl:text>}]</xsl:text>
+        <xsl:text>]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates select="li"/>

@@ -191,7 +191,7 @@
                     attribute font-size { "8" | "9" | "10" | "11" | "12" | "14" | "17" | "20" }?,
                     attribute page-ref { "yes" | "no" }?,
                     attribute draft { "yes" | "no" }?,
-                    attribute snapshow { "yes" | "no" }?,
+                    attribute snapshot { "yes" | "no" }?,
                     attribute link-highlight { "none" | "underline" }?,
                     ( Page? & Worksheet? & Cover? & Asymptote?)
                 }
@@ -434,12 +434,13 @@
 
             Appearance =
                 element appearance {
-                    attribute theme { text }
+                    attribute theme { text }?,
+                    attribute custom-css { text }?
                 }
 
             Controls =
                 element controls {
-                    attribute backarrow { "faded" | "hidden" | "visible" }?,
+                    attribute backarrows { "faded" | "hidden" | "visible" }?,
                     attribute display { "yes" | "no" }?,
                     attribute layout { "edges" | "bottom-right" }?,
                     attribute tutorial { "yes" | "no" }?
