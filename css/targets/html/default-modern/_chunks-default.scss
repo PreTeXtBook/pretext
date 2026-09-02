@@ -104,6 +104,6 @@ section.solutions:not(:is(:first-child)) {
 }
 
 .paragraphs,
-article {
+article:not(:is(.assemblage-like, .goal-like)) {
   @include inline-heading-mixin.heading;
 }

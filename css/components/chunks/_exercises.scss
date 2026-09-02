@@ -18,6 +18,7 @@
 //********************************************************************
 
 @use '../helpers/cols';
+@use './helpers/inline-heading-mixin';
 
 // generate multi column rules for exercises
 @include cols.allow-cols('.exercise-like');
@@ -32,6 +33,7 @@
 }
 
 .exercisegroup {
+  @include inline-heading-mixin.heading;
 
   .exercise-like {
     margin-top: 1em;
@@ -41,15 +43,6 @@
     font-size: 1.10em;
     line-height: 1.05em;
     margin-top: 0.75em;
-    display: inline;
-
-    & + .introduction {
-      display: inline;
-
-      & > .para:first-child {
-        display: inline;
-      }
-    }
   }
 
   // push the actual exercises down from any possible heading/intro
