@@ -1574,8 +1574,10 @@
 <!-- Math -->
 <!-- #### -->
 
-<!-- Pluck SVGs from the file full of them, with matching IDs -->
-<xsl:template match="m|md[mrow]">
+<!-- Pluck SVGs from the file full of them, with matching IDs.  -->
+<!-- Music notation ("n", "scaledeg", "timesignature", "chord") -->
+<!-- is set as inline math, so it has a representation as well. -->
+<xsl:template match="m|md[mrow]|n|scaledeg|timesignature|chord">
     <!-- NB: math-representation file writes with "unique-id" -->
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="unique-id"/>
