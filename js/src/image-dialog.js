@@ -20,7 +20,9 @@ function initializeImageDialogs() {
     ].join(', ');
 
     document.querySelectorAll(magnifiableImageSelector).forEach((image) => {
-        if (initializedImageDialogs.has(image)) {
+        // Do not initialize the same image twice, and do not initialize
+        // anything that explicitly opts out.
+        if (initializedImageDialogs.has(image) || image.closest('[data-ptx-image-dialog="false"]')) {
             return;
         }
 
