@@ -280,13 +280,16 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     control = None
     if output_dir:
         control = ET.XSLTAccessControl(write_file=True)
-    # Our stylesheets use an internal DTD subset to pull in "../entities.ent"
+    # Our stylesheets use an internal DTD subset to pull in "entities.ent"
     # (see the "entity tricks" comment atop each stylesheet) via an external
-    # parameter entity. lxml 6.1.3 stopped resolving external parameter
-    # entities by default (LP#2165901), so this must be requested explicitly.
-    # The stylesheet is always our own bundled/trusted XSL, never
-    # user-supplied XML content, so re-enabling resolution here is safe.
-    xsl_parser = ET.XMLParser(resolve_entities=True)
+    # parameter entity.  lxml resolves internal entities only unless it
+    # is asked otherwise, so external parameter entities are requested here.
+    #     https://bugs.launchpad.net/lxml/+bug/2165901
+    # This is safe because the stylesheet always comes from whoever runs
+    # the build, either bundled with PreTeXt or supplied by the publisher,
+    # and never from the document being processed.  Resolution stays on
+    # local files: "no_network" is the default, but we are explicit here.
+    xsl_parser = ET.XMLParser(resolve_entities=True, no_network=True)
     xsl_tree = ET.parse(xsl, parser=xsl_parser)
     xslt = ET.XSLT(xsl_tree, access_control=control)
 
