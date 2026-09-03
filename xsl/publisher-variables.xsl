@@ -3532,7 +3532,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
         <pi:pub-attribute name="read-aloud" default="yes" options="no"/>
-        <pi:pub-attribute name="favicon" default="none" options="simple"/>
+        <pi:pub-attribute name="favicon" default="none" options="simple svg"/>
         <pi:pub-attribute name="embed-button" default="no" options="yes"/>
         <pi:pub-attribute name="design-width" freeform="yes"/>
         <calculator>
