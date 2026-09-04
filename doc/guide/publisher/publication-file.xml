@@ -631,6 +631,7 @@
                     <p><attr>favicon</attr>: used to control how icon files for a favicon are embedded into each <init>HTML</init> page:<ul>
                         <li><c>none</c></li>
                         <li><c>simple</c></li>
+                        <li><c>svg</c></li>
                     </ul></p>
                 </li>
             </ul>The default is <c>none</c>.  See <xref ref="online-favicon-configuration"/> for more, including an explanation of what a favicon is.</p>

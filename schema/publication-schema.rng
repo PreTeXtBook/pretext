@@ -721,6 +721,7 @@
           <choice>
             <value>none</value>
             <value>simple</value>
+            <value>svg</value>
           </choice>
         </attribute>
       </optional>
