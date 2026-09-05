@@ -3349,16 +3349,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author" mode="article-info">
     <xsl:apply-templates select="personname" />
+    <!-- A support statement is a "\thanks" footnote off the name.  The -->
+    <!-- "\author" block is set as a one-column tabular, where a "\\"   -->
+    <!-- row cannot wrap: a sentence of ordinary length overflows the   -->
+    <!-- page and carries the name, affiliation and email with it.      -->
+    <xsl:if test="support">
+        <xsl:text>\thanks{</xsl:text>
+        <xsl:apply-templates select="support" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:if test="affiliation">
         <xsl:apply-templates select="affiliation" />
     </xsl:if>
     <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
-    </xsl:if>
-    <xsl:if test="support">
-        <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="support" />
     </xsl:if>
     <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
