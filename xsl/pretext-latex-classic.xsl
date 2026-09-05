@@ -128,7 +128,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="latex-preamble">
     <!-- Some journal styles require specific packages be loaded right away -->
     <xsl:call-template name="journal-packages"/>
-    <xsl:call-template name="frontmatter-helpers"/>
     <xsl:call-template name="preamble-early"/>
     <xsl:call-template name="cleardoublepage"/>
     <xsl:call-template name="standard-packages"/>
@@ -251,7 +250,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Other latex styles can override this to put some information there. -->
 <xsl:template name="bibinfo-pre-begin-document">
     <xsl:apply-templates select="$document-root" mode="article-title"/>
-    <!--<xsl:apply-templates select="$bibinfo/support" mode="article-frontmatter"/>-->
     <xsl:call-template name="article-authors"/>
     <xsl:apply-templates select="$bibinfo/date" mode="article-frontmatter"/>
 </xsl:template>
@@ -367,10 +365,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- The article-level support statement is a "\thanks" on the title -->
+<!-- (see the "article-title" template): a marked footnote on the    -->
+<!-- title page, apart from the per-author "\thanks" off each name   -->
 <xsl:template match="bibinfo/support" mode="article-frontmatter">
-    <xsl:text>\ptxsupport{</xsl:text>
-    <xsl:apply-templates select="$bibinfo/support" mode="article-info"/>
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\thanks{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 
@@ -941,12 +942,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$miscellaneous-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
-</xsl:template>
-
-
-<!-- Preamble template for elements needed to produce the frontmatter -->
-<xsl:template name="frontmatter-helpers">
-    <xsl:call-template name="support-footnote"/>
 </xsl:template>
 
 </xsl:stylesheet>
