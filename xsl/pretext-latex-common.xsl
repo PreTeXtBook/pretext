@@ -1918,14 +1918,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- FIGURE-LIKE come in three flavors: blocks (not in a side-by-side),  -->
     <!-- panels (in a side-by-side, but not in an overall "figure"), or      -->
     <!-- subnumbered (panel of a side-by-side, which is then in an overall   -->
-    <!-- "figure').  Selections must be careful (not like dropping through   -->
+    <!-- "figure", or a "figure" in a "stack" that is the content of an      -->
+    <!-- overall "figure").  Selections must be careful (not dropping through -->
     <!-- a choose/when).  Environments need to consider title/caption        -->
     <!-- placement and counters.  So we might create twelve different        -->
     <!-- environments here.  In -common, see the "figure-placement" template -->
     <!-- for another determination, and a more careful explanation.          -->
     <!-- (There was once a subtle bug when we were not so careful here.)     -->
     <xsl:variable name="figure-reps" select="
-        ($document-root//figure[not(parent::sidebyside)])[1]|
+        ($document-root//figure[not(parent::sidebyside or parent::stack/parent::figure)])[1]|
         ($document-root//table[not(parent::sidebyside)])[1]|
         ($document-root//listing[not(parent::sidebyside)])[1]|
         ($document-root//list[not(parent::sidebyside)])[1]"/>
@@ -1955,7 +1956,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (SUB)FIGURE-LIKE -->
     <!-- subnumbered versions, if contained by overall figure -->
     <xsl:variable name="subnumber-reps" select="
-        ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure)[1]|
+        ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure|$document-root//figure/stack/figure)[1]|
         ($document-root//figure/sidebyside/table|$document-root//figure/sbsgroup/sidebyside/table)[1]|
         ($document-root//figure/sidebyside/listing|$document-root//figure/sbsgroup/sidebyside/listing)[1]|
         ($document-root//figure/sidebyside/list|$document-root//figure/sbsgroup/sidebyside/list)[1]"/>
@@ -2871,7 +2872,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <!-- begin: title/caption construction -->
     <xsl:choose>
-        <!-- Captions/titlesof 2D displays within panels of figure/sidebyside  -->
+        <!-- Captions/titles of 2D displays within panels of figure/sidebyside -->
+        <!-- or of figures stacked within a figure.                            -->
         <!-- \thetcbcounter comes from subdisplay, looks like 25.3(b),         -->
         <!-- and this is what will render in a cross-reference via \label/\ref -->
         <!-- The enclosing figure is numbered from block or figure-distinct.   -->
@@ -7198,7 +7200,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- likewise, sidebyside and tabular will center themselves -->
     <!-- Eventually everything in a figure should control itself -->
     <!-- TODO: need to investigate more (poem? etc)              -->
-    <xsl:if test="self::figure and not(image or sidebyside or tabular)">
+    <xsl:if test="self::figure and not(image or sidebyside or tabular or stack)">
         <xsl:text>\centering&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO: process meta-data, then restrict contents -->
@@ -7213,6 +7215,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:text>\end{sidewaysfigure}%&#xa;</xsl:text>
     </xsl:if>
     <xsl:call-template name="end-saved-footnotes"/>
+</xsl:template>
+
+<!-- A "stack" within a "figure" holds subfigures: each is a  -->
+<!-- "figure" set in the subnumbered environment, one after   -->
+<!-- another at full width, and the enclosing figure supplies -->
+<!-- the caption for the whole.                               -->
+<xsl:template match="figure/stack">
+    <xsl:apply-templates select="figure"/>
 </xsl:template>
 
 <!-- Tables, (Named) Lists -->
