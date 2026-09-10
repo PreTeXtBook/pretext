@@ -2576,6 +2576,7 @@
           <ref name="Audio"/>
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
+          <ref name="FigureStack"/>
           <ref name="MuseScore"/>
           <ref name="Paragraph"/>
         </choice>
@@ -2584,6 +2585,19 @@
       <ref name="FigureListing"/>
       <ref name="FigureList"/>
     </choice>
+  </define>
+  <!--
+    a "stack" of subfigures: the enclosing "figure" numbers
+    and captions the whole, and each stacked "figure" is a
+    lettered subfigure with a caption of its own
+  -->
+  <define name="FigureStack">
+    <element name="stack">
+      <ref name="FigureInterior"/>
+      <oneOrMore>
+        <ref name="FigureInterior"/>
+      </oneOrMore>
+    </element>
   </define>
   <!-- the one route to a numbered, titled "tabular" -->
   <define name="FigureTable">
@@ -2685,26 +2699,30 @@
     </optional>
   </define>
   <!--
-    A "figure" occupying a panel is restricted: the layout
-    elements ("sidebyside", "sbsgroup") may not nest, and a
-    static conversion realizes the media elements ("video",
+    An interior "figure", one occupying a panel or stacked
+    within a "figure" (see "FigureStack"), is restricted: the
+    layout elements ("sidebyside", "sbsgroup") may not nest, and
+    a static conversion realizes the media elements ("video",
     "audio") as a manufactured "sidebyside", so none of these
     may appear.  The schema stops these immediate routes; the
     validation-plus stylesheet polices arbitrary depth.
   -->
+  <define name="FigureInterior">
+    <element name="figure">
+      <ref name="MetaDataCaption"/>
+      <optional>
+        <ref name="Landscape"/>
+      </optional>
+      <choice>
+        <ref name="Image"/>
+        <ref name="MuseScore"/>
+        <ref name="Paragraph"/>
+      </choice>
+    </element>
+  </define>
   <define name="FigurePanel">
     <choice>
-      <element name="figure">
-        <ref name="MetaDataCaption"/>
-        <optional>
-          <ref name="Landscape"/>
-        </optional>
-        <choice>
-          <ref name="Image"/>
-          <ref name="MuseScore"/>
-          <ref name="Paragraph"/>
-        </choice>
-      </element>
+      <ref name="FigureInterior"/>
       <ref name="FigureTable"/>
       <ref name="FigureListing"/>
       <ref name="FigureList"/>
