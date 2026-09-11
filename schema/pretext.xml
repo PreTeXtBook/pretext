@@ -1730,6 +1730,8 @@
 
         <p>A <c>figure</c> may also hold a single paragraph.  A captioned, numbered display of mathematics (a multiplication table as an <c>md</c> array, say), or the transcription of an inscription, is honestly a figure, and one paragraph is a display, not a container.</p>
 
+        <p>A <c>figure</c> may also hold a <c>stack</c> of two or more <c>figure</c>.  The outer <c>figure</c> carries the number and the overall caption; each interior <c>figure</c> is a subfigure, numbered with a letter, (a), (b), and so on, and carries its own caption.  An interior <c>figure</c> is restricted exactly as a <c>figure</c> occupying a panel of a <c>sidebyside</c> (see the section on side-by-side layout).</p>
+
         <p>A <c>tabular</c> never takes a number directly.  Bare, it may sit between paragraphs as unnumbered, uncaptioned content; the <c>table</c> wrapper is the one route to a number and a title.  In particular, a <c>tabular</c> is not a child of a <c>figure</c>.</p>
         <!-- 2021-12-29: should add interactive to figure, once ready -->
 
@@ -1750,11 +1752,19 @@
                         Audio |
                         SideBySide |
                         SideBySideGroup |
+                        FigureStack |
                         MuseScore |
                         Paragraph
                     )
                 } |
                 FigureTable | FigureListing | FigureList
+            # a "stack" of subfigures: the enclosing "figure" numbers
+            # and captions the whole, and each stacked "figure" is a
+            # lettered subfigure with a caption of its own
+            FigureStack =
+                element stack {
+                    FigureInterior, FigureInterior+
+                }
             # the one route to a numbered, titled "tabular"
             FigureTable =
                 element table {
@@ -1873,7 +1883,7 @@
 
         <p>Note that widths give on a <c>sidebyside</c> override any width given to the components of the panels.</p>
 
-        <p>A <tag>stack</tag> allows non-captioned, non-titled elements to accumulate vertically in a single panel.  It is a basic container.</p>
+        <p>A <tag>stack</tag> allows non-captioned, non-titled elements to accumulate vertically in a single panel.  It is a basic container.  (A <tag>stack</tag> as the content of a <tag>figure</tag> is a different device: it holds subfigures, and is described with figures.)</p>
 
         <p>An <tag>exercise</tag> may be a panel, in support of compact layout of a <tag>worksheet</tag> or a <tag>handout</tag>, where workspace is relevant.  The schema does not restrict the arrangement to those locations, but the validation-plus stylesheet warns about others.</p>
 
@@ -1907,13 +1917,14 @@
                     AlignmentVertical |
                     attribute valigns { list { ("top" | "middle" | "bottom")+ } }
                 )?
-            # A "figure" occupying a panel is restricted: the layout
-            # elements ("sidebyside", "sbsgroup") may not nest, and a
-            # static conversion realizes the media elements ("video",
+            # An interior "figure", one occupying a panel or stacked
+            # within a "figure" (see "FigureStack"), is restricted: the
+            # layout elements ("sidebyside", "sbsgroup") may not nest, and
+            # a static conversion realizes the media elements ("video",
             # "audio") as a manufactured "sidebyside", so none of these
             # may appear.  The schema stops these immediate routes; the
             # validation-plus stylesheet polices arbitrary depth.
-            FigurePanel =
+            FigureInterior =
                 element figure {
                     MetaDataCaption,
                     Landscape?,
@@ -1922,7 +1933,9 @@
                         MuseScore |
                         Paragraph
                     )
-                } |
+                }
+            FigurePanel =
+                FigureInterior |
                 FigureTable | FigureListing | FigureList
             # The panels themselves; a narrative "sidebyside" holds at
             # least two, else nothing is side by side

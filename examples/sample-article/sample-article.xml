@@ -12899,6 +12899,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </sbsgroup>
                 </figure>
 
+                <p>A <c>sidebyside</c> divides the width among its panels, so two figures that each need the full width, a wide plot or a panoramic photograph, say, cannot share a row.  For these, a <c>figure</c> may hold a <c>stack</c> of two or more <c>figure</c>: the outer <c>figure</c> carries the number and the overall caption, and each interior <c>figure</c> is a subfigure with its own caption and a letter, as in <xref ref="figure-stack"/>.  A cross-reference may reach the whole, or a single subfigure such as <xref ref="figure-stack-below"/>.  An interior <c>figure</c> is restricted just as a <c>figure</c> occupying a panel: no layout elements, no media elements.</p>
+
+                <figure xml:id="figure-stack">
+                    <caption>Two figures, stacked</caption>
+                    <stack>
+                        <figure xml:id="figure-stack-above">
+                            <caption>A wide rectangle, full width</caption>
+                            <image source="images/cross-rectangle.png" width="100%">
+                                <shortdescription>a wide rectangle with a cross drawn through it</shortdescription>
+                            </image>
+                        </figure>
+                        <figure xml:id="figure-stack-below">
+                            <caption>A wide rectangle, nine-tenths width</caption>
+                            <image source="images/cross-rectangle.png" width="90%">
+                                <shortdescription>a wide rectangle with a cross drawn through it</shortdescription>
+                            </image>
+                        </figure>
+                    </stack>
+                </figure>
+
                 <p>A long poem, when placed into a <c>sidebyside</c> will not fit onto a physical page and will not break across pages.  With a <c>sbsgroup</c> you can put each stanza (say) into its own <c>sidebyside</c> and place something (commentary) next to it.  We include the <c>title</c> with the first stanza and the <c>author</c> with the last stanza.  This device can also be useful to attach commentary to specific stanzas.</p>
 
                 <sbsgroup widths="60% 40%">

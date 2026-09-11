@@ -2230,8 +2230,9 @@ Book (with parts), "section" at level 3
 <!--     of its own, since there is no enclosing "figure"                -->
 <!--                                                                     -->
 <!--   "subnumber" - a panel of a side-by-side, which in turn is a       -->
-<!--     child/descendant of a "figure" (a "sbsgroup" may intervene).    -->
-<!--     This triggers a block number foor the exterior "figure" and     -->
+<!--     child/descendant of a "figure" (a "sbsgroup" may intervene),    -->
+<!--     or a "figure" in a "stack" that is the content of a "figure".   -->
+<!--     This triggers a block number for the exterior "figure" and      -->
 <!--     a subnumber for the interior FIGURE-LIKE.                       -->
 <!--                                                                     -->
 <!-- (These code comments are referenced in the LaTeX conversion.)       -->
@@ -2240,6 +2241,9 @@ Book (with parts), "section" at level 3
     <!-- more specific first, reverse of description above -->
     <xsl:choose>
         <xsl:when test="parent::sidebyside and ancestor::figure">
+            <xsl:text>subnumber</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::figure and parent::stack/parent::figure">
             <xsl:text>subnumber</xsl:text>
         </xsl:when>
         <xsl:when test="parent::sidebyside">

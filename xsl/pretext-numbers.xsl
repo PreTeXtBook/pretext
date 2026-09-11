@@ -358,6 +358,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>)</xsl:text>
 </xsl:template>
 
+<!-- A "figure" may also stack subfigures vertically: a "stack" -->
+<!-- holding only "figure", each subnumbered in the same way   -->
+<xsl:template match="figure/stack/figure" mode="serial-number">
+    <xsl:text>(</xsl:text>
+    <xsl:number format="a" count="figure"/>
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
 <!-- Serial Numbers: List Items -->
 
 <!-- First, the number of a list item within its own ordered list.  This -->
@@ -669,6 +677,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="structure-number">
     <xsl:apply-templates select="parent::sidebyside/parent::sbsgroup/parent::figure" mode="number" />
 </xsl:template>
+<xsl:template match="figure/stack/figure" mode="structure-number">
+    <xsl:apply-templates select="parent::stack/parent::figure" mode="number" />
+</xsl:template>
 
 <!-- Structure Numbers: Equations -->
 <!-- "mrow" may be numbered, and bare "md" inherit a number from their  -->
@@ -842,11 +853,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>:</xsl:text>
                     </xsl:when>
                     <!-- A figure-like inside a sidebyside (or       -->
-                    <!-- sbsgroup) inside a figure is subnumbered    -->
+                    <!-- sbsgroup) inside a figure, or a figure in   -->
+                    <!-- a stack inside a figure, is subnumbered     -->
                     <!-- with a letter like "(a)", so the serial     -->
                     <!-- number already carries its own delimiter    -->
                     <!-- and no period separator is needed.          -->
-                    <xsl:when test="(&FIGURE-FILTER;) and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)"/>
+                    <xsl:when test="(&FIGURE-FILTER;) and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure or self::figure[parent::stack/parent::figure])"/>
                     <xsl:otherwise>
                         <xsl:text>.</xsl:text>
                     </xsl:otherwise>

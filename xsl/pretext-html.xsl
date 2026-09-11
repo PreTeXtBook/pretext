@@ -3273,9 +3273,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The optionally born-hidden items can be panels of -->
 <!-- a sidebyside, where we should not be hiding them. -->
 <!-- A figure wrapping the sidebyside could be knowled -->
-<!-- if they need to be hidden.                        -->
-<xsl:template match="sidebyside/figure|sidebyside/table|sidebyside/listing|sidebyside/list" mode="is-hidden">
+<!-- if they need to be hidden.  The same goes for a   -->
+<!-- figure stacked within a figure.                   -->
+<xsl:template match="sidebyside/figure|sidebyside/table|sidebyside/listing|sidebyside/list|figure/stack/figure" mode="is-hidden">
     <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- A "stack" within a "figure" holds subfigures, which the    -->
+<!-- enclosing figure captions as a whole.  Each is an ordinary -->
+<!-- figure, subnumbered "(a)", "(b)", ... by the numbering     -->
+<!-- routines, and never a knowl.  The wrapper is a hook for    -->
+<!-- styling the vertical arrangement.                          -->
+<xsl:template match="figure/stack">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
+
+    <div class="figure-stack">
+        <xsl:apply-templates select="figure">
+            <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+    </div>
 </xsl:template>
 
 <!-- Overall enclosing element -->

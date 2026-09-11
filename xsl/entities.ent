@@ -154,7 +154,7 @@
 <!-- "top" figure-like is a captioned display that earns a number (a    -->
 <!-- panel inside a captioned side-by-side earns a letter instead).     -->
 <!ENTITY FUNDAMENTAL-BLOCK-FILTER "(&DEFINITION-FILTER;) or (&THEOREM-FILTER;) or (&AXIOM-FILTER;) or (&REMARK-FILTER;) or (&COMPUTATION-FILTER;) or (&EXAMPLE-FILTER;)">
-<!ENTITY TOP-FIGURE-FILTER "(&FIGURE-FILTER;) and not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)">
+<!ENTITY TOP-FIGURE-FILTER "(&FIGURE-FILTER;) and not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure or self::figure[parent::stack/parent::figure])">
 
 <!-- Panels of a "sidebyside", and content of a "stack" panel.  The   -->
 <!-- lists mirror the schema, plus grandfathered items the code still -->
