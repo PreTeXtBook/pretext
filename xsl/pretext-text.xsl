@@ -1317,6 +1317,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A "stack" within a "figure" holds subfigures, each a      -->
+<!-- "figure" with its own caption, subnumbered "(a)", "(b)",  -->
+<!-- ...; the enclosing figure captions the whole.             -->
+<xsl:template match="figure/stack">
+    <xsl:apply-templates select="figure"/>
+</xsl:template>
+
 <!-- ##### -->
 <!-- Lists -->
 <!-- ##### -->
