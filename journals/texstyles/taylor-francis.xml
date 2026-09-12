@@ -39,7 +39,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <title cmd="title">
         <arg>
             <ptx-title/>
-            <support cmd="support">
+            <!-- the article class marks a "\thanks" on the title and sets it at the foot of the title page -->
+            <support cmd="thanks">
                 <arg><ptx-bibinfo-support/></arg>
             </support>
         </arg>
