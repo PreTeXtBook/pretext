@@ -16230,7 +16230,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <sidebyside width="45%" margins="0%">
                     <exercise workspace="1in">
                         <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                            <p>This <tag>exercise</tag> is a panel of a <tag>sidebyside</tag>, and the image below is not a panel.  So it is sized by its own <attr>width</attr> of 50%, relative to the available width where it sits.</p>
+
+                            <image width="50%" source="images/cross-square.png"/>
                         </statement>
                     </exercise>
 
