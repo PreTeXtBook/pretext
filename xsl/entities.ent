@@ -166,6 +166,14 @@
 <!ENTITY SBSPANEL "p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack">
 <!ENTITY STACKABLE "tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console">
 
+<!-- A panel of a "sidebyside" is a child of the "sidebyside", or a     -->
+<!-- child of a "stack" in the "sidebyside".  The layout of the         -->
+<!-- "sidebyside" sizes its panels (and the content of a "figure"       -->
+<!-- panel).  An object nested more deeply, such as an "image" in an    -->
+<!-- "exercise" panel or in a list item, is sized by its own attributes -->
+<!-- relative to the available width where it sits.                     -->
+<!ENTITY SBS-PANEL-FILTER "parent::sidebyside or parent::stack/parent::sidebyside">
+
 <!-- appendages of examples, exercises, tasks -->
 <!ENTITY SOLUTION-LIKE "hint|answer|solution">
 <!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">
