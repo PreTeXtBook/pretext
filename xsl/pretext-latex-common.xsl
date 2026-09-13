@@ -824,23 +824,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- The funding/support acknowledgment ("bibinfo/support") is an   -->
-<!-- unnumbered footnote on an article's title page: temporarily    -->
-<!-- hijack \thefootnote to suppress the mark, then restore it.     -->
-<!-- Shared: the regular conversion employs this via its            -->
-<!-- "footnote-numbering", classic via its "frontmatter-helpers"    -->
-<xsl:template name="support-footnote">
-    <xsl:if test="$b-is-article and $bibinfo/support">
-        <xsl:text>%% add a \ptxsupport command as unnumbered footnote&#xa;</xsl:text>
-        <xsl:text>\let\ptxsavedfootnote\thefootnote%&#xa;</xsl:text>
-        <xsl:text>\newcommand\ptxsupport[1]{%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
-        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\ptxsavedfootnote%&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
 <!-- Semantic Macros -->
 <xsl:template name="semantic-macros">
     <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
@@ -3366,16 +3349,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author" mode="article-info">
     <xsl:apply-templates select="personname" />
+    <!-- A support statement is a "\thanks" footnote off the name.  The -->
+    <!-- "\author" block is set as a one-column tabular, where a "\\"   -->
+    <!-- row cannot wrap: a sentence of ordinary length overflows the   -->
+    <!-- page and carries the name, affiliation and email with it.      -->
+    <xsl:if test="support">
+        <xsl:text>\thanks{</xsl:text>
+        <xsl:apply-templates select="support" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:if test="affiliation">
         <xsl:apply-templates select="affiliation" />
     </xsl:if>
     <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="email" />
-    </xsl:if>
-    <xsl:if test="support">
-        <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="support" />
     </xsl:if>
     <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
@@ -3419,14 +3407,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\\&#xa;</xsl:text>
         <xsl:apply-templates select="location" />
     </xsl:if>
-</xsl:template>
-
-<xsl:template match="bibinfo/support" mode="article-info">
-    <xsl:apply-templates select="*"/>
-</xsl:template>
-
-<xsl:template match="bibinfo/support" mode="article-info">
-    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- Departments, Institutions, and Addresses are free-form, or sequences of lines  -->

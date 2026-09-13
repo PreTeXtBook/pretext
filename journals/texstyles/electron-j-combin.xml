@@ -46,7 +46,7 @@
 
     <author cmd="author">
         <arg>
-            <author-list sep="&#xa;\and&#xa;">
+            <author-list sep="&#xa;\and">
                 <ptx-personname/>
                 <fnmark cmd="authornote" arg="ordinal"/>
             </author-list>
