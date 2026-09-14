@@ -2155,15 +2155,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An image is a centered block, with the authored @width      -->
 <!-- percentage (or the documented defaults) honored by the      -->
 <!-- common machinery, which makes an image fill its panel when  -->
-<!-- inside a "sidebyside".  The percentage width of the graphic -->
-<!-- is relative to the available width, and the image scales to -->
-<!-- it, preserving the aspect ratio.  Restricted to externally  -->
-<!-- provided and pre-generated images; the harness reports the  -->
-<!-- born-in-source kinds (e.g. "latex-image"), which need       -->
-<!-- companion image-generation components.  N.B. an SVG file    -->
-<!-- must carry its intrinsic @width and @height: with only a    -->
-<!-- @viewBox, FOP assumes a square, and the drawing floats in   -->
-<!-- extra vertical space.                                       -->
+<!-- it is a panel of a "sidebyside" (or the content of a        -->
+<!-- "figure" panel).  The percentage width of the graphic is    -->
+<!-- relative to the available width where the image sits, and   -->
+<!-- the image scales to it, preserving the aspect ratio.        -->
+<!-- Restricted to externally provided and pre-generated images; -->
+<!-- the harness reports the born-in-source kinds (e.g.          -->
+<!-- "latex-image"), which need companion image-generation       -->
+<!-- components.  N.B. an SVG file must carry its intrinsic      -->
+<!-- @width and @height: with only a @viewBox, FOP assumes a     -->
+<!-- square, and the drawing floats in extra vertical space.     -->
 <xsl:template match="image[@source|@pi:generated]|image[latex-image]|image[sageplot]|image[asymptote]|image[pf:prefigure]|image[mermaid]">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage"/>
