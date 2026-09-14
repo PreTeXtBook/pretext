@@ -2918,7 +2918,7 @@ Book (with parts), "section" at level 3
 <!-- Entirely similar for jsxgraph, audio, video, interactive and slate,  -->
 <!-- but we do not consult default *image* width in docinfo               -->
 
-<xsl:template match="image[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]|audio[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]|video[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]|jsxgraph[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]|interactive[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]|slate[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]" mode="get-width-percentage">
+<xsl:template match="image[not(&SBS-LAYOUT-FILTER;)]|audio[not(&SBS-LAYOUT-FILTER;)]|video[not(&SBS-LAYOUT-FILTER;)]|jsxgraph[not(&SBS-LAYOUT-FILTER;)]|interactive[not(&SBS-LAYOUT-FILTER;)]|slate[not(&SBS-LAYOUT-FILTER;)]" mode="get-width-percentage">
     <!-- find it first -->
     <xsl:variable name="raw-width">
         <xsl:choose>
@@ -2962,7 +2962,7 @@ Book (with parts), "section" at level 3
 <!-- time.  An image more deeply within a sidebyside is     -->
 <!-- handled above.                                         -->
 <!-- Exception: asymptote WebGL needs actual pixels         -->
-<xsl:template match="image[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]" mode="get-width-percentage">
+<xsl:template match="image[&SBS-LAYOUT-FILTER;]" mode="get-width-percentage">
     <xsl:text>100%</xsl:text>
 </xsl:template>
 
@@ -2979,7 +2979,7 @@ Book (with parts), "section" at level 3
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- a panel of a sidebyside, or the content of a stack or figure panel -->
-<xsl:template match="audio[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]|video[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]|jsxgraph[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]|interactive[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]|slate[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]|image[asymptote and (&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]|image[sageplot and (&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]" mode="get-width-percentage">
+<xsl:template match="audio[&SBS-LAYOUT-FILTER;]|video[&SBS-LAYOUT-FILTER;]|jsxgraph[&SBS-LAYOUT-FILTER;]|interactive[&SBS-LAYOUT-FILTER;]|slate[&SBS-LAYOUT-FILTER;]|image[asymptote and (&SBS-LAYOUT-FILTER;)]|image[sageplot and (&SBS-LAYOUT-FILTER;)]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -4232,7 +4232,7 @@ Book (with parts), "section" at level 3
             </xsl:when>
             <!-- not placed on image, or figure/image,      -->
             <!-- but a document-wide default margins exists -->
-            <xsl:when test="self::image and not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]) and $docinfo/defaults/images/@margins">
+            <xsl:when test="self::image and not(&SBS-LAYOUT-FILTER;) and $docinfo/defaults/images/@margins">
                 <xsl:value-of select="normalize-space($docinfo/defaults/images/@margins)" />
             </xsl:when>
             <!-- default if not specified -->
@@ -4273,7 +4273,7 @@ Book (with parts), "section" at level 3
             </xsl:when>
             <!-- not placed on image, or figure/image,    -->
             <!-- but a document-wide default width exists -->
-            <xsl:when test="self::image and not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]) and $docinfo/defaults/images/@width">
+            <xsl:when test="self::image and not(&SBS-LAYOUT-FILTER;) and $docinfo/defaults/images/@width">
                 <xsl:value-of select="$docinfo/defaults/images/@width" />
             </xsl:when>
             <!-- default setting if not specified, and not global -->

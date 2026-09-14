@@ -7369,7 +7369,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "exercise" panel or a list item, say) is here too: the   -->
 <!-- tcolorbox measures from "\linewidth", the available      -->
 <!-- width where the image sits.                              -->
-<xsl:template match="image[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;])]">
+<xsl:template match="image[not(&SBS-LAYOUT-FILTER;)]">
     <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
@@ -7416,7 +7416,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "\par" on each side, unconditionally.                           -->
 
 <!-- Second: images already constrained by side-by-side panels -->
-<xsl:template match="image[&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]]">
+<xsl:template match="image[&SBS-LAYOUT-FILTER;]">
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:text>\noindent</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />

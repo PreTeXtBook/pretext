@@ -587,7 +587,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- centering wins                                       -->
             <xsl:variable name="alignment">
                 <xsl:choose>
-                    <xsl:when test="&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]"/>
+                    <xsl:when test="&SBS-LAYOUT-FILTER;"/>
                     <xsl:when test="@margins and (number($layout/left-margin) &lt;= 10)">
                         <xsl:text>left</xsl:text>
                     </xsl:when>
@@ -608,7 +608,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- own layout, as outside of one.                       -->
             <xsl:variable name="width">
                 <xsl:choose>
-                    <xsl:when test="&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]">
+                    <xsl:when test="&SBS-LAYOUT-FILTER;">
                         <xsl:variable name="rtf-sbs-layout">
                             <xsl:apply-templates select="ancestor::sidebyside" mode="layout-parameters"/>
                         </xsl:variable>
