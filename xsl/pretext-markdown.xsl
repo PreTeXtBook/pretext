@@ -587,7 +587,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- centering wins                                       -->
             <xsl:variable name="alignment">
                 <xsl:choose>
-                    <xsl:when test="ancestor::sidebyside"/>
+                    <xsl:when test="&SBS-LAYOUT-FILTER;"/>
                     <xsl:when test="@margins and (number($layout/left-margin) &lt;= 10)">
                         <xsl:text>left</xsl:text>
                     </xsl:when>
@@ -603,10 +603,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- carries a percentage (a bare number would be pixels).-->
             <!-- A panel image takes its width from the enclosing     -->
             <!-- "sidebyside" layout, locating its panel as -common   -->
-            <!-- does (a "figure" or "stack" wrapper is the panel)    -->
+            <!-- does (a "figure" or "stack" wrapper is the panel).   -->
+            <!-- An image more deeply within a "sidebyside" has its   -->
+            <!-- own layout, as outside of one.                       -->
             <xsl:variable name="width">
                 <xsl:choose>
-                    <xsl:when test="ancestor::sidebyside">
+                    <xsl:when test="&SBS-LAYOUT-FILTER;">
                         <xsl:variable name="rtf-sbs-layout">
                             <xsl:apply-templates select="ancestor::sidebyside" mode="layout-parameters"/>
                         </xsl:variable>
