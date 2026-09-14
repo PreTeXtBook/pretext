@@ -628,7 +628,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Images get wrapped in a div with @class="fragment" if they are  -->
 <!-- paused                                                          -->
-<xsl:template match="image[not(ancestor::sidebyside) and (@pause='yes')]">
+<xsl:template match="image[not(&SBS-PANEL-FILTER; or parent::figure[&SBS-PANEL-FILTER;]) and (@pause='yes')]">
     <div class="fragment">
       <xsl:apply-imports/>
     </div>
