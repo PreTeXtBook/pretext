@@ -329,7 +329,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- To enforce this, we *could* make a no-op, plus warning,      -->
 <!-- template in the "pretext-html" stylesheet, with this         -->
 <!-- implementation doing an overide.                             -->
-<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|datafile|file|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet" mode="runestone-id-attribute">
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
@@ -613,7 +613,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Runestone timed exam associated with some "section".  We also avoid      -->
         <!-- collecting "exercise" at arbitrary depth for the timed exams, as the     -->
         <!-- template for those divisions will do that collection.                    -->
-        <xsl:apply-templates select="exercises[@time-limit]|.//exercise[not(ancestor::exercises[@time-limit])]|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile" mode="runestone-manifest"/>
+        <xsl:apply-templates select="exercises[@time-limit]|.//exercise[not(ancestor::exercises[@time-limit])]|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//file" mode="runestone-manifest"/>
 
         <!-- Now check for programs that have been included elsewhere. They need      -->
         <!-- to be rendered into <source> elements.                                   -->
@@ -671,7 +671,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Minimal label.  In database for obvious reasons, -->
 <!-- this is best (only?) thing to use as a label.    -->
-<xsl:template match="datafile" mode="runestone-manifest-label">
+<xsl:template match="datafile|file" mode="runestone-manifest-label">
     <label>
         <xsl:value-of select="@filename"/>
     </label>
@@ -912,7 +912,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Get filename to use for an element, fallback on label if filename is missing -->
-<xsl:template match="program|datafile" mode="runestone-filename">
+<xsl:template match="program|datafile|file" mode="runestone-filename">
     <xsl:choose>
         <xsl:when test="@filename">
             <xsl:value-of select="@filename"/>
@@ -933,7 +933,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When datafile is in appendix, we want to wrap it with <datafile> -->
 <!-- and not write it as a question, which are expected to be in      -->
 <!-- numbered chapters.                                               -->
-<xsl:template match="datafile" mode="runestone-manifest">
+<xsl:template match="datafile|file" mode="runestone-manifest">
     <xsl:variable name="container-name">
         <xsl:choose>
             <xsl:when test="ancestor::appendix">
@@ -959,12 +959,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Appendix is currently not allowed to have "questions" as Runestone  -->
 <!-- requires those to have a chapter with an integer number             -->
 <!-- But look for code and datafiles that should go in source_code table -->
-<xsl:template match="appendix[.//program or .//datafile]" mode="runestone-manifest">
+<xsl:template match="appendix[.//program or .//datafile or .//file]" mode="runestone-manifest">
     <appendix>
         <!-- Check for programs that have been included elsewhere.           -->
         <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
         <!-- Check for datafiles, and write them as "<datafile>"s            -->
-        <xsl:apply-templates select=".//datafile" mode="runestone-manifest"/>
+        <xsl:apply-templates select=".//datafile|.//file" mode="runestone-manifest"/>
     </appendix>
 </xsl:template>
 <!-- If no programs or datafiles, do nothing -->
@@ -2885,6 +2885,163 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:element>
             </xsl:when>
             <!-- no other source/PTX element is supported , bail out-->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </div>
+</xsl:template>
+
+<!-- The "file" element is the successor to "datafile".  It names   -->
+<!-- its kind with @format (binary, image, or pre) rather than a     -->
+<!-- child element, and its content is either an external @source    -->
+<!-- file or an authored "pre" element.  A "file" is invisible by    -->
+<!-- default; @user-interaction (view/edit) only applies to text.    -->
+<!-- An "image" is rendered as a base64 data-URI that the browser    -->
+<!-- shows; a "binary" (e.g. a compiled .jar or .zip) is carried as  -->
+<!-- a hidden "pre" of its base64 representation, flagged with       -->
+<!-- "data-isbinary" so an upgraded Runestone can hand it to a       -->
+<!-- server verbatim.  Hidden files stay in the manifest (the        -->
+<!-- htmlsrc registers their content with Runestone) but carry       -->
+<!-- "data-hidden" so the browser hides them.                        -->
+<xsl:template match="file" mode="runestone-to-interactive">
+    <!-- Possibly annotate with the source                     -->
+    <xsl:apply-templates select="." mode="view-source-widget"/>
+    <!-- Some templates and variables are defined in -common for consistency -->
+
+    <!-- A "file" is hidden unless @user-interaction requests -->
+    <!-- visibility.  Only text files can be viewed or edited -->
+    <!-- in any meaningful way.                               -->
+    <xsl:variable name="b-is-visible" select="@user-interaction = 'view' or @user-interaction = 'edit'"/>
+    <!-- A "pre" child implies @format = 'pre'; default to it when    -->
+    <!-- @format is not given.                                        -->
+    <xsl:variable name="file-format">
+        <xsl:choose>
+            <xsl:when test="@format">
+                <xsl:value-of select="@format"/>
+            </xsl:when>
+            <xsl:otherwise>pre</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="pre-element">
+        <xsl:choose>
+            <xsl:when test="$file-format = 'pre' and @user-interaction = 'edit'">
+                <xsl:text>textarea</xsl:text>
+            </xsl:when>
+            <xsl:when test="$file-format = 'pre' or $file-format = 'binary'">
+                <xsl:text>pre</xsl:text>
+            </xsl:when>
+            <!-- safeguard, only consulted for "pre" and "binary" -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="b-is-editable" select="$pre-element = 'textarea'"/>
+
+    <!-- The HTML that Runestone expects -->
+    <div class="runestone datafile">
+        <div class="datafile_caption">
+            <code class="code-inline tex2jax_ignore">
+                <xsl:text>Data: </xsl:text>
+                <xsl:value-of select="@filename" />
+            </code>
+        </div>
+        <xsl:choose>
+            <!-- cover image: a base64 data-URI registered with     -->
+            <!-- Runestone and shown (or hidden) as an image         -->
+            <xsl:when test="$file-format = 'image'">
+                <xsl:variable name="data-filename">
+                    <xsl:apply-templates select="."  mode="datafile-filename"/>
+                </xsl:variable>
+                <xsl:variable name="image-b64-elt" select="document($data-filename, $original)/pi:image-b64"/>
+                <img data-component="datafile" data-isimage="true">
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <!-- hidden image files are registered with -->
+                    <!-- Runestone by the base64 @src, but not  -->
+                    <!-- shown                                   -->
+                    <xsl:if test="not($b-is-visible)">
+                        <xsl:attribute name="data-hidden"/>
+                    </xsl:if>
+                    <xsl:attribute name="data-filename">
+                        <xsl:value-of select="@filename"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="src">
+                        <xsl:text>data:</xsl:text>
+                        <xsl:value-of select="$image-b64-elt/@pi:mime-type"/>
+                        <xsl:text>;base64,</xsl:text>
+                        <xsl:value-of select="$image-b64-elt/@pi:base64"/>
+                    </xsl:attribute>
+                </img>
+            </xsl:when>
+            <!-- binary: an opaque payload (e.g. a compiled .jar or  -->
+            <!-- .zip) registered with Runestone as a hidden source   -->
+            <!-- "pre" carrying the base64 representation, and        -->
+            <!-- flagged with "data-isbinary" so an upgraded Runestone -->
+            <!-- can hand it to a server (Jobe) verbatim.  This is    -->
+            <!-- distinct from an "image", which the browser renders. -->
+            <xsl:when test="$file-format = 'binary'">
+                <xsl:variable name="data-filename">
+                    <xsl:apply-templates select="."  mode="datafile-filename"/>
+                </xsl:variable>
+                <xsl:variable name="image-b64-elt" select="document($data-filename, $original)/pi:image-b64"/>
+                <xsl:element name="{$pre-element}">
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <xsl:attribute name="data-component">
+                        <xsl:text>datafile</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-filename">
+                        <xsl:value-of select="@filename"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-isbinary">true</xsl:attribute>
+                    <xsl:attribute name="data-mime-type">
+                        <xsl:value-of select="$image-b64-elt/@pi:mime-type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-edit">
+                        <xsl:value-of select="$b-is-editable"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-hidden"/>
+                    <xsl:value-of select="$image-b64-elt/@pi:base64"/>
+                </xsl:element>
+            </xsl:when>
+            <!-- text: an authored "pre" or an external file -->
+            <xsl:when test="$file-format = 'pre'">
+                <xsl:element name="{$pre-element}">
+                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    <xsl:attribute name="data-component">
+                        <xsl:text>datafile</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-filename">
+                        <xsl:value-of select="@filename"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-edit">
+                        <xsl:value-of select="$b-is-editable"/>
+                    </xsl:attribute>
+                    <!-- hide text files unless @user-interaction allows -->
+                    <!-- viewing or editing                            -->
+                    <xsl:if test="not(@user-interaction = 'view') and not(@user-interaction = 'edit')">
+                        <xsl:attribute name="data-hidden"/>
+                    </xsl:if>
+                    <xsl:attribute name="data-rows">
+                        <xsl:choose>
+                            <xsl:when test="@rows">
+                                <xsl:value-of select="@rows"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-rows"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="data-cols">
+                        <xsl:choose>
+                            <xsl:when test="@cols">
+                                <xsl:value-of select="@cols"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-cols"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="." mode="datafile-text-contents"/>
+                </xsl:element>
+            </xsl:when>
+            <!-- no other kind is supported, bail out-->
             <xsl:otherwise/>
         </xsl:choose>
     </div>
