@@ -447,9 +447,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <p>
       The <tag>title</tag> is optional and typically used for theorems with names. To give an attribution, one can use the optional <tag>creator</tag> tag.
+      To cite where a result comes from, use the optional <tag>origins</tag> tag, which holds one or more <tag>xref</tag> (typically to bibliography entries) and nothing else.
+      Every conversion renders the title first, then the creator and the origins together in parentheses, so supply no punctuation of your own.
           <idx><h sortby="theorem"><tag>theorem</tag></h><h sortby="title"><tag>title</tag></h></idx>
           <idx><h sortby="title"><tag>title</tag></h><h>of theorem-like elements</h></idx>
           <idx><h sortby="creator"><tag>creator</tag></h><h>of theorem-like elements</h></idx>
+          <idx><h sortby="origins"><tag>origins</tag></h><h>of theorem-like elements</h></idx>
       Cross references (see <xref ref="basics-s-xref"/>) can be made using the name or the number, depending on how the author codes them.
     </p>
 
@@ -463,7 +466,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <p>
       You can use <tag>definition</tag> essentially like <tag>theorem</tag>,
       but a <tag>definition</tag> does not have a proof.
+      It may carry a <tag>creator</tag> and an <tag>origins</tag> just as a theorem does.
           <idx>definition</idx>
+          <idx><h sortby="creator"><tag>creator</tag></h><h>of definition-like elements</h></idx>
+          <idx><h sortby="origins"><tag>origins</tag></h><h>of definition-like elements</h></idx>
       You are encouraged to use the <tag>term</tag> tag to set off the word being defined.
           <idx><h sortby="term"><tag>term</tag></h><h>in a definition</h></idx>
       If you wish to include a list of notation as an appendix as your document,
@@ -586,7 +592,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <pretext/> provides several tags that fall into the category of an <q>axiom</q>.
       They are <tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>principle</tag>.
       The content of these tags is very simple.
-      They allow an optional <tag>title</tag>, an optional <tag>creator</tag>,
+      They allow an optional <tag>title</tag>, an optional <tag>creator</tag>, an optional <tag>origins</tag>,
       optional <tag>idx</tag> tags,
       and then a <tag>statement</tag> much like a <tag>theorem</tag> does.
           <idx sortby="axiom"><tag>axiom</tag></idx>
@@ -598,6 +604,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
           <idx><h sortby="title"><tag>title</tag></h><h>of axiom-like elements</h></idx>
           <idx><h sortby="statement"><tag>statement</tag></h><h>of axiom-like elements</h></idx>
           <idx><h sortby="creator"><tag>creator</tag></h><h>of axiom-like elements</h></idx>
+          <idx><h sortby="origins"><tag>origins</tag></h><h>of axiom-like elements</h></idx>
 
     </p>
 

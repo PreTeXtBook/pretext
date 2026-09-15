@@ -938,6 +938,31 @@
             </list>
         </subsection>
 
+        <subsection xml:id="topic-block-attribution">
+            <title>Attribution: Creators and Origins</title>
+            <idx><h>creator</h><h>of a mathematical block</h></idx>
+            <idx><h>origins</h><h>of a mathematical block</h></idx>
+            <idx><h>citation</h><h>in the heading of a block</h></idx>
+
+            <p>The mathematical blocks, THEOREM-LIKE, AXIOM-LIKE, DEFINITION-LIKE, and the open problems (<tag>openproblem</tag>, <tag>openquestion</tag>, <tag>openconjecture</tag>), can carry two optional pieces of information beyond a title, in this order: a <tag>creator</tag> and an <tag>origins</tag>.  A <tag>creator</tag> is short text, typically the name of the person a result is attributed to, such as <c>Hadamard</c> or <c>Leibniz, Newton</c>.  An <tag>origins</tag> says where the result comes from.  It holds one or more <tag>xref</tag>, and nothing else, not even a word of text.  Typically each <tag>xref</tag> points to a <tag>biblio</tag> entry, so the heading of the block carries a citation, and a locator, such as a chapter or a theorem number within the source, goes in the <attr>detail</attr> attribute of the <tag>xref</tag> (<xref ref="topic-cross-referencing"/>).  A cross-reference to a <tag>historical</tag> or <tag>biographical</tag> aside about the creator works just as well.</p>
+
+            <pre>
+            &lt;theorem xml:id="theorem-prime-number"&gt;
+                &lt;title&gt;Prime Number Theorem&lt;/title&gt;
+                &lt;creator&gt;Hadamard&lt;/creator&gt;
+                &lt;origins&gt;
+                    &lt;xref ref="biblio-hadamard-1896"/&gt;
+                    &lt;xref ref="biblio-apostol" detail="Chapter 13"/&gt;
+                &lt;/origins&gt;
+                &lt;statement&gt;
+                    ...
+            </pre>
+
+            <p>Every conversion renders these the same way: the type and number, the title with its period, and then the creator and the origins together in parentheses, with commas between them.  So the theorem above is headed <q>Theorem 4.3 Prime Number Theorem. (Hadamard, [1], [2, Chapter 13])</q>, a block with only origins is headed like <q>Lemma 4.4 ([2, Theorem 9.4])</q>, and a definition with only a creator like <q>Definition 4.5 (Cantor)</q>.  You supply no punctuation, and there is no <q>and</q> before the last citation.  The citations in the heading are live cross-references, just as they would be in a paragraph.</p>
+
+            <p>Do not put a citation in a <tag>title</tag>.  A title travels: it appears in the Table of Contents, in automatic lists, in the text of a cross-reference, and in the heading of a knowl, and a citation is noise in every one of those places.  For that reason an <tag>xref</tag> inside a title is rendered as plain text, never as a link.  A <tag>creator</tag> is not the place either, since it is just a name.  The <tag>origins</tag> element exists so that a citation lives in exactly one place, renders as a working link, and is information that a tool can find.</p>
+        </subsection>
+
         <subsection>
             <title>Other Blocks</title>
 
@@ -1266,7 +1291,7 @@
             <title>Citations</title>
             <idx>citation</idx>
 
-            <p>Citations are just specialized cross-references to <tag>biblio</tag> elements, and so behave the same way as other cross-references.  However they will always visually look like [23], and there is no notion of <q>type name.</q></p>
+            <p>Citations are just specialized cross-references to <tag>biblio</tag> elements, and so behave the same way as other cross-references.  However they will always visually look like [23], and there is no notion of <q>type name.</q>  A citation that belongs in the heading of a theorem, or of another mathematical block, goes in the block's <tag>origins</tag> element (<xref ref="topic-block-attribution"/>).</p>
         </subsection>
 
         <subsection>
@@ -1491,7 +1516,7 @@
 
         <p>To avoid confusing your readers, use these alternate titles sparingly, and ideally only when you have a really, really, really long title and then use a short title that is easily recognizable as a variant of the long title, or when markup is behaving poorly in situations such as a browser tab.  Your first option should be to ask if your long title must absolutely be so long, or if the markup is strictly necessary.</p>
 
-        <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext/>, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).</p>
+        <p>Many, many other structures admit titles.  Experiment, or look at specific descriptions of the structure you are interested in.  Titles are very integral to <pretext/>, much like cross-references.  Titles migrate to the Table of Contents, get used in page headers for print output, can be used in lists (such as a List of Figures), and can be used as the text of a cross-reference, instead of a number.  You might not be inclined to give a <tag>remark</tag> a title, but it would be good practice to do so.  If you use knowls in your <init>HTML</init> output for structures such as <tag>example</tag> (or if somebody else may someday choose to), then your readers will be spared a lot of confusion if you supply informative titles for each. Your electronic outputs will be much more useful to your readers if you routinely title every structure that allows it (perhaps excepting <tag>exercise</tag> which can be known by their number).  A title is not the place for a citation, though; a mathematical block has an <tag>origins</tag> element for that (<xref ref="topic-block-attribution"/>).</p>
 
         <p>If a title is very long, the <tag>line</tag> element can be used to indicate how the title should appear on multiple lines.  Note: does not apply to all output formats.
         <idx><h>title</h><h>very long</h></idx>

@@ -20,6 +20,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <theorem>
     <title>Optional</title>
     <creator>I. Newton</creator>
+    <origins><xref ref="knuth-literate-programming"/></origins>
   <statement>
     <p>
       Here's the statement of the theorem.
