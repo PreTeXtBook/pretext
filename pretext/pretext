@@ -679,7 +679,7 @@ def main():
     # The big switch
     # Validation trumps everything, since it is an easy switch
     if args.validate:
-        ptx.validate(xml_source, publication_file, stringparams, out_file, dest_dir, method, args.validate)
+        validation_report = ptx.validate(xml_source, publication_file, stringparams, out_file, dest_dir, method, args.validate)
     elif args.component == "prefigure":
         if args.format in ["source", "svg", "pdf", "png", "tactile", "all"]:
             ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, None)
@@ -1023,6 +1023,18 @@ def main():
     # Cleanup, if execution does not raise errors
     # "any_log_level" is False, since we want to keep temporary directories if the log level is set to debug
     ptx.release_temporary_directories(any_log_level=False)
+
+    # A validation report is always a file, never console output, and at
+    # the default verbosity nothing else is printed.  So, whatever the
+    # verbosity, the very last output of a run says where the report is.
+    if args.validate:
+        if validation_report:
+            print("Validation report written to a file (not shown on this console):")
+            print("    {}".format(validation_report))
+        elif args.verbose:
+            print("No validation report was produced (the reason is given above)")
+        else:
+            print('No validation report was produced (run again with "-v" to see why)')
 
 
 # Do it - lone top-level command.  A fatal message halts the build by

@@ -179,6 +179,10 @@ The script should be run on the entire document, even if all the images are in o
                     <cell><c>-c preview</c></cell>
                     <cell>[<c>fast</c>], <c>slow</c></cell>
                 </row>
+                <row>
+                    <cell><c>-V</c></cell>
+                    <cell>[<c>local</c>], <c>server</c></cell>
+                </row>
             </tabular>
         </table>
 
