@@ -2099,7 +2099,7 @@
     <optional>
       <attribute name="workspace"/>
     </optional>
-    <ref name="MetaDataTitleOptional"/>
+    <ref name="MetaDataTitleCreatorOriginsOptional"/>
     <zeroOrMore>
       <ref name="Notation"/>
     </zeroOrMore>
@@ -2147,7 +2147,7 @@
     <optional>
       <attribute name="workspace"/>
     </optional>
-    <ref name="MetaDataTitleCreatorOptional"/>
+    <ref name="MetaDataTitleCreatorOriginsOptional"/>
     <choice>
       <oneOrMore>
         <ref name="BlockStatement"/>
@@ -2189,7 +2189,7 @@
     </choice>
   </define>
   <define name="AxiomLike">
-    <ref name="MetaDataTitleCreatorOptional"/>
+    <ref name="MetaDataTitleCreatorOriginsOptional"/>
     <ref name="Statement"/>
   </define>
   <define name="Axiom">
@@ -2380,7 +2380,7 @@
     </element>
   </define>
   <define name="OpenProblemLike">
-    <ref name="MetaDataTitleOptional"/>
+    <ref name="MetaDataTitleCreatorOriginsOptional"/>
     <optional>
       <ref name="Prelude"/>
     </optional>
@@ -4382,6 +4382,16 @@
       <ref name="TextShort"/>
     </element>
   </define>
+  <define name="Origins">
+    <element name="origins">
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <oneOrMore>
+        <ref name="Xref"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="XMLLang">
     <attribute name="xml:lang"/>
   </define>
@@ -4564,7 +4574,7 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
-  <define name="MetaDataTitleCreatorOptional">
+  <define name="MetaDataTitleCreatorOriginsOptional">
     <optional>
       <ref name="UniqueID"/>
     </optional>
@@ -4582,6 +4592,9 @@
     </optional>
     <optional>
       <ref name="Creator"/>
+    </optional>
+    <optional>
+      <ref name="Origins"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>

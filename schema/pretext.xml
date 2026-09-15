@@ -1462,14 +1462,14 @@
     <section>
         <title>Definitions</title>
 
-        <p>Definitions are special, there is nothing else quite like them.  A statement, no proof, and also a natural place for notation entries.</p>
+        <p>Definitions are special, there is nothing else quite like them.  A statement, no proof, and also a natural place for notation entries.  Like a theorem, a definition may credit a <c>creator</c> and cite its <c>origins</c>.</p>
 
         <fragment xml:id="definition-like">
             <title>Definitions</title>
             <code>
             DefinitionLike =
                 attribute workspace {text}?,
-                MetaDataTitleOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 Notation*,
                 Statement
             Definition =
@@ -1481,7 +1481,7 @@
     <section>
         <title>Theorems, And Other Results</title>
 
-        <p>Theorems, corollaries, lemmas <mdash/> they all have statements, and should have proof(s).  Otherwise they are all the same.  A proof may be divided with cases, in no particular rigid way, just as a marker of any number of different, non-overlapping portions of a proof.  Titles can be used to describe each case, or implication arrows may be used (typically with a proof of an equivalence).  A <c>proof</c> is also allowed to stand on its own as a block, independent of a structure like a <c>theorem</c> or <c>algorithm</c>.</p>
+        <p>Theorems, corollaries, lemmas <mdash/> they all have statements, and should have proof(s).  Otherwise they are all the same.  A proof may be divided with cases, in no particular rigid way, just as a marker of any number of different, non-overlapping portions of a proof.  Titles can be used to describe each case, or implication arrows may be used (typically with a proof of an equivalence).  A <c>proof</c> is also allowed to stand on its own as a block, independent of a structure like a <c>theorem</c> or <c>algorithm</c>.  A result may credit a <c>creator</c> (a name, as short text) and cite its <c>origins</c>: one or more <c>xref</c>, typically to bibliography entries, and nothing else.  Conversions render the creator and the origins together, in parentheses, after any title, with commas between the parts, so an author supplies no punctuation.</p>
 
         <fragment xml:id="theorem-like">
             <title>Theorems, and similar</title>
@@ -1502,7 +1502,7 @@
                 }
             TheoremLike =
                 attribute workspace {text}?,
-                MetaDataTitleCreatorOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
                 element theorem {TheoremLike} |
@@ -1547,7 +1547,7 @@
             <title>Axioms, and similar</title>
             <code>
             AxiomLike =
-                MetaDataTitleCreatorOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 Statement
             Axiom =
                 element axiom {AxiomLike} |
@@ -1606,13 +1606,13 @@
     <section>
         <title>Open Problems</title>
 
-        <p>Open problems collect unsolved questions, perhaps the subject of current research.  They are numbered like a <c>project</c><mdash/>sharing the overall blocks counter, or running on their own counter when a publisher requests a <attr>distinct</attr> number.  Possibly structured with <c>task</c>.  The appendages are discussion-like (<tag>discussion</tag>, <tag>context</tag>, and similar), rather than the hints, answers, and solutions of an exercise or a project.</p>
+        <p>Open problems collect unsolved questions, perhaps the subject of current research.  They are numbered like a <c>project</c><mdash/>sharing the overall blocks counter, or running on their own counter when a publisher requests a <attr>distinct</attr> number.  Possibly structured with <c>task</c>.  The appendages are discussion-like (<tag>discussion</tag>, <tag>context</tag>, and similar), rather than the hints, answers, and solutions of an exercise or a project.  As a mathematical block, an open problem may credit a <c>creator</c> and cite its <c>origins</c>.</p>
 
         <fragment xml:id="open-problem-like">
             <title>Open problems, and similar</title>
             <code>
             OpenProblemLike =
-                MetaDataTitleOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 Prelude?,
                 (
                     (Statement, Discussion*) |
@@ -3481,7 +3481,8 @@
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
             <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
-            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
+            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>origins</c>, <c>caption</c>, <c>idx</c> order.</li>
+            <li>An <c>origins</c> element holds only <c>xref</c> elements, no text: each is a cross-reference to where a result comes from, typically a bibliography entry, or perhaps a historical or biographical aside.  Conversions supply the parentheses and commas.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
             <li><c>MetaDataAltTitle</c> has a required <tag>title</tag>, and allows optional <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
@@ -3514,6 +3515,8 @@
                 element plaintitle {Component?, text}
             Creator =
                 element creator {Component?, TextShort}
+            Origins =
+                element origins {Component?, Xref+}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
@@ -3575,13 +3578,14 @@
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
-            MetaDataTitleCreatorOptional =
+            MetaDataTitleCreatorOriginsOptional =
                 UniqueID?,
                 LabelID?,
                 Component?,
                 XMLLang?,
                 Title?,
                 Creator?,
+                Origins?,
                 Index*
             MetaDataCaption =
                 UniqueID?,

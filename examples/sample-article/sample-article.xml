@@ -2704,6 +2704,74 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </definition>
             </subsection>
 
+            <subsection xml:id="block-samples-attributed">
+                <title>Attributed Blocks</title>
+
+                <p>A theorem-like, axiom-like, definition-like, or open-problem block can credit a <tag>creator</tag>, and can cite its <tag>origins</tag> with one or more <tag>xref</tag>, typically to bibliography entries.  Whatever combination of title, creator, and origins is present, the heading renders the title first, then the creator and the origins together in parentheses, with commas between them.  The blocks that follow exercise the combinations, and a couple of the cross-references carry a <attr>detail</attr>.</p>
+
+                <theorem xml:id="theorem-attribution-every">
+                    <title>Every Attribution</title>
+                    <creator>Hadamard</creator>
+                    <origins>
+                        <xref ref="biblio-beezer-fcla" detail="Chapter R"/>
+                        <xref ref="biblio-lay-article"/>
+                    </origins>
+                    <statement><p>A title, a creator, and two origins, the first with a locator.</p></statement>
+                </theorem>
+
+                <lemma xml:id="lemma-attribution-origins">
+                    <origins><xref ref="biblio-judson-aata" detail="Theorem 9.4"/></origins>
+                    <statement><p>Origins alone, with a locator on a structured bibliography entry.</p></statement>
+                </lemma>
+
+                <corollary xml:id="corollary-attribution-creator-origins">
+                    <creator>Gauss</creator>
+                    <origins><xref ref="biblio-judson-aata"/></origins>
+                    <statement><p>A creator and one origin, no title.</p></statement>
+                </corollary>
+
+                <proposition xml:id="proposition-attribution-title-origins">
+                    <title>Titled, with Origins</title>
+                    <origins><xref ref="biblio-lay-article"/></origins>
+                    <statement><p>A title and one origin, no creator.</p></statement>
+                </proposition>
+
+                <axiom xml:id="axiom-attribution-origins">
+                    <origins><xref ref="biblio-beezer-fcla"/></origins>
+                    <statement><p>An axiom-like block with origins alone.</p></statement>
+                </axiom>
+
+                <conjecture xml:id="conjecture-attribution-every">
+                    <title>Titled and Credited</title>
+                    <creator>Goldbach</creator>
+                    <origins>
+                        <xref ref="biblio-judson-aata"/>
+                        <xref ref="biblio-lay-article"/>
+                        <xref ref="biblio-beezer-fcla"/>
+                    </origins>
+                    <statement><p>An axiom-like block with a title, a creator, and three origins.</p></statement>
+                </conjecture>
+
+                <definition xml:id="definition-attribution-creator">
+                    <creator>Cantor</creator>
+                    <statement><p>A definition-like block with a creator alone, no title.</p></statement>
+                </definition>
+
+                <definition xml:id="definition-attribution-every">
+                    <title>Titled, Credited, and Cited</title>
+                    <creator>Dedekind</creator>
+                    <origins><xref ref="biblio-lay-article" detail="Section 2"/></origins>
+                    <statement><p>A definition-like block with a title, a creator, and one origin with a locator.</p></statement>
+                </definition>
+
+                <openproblem xml:id="openproblem-attribution-every">
+                    <title>An Open Problem, Attributed</title>
+                    <creator>Hilbert</creator>
+                    <origins><xref ref="biblio-judson-aata" detail="Chapter 23"/></origins>
+                    <statement><p>An open problem with a title, a creator, and one origin with a locator.</p></statement>
+                </openproblem>
+            </subsection>
+
             <subsection xml:id="block-samples-aside-like">
                 <title>Aside-like Blocks</title>
                 <p>Three <tag>aside</tag>s are below.</p>
@@ -13719,12 +13787,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>Beyond a <c>statement</c>, an open problem can be followed by discussion appendages such as <c>status</c>, <c>discussion</c>, <c>opinion</c>, <c>suggestion</c>, or <c>context</c>, and, like a <c>project</c>, it may be divided into <c>task</c>s.</p>
 
             <openproblem>
+                <origins><xref ref="biblio-lay-article"/></origins>
                 <statement>
                     <p>Solve the Riemann Hypothesis<fn>Footnotes were once incomplete on open problems.</fn> <em>and</em> provide a short proof of Fermat's Last Theorem.</p>
                 </statement>
             </openproblem>
 
             <openquestion>
+                <creator>Goldbach</creator>
+                <origins><xref ref="biblio-judson-aata" detail="Chapter 3"/></origins>
                 <statement>
                     <p>Is every even integer greater than two the sum of two primes?</p>
                 </statement>

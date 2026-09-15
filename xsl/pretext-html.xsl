@@ -2094,7 +2094,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), outcomes (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, OPENPROBLEM-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
-<!-- E.g. Corollary 4.1 (Leibniz, Newton).  The fundamental theorem of calculus. -->
+<!-- E.g. Corollary 4.1 The fundamental theorem of calculus. (Leibniz, Newton, [3]) -->
 <xsl:template match="*" mode="heading-full">
     <xsl:param name="b-make-link" select="false()"/>
     <xsl:param name="heading-level"/>
@@ -2115,26 +2115,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$the-number"/>
                 </span>
             </xsl:if>
-            <!--  -->
-            <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
-                <xsl:call-template name="space-styled"/>
-                <span class="creator">
-                    <xsl:text>(</xsl:text>
-                    <xsl:apply-templates select="." mode="creator-full"/>
-                    <xsl:text>)</xsl:text>
-                </span>
+            <!-- The attribution of a mathematical block: creator and -->
+            <!-- origins, one parenthesized group after the title     -->
+            <xsl:variable name="b-attribution" select="(creator or origins) and (&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;)"/>
+            <!-- A period after the number only when nothing follows it: a -->
+            <!-- title carries its own punctuation, and an attribution     -->
+            <!-- follows with none, exactly as in the LaTeX conversion     -->
+            <xsl:if test="not(title) and not($b-attribution)">
+                <xsl:call-template name="period-styled"/>
             </xsl:if>
-            <!-- A period now, no matter which of 4 combinations we have above-->
-            <xsl:call-template name="period-styled"/>
-            <!-- A title carries its own punctuation -->
             <xsl:if test="title">
                 <xsl:call-template name="space-styled"/>
                 <span class="title">
                     <xsl:apply-templates select="." mode="title-full"/>
                 </span>
             </xsl:if>
+            <xsl:if test="$b-attribution">
+                <xsl:call-template name="space-styled"/>
+                <span class="attribution">
+                    <xsl:text>(</xsl:text>
+                    <xsl:apply-templates select="." mode="attribution-full"/>
+                    <xsl:text>)</xsl:text>
+                </span>
+            </xsl:if>
         </xsl:with-param>
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- Within the attribution, the creator and the origins each get a -->
+<!-- span, so a stylesheet can address the name and the citations   -->
+<!-- separately; the text and the commas come from the common       -->
+<!-- versions of these modes                                        -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;" mode="creator-full">
+    <xsl:if test="creator">
+        <span class="creator">
+            <xsl:apply-imports/>
+        </span>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;" mode="origins-full">
+    <xsl:if test="origins">
+        <span class="origins">
+            <xsl:apply-imports/>
+        </span>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="&FIGURE-LIKE;" mode="figure-caption">

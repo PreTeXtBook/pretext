@@ -761,7 +761,7 @@
 
             DefinitionLike =
                 attribute workspace {text}?,
-                MetaDataTitleOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 Notation*,
                 Statement
             Definition =
@@ -783,7 +783,7 @@
                 }
             TheoremLike =
                 attribute workspace {text}?,
-                MetaDataTitleCreatorOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
                 element theorem {TheoremLike} |
@@ -796,7 +796,7 @@
                 element identity {TheoremLike}
 
             AxiomLike =
-                MetaDataTitleCreatorOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 Statement
             Axiom =
                 element axiom {AxiomLike} |
@@ -852,7 +852,7 @@
                 }
 
             OpenProblemLike =
-                MetaDataTitleOptional,
+                MetaDataTitleCreatorOriginsOptional,
                 Prelude?,
                 (
                     (Statement, Discussion*) |
@@ -1681,6 +1681,8 @@
                 element plaintitle {Component?, text}
             Creator =
                 element creator {Component?, TextShort}
+            Origins =
+                element origins {Component?, Xref+}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
@@ -1742,13 +1744,14 @@
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
-            MetaDataTitleCreatorOptional =
+            MetaDataTitleCreatorOriginsOptional =
                 UniqueID?,
                 LabelID?,
                 Component?,
                 XMLLang?,
                 Title?,
                 Creator?,
+                Origins?,
                 Index*
             MetaDataCaption =
                 UniqueID?,

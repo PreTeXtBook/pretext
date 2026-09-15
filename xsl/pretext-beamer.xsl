@@ -367,8 +367,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- Everything else theorem-ish, plus remarks and asides, is a -->
-<!-- generic Beamer "block" headed by its type-name and title   -->
+<!-- Everything else theorem-ish, plus remarks and asides, is a    -->
+<!-- generic Beamer "block" headed by its type-name and title, and -->
+<!-- for a mathematical block the parenthesized attribution        -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&GOAL-LIKE;|assemblage">
     <xsl:text>\begin{block}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
@@ -376,23 +377,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>: </xsl:text>
         <xsl:apply-templates select="." mode="title-full"/>
     </xsl:if>
+    <xsl:if test="creator or origins">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="attribution-full"/>
+        <xsl:text>)</xsl:text>
+    </xsl:if>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(&PROOF-FILTER;)]"/>
     <xsl:text>\end{block}&#xa;</xsl:text>
     <xsl:apply-templates select="&PROOF-LIKE;"/>
 </xsl:template>
 
-<!-- The common core: the environment, an optional title in the   -->
-<!-- optional argument, the guts, and any proof following outside -->
+<!-- The common core: the environment, the optional argument, the   -->
+<!-- guts, and any proof following outside.  Beamer sets the        -->
+<!-- optional argument in parentheses, so a title, the creator, and -->
+<!-- the origins share that one group, separated by commas, as in   -->
+<!-- the classic LaTeX conversion.  Braces protect the argument: a  -->
+<!-- citation such as [3] would otherwise end it at the first "]".  -->
 <xsl:template name="beamer-environment">
     <xsl:param name="environment"/>
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$environment"/>
     <xsl:text>}</xsl:text>
-    <xsl:if test="title">
-        <xsl:text>[</xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-        <xsl:text>]</xsl:text>
+    <xsl:if test="title or creator or origins">
+        <xsl:text>[{</xsl:text>
+        <xsl:if test="title">
+            <xsl:apply-templates select="." mode="title-xref"/>
+        </xsl:if>
+        <xsl:if test="title and (creator or origins)">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+        <xsl:if test="creator or origins">
+            <xsl:apply-templates select="." mode="attribution-full"/>
+        </xsl:if>
+        <xsl:text>}]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(&PROOF-FILTER;)]"/>

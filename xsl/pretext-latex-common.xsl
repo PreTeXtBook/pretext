@@ -2775,7 +2775,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <!-- number of arguments -->
     <xsl:choose>
-        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;">
             <xsl:text>[4]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -2787,7 +2787,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- begin: title construction -->
     <xsl:text>title={{#1~\thetcbcounter</xsl:text>
     <xsl:choose>
-        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;">
             <!-- first space of double space -->
             <xsl:text>\notblank{#2#3}{\space}{}</xsl:text>
             <xsl:text>\notblank{#2}{\space#2}{}</xsl:text>
@@ -2801,7 +2801,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- end: title construction -->
     <!-- label in argument 3 or argument 4 -->
     <xsl:choose>
-        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;">
             <xsl:text>phantomlabel={#4}, </xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -4333,20 +4333,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Examples have no structure, or have statement and solution -->
 <!-- Exercises have hints, answers and solutions                -->
 
-<!-- Environments/blocks implemented with tcolorbox          -->
-<!-- expect certain arguments.  This template provides them. -->
-<!--                                                         -->
-<!-- 1.  title, with punctuation as needed                   -->
-<!-- 2.  the "unique-id", which suffices for                 -->
-<!--     the LaTeX label/ref mechanism                       -->
-<!--                                                         -->
-<!-- Or, for THEOREM-LIKE and AXIOM-LIKE,                    -->
-<!--                                                         -->
-<!-- 1.  title, right now we add punctuation as needed       -->
-<!-- 2.  a list of creator(s)                                -->
-<!-- 3.  the "unique-id", which suffices for                 -->
-<!--     the LaTeX label/ref mechanism                       -->
-<!-- N.B.: "objectives", "outcomes" need to use this         -->
+<!-- Environments/blocks implemented with tcolorbox            -->
+<!-- expect certain arguments.  This template provides them.   -->
+<!--                                                           -->
+<!-- 1.  title, with punctuation as needed                     -->
+<!-- 2.  the "unique-id", which suffices for                   -->
+<!--     the LaTeX label/ref mechanism                         -->
+<!--                                                           -->
+<!-- Or, for the mathematical blocks (THEOREM-LIKE, AXIOM-LIKE, -->
+<!-- DEFINITION-LIKE, OPENPROBLEM-LIKE),                       -->
+<!--                                                           -->
+<!-- 1.  title, right now we add punctuation as needed         -->
+<!-- 2.  the attribution: creator and origins, comma-separated -->
+<!-- 3.  the "unique-id", which suffices for                   -->
+<!--     the LaTeX label/ref mechanism                         -->
+<!-- N.B.: "objectives", "outcomes" need to use this           -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|assemblage" mode="block-options">
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
@@ -4354,9 +4355,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
-    <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+    <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;">
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="creator-full" />
+        <xsl:apply-templates select="." mode="attribution-full"/>
         <xsl:text>}</xsl:text>
     </xsl:if>
     <!-- unique-id destined for tcolorbox  phantomlabel=  option -->

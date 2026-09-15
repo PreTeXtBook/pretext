@@ -2526,16 +2526,17 @@ Book (with parts), "section" at level 3
 <!-- the localization routines.                              -->
 
 
-<!-- With modal templates below, the default template does nothing   -->
-<!-- We include the "creator" element of a theorem/axiom as metadata -->
-<!-- NB: since these elements get killed on-sight, when we actually  -->
-<!-- want to process them we need to use a "select" attribute        -->
-<!-- similar to  title/*|title/text() or title/node().               -->
+<!-- With modal templates below, the default template does nothing    -->
+<!-- The "creator" and "origins" of a mathematical block are metadata -->
+<!-- NB: since these elements get killed on-sight, when we actually   -->
+<!-- want to process them we need to use a "select" attribute         -->
+<!-- similar to  title/*|title/text() or title/node().                -->
 <xsl:template match="title" />
 <xsl:template match="subtitle" />
 <xsl:template match="shorttitle"/>
 <xsl:template match="plaintitle"/>
 <xsl:template match="creator" />
+<xsl:template match="origins"/>
 
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
@@ -2826,7 +2827,7 @@ Book (with parts), "section" at level 3
 <!-- pieces simply so it is more readable.                     -->
 <!--                                                           -->
 <!-- Blocks -->
-<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|assemblage" mode="title-wants-punctuation">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|assemblage" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Miscellaneous -->
@@ -2845,9 +2846,34 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="false()"/>
 </xsl:template>
 
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="creator-full">
+<!-- The attribution of a mathematical block: the "creator" (a name,  -->
+<!-- as short text) and the "origins" (cross-references, typically to -->
+<!-- bibliography entries).  Each conversion places the whole group   -->
+<!-- after the title, in parentheses, so the pieces here carry only   -->
+<!-- the commas between them.                                         -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;" mode="creator-full">
     <!-- select="creator" would just get it killed -->
     <xsl:apply-templates select="creator/*|creator/text()" />
+</xsl:template>
+
+<!-- The schema allows only "xref" inside "origins", so each one is -->
+<!-- a live cross-reference; commas separate them, with no          -->
+<!-- conjunction before the last                                    -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;" mode="origins-full">
+    <xsl:for-each select="origins/xref">
+        <xsl:if test="preceding-sibling::xref">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="."/>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;" mode="attribution-full">
+    <xsl:apply-templates select="." mode="creator-full"/>
+    <xsl:if test="creator and origins">
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="origins-full"/>
 </xsl:template>
 
 <!-- Structured titles -->
