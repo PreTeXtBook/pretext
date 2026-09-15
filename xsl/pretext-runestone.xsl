@@ -2839,6 +2839,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>;base64,</xsl:text>
                         <xsl:value-of select="$image-b64-elt/@pi:base64"/>
                     </xsl:attribute>
+                    <xsl:attribute name="alt">
+                        <xsl:choose>
+                            <xsl:when test="image/shortdescription">
+                                <xsl:value-of select="image/shortdescription"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@filename"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
                 </img>
             </xsl:when>
             <!-- text, an authored toy example, or a serious external file -->
