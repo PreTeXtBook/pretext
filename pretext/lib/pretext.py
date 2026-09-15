@@ -5537,6 +5537,8 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, rep
     # service; the consolidated report is identical.  The report form
     # "full" is meant for an author, while "terse" is machine-readable
     # output, one tab-separated message per line, meant for a program.
+    # The report's filename is returned, so a caller can say where it
+    # is; None means no report was written (the server method failed).
     terse = report_form == "terse"
     server = method == "server"
     # to ensure provided stringparams aren't mutated unintentionally
@@ -5665,7 +5667,7 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, rep
     jing_messages = _jing_run(development_schema)
     if jing_messages is None:
         # the server could not be reached; a clear error was logged
-        return
+        return None
     if not jing_messages:
         log.info("the source validates with no schema errors")
     # None here means the server fell over between the two runs; the
@@ -5974,6 +5976,8 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method, rep
         log.info("validation-plus stylesheet raised no messages")
     log.info("consolidated validation report in {}".format(reportname))
     log.info("locations refer to the assembled source in {}".format(assembled_source))
+
+    return reportname
 
 
 def _validation_report_preamble(development_schema, production_schema, assembled_source):
