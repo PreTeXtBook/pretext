@@ -1018,11 +1018,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A run-in heading is a bold inline, built by one of a few modes -->
 <!-- that vary in the number they show.  The font style is reset,   -->
 <!-- since the heading may land inside an italic THEOREM-LIKE       -->
-<!-- statement.  Each ends with a period and an optional title.     -->
+<!-- statement.  Each has an optional title, for a mathematical     -->
+<!-- block the attribution (creator and origins), and a period only -->
+<!-- when neither follows the number.                               -->
 
-<!-- "heading-full": type-name, full number, and (for a THEOREM or  -->
-<!-- AXIOM) the attributing creator.  Basic blocks and inline       -->
-<!-- exercises and projects.                                        -->
+<!-- "heading-full": type-name, full number, any title, and (for a   -->
+<!-- mathematical block) the attribution, as in the HTML conversion. -->
+<!-- Basic blocks and inline exercises and projects.                 -->
 <xsl:template match="*" mode="heading-full">
     <fo:inline font-weight="bold" font-style="normal">
         <xsl:apply-templates select="." mode="type-name"/>
@@ -1033,16 +1035,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text> </xsl:text>
             <xsl:value-of select="$the-number"/>
         </xsl:if>
-        <!-- attribution of a theorem or axiom, as in the HTML conversion -->
-        <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
-            <xsl:text> (</xsl:text>
-            <xsl:apply-templates select="." mode="creator-full"/>
-            <xsl:text>)</xsl:text>
+        <xsl:variable name="b-attribution" select="(creator or origins) and (&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;)"/>
+        <!-- A period after the number only when nothing follows it, -->
+        <!-- as in the HTML and LaTeX conversions                    -->
+        <xsl:if test="not(title) and not($b-attribution)">
+            <xsl:text>.</xsl:text>
         </xsl:if>
-        <xsl:text>.</xsl:text>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+        <xsl:if test="$b-attribution">
+            <xsl:text> (</xsl:text>
+            <xsl:apply-templates select="." mode="attribution-full"/>
+            <xsl:text>)</xsl:text>
         </xsl:if>
     </fo:inline>
 </xsl:template>
