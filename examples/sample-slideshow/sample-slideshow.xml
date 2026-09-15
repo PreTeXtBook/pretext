@@ -234,6 +234,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <theorem xml:id="theorem-FTC">
                     <title>The Fundamental Theorem of Calculus</title>
+                    <creator>Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h></idx>
 
                     <statement>
