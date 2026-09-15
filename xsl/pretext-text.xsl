@@ -1077,9 +1077,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
-<!-- The heading line of a block: type, number when there is one, -->
-<!-- a parenthesized creator for the theorem-like and axiom-like, -->
-<!-- title when there is one                                      -->
+<!-- The heading line of a block: type, number when there is one,  -->
+<!-- title when there is one, for a mathematical block the         -->
+<!-- parenthesized attribution (creator and origins), and a period -->
+<!-- only when neither follows the number                          -->
 <xsl:template match="*" mode="block-heading">
     <xsl:call-template name="block-heading-line">
         <xsl:with-param name="heading">
@@ -1091,20 +1092,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> </xsl:text>
                 <xsl:value-of select="$the-number"/>
             </xsl:if>
-            <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
+            <xsl:variable name="b-attribution" select="(creator or origins) and (&THEOREM-FILTER; or &AXIOM-FILTER; or &DEFINITION-FILTER; or &OPENPROBLEM-FILTER;)"/>
+            <xsl:if test="not(title) and not($b-attribution)">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <xsl:if test="title">
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="title-full"/>
+            </xsl:if>
+            <xsl:if test="$b-attribution">
                 <xsl:text> (</xsl:text>
-                <xsl:apply-templates select="." mode="creator-full"/>
+                <xsl:apply-templates select="." mode="attribution-full"/>
                 <xsl:text>)</xsl:text>
             </xsl:if>
-            <xsl:choose>
-                <xsl:when test="title">
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>.</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
