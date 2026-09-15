@@ -594,20 +594,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="env-title"> 
-    <xsl:if test="title|creator">
-        <xsl:text>[</xsl:text>
+<!-- amsthm sets the optional argument in parentheses, so a title, -->
+<!-- the creator, and the origins share that one group, separated  -->
+<!-- by commas.  Braces protect the argument: a citation such as   -->
+<!-- [3] would otherwise end it at the first "]".                  -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="env-title">
+    <xsl:if test="title or creator or origins">
+        <xsl:text>[{</xsl:text>
         <xsl:if test="title">
             <!-- Title, but without punctuation.  Or is there a smarter way? -->
             <xsl:apply-templates select="." mode="title-xref"/>
         </xsl:if>
-        <xsl:if test="(title) and (creator)">
-            <xsl:text>&#160;</xsl:text>
+        <xsl:if test="title and (creator or origins)">
+            <xsl:text>, </xsl:text>
         </xsl:if>
-        <xsl:if test="creator">
-            <xsl:apply-templates select="." mode="creator-full"/>
+        <xsl:if test="creator or origins">
+            <xsl:apply-templates select="." mode="attribution-full"/>
         </xsl:if>
-        <xsl:text>]</xsl:text>
+        <xsl:text>}]</xsl:text>
     </xsl:if>
 </xsl:template>
 
