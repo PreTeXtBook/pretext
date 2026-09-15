@@ -2357,7 +2357,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- xref: xref-number and xref-link defined above -->
 <!-- today, timeofday: pure text in common -->
 <!-- ad, am, bc, ca, eg, etal, etc, ie, nb, pm, ps, vs, viz: Latin abbreviations, defined as text in common -->
-<!-- title, subtitle, shorttitle, plaintitle, creator: killed in common as metadata -->
+<!-- title, subtitle, shorttitle, plaintitle, creator, origins: killed in common as metadata -->
 <!-- caption: killed in common as metadata -->
 <!-- cline: a simple template in common is active -->
 <!-- c: a simple template in common is active -->
@@ -2452,7 +2452,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         self::xref or
         self::today or self::timeofday or
         self::ad or self::am or self::bc or self::ca or self::eg or self::etal or self::etc or self::ie or self::nb or self::pm or self::ps or self::vs or self::viz or
-        self::title or self::subtitle or self::shorttitle or self::plaintitle or self::creator or
+        self::title or self::subtitle or self::shorttitle or self::plaintitle or self::creator or self::origins or
         self::caption or
         self::cline or
         self::c or
