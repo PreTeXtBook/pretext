@@ -46,6 +46,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <arg><ptx-title/></arg>
     </title>
 
+    <!-- the article-level statement; amsart sets every "\thanks" as an unmarked footnote, in order -->
+    <support cmd="thanks">
+        <arg><ptx-bibinfo-support/></arg>
+    </support>
+
     <author-list>
         <author cmd="author" corresponding="author*">
             <arg><ptx-personname/></arg>

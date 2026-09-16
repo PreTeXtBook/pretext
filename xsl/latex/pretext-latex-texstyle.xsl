@@ -189,7 +189,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Here we build the "standard" (classic) latex preamble,       -->
 <!-- with some minor modifications suggested by the texstyle file -->
 <xsl:template match="texstyle/ptx-preamble">
-    <xsl:call-template name="frontmatter-helpers"/>
     <xsl:call-template name="preamble-early"/>
     <xsl:call-template name="cleardoublepage"/>
     <xsl:call-template name="standard-packages"/>
