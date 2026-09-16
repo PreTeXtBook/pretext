@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <name>Springer Nature journals</name>
         <publisher>Springer Nature</publisher>
         <required-files>
-            <file name="sn-jnl.cls" href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" path="sn-article-template/sn-jnl.cls"/>
+            <file name="sn-jnl.cls" href="https://cms-resources.apps.public.k8s.springernature.io/springer-cms/rest/v1/content/18782940/data/v12" path="sn-article-template/sn-jnl.cls"/>
         </required-files>
         <latex-engine command="pdflatex"/>
         <bibliography-style>spbasic</bibliography-style>
