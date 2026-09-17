@@ -20,6 +20,14 @@
             The code for a journal is taken from the list of abbreviations used by MathSciNet available at <url href="https://mathscinet.ams.org/msnhtml/serials.pdf">https://mathscinet.ams.org/msnhtml/serials.pdf</url>.
         </p>
 
+        <p>
+            The third column gives the Citation Style Language (<init>CSL</init>) style that
+            naming the journal selects for the bibliography and citations.  Journals listed
+            with <q>(none)</q> have no style available, and their references are formatted by
+            <pretext/> in its usual way.  See <xref ref="common-csl"/> to choose a style
+            yourself instead.
+        </p>
+
         <xi:include href="journals-table.xml"/>
 
 </appendix>
