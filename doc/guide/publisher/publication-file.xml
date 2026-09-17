@@ -187,7 +187,54 @@
 
             <p>
                 A complete list of the supported journals, together with their short name codes, will
-                be available in <xref ref="appendix-journals"/>.
+                be available in <xref ref="appendix-journals"/>.  That list also gives the
+                bibliography style each journal uses, which naming a journal selects for you: your
+                references and citations are then formatted in that journal's style, in every output
+                format, with no further setting.  See <xref ref="common-csl"/> if you would rather
+                choose a style yourself, which takes precedence over the journal's.
+            </p>
+
+            <p>
+                A few supported journals have a bibliography format with no counterpart among the
+                available styles, and are listed with no style of their own.  For those, references
+                are formatted by <pretext/> in its usual way unless you name a style.
+            </p>
+        </subsection>
+
+        <subsection xml:id="common-csl">
+            <title>Bibliography and citation style</title>
+            <idx><h>common option</h><h>bibliography style</h></idx>
+            <idx><h>bibliography style</h><h>common option</h></idx>
+            <idx><h>citation style</h></idx>
+            <idx><h>CSL</h></idx>
+
+            <p>
+                The entries of a bibliography, and the citations that point at them, can be
+                formatted according to a style from the Citation Style Language
+                (<init>CSL</init>) repository, which describes the house styles of thousands of
+                journals and publishers.  Name one with
+                <cd>
+                    <cline>/publication/common/citation-stylesheet-language/@style</cline>
+                </cd>
+                whose value is a style identifier from that repository, such as
+                <c>american-mathematical-society-numeric</c> or <c>harvard1</c>, without the
+                <c>.csl</c> suffix.  A list of the available styles can be browsed at
+                <url href="https://www.zotero.org/styles">https://www.zotero.org/styles</url>.
+            </p>
+
+            <p>
+                Naming a journal (<xref ref="common-journal"/>) selects that journal's style
+                automatically, so most authors need not set this at all.  When both are given,
+                your setting wins, which is what you want when preparing a preprint of an article
+                destined for a journal whose <latex/> style you still wish to use.
+            </p>
+
+            <p>
+                Formatted references and citations are a generated asset, like images: they are
+                built when needed and cached, so a first build fetches the style file and formats
+                the bibliography.  Until that happens <pretext/> formats references in its usual
+                way and says so.  Styles that put citations in footnotes or endnotes are not yet
+                supported.
             </p>
         </subsection>
 
