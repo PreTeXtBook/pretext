@@ -1160,7 +1160,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $b-extracting-biblio: set here and overridden in the extraction stylesheet -->
 
 <!-- two error conditions -->
-<!-- 2025-08-13: this variable is always false -->
+<!-- Whether the generated file of formatted references and citations   -->
+<!-- is absent.  XSLT 1.0 has no way to ask, and libxslt evaluates      -->
+<!-- every global variable at the start of a transformation, so a       -->
+<!-- document() here would abort any conversion whose file is not yet   -->
+<!-- built, the publisher variable report included.  So Python,         -->
+<!-- which can simply look, says.  (See get_csl_style() in pretext.py.) -->
+<!-- Silence means "present", which is what every caller that does not  -->
+<!-- know any better has always assumed.                                -->
+<xsl:param name="csl.file.missing" select="''"/>
+
 <xsl:variable name="missing-csl-file">
     <xsl:choose>
         <!-- can't be missing if we don't need it, and we   -->
@@ -1168,6 +1177,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- isn't called for, and getting ominous warnings -->
         <xsl:when test="not($b-using-csl-styles)">
             <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$csl.file.missing = 'yes'">
+            <xsl:text>yes</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>no</xsl:text>
@@ -1202,7 +1214,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- we do not warning at the end of this template, -->
         <!-- just because the file itself does not exist    -->
-        <xsl:when test="not($b-using-csl-styles) or $missing-csl-file">
+        <!-- Extraction is how the generated file comes to  -->
+        <!-- exist, so there is nothing yet to compare with -->
+        <!-- and, first time through, nothing to open: the  -->
+        <!-- document() below would fail outright.          -->
+        <xsl:when test="$b-extracting-biblio or not($b-using-csl-styles) or $b-missing-csl-file">
             <xsl:text>no</xsl:text>
         </xsl:when>
         <!-- now we are using CSL styles and we do have a file to interrogate -->
@@ -1249,6 +1265,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- processed references and citations should exist     -->
         <!-- but maybe not (this "when" is separate for clarity) -->
         <xsl:when test="$b-missing-csl-file or $b-style-file-mismatch">
+            <xsl:if test="$b-missing-csl-file">
+                <xsl:message>PTX:WARNING:     your publisher file asks for references and citations formatted by a Citation Stylesheet Language (CSL) style, but the generated file of formatted references and citations was not found at "<xsl:value-of select="$csl-file"/>".  Generate the "references" assets to create it.  We will fall back to default processing in order to proceed.</xsl:message>
+            </xsl:if>
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
@@ -1332,7 +1351,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Note: not using CSL styles immediately determines that    -->
         <!-- this "xrref" is not a "biblio target" and a copy is       -->
         <!-- made here, immediately as well                            -->
-        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio">
+        <!-- A missing or mismatched generated file is met the same way    -->
+        <!-- here as in the "references" division above: keep the author's -->
+        <!-- "xref", so citations and bibliography degrade together.       -->
+        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio or $b-missing-csl-file or $b-style-file-mismatch">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
@@ -1342,7 +1364,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="the-xref-id">
                 <xsl:value-of select="@pi:original-id"/>
             </xsl:variable>
-            <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
+            <!-- $csl-file, from the publisher-variables stylesheet,      -->
+            <!-- respects a publisher's choice of generated directory;    -->
+            <!-- the literal path that stood here did not.                -->
+            <xsl:variable name="matched-citation" select="document($csl-file, $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
             <xsl:copy-of select="$matched-citation"/>
             <!-- WARN ON UNMATCHED -->
         </xsl:otherwise>

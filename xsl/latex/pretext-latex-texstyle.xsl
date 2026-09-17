@@ -757,8 +757,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- A journal's bibliography is rendered by PreTeXt, not by BibTeX.     -->
+<!-- Entries and citations are formatted before any conversion runs:     -->
+<!-- a publisher naming a journal (or a CSL style outright) has them     -->
+<!-- rendered into the source during assembly, in that journal's style;  -->
+<!-- otherwise PreTeXt's own bibliography formatting applies.  Either     -->
+<!-- way the LaTeX arrives ready, inside the "referencelist" environment -->
+<!-- of the regular conversion, and no ".bst" or ".bib" file is wanted.  -->
+<!-- The texstyle file says only *where* the list belongs.               -->
 <xsl:template match="texstyle/bibliography">
-    <xsl:message>PTX:WARNING: Bibliographies are not implemented correctly yet.</xsl:message>
     <xsl:apply-templates select="$document-root/references|$document-root/backmatter/references"/>
 </xsl:template>
 
