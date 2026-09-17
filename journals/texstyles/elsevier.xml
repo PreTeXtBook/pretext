@@ -28,7 +28,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <file href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" compression="zip" path="sn-article-template/sn-jnl.cls"/>
         </required-files>-->
         <latex-engine command="pdflatex"/>
-        <!--<bibliography-style>spbasic</bibliography-style>-->
+        <csl-style name="elsevier-with-titles"
+                   href="https://raw.githubusercontent.com/citation-style-language/styles/master/elsevier-with-titles.csl"/>
 
         <style-author>Oscar Levin</style-author>
         <date>2025-03-21</date>
@@ -91,9 +92,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <appendices cmd="appendix"/>
 
 
-    <bibliography cmd="bibliography">
-        <arg><bib-file/></arg>
-    </bibliography>
+    <bibliography/>
 
 
     <end-document/>

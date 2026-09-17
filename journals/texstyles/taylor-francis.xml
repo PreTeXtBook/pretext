@@ -24,7 +24,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <name>Taylor Francis General - All other Taylor-Francis journals</name>
         <publisher>Taylor-Francis</publisher>
         <latex-engine command="pdflatex"/>
-        <bibliography-style>spbasic</bibliography-style>
+        <csl-style name="taylor-and-francis-numeric-q"
+                   href="https://raw.githubusercontent.com/citation-style-language/styles/master/taylor-and-francis-numeric-q.csl"/>
 
         <style-author>Oscar Levin</style-author>
         <date>2025-03-17</date>
@@ -84,9 +85,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <appendices/>
 
 
-    <bibliography cmd="bibliography">
-        <arg><bib-file/></arg>
-    </bibliography>
+    <bibliography/>
 
 
     <end-document/>

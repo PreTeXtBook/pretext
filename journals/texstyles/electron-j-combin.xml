@@ -9,7 +9,11 @@
             <file name="e-jc.sty" href="https://www.combinatorics.org/files/e-jc.sty" />
         </required-files>
         <latex-engine command="pdflatex"/>
-        <!--<bibliography-style>spbasic</bibliography-style>-->
+        <!-- No CSL style is declared: the journal's own bibliography  -->
+        <!-- format has no counterpart in the CSL repository.  With no -->
+        <!-- style here, a publisher naming this journal gets default  -->
+        <!-- PreTeXt bibliography handling unless they name a CSL      -->
+        <!-- style in the publication file themselves.                 -->
 
         <style-author>Oscar Levin</style-author>
         <date>2025-03-23</date>
@@ -84,9 +88,7 @@
     <appendices cmd="appendix"/>
 
 
-    <bibliography cmd="bibliography">
-        <arg><bib-file/></arg>
-    </bibliography>
+    <bibliography/>
 
 
     <end-document/>
