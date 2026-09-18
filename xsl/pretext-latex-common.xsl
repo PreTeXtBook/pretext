@@ -1644,6 +1644,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
     </xsl:if>
+    <!-- tcolorbox names the auto counter after the box, so the name below   -->
+    <!-- reappears in the LaTeX as the counter "tcb@cnt@figuredistinct" and  -->
+    <!-- as its macro "\thetcb@cnt@figuredistinct", which subfigure captions -->
+    <!-- write out directly.  A control sequence name cannot contain a       -->
+    <!-- hyphen, so the box name has none.                                   -->
     <xsl:if test="$b-number-figure-distinct">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% This document is set to number figure, table, list, listing on a separate numbering scheme&#xa;</xsl:text>
@@ -1657,7 +1662,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-figures" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{figuredistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$b-number-openproblem-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1687,7 +1692,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>, number within=</xsl:text>
     <xsl:choose>
         <xsl:when test="$b-number-figure-distinct">
-            <xsl:text>tcb@cnt@figure-distinct</xsl:text>
+            <xsl:text>tcb@cnt@figuredistinct</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>tcb@cnt@block</xsl:text>
@@ -2818,7 +2823,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>subdisplay</xsl:text>
             </xsl:when>
             <xsl:when test="$b-number-figure-distinct">
-                <xsl:text>figure-distinct</xsl:text>
+                <xsl:text>figuredistinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>block</xsl:text>
@@ -2859,7 +2864,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- or of figures stacked within a figure.                            -->
         <!-- \thetcbcounter comes from subdisplay, looks like 25.3(b),         -->
         <!-- and this is what will render in a cross-reference via \label/\ref -->
-        <!-- The enclosing figure is numbered from block or figure-distinct.   -->
+        <!-- The enclosing figure is numbered from block or figuredistinct.    -->
         <!-- We us the "xstring" package to strip out this number (e.g. 25.3)  -->
         <!-- and leave just the sub-numbering (e.g, (b)).                      -->
         <!-- NB: parameter #3 is a hardcoded number supplied by the -common    -->
@@ -2873,7 +2878,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>before lower={{</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@figure-distinct}{}}</xsl:text>
+                    <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@figuredistinct}{}}</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@block}{}}</xsl:text>
