@@ -1612,6 +1612,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <xsl:text>]{block}{}&#xa;</xsl:text>
+    <!-- tcolorbox names each auto counter after its box, so the names     -->
+    <!-- below reappear in the LaTeX as counters, "tcb@cnt@figuredistinct" -->
+    <!-- for one, and as macros, "\thetcb@cnt@figuredistinct", which       -->
+    <!-- subfigure captions write out directly.  A control sequence name   -->
+    <!-- cannot contain a hyphen, so none of the box names does.           -->
     <!-- should condition on $project-reps, but it is not defined yet -->
     <xsl:if test="$b-number-project-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1627,7 +1632,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-projects" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{projectdistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$b-number-exercise-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1642,13 +1647,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-exercises" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{exercisedistinct}{}&#xa;</xsl:text>
     </xsl:if>
-    <!-- tcolorbox names the auto counter after the box, so the name below   -->
-    <!-- reappears in the LaTeX as the counter "tcb@cnt@figuredistinct" and  -->
-    <!-- as its macro "\thetcb@cnt@figuredistinct", which subfigure captions -->
-    <!-- write out directly.  A control sequence name cannot contain a       -->
-    <!-- hyphen, so the box name has none.                                   -->
     <xsl:if test="$b-number-figure-distinct">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% This document is set to number figure, table, list, listing on a separate numbering scheme&#xa;</xsl:text>
@@ -1678,7 +1678,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-openproblems" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{openproblem-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{openproblemdistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
     <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
@@ -2735,13 +2735,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="counter">
         <xsl:choose>
             <xsl:when test="(&PROJECT-FILTER;) and $b-number-project-distinct">
-                <xsl:text>project-distinct</xsl:text>
+                <xsl:text>projectdistinct</xsl:text>
             </xsl:when>
             <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;) and $b-number-exercise-distinct">
-                <xsl:text>exercise-distinct</xsl:text>
+                <xsl:text>exercisedistinct</xsl:text>
             </xsl:when>
             <xsl:when test="(&OPENPROBLEM-FILTER;) and $b-number-openproblem-distinct">
-                <xsl:text>openproblem-distinct</xsl:text>
+                <xsl:text>openproblemdistinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>block</xsl:text>
