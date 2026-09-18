@@ -1612,6 +1612,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <xsl:text>]{block}{}&#xa;</xsl:text>
+    <!-- tcolorbox names each auto counter after its box, so the names     -->
+    <!-- below reappear in the LaTeX as counters, "tcb@cnt@figuredistinct" -->
+    <!-- for one, and as macros, "\thetcb@cnt@figuredistinct", which       -->
+    <!-- subfigure captions write out directly.  A control sequence name   -->
+    <!-- cannot contain a hyphen, so none of the box names does.           -->
     <!-- should condition on $project-reps, but it is not defined yet -->
     <xsl:if test="$b-number-project-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1627,7 +1632,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-projects" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{projectdistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$b-number-exercise-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1642,7 +1647,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-exercises" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{exercisedistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$b-number-figure-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1657,7 +1662,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-figures" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{figuredistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$b-number-openproblem-distinct">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1673,7 +1678,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="level" select="$numbering-openproblems" />
             </xsl:call-template>
         </xsl:if>
-        <xsl:text>]{openproblem-distinct}{}&#xa;</xsl:text>
+        <xsl:text>]{openproblemdistinct}{}&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
     <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
@@ -1684,16 +1689,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox[auto counter</xsl:text>
     <!-- control the levels of the numbering -->
     <!-- global (no periods) is the default  -->
+    <!-- The subnumbers nest within the counter that numbers figures, -->
+    <!-- and the full number, a figure number followed by a letter,   -->
+    <!-- is built from that same counter                              -->
+    <xsl:variable name="figure-counter">
+        <xsl:choose>
+            <xsl:when test="$b-number-figure-distinct">
+                <xsl:text>tcb@cnt@figuredistinct</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>tcb@cnt@block</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>, number within=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$b-number-figure-distinct">
-            <xsl:text>tcb@cnt@figure-distinct</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>tcb@cnt@block</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, number freestyle={\noexpand\thetcb@cnt@block(\noexpand\alph{\tcbcounter})}</xsl:text>
+    <xsl:value-of select="$figure-counter"/>
+    <xsl:text>, number freestyle={\noexpand\the</xsl:text>
+    <xsl:value-of select="$figure-counter"/>
+    <xsl:text>(\noexpand\alph{\tcbcounter})}</xsl:text>
     <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
     <!-- faux subdisplay requires manipulating low-level counters -->
     <xsl:text>\makeatother&#xa;</xsl:text>
@@ -2722,13 +2735,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="counter">
         <xsl:choose>
             <xsl:when test="(&PROJECT-FILTER;) and $b-number-project-distinct">
-                <xsl:text>project-distinct</xsl:text>
+                <xsl:text>projectdistinct</xsl:text>
             </xsl:when>
             <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;) and $b-number-exercise-distinct">
-                <xsl:text>exercise-distinct</xsl:text>
+                <xsl:text>exercisedistinct</xsl:text>
             </xsl:when>
             <xsl:when test="(&OPENPROBLEM-FILTER;) and $b-number-openproblem-distinct">
-                <xsl:text>openproblem-distinct</xsl:text>
+                <xsl:text>openproblemdistinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>block</xsl:text>
@@ -2818,7 +2831,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>subdisplay</xsl:text>
             </xsl:when>
             <xsl:when test="$b-number-figure-distinct">
-                <xsl:text>figure-distinct</xsl:text>
+                <xsl:text>figuredistinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>block</xsl:text>
@@ -2859,7 +2872,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- or of figures stacked within a figure.                            -->
         <!-- \thetcbcounter comes from subdisplay, looks like 25.3(b),         -->
         <!-- and this is what will render in a cross-reference via \label/\ref -->
-        <!-- The enclosing figure is numbered from block or figure-distinct.   -->
+        <!-- The enclosing figure is numbered from block or figuredistinct.    -->
         <!-- We us the "xstring" package to strip out this number (e.g. 25.3)  -->
         <!-- and leave just the sub-numbering (e.g, (b)).                      -->
         <!-- NB: parameter #3 is a hardcoded number supplied by the -common    -->
@@ -2873,7 +2886,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>before lower={{</xsl:text>
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@figure-distinct}{}}</xsl:text>
+                    <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@figuredistinct}{}}</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@block}{}}</xsl:text>
