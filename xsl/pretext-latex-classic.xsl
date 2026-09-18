@@ -854,16 +854,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox[auto counter</xsl:text>
     <!-- control the levels of the numbering -->
     <!-- global (no periods) is the default  -->
+    <!-- The subnumbers nest within the counter that numbers figures, -->
+    <!-- and the full number, a figure number followed by a letter,   -->
+    <!-- is built from that same counter                              -->
+    <xsl:variable name="figure-counter">
+        <xsl:choose>
+            <xsl:when test="$b-number-figure-distinct">
+                <xsl:text>tcb@cnt@figuredistinct</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>tcb@cnt@block</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>, number within=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$b-number-figure-distinct">
-            <xsl:text>tcb@cnt@figuredistinct</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>tcb@cnt@block</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, number freestyle={\noexpand\thetcb@cnt@block(\noexpand\alph{\tcbcounter})}</xsl:text>
+    <xsl:value-of select="$figure-counter"/>
+    <xsl:text>, number freestyle={\noexpand\the</xsl:text>
+    <xsl:value-of select="$figure-counter"/>
+    <xsl:text>(\noexpand\alph{\tcbcounter})}</xsl:text>
     <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
     <!-- faux subdisplay requires manipulating low-level counters -->
     <xsl:text>\makeatother&#xa;</xsl:text>
