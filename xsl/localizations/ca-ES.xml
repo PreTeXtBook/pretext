@@ -147,12 +147,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
-    <localization string-id='divisionalexercise'>Exercici</localization>
+    <localization string-id='exercise-divisional'>Exercici</localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <localization string-id='inlineexercise'>Punt de control</localization>
-    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
-    <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
+    <localization string-id='exercise-inline'>Punt de control</localization>
+    <!-- <localization string-id='exercise-worksheet'>Worksheet Exercise</localization> -->
+    <!-- <localization string-id='exercise-reading'>Reading Question</localization> -->
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Pista</localization>
     <localization string-id='answer'>Resposta</localization>

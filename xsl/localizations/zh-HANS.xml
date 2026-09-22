@@ -141,10 +141,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='pre'>代码块</localization>
     <localization string-id='fragment'>代码片段</localization>
     <!-- Parts of an exercise and its solution -->
-    <localization string-id='divisionalexercise'>练习</localization>
-    <localization string-id='inlineexercise'>检查点</localization>
-    <localization string-id='worksheetexercise'>工作单练习</localization>
-    <localization string-id='readingquestion'>问题</localization>
+    <localization string-id='exercise-divisional'>练习</localization>
+    <localization string-id='exercise-inline'>检查点</localization>
+    <localization string-id='exercise-worksheet'>工作单练习</localization>
+    <localization string-id='exercise-reading'>问题</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>提示</localization>
     <localization string-id='answer'>答案</localization>

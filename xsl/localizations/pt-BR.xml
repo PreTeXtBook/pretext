@@ -151,12 +151,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fragment'>Fragmento</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
-    <localization string-id='divisionalexercise'>Exercício</localization>
+    <localization string-id='exercise-divisional'>Exercício</localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <localization string-id='inlineexercise'>Exercício de Verificação</localization>
-    <localization string-id='worksheetexercise'>Exercício da Lista</localization>
-    <localization string-id='readingquestion'>Exercício de Interpretação</localization>
+    <localization string-id='exercise-inline'>Exercício de Verificação</localization>
+    <localization string-id='exercise-worksheet'>Exercício da Lista</localization>
+    <localization string-id='exercise-reading'>Exercício de Interpretação</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Dica</localization>
     <localization string-id='answer'>Resposta</localization>

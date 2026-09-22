@@ -223,11 +223,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- An "exercise", at any level, within an "exercises" division is a          -->
-    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
-    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
-    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
-    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
-    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
+    <!-- "divisional" exercise, and the string employed is                         -->
+    <!-- 'exercise-divisional'.  An "exercise" whose parent is a division          -->
+    <!-- (chapter, section, etc) we call an "inline exercise", and the string      -->
+    <!-- is 'exercise-inline'.  An "exercise" in a "worksheet" is an               -->
+    <!-- 'exercise-worksheet', and one in a "reading-questions" is an              -->
+    <!-- 'exercise-reading'.  These are the names a publication file uses, and     -->
+    <!-- the names an author writes in a "rename" or a "list-of", so a type of     -->
+    <!-- "exercise" has one name throughout.                                       -->
     <!-- It is important to use different translations so that a text with         -->
     <!-- different types of exercises do not have ambiguous cross-references       -->
     <!-- (there is an example of this at the start of one of the later             -->
@@ -236,13 +239,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- In English, an "Exercise" is something you do that has a beneficial       -->
     <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
     <!-- is something you must do before you do something else.  Another use of    -->
-    <!-- the term is a location on a roadway where you must stop for the      -->
+    <!-- the term is a location on a roadway where you must stop for the           -->
     <!-- police to do an inspection. A worksheet is a collection of activities or  -->
     <!-- problems, typically printed on paper, which might be used in a classroom. -->
-    <localization string-id='divisionalexercise'>Exercise</localization>
-    <localization string-id='inlineexercise'>Checkpoint</localization>
-    <localization string-id='worksheetexercise'>Worksheet Exercise</localization>
-    <localization string-id='readingquestion'>Reading Question</localization>
+    <localization string-id='exercise-divisional'>Exercise</localization>
+    <localization string-id='exercise-inline'>Checkpoint</localization>
+    <localization string-id='exercise-worksheet'>Worksheet Exercise</localization>
+    <localization string-id='exercise-reading'>Reading Question</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Hint</localization>
     <localization string-id='answer'>Answer</localization>

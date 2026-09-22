@@ -145,10 +145,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fragment'>Porzione</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
-    <localization string-id='divisionalexercise'>Esercizio</localization>
-    <localization string-id='inlineexercise'>Punto di controllo</localization>
-    <localization string-id='worksheetexercise'>Esercizio in scheda didattica</localization>
-    <localization string-id='readingquestion'>Domanda di comprensione del testo</localization>
+    <localization string-id='exercise-divisional'>Esercizio</localization>
+    <localization string-id='exercise-inline'>Punto di controllo</localization>
+    <localization string-id='exercise-worksheet'>Esercizio in scheda didattica</localization>
+    <localization string-id='exercise-reading'>Domanda di comprensione del testo</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Suggerimento</localization>
     <localization string-id='answer'>Risposta</localization>

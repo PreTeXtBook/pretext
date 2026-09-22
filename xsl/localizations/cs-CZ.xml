@@ -144,12 +144,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
-    <localization string-id='divisionalexercise'>Cvičení</localization>
+    <localization string-id='exercise-divisional'>Cvičení</localization>
     <!-- Translation needed for Czech Czech -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <localization string-id='inlineexercise'>Zkouška</localization>
-    <localization string-id='worksheetexercise'>Cvičení pracovního listu</localization>
-    <localization string-id='readingquestion'>Otázka ze čtení</localization>
+    <localization string-id='exercise-inline'>Zkouška</localization>
+    <localization string-id='exercise-worksheet'>Cvičení pracovního listu</localization>
+    <localization string-id='exercise-reading'>Otázka ze čtení</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Nápověda</localization>
     <localization string-id='answer'>Odpověď</localization>

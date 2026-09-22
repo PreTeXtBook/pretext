@@ -143,12 +143,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='fragment'>Fragment</localization> -->
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
-    <localization string-id='divisionalexercise'>Exercice</localization>
+    <localization string-id='exercise-divisional'>Exercice</localization>
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <localization string-id='inlineexercise'>Mise au point</localization>
-    <localization string-id='worksheetexercise'>Activité</localization>
-    <localization string-id='readingquestion'>Question de compréhension</localization>
+    <localization string-id='exercise-inline'>Mise au point</localization>
+    <localization string-id='exercise-worksheet'>Activité</localization>
+    <localization string-id='exercise-reading'>Question de compréhension</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Indication</localization>
     <localization string-id='answer'>Réponse</localization>

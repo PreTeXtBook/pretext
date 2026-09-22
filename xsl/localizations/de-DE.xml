@@ -146,10 +146,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='fragment'>Fragment</localization> -->
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
-    <localization string-id='divisionalexercise'>Übung</localization>
-    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
-    <localization string-id='worksheetexercise'>Arbeitsübung</localization>
-    <localization string-id='readingquestion'>Lesefrage</localization>
+    <localization string-id='exercise-divisional'>Übung</localization>
+    <!-- <localization string-id='exercise-inline'>Checkpoint</localization> -->
+    <localization string-id='exercise-worksheet'>Arbeitsübung</localization>
+    <localization string-id='exercise-reading'>Lesefrage</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Andeutung</localization>
     <localization string-id='answer'>Antwort</localization>

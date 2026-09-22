@@ -143,10 +143,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='pre'>بلۆکی کۆد</localization>
     <localization string-id='fragment'>پارچە</localization>
     <!-- Parts of an exercise and its solution -->
-    <localization string-id='divisionalexercise'>مەشق</localization>
-    <localization string-id='inlineexercise'>خاڵی پشکنین</localization>
-    <localization string-id='worksheetexercise'>پەڕەکاری ڕاهێنانەکان</localization>
-    <localization string-id='readingquestion'>پرسیارەکانی خوێندنەوە</localization>
+    <localization string-id='exercise-divisional'>مەشق</localization>
+    <localization string-id='exercise-inline'>خاڵی پشکنین</localization>
+    <localization string-id='exercise-worksheet'>پەڕەکاری ڕاهێنانەکان</localization>
+    <localization string-id='exercise-reading'>پرسیارەکانی خوێندنەوە</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>یارمەتی</localization>
     <localization string-id='answer'>وەڵام</localization>
