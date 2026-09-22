@@ -3293,26 +3293,27 @@ Book (with parts), "section" at level 3
 <!-- First, a "divisional" "exercise" in an "exercises",      -->
 <!-- with perhaps intervening groups, like an "exercisegroup" -->
 <xsl:template match="exercises//exercise" mode="string-id">
-    <xsl:text>divisionalexercise</xsl:text>
+    <xsl:text>exercise-divisional</xsl:text>
 </xsl:template>
 
 <!-- Second, an "exercise" placed within a "worksheet"-->
 <xsl:template match="worksheet//exercise" mode="string-id">
-    <xsl:text>worksheetexercise</xsl:text>
+    <xsl:text>exercise-worksheet</xsl:text>
 </xsl:template>
 
 <!-- Third, an "exercise" placed within a "reading-questions"-->
 <xsl:template match="reading-questions//exercise" mode="string-id">
-    <xsl:text>readingquestion</xsl:text>
+    <xsl:text>exercise-reading</xsl:text>
 </xsl:template>
 
 <!-- Finally, an inline exercise has a division (several possible)        -->
 <!-- as a parent. We just drop in here last if other matches do not       -->
 <!-- succeed, but could improve with a filter or list of specific matches -->
-<!-- This matches the LaTeX environment of the same name, so              -->
-<!-- template to create an "inlineexercise" environment runs smoothly     -->
+<!-- The LaTeX conversions name their environment for an inline exercise  -->
+<!-- "inlineexercise", written there as a literal: an environment name is -->
+<!-- not a string-id, and a hyphen does not belong in one.                -->
 <xsl:template match="exercise" mode="string-id">
-    <xsl:text>inlineexercise</xsl:text>
+    <xsl:text>exercise-inline</xsl:text>
 </xsl:template>
 
 <!-- "solutions" divisions are "Solutions 5.6" in the  -->
@@ -7176,19 +7177,22 @@ Book (with parts), "section" at level 3
     <!-- categorized by their ancestors.  So we recognize certain strings        -->
     <!-- as "pseudo-elements".  We do this once and then pass them along.        -->
     <!--                                                                         -->
-    <!--   * inlineexercise                                                      -->
-    <!--   * divisionexercise                                                    -->
-    <!--   * worksheetexercise                                                   -->
-    <!--   * readingquestion                                                     -->
+    <!--   * exercise-inline                                                     -->
+    <!--   * exercise-divisional                                                 -->
+    <!--   * exercise-worksheet                                                  -->
+    <!--   * exercise-reading                                                    -->
     <!--                                                                         -->
-    <!-- Equality of strings (e.g. 'inlineexercise') and the node-set ($elements)-->
-    <!-- is true when the *string-value* of *one* node in the set is identical   -->
-    <!-- NB: if this gets out-of-hand, it should be passed as a structure        -->
-    <xsl:variable name="b-inline-exercises" select="'inlineexercise' = $elements"/>
-    <xsl:variable name="b-division-exercises" select="'divisionexercise' = $elements"/>
-    <xsl:variable name="b-worksheet-exercises" select="'worksheetexercise' = $elements"/>
-    <xsl:variable name="b-reading-questions" select="'readingquestion' = $elements"/>
-    <!-- display subdivision headings with empty contents? -->
+    <!-- These are the names a publication file uses, and the names an           -->
+    <!-- author writes in a "rename", so a type of "exercise" has one name.      -->
+    <!--                                                                         -->
+    <!-- Equality of strings (e.g. 'exercise-inline') and the node-set           -->
+    <!-- ($elements) is true when the *string-value* of *one* node in the        -->
+    <!-- set is identical.  NB: if this gets out-of-hand, pass a structure       -->
+    <xsl:variable name="b-inline-exercises" select="'exercise-inline' = $elements"/>
+    <xsl:variable name="b-division-exercises" select="'exercise-divisional' = $elements"/>
+    <xsl:variable name="b-worksheet-exercises" select="'exercise-worksheet' = $elements"/>
+    <xsl:variable name="b-reading-questions" select="'exercise-reading' = $elements"/>
+    <!-- display subdivision headings with empty contents?                       -->
     <xsl:variable name="entered-empty">
         <xsl:choose>
             <xsl:when test="not(@empty)">
@@ -12009,6 +12013,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$document-root//sbsgroup[count(sidebyside) = 1]&quot;" />
         <xsl:with-param name="date-string" select="'2026-08-23'" />
         <xsl:with-param name="message" select="'an &quot;sbsgroup&quot; now requires at least two &quot;sidebyside&quot;.  A group of one behaves exactly like the &quot;sidebyside&quot; alone, so use the &quot;sidebyside&quot; by itself, with the layout attributes moved onto it'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-09-22  a type of "exercise" is named as in a publication file -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/rename[(@element = 'inlineexercise') or (@element = 'divisionalexercise') or (@element = 'worksheetexercise') or (@element = 'readingquestion')]&quot;" />
+        <xsl:with-param name="date-string" select="'2026-09-22'" />
+        <xsl:with-param name="message" select="'a &quot;rename&quot; now names a type of &quot;exercise&quot; the way a publication file does: &quot;exercise-inline&quot;, &quot;exercise-divisional&quot;, &quot;exercise-worksheet&quot;, or &quot;exercise-reading&quot;.  The one-word names are deprecated, and will continue to be honored'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-09-22  a type of "exercise" is named as in a publication file -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//list-of[contains(@elements, 'inlineexercise') or contains(@elements, 'divisionexercise') or contains(@elements, 'divisionalexercise') or contains(@elements, 'worksheetexercise') or contains(@elements, 'readingquestion')]&quot;" />
+        <xsl:with-param name="date-string" select="'2026-09-22'" />
+        <xsl:with-param name="message" select="'the &quot;elements&quot; attribute of a &quot;list-of&quot; now names a type of &quot;exercise&quot; the way a publication file does: &quot;exercise-inline&quot;, &quot;exercise-divisional&quot;, &quot;exercise-worksheet&quot;, or &quot;exercise-reading&quot;.  The one-word names are deprecated, and will continue to be honored'"/>
     </xsl:call-template>
     <!--  -->
     <!-- End of the chronological sequence: a new entry goes just above. -->
