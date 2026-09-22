@@ -18605,13 +18605,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <appendix xml:id="appendix-exercise-lists" label="appendix-exercise-lists">
                 <title>Lists of Exercises</title>
 
-                <p>Since <tag>exercise</tag> come in several flavors, we use <term>pseudo-elements</term> to specify the distinct types.  There are not many reading questions<mdash/>but here is a list of all of them, by section, using a <c>readingquestion</c> pseudo-element.</p>
+                <p>Since <tag>exercise</tag> come in several flavors, we use <term>pseudo-elements</term> to specify the distinct types.  These are the names a publication file uses for the same flavors.  There are not many reading questions<mdash/>but here is a list of all of them, by section, using an <c>exercise-reading</c> pseudo-element.</p>
 
-                <list-of elements="readingquestion" divisions="section" empty="no"/>
+                <list-of elements="exercise-reading" divisions="section" empty="no"/>
 
-                <p>And now a list of all the inline exercises, and including the title of every <tag>section</tag>, even if there is no inline exercise contained inside it.  The pseudo-element is <c>inlineexercise</c>.</p>
+                <p>And now a list of all the inline exercises, and including the title of every <tag>section</tag>, even if there is no inline exercise contained inside it.  The pseudo-element is <c>exercise-inline</c>.</p>
 
-                <list-of elements="inlineexercise" divisions="section" empty="yes"/>
+                <list-of elements="exercise-inline" divisions="section" empty="yes"/>
 
             </appendix>
 
