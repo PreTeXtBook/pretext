@@ -333,12 +333,6 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         data_dir = common.get_source_directories(xml_source)
         common.copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
 
-        # make output/tactile directory if the outformat is "all"
-        # PreFigure makes 'output' but we also want to create 'output/tactile'
-        if outformat == "all":
-            os.mkdir('output')
-            os.mkdir('output/tactile')
-
         # Process each pf_source_file for requested format
         for pfdiagram in pf_source_files:
             if ext_converter:
@@ -370,11 +364,16 @@ def individual_prefigure_conversion(pfdiagram, outformat):
         log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
         prefig.engine.pdf('tactile', pfdiagram)
         pdf_name = pfdiagram[:-4] + '.pdf'
+        # PreFigure makes "output" when it builds, but the tactile
+        # subdirectory below it is ours to make, for any format asking
+        os.makedirs('output/tactile', exist_ok=True)
         shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
-
-    if outformat == "svg" or outformat == "all":
-        log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
-        prefig.engine.build('svg', pfdiagram)
+        # A tactile build also writes an SVG 1.1 copy of the tactile
+        # drawing, which was never requested here, and which carries the
+        # name the SVG format gives the copy the XSL-FO conversion reads
+        tactile_svg_eleven = 'output/' + pfdiagram[:-4] + '-11.svg'
+        if os.path.exists(tactile_svg_eleven):
+            os.remove(tactile_svg_eleven)
 
     if outformat == "pdf" or outformat == "all":
         log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
@@ -383,6 +382,13 @@ def individual_prefigure_conversion(pfdiagram, outformat):
     if outformat == "png" or outformat == "all":
         log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
         prefig.engine.png('svg', pfdiagram)
+
+    # The PDF and PNG steps each build an SVG of their own and then
+    # delete it, along with the annotations and diagcess files beside
+    # it, so the SVG is made last and survives a request for "all".
+    if outformat == "svg" or outformat == "all":
+        log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
+        prefig.engine.build('svg', pfdiagram)
 
 
 
