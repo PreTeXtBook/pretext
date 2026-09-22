@@ -369,10 +369,6 @@ def individual_prefigure_conversion(pfdiagram, outformat):
         os.makedirs('output/tactile', exist_ok=True)
         shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
 
-    if outformat == "svg" or outformat == "all":
-        log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
-        prefig.engine.build('svg', pfdiagram)
-
     if outformat == "pdf" or outformat == "all":
         log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
         prefig.engine.pdf('svg', pfdiagram, dpi=100)
@@ -380,6 +376,13 @@ def individual_prefigure_conversion(pfdiagram, outformat):
     if outformat == "png" or outformat == "all":
         log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
         prefig.engine.png('svg', pfdiagram)
+
+    # The PDF and PNG steps each build an SVG of their own and then
+    # delete it, along with the annotations and diagcess files beside
+    # it, so the SVG is made last and survives a request for "all".
+    if outformat == "svg" or outformat == "all":
+        log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
+        prefig.engine.build('svg', pfdiagram)
 
 
 
