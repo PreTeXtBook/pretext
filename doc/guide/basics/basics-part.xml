@@ -1027,18 +1027,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       element. The value of <attr>element</attr> to rename an
       <tag>exercise</tag> is as follows:
       <ul>
-	<li><c>divisionalexercise</c> for an <tag>exercise</tag>
+	<li><c>exercise-divisional</c> for an <tag>exercise</tag>
 	inside <tag>exercises</tag>, <tag>subexercises</tag>, or
 	<tag>exercisegroup</tag> with default <q>Exercise</q></li>
-	<li><c>inlineexercise</c> for an inline exerise with default
+	<li><c>exercise-inline</c> for an inline exercise with default
 	<q>Checkpoint</q></li>
-	<li><c>worksheetexercise</c> for an <tag>exercise</tag>
+	<li><c>exercise-worksheet</c> for an <tag>exercise</tag>
 	contained in a <tag>worksheet</tag> with default <q>Worksheet
 	Exercise</q></li>
-	<li><c>readingquestion</c> for an <tag>exercise</tag>
+	<li><c>exercise-reading</c> for an <tag>exercise</tag>
 	contained in a <tag>reading-questions</tag> with default
 	<q>Reading Question</q></li>
-      </ul></p>
+      </ul>These are the names a publication file uses for the same four
+      types of <tag>exercise</tag>, so one name serves everywhere.</p>
     </paragraphs>
   </chapter>
 

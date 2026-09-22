@@ -5318,7 +5318,7 @@
 
         <p>There is a <attr>scope</attr> attribute, which should be the name of an element which is a division containing the location of the <tag>list-of</tag> element.  Then the list is restricted to items within the specified division.  For example, if you have the <tag>list-of</tag> inside a <tag>subsection</tag> built for this purpose, and you use <c>@scope="section"</c> then the list will have all the items from throughout the section containing the list.</p>
 
-        <p>There are four types of exercises, based on their location: inline, divisional, worksheet, and reading questions.  These may be specified inside <attr>elements</attr> by the <term>pseudo-elements</term>: <c>'inlineexercise'</c>, <c>'divisionexercise'</c>, <c>'worksheetexercise'</c>, <c>'readingquestion'</c>.  (These are just strings meant for this purpose, and are not <em>real</em> <pretext/> elements.)</p>
+        <p>There are four types of exercises, based on their location: inline, divisional, worksheet, and reading questions.  These may be specified inside <attr>elements</attr> by the <term>pseudo-elements</term>: <c>'exercise-inline'</c>, <c>'exercise-divisional'</c>, <c>'exercise-worksheet'</c>, <c>'exercise-reading'</c>.  (These are just strings meant for this purpose, and are not <em>real</em> <pretext/> elements.)  They are the names a publication file uses, and the names a <tag>rename</tag> uses, for the same four types.</p>
 
         <p>There may be an argument for a <attr>ref</attr> attribute that would behave similar to <attr>scope</attr>.  Make a feature request if you need it?</p>
 
