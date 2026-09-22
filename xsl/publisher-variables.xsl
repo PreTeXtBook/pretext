@@ -2207,8 +2207,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-worksheet']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
-<xsl:variable name="knowl-exercise-readingquestion">
-    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-readingquestion']" mode="set-pubfile-variable"/>
+<xsl:variable name="knowl-exercise-reading">
+    <xsl:apply-templates select="$publisher-attribute-options/html/knowl/pi:pub-attribute[@name='exercise-reading']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 <!--                   -->
@@ -3691,7 +3691,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="exercise-inline" default="yes" options="no" legacy-stringparam="html.knowl.exercise.inline"/>
             <pi:pub-attribute name="exercise-divisional" default="no" options="yes" legacy-stringparam="html.knowl.exercise.sectional"/>
             <pi:pub-attribute name="exercise-worksheet" default="no" options="yes" legacy-stringparam="html.knowl.exercise.worksheet"/>
-            <pi:pub-attribute name="exercise-readingquestion" default="no" options="yes" legacy-stringparam="html.knowl.exercise.readingquestion"/>
+            <pi:pub-attribute name="exercise-reading" legacy-name="exercise-readingquestion" default="no" options="yes" legacy-stringparam="html.knowl.exercise.readingquestion"/>
         </knowl>
         <cross-references>
             <pi:pub-attribute name="knowled" default="maximum" options="never cross-page"/>
@@ -3857,7 +3857,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- get the corresponding attribute from the publisher file -->
     <!-- which may not exist                                     -->
     <xsl:variable name="full-path" select="concat('$publication/', $path)"/>
-    <xsl:variable name="pubfile-attribute" select="dyn:evaluate($full-path)"/>
+    <xsl:variable name="new-name-attribute" select="dyn:evaluate($full-path)"/>
+    <!-- An attribute that has been renamed carries its old name as       -->
+    <!-- "@legacy-name", and a publisher who used that name still gets    -->
+    <!-- the value, with a deprecation message.  The path to it is the    -->
+    <!-- path to this attribute's parent, plus the old name.              -->
+    <xsl:variable name="legacy-name-path">
+        <xsl:choose>
+            <xsl:when test="@legacy-name">
+                <xsl:apply-templates select=".." mode="pub-entry-path"/>
+                <xsl:value-of select="concat('@', @legacy-name)"/>
+            </xsl:when>
+            <!-- no old name, so a legal expression selecting nothing -->
+            <xsl:otherwise>
+                <xsl:text>self::node()[false()]</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="legacy-name-attribute" select="dyn:evaluate(concat('$publication/', $legacy-name-path))"/>
+    <xsl:variable name="pubfile-attribute" select="$new-name-attribute | $legacy-name-attribute"/>
+    <!-- say so, once, when only the old name is present -->
+    <xsl:if test="$legacy-name-attribute and not($new-name-attribute)">
+        <xsl:message>PTX:DEPRECATE: the publisher file entry  <xsl:value-of select="$legacy-name-path"/>  has been renamed  <xsl:value-of select="$path"/>.  Your value, "<xsl:value-of select="$legacy-name-attribute"/>", will be used.  However you should move to the new name.</xsl:message>
+    </xsl:if>
     <!-- The default value, which may be specified or may vary conditionally -->
     <!-- (via a custom template) appears frequently as the provided value    -->
     <!-- when there is an error condition of some type, and is also echo'ed  -->

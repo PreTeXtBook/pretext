@@ -1196,7 +1196,12 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="exercise-readingquestion">
+        <!--
+          The four types of "exercise" are named here as they are
+          in "common" above, and as an author names them in a
+          "rename" or a "list-of".
+        -->
+        <attribute name="exercise-reading">
           <choice>
             <value>yes</value>
             <value>no</value>
