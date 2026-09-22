@@ -333,12 +333,6 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         data_dir = common.get_source_directories(xml_source)
         common.copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
 
-        # make output/tactile directory if the outformat is "all"
-        # PreFigure makes 'output' but we also want to create 'output/tactile'
-        if outformat == "all":
-            os.mkdir('output')
-            os.mkdir('output/tactile')
-
         # Process each pf_source_file for requested format
         for pfdiagram in pf_source_files:
             if ext_converter:
@@ -370,6 +364,9 @@ def individual_prefigure_conversion(pfdiagram, outformat):
         log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
         prefig.engine.pdf('tactile', pfdiagram)
         pdf_name = pfdiagram[:-4] + '.pdf'
+        # PreFigure makes "output" when it builds, but the tactile
+        # subdirectory below it is ours to make, for any format asking
+        os.makedirs('output/tactile', exist_ok=True)
         shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
 
     if outformat == "svg" or outformat == "all":
