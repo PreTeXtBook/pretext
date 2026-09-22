@@ -1982,25 +1982,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!--divisional exercise -->
             <xsl:when test="self::exercise and ancestor::exercises">
                 <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'divisionalexercise'"/>
+                    <xsl:with-param name="string-id" select="'exercise-divisional'"/>
                 </xsl:apply-templates>
             </xsl:when>
             <!-- worksheet exercise -->
             <xsl:when test="self::exercise and ancestor::worksheet">
                 <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'worksheetexercise'"/>
+                    <xsl:with-param name="string-id" select="'exercise-worksheet'"/>
                 </xsl:apply-templates>
             </xsl:when>
             <!-- reading question -->
             <xsl:when test="self::exercise and ancestor::reading-questions">
                 <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'readingquestion'"/>
+                    <xsl:with-param name="string-id" select="'exercise-reading'"/>
                 </xsl:apply-templates>
             </xsl:when>
             <!-- inline exercise ("Checkpoint") by elimination -->
             <xsl:when test="self::exercise">
                 <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'inlineexercise'"/>
+                    <xsl:with-param name="string-id" select="'exercise-inline'"/>
                 </xsl:apply-templates>
             </xsl:when>
             <!-- now PROJECT-LIKE by elimination, don't need $string-id -->
