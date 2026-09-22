@@ -368,6 +368,12 @@ def individual_prefigure_conversion(pfdiagram, outformat):
         # subdirectory below it is ours to make, for any format asking
         os.makedirs('output/tactile', exist_ok=True)
         shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
+        # A tactile build also writes an SVG 1.1 copy of the tactile
+        # drawing, which was never requested here, and which carries the
+        # name the SVG format gives the copy the XSL-FO conversion reads
+        tactile_svg_eleven = 'output/' + pfdiagram[:-4] + '-11.svg'
+        if os.path.exists(tactile_svg_eleven):
+            os.remove(tactile_svg_eleven)
 
     if outformat == "pdf" or outformat == "all":
         log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
