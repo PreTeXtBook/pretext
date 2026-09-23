@@ -4829,9 +4829,19 @@
         </paragraphs>
 
         <paragraphs>
-            <title>What the Images Need, and Where Files Live</title>
+            <title>What the Images Need</title>
 
-            <p>A <tag>latex-image-preamble</tag> and an <tag>asymptote-preamble</tag> supply setup for images described by source code, and a <c>pf:prefigure-preamble</c> does the same for PreFigure (<xref ref="topic-images"/>).  A <tag>directories</tag> element declares the directories that run with your source: <attr>external</attr> names the directory of files you curate (images and other assets<mdash/>a different directory is a different document), and <attr>data</attr> the directory of data files that images and programs consume.  The <em>destination</em> for generated files remains a publication file entry (<xref ref="processing-directory-management"/>).</p>
+            <p>A <tag>latex-image-preamble</tag> and an <tag>asymptote-preamble</tag> supply setup for images described by source code, and a <c>pf:prefigure-preamble</c> does the same for PreFigure (<xref ref="topic-images"/>).</p>
+        </paragraphs>
+
+        <paragraphs>
+            <title>Where Files Live</title>
+
+            <p>A <tag>directories</tag> element declares the directories that run with your source.  Its <attr>external</attr> attribute names the directory of files you curate, such as photographs and movies<mdash/>a different directory is a different document.  Its <attr>data</attr> attribute names the directory of data files that images and programs consume.  Each value is a path <em>relative</em> to the location of your main <pretext/> source file, to a directory that must exist.  So with your source in a <c>source</c> directory, and your curated files in a peer directory named <c>ext</c>, you would write<cd>
+                <cline>&lt;directories external="../ext"/&gt;</cline>
+            </cd>and then an <tag>image</tag> would say <c>source="photos/whippet.png"</c> for a file at <c>ext/photos/whippet.png</c>, never mentioning <c>ext</c> itself.</p>
+
+            <p>The <em>destination</em> for generated files is not a property of your source, so it is a <attr>generated</attr> attribute on a <tag>directories</tag> element in a publication file.  An <attr>external</attr> attribute there is deprecated, and honored only when the <tag>docinfo</tag> does not declare an external directory.  To move the declaration, delete the <attr>external</attr> attribute from the publication file and place the same value on the <tag>directories</tag> element in <tag>docinfo</tag>: the path does not change, since the publication file value was also relative to the main source file.  The full story, with a worked example, is <xref ref="processing-directory-management"/>.</p>
         </paragraphs>
 
         <paragraphs>
@@ -4862,7 +4872,7 @@
             <cline>    &lt;macros&gt;\newcommand{\adjoint}[1]{#1^\ast}&lt;/macros&gt;</cline>
             <cline>    &lt;math-package latex-name="cancel" mathjax-name="cancel"/&gt;</cline>
             <cline>    &lt;latex-image-preamble&gt;\usepackage{pgfplots}&lt;/latex-image-preamble&gt;</cline>
-            <cline>    &lt;directories data="data"/&gt;</cline>
+            <cline>    &lt;directories external="../ext" data="../data"/&gt;</cline>
             <cline>    &lt;defaults&gt;</cline>
             <cline>        &lt;images width="60%"/&gt;</cline>
             <cline>        &lt;programs language="python"/&gt;</cline>
