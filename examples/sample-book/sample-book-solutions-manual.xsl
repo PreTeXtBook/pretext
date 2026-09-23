@@ -47,7 +47,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Default is "letterpaper", we could fine-tune margins if desired   -->
 <!-- 1.25 inch side margins, 0.75 inch top/bottom -->
 <xsl:param name="latex.geometry">
-	<xsl:text>left=1.25in,right=1.25in,top=0.75in,bottom=0.75in,headsep=0.25in</xsl:text>
+    <xsl:text>left=1.25in,right=1.25in,top=0.75in,bottom=0.75in,headsep=0.25in</xsl:text>
 </xsl:param>
 
 </xsl:stylesheet>
