@@ -43,7 +43,7 @@
     <paragraphs>
         <title>Installing WSL</title>
         <p>
-	    If you have Windows 10 with OS Build greater than 16215 (August 2016),
+        If you have Windows 10 with OS Build greater than 16215 (August 2016),
         then installing <init>WSL</init> is not difficult. Just follow the
         (reasonably straightforward) instructions given by Microsoft at the address
         <url href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" visual="msdn.microsoft.com/en-us/commandline/wsl/install_guide"/>.
@@ -173,7 +173,7 @@
         </p></li>
         <li><p>
             You now want to view the <c>hw.html</c> file in a browser,
-	    This is done with the command <c>explorer.exe hw.html</c>.
+        This is done with the command <c>explorer.exe hw.html</c>.
         </p></li>
         </ol>
         The <c>edit-xsltproc-view</c> cycle just given may seem daunting at first blush.
