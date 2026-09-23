@@ -693,9 +693,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <idx><h sortby="introduction"><tag>introduction</tag></h><h>of a project-like element</h></idx>
       <idx><h>project-like elements (<tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>, <tag>project</tag>)</h><h><pretext/> code for</h></idx>
 
-		<program>
-		<code><xi:include href="project.ptx" parse="text"/></code>
-		</program>
+        <program>
+          <code><xi:include href="project.ptx" parse="text"/></code>
+        </program>
     </listing>
 
     <p>
@@ -721,14 +721,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="basics-ss-exercise-structure">
       <title><tag>exercise</tag> structure</title>
       <p>
-    An <tag>exercise</tag> can be rather freeform, containing
-    elements such as <tag>p</tag>, <tag>figure</tag>,
-    <tag>image</tag>, etc. However, an author will typically think
-    about an exercise as having an associated correct answer,
-    perhaps with a hint or a detailed solution. <pretext /> has
-    tags to support that sort of content, but it does require that
-    your <tag>exercise</tag> be structured. This is nearly
-    identical to the structure of a project-like element.
+        An <tag>exercise</tag> can be rather freeform, containing
+        elements such as <tag>p</tag>, <tag>figure</tag>,
+        <tag>image</tag>, etc. However, an author will typically think
+        about an exercise as having an associated correct answer,
+        perhaps with a hint or a detailed solution. <pretext /> has
+        tags to support that sort of content, but it does require that
+        your <tag>exercise</tag> be structured. This is nearly
+        identical to the structure of a project-like element.
       </p>
 
       <listing xml:id="basics-l-exercise">
@@ -737,9 +737,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <idx><h>inline exercise</h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h><h>inline</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h></idx>
-	<program>
+        <program>
 <code><xi:include href="exercise.ptx" parse="text"/></code>
-	</program>
+        </program>
       </listing>
 
       <p>
@@ -764,26 +764,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         (at all).
         Check <xref
     ref="publisher-string-parameters"
-    text="type-global" /> for information about <c>stringparam</c>s.
+        text="type-global" /> for information about <c>stringparam</c>s.
       </p>
 
       <p>
-    An <tag>exercise</tag> can also have a more complicated
-    structure that assigns a sequence of steps for a student to
-    complete. <pretext /> provides the same <tag>task</tag> tag
-    that is used in project-like elements to give structure to
-    such an <tag>exercise</tag>.
+        An <tag>exercise</tag> can also have a more complicated
+        structure that assigns a sequence of steps for a student to
+        complete. <pretext /> provides the same <tag>task</tag> tag
+        that is used in project-like elements to give structure to
+        such an <tag>exercise</tag>.
       </p>
       <listing xml:id="basics-l-exercise-task">
         <title>An exercise with tasks</title>
         <idx><h sortby="exercise"><tag>exercise</tag></h><h
-    sortby="with task">with <tag>task</tag></h><h><pretext/> code for</h></idx>
+            sortby="with task">with <tag>task</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h
-    sortby="exercise"><tag>exercise</tag></h><h sortby="with
-    task">with <tag>task</tag></h></idx>
-	<program>
+            sortby="exercise"><tag>exercise</tag></h><h sortby="with
+            task">with <tag>task</tag></h></idx>
+        <program>
 <code><xi:include href="exercise-task.ptx" parse="text"/></code>
-	</program>
+        </program>
       </listing>
 
       <p>
@@ -805,10 +805,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         See <xref ref="basics-ch-rename"/> for information on how to use something different than
         <q>Checkpoint</q> as the name for these.
         </fn> To distinguish these <tag>exercise</tag>s from
-    <tag>exercise</tag>s that are contained in the specialized
-    divisions designed to collect <tag>exercise</tag>s that will
-    be discussed in the next section, we refer to these as
-    <term>inline exercises</term>.
+        <tag>exercise</tag>s that are contained in the specialized
+        divisions designed to collect <tag>exercise</tag>s that will
+        be discussed in the next section, we refer to these as
+        <term>inline exercises</term>.
             <idx><h>checkpoint</h><see>inline exercise</see></idx>
             <idx>inline exercise</idx>
       </p>
@@ -817,40 +817,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="basics-s-">
       <title>Divisions of <tag>exercise</tag>s</title>
       <introduction>
-    <p>
-      <idx sortby="exercises division"><tag>exercises</tag>
-      division</idx>
+        <p>
+          <idx sortby="exercises division"><tag>exercises</tag>
+          division</idx>
 
-      You can also put several <tag>exercise</tag>s as part of an
-      <tag>exercises</tag> element within a division, which is the
-      typical way for creating a collection of exercises together
-      at the end of a division such as a chapter or section. The
-      content of an <tag>exercises</tag> division is rather
-      limited. It can begin with an <tag>introduction</tag>
-      (perhaps a set of common instructions), followed by a
-      mixture of <tag>exercise</tag> and <tag>exercisegroup</tag>
-      (see <xref ref="basics-ss-exgp" text="type-global" />)
-      elements, followed by an optional <tag>conclusion</tag>. The
-      sample code in <xref ref="basics-l-exercisegroup"
-      text="type-global" /> illustrates this structure, which is
-      rendered later as <q><xref ref="basics-s-sample-exercises"
-      text="global"/> Exercises</q>.
-    </p>
-    <p>
-      <idx sortby="subexercises"><tag>subexercises</tag></idx>
-      <idx><h sortby="exercises"><tag>exercises</tag></h><h>grouping</h></idx>
-      An alternative structure for an <tag>exercises</tag>
-      division is to use a sequence of <tag>subsexercises</tag>
-      elements, optionally preceded by an <tag>introduction</tag>
-      and followed by a <tag>conclusion</tag>. The content of a
-      <tag>subexercises</tag> element is identical to
-      what was described above for an <tag>exercises</tag>
-      element, but we emphasize that a strong rationale for using
-      <tag>subexercises</tag> (as opposed to
-      <tag>exercisegroup</tag>) is that a <tag>subexercises</tag>
-      element can begin with a <tag>title</tag>, providing a clear
-      way of organizing the <tag>exercise</tag>s for the reader.
-    </p>
+          You can also put several <tag>exercise</tag>s as part of an
+          <tag>exercises</tag> element within a division, which is the
+          typical way for creating a collection of exercises together
+          at the end of a division such as a chapter or section. The
+          content of an <tag>exercises</tag> division is rather
+          limited. It can begin with an <tag>introduction</tag>
+          (perhaps a set of common instructions), followed by a
+          mixture of <tag>exercise</tag> and <tag>exercisegroup</tag>
+          (see <xref ref="basics-ss-exgp" text="type-global" />)
+          elements, followed by an optional <tag>conclusion</tag>. The
+          sample code in <xref ref="basics-l-exercisegroup"
+          text="type-global" /> illustrates this structure, which is
+          rendered later as <q><xref ref="basics-s-sample-exercises"
+            text="global"/> Exercises</q>.
+        </p>
+        <p>
+          <idx sortby="subexercises"><tag>subexercises</tag></idx>
+          <idx><h sortby="exercises"><tag>exercises</tag></h><h>grouping</h></idx>
+          An alternative structure for an <tag>exercises</tag>
+          division is to use a sequence of <tag>subsexercises</tag>
+          elements, optionally preceded by an <tag>introduction</tag>
+          and followed by a <tag>conclusion</tag>. The content of a
+          <tag>subexercises</tag> element is identical to
+          what was described above for an <tag>exercises</tag>
+          element, but we emphasize that a strong rationale for using
+          <tag>subexercises</tag> (as opposed to
+          <tag>exercisegroup</tag>) is that a <tag>subexercises</tag>
+          element can begin with a <tag>title</tag>, providing a clear
+          way of organizing the <tag>exercise</tag>s for the reader.
+        </p>
       </introduction>
       <subsection xml:id="basics-ss-exgp">
       <title><tag>exercisegroup</tag></title>
@@ -861,7 +861,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         which is when you will use the <tag>exercisegroup</tag> tag.
             <idx><h sortby="exercisegroup"><tag>exercisegroup</tag></h><h>instructions</h></idx>
         An <tag>exercisegroup</tag> can only be used as part of an
-    <tag>exercises</tag> element or a <tag>subexercises</tag> element, however!
+          <tag>exercises</tag> element or a <tag>subexercises</tag> element, however!
         The portion of this section headed as
         <q><xref ref="basics-s-sample-exercises" text="global"/> Exercises</q>
         is produced using the code in <xref ref="basics-l-exercisegroup"/>.
@@ -892,15 +892,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       </p>
       </subsection>
       <subsection>
-    <title>Reading questions</title>
-    <p>
-      Another specialized division, <tag>reading-questions</tag>,
-      can be used to house <tag>exercise</tag>s designed to test
-      or guide a reader's comprehension of the material in that
-      division. The structure of a <tag>reading-questions</tag>
-      element is similar to an <tag>exercises</tag> element, but
-      without the grouping options of <tag>subexercises</tag> and
-      <tag>exercisegroup</tag>.         The portion of this section headed as
+        <title>Reading questions</title>
+        <p>
+          Another specialized division, <tag>reading-questions</tag>,
+          can be used to house <tag>exercise</tag>s designed to test
+          or guide a reader's comprehension of the material in that
+          division. The structure of a <tag>reading-questions</tag>
+          element is similar to an <tag>exercises</tag> element, but
+          without the grouping options of <tag>subexercises</tag> and
+          <tag>exercisegroup</tag>.         The portion of this section headed as
         <q><xref ref="basics-reading-questions" text="global"/> <xref ref="basics-reading-questions" text="title"/></q>
         is produced using the code in <xref ref="basics-l-reading-questions"/>.
       </p>
@@ -967,9 +967,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <title>Structure of <tag>worksheet</tag>.</title>
         <idx><h sortby="worksheet"><tag>worksheet</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="worksheet"><tag>worksheet</tag></h></idx>
-	<program>
-	  <code><xi:include href="worksheet.ptx" parse="text"/></code>
-	</program>
+      <program>
+        <code><xi:include href="worksheet.ptx" parse="text"/></code>
+      </program>
     </listing>
     <xi:include href="worksheet.ptx" />
   </chapter>
@@ -1018,7 +1018,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <tag>exercise</tag>s</title>
       <idx><h>inline exercise</h><h>renaming</h></idx>
       <idx><h
-           sortby="exercise"><tag>exercise</tag></h><h>renaming</h></idx>
+          sortby="exercise"><tag>exercise</tag></h><h>renaming</h></idx>
       <idx><h sortby="rename"><tag>rename</tag></h><h sortby="for exercise">for <tag>exercise</tag></h></idx>
       <p>Because of the range of divisions that can contain an
       <tag>exercise</tag> element with different names displayed (such
@@ -1027,17 +1027,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       element. The value of <attr>element</attr> to rename an
       <tag>exercise</tag> is as follows:
       <ul>
-    <li><c>exercise-divisional</c> for an <tag>exercise</tag>
-    inside <tag>exercises</tag>, <tag>subexercises</tag>, or
-    <tag>exercisegroup</tag> with default <q>Exercise</q></li>
-    <li><c>exercise-inline</c> for an inline exercise with default
-    <q>Checkpoint</q></li>
-    <li><c>exercise-worksheet</c> for an <tag>exercise</tag>
-    contained in a <tag>worksheet</tag> with default <q>Worksheet
-    Exercise</q></li>
-    <li><c>exercise-reading</c> for an <tag>exercise</tag>
-    contained in a <tag>reading-questions</tag> with default
-    <q>Reading Question</q></li>
+          <li><c>exercise-divisional</c> for an <tag>exercise</tag>
+            inside <tag>exercises</tag>, <tag>subexercises</tag>, or
+            <tag>exercisegroup</tag> with default <q>Exercise</q></li>
+          <li><c>exercise-inline</c> for an inline exercise with default
+            <q>Checkpoint</q></li>
+          <li><c>exercise-worksheet</c> for an <tag>exercise</tag>
+            contained in a <tag>worksheet</tag> with default <q>Worksheet
+            Exercise</q></li>
+          <li><c>exercise-reading</c> for an <tag>exercise</tag>
+            contained in a <tag>reading-questions</tag> with default
+            <q>Reading Question</q></li>
       </ul>These are the names a publication file uses for the same four
       types of <tag>exercise</tag>, so one name serves everywhere.</p>
     </paragraphs>
@@ -1063,22 +1063,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         then <init>SVG</init> is what you want.
         If you're producing <init>PDF</init> by using <latex/>,
         then you'll also want <init>PDF</init> graphics files. If you
-    plan to produce an ebook that can be read on Kindle devices,
-    you will need <init>PNG</init> graphics files.
+        plan to produce an ebook that can be read on Kindle devices,
+        you will need <init>PNG</init> graphics files.
         Fortunately,
         it's not too hard to convert between these formats on the command line.<fn>
         Since conversion is a rare task,
         it may be easiest to do in a cloud environment like CoCalc.
         </fn> In order to produce <init>HTML</init>, <init>PDF</init>,
-    and Kindle, you will need to always have three files
-    available. We recommend that you consistently pick
-    <init>PDF</init> or <init>SVG</init> to be the one that you
-    edit and then convert to the other format. Otherwise, you
-    might have <c>parabola.svg</c> and <c>parabola.pdf</c> and
-    <c>parabola.png</c> contain three different graphics, and then
-    the different output formats for your project will have different images in them!
+        and Kindle, you will need to always have three files
+        available. We recommend that you consistently pick
+        <init>PDF</init> or <init>SVG</init> to be the one that you
+        edit and then convert to the other format. Otherwise, you
+        might have <c>parabola.svg</c> and <c>parabola.pdf</c> and
+        <c>parabola.png</c> contain three different graphics, and then
+        the different output formats for your project will have different images in them!
         <init>PNG</init> and <init>JPEG</init> are supported by modern
-    web browsers, <latex/>, and Kindle,
+        web browsers, <latex/>, and Kindle,
         so that's a good option when vector graphic formats like <init>SVG</init> and <init>PDF</init> are not available or appropriate.
       </p>
       <listing xml:id="basics-l-image">
@@ -1092,7 +1092,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       </listing>
 
       <p>
-    <idx><h sortby="width"><attr>width</attr></h><h sortby="of image">of <tag>image</tag></h></idx>
+        <idx><h sortby="width"><attr>width</attr></h><h sortby="of image">of <tag>image</tag></h></idx>
         Use of <attr>width</attr> on an image must be a percentage, and for an <tag>image</tag> as in this example, the percentage is of the current line width. The code in <xref ref="basics-l-image"/> produces the following output:
       </p>
 
@@ -1105,8 +1105,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <p>
           <idx><h>file extensions</h><h>for graphics</h></idx>
           <idx><h>extensions</h><see>file extensions</see></idx>
-      <idx><h>graphics</h><h>file formats</h></idx>
-      <idx><h sortby="image"><tag>image</tag></h><h>file formats</h></idx>
+        <idx><h>graphics</h><h>file formats</h></idx>
+        <idx><h sortby="image"><tag>image</tag></h><h>file formats</h></idx>
         Note that the path to the image file does not include the file extension.
         When you process your source,
         the output format you're generating will determine what gets added on so that the right file is used.
@@ -1114,20 +1114,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         make sure that the <init>SVG</init> file is in the correct location relative to the <init>HTML</init> file.
         Here, we need a directory called <c>images</c> that lives next to our <init>HTML</init> files with a file called <c>small-graph.svg</c> inside that directory.
         If using a <init>PNG</init> or <init>JPEG</init> file across
-    <init>HTML</init>, <latex />/<init>PDF</init>,
-    <init>EPUB</init>, and Kindle,
+        <init>HTML</init>, <latex />/<init>PDF</init>,
+        <init>EPUB</init>, and Kindle,
         put the extension in the filename so that the file is used for
-    all. Many authors have an <c>images</c> directory that lives in the same directory as their <pretext/> source files and then produce the <c>.tex</c> file or <init>HTML</init> files in another directory. When doing so, you need to copy the <c>images</c> directory to be in the same directory as the <c>.tex</c> file before generating a <init>PDF</init> or in the same directory as your many <c>.html</c> files before viewing your <init>HTML</init> files in a web browser.
+        all. Many authors have an <c>images</c> directory that lives in the same directory as their <pretext/> source files and then produce the <c>.tex</c> file or <init>HTML</init> files in another directory. When doing so, you need to copy the <c>images</c> directory to be in the same directory as the <c>.tex</c> file before generating a <init>PDF</init> or in the same directory as your many <c>.html</c> files before viewing your <init>HTML</init> files in a web browser.
       </p>
     </section>
     <section xml:id="basics-s-fig">
         <title><tag>figure</tag></title>
         <idx sortby="figure"><tag>figure</tag></idx>
         <p>To provide a number and caption for an <tag>image</tag>,
-    the <tag>figure</tag> element is used. Notice that the
-    <tag>caption</tag> is authored at the <em>beginning</em> of
-    the <tag>figure</tag> but is displayed <em>below</em> the
-    <tag>figure</tag>'s content.</p>
+        the <tag>figure</tag> element is used. Notice that the
+        <tag>caption</tag> is authored at the <em>beginning</em> of
+        the <tag>figure</tag> but is displayed <em>below</em> the
+        <tag>figure</tag>'s content.</p>
       <listing xml:id="basics-l-figure">
           <title>Code to include a figure</title>
           <idx><h sortby="figure"><tag>figure</tag></h><h><pretext/> code for</h></idx>
@@ -1152,7 +1152,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <section xml:id="basics-s-sidebyside">
         <title><tag>sidebyside</tag></title>
         <idx sortby="sidebyside"><tag>sidebyside</tag></idx>
-    <idx>page layout</idx>
+      <idx>page layout</idx>
       <p>
         One of the more complex pieces of code in <pretext/>,
         by most accounts, is that used for positioning objects
@@ -1266,12 +1266,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
           you'll need a working installation of it with a proper configuration of its path in the <c>pretext.cfg</c> file.
           Linux and CoCalc can probably get away without extra configuration here,
           but it will likely be required on macOS and Windows unless
-      you've set up your SageMath install so you can run it from
-      the command line by simply executing <c>sage</c>. More
-      details on running the <c>pretext/pretext</c> script can be
-      found in <xref
+          you've set up your SageMath install so you can run it from
+          the command line by simply executing <c>sage</c>. More
+          details on running the <c>pretext/pretext</c> script can be
+          found in <xref
       ref="pretext-script"
-      text="type-global" />
+          text="type-global" />
         </p>
       </aside>
       <p><idx sortby="latex-image-preamble"><tag>latex-image-preamble</tag></idx>
@@ -1432,7 +1432,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         Including computational SageMath cells is pretty easy with <tag>sage</tag>, <tag>input</tag>,
         and <tag>output</tag>.
         The last tag is useful for producing formats intended for
-    offline reading so that they can include the result of the code's execution.
+        offline reading so that they can include the result of the code's execution.
       </p>
 
       <listing xml:id="basics-l-sage">
@@ -1462,7 +1462,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
         The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script
-    that we discussed in <xref ref="basics-s-latex-fig"/> to produce the image files required for your chosen output formats.
+        that we discussed in <xref ref="basics-s-latex-fig"/> to produce the image files required for your chosen output formats.
         This is accomplished by using <tag>sageplot</tag> with the script.
         (The <c>pretext</c> script is fully discussed in <xref ref="pretext-script"/>, but at least
         see the aside in <xref ref="basics-s-latex-fig"/> about the additional packages that must be installed and configured to use it properly.)
