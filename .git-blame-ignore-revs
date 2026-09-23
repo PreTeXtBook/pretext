@@ -12,3 +12,9 @@
 
 # Jun 2026: normalize line endings to LF in two localization files
 fcc497053294ba42ee77e88fc21890a8f1eb2eff
+
+# Sep 2026: tabs to spaces, and indentation to match, in PreTeXt and XSL source
+6fef71098f2fcf8db01f18853ed9b4dda96f878c
+57a8cd317edb879fd3d47d7274976faf3cdde0bd
+1060a688b54899cd6f4a244e7fbe78a96990d488
+604c4ed200fd7266f437121b59b3e7fa0bac07b9
