@@ -1379,8 +1379,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="parent::match/@order"/>
             </xsl:attribute>
         </xsl:if>
-        <xsl:apply-templates select="node()" mode="assembly"/>
+        <xsl:apply-templates select="." mode="cardsort-card-assembly"/>
     </xsl:copy>
+</xsl:template>
+
+<xsl:template match="cardsort/match/response" mode="assembly">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="assembly"/>
+        <xsl:apply-templates select="." mode="cardsort-card-assembly"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Experimental, see "debug.advanced.feedback": a card may have a -->
+<!-- "statement" and a "feedback".  Unless the experiment is on,    -->
+<!-- the card is just the content of its "statement", and any       -->
+<!-- "feedback" is dropped, so is never seen by any conversion.     -->
+<xsl:template match="cardsort/match/premise|cardsort/match/response" mode="cardsort-card-assembly">
+    <xsl:choose>
+        <xsl:when test="not($b-debug-advanced-feedback) and statement">
+            <xsl:apply-templates select="statement/node()" mode="assembly"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="node()" mode="assembly"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The deprecated "matches" form does not get this new feature -->
+<xsl:template match="matches/match/premise" mode="cardsort-card-assembly">
+    <xsl:apply-templates select="node()" mode="assembly"/>
 </xsl:template>
 
 <!-- WeBWorK @copy resolution -->
