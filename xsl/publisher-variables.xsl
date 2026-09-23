@@ -105,6 +105,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as an empty string -->
 <xsl:variable name="chunk-level-entered" select="string($chunks)"/>
 
+<!-- Experimental: "statement" and "feedback" inside the "premise" -->
+<!-- and "response" (the "cards") of a "cardsort" exercise.  With  -->
+<!-- "no" a card is the content of its "statement" and "feedback"  -->
+<!-- is dropped.  With "yes" the structure survives, for eventual  -->
+<!-- use by Runestone.  Declared here, since assembly needs it.    -->
+<xsl:param name="debug.advanced.feedback" select="'no'"/>
+<xsl:variable name="b-debug-advanced-feedback" select="$debug.advanced.feedback = 'yes'"/>
+
 <!-- ############################# -->
 <!-- Structure of the Version Tree -->
 <!-- ############################# -->

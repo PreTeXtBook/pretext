@@ -1638,7 +1638,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:number count="premise" from="cardsort" level="any"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="parent::match" mode="category-attribute"/>
-                            <xsl:apply-templates select="."/>
+                            <xsl:apply-templates select="." mode="cardsort-card-content"/>
                         </li>
                     </xsl:for-each>
                     <!-- PTX response = RS dropzone -->
@@ -1651,13 +1651,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:number count="response" from="cardsort" level="any"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="parent::match" mode="category-attribute"/>
-                            <xsl:apply-templates select="."/>
+                            <xsl:apply-templates select="." mode="cardsort-card-content"/>
                         </li>
                     </xsl:for-each>
                 </xsl:for-each>
             </ul>
         </div>
     </div>
+</xsl:template>
+
+<!-- Experimental, see "debug.advanced.feedback": a card may have  -->
+<!-- a "statement" and a "feedback".  The "statement" is the card, -->
+<!-- while the "feedback" is not yet communicated to Runestone.    -->
+<xsl:template match="premise|response" mode="cardsort-card-content">
+    <xsl:choose>
+        <xsl:when test="$b-debug-advanced-feedback and statement">
+            <xsl:apply-templates select="statement/node()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="."/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A "category" is simply the sequence number of an     -->

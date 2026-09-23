@@ -691,6 +691,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
+<!-- A card ("premise" or "response") is copied as-is -->
+<xsl:template match="premise|response" mode="cardsort-card-static">
+    <xsl:copy-of select="."/>
+</xsl:template>
+
+<!-- Experimental, see "debug.advanced.feedback": a card of a -->
+<!-- "cardsort" may have a "statement" and a "feedback".  The -->
+<!-- card becomes the content of the "statement", while any   -->
+<!-- "feedback" is dropped.                                   -->
+<xsl:template match="cardsort/match/premise|cardsort/match/response" mode="cardsort-card-static">
+    <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:choose>
+            <xsl:when test="$b-debug-advanced-feedback and statement">
+                <xsl:copy-of select="statement/node()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="node()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
 <!-- Exercise statement as a tabular -->
 
 <!-- For a problem statement, we use a response list re-ordered    -->
@@ -709,7 +732,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="sorted-premises-rtf">
         <xsl:for-each select="match/premise|premise">
             <xsl:sort select="@order"/>
-            <xsl:copy-of select="."/>
+            <xsl:apply-templates select="." mode="cardsort-card-static"/>
         </xsl:for-each>
     </xsl:variable>
     <xsl:variable name="sorted-premises" select="exsl:node-set($sorted-premises-rtf)"/>
@@ -718,7 +741,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="sorted-responses-rtf">
         <xsl:for-each select="match/response|response">
             <xsl:sort select="@order"/>
-            <xsl:copy-of select="."/>
+            <xsl:apply-templates select="." mode="cardsort-card-static"/>
         </xsl:for-each>
     </xsl:variable>
     <xsl:variable name="sorted-responses" select="exsl:node-set($sorted-responses-rtf)"/>
@@ -790,7 +813,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>
                     <xsl:choose>
                         <xsl:when test="response">
-                            <xsl:copy-of select="response"/>
+                            <xsl:apply-templates select="response" mode="cardsort-card-static"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:text>(</xsl:text>
@@ -804,7 +827,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <ul>
                             <xsl:for-each select="premise">
                                 <li>
-                                    <xsl:copy-of select="."/>
+                                    <xsl:apply-templates select="." mode="cardsort-card-static"/>
                                 </li>
                             </xsl:for-each>
                         </ul>
