@@ -4868,13 +4868,13 @@
             <cline>    &lt;blurb shelf="Mathematics"&gt;A field guide to the fauna of PreTeXt.&lt;/blurb&gt;</cline>
             <cline>    &lt;initialism&gt;FG&lt;/initialism&gt;</cline>
             <cline>    &lt;rename element="activity"&gt;Laboratory&lt;/rename&gt;</cline>
-            <cline>    &lt;cross-references text="type-global"/&gt;</cline>
             <cline>    &lt;macros&gt;\newcommand{\adjoint}[1]{#1^\ast}&lt;/macros&gt;</cline>
             <cline>    &lt;math-package latex-name="cancel" mathjax-name="cancel"/&gt;</cline>
             <cline>    &lt;latex-image-preamble&gt;\usepackage{pgfplots}&lt;/latex-image-preamble&gt;</cline>
             <cline>    &lt;directories external="../ext" data="../data"/&gt;</cline>
             <cline>    &lt;defaults&gt;</cline>
             <cline>        &lt;images width="60%"/&gt;</cline>
+            <cline>        &lt;xrefs text="type-global"/&gt;</cline>
             <cline>        &lt;programs language="python"/&gt;</cline>
             <cline>        &lt;parsons language="natural"/&gt;</cline>
             <cline>    &lt;/defaults&gt;</cline>
