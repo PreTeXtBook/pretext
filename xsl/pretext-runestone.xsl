@@ -1608,7 +1608,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Carsort Problem -->
 
+<!-- Experimental, see "debug.advanced.feedback": XML for Runestone -->
 <xsl:template match="*[@pi:exercise-interactive = 'cardsort']" mode="runestone-to-interactive">
+    <xsl:choose>
+        <xsl:when test="$b-debug-advanced-feedback">
+            <xsl:apply-templates select="." mode="cardsort-xml"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="cardsort-html"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*[@pi:exercise-interactive = 'cardsort']" mode="cardsort-html">
     <div class="ptx-runestone-container">
         <div class="runestone cardsort_section">
             <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
@@ -1638,7 +1650,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:number count="premise" from="cardsort" level="any"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="parent::match" mode="category-attribute"/>
-                            <xsl:apply-templates select="." mode="cardsort-card-content"/>
+                            <xsl:apply-templates select="."/>
                         </li>
                     </xsl:for-each>
                     <!-- PTX response = RS dropzone -->
@@ -1651,7 +1663,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:number count="response" from="cardsort" level="any"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="parent::match" mode="category-attribute"/>
-                            <xsl:apply-templates select="." mode="cardsort-card-content"/>
+                            <xsl:apply-templates select="."/>
                         </li>
                     </xsl:for-each>
                 </xsl:for-each>
@@ -1660,18 +1672,104 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Experimental, see "debug.advanced.feedback": a card may have  -->
-<!-- a "statement" and a "feedback".  The "statement" is the card, -->
-<!-- while the "feedback" is not yet communicated to Runestone.    -->
-<xsl:template match="premise|response" mode="cardsort-card-content">
-    <xsl:choose>
-        <xsl:when test="$b-debug-advanced-feedback and statement">
-            <xsl:apply-templates select="statement/node()"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="."/>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- Experimental, see "debug.advanced.feedback".  The XML form    -->
+<!-- Runestone reads for "matching" and for "dragndrop", which     -->
+<!-- allows a "feedback" on each card.  The exercise's "feedback"  -->
+<!-- is always first, even when empty, so a Runestone that looks   -->
+<!-- for the first "feedback" never finds a card's "feedback".     -->
+<!-- Identifications are those of the HTML form: a "premise" is a  -->
+<!-- "_drag" and a "response" is a "_drop".  A "premise" without a -->
+<!-- "response" gets no "answer", making it a distractor.          -->
+<xsl:template match="*[@pi:exercise-interactive = 'cardsort']" mode="cardsort-xml">
+    <xsl:variable name="rsid">
+        <xsl:apply-templates select="." mode="runestone-id"/>
+    </xsl:variable>
+    <div class="ptx-runestone-container">
+        <div class="runestone cardsort_section">
+            <div data-component="dragndrop" data-question_label="">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <script type="text/xml">
+                    <dragndrop>
+                        <statement>
+                            <xsl:apply-templates select="statement"/>
+                        </statement>
+                        <feedback>
+                            <xsl:apply-templates select="feedback"/>
+                        </feedback>
+                        <xsl:apply-templates select="cardsort/match/premise" mode="cardsort-xml">
+                            <xsl:with-param name="rsid" select="$rsid"/>
+                        </xsl:apply-templates>
+                        <xsl:apply-templates select="cardsort/match/response" mode="cardsort-xml">
+                            <xsl:with-param name="rsid" select="$rsid"/>
+                        </xsl:apply-templates>
+                        <xsl:apply-templates select="cardsort/match/premise" mode="cardsort-xml-answer">
+                            <xsl:with-param name="rsid" select="$rsid"/>
+                        </xsl:apply-templates>
+                    </dragndrop>
+                </script>
+            </div>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- A card, with an optional "feedback" -->
+<xsl:template match="premise|response" mode="cardsort-xml">
+    <xsl:param name="rsid"/>
+    <xsl:element name="{local-name(.)}">
+        <id>
+            <xsl:apply-templates select="." mode="cardsort-xml-id">
+                <xsl:with-param name="rsid" select="$rsid"/>
+            </xsl:apply-templates>
+        </id>
+        <label>
+            <xsl:choose>
+                <xsl:when test="statement">
+                    <xsl:apply-templates select="statement/node()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="node()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </label>
+        <xsl:if test="feedback">
+            <feedback>
+                <xsl:apply-templates select="feedback"/>
+            </feedback>
+        </xsl:if>
+    </xsl:element>
+</xsl:template>
+
+<!-- A "premise" matches the "response" of its "match", if any -->
+<xsl:template match="premise" mode="cardsort-xml-answer">
+    <xsl:param name="rsid"/>
+    <xsl:if test="../response">
+        <answer>
+            <xsl:attribute name="premise">
+                <xsl:apply-templates select="." mode="cardsort-xml-id">
+                    <xsl:with-param name="rsid" select="$rsid"/>
+                </xsl:apply-templates>
+            </xsl:attribute>
+            <xsl:attribute name="response">
+                <xsl:apply-templates select="../response" mode="cardsort-xml-id">
+                    <xsl:with-param name="rsid" select="$rsid"/>
+                </xsl:apply-templates>
+            </xsl:attribute>
+        </answer>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="premise" mode="cardsort-xml-id">
+    <xsl:param name="rsid"/>
+    <xsl:value-of select="$rsid"/>
+    <xsl:text>_drag</xsl:text>
+    <xsl:number count="premise" from="cardsort" level="any"/>
+</xsl:template>
+
+<xsl:template match="response" mode="cardsort-xml-id">
+    <xsl:param name="rsid"/>
+    <xsl:value-of select="$rsid"/>
+    <xsl:text>_drop</xsl:text>
+    <xsl:number count="response" from="cardsort" level="any"/>
 </xsl:template>
 
 <!-- A "category" is simply the sequence number of an     -->
