@@ -113,7 +113,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Let <m>S(n)</m> be a statement about integers for  <m>n \in {\mathbb N}</m> and suppose <m>S(n_0)</m> is true for some integer <m>n_0</m>.  If <m>S(n_0), S(n_0 + 1), \ldots, S(k)</m> imply that <m>S(k + 1)</m> for <m>k \geq n_0</m>, then the statement <m>S(n)</m> is true for all integers <m>n \geq n_0</m>. </p>
             </statement>
-        </principle>		
+        </principle>
 
         <!-- wording change.  Suggested by P. Diethelm.  TWJ 22/4/2013 -->
 
@@ -124,7 +124,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Every nonempty subset of the natural numbers is well-ordered.</p>
             </statement>
-        </principle>		
+        </principle>
 
         <p>The Principle of Well-Ordering is equivalent to the Principle of Mathematical Induction.</p> 
 
