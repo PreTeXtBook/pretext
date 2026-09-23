@@ -143,10 +143,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='pre'>Codeblok</localization>
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
-    <localization string-id='divisionalexercise'>Oefening</localization>
-    <localization string-id='inlineexercise'>Controlepunt</localization>
-    <localization string-id='worksheetexercise'>Werkblad-oefening</localization>
-    <localization string-id='readingquestion'>Leesvraag</localization>
+    <localization string-id='exercise-divisional'>Oefening</localization>
+    <localization string-id='exercise-inline'>Controlepunt</localization>
+    <localization string-id='exercise-worksheet'>Werkblad-oefening</localization>
+    <localization string-id='exercise-reading'>Leesvraag</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Tip</localization>
     <localization string-id='answer'>Antwoord</localization>

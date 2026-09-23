@@ -824,7 +824,7 @@
                     </row>
                     <!--  -->
                     <row>
-                        <cell><c>exercise-readingquestion</c></cell>
+                        <cell><c>exercise-reading</c></cell>
                         <cell><c>no</c></cell>
                         <cell>inside <tag>readingquestions</tag> division</cell>
                     </row>

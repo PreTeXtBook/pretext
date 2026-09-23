@@ -385,7 +385,10 @@
                     attribute exercise-inline { "yes" | "no" }?,
                     attribute exercise-divisional { "yes" | "no" }?,
                     attribute exercise-worksheet { "yes" | "no" }?,
-                    attribute exercise-readingquestion { "yes" | "no" }?
+                    # The four types of "exercise" are named here as they are
+                    # in "common" above, and as an author names them in a
+                    # "rename" or a "list-of".
+                    attribute exercise-reading { "yes" | "no" }?
                 }
 
             NavigationHTML =

@@ -2726,6 +2726,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- 2026-09-22  A type of "exercise" is named as a publication file   -->
+<!-- names it, as "exercise-inline" and so on, in a "rename" and in    -->
+<!-- "list-of/@elements" alike.  An older one-word name is upgraded    -->
+<!-- here.  "divisionexercise", which only "list-of" ever accepted,    -->
+<!-- joins it, so that one type of "exercise" has one name.            -->
+<xsl:template match="rename/@element" mode="repair">
+    <xsl:attribute name="element">
+        <xsl:call-template name="exercise-type-name">
+            <xsl:with-param name="name" select="string(.)"/>
+        </xsl:call-template>
+    </xsl:attribute>
+</xsl:template>
+
+<xsl:template match="list-of/@elements" mode="repair">
+    <xsl:attribute name="elements">
+        <xsl:for-each select="str:tokenize(., ', ')">
+            <xsl:if test="position() != 1">
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:call-template name="exercise-type-name">
+                <xsl:with-param name="name" select="string(.)"/>
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- The current name of a type of "exercise", given whatever name an  -->
+<!-- author wrote for it.  Any other name, an ordinary element among   -->
+<!-- them, passes through untouched.                                   -->
+<xsl:template name="exercise-type-name">
+    <xsl:param name="name"/>
+
+    <xsl:choose>
+        <xsl:when test="$name = 'inlineexercise'">
+            <xsl:text>exercise-inline</xsl:text>
+        </xsl:when>
+        <xsl:when test="($name = 'divisionalexercise') or ($name = 'divisionexercise')">
+            <xsl:text>exercise-divisional</xsl:text>
+        </xsl:when>
+        <xsl:when test="$name = 'worksheetexercise'">
+            <xsl:text>exercise-worksheet</xsl:text>
+        </xsl:when>
+        <xsl:when test="$name = 'readingquestion'">
+            <xsl:text>exercise-reading</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$name"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- 2021-07-02 wrap notation/usage in "m" if not present -->
 <xsl:template match="notation/usage[not(m)]" mode="repair">
     <!-- duplicate "usage" w/ attributes, insert "m" as repair -->

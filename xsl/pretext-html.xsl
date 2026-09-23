@@ -3915,7 +3915,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$knowl-exercise-worksheet = 'yes'"/>
 </xsl:template>
 <xsl:template match="reading-questions//exercise" mode="is-hidden">
-    <xsl:value-of select="$knowl-exercise-readingquestion = 'yes'"/>
+    <xsl:value-of select="$knowl-exercise-reading = 'yes'"/>
 </xsl:template>
 
 <!-- Overall enclosing element -->
