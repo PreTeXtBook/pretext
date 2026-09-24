@@ -3341,7 +3341,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- set, but not correct, so inform and use default -->
         <xsl:when test="$publication/html/asymptote/@links">
-            <xsl:message>PTX:FALLBACK: HTML links to Asymptote publisher file should be "yes" (adds link below image) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML links to Asymptote publisher file should be "yes" (adds link below image) or "no" (no links), not "<xsl:value-of select="$publication/html/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
             <xsl:text>no</xsl:text>
         </xsl:when>
         <!-- unset, use the default, which is "no" since -->

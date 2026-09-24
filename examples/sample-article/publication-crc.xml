@@ -30,7 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <brandlogo url="https://pretextbook.org" source="misc/book-cover-google-art-project.jpg"/>
         <!-- links below images to open full-size, must be elected -->
-        <asymptote links="yes"/>
+        <asymptote links="no"/>
         <!-- A location for a hosted HTML version, as certain      -->
         <!-- aspects of the LaTeX/PDF version will link to         -->
         <!-- corresponding aspects of the HTML version             -->
