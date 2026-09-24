@@ -2747,6 +2747,10 @@ Book (with parts), "section" at level 3
         <xsl:when test="plaintitle">
             <xsl:apply-templates select="plaintitle/text()"/>
         </xsl:when>
+        <!-- only the lines, not the whitespace between them -->
+        <xsl:when test="title/line">
+            <xsl:apply-templates select="title/line" mode="plain-title-edit"/>
+        </xsl:when>
         <xsl:when test="title">
             <xsl:apply-templates select="title/node()[not(self::fn)]" mode="plain-title-edit"/>
         </xsl:when>
@@ -2761,8 +2765,24 @@ Book (with parts), "section" at level 3
 
 <!-- Plain subtitle: used for HTML <meta> tags -->
 <xsl:template match="*" mode="subtitle-plain">
-    <xsl:if test="subtitle">
-        <xsl:apply-templates select="subtitle/node()[not(self::fn)]" mode="plain-title-edit"/>
+    <xsl:choose>
+        <!-- only the lines, not the whitespace between them -->
+        <xsl:when test="subtitle/line">
+            <xsl:apply-templates select="subtitle/line" mode="plain-title-edit"/>
+        </xsl:when>
+        <xsl:when test="subtitle">
+            <xsl:apply-templates select="subtitle/node()[not(self::fn)]" mode="plain-title-edit"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The lines of a structured title (or subtitle) run together -->
+<!-- in a plain version, separated by a space, as they are in   -->
+<!-- the "title-simple" template                                -->
+<xsl:template match="title/line|subtitle/line" mode="plain-title-edit">
+    <xsl:apply-templates select="node()[not(self::fn)]" mode="plain-title-edit"/>
+    <xsl:if test="following-sibling::line">
+        <xsl:text> </xsl:text>
     </xsl:if>
 </xsl:template>
 
