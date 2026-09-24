@@ -4224,6 +4224,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- A "slide" is numbered as a division is: its @pi:struct is the -->
+<!-- structure number of its container and its @pi:serial counts   -->
+<!-- slides.  The numbering level of divisions decides the form.   -->
+<!-- At level 0 slides are counted through the whole slideshow and -->
+<!-- there is no structure number.  At level 1, only possible with -->
+<!-- sections, slides are counted within their "section", and its  -->
+<!-- number is the structure number.  A slide gets no              -->
+<!-- @pi:block-struct, so blocks within it are numbered by the     -->
+<!-- enclosing division alone.                                     -->
+<xsl:template match="slide" mode="augment">
+    <xsl:param name="parent-struct"/>
+    <xsl:param name="level"/>
+
+    <xsl:copy>
+        <xsl:attribute name="pi:struct">
+            <xsl:if test="$numbering-maxlevel > 0">
+                <xsl:value-of select="$parent-struct"/>
+            </xsl:if>
+        </xsl:attribute>
+        <xsl:attribute name="pi:serial">
+            <xsl:choose>
+                <xsl:when test="$numbering-maxlevel > 0">
+                    <xsl:number count="slide"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:number count="slide" level="any" from="slideshow"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="$parent-struct"/>
+            <xsl:with-param name="level" select="$level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 <!-- The top-level division (book, article, ...) is the root of the   -->
 <!-- division tree, at level 0, which the catch-all does not record.  -->
 <!-- A level-0 numbering scheme counts continuously from the root.    -->
