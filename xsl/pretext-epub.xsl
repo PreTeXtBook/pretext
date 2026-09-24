@@ -471,7 +471,20 @@
                 <item id="css-epub" href="{$css-dir}/epub.css" media-type="text/css"/>
             </xsl:otherwise>
         </xsl:choose>
-        <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
+        <!-- Absent an authored image, the cover page shows the -->
+        <!-- document's title, which may hold mathematics       -->
+        <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml">
+            <xsl:variable name="has-math">
+                <xsl:call-template name="file-has-math">
+                    <xsl:with-param name="filename" select="'cover-page.xhtml'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="$has-math = 'true'">
+                <xsl:attribute name="properties">
+                    <xsl:value-of select="$manifest-math-property"/>
+                </xsl:attribute>
+            </xsl:if>
+        </item>
         <item id="table-contents"
               href="{$xhtml-dir}/table-contents.xhtml"
               media-type="application/xhtml+xml">
