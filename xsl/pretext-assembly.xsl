@@ -4471,7 +4471,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ("-fn") are single counters; the block families share the "blocks"     -->
 <!-- counter unless figure-likes, projects, inline exercises, or open       -->
 <!-- problems are set "distinct", each then opening its own counter.        -->
-<xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
+<xsl:template match="book|article|slideshow|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
     <xsl:param name="blocks-nodes"/>
