@@ -536,7 +536,10 @@
         <xsl:if test="$b-has-endnotes">
             <item id="endnotes" href="{$xhtml-dir}/{$endnote-file}"
                   media-type="application/xhtml+xml">
-                <xsl:if test="$b-endnotes-have-math">
+                <!-- The test examines the source, not the file, so it -->
+                <!-- also holds for mathematics as speech, which is    -->
+                <!-- text and has no property to declare               -->
+                <xsl:if test="$b-endnotes-have-math and not($manifest-math-property = '')">
                     <xsl:attribute name="properties">
                         <xsl:value-of select="$manifest-math-property"/>
                     </xsl:attribute>
