@@ -142,6 +142,21 @@
 <!-- but a a boolean sure helps                                  -->
 <xsl:variable name="b-kindle" select="$math.format = 'kindle'"/>
 
+<!-- A file holding mathematics must say so in the "properties" of -->
+<!-- its manifest "item", and which property depends only on the   -->
+<!-- format of the mathematics.  Mathematics as speech is text, so -->
+<!-- it has no property, and the value is empty.                   -->
+<xsl:variable name="manifest-math-property">
+    <xsl:choose>
+        <xsl:when test="$math.format = 'mml' or $math.format = 'kindle'">
+            <xsl:text>mathml</xsl:text>
+        </xsl:when>
+        <xsl:when test="$math.format = 'svg'">
+            <xsl:text>svg</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
 <xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical)"/>
 
@@ -394,10 +409,12 @@
                 <xsl:apply-templates select="personname"/>
             </xsl:element>
         </xsl:for-each>
-        <!-- Required in EPUB 3.0.1 spec       -->
-        <!-- TODO: title-types can refine this -->
+        <!-- Required in EPUB 3.0.1 spec                       -->
+        <!-- TODO: title-types can refine this                 -->
+        <!-- Text only, so any mathematics is its LaTeX source -->
+        <!-- (or the author supplies a "plaintitle" instead)   -->
         <xsl:element name="dc:title">
-            <xsl:apply-templates select="$document-root" mode="title-full" />
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
         </xsl:element>
         <!-- Required in EPUB 3.0.1 spec                -->
         <!-- Repeatable and more complicated, see spec  -->
@@ -454,7 +471,20 @@
                 <item id="css-epub" href="{$css-dir}/epub.css" media-type="text/css"/>
             </xsl:otherwise>
         </xsl:choose>
-        <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
+        <!-- Absent an authored image, the cover page shows the -->
+        <!-- document's title, which may hold mathematics       -->
+        <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml">
+            <xsl:variable name="has-math">
+                <xsl:call-template name="file-has-math">
+                    <xsl:with-param name="filename" select="'cover-page.xhtml'"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="$has-math = 'true'">
+                <xsl:attribute name="properties">
+                    <xsl:value-of select="$manifest-math-property"/>
+                </xsl:attribute>
+            </xsl:if>
+        </item>
         <item id="table-contents"
               href="{$xhtml-dir}/table-contents.xhtml"
               media-type="application/xhtml+xml">
@@ -462,27 +492,17 @@
             <!-- predict which division titles the table of contents -->
             <!-- displays, read it and see if any mathematics landed -->
             <!-- there, exactly as "manifest-item" does per chunk    -->
-            <xsl:variable name="toc-contents" select="document(concat($tmpdir, '/', $content-dir, '/', $xhtml-dir, '/table-contents.xhtml'))"/>
+            <xsl:variable name="has-math">
+                <xsl:call-template name="file-has-math">
+                    <xsl:with-param name="filename" select="'table-contents.xhtml'"/>
+                </xsl:call-template>
+            </xsl:variable>
             <xsl:attribute name="properties">
-                <xsl:choose>
-                    <xsl:when test="$toc-contents//svg:svg | $toc-contents//math:math">
-                        <xsl:choose>
-                            <xsl:when test="$math.format = 'mml' or
-                                            $math.format = 'kindle'">
-                                <xsl:text>nav mathml</xsl:text>
-                            </xsl:when>
-                            <xsl:when test="$math.format = 'svg'">
-                                <xsl:text>nav svg</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>nav</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>nav</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:text>nav</xsl:text>
+                <xsl:if test="($has-math = 'true') and not($manifest-math-property = '')">
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$manifest-math-property"/>
+                </xsl:if>
             </xsl:attribute>
         </item>
         <item id="cover-image" href="{$xhtml-dir}/{$epub-cover-dest}" properties="cover-image">
@@ -516,17 +536,12 @@
         <xsl:if test="$b-has-endnotes">
             <item id="endnotes" href="{$xhtml-dir}/{$endnote-file}"
                   media-type="application/xhtml+xml">
-                <xsl:if test="$b-endnotes-have-math">
+                <!-- The test examines the source, not the file, so it -->
+                <!-- also holds for mathematics as speech, which is    -->
+                <!-- text and has no property to declare               -->
+                <xsl:if test="$b-endnotes-have-math and not($manifest-math-property = '')">
                     <xsl:attribute name="properties">
-                        <xsl:choose>
-                            <xsl:when test="$math.format = 'mml' or
-                                            $math.format = 'kindle'">
-                                <xsl:text>mathml</xsl:text>
-                            </xsl:when>
-                            <xsl:when test="$math.format = 'svg'">
-                                <xsl:text>svg</xsl:text>
-                            </xsl:when>
-                        </xsl:choose>
+                        <xsl:value-of select="$manifest-math-property"/>
                     </xsl:attribute>
                 </xsl:if>
             </item>
@@ -610,6 +625,17 @@
     </xsl:if>
 </xsl:template>
 
+<!-- Whether a file of the container holds mathematics, as "true"   -->
+<!-- or "false".  There are simply too many edge cases to decide    -->
+<!-- this from the structure of the source, so read the XHTML file, -->
+<!-- already written, and look for an "svg" or a "math" element.    -->
+<!-- (Processing with page2svg makes it appear SVG images exist.)   -->
+<xsl:template name="file-has-math">
+    <xsl:param name="filename"/>
+    <xsl:variable name="contents" select="document(concat($tmpdir, '/', $content-dir, '/', $xhtml-dir, '/', $filename))"/>
+    <xsl:value-of select="boolean($contents//svg:svg | $contents//math:math)"/>
+</xsl:template>
+
 <!-- One manifest "item" element for the context node's file -->
 <xsl:template name="manifest-item">
     <!-- Annotate manifest entries -->
@@ -620,49 +646,17 @@
     <xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <!-- properties are iff, so validator complains if extra -->
-        <!-- condition on math presence for svg/mathml property  -->
-        <!-- TODO: use a parameter switch for output style       -->
         <!-- Study: https://github.com/w3c/epubcheck/issues/420  -->
-        <!-- Processing with page2svg makes it appear SVG images exist -->
-        <!-- Set properties="svg" or properties="mathml" when a -->
-        <!-- file contains math in one of thse formats. -->
-        <!-- There are simply too many edge cases to do this -->
-        <!-- based on document structure alone, so read the actual -->
-        <!-- XHTML files we've already written and look for svg -->
-        <!-- or math tags in them. -->
         <xsl:variable name="has-math">
-            <xsl:variable name="contents-filename">
-                <xsl:value-of select="$tmpdir" />
-                <xsl:text>/</xsl:text>
-                <xsl:value-of select="$content-dir" />
-                <xsl:text>/</xsl:text>
-                <xsl:value-of select="$xhtml-dir" />
-                <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="."
-                                     mode="containing-filename"/>
-            </xsl:variable>
-            <xsl:variable name="filedata"
-                          select="document($contents-filename)"/>
-            <xsl:choose>
-                <xsl:when test="$filedata//svg:svg|$filedata//math:math">
-                    <xsl:text>true</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>false</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="file-has-math">
+                <xsl:with-param name="filename">
+                    <xsl:apply-templates select="." mode="containing-filename"/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="b-has-math" select="$has-math = 'true'" />
-        <xsl:if test="$b-has-math">
+        <xsl:if test="$has-math = 'true'">
             <xsl:attribute name="properties">
-                <xsl:choose>
-                    <xsl:when test="$math.format = 'mml' or $math.format = 'kindle'">
-                        <xsl:text>mathml</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$math.format = 'svg'">
-                        <xsl:text>svg</xsl:text>
-                    </xsl:when>
-                </xsl:choose>
+                <xsl:value-of select="$manifest-math-property"/>
             </xsl:attribute>
         </xsl:if>
         <!-- TODO: coordinate with manifest/script on xhtml extension -->
@@ -769,12 +763,14 @@
                 </xsl:choose>
             </xsl:attribute>
         </cover>
-        <!-- These may be used in automated creation of a cover image -->
+        <!-- These may be used in automated creation of a cover image, -->
+        <!-- which LaTeX typesets from plain text, so an author may     -->
+        <!-- supply a "plaintitle" to use in place of the title         -->
         <title>
-            <xsl:apply-templates select="$document-root" mode="title-simple"/>
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
         </title>
         <subtitle>
-            <xsl:apply-templates select="$document-root" mode="subtitle"/>
+            <xsl:apply-templates select="$document-root" mode="subtitle-plain"/>
         </subtitle>
         <author>
             <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
@@ -856,11 +852,12 @@
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
             <xsl:call-template name="html-theme-attributes"/>
-            <!-- head element should not be empty -->
+            <!-- head element should not be empty         -->
+            <!-- and a "title" in the "head" is text only -->
             <head>
                 <meta charset="utf-8"/>
                 <title>
-                    <xsl:apply-templates select="$document-root" mode="title-full"/>
+                    <xsl:apply-templates select="$document-root" mode="title-plain"/>
                 </title>
                 <xsl:if test="not($b-authored-cover)">
                     <xsl:call-template name="epub-kindle-css"/>

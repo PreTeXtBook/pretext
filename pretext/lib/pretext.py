@@ -3444,8 +3444,31 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
                 cover_source,
             ]
             with common.working_directory(tmp_dir):
-                subprocess.run(latex_cmd)
+                latex_result = subprocess.run(latex_cmd)
                 subprocess.run(png_cmd)
+            # In batch mode LaTeX recovers from an error as best it can, so
+            # a cover image usually results anyway, perhaps a wrong one.  The
+            # title is the likely cause, so report the first error and advise.
+            if latex_result.returncode != 0:
+                latex_error = ""
+                cover_log_file = os.path.join(tmp_dir, "cover.log")
+                if os.path.exists(cover_log_file):
+                    with open(cover_log_file, encoding="utf-8", errors="replace") as cover_log:
+                        for line in cover_log:
+                            if line.startswith("!"):
+                                latex_error = ' ("{}")'.format(line.strip())
+                                break
+                msg = " ".join(
+                    [
+                        "LaTeX reported an error{} while making the default cover image for the EPUB",
+                        "from the title, subtitle and authors of the document, so the image may be wrong or missing.",
+                        "Mathematics, or a character that LaTeX treats specially (such as &, %, # or _),",
+                        "in the title or subtitle is a likely cause.",
+                        'A "plaintitle" element supplies a plain-text version of the title to use instead,',
+                        'or a publication file entry "epub/cover/@front" can name a cover image of your own.',
+                    ]
+                ).format(latex_error)
+                log.warning(msg)
         except:
             msg = '\n'.join(["failed to construct cover image using LaTeX and ImageMagick",
                              'perhaps because the "convert" executable is not on your path.'])
