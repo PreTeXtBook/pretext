@@ -3575,6 +3575,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/beamer/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Beamer Slide Numbering -->
+
+<xsl:variable name="beamer-slide-numbering">
+    <xsl:apply-templates select="$publisher-attribute-options/beamer/appearance/pi:pub-attribute[@name='slide-numbering']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-beamer-slide-numbering" select="$beamer-slide-numbering = 'yes'"/>
+
 <!-- Beamer Aspect Ratio -->
 
 <!-- Beamer builds a slide as a small page, which a viewer scales up -->
@@ -3866,6 +3874,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <beamer>
         <appearance>
             <pi:pub-attribute name="theme" default="Boadilla" freeform="yes"/>
+            <pi:pub-attribute name="slide-numbering" default="no" options="yes"/>
         </appearance>
         <page>
             <pi:pub-attribute name="aspect-ratio" default="16:9" options="4:3 16:10 14:9 5:4 3:2"/>
