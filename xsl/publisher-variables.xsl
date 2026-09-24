@@ -3445,6 +3445,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='custom-css']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Reveal.js Slide Numbering -->
+
+<xsl:variable name="reveal-slide-numbering">
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='slide-numbering']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-slide-numbering" select="$reveal-slide-numbering = 'yes'"/>
+
 <!-- Reveal.js Controls Back Arrows -->
 
 <xsl:variable name="reveal-control-backarrow">
@@ -3837,6 +3845,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
             <pi:pub-attribute name="custom-css" default="" freeform="yes"/>
+            <pi:pub-attribute name="slide-numbering" default="no" options="yes"/>
         </appearance>
         <controls>
             <pi:pub-attribute name="backarrows" default="faded" options="hidden visible"/>
