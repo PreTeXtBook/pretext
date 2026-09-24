@@ -106,6 +106,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 See <xref ref="revealjs-navigation-options"/> for details on setting the navigation mode for your slideshow.
             </p>
         </paragraphs>
+        <paragraphs xml:id="revealjs-slide-numbers">
+            <title>Slide Numbers</title>
+            <p>
+                A number in the corner of each slide lets an audience ask about a particular slide, and lets you find it again quickly.
+                Slide numbers are off unless you turn them on in the publication file.  See <xref ref="revealjs-appearance-options"/>.
+            </p>
+            <p>
+                The numbers are those of <pretext/>, so they do not depend on the navigation mode.
+                Only a <tag>slide</tag> gets a number; the title slide, the abstract, and the title slide of each section show none.
+                The form of the numbers follows the numbering level of divisions (<xref ref="numbering-divisions-options"/>).
+                By default the level is <c>0</c>, and the slides are counted consecutively through the whole slideshow, so you can ask your audience to look again at <q>slide 12</q>.
+                A slideshow organized by sections may instead elect level <c>1</c>, and then a number is the number of the section, a period, and the position of the slide within its section.
+                So <c>3.2</c> is the second slide of the third section.
+            </p>
+        </paragraphs>
         <paragraphs>
             <title>Local Resources</title>
             <p>
@@ -170,6 +185,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             Beamer's own habit is to center a frame's content vertically.
             A <pretext/> slideshow instead places content at the top of every frame by default, in agreement with the Reveal.js conversion.
             For the classic centered look<mdash/>title page, section pages, and every slide<mdash/>set a document-wide default of <c>middle</c> with the <attr>valign</attr> attribute described in <xref ref="topic-slides"/>.
+        </p>
+        <p>
+            Beamer themes differ in whether they show a frame number, and where.
+            Set the <attr>slide-numbering</attr> attribute of the <tag>appearance</tag> element to <c>yes</c> (<xref ref="beamer-appearance-options"/>), and a theme that shows a frame number shows instead the number <pretext/> gives each <tag>slide</tag>, formed exactly as for a Reveal.js slideshow (<q><xref ref="revealjs-slide-numbers" text="title"/></q> in <xref ref="publisher-revealjs"/>).
+            Some themes, such as <c>Warsaw</c> and <c>Berlin</c>, have a place for a frame number that they leave empty, and that place then gets the number.
+            A theme with no place for a frame number, such as the <c>default</c> theme, shows none.
+            Where a theme would also show a total, as <c>Boadilla</c> does, the number appears alone, so your audience is not told how long your talk will run.
+            The title, contents, abstract, and section title frames show no number.
+            With the default value, <c>no</c>, no frame shows a number, whatever the theme.
         </p>
     </section>
 </chapter>
