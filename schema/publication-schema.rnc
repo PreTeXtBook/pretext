@@ -438,7 +438,8 @@
             Appearance =
                 element appearance {
                     attribute theme { text }?,
-                    attribute custom-css { text }?
+                    attribute custom-css { text }?,
+                    attribute slide-numbering { "yes" | "no" }?
                 }
 
             Controls =
@@ -468,7 +469,8 @@
 
             AppearanceBeamer =
                 element appearance {
-                    attribute theme { text }
+                    attribute theme { text }?,
+                    attribute slide-numbering { "yes" | "no" }?
                 }
 
             PageBeamer =

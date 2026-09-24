@@ -1367,6 +1367,14 @@
       <optional>
         <attribute name="custom-css"/>
       </optional>
+      <optional>
+        <attribute name="slide-numbering">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="Controls">
@@ -1466,7 +1474,17 @@
   </define>
   <define name="AppearanceBeamer">
     <element name="appearance">
-      <attribute name="theme"/>
+      <optional>
+        <attribute name="theme"/>
+      </optional>
+      <optional>
+        <attribute name="slide-numbering">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="PageBeamer">
