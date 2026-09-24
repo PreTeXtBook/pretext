@@ -3468,6 +3468,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- implemented entirely in common, and need no FO template      -->
 <!-- of their own here.                                           -->
 
+<!-- The "text()" template of -common passes each run of prose  -->
+<!-- through this hook.  A keyboard apostrophe (U+0027) becomes -->
+<!-- the typographic 'RIGHT SINGLE QUOTATION MARK' (U+2019), as -->
+<!-- in the HTML conversion; TeX makes the same change on its   -->
+<!-- own in the LaTeX conversion.  Verbatim text ("c", "cd",    -->
+<!-- "pre", "program", "kbd", and the like) is taken whole with -->
+<!-- "value-of" and never arrives here, so code keeps its       -->
+<!-- straight mark.                                             -->
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+    <xsl:value-of select="str:replace($text, $apos, '&#x2019;')"/>
+</xsl:template>
+
 <!-- An <icon> is a FontAwesome 5 glyph, as in the LaTeX route: the -->
 <!-- face follows  iconinfo/@font-awesome-family  and the glyph is  -->
 <!-- the Private-Use codepoint  iconinfo/@fa-codepoint.             -->
