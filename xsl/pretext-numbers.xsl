@@ -594,6 +594,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@pi:struct"/>
 </xsl:template>
 
+<!-- Structure Numbers: Slides -->
+<!-- The number of the "section" holding a slide, or empty, as -->
+<!-- decided in assembly by the numbering level of divisions   -->
+<xsl:template match="slide" mode="structure-number">
+    <xsl:value-of select="@pi:struct"/>
+</xsl:template>
+
 <!-- Structure Numbers: Specialized Divisions -->
 <!-- Some divisions get their numbers from their parents, or  -->
 <!-- in other ways.  We are careful to do this by determining -->
@@ -888,6 +895,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@pi:serial"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Serial Numbers: Slides -->
+<!-- Assembly counts every slide, through the slideshow or -->
+<!-- within a section, by the numbering level of divisions -->
+<xsl:template match="slide" mode="serial-number">
+    <xsl:value-of select="@pi:serial"/>
 </xsl:template>
 
 <!-- Serial Numbers: Specialized Divisions -->
