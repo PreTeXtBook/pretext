@@ -90,6 +90,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="valign-letter">
             <xsl:with-param name="valign" select="$slides-valign-default"/>
         </xsl:call-template>
+        <xsl:call-template name="beamer-not-a-slide"/>
         <xsl:text>]&#xa;</xsl:text>
         <xsl:text>\frametitle{</xsl:text>
         <xsl:apply-templates select="." mode="type-name">
@@ -156,6 +157,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="valign-letter">
         <xsl:with-param name="valign" select="$slides-valign-default"/>
     </xsl:call-template>
+    <xsl:call-template name="beamer-not-a-slide"/>
     <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\titlepage&#xa;</xsl:text>
     <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
@@ -167,6 +169,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="valign-letter">
         <xsl:with-param name="valign" select="$slides-valign-default"/>
     </xsl:call-template>
+    <xsl:call-template name="beamer-not-a-slide"/>
     <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\frametitle{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
@@ -197,6 +200,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- With PreTeXt's slide numbers, a frame that is not a "slide"    -->
+<!-- (title, contents, abstract, section title) does not advance    -->
+<!-- Beamer's count of frames, so that count, and the total a theme -->
+<!-- may show or use for a progress bar, is a count of slides.      -->
+<xsl:template name="beamer-not-a-slide">
+    <xsl:if test="$b-beamer-slide-numbering">
+        <xsl:text>,noframenumbering</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- A "section" is a Beamer section (navigation, table of contents) -->
 <!-- with a section-title frame, as in the reveal.js conversion.     -->
 <xsl:template match="slideshow/section">
@@ -207,6 +220,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="valign-letter">
         <xsl:with-param name="valign" select="$slides-valign-default"/>
     </xsl:call-template>
+    <xsl:call-template name="beamer-not-a-slide"/>
     <xsl:text>]&#xa;</xsl:text>
     <xsl:text>\sectionpage&#xa;</xsl:text>
     <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
@@ -217,6 +231,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- realized through the "listings" package (or other verbatim-like -->
 <!-- material) must be marked "fragile".                             -->
 <xsl:template match="slide">
+    <xsl:if test="$b-beamer-slide-numbering">
+        <xsl:text>\renewcommand{\ptxslidenumber}{</xsl:text>
+        <xsl:apply-templates select="." mode="number"/>
+        <xsl:text>}\ptxslidetrue&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\begin{frame}[</xsl:text>
     <xsl:call-template name="valign-letter">
         <xsl:with-param name="valign">
@@ -231,7 +250,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
+    <xsl:text>\end{frame}&#xa;</xsl:text>
+    <xsl:if test="$b-beamer-slide-numbering">
+        <xsl:text>\ptxslidefalse&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A "subslide" is material that appears, as one group, after an   -->
@@ -551,6 +574,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usefonttheme[onlymath]{serif}&#xa;</xsl:text>
     <xsl:text>%% quash navigation symbols&#xa;</xsl:text>
     <xsl:text>\setbeamertemplate{navigation symbols}{}&#xa;</xsl:text>
+    <!-- Every theme that shows a frame number, whether in a template   -->
+    <!-- or directly, and every progress bar, gets it from the command  -->
+    <!-- \insertframenumber.  So it becomes PreTeXt's number of the     -->
+    <!-- most recent slide, which is always a number, as a theme doing  -->
+    <!-- arithmetic with it requires (so 0 before the first slide).     -->
+    <!-- A theme displays the number through a template: "page number   -->
+    <!-- in head/foot" for most (some leave it empty, others add a      -->
+    <!-- total, which would announce how long a talk runs), "frame      -->
+    <!-- numbering" for metropolis.  Both show the number alone, and    -->
+    <!-- only on a frame that is a slide, as the flag \ifptxslide says. -->
+    <!-- Without slide numbers, both templates are empty, so no theme   -->
+    <!-- shows a number, just as a Reveal.js slideshow shows none.      -->
+    <xsl:choose>
+        <xsl:when test="$b-beamer-slide-numbering">
+            <xsl:text>%% PreTeXt's slide numbers, wherever a theme shows a frame number,&#xa;</xsl:text>
+            <xsl:text>%% alone, and only on a frame that is a slide&#xa;</xsl:text>
+            <xsl:text>\newif\ifptxslide&#xa;</xsl:text>
+            <xsl:text>\newcommand{\ptxslidenumber}{0}&#xa;</xsl:text>
+            <xsl:text>\renewcommand{\insertframenumber}{\ptxslidenumber}&#xa;</xsl:text>
+            <xsl:text>\setbeamertemplate{page number in head/foot}{\ifptxslide\insertframenumber\fi}&#xa;</xsl:text>
+            <xsl:text>\setbeamertemplate{frame numbering}{\ifptxslide\insertframenumber\fi}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>%% no slide numbers, whatever the theme&#xa;</xsl:text>
+            <xsl:text>\setbeamertemplate{page number in head/foot}{}&#xa;</xsl:text>
+            <xsl:text>\setbeamertemplate{frame numbering}{}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>%% every "section" gets a section-title frame via \sectionpage&#xa;</xsl:text>
     <xsl:text>&#xa;%%%% Start PreTeXt generated preamble %%%%&#xa;&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
