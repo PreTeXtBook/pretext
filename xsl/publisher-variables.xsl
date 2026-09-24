@@ -141,6 +141,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-article-sections"    select="boolean($version-root/article/section)"/>
 <xsl:variable name="version-article-printouts"   select="boolean($version-root/article/worksheet|$version-root/article/handout)"/>
 <xsl:variable name="version-article-subsections" select="boolean($version-root/article/section/subsection)"/>
+<xsl:variable name="version-slideshow-sections"  select="boolean($version-root/slideshow/section)"/>
 
 <!-- A book must have a chapter              -->
 <!-- An article need not have a section      -->
@@ -1505,12 +1506,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- numbered) specialized divisions of a          -->
 <!-- "subsubsection", then the non-zero maximums   -->
 <!-- below would go up by 1                        -->
-<!--   article/section: s.ss.sss => 3              -->
-<!--   book:            c.s.ss.sss => 4            -->
-<!--   book/part:       p.c.s.ss.sss => 5          -->
+<!--   article/section:   s.ss.sss => 3            -->
+<!--   book:              c.s.ss.sss => 4          -->
+<!--   book/part:         p.c.s.ss.sss => 5        -->
+<!--   slideshow/section: s.n => 1                 -->
 <xsl:variable name="numbering-maxlevel-entered">
-    <!-- these are the maximum possible for a given document type -->
-    <!-- the default, and also an error-check upper-limit         -->
+    <!-- these are the maximum possible for a given document type, -->
+    <!-- an error-check upper-limit, and usually the default       -->
     <xsl:variable name="max-feasible">
         <xsl:choose>
             <xsl:when test="$version-has-parts">5</xsl:when>
@@ -1518,10 +1520,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$version-article-sections or $version-article-printouts">3</xsl:when>
             <xsl:when test="$version-doc-type = 'article'">0</xsl:when>
             <xsl:when test="$version-doc-type = 'letter'">0</xsl:when>
+            <xsl:when test="$version-slideshow-sections">1</xsl:when>
             <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
             <xsl:when test="$version-doc-type = 'memo'">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>PTX:BUG: a document type needs a maximum division level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- A slideshow defaults to level 0, whatever its structure, -->
+    <!-- so its slides are counted through the whole slideshow    -->
+    <xsl:variable name="default-level">
+        <xsl:choose>
+            <xsl:when test="$version-doc-type = 'slideshow'">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$max-feasible"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -1534,7 +1547,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
                         <xsl:message>PTX:FALLBACK:   numbering level for divisions given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
-                        <xsl:value-of select="$max-feasible"/>
+                        <xsl:value-of select="$default-level"/>
                         </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="$publication/numbering/divisions/@level"/>
@@ -1545,9 +1558,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="not($numbering.maximum.level = '')">
                 <xsl:value-of select="$numbering.maximum.level" />
             </xsl:when>
-            <!-- various defaults are the maximum possible -->
+            <!-- various defaults, usually the maximum possible -->
             <xsl:otherwise>
-                <xsl:value-of select="$max-feasible"/>
+                <xsl:value-of select="$default-level"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -1555,7 +1568,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$candidate-maxlevel > $max-feasible">
             <xsl:message>PTX:FALLBACK:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$max-feasible"/>
+            <xsl:value-of select="$default-level"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="$candidate-maxlevel"/>
