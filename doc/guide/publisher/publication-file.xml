@@ -267,6 +267,7 @@
             <p>You can stop numbering divisions at some depth.  For example, you may want your <tag>book</tag> (without parts) to have numbered <tag>subsection</tag>, but numbers on the few <tag>subsubsection</tag> is just too messy and not necessary.  Then you would set the publication file entry<cd>
                 <cline>/publication/numbering/divisions/@level</cline>
             </cd> to the value <c>3</c> to number <tag>chapter</tag>, <tag>section</tag>, and <tag>subsection</tag>, only.  (Note this is the exception, you will get at most <em>two</em> separators in a division number in this case.)  So you can think of this as the <em>maximum</em> level for numbers on divisions.  The levels of the other objects (described in <xref ref="numbering-blocks-options"/>) can never exceed this maximum.  If an entry in your publication file asks for a greater level, or is not a non-negative integer, you will get a warning and the default value will be used instead.  When you make no request at all there is no warning: each default is determined by the type of your document, and is automatically reduced to the divisions level when necessary, on the presumption that this is just what you expect.</p>
+            <p>A <tag>slideshow</tag> has level <c>0</c> by default, whatever its structure.  A slideshow organized by <tag>section</tag> may instead elect level <c>1</c>, which numbers the sections; without sections, <c>0</c> is the only level.  For reveal.js and Beamer slideshows, this level also decides the form of the number shown on each slide, see <q><xref ref="revealjs-slide-numbers" text="title"/></q> in <xref ref="publisher-revealjs"/>.</p>
         </subsection>
 
         <subsection xml:id="numbering-blocks-options" label="numbering-blocks-options">
@@ -1188,6 +1189,7 @@
             </cd>element can have the following attributes:<ul>
                 <li><attr>theme</attr>: the base name of a file that is a reveal.js theme. (See the <url href="https://revealjs.com/themes/">reveal.js documentation</url> for available themes.)  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
                 <li><attr>custom-css</attr>: a string separated list of custom css files to load. These may be local files or remote URLs. For local files, it is recommended to place them in the <term>external</term> files directory so that they are automatically copied from your source folder to the output directory. (Refer to <xref ref="processing-directory-management"/> for more information on external files.)</li>
+                <li><attr>slide-numbering</attr>: for a number on each slide.  Values are <c>yes</c> or <c>no</c>.  The default is <c>no</c>.  The form of the numbers follows the numbering level of divisions (<xref ref="numbering-divisions-options"/>).  See <q><xref ref="revealjs-slide-numbers" text="title"/></q> in <xref ref="publisher-revealjs"/>.</li>
             </ul></p>
         </subsection>
 
@@ -1246,8 +1248,9 @@
 
             <p>The<cd>
                 <cline>/publication/beamer/appearance</cline>
-            </cd>element can have the following attribute:<ul>
+            </cd>element can have the following attributes:<ul>
                 <li><attr>theme</attr>: the name of a Beamer theme, as it would appear in a <c>\usetheme</c> command, such as <c>Singapore</c> or <c>Madrid</c>.  The default is <c>Boadilla</c>.  Any theme your <latex/> installation provides may be named, including a locally-installed custom theme.  A name the <latex/> installation cannot find stops the build with an error repeating the name; capitalization is the first thing to check.  See <xref ref="publisher-beamer"/>.</li>
+                <li><attr>slide-numbering</attr>: for the number <pretext/> gives each slide.  Values are <c>yes</c> or <c>no</c>.  The default is <c>no</c>, and then no frame shows a number, whatever the theme.  The form of the numbers follows the numbering level of divisions (<xref ref="numbering-divisions-options"/>), and where they appear depends on the theme.  See <xref ref="publisher-beamer"/>.</li>
             </ul></p>
         </subsection>
 
