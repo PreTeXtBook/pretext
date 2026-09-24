@@ -394,10 +394,12 @@
                 <xsl:apply-templates select="personname"/>
             </xsl:element>
         </xsl:for-each>
-        <!-- Required in EPUB 3.0.1 spec       -->
-        <!-- TODO: title-types can refine this -->
+        <!-- Required in EPUB 3.0.1 spec                       -->
+        <!-- TODO: title-types can refine this                 -->
+        <!-- Text only, so any mathematics is its LaTeX source -->
+        <!-- (or the author supplies a "plaintitle" instead)   -->
         <xsl:element name="dc:title">
-            <xsl:apply-templates select="$document-root" mode="title-full" />
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
         </xsl:element>
         <!-- Required in EPUB 3.0.1 spec                -->
         <!-- Repeatable and more complicated, see spec  -->
@@ -856,11 +858,12 @@
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
         <html>
             <xsl:call-template name="html-theme-attributes"/>
-            <!-- head element should not be empty -->
+            <!-- head element should not be empty         -->
+            <!-- and a "title" in the "head" is text only -->
             <head>
                 <meta charset="utf-8"/>
                 <title>
-                    <xsl:apply-templates select="$document-root" mode="title-full"/>
+                    <xsl:apply-templates select="$document-root" mode="title-plain"/>
                 </title>
                 <xsl:if test="not($b-authored-cover)">
                     <xsl:call-template name="epub-kindle-css"/>
