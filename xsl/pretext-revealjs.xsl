@@ -194,6 +194,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>.reveal .slides section.valign-top { top: 0 !important; }&#xa;</xsl:text>
             <xsl:text>.reveal .slides section.valign-middle.present { display: flex !important; flex-direction: column; justify-content: center; top: 0 !important; height: 100% !important; }&#xa;</xsl:text>
             <xsl:text>.reveal .slides section.valign-bottom.present { display: flex !important; flex-direction: column; justify-content: flex-end; top: 0 !important; height: 100% !important; }&#xa;</xsl:text>
+            <!-- A slide without a number still gets the number's box, -->
+            <!-- which reveal.js displays with an inline style         -->
+            <xsl:if test="$b-reveal-slide-numbering">
+                <xsl:text>.reveal .slide-number:has(.slide-number-a:empty) { display: none !important; }&#xa;</xsl:text>
+            </xsl:if>
           </style>
           <!-- no diagcess machinery with embedded mathematics: an  -->
           <!-- annotated PreFigure diagram is then a static image   -->
@@ -267,6 +272,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$reveal-navigation-mode"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
+            <!-- reveal.js displays what this function returns, so a -->
+            <!-- slide shows the number PreTeXt computed for it, the -->
+            <!-- same in every navigation mode, and any other slide  -->
+            <!-- (title, abstract, section title) shows nothing      -->
+            <xsl:text>  slideNumber: </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-reveal-slide-numbering">
+                        <xsl:text>function(slide) { return [(slide &amp;&amp; slide.dataset.slideNumber) || '']; }</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
             <!-- reveal.js "center" vertically centers every slide,  -->
             <!-- so it realizes a document-wide "middle" default;    -->
             <!-- a "top" or "bottom" default disables it, and slides -->
@@ -464,6 +483,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   <xsl:apply-templates select="." mode="valign"/>
               </xsl:with-param>
           </xsl:call-template>
+          <xsl:if test="$b-reveal-slide-numbering">
+              <xsl:attribute name="data-slide-number">
+                  <xsl:apply-templates select="." mode="number"/>
+              </xsl:attribute>
+          </xsl:if>
           <xsl:variable name="slide-hN">
               <xsl:apply-templates select="." mode="hN">
                   <xsl:with-param name="heading-level" select="$reveal-slide-heading-level"/>
