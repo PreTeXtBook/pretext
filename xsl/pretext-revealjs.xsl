@@ -66,6 +66,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="math-repr" select="document($mathfile)/pi:math-representations"/>
 <xsl:variable name="speech-repr" select="document($speechfile)/pi:math-representations"/>
 
+<!-- Embedded mathematics is extracted as SVG with clause-ending    -->
+<!-- punctuation absorbed into display mathematics only, so the     -->
+<!-- text after inline mathematics must keep its punctuation.  This -->
+<!-- overrides the HTML value, which absorbs punctuation into all   -->
+<!-- mathematics, as MathJax does for online mathematics.           -->
+<xsl:variable name="math.punctuation.include">
+    <xsl:choose>
+        <xsl:when test="$b-reveal-embedded-math">
+            <xsl:text>display</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>all</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Reveal.js output is one monolithic page, so heading levels are -->
 <!-- threaded, not chunked.  The slideshow title (h1) and subtitle  -->
 <!-- (h2) are fixed.  A "section" is always level 2 (sections never -->
