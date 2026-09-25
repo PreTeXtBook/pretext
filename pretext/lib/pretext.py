@@ -1304,6 +1304,14 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # * Use of CSL styles in "opt-in", condition here
     # * Abandon with an error message if not possible
 
+    # A journal named in the publication file supplies a CSL style,
+    # which this records in  stringparams  before any publisher
+    # variable is read, so the report below reports the style actually
+    # in force -- the same one every conversion will see.  Only the
+    # download location needs keeping here; the style name comes back
+    # through the report, as it always has.
+    (_, csl_href) = get_csl_style(xml_source, pub_file, stringparams)
+
     # Compute publisher variable report one time, collecting results
     pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
     # style file name selected by the publisher, no path information
@@ -1316,7 +1324,8 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     if using_csl_styles == "false":
         msg = " ".join(["requesting formatted references and citations is not possible",
-              "without a CSL style file specified in the publication file.",
+              "without a CSL style file specified in the publication file,",
+              "or implied by a journal named there.",
               "No action is being taken."])
         log.error(msg)
         # bail out and do not do *anything*
@@ -1377,12 +1386,21 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ### Initialize CSL Style File ###
     #
     # * Examine publisher file, get string for CSL file name
-    # * Needs to be moved manually to <cite-proc>/data/styles
-    # * Need to automate placing the style file
+    # * Download the style file when we know where it lives, caching
+    #   it in the generated directory beside other fetched resources
+    # * Otherwise hand citeproc-py the bare name, and let it find a
+    #   style it already has (it ships exactly one, "harvard1")
     # * We interrogate the punctuation of citations
 
+    generated_abs, external_abs = common.get_managed_directories(xml_source, pub_file)
+    csl_style_source = place_csl_style_file(csl_style, csl_href,
+                                            os.path.join(generated_abs, "csl"))
+    if csl_style_source is None:
+        # place_csl_style_file() has said what went wrong
+        return
+
     # Initialize use of the chosen style
-    style = citeproc.CitationStylesStyle(csl_style, validate=False)
+    style = citeproc.CitationStylesStyle(csl_style_source, validate=False)
 
     # The citepoc-py "CitationStylesStyle" object is derived ultimately
     # from an lxml Element Tree in a "xml" property of the object.  We
@@ -1668,7 +1686,7 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     except Exception as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a references file: {}\n"
-        raise ValueError(msg.format(f) + root_cause)
+        raise ValueError(msg.format(bib_file) + root_cause)
 
 
 ##############################
@@ -4667,6 +4685,74 @@ def get_latex_style(xml, pub_file, stringparams):
         latex_style = pub_latex_style
     return latex_style
 
+def get_csl_style(xml, pub_file, stringparams):
+    """
+    Returns the CSL style for bibliographies and citations, as a
+    (name, href) pair, and records the name in  stringparams  as
+    "journal.csl.style" so that every conversion reports the same
+    style in the publisher variable "csl-style-file".
+
+      - A style named in the publication file is the publisher's own
+        choice and always wins.
+      - Otherwise a journal named in the publication file supplies a
+        default, by way of the journal's texstyle file.
+      - With neither, CSL processing stays off and (None, None) is
+        returned.
+
+    The  href  says where the style file may be downloaded, and is
+    only ever known for a style a journal supplies.
+
+    This is idempotent.  A second call sees the value the first
+    injected reported back as though it came from the publication
+    file; the two agree, so no message is issued and nothing changes.
+
+    Also records whether the generated file of formatted references
+    exists, which the stylesheets cannot discover for themselves.
+    """
+    # Every pass that imports the assembly stylesheet evaluates its
+    # global variables, one of which opens this file.  Saying plainly
+    # that it is absent keeps a conversion (or this function's own
+    # report, below) from aborting on a project whose references have
+    # not been generated yet, and degrades to default bibliography
+    # handling instead.
+    (generated_abs, external_abs) = common.get_managed_directories(xml, pub_file)
+    csl_file = os.path.join(generated_abs, "references", "csl-bibliography.xml")
+    if os.path.exists(csl_file):
+        stringparams["csl.file.missing"] = ""
+    else:
+        log.debug("No generated file of formatted references at {}.".format(csl_file))
+        stringparams["csl.file.missing"] = "yes"
+
+    pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
+    pub_csl_style = common.get_publisher_variable(pub_vars, "csl-style-file")
+    journal_name = common.get_publisher_variable(pub_vars, "journal-name")
+
+    journal_csl_style = None
+    journal_csl_href = None
+    if len(journal_name) > 0:
+        journal_info = get_journal_info(journal_name)
+        journal_csl_style = journal_info.get("csl-style")
+        journal_csl_href = journal_info.get("csl-href")
+
+    if len(pub_csl_style) > 0:
+        if (journal_csl_style is not None) and (journal_csl_style != pub_csl_style):
+            msg = 'Your publication file specifies the CSL style "{}", so it will be used instead of "{}", the style of the journal "{}".'
+            log.info(msg.format(pub_csl_style, journal_csl_style, journal_name))
+            # a publisher's own style comes with no download location
+            return (pub_csl_style, None)
+        # the very style the journal supplies, so the journal's
+        # download location applies to it as well
+        return (pub_csl_style, journal_csl_href)
+
+    if journal_csl_style is None:
+        return (None, None)
+
+    msg = 'Using the CSL style "{}" of the journal "{}" for references and citations.'
+    log.debug(msg.format(journal_csl_style, journal_name))
+    stringparams["journal.csl.style"] = journal_csl_style
+    return (journal_csl_style, journal_csl_href)
+
+
 def latex_package(xml, pub_file, stringparams, dest_dir):
     """
     Fetch latex packages (.sty/.cls files) required for building a
@@ -6319,48 +6405,6 @@ def check_python_version():
         )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def copy_html_js(work_dir):
     '''Copy all necessary CSS and JS into working directory'''
 
@@ -6371,13 +6415,87 @@ def copy_html_js(work_dir):
     shutil.copytree(js_src, js_dest)
 
 
+def get_texstyle_file_path(texstyle_file):
+    """
+    Absolute path to a texstyle file.  Every texstyle file, and every
+    file named by an "extends" element, lives in this one directory.
+
+    Arguments:
+    texstyle_file: file name relative to journals/texstyles, such as
+    "ams.xml" or "dependents/bull-amer-math-soc.xml".
+    """
+    return os.path.join(common.get_ptx_path(), "journals", "texstyles", texstyle_file)
 
 
+def read_texstyle_csl_style(texstyle_file):
+    """
+    Returns the (name, href) pair declared by the "csl-style" element
+    of a single texstyle file, consulting no other file.
+
+    The @name is a Citation Style Language style identifier, without
+    the ".csl" suffix, as used in the CSL repository.  The @href, when
+    present, is where that style file can be downloaded; with no @href
+    the style is expected to be one citeproc-py can already locate.
+    Returns (None, None) when the file declares no "csl-style".
+    """
+    texstyle_tree = ET.parse(get_texstyle_file_path(texstyle_file))
+    csl_elements = texstyle_tree.xpath("/texstyle/metadata/csl-style")
+    if not csl_elements:
+        return (None, None)
+    if csl_elements[0].get("name") is None:
+        msg = "the texstyle file {} has a  csl-style  element with no  @name,  so it will be ignored."
+        log.warning(msg.format(texstyle_file))
+        return (None, None)
+    return (csl_elements[0].get("name"), csl_elements[0].get("href"))
 
 
+def read_texstyle_extends(texstyle_file):
+    """
+    Returns the file name of the texstyle file that the given texstyle
+    file extends, relative to the texstyles directory, or None if it
+    extends nothing.
+
+    An "extends" element holds a bare journal code, and the file it
+    names always sits at the top level of the texstyles directory,
+    even when the extending file is itself a dependent.
+    """
+    texstyle_tree = ET.parse(get_texstyle_file_path(texstyle_file))
+    extends_elements = texstyle_tree.xpath("/texstyle/metadata/extends")
+    if not extends_elements or not extends_elements[0].text:
+        return None
+    return extends_elements[0].text.strip() + ".xml"
 
 
+def get_texstyle_csl_style(texstyle_file):
+    """
+    Resolves the CSL style for a texstyle file, as a (name, href)
+    pair, falling back to the file it extends.  Returns (None, None)
+    when no style can be found.
 
+    A "csl-style" element is taken whole: a file declaring one keeps
+    its own @name and @href, even when the @href is absent (which
+    means the style is one citeproc-py can already locate).  Nothing
+    is ever mixed across the two files.  Only a single level of
+    "extends" is followed, matching what "include-base" does in
+    pretext-latex-texstyle.xsl.
+
+    That walk is needed because the XSL merge replaces the whole
+    "metadata" element, so a dependent carrying any metadata of its
+    own shadows its base's CSL style rather than inheriting it.
+
+    Arguments:
+    texstyle_file: file name relative to journals/texstyles, such as
+    "ams.xml" or "dependents/bull-amer-math-soc.xml".
+    """
+    (csl_style, csl_href) = read_texstyle_csl_style(texstyle_file)
+    if csl_style is not None:
+        return (csl_style, csl_href)
+    base_texstyle_file = read_texstyle_extends(texstyle_file)
+    if base_texstyle_file is None:
+        return (None, None)
+    log.debug("Looking for a CSL style in {}, which {} extends.".format(
+        base_texstyle_file, texstyle_file))
+    return read_texstyle_csl_style(base_texstyle_file)
 
 
 def get_journal_info(journal_name):
@@ -6408,7 +6526,7 @@ def get_journal_info(journal_name):
         journal_info[key] = element.text if element is not None else None
     # get the attribute values of the optional 'method' element.  Possible attributes are @latex-style, @texstyle, and @dependent
     if journal.find("method") is not None:
-        for attr in ["latex-style", "texstyle", "dependent"]:
+        for attr in ["latex-style", "texstyle", "dependent", "csl"]:
             if attr in journal.find("method").attrib:
                 journal_info[attr] = journal.find("method").attrib[attr]
 
@@ -6429,7 +6547,62 @@ def get_journal_info(journal_name):
             journal_info["texstyle-file"] =  journal_info.get("texstyle") + ".xml"
             log.debug("Using texstyle-file {}.".format(journal_info["texstyle-file"]))
 
+    # The journal's CSL style for bibliographies and citations.  A
+    # "csl" attribute in journals.xml is a deliberate override for one
+    # journal; otherwise the journal's texstyle family supplies the
+    # default.  Either way this is only a default: a publisher naming a
+    # CSL style in the publication file outranks it.
+    csl_style = journal_info.get("csl")
+    csl_href = None
+    if csl_style is None and journal_info.get("texstyle-file"):
+        (csl_style, csl_href) = get_texstyle_csl_style(journal_info["texstyle-file"])
+    journal_info["csl-style"] = csl_style
+    journal_info["csl-href"] = csl_href
+    if csl_style is None:
+        log.debug("The journal {} supplies no CSL style.".format(journal_name))
+    else:
+        log.debug("Using the CSL style {} for the journal {}.".format(csl_style, journal_name))
+
     return journal_info
+
+def place_csl_style_file(csl_style, csl_href, cache_dir):
+    """
+    Returns something citeproc-py can open as a CSL style: the path to
+    a local copy of the style file, downloaded and cached on first
+    use, or else the bare style name, leaving citeproc-py to find a
+    style it already has.
+
+    Returns None when the style file cannot be had at all.  A caller
+    must not paper over that by carrying on: rendering a bibliography
+    in some other style is never the right repair for a missing one.
+
+    Arguments:
+    csl_style: a CSL style identifier, with no ".csl" suffix
+    csl_href: where that style file can be downloaded, or None
+    cache_dir: directory holding downloaded style files
+    """
+    if csl_href is None:
+        msg = 'No download location is known for the CSL style "{}", so citeproc-py will have to supply it.'
+        log.debug(msg.format(csl_style))
+        return csl_style
+
+    file_path = os.path.join(cache_dir, csl_style + ".csl")
+    if os.path.exists(file_path):
+        log.debug("Using the cached CSL style file {}.".format(file_path))
+        return file_path
+
+    log.info('Downloading the CSL style "{}" from {}'.format(csl_style, csl_href))
+    try:
+        common.download_file(csl_href, file_path)
+    except Exception as e:
+        msg = " ".join(['the CSL style file for "{}" could not be downloaded from {} ({}).',
+                        "To supply it by hand instead, save that file as {} and build again.",
+                        "No action is being taken."])
+        log.error(msg.format(csl_style, csl_href, e, file_path))
+        return None
+    log.debug("Saved the CSL style file as {}.".format(file_path))
+    return file_path
+
 
 def place_latex_package_files(dest_dir, journal_name, cache_dir):
     """

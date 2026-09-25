@@ -274,6 +274,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/journal/pi:pub-attribute[@name='name']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Python resolves a journal named in the publisher file into    -->
+<!-- the CSL style that journal uses, and overrides with it here.  -->
+<!-- (See get_csl_style() in the  pretext.py  script.)  A style    -->
+<!-- named in the publisher file wins, so Python only sets this    -->
+<!-- when the publisher has not made a choice of their own.        -->
+<xsl:param name="journal.csl.style" select="''"/>
+
 <!-- This is the minimum information to locate a     -->
 <!-- Citation Stylesheet Language (CSL) style file   -->
 <!-- in the CSL repository.  It is not expected to   -->
@@ -3662,7 +3669,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- right place in the citeproc-py distribution and   -->
         <!-- should be present out-of-the-box.                 -->
         <citation-stylesheet-language>
-            <pi:pub-attribute name="style" default="" freeform="yes"/>
+            <pi:pub-attribute name="style" default="" freeform="yes" stringparam="journal.csl.style"/>
         </citation-stylesheet-language>
         <worksheet>
             <pi:pub-attribute name="margin" default="0.75in" freeform="yes"/>
