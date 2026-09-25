@@ -3243,12 +3243,6 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     #   'mml': mathematics as MathML
     import fileinput
 
-    # for building a cover image
-    # modules from the PIL package
-    import PIL.Image  # new()
-    import PIL.ImageDraw  # Draw()
-    import PIL.ImageFont  # truetype(), load_default()
-
     # general message for this entire procedure
     log.info(
         "converting {} into EPUB in {} with math as {}".format(
@@ -3388,193 +3382,87 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
         os.makedirs(os.path.dirname(cover_dest), exist_ok=True)
         shutil.copy2(cover_source, cover_dest)
     else:
-        # When an author does not provide an image, we try to manufacture one.
-        # The file will be named "cover.png" and will be a top-level file in
-        # the XHTML directory.  A publisher variable maintains consistency as
-        # to what land in the XHTML files themselves (and manifest, etc.)
-        cover_source = os.path.join(tmp_dir, "cover.png")
+        # When an author does not provide an image, we manufacture one: a
+        # picture of the cover page itself (title, subtitle, and authors,
+        # with any mathematics already rendered in this EPUB's format), taken
+        # by a headless browser.  The file is "cover.png", a top-level file
+        # in the XHTML directory, consistent with the manifest and the XHTML
+        # files through a publisher variable.  Its 1600 by 2560 pixels (a
+        # ratio of 1.6) is the size Kindle recommends, and exceeds the 1400
+        # pixels on the shorter side that Apple Books asks for.
+        cover_page = os.path.join(xhtml_dir, "cover-page.xhtml")
         cover_dest = os.path.join(xhtml_dir, "cover.png")
-        # Get some useful things from the packaging file
-        title = packaging_tree.xpath("/packaging/title")[0].xpath("string()").__str__()
-        subtitle = (
-            packaging_tree.xpath("/packaging/subtitle")[0].xpath("string()").__str__()
-        )
-        author = (
-            packaging_tree.xpath("/packaging/author")[0].xpath("string()").__str__()
-        )
-        title_ASCII = "".join([x if ord(x) < 128 else "?" for x in title])
-        subtitle_ASCII = "".join([x if ord(x) < 128 else "?" for x in subtitle])
-        author_ASCII = "".join([x if ord(x) < 128 else "?" for x in author])
-        log.info("attempting to construct cover image using LaTeX and ImageMagick")
-        try:
-            # process with the  xelatex  engine (better Unicode support)
-            latex_key = common.get_deprecated_tex_fallback("xelatex")
-            tex_executable_cmd = common.get_executable_cmd(latex_key)
-            cover_tex_template = "\\documentclass[20pt]{{scrartcl}}\\begin{{document}}\\title{{ {} }}\\subtitle{{ {} }}\\author{{ {} }}\\date{{}}\\maketitle\\thispagestyle{{empty}}\\end{{document}}"
-            if "xelatex" in tex_executable_cmd:
-                cover_tex = cover_tex_template.format(
-                    title, subtitle, author.replace(", ", "\\\\")
-                )
-            else:
-                cover_tex = cover_tex_template.format(
-                    title_ASCII, subtitle_ASCII, author_ASCII
-                )
-            cover_tex_file = os.path.join(tmp_dir, "cover.tex")
-            with open(cover_tex_file, "w", encoding="utf-8") as tex:
-                tex.write(cover_tex)
-            latex_cmd = tex_executable_cmd + ["-interaction=batchmode", cover_tex_file]
-            cover_pdf_file = os.path.join(tmp_dir, "cover.pdf")
-            # Presume ImageMagick's "convert" executable is on the path
-            pdfpng_executable_cmd = ["convert"]
-            png_cmd = pdfpng_executable_cmd + [
-                "-quiet",
-                "-density",
-                "300",
-                cover_pdf_file + "[0]",
-                "-gravity",
-                "center",
-                "-crop",
-                "5:8",
-                "-background",
-                "white",
-                "-alpha",
-                "remove",
-                "-quality",
-                "100",
-                cover_source,
+        # Poster-sized type for the picture, on top of the EPUB stylesheet,
+        # at 800 by 1280 CSS pixels, which the device scale doubles.  The
+        # title block sits in the middle of the page, within its margins.
+        cover_css = " ".join(
+            [
+                "html, body { margin: 0; padding: 0; background: white; }",
+                "section.frontmatter { box-sizing: border-box; height: 1280px;",
+                "  padding: 160px 80px; display: flex; flex-direction: column;",
+                "  justify-content: center; text-align: center; }",
+                "h1.heading { font-family: sans-serif; font-size: 64px;",
+                "  line-height: 1.25; margin: 0; }",
+                "h1.heading .subtitle { display: block; font-size: 0.6em;",
+                "  font-weight: normal; margin-top: 0.75em; }",
+                "div.author { font-size: 36px; margin-top: 2em; }",
+                "div.author:has(> div.author-name:empty) { display: none; }",
             ]
-            with common.working_directory(tmp_dir):
-                latex_result = subprocess.run(latex_cmd)
-                subprocess.run(png_cmd)
-            # In batch mode LaTeX recovers from an error as best it can, so
-            # a cover image usually results anyway, perhaps a wrong one.  The
-            # title is the likely cause, so report the first error and advise.
-            if latex_result.returncode != 0:
-                latex_error = ""
-                cover_log_file = os.path.join(tmp_dir, "cover.log")
-                if os.path.exists(cover_log_file):
-                    with open(cover_log_file, encoding="utf-8", errors="replace") as cover_log:
-                        for line in cover_log:
-                            if line.startswith("!"):
-                                latex_error = ' ("{}")'.format(line.strip())
-                                break
-                msg = " ".join(
-                    [
-                        "LaTeX reported an error{} while making the default cover image for the EPUB",
-                        "from the title, subtitle and authors of the document, so the image may be wrong or missing.",
-                        "Mathematics, or a character that LaTeX treats specially (such as &, %, # or _),",
-                        "in the title or subtitle is a likely cause.",
-                        'A "plaintitle" element supplies a plain-text version of the title to use instead,',
-                        'or a publication file entry "epub/cover/@front" can name a cover image of your own.',
-                    ]
-                ).format(latex_error)
-                log.warning(msg)
-        except:
-            msg = '\n'.join(["failed to construct cover image using LaTeX and ImageMagick",
-                             'perhaps because the "convert" executable is not on your path.'])
-            log.warning(msg)
-            log.info('attempting to construct cover image using "Arial.ttf" and "Arial Bold.ttf"')
-            try:
-                title_size = 100
-                title_font = PIL.ImageFont.truetype("Arial Bold.ttf", title_size)
-                subtitle_size = int(title_size * 0.6)
-                subtitle_font = PIL.ImageFont.truetype(
-                    "Arial Bold.ttf", subtitle_size
-                )
-                author_size = subtitle_size
-                author_font = PIL.ImageFont.truetype("Arial.ttf", author_size)
-                title_words = title.split()
-                subtitle_words = subtitle.split()
-                author_names = [x.strip() for x in author.split(",")]
-                png_width = 1280
-                png_height = int(png_width * 1.6)
-                # build an array of lines for the title (and subtitle), each line fitting within 80% of png_width
-                title_lines = [""]
-                for word in title_words:
-                    last_line = title_lines[-1]
-                    (line_width, line_height) = title_font.getsize(
-                        last_line + " " + word
-                    )
-                    if line_width <= 0.8 * png_width:
-                        title_lines[-1] += " " + word
-                    else:
-                        title_lines.append(word)
-                multiline_title = "\n".join(title_lines).strip()
-                subtitle_lines = [""]
-                for word in subtitle_words:
-                    last_line = subtitle_lines[-1]
-                    (line_width, line_height) = subtitle_font.getsize(
-                        last_line + " " + word
-                    )
-                    if line_width <= 0.8 * png_width:
-                        subtitle_lines[-1] += " " + word
-                    else:
-                        subtitle_lines.append(word)
-                multiline_subtitle = "\n".join(subtitle_lines).strip()
-                # each author on own line
-                multiline_author = "\n".join(author_names).strip()
-                # create new image
-                cover_png = PIL.Image.new(
-                    mode="RGB", size=(png_width, png_height), color="white"
-                )
-                draw = PIL.ImageDraw.Draw(cover_png)
-                title_depth = int(png_height // 4)
-                subtitle_depth = (
-                    title_depth + len(title_lines) * title_size + 0.2 * title_size
-                )
-                author_depth = (
-                    subtitle_depth
-                    + len(subtitle_lines) * subtitle_size
-                    + 0.8 * title_size
-                )
-                draw.multiline_text(
-                    (int(png_width // 2), title_depth),
-                    multiline_title,
-                    font=title_font,
-                    fill="black",
-                    anchor="ma",
-                    align="center",
-                )
-                draw.multiline_text(
-                    (int(png_width // 2), subtitle_depth),
-                    multiline_subtitle,
-                    font=subtitle_font,
-                    fill="gray",
-                    anchor="ma",
-                    align="center",
-                )
-                draw.multiline_text(
-                    (int(png_width // 2), author_depth),
-                    multiline_author,
-                    font=author_font,
-                    fill="black",
-                    anchor="ma",
-                    align="center",
-                )
-                cover_png.save(cover_source)
-            except:
-                log.warning(
-                    'failed to construct cover image using "Arial.ttf" and "Arial Bold.ttf"'
-                )
-                log.info("attempting to construct crude bitmap font cover image")
-                try:
-                    title_words = title_ASCII.split()
-                    title_font = PIL.ImageFont.load_default()
-                    cover_png = PIL.Image.new(
-                        mode="RGB", size=(120, 192), color="white"
-                    )
-                    draw = PIL.ImageDraw.Draw(cover_png)
-                    y = 20
-                    for word in title_words:
-                        draw.text((20, y), word, font=title_font, fill="black")
-                        y += 10
-                    cover_png.save(cover_source)
-                except:
-                    # We failed to build a cover.png so we remove all references to cover.png
-                    log.warning("failed to construct a cover image")
+        )
+        # The subtitle has a line of its own in the picture, so the colon
+        # that joins it to the title on the cover page goes.  Then a long
+        # title, or many authors, shrinks in steps until all of it fits.
+        cover_script = " ".join(
+            [
+                "() => {",
+                "  const title = document.querySelector('h1.heading .title');",
+                "  if (title && document.querySelector('h1.heading .subtitle')",
+                "      && title.lastChild && title.lastChild.nodeType === Node.TEXT_NODE) {",
+                "    title.lastChild.data = title.lastChild.data.replace(/:\\s*$/, '');",
+                "  }",
+                "  const section = document.querySelector('section.frontmatter');",
+                "  const heading = document.querySelector('h1.heading');",
+                "  const author = document.querySelector('div.author');",
+                "  let scale = 1.0;",
+                "  while (section && section.scrollHeight > section.clientHeight && scale > 0.3) {",
+                "    scale = scale * 0.9;",
+                "    if (heading) { heading.style.fontSize = (64 * scale) + 'px'; }",
+                "    if (author) { author.style.fontSize = (36 * scale) + 'px'; }",
+                "  }",
+                "}",
+            ]
+        )
+
+        log.info("constructing a cover image from the cover page")
         try:
-            shutil.copy2(cover_source, cover_dest)
-        except:
+            # a missing module is one more reason for no cover image
+            import asyncio  # run()
+            import pathlib  # Path.as_uri()
+            import playwright.async_api  # async_playwright()
+
+            async def picture_cover_page():
+                async with playwright.async_api.async_playwright() as pw:
+                    browser = await pw.chromium.launch()
+                    page = await browser.new_page(
+                        viewport={"width": 800, "height": 1280}, device_scale_factor=2
+                    )
+                    await page.goto(pathlib.Path(cover_page).as_uri())
+                    await page.add_style_tag(content=cover_css)
+                    await page.evaluate(cover_script)
+                    await page.screenshot(path=cover_dest)
+                    await browser.close()
+
+            asyncio.run(picture_cover_page())
+        except Exception as e:
+            msg = " ".join(
+                [
+                    "failed to construct a cover image from the cover page ({}),",
+                    "so the EPUB will have no cover image.  The publication file",
+                    'entry "epub/cover/@front" can name a cover image of your own.',
+                ]
+            )
+            log.warning(msg.format(e))
+        if not os.path.exists(cover_dest):
             log.info("removing references to cover image from package.opf")
             package_opf = os.path.join(tmp_dir, "EPUB/package.opf")
             package_opf_tree = ET.parse(package_opf)
