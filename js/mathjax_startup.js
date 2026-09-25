@@ -41,6 +41,15 @@ let mathJaxOpts = {
 
 
 export function startMathJax(opts) {
+  // window.runestoneMathReady is the promise that Runestone uses to know when
+  // MathJax is ready. It is deliberately fulfilled, never rejected, with
+  // a value of either MathJax or null.
+  let resolveRunestoneMathReady;
+  const runestoneMathReady = new Promise((resolve) => {
+    resolveRunestoneMathReady = resolve;
+  });
+  window.runestoneMathReady = runestoneMathReady;
+
   if(opts.hasWebworkReps || opts.hasSage) {
     mathJaxOpts['renderActions'] = {
       "findScript": [
@@ -109,7 +118,16 @@ export function startMathJax(opts) {
         MathJax.startup.defaultReady();
       },
       pageReady() {
-        return MathJax.startup.defaultPageReady().then(rsMathReady);
+        // Let MathJax keep reporting a genuine initial-typesetting failure,
+        // but still release Runestone's queue. It will determine whether a
+        // usable typesetPromise remains and otherwise treat MathJax as absent.
+        return MathJax.startup.defaultPageReady().then(
+          () => resolveRunestoneMathReady(MathJax),
+          (error) => {
+            resolveRunestoneMathReady(null);
+            throw error;
+          },
+        );
       },
     }
   }
@@ -142,8 +160,19 @@ export function startMathJax(opts) {
   // Apply the options
   window.MathJax = mathJaxOpts;
 
-  // Lets Runestone know that MathJax is ready
-  const runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);
-  window.runestoneMathReady = runestoneMathReady;
+  // The MathJax CDN request may fail before this module runs. The generated
+  // script records that failure on itself; inspect it after installing the
+  // resolver so either execution order fulfils the same null result.
+  const mathJaxScript = document.querySelector('script[data-pretext-mathjax]');
+  if (mathJaxScript) {
+    mathJaxScript.addEventListener(
+      'error',
+      () => resolveRunestoneMathReady(null),
+      { once: true },
+    );
+    if (mathJaxScript.dataset.loadFailed === 'true') {
+      resolveRunestoneMathReady(null);
+    }
+  }
 }
 
