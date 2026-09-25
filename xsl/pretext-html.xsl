@@ -14076,7 +14076,13 @@ TODO:
         <xsl:text>});&#xa;</xsl:text>
     </script>
     <!-- MathJax 4 CDN -->
-    <script defer="true">
+    <script defer="true" data-pretext-mathjax="true">
+        <!-- These scripts execute in document order, but their resources    -->
+        <!-- fetch independently.  The CDN request can therefore fail before -->
+        <!-- mathjax_startup.js has evaluated.                               -->
+        <xsl:attribute name="onerror">
+            <xsl:text>this.dataset.loadFailed = 'true';</xsl:text>
+        </xsl:attribute>
         <xsl:attribute name="src">
             <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4/</xsl:text>
             <xsl:choose>
