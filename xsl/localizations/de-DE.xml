@@ -23,6 +23,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- de-DE, German (Germany) -->
 <!-- Karl-Dieter Crisman, kcrisman@gmail.com, 2020-06-01   -->
+<!-- Klaus Krtschil, klaus@krtschil.net, 2026-09-25        -->
 
 <locale language="de-DE" direction="ltr"
         quote-primary="down-up-double" quote-secondary="down-up-single">
@@ -37,10 +38,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identität</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Beweis</localization>
-    <!-- <localization string-id='argument'>Argument</localization> -->
-    <!-- <localization string-id='justification'>Justification</localization> -->
-    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
-    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <localization string-id='argument'>Argument</localization>
+    <localization string-id='justification'>Rechtfertigung</localization>
+    <localization string-id='reasoning'>Begründung</localization>
+    <localization string-id='explanation'>Erklärung</localization>
     <localization string-id='case'>Fall</localization>
     <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->
@@ -48,7 +49,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='axiom'>Axiom</localization>
     <localization string-id='conjecture'>Vermutung</localization>
     <localization string-id='principle'>Prinzip</localization>
-    <!-- <localization string-id='heuristic'>Heuristic</localization> -->
+    <localization string-id='heuristic'>Heuristik</localization>
     <localization string-id='hypothesis'>Hypothese</localization>
     <localization string-id='assumption'>Voraussetzung</localization>
     <!-- Definitions -->
@@ -61,7 +62,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='book'>Buch</localization>
     <localization string-id='article'>Artikel</localization>
     <localization string-id='letter'>Brief</localization>
-    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='slideshow'>Diashow</localization>
     <localization string-id='memo'>Memo</localization> <!-- oder Memorandum? -->
     <localization string-id='presentation'>Vortrag</localization>
     <!-- Parts of a document -->
@@ -69,7 +70,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Teil</localization>
     <localization string-id='chapter'>Kapitel</localization>
     <localization string-id='appendix'>Anhang</localization>
-    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='appendices'>Anhänge</localization>
     <localization string-id='section'>Abschnitt</localization>
     <localization string-id='subsection'>Unterabschnitt</localization>
     <localization string-id='subsubsection'>Unterunterabschnitt</localization>
@@ -78,7 +79,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Schluss</localization>
     <localization string-id='exercises'>Übungen</localization>
     <localization string-id='worksheet'>Arbeitsblatt</localization>
-    <!-- <localization string-id='handout'>Handout</localization> -->
+    <localization string-id='handout'>Handout</localization>
     <localization string-id='reading-questions'>Lesefragen</localization>
     <localization string-id='solutions'>Lösungen</localization>
     <!-- Wörterverzeichnis scheint viel weniger benutzt zu sein, s. Google ngram -->
@@ -89,20 +90,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Absätze</localization>
     <localization string-id='subparagraph'>Unterabsatz</localization>
     <!-- Adjustments to titles of divisions -->
-    <!-- <localization string-id='group'>Group</localization> -->
+    <localization string-id='group'>Gruppe</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <localization string-id='remark'>Bemerkung</localization>
-    <!-- <localization string-id='convention'>Convention</localization> -->
+    <localization string-id='convention'>Konvention</localization>
     <localization string-id='note'>Vermerk</localization>
     <!-- Bemerkung versus Anmerkung - I have reserved Anmerkung for footnote -->
     <localization string-id='observation'>Bemerkung</localization>
     <localization string-id='warning'>Warnung</localization>
-    <!-- <localization string-id='insight'>Insight</localization> -->
+    <localization string-id='insight'>Überblick</localization>
     <!-- COMPUTATION-LIKE blocks -->
-    <!-- <localization string-id='computation'>Computation</localization> -->
+    <localization string-id='computation'>Berechnung</localization>
     <localization string-id='technology'>Technologie</localization>
-    <!-- <localization string-id='data'>Data</localization> -->
+    <localization string-id='data'>Daten</localization>
     <!-- ASIDE-LIKE blocks -->
     <!-- <localization string-id='aside'>Aside</localization> -->
     <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
@@ -112,33 +113,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='question'>Frage</localization>
     <localization string-id='problem'>Problem</localization>
     <!-- PROJECT-LIKE blocks -->
-    <!-- <localization string-id='project'>Project</localization> -->
-    <!-- <localization string-id='activity'>Activity</localization> -->
+    <localization string-id='project'>Projekt</localization>
+    <localization string-id='activity'>Aktivität</localization>
     <!-- <localization string-id='exploration'>Exploration</localization> -->
     <localization string-id='task'>Aufgabe</localization>
     <!-- <localization string-id='investigation'>Investigation</localization> -->
     <!-- <localization string-id='assemblage'>Assemblage</localization> -->
     <localization string-id='poem'>Gedicht</localization>
-    <!-- <localization string-id='objectives'>Objectives</localization> -->
-    <!-- <localization string-id='objective'>Objective</localization> -->
-    <!-- <localization string-id='outcomes'>Outcomes</localization> -->
-    <!-- <localization string-id='outcome'>Outcome</localization> -->
-    <!-- <localization string-id='openquestion'>Open Question</localization> -->
-    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
-    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
-    <!-- <localization string-id='context'>Context</localization> -->
-    <!-- <localization string-id='discussion'>Discussion</localization> -->
-    <!-- <localization string-id='opinion'>Opinion</localization> -->
-    <!-- <localization string-id='status'>Status</localization> -->
-    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <localization string-id='objectives'>Ziele</localization>
+    <localization string-id='objective'>Ziel</localization>
+    <localization string-id='outcomes'>Ergebnisse</localization>
+    <localization string-id='outcome'>Ergebnis</localization>
+    <localization string-id='openquestion'>Offene Frage</localization>
+    <localization string-id='openproblem'>Offenes Problem</localization>
+    <localization string-id='openconjecture'>Offene Vermutung</localization>
+    <localization string-id='context'>Kontext</localization>
+    <localization string-id='discussion'>Diskussion</localization>
+    <localization string-id='opinion'>Meinung</localization>
+    <localization string-id='status'>Status</localization>
+    <localization string-id='suggestion'>Vorschlag</localization>
     <localization string-id='figure'>Figur</localization> <!-- Duden 4b für Figur -->
     <localization string-id='table'>Tabelle</localization>
-    <!-- <localization string-id='listing'>Listing</localization> -->
+    <localization string-id='listing'>Liste</localization>
     <localization string-id='fn'>Anmerkung</localization>
-    <!-- <localization string-id='contributor'>Contributor</localization> -->
+    <localization string-id='contributor'>Mitwirkender</localization>
     <!-- Lists and their items -->
     <localization string-id='list'>Liste</localization>
-    <!-- <localization string-id='li'>Item</localization> -->
+    <localization string-id='li'>Item</localization>
     <!-- <localization string-id='gi'>Term</localization> -->
     <localization string-id='p'>Absatz</localization>
     <localization string-id='blockquote'>Zitat</localization>
@@ -162,30 +163,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='toc'>Inhalt</localization>
     <localization string-id='abstract'>Zusammenfassung</localization> <!-- or is Abstrakt used? -->
     <localization string-id='preface'>Einleitung</localization>
-    <!-- <localization string-id='acknowledgement'>Acknowledgements</localization> -->
-    <!-- <localization string-id='biography'>Author Biography</localization> -->
-    <!-- <localization string-id='about-author'>About the Author</localization> -->
-    <!-- <localization string-id='about-authors'>About the Authors</localization> -->
+    <localization string-id='acknowledgement'>Danksagung</localization>
+    <localization string-id='biography'>Biographie</localization>
+    <localization string-id='about-author'>Über den Autor</localization>
+    <localization string-id='about-authors'>Über die Autoren</localization>
     <localization string-id='foreword'>Vorwort</localization>
-    <!-- <localization string-id='dedication'>Dedication</localization> -->
-    <!-- <localization string-id='colophon'>Colophon</localization> -->
+    <localization string-id='dedication'>Widmung</localization>
+    <localization string-id='colophon'>Kolophon</localization>
     <!-- Runestone Activities -->
-    <!-- <localization string-id='video'>Video</localization> -->
-    <!-- <localization string-id='program'>Program</localization> -->
+    <localization string-id='video'>Video</localization>
+    <localization string-id='program'>Programm</localization>
     <!-- Runestone Exercises -->
-    <!-- <localization string-id='true'>True</localization> -->
-    <!-- <localization string-id='false'>False</localization> -->
-    <!-- <localization string-id='or'>Or</localization> -->
-    <!-- <localization string-id='either'>Either</localization> -->
-    <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
-    <!-- <localization string-id='query'>Query</localization> -->
+    <localization string-id='true'>Wahr</localization>
+    <localization string-id='false'>Falsch</localization>
+    <localization string-id='or'>Oder</localization>
+    <localization string-id='either'>Entweder</localization>
+    <localization string-id='uncategorized'>Unkategorisiert</localization>
+    <localization string-id='query'>Query</localization>
     <localization string-id='program-activecode'>ActiveCode</localization>
     <!-- <localization string-id='scratch-activecode'>Scratch ActiveCode</localization> -->
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- oder auch Index, siehe http://www.d-indexer.org/frag/grundsatz.html#index -->
     <localization string-id='index'>Register</localization>
-    <!-- <localization string-id='jump-to'>Jump to:</localization> -->
+    <localization string-id='jump-to'>Gehe zu:</localization>
     <!-- Parts of the Index -->
     <!-- see https://online.liverpooluniversitypress.co.uk/doi/pdf/10.3828/indexer.2006.21 for lots more info on peculiarities of German indexing we cannot hope to follow -->
     <localization string-id='see'>siehe</localization>
@@ -202,80 +203,79 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='previous'>Zurück</localization>
     <localization string-id='up'>Oben</localization>
     <localization string-id='next'>Weiter</localization>
-    <!-- I am even less sure here - can one really shorten "Weiter"? -->
-    <localization string-id='previous-short'>Zu</localization>
-    <localization string-id='up-short'>Ob</localization>
-    <localization string-id='next-short'>We</localization>
-    <!-- <localization string-id='top'>Top</localization> -->
-    <!-- <localization string-id='annotations'>Annotations</localization> -->
-    <!-- <localization string-id='feedback'>Feedback</localization> -->
-    <localization string-id='authored'>Mit PreTeXt gebaut</localization>
+    <!-- I am even less sure here - can one really shorten "Weiter"? KK: not really. Nobody would recognize the two letters as abbreviations -->
+    <localization string-id='previous-short'>Zurück</localization>
+    <localization string-id='up-short'>Oben</localization>
+    <localization string-id='next-short'>Weiter</localization>
+    <localization string-id='top'>Top</localization>
+    <localization string-id='annotations'>Anmerkungen</localization>
+    <localization string-id='feedback'>Feedback</localization>
+    <localization string-id='authored'>Mit PreTeXt erstellt</localization>
     <!-- Search Results display/dialog -->
-    <!-- <localization string-id='search-book'>Search Book</localization> -->
-    <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
-    <!-- <localization string-id='no-search-results'>No results</localization> -->
+    <localization string-id='search-book'>Buch durchsuchen</localization>
+    <localization string-id='search-results-heading'>Suchergebnisse</localization>
+    <localization string-id='no-search-results'>Keine Suchergebnisse</localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'>An</localization>
     <localization string-id='from'>Von</localization>
-    <!-- <localization string-id='subject'>Subject</localization> -->
-    <!-- <localization string-id='date'>Date</localization> -->
-    <!-- <localization string-id='cc'>cc</localization> -->
-    <!-- <localization string-id='enclosure'>encl</localization> -->
+    <localization string-id='subject'>Betreff</localization>
+    <localization string-id='date'>Datum</localization>
+    <localization string-id='cc'>Kopie(CC)</localization>
+    <localization string-id='enclosure'>Anhang</localization>
     <!-- Various -->
-    <!-- <localization string-id='todo'>To Do</localization> -->
+    <localization string-id='todo'>Zu erledigen</localization>
     <!-- Herausgeber seems more at publisher, but not always -->
     <localization string-id='editor'>Redakteur</localization>
     <localization string-id='edition'>Auflage</localization>
     <localization string-id='website'>Website</localization>
     <localization string-id='copyright'>Urheberrechte</localization>
-    <!-- <localization string-id='keywords'>Keywords</localization> -->
+    <localization string-id='keywords'>Schlüsselwörter</localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>Permalink</localization>
     <localization string-id='incontext'>Im Zusammenhang</localization>
-    <!-- <localization string-id='standalone'>Standalone</localization> -->
-    <!-- <localization string-id='embed'>Embed</localization> -->
-    <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
-    <!-- <localization string-id='copy'>Copy</localization> -->
-    <!-- <localization string-id='profile'>Profile</localization> -->
+    <localization string-id='standalone'>Eigenständig</localization>
+    <localization string-id='embed'>Einbinden</localization>
+    <localization string-id='embed-this-page'>Diese Seite einbetten</localization>
+    <localization string-id='copy'>Kopie</localization>
+    <localization string-id='profile'>Profil</localization>
     <localization string-id='permalink-tooltip'>Kopiere Bezeichnung und Link zu</localization>
-    <!-- <localization string-id='calculator'>Calculator</localization> -->
+    <localization string-id='calculator'>Rechner</localization>
     <!-- Though at least one Sage cell installation uses Auswerten instead -->
     <localization string-id='evaluate'>Ausführen</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
-    <!-- <localization string-id='instructions'>Instructions</localization> -->
-    <!-- <localization string-id='correct'>Correct</localization> -->
-    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
-    <!-- <localization string-id='blank'>Blank</localization> -->
-    <!-- <localization string-id='submit'>Submit</localization> -->
-    <!-- <localization string-id='check-responses'>Check Responses</localization> -->
-    <!-- <localization string-id='reveal'>Reveal</localization> -->
-    <!-- <localization string-id='randomize'>Randomize</localization> -->
-    <!-- <localization string-id='activate'>Activate</localization> -->
-    <!-- <localization string-id='reset'>Reset</localization> -->
-    <!-- <localization string-id='array'>array</localization> -->
-    <!-- <localization string-id="papersize">Paper size</localization> -->
-    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
-    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
-    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
-    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
-    <!-- <localization string-id="print-header">Print headers</localization> -->
-    <!-- <localization string-id="print-footer">Print footers</localization> -->
-    <!-- <localization string-id="first-page">First page</localization> -->
-    <!-- <localization string-id="running">Running</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
-    <!-- <localization string-id='print'>Print</localization> -->
-    <!-- <localization string-id='print-preview'>Print preview</localization> -->
-    <!-- <localization string-id='close'>Close</localization> -->
-    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
+    <localization string-id='instructions'>Anweisungen</localization>
+    <localization string-id='correct'>Richtig</localization>
+    <localization string-id='incorrect'>Falsch</localization>
+    <localization string-id='blank'>Leer</localization>
+    <localization string-id='submit'>Abschicken</localization>
+    <localization string-id='check-responses'>Antworten überprüfen</localization>
+    <localization string-id='reveal'>Anzeigen</localization>
+    <localization string-id='randomize'>Randomisieren</localization>
+    <localization string-id='activate'>Aktivieren</localization>
+    <localization string-id='reset'>Zurücksetzen</localization>
+    <localization string-id='array'>Array</localization>
+    <localization string-id="papersize">Papierformat</localization>
+    <localization string-id="printing-options">Weitere Druckeinstellungen</localization>
+    <localization string-id="hide-hints">Hinweise verbergen</localization>
+    <localization string-id="hide-answers">Antworten verbergen</localization>
+    <localization string-id="hide-solutions">Lösungen verbergen</localization>
+    <localization string-id="print-header">Kopfzeilen drucken</localization>
+    <localization string-id="print-footer">Fußzeilen drucken</localization>
+    <localization string-id="first-page">Erste Seite</localization>
+    <localization string-id="running">Läuft</localization>
+    <localization string-id="highlight-workspace">Arbeitsbereich hervorheben</localization>
+    <localization string-id='print'>Drucken</localization>
+    <localization string-id='print-preview'>Druckvorschau</localization>
+    <localization string-id='close'>Schließen</localization>
+    <localization string-id='open-new-tab'>In neuem Tab öffnen</localization>
     <!-- Readability menu items, HTML only, utilized by Javascript -->
-    <!-- <localization string-id='readability-settings'>Readability settings</localization> -->
-    <!-- <localization string-id='readability-line-height'>Line height</localization> -->
-    <!-- <localization string-id='readability-content-font-size'>Content font size</localization> -->
-    <!-- <localization string-id='readability-theme'>Theme</localization> -->
-    <!-- <localization string-id='readability-theme-system'>System</localization> -->
-    <!-- <localization string-id='readability-theme-light'>Light</localization> -->
-    <!-- <localization string-id='readability-theme-dark'>Dark</localization> -->
-    <!-- <localization string-id='readability-assistive-technologies'>Assistive technologies</localization> -->
-    <!-- <localization string-id='readability-expose-permalinks'>Expose permalinks</localization> -->
-    <!-- <localization string-id='reset-all'>Reset All</localization> -->
+    <localization string-id='readability-settings'>Einstellungen zur Lesbarkeit</localization>
+    <localization string-id='readability-line-height'>Zeilenhöhe</localization>
+    <localization string-id='readability-content-font-size'>Schriftgröße für Inhalt</localization>
+    <localization string-id='readability-theme'>Thema</localization>
+    <localization string-id='readability-theme-system'>System</localization>
+    <localization string-id='readability-theme-light'>Hell</localization>
+    <localization string-id='readability-theme-dark'>Dunkel</localization>
+    <localization string-id='readability-assistive-technologies'>Hilfstechnologien</localization>
+    <localization string-id='readability-expose-permalinks'>Zeige Permalinks an</localization>
+    <localization string-id='reset-all'>Alles zurücksetzen</localization>
 </locale>

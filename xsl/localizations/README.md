@@ -41,7 +41,7 @@ Current (partially) implemented language codes and contributors
 * bg-BG, Bulgarian (Bulgaria), Boyko Bantchev
 * ca-ES, Catalan (Spain), Jordi Saludes
 * cs-CZ, Czech (Czechia), Jiří Lebl
-* de-DE, German (Germany), Karl-Dieter Crisman
+* de-DE, German (Germany), Karl-Dieter Crisman, Klaus Krtschil
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer
 * fi-FI, Finnish (Finland), Lasse M. Manninen

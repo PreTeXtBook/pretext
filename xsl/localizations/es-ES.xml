@@ -247,7 +247,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This needs to be defined to *something* (English) -->
     <!-- Translate at first opportunity, please -->
     <localization string-id='evaluate'>Evaluar</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
     <localization string-id='instructions'>Instrucciones</localization>
     <localization string-id='correct'>Correcto</localization>
     <localization string-id='incorrect'>Incorrecto</localization>

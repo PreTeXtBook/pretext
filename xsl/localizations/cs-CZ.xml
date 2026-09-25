@@ -240,7 +240,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This needs to be defined to *something* (English) -->
     <!-- Translate at first opportunity, please -->
     <localization string-id='evaluate'>Ohodnotit</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
     <localization string-id='instructions'>Instrukce</localization>
     <localization string-id='correct'>Správně</localization>
     <localization string-id='incorrect'>Nesprávně</localization>

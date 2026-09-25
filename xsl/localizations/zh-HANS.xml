@@ -229,7 +229,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization> -->
     <!-- <localization string-id='calculator'>Calculator</localization> -->
     <localization string-id='evaluate'>求解</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
     <localization string-id='instructions'>说明</localization>
     <localization string-id='correct'>正确</localization>
     <localization string-id='incorrect'>错误</localization>

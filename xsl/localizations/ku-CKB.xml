@@ -235,7 +235,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
     <!-- <localization string-id='calculator'>Calculator</localization> -->
     <localization string-id='evaluate'>نرخ دۆزینەوە</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
     <localization string-id='instructions'>ڕێنماییەکان</localization>
     <localization string-id='correct'>ڕاست</localization>
     <localization string-id='incorrect'>ناڕاست</localization>
