@@ -242,7 +242,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='calculator'>Rechner</localization>
     <!-- Though at least one Sage cell installation uses Auswerten instead -->
     <localization string-id='evaluate'>Ausführen</localization>
-    <localization string-id='code'>Code</localization>
     <localization string-id='instructions'>Anweisungen</localization>
     <localization string-id='correct'>Richtig</localization>
     <localization string-id='incorrect'>Falsch</localization>

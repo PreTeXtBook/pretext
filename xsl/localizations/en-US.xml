@@ -365,13 +365,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- replaced by "description" if that is easier to translate.      -->
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
     <localization string-id='calculator'>Calculator</localization>
-    <!-- Sage Cell evaluate button      -->
-    <!-- eg, "Evaluate (Maxima)"        -->
-    <!-- 2017-05-14: 'code' is obsolete -->
-    <!-- This needs to be defined to *something* (always)       -->
+    <!-- Sage Cell evaluate button                               -->
+    <!-- eg, "Evaluate (Maxima)"                                 -->
+    <!-- This needs to be defined to *something* (always)        -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <localization string-id='evaluate'>Evaluate</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
     <localization string-id='instructions'>Instructions</localization>
     <!-- Interactive exercise feedback messages                   -->
