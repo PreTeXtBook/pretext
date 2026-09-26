@@ -1261,8 +1261,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </p>
 
         <p>
-          <c>pdf2svg</c> and ImageMagick are also pieces of the toolchain that may need to be installed separately,
-          including on macOS. To generate graphics using SageMath,
+          To generate graphics using SageMath,
           you'll need a working installation of it with a proper configuration of its path in the <c>pretext.cfg</c> file.
           Linux and CoCalc can probably get away without extra configuration here,
           but it will likely be required on macOS and Windows unless

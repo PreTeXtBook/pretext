@@ -74,7 +74,7 @@
       <p>Path names that begin with the drive letter (Windows) or the root <c>/</c> (Linux/Mac OS X) are called <term>absolute path names</term>. Their referents do not depend on the location from which the path name is invoked. <term>Relative path names</term>, on the other hand, begin in the so-called <term>current working directory</term>. A relative pathname might look something like this:</p>
       <pre>../../examples/sample-article/sample-article.xml</pre>
       <p>The symbol <c>..</c> is a shortcut for the parent of the current directory. Thus, the relative path name above means from where we are, ascend two levels, then descend into the <c>examples</c> and <c>sample-article</c> subdirectories, and find the file <c>sample-article.xml</c>.</p>
-      <p>Path names that contain spaces are <em>evil</em>, and should be avoided in many cases. Unfortunately, all Windows default program installation locations contain at least one space (directory name <q>Program Files</q>). This does not appear to cause problems, except when installing ImageMagick (<xref ref="installing-imagemagick" />). To be extra careful, you could always choose an installation location that is free of space characters.</p>
+      <p>Path names that contain spaces are <em>evil</em>, and should be avoided in many cases. Unfortunately, all Windows default program installation locations contain at least one space (directory name <q>Program Files</q>). This does not appear to cause problems. To be extra careful, you could always choose an installation location that is free of space characters.</p>
 
     </subsection>
 
@@ -225,45 +225,14 @@
   <section xml:id="installing-anaconda">
     <title>Installing Anaconda</title>
     <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>pretext</c> script has <url href="https://github.com/PreTeXtBook/pretext/pull/252" visual="github.com/PreTeXtBook/pretext/pull/252"/> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
-    <p>If you already have a working Python installation, skip to <xref ref="installing-imagemagick" />.</p>
+    <p>If you already have a working Python installation, skip this section.</p>
     <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you do not need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.<ol>
       <li><p>Download either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads" visual="www.continuum.io/downloads"/>.</p></li>
       <li><p>Run the installer and accept all the default suggestions.</p></li>
     </ol></p>
 
     <p>Congratulations, you have successfully installed Python.</p>
-    <p>If you do not care about images, you can stop here. Much of the <pretext/> functionality is already present. However, to use the <c>pretext/pretext</c> script to create SVG images from sources like PDF/PNG images, Sage, Asymptote, or TikZ, you need to install ImageMagick using the directions in <xref ref ="installing-imagemagick"/>.</p>
   </section>
-
-  <section xml:id="installing-imagemagick">
-    <title>Installing ImageMagick</title>
-    <p>Visit the <url href="https://imagemagick.org/script/download.php#windows" visual="imagemagick.org/script/download.php#windows"/> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
-    <pre>ImageMagick-7.0.1-6-Q16-x64-dll.exe</pre>
-    <p>then a good choice for a 32-bit Windows would be</p>
-    <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
-    <list xml:id="installing-imagemagick-steps">
-      <title>imagemagick Installation</title>
-      <ol>
-        <li>
-          <p>Run the installer from your download location.</p>
-        </li>
-        <li>
-          <p>Accept the license agreement.</p>
-        </li>
-        <li>
-          <p>Choose a default installation location that has no spaces in its folder name. The default choice <q>Program Files</q> causes problems because of path name issues. I chose<cd>c:\ImageMagick-7.0.1-Q16\</cd>It matters because the ImageMagick utility <c>convert</c> is used by the <c>pretext</c> script to convert your images into different formats. The <c>pretext</c> script will have a lot of trouble with path names that contain spaces.</p>
-        </li>
-        <li>
-          <p>When confronted with <q>Select additional tasks</q>, make sure that the boxes for <q>Add application directory to your system path</q> and <q>Install legacy utilities</q> are checked.</p>
-        </li>
-        <li>
-          <p>If you like, carry out the procedure to verify your installation.</p>
-        </li>
-      </ol>
-    </list>
-    <p>Congratulations, you have successfully installed ImageMagick.</p>
-  </section>
-
 
   <section xml:id="section-jing">
     <title>Installing jing</title>

@@ -763,18 +763,6 @@
                 </xsl:choose>
             </xsl:attribute>
         </cover>
-        <!-- These may be used in automated creation of a cover image, -->
-        <!-- which LaTeX typesets from plain text, so an author may     -->
-        <!-- supply a "plaintitle" to use in place of the title         -->
-        <title>
-            <xsl:apply-templates select="$document-root" mode="title-plain"/>
-        </title>
-        <subtitle>
-            <xsl:apply-templates select="$document-root" mode="subtitle-plain"/>
-        </subtitle>
-        <author>
-            <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
-        </author>
         <!-- Decide what to do with preview images, etc. -->
         <images>
             <xsl:for-each select="$document-root//image">
