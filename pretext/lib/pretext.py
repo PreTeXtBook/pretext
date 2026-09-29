@@ -6347,8 +6347,8 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
             # download the file if it is not already in the cache_dir
             log.debug("Downloading required file {} from {}".format(file.attrib["name"], file.attrib["href"]))
             url = file.attrib["href"]
-            # The url might be to the file, or to a compressed archive.  We do slightly different things in each case.  TODO: other archive formats.
-            if url.endswith(".zip"):
+            # The url might be to the file, or to a compressed archive, as said by @compression (a url need not end in ".zip").  We do slightly different things in each case.  TODO: other archive formats.
+            if file.get("compression") == "zip":
                 tmp_zip = os.path.join(cache_dir, "tmp.zip")
                 common.download_file(url, tmp_zip)
                 with zipfile.ZipFile(tmp_zip, 'r') as zip_ref:
