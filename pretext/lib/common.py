@@ -224,6 +224,28 @@ def download_file(url, dest_filename):
         raise Exception("Failed to save download", dest_filename)
 
 
+# lxml halts a transform on any document() it cannot load, while the
+# xsltproc executable warns and supplies an empty node-set.  The file of
+# references and citations formatted by a CSL style is generated on
+# request, so it is routinely absent, and the assembly stylesheet asks
+# for it in every conversion once a CSL style is in force.  This hands
+# back a stand-in document for that one file when it does not exist, so
+# the stylesheet finds no "pi:csl-references" and falls back to default
+# bibliography handling, as it would under xsltproc.
+class _GeneratedReferencesResolver(ET.Resolver):
+    def resolve(self, url, public_id, context):
+        from urllib.parse import urlparse
+        from urllib.request import url2pathname
+
+        if not url.endswith("csl-bibliography.xml"):
+            return None
+        parsed = urlparse(url)
+        path = url2pathname(parsed.path) if parsed.scheme == "file" else url
+        if os.path.exists(path):
+            return None
+        return self.resolve_string("<missing-generated-file/>", context)
+
+
 # Pythonic replacement for xsltproc executable
 def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     """
@@ -290,6 +312,8 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     # and never from the document being processed.  Resolution stays on
     # local files: "no_network" is the default, but we are explicit here.
     xsl_parser = ET.XMLParser(resolve_entities=True, no_network=True)
+    # document() consults the resolvers of the stylesheet's parser
+    xsl_parser.resolvers.add(_GeneratedReferencesResolver())
     xsl_tree = ET.parse(xsl, parser=xsl_parser)
     xslt = ET.XSLT(xsl_tree, access_control=control)
 
