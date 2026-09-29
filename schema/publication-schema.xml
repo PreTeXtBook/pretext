@@ -186,6 +186,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     element journal {
                         attribute name {text}
                     }? &amp;
+                    element citation-stylesheet-language {
+                        attribute style {text}
+                    }? &amp;
                     element worksheet {
                         attribute margin {text}?,
                         attribute top {text}?,

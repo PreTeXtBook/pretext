@@ -155,6 +155,11 @@
           </element>
         </optional>
         <optional>
+          <element name="citation-stylesheet-language">
+            <attribute name="style"/>
+          </element>
+        </optional>
+        <optional>
           <element name="worksheet">
             <optional>
               <attribute name="margin"/>
