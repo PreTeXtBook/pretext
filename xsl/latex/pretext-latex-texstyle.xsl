@@ -756,8 +756,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- A journal's bibliography is formatted by PreTeXt, not by BibTeX: -->
+<!-- in the journal's CSL style, when references have been generated -->
+<!-- and replaced during assembly, else in PreTeXt's own way.  So the -->
+<!-- texstyle file only says *where* the list belongs.                -->
 <xsl:template match="texstyle/bibliography">
-    <xsl:message>PTX:WARNING: Bibliographies are not implemented correctly yet.</xsl:message>
     <xsl:apply-templates select="$document-root/references|$document-root/backmatter/references"/>
 </xsl:template>
 
