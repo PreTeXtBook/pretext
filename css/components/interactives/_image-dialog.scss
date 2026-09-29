@@ -66,13 +66,11 @@
     min-height: 0;
   }
 
+  // always visible, not only while hovered or focused: focus moves
+  // away when a reader opens an image description in the dialog,
+  // and a touch screen has no hover
   .ptx-dialog-close-button {
-    opacity: 0;
-
-    &:hover,
-    &:focus {
-      opacity: 0.8;
-    }
+    opacity: 0.8;
   }
 
   figure,
