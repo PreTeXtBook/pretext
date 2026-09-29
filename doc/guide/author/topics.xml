@@ -2831,6 +2831,10 @@
                 See <xref ref="subsec-img-desc-advice"/> for advice on writing effective image descriptions.
             </p>
 
+            <p>
+                In <init>HTML</init> and <init>EPUB</init> output a reader can reveal the <tag>description</tag>, which is then wide enough to read comfortably, however narrow the image, and stays within the text.  So a long description of a small image will not be squeezed into a narrow column.  Within a panel of a <tag>sidebyside</tag> the description fills the width of its panel.  The <tag>description</tag> of an <tag>interactive</tag> behaves the same way.
+            </p>
+
         </subsection>
 
         <subsection xml:id="topic-images-vector">
