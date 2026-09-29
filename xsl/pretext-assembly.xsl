@@ -1348,7 +1348,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="the-xref-id">
                 <xsl:value-of select="@pi:original-id"/>
             </xsl:variable>
-            <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
+            <!-- $csl-file is defined in the publisher-variables stylesheet -->
+            <xsl:variable name="matched-citation" select="document($csl-file, $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
             <xsl:copy-of select="$matched-citation"/>
             <!-- WARN ON UNMATCHED -->
         </xsl:otherwise>
