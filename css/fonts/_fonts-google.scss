@@ -35,12 +35,24 @@ $print: 'PT Serif, Times New Roman, Times, serif' !default;
   @return true;
 }
 
+// Google Fonts writes each space in a family name as "+" ("Open+Sans").
+// A URL may not contain a raw space, and a minifier that rewrites the
+// quoted import as an unquoted url() would end the URL at the space.
+@function url-family-name($font-name) {
+  $space: string.index($font-name, ' ');
+  @if not $space {
+    @return $font-name;
+  }
+  @return string.slice($font-name, 1, $space - 1) + '+' + url-family-name(string.slice($font-name, $space + 1));
+}
+
 @function generate-import($font-name) {
+  $family: url-family-name($font-name);
   @if is-variable-font($font-name) {
-    @return 'https://fonts.googleapis.com/css2?family=' + $font-name + ':ital,wght@0,400..700;1,400..700&display=swap';
+    @return 'https://fonts.googleapis.com/css2?family=' + $family + ':ital,wght@0,400..700;1,400..700&display=swap';
   }
   @else {
-    @return 'https://fonts.googleapis.com/css2?family=' + $font-name + ':ital,wght@0,400;0,700;1,400;1,700&display=swap';
+    @return 'https://fonts.googleapis.com/css2?family=' + $family + ':ital,wght@0,400;0,700;1,400;1,700&display=swap';
   }
 }
 
