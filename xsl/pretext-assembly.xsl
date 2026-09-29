@@ -1226,7 +1226,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:otherwise>
                     <xsl:text>yes</xsl:text>
                     <!-- and we take the opportunity to say so, just once, and early on -->
-                    <xsl:message>PTX:WARNING:     your publisher file indicates the use of one Citation Stylesheet Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
+                    <xsl:message>PTX:WARNING:     your publisher file indicates the use of one Citation Style Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
@@ -1338,7 +1338,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Note: not using CSL styles immediately determines that    -->
         <!-- this "xrref" is not a "biblio target" and a copy is       -->
         <!-- made here, immediately as well                            -->
-        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio">
+        <!-- A missing or mismatched generated file is met the same    -->
+        <!-- way here as with the "references" division above: keep    -->
+        <!-- the author's "xref", so citations and bibliography both   -->
+        <!-- fall back to default processing, together                 -->
+        <xsl:when test="not($b-is-biblio-target) or not($b-consulting-csl-file) or $b-missing-csl-file or $b-style-file-mismatch">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
