@@ -1332,7 +1332,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Note: not using CSL styles immediately determines that    -->
         <!-- this "xrref" is not a "biblio target" and a copy is       -->
         <!-- made here, immediately as well                            -->
-        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio">
+        <!-- A missing or mismatched generated file is met the same    -->
+        <!-- way here as with the "references" division above: keep   -->
+        <!-- the author's "xref", so citations and bibliography both   -->
+        <!-- fall back to default processing, together                 -->
+        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio or $b-missing-csl-file or $b-style-file-mismatch">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
