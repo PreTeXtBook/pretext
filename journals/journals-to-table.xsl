@@ -27,7 +27,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <title>Journals supported by PreTeXt</title>
         <tabular>
             <row header="yes">
-                <cell>Full Journal Name</cell><cell>Code</cell>
+                <cell>Full Journal Name</cell><cell>Code</cell><cell>Bibliography Style</cell>
             </row>
             <xsl:apply-templates select="journal"/>
         </tabular>
@@ -40,6 +40,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <row bottom="minor">
         <cell><xsl:value-of select="name"/></cell>
         <cell><xsl:value-of select="code"/></cell>
+        <cell>
+            <xsl:choose>
+                <xsl:when test="citation-stylesheet-language/@style">
+                    <xsl:value-of select="citation-stylesheet-language/@style"/>
+                </xsl:when>
+                <!-- no CSL style, so PreTeXt formats references -->
+                <xsl:otherwise>
+                    <xsl:text>(none)</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </cell>
     </row>
 </xsl:template>
 
