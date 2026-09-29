@@ -21,34 +21,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <ptx-journals>
   <!-- We might want some categories or other way to break these up?  More likely just use tags -->
 
+  <!-- A journal's "citation-stylesheet-language/@style" is the Citation Style  -->
+  <!-- Language (CSL) style for its references and citations, used when the    -->
+  <!-- publication file names the journal and names no style of its own.  A    -->
+  <!-- journal with no counterpart among CSL styles has none, and its          -->
+  <!-- references are formatted by PreTeXt in its usual way.                   -->
+
   <journal>
     <code>ams</code>
     <name>AMS journals</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
   </journal>
 
   <journal>
     <code>elsevier</code>
     <name>Elsevier journals</name>
     <publisher>Elsevier</publisher>
+    <citation-stylesheet-language style="elsevier-with-titles"/>
   </journal>
 
   <journal>
     <code>springer-nature</code>
     <name>Springer Nature journals</name>
     <publisher>Springer Nature</publisher>
+    <citation-stylesheet-language style="springer-mathphys-brackets"/>
   </journal>
 
   <journal>
     <code>taylor-francis</code>
     <name>Taylor Francis journals</name>
     <publisher>Taylor &amp; Francis</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-numeric-q"/>
   </journal>
 
   <journal>
     <code>ann-pure-appl-logic</code>
     <name>Annals of Pure and Applied Logic</name>
     <publisher>Elsevier</publisher>
+    <citation-stylesheet-language style="elsevier-with-titles"/>
     <method texstyle="elsevier"/>
   </journal>
 
@@ -56,6 +67,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>bull-amer-math-soc</code>
     <name>Bulletin (New Series) of the American Mathematical Society</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -63,6 +75,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>conform-geom-dyn</code>
     <name>Conformal Geometry and Dynamics</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -76,6 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>exp-math</code>
     <name>Experimental Mathematics</name>
     <publisher>Taylor &amp; Francis</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-numeric-q"/>
     <method texstyle="taylor-francis"/>
   </journal>
 
@@ -83,6 +97,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>j-algebraic-geom</code>
     <name>Journal of Algebraic Geometry</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -91,6 +106,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>j-amer-math-soc</code>
     <name>Journal of the American Mathematical Society</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -98,6 +114,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>math-comp</code>
     <name>Mathematics of Computation</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -105,6 +122,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>quart-appl-math</code>
     <name>Quarterly of Applied Mathematics</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -112,6 +130,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>proc-amer-math-soc</code>
     <name>Proceedings of the American Mathematical Society</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -119,6 +138,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>represent-theory</code>
     <name>Representation Theory</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -126,6 +146,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>theory-probab-math-statist</code>
     <name>Theory of Probability and Mathematical Statistics</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
@@ -133,6 +154,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <code>trans-ams</code>
     <name>Transactions of the American Mathematical Society</name>
     <publisher>American Mathematical Society</publisher>
+    <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
   </journal>
 
