@@ -1383,7 +1383,14 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # * We interrogate the punctuation of citations
 
     # Initialize use of the chosen style
-    style = citeproc.CitationStylesStyle(csl_style, validate=False)
+    try:
+        style = citeproc.CitationStylesStyle(csl_style, validate=False)
+    except ValueError as e:
+        # citeproc-py's message says where it looked, and
+        # recommends "citeproc-py-styles" when it is absent
+        msg = 'the CSL style "{}" could not be located: {}  No action is being taken.'
+        log.error(msg.format(csl_style, e))
+        return
 
     # The citepoc-py "CitationStylesStyle" object is derived ultimately
     # from an lxml Element Tree in a "xml" property of the object.  We
