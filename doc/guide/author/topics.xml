@@ -1461,7 +1461,14 @@
 
         <subsection xml:id="topic-references">
             <title>(*) References (Lists of Works Cited)</title>
-            <p></p>
+            <idx><h>bibliography style</h></idx>
+            <idx><h>citation style</h></idx>
+
+            <p>The entries of a bibliography, and the citations that point to them, can be formatted according to a style from the Citation Style Language (<init>CSL</init>) repository, which describes the house styles of thousands of journals and publishers.  A publication file names a style by its identifier (<xref ref="common-csl"/>), such as <c>american-mathematical-society-numeric</c> or <c>apa</c>.  The available styles can be browsed at <url href="https://www.zotero.org/styles">https://www.zotero.org/styles</url>.</p>
+
+            <p>Naming a journal (<xref ref="common-journal"/>) selects that journal's style, so you need not name a style at all.  When both are given, the style named in the publication file wins, which is what you want when preparing a preprint of an article destined for a journal whose <latex/> style you still wish to use.</p>
+
+            <p>Formatted references and citations are a generated asset.  Generate them with <c>pretext generate references</c> from the <init>CLI</init>, or with <c>-c references</c> from the <c>pretext/pretext</c> script, and again whenever you change the style or your references.  Until then <pretext/> formats references in its usual way, and says so.  Formatting requires the <c>citeproc-py</c> Python package, and the styles themselves come from the <c>citeproc-py-styles</c> package, so install both.  Styles that put citations in footnotes or endnotes are not yet supported.</p>
         </subsection>
 
         <subsection xml:id="topic-glossary">

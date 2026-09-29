@@ -187,7 +187,30 @@
 
             <p>
                 A complete list of the supported journals, together with their short name codes, will
-                be available in <xref ref="appendix-journals"/>.
+                be available in <xref ref="appendix-journals"/>.  That list also gives each journal's
+                bibliography style, which naming the journal selects for your references and
+                citations, in every output format.  See <xref ref="topic-references"/> for what that
+                requires, and <xref ref="common-csl"/> for choosing a style yourself instead.
+            </p>
+        </subsection>
+
+        <subsection xml:id="common-csl">
+            <title>Bibliography and citation style</title>
+            <idx><h>common option</h><h>bibliography style</h></idx>
+            <idx><h>bibliography style</h><h>common option</h></idx>
+            <idx><h>citation style</h></idx>
+            <idx><h>CSL</h></idx>
+
+            <p>
+                A style from the Citation Style Language (<init>CSL</init>) repository formats the
+                entries of a bibliography and the citations that point to them.  Name one with
+                <cd>
+                    <cline>/publication/common/citation-stylesheet-language/@style</cline>
+                </cd>
+                whose value is the style's identifier, without the <c>.csl</c> suffix.  A journal
+                (<xref ref="common-journal"/>) may supply a default, which a style named here
+                overrides.  See <xref ref="topic-references"/> for choosing a style, and for
+                generating the formatted references.
             </p>
         </subsection>
 
