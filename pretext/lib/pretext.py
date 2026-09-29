@@ -1306,9 +1306,8 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Compute publisher variable report one time, collecting results
     pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
-    # style file name selected by the publisher, no path information
-    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
-    # so place by a given style file by hand right now
+    # style file name selected by the publisher, or else supplied by
+    # a journal named in the publication file, no path information
     # Call below does not need an extension, so we do not supply it
     csl_style = common.get_publisher_variable(pub_vars, 'csl-style-file')
     # XSL "value-of" for boolean reports strings "true" or "false"
@@ -1316,7 +1315,8 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     if using_csl_styles == "false":
         msg = " ".join(["requesting formatted references and citations is not possible",
-              "without a CSL style file specified in the publication file.",
+              "without a CSL style file specified in the publication file,",
+              "or supplied by a journal named there.",
               "No action is being taken."])
         log.error(msg)
         # bail out and do not do *anything*
@@ -1377,8 +1377,9 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ### Initialize CSL Style File ###
     #
     # * Examine publisher file, get string for CSL file name
-    # * Needs to be moved manually to <cite-proc>/data/styles
-    # * Need to automate placing the style file
+    # * citeproc-py locates a style by its bare name, among the one
+    #   style it bundles and all of those in the "citeproc-py-styles"
+    #   package, if installed
     # * We interrogate the punctuation of citations
 
     # Initialize use of the chosen style
