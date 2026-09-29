@@ -1668,7 +1668,7 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     except Exception as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a references file: {}\n"
-        raise ValueError(msg.format(f) + root_cause)
+        raise ValueError(msg.format(bib_file) + root_cause)
 
 
 ##############################
