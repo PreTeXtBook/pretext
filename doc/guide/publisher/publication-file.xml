@@ -187,7 +187,50 @@
 
             <p>
                 A complete list of the supported journals, together with their short name codes, will
-                be available in <xref ref="appendix-journals"/>.
+                be available in <xref ref="appendix-journals"/>.  That list also gives each journal's
+                bibliography style, which naming the journal selects for your references and
+                citations, in every output format.  See <xref ref="common-csl"/> for what that
+                requires, and for choosing a style yourself instead.
+            </p>
+        </subsection>
+
+        <subsection xml:id="common-csl">
+            <title>Bibliography and citation style</title>
+            <idx><h>common option</h><h>bibliography style</h></idx>
+            <idx><h>bibliography style</h><h>common option</h></idx>
+            <idx><h>citation style</h></idx>
+            <idx><h>CSL</h></idx>
+
+            <p>
+                The entries of a bibliography, and the citations that point to them, can be
+                formatted according to a style from the Citation Style Language
+                (<init>CSL</init>) repository, which describes the house styles of thousands of
+                journals and publishers.  Name one with
+                <cd>
+                    <cline>/publication/common/citation-stylesheet-language/@style</cline>
+                </cd>
+                whose value is a style's identifier, such as
+                <c>american-mathematical-society-numeric</c> or <c>apa</c>, without the
+                <c>.csl</c> suffix.  The available styles can be browsed at
+                <url href="https://www.zotero.org/styles">https://www.zotero.org/styles</url>.
+            </p>
+
+            <p>
+                Naming a journal (<xref ref="common-journal"/>) selects that journal's style, so
+                you need not set this at all.  When both are given, the style named here wins, which
+                is what you want when preparing a preprint of an article destined for a journal
+                whose <latex/> style you still wish to use.
+            </p>
+
+            <p>
+                Formatted references and citations are a generated asset.  Generate them with
+                <c>pretext generate references</c> from the <init>CLI</init>, or with
+                <c>-c references</c> from the <c>pretext/pretext</c> script, and again whenever
+                you change the style or your references.  Until then <pretext/> formats
+                references in its usual way, and says so.  Formatting requires the
+                <c>citeproc-py</c> Python package, and the styles themselves come from the
+                <c>citeproc-py-styles</c> package, so install both.  Styles that put citations
+                in footnotes or endnotes are not yet supported.
             </p>
         </subsection>
 
