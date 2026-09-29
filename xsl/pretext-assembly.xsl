@@ -1161,7 +1161,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The generated file is only consulted in a conversion (extraction -->
 <!-- is making the file, not using it), with CSL styles in use, of a  -->
-<!-- document that has references to replace.                         -->
+<!-- document that has references to replace.  A stylesheet with no   -->
+<!-- use for the file (the publisher variable report) overrides this. -->
 <xsl:variable name="b-consulting-csl-file" select="$b-using-csl-styles and not($b-extracting-biblio) and boolean($original//backmatter/references[not(@source)])"/>
 
 <!-- two error conditions -->
@@ -1238,8 +1239,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="backmatter/references[not(@source)]" mode="assembly">
     <xsl:choose>
         <!-- duplicate for biblio extraction process or if using -->
-        <!-- default (simplistic) PreTeXt bibliography support   -->
-        <xsl:when test="$b-extracting-biblio or not($b-using-csl-styles)">
+        <!-- default (simplistic) PreTeXt bibliography support,  -->
+        <!-- or any other pass not consulting the generated file -->
+        <xsl:when test="not($b-consulting-csl-file)">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
@@ -1336,7 +1338,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- way here as with the "references" division above: keep   -->
         <!-- the author's "xref", so citations and bibliography both   -->
         <!-- fall back to default processing, together                 -->
-        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio or $b-missing-csl-file or $b-style-file-mismatch">
+        <xsl:when test="not($b-is-biblio-target) or not($b-consulting-csl-file) or $b-missing-csl-file or $b-style-file-mismatch">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
