@@ -771,11 +771,18 @@ function hideWidowedWorkspaces() {
 }
 
 function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}) {
-    adjustWorkspaceToFitPage({paperSize, margins});
-    if (pageOverflows()) {
+    const squeezed = adjustWorkspaceToFitPage({paperSize, margins});
+    const squeezedTooFar = squeezed && holdsAuthoredWorkspace();
+    if (pageOverflows() || squeezedTooFar) {
         if (fullRecompute) {
             resetPrintoutPagination(margins);
         } else {
+            if (squeezedTooFar) {
+                // The squeeze made room that is not there at the authored
+                // heights, so put those back first: the rows that then no
+                // longer fit are the ones addSpilloverPages() moves on.
+                setInitialWorkspaceHeights();
+            }
             addSpilloverPages(margins);
         }
         adjustWorkspaceToFitPage({paperSize, margins});
@@ -1258,6 +1265,14 @@ function measureFootnotes(rows, measuringPage) {
     return {heights, chrome};
 }
 
+// Mark a header or footer box that has nothing in it, so the print stylesheet
+// can let it shrink away and give its room to the boxes beside it.  Judged by
+// what a reader would see rather than with :empty, since a box that has been
+// typed in and then cleared is usually left holding a stray <br>.
+function markBlankHeaderFooterBox(box) {
+    box.classList.toggle('blank', box.textContent.trim() === '' && !box.querySelector('img'));
+}
+
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
 function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
@@ -1341,8 +1356,10 @@ function addHeadersAndFootersToPrintout() {
         };
         const elements = document.querySelectorAll(selectorMap[key]);
         elements.forEach(elem => {
+            markBlankHeaderFooterBox(elem);
             elem.addEventListener('input', () => {
                 localStorage.setItem(key, elem.innerHTML);
+                markBlankHeaderFooterBox(elem);
             });
         });
     });
@@ -1351,6 +1368,8 @@ function addHeadersAndFootersToPrintout() {
 
 // We look at each page and adjust the heights of the workspaces to fit it nicely into the page.
 // The width and height of the page will now depend on the letter or a4 setting.
+// Returns whether any page only fit by squeezing its writing space below the
+// authored heights (see holdsAuthoredWorkspace()).
 function adjustWorkspaceToFitPage({paperSize, margins}) {
     console.log("*** Adjusting workspace to fit page size:", paperSize, "with margins:", margins);
 
@@ -1383,6 +1402,7 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
         block.style.marginTop = "";
     });
 
+    let squeezed = false;
     const pages = document.querySelectorAll('.onepage');
     pages.forEach(page => {
         console.log("Adjusting workspace height for page:", page);
@@ -1423,6 +1443,10 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
         }
         const extraHeight = paperContentHeight - totalContentHeight;
         console.log("Extra height to distribute across workspaces:", extraHeight, "px.");
+        // A pixel of slack, so that rounding alone never counts as squeezing
+        if (extraHeight < -1) {
+            squeezed = true;
+        }
         // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight
         const workspaceAdjustmentFactor = (totalWorkspaceHeight + extraHeight) / totalWorkspaceHeight;
         console.log("Workspace adjustment factor for page:", workspaceAdjustmentFactor);
@@ -1442,6 +1466,7 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
     if (wasHighlighted) {
         toggleWorkspaceHighlight(true);
     }
+    return squeezed;
 }
 
 // Helper functions for calculating heights and workspace sizes
@@ -2002,18 +2027,23 @@ async function loadPrintout(printableSectionID) {
     ptxContent.appendChild(printableSection);
 }
 
+// Whether hint/answer/solution divs of `solutionType` start hidden when the
+// reader has not said otherwise: answers and solutions do, hints don't.
+// Single source of truth for that default so rewriteSolutions() (which needs
+// it immediately, before the checkbox that owns it has even been set up), the
+// checkbox setup loop below, and the dialog's reset button can't drift apart.
+function solutionTypeHiddenByDefault(solutionType) {
+    return solutionType === "answer" || solutionType === "solution";
+}
+
 // Whether hint/answer/solution divs of `solutionType` should be hidden: the
-// user's stored choice if there is one, otherwise the default (answers and
-// solutions start hidden, hints don't). Single source of truth for that
-// default so rewriteSolutions() (which needs it immediately, before the
-// checkbox that owns it has even been set up) and the checkbox setup loop
-// below can't drift apart.
+// user's stored choice if there is one, otherwise the default.
 function solutionTypeHidden(solutionType) {
     const stored = localStorage.getItem(`hide-${solutionType}`);
     if (stored !== null) {
         return stored === "true";
     }
-    return solutionType === "answer" || solutionType === "solution";
+    return solutionTypeHiddenByDefault(solutionType);
 }
 
 // Function to redo solutions details to divs with summary as title
@@ -2162,6 +2192,14 @@ async function applySolutionVisibility(solutionType, hidden, {paperSize, margins
                 adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
             });
         } else {
+            // Once the text has changed, a spillover page can be holding
+            // writing space rather than overflow (see holdsAuthoredWorkspace()),
+            // and a reveal lets writing space be squeezed again.  So fold back
+            // first, as hiding does, or those pages would outlive their reason
+            // and a reveal would no longer undo a hide.
+            if (printTextChanged()) {
+                collapseSpilloverPages(margins);
+            }
             adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
             await pollUntilSettled(() => {
                 if (pageOverflows()) {
@@ -2170,6 +2208,145 @@ async function applySolutionVisibility(solutionType, hidden, {paperSize, margins
                 }
             });
         }
+    });
+}
+
+// Text options //
+
+// The reader's choices of type size, line and letter spacing, and typeface for
+// the printout, made in the "Printing options" dialog: the menu each is chosen
+// from, and where the choice is kept between visits.  Every menu's standard is
+// the empty value (see the "print-text-options" template in the XSL).
+const PRINT_TEXT_OPTIONS = [
+    {name: 'fontSize',      selectId: 'ptx-print-font-size',      storageKey: 'print-font-size'},
+    {name: 'lineSpacing',   selectId: 'ptx-print-line-spacing',   storageKey: 'print-line-spacing'},
+    {name: 'letterSpacing', selectId: 'ptx-print-letter-spacing', storageKey: 'print-letter-spacing'},
+    {name: 'font',          selectId: 'ptx-print-font',           storageKey: 'print-font'},
+];
+
+// The choices currently made in the dialog, as {fontSize, lineSpacing,
+// letterSpacing, font}.
+function readPrintTextChoices() {
+    const choices = {};
+    for (const option of PRINT_TEXT_OPTIONS) {
+        const select = document.getElementById(option.selectId);
+        choices[option.name] = select ? select.value : '';
+    }
+    return choices;
+}
+
+// Put text choices on the printout, where print-worksheet.css acts on them.
+// An empty choice is the standard, and puts nothing there at all, so the
+// stylesheet's own values stand.  The two numeric choices go on as custom
+// properties; the named ones as attributes, which the stylesheet maps to the
+// spacing or typeface they stand for.
+function setPrintTextChoices(printout, {fontSize, lineSpacing, letterSpacing, font}) {
+    if (fontSize) {
+        printout.style.setProperty('--ptx-print-font-size', `${fontSize}pt`);
+    } else {
+        printout.style.removeProperty('--ptx-print-font-size');
+    }
+    if (lineSpacing) {
+        printout.style.setProperty('--ptx-print-line-height', lineSpacing);
+    } else {
+        printout.style.removeProperty('--ptx-print-line-height');
+    }
+    if (letterSpacing) {
+        printout.dataset.printLetterSpacing = letterSpacing;
+    } else {
+        delete printout.dataset.printLetterSpacing;
+    }
+    if (font) {
+        printout.dataset.printFont = font;
+    } else {
+        delete printout.dataset.printFont;
+    }
+}
+
+// The choices setPrintTextChoices() last put on the printout, in the same form
+// readPrintTextChoices() gives them.  The dialog can run ahead of these, since
+// its changes are queued behind any layout work in progress.
+function appliedPrintTextChoices(printout) {
+    return {
+        fontSize: printout.style.getPropertyValue('--ptx-print-font-size').replace(/pt$/, ''),
+        lineSpacing: printout.style.getPropertyValue('--ptx-print-line-height'),
+        letterSpacing: printout.dataset.printLetterSpacing || '',
+        font: printout.dataset.printFont || '',
+    };
+}
+
+// Whether the printout's text is set any differently from the standard its
+// page breaks were planned against.
+function printTextChanged() {
+    const printout = getPrintout();
+    if (!printout) return false;
+    return Object.values(appliedPrintTextChoices(printout)).some(choice => choice !== '');
+}
+
+// Whether blank writing space must keep its authored height, with rows that no
+// longer fit moved onto a spillover page instead.
+//
+// Pages are planned so that, with nothing revealed, every workspace gets at
+// least the room the author asked for (see pageCost()), and whatever is left
+// over on a page is added to it.  Larger text eats that surplus first, and
+// then -- since adjustWorkspaceToFitPage() makes any page fit that some
+// squeezing can -- the writing space itself, so that on a page with workspace
+// the text would never flow anywhere.  A reader who enlarged the text still
+// has to write their answers, so here the rule the planner follows is kept.
+//
+// Only once the text has changed, so that the layout at the standard -- and
+// in particular an author's own overfull <page>, which has always been
+// squeezed to fit -- is exactly as it was.  And not while anything is
+// revealed, for the same reason pageCost() allows squeezing then.
+function holdsAuthoredWorkspace() {
+    return printTextChanged() && !anySolutionShown();
+}
+
+// Wait for the printout's typeface to be ready to measure.  A face that no text
+// has used yet is only fetched once some text asks for it, and until it
+// arrives that text is set in a fallback with different metrics -- so measuring
+// straight away plans against letters the reader will never see.  Bold and
+// italic are separate files, and headings and emphasis need them.
+async function printFontsLoaded(printout) {
+    if (!document.fonts) return;
+    const style = getComputedStyle(printout);
+    try {
+        await Promise.all(['normal', 'bold', 'italic'].map(variant =>
+            document.fonts.load(`${variant} ${style.fontSize} ${style.fontFamily}`)));
+    } catch (err) {
+        console.warn("Could not load the printout's font; measuring with what is available:", err);
+    }
+    await document.fonts.ready;
+}
+
+// Apply the reader's text choices and repaginate to match.
+//
+// The page breaks are always planned at the standard, and a change of text is
+// then handled the way a revealed solution is: incrementally, on top of that
+// one base layout, with whatever no longer fits spilled onto extra pages.  Every
+// spillover page is folded back first and the overflow split off afresh (see
+// collapseSpilloverPages()), so however a reader arrives at a combination of
+// choices it comes out the same, and returning to the standard returns to the
+// base layout.
+async function applyPrintTextChoices(choices, {paperSize, margins}) {
+    const printout = getPrintout();
+    if (!printout) return;
+    // Choices can be queued faster than they are laid out.  Callers pass the
+    // dialog as it stands when their turn comes, so all but the first of a
+    // burst find nothing left to do.
+    const applied = appliedPrintTextChoices(printout);
+    if (PRINT_TEXT_OPTIONS.every(option => choices[option.name] === applied[option.name])) return;
+    setPrintTextChoices(printout, choices);
+    await printFontsLoaded(printout);
+    await withIframesDetached(async () => {
+        collapseSpilloverPages(margins);
+        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        // Same as hiding a solution: a change in size can take a moment to
+        // settle, so keep folding back and re-splitting until it has.
+        await pollUntilSettled(() => {
+            collapseSpilloverPages(margins);
+            adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        });
     });
 }
 
@@ -2209,6 +2386,16 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             right: toPixels(marginList[1] || "0.75in"),
             bottom: toPixels(marginList[2] || "0.75in"),
             left: toPixels(marginList[3] || "0.75in")
+        }
+
+        // Every control below lives in the "Printing options" dialog.  Set it
+        // up first, so the button works at once.
+        const printOptionsButton = document.getElementById("ptx-print-options-button");
+        const printOptionsPopup = document.getElementById("ptx-print-options-popup");
+        if (printOptionsButton && printOptionsPopup && window.PTXDialog) {
+            new window.PTXDialog(printOptionsPopup, printOptionsButton, {
+                closeButton: document.getElementById("ptx-print-options-close-button")
+            });
         }
 
         // Transform all solutions details elements to divs with the summary as a title
@@ -2286,6 +2473,19 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         const hideSolutionsOptions = document.querySelector('.hide-solutions-options');
         if (hideSolutionsOptions && !hideSolutionsOptions.querySelector('.hide-option:not(.hidden)')) {
             hideSolutionsOptions.classList.add('hidden');
+        }
+
+        // Show the reader's stored text choices in the dialog, but do not
+        // apply them yet: pages are planned at the standard, and the choices
+        // go on top of that afterward -- see applyPrintTextChoices() below.
+        for (const option of PRINT_TEXT_OPTIONS) {
+            const select = document.getElementById(option.selectId);
+            if (!select) continue;
+            select.value = localStorage.getItem(option.storageKey) || "";
+            // A stored choice the menu no longer offers selects nothing at all
+            if (select.selectedIndex === -1) {
+                select.value = "";
+            }
         }
 
         // Finally, with everything set up, we create or adjust the printout pages as needed.
@@ -2409,6 +2609,33 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             }
         });
 
+        // Last, lay the reader's text choices over that layout, and from here
+        // on follow the dialog.  Last so that it is exactly what changing the
+        // text on a finished page would do, and a stored choice comes out the
+        // same as one made live.  Each run reads the dialog when its turn in
+        // pendingSettle comes, so a change made while the page was still
+        // loading is picked up by the first, and a burst of changes costs one
+        // relayout rather than one each.
+        const applyTextChoices = () => {
+            const choices = readPrintTextChoices();
+            for (const option of PRINT_TEXT_OPTIONS) {
+                if (choices[option.name]) {
+                    localStorage.setItem(option.storageKey, choices[option.name]);
+                } else {
+                    localStorage.removeItem(option.storageKey);
+                }
+            }
+            return applyPrintTextChoices(choices, {paperSize, margins});
+        };
+        pendingSettle = pendingSettle.then(applyTextChoices);
+        for (const option of PRINT_TEXT_OPTIONS) {
+            const select = document.getElementById(option.selectId);
+            if (!select) continue;
+            select.addEventListener("change", () => {
+                pendingSettle = pendingSettle.then(applyTextChoices);
+            });
+        }
+
         // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
         // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
         const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
@@ -2430,6 +2657,47 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                 // Initial toggle to apply the highlight class if checked
                 toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
             }
+        }
+
+        // The dialog's reset button: every option back to its standard but the
+        // paper size (see the XSL), as one link in pendingSettle so that the
+        // relayouts it sets off run one after another, and after anything
+        // already under way.  The checkboxes whose handlers do their work at
+        // once are reset through those handlers, first, so the relayouts that
+        // follow see them.  The hint/answer/solution ones repaginate
+        // asynchronously, and are applied directly: firing their change events
+        // would leave every handler waiting on this same link, and then running
+        // all at once.
+        const resetButton = document.getElementById("ptx-print-options-reset-button");
+        if (resetButton) {
+            resetButton.addEventListener("click", () => {
+                pendingSettle = pendingSettle.then(async () => {
+                    const offByDefault = ["first-page-header", "running-header", "first-page-footer", "running-footer"]
+                        .map(hf => document.getElementById(`print-${hf}-checkbox`))
+                        .concat(highlightWorkspaceCheckbox);
+                    for (const checkbox of offByDefault) {
+                        if (checkbox && checkbox.checked) {
+                            checkbox.checked = false;
+                            checkbox.dispatchEvent(new Event("change"));
+                        }
+                    }
+                    for (const option of PRINT_TEXT_OPTIONS) {
+                        const select = document.getElementById(option.selectId);
+                        if (select) select.value = "";
+                    }
+                    await applyTextChoices();
+                    for (const solutionType of ["hint", "answer", "solution"]) {
+                        const checkbox = document.getElementById(`hide-${solutionType}-checkbox`);
+                        if (!checkbox || !printout.querySelector(`.${solutionType}`)) continue;
+                        const hidden = solutionTypeHiddenByDefault(solutionType);
+                        localStorage.setItem(`hide-${solutionType}`, hidden);
+                        if (checkbox.checked !== hidden) {
+                            checkbox.checked = hidden;
+                            await applySolutionVisibility(solutionType, hidden, {paperSize, margins});
+                        }
+                    }
+                });
+            });
         }
 
         console.log("finished adjusting workspace");
