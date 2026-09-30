@@ -42,6 +42,14 @@
     margin: 0;
   }
 
+  // The reset above also discards the text size and line height a reader chose
+  // in the readability settings (see _body.scss), so a page printed at the
+  // default size however it read on screen.  Put them back.
+  .ptx-main > .ptx-content {
+    font-size: var(--ptx-content-font-size, inherit) !important;
+    line-height: var(--ptx-content-line-height, normal) !important;
+  }
+
   .ptx-sagecell, .tabular, .table-like, .figure-like, .exercise-like {
     break-inside: avoid;
   }
