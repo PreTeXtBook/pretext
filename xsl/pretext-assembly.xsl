@@ -431,8 +431,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stylesheet older than the script that wrote it, and the mismatch      -->
 <!-- would surface as substitutions quietly coming out wrong instead of    -->
 <!-- as a statement of what is actually the matter.                        -->
+<!-- The file is read only if this tree holds something the lookups below  -->
+<!-- will substitute, the same elements that open the file there.  A       -->
+<!-- "setup" alone (such as "var" with "condition") is enough to name the  -->
+<!-- file, but has nothing to substitute and so the file is never made.    -->
 <xsl:template match="/" mode="dynamic-substitution">
-    <xsl:if test="($exercise-style = 'static') and not($b-extracting) and not($dynamic-substitutions-file = '')">
+    <xsl:if test="($exercise-style = 'static') and not($b-extracting) and not($dynamic-substitutions-file = '') and (.//fillin[@ansobj] or .//eval[@obj])">
         <xsl:variable name="recorded" select="document($dynamic-substitutions-file,$original)/*/@version"/>
         <!-- A missing @version is an older file, and is silent: the        -->
         <!-- representation template already falls back for those.  Only a  -->
