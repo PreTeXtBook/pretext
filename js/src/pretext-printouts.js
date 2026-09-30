@@ -2233,6 +2233,9 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         papersizeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 if (this.checked) {
+                    // The handlers below read this when they run, so it has to
+                    // follow the reader's choice.
+                    paperSize = this.value;
                     document.body.classList.remove("a4", "letter");
                     document.body.classList.add(this.value);
                     localStorage.setItem("papersize", this.value);
