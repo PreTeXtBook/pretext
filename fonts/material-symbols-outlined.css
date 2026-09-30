@@ -1,0 +1,32 @@
+/* Material Symbols Outlined, the icons PreTeXt uses, in one style  */
+/* (optical size 24, weight 400, not filled, grade 0), for HTML     */
+/* output that does not rely on Google Fonts.  An icon not in the   */
+/* font is drawn as its name: see material-symbols-outlined.txt,    */
+/* and README.md, to add one.  Font: Apache License 2.0, see        */
+/* LICENSE-MaterialSymbols.txt.  The class rules are those Google   */
+/* Fonts supplies for this icon font.                               */
+
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('material-symbols-outlined.woff2') format('woff2');
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
