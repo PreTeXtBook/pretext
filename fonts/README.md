@@ -226,3 +226,53 @@ end-of-block marks and a handful of named symbols.
   releases a newer FreeSerif, or in the rare event PreTeXt needs a
   symbol from a Unicode block outside the generous ranges listed at the
   top of the script.
+
+## `material-symbols-outlined.woff2` — the HTML icon font
+
+The fonts above serve the `pdf-fo` route.  This one, and its stylesheet
+`material-symbols-outlined.css`, serve HTML output instead: the icons on
+buttons and controls (the table of contents, navigation, the image
+dialog, read-aloud, Runestone exercises) are drawn with the Material
+Symbols Outlined icon font.  HTML output used to load it from Google
+Fonts, so a reader who was offline saw each icon as its name
+(`chevron_left`).  A build that places its own static files now places
+these two files in `_static/pretext/fonts`, and the pages load them
+from there.  A build using CDN resources is online by definition, and
+still loads the font from Google Fonts.
+
+- **Source.**  **google/material-design-icons**
+  (<https://github.com/google/material-design-icons>), commit
+  `bd8cb85bd4ba`, file
+  `variablefont/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2`.
+
+- **License.**  Apache License 2.0 (`LICENSE-MaterialSymbols.txt`).
+
+- **Size.**  Google's font has about 3,500 icons, in many styles, and is
+  4 MB.  PreTeXt uses a few dozen icons, in one style — optical size 24,
+  weight 400, not filled, grade 0, just what it requested from Google
+  Fonts — so the bundled font has only those, and is about 5 KB.  The
+  icons it has are listed in `material-symbols-outlined.txt`.
+
+- **Which icons.**  An icon is asked for by its code point (the
+  `insert-symbol` template of the HTML conversion) or by its name, which
+  the font turns into the icon with a ligature (scripts, and `content`
+  in stylesheets).  The script below searches PreTeXt's templates,
+  scripts, and stylesheets for both, and adds a short list of icons used
+  by projects PreTeXt loads (the Runestone Components), kept at the top
+  of the script.  **An icon the font lacks is drawn as its name, in
+  plain text.**  So a developer or theme designer who uses a new icon
+  must run the script again, and commit the new font and list.
+
+- **Regeneration.**  Download the source font above, then run
+
+  ```
+  python3 make-material-symbols.py SOURCE.woff2
+  ```
+
+  (it needs the `fonttools` and `brotli` packages — maintainer-only
+  dependencies, not required to build a document).  It reports each
+  icon it keeps, and where it was found.  To pick up icons newer than
+  this copy, download from a newer commit, and record that commit here.
+  The table of icon names and code points in `xsl/html-symbols.xsl` is
+  separate, but the script stops if a code point there does not draw its
+  icon in the new font.
