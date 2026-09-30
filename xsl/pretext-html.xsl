@@ -14690,8 +14690,17 @@ TODO:
 <xsl:template name="fonts">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-    <!-- Material Symbols font used for symbols -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <!-- Material Symbols font used for symbols, a copy placed with the  -->
+    <!-- other static files, so icons work offline (see fonts/README.md) -->
+    <!-- CDN resources are online, so then use Google Fonts              -->
+    <xsl:choose>
+        <xsl:when test="$b-cdn-resources">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+        </xsl:when>
+        <xsl:otherwise>
+            <link rel="stylesheet" href="_static/pretext/fonts/material-symbols-outlined.css" />
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- Legacy themes need these fonts, modern ones load them on their own -->
     <xsl:if test="$b-html-theme-legacy">
             <!-- DejaVu Serif from an alternate CDN -->
