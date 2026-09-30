@@ -1,6 +1,6 @@
 @charset "UTF-8";
-@import "https://fonts.googleapis.com/css2?family=Open Sans:ital,wght@0,400..700;1,400..700&display=swap";
-@import "https://fonts.googleapis.com/css2?family=PT Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400..700;1,400..700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inconsolata:ital,wght@0,400..700;1,400..700&display=swap";
 
 /* ../../css/targets/print-worksheet/print-worksheet.scss */
@@ -2434,13 +2434,16 @@ form.papersize-select {
   .printout .onepage {
     margin-top: 0;
     width: 100%;
-    height: var(--ws-content-height);
+    height: auto;
     overflow: hidden;
     page-break-after: always;
     page-break-inside: avoid;
+    break-after: page;
+    break-inside: avoid;
   }
   .printout .onepage:last-of-type {
     page-break-after: avoid;
+    break-after: avoid;
   }
   .printout .first-page-header,
   .printout .running-header {
