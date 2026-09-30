@@ -12974,78 +12974,219 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </h2>
         <div class="print-controls">
-            <div class="print-controls-toggles">
-                <xsl:apply-templates select="." mode="papersize-toggle"/>
-                <xsl:apply-templates select="." mode="printing-options"/>
-            </div>
+            <xsl:apply-templates select="." mode="printing-options"/>
             <xsl:apply-templates select="." mode="print-button"/>
         </div>
     </div>
 </xsl:template>
 
+<!-- A row of the "Printing options" dialog, laid out like the text -->
+<!-- options below it: a label, then the choices                    -->
 <xsl:template match="*" mode="papersize-toggle">
-    <xsl:variable name="papersize">
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'papersize'"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <form class="papersize-select" id="papersize-select">
-        <span class="name"><xsl:value-of select="$papersize"/></span>
-        <label>
-            <input type="radio" name="papersize" value="a4"/>A4
-        </label>
-        <label>
-            <input type="radio" name="papersize" value="letter"/>Letter
-        </label>
-    </form>
+    <div class="print-option-row papersize-select" id="papersize-select" role="radiogroup" aria-labelledby="ptx-print-papersize-label">
+        <span class="print-option-label" id="ptx-print-papersize-label">
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'description'"/>
+            </xsl:call-template>
+            <span>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'papersize'"/>
+                </xsl:apply-templates>
+            </span>
+        </span>
+        <span class="papersize-choices">
+            <label>
+                <input type="radio" name="papersize" value="a4"/>
+                <span>A4</span>
+            </label>
+            <label>
+                <input type="radio" name="papersize" value="letter"/>
+                <span>Letter</span>
+            </label>
+        </span>
+    </div>
 </xsl:template>
 
+<!-- The options for a print preview outnumber what fits in the   -->
+<!-- header, so they live in a modal dialog, opened by a button   -->
+<!-- carrying the same icon as the readability settings of an     -->
+<!-- ordinary page.  That dialog is in the navbar, which a print  -->
+<!-- preview hides, so this one is a separate dialog with ids of  -->
+<!-- its own.  pretext-printouts.js wires it up with PTXDialog.   -->
 <xsl:template match="*" mode="printing-options">
-    <details class="print-options">
-        <summary>
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'printing-options'"/>
-            </xsl:apply-templates>
-        </summary>
+    <xsl:variable name="printing-options-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'printing-options'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="close-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'close'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button type="button" id="ptx-print-options-button" class="ptx-print-options-button button" title="{$printing-options-localization}">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'match_case'"/>
+        </xsl:call-template>
+        <span class="name">
+            <xsl:value-of select="$printing-options-localization"/>
+        </span>
+    </button>
+    <dialog class="ptx-dialog ptx-print-options-popup" id="ptx-print-options-popup">
+        <div class="ptx-print-options-popup-controls">
+            <h2 class="heading">
+                <xsl:value-of select="$printing-options-localization"/>
+            </h2>
+            <button type="button" class="ptx-print-options-close-button button" id="ptx-print-options-close-button" title="{$close-localization}">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'close'"/>
+                </xsl:call-template>
+            </button>
+        </div>
+        <div class="ptx-print-options-group">
+            <xsl:apply-templates select="." mode="papersize-toggle"/>
+            <xsl:apply-templates select="." mode="print-text-options"/>
+        </div>
         <xsl:apply-templates select="." mode="hide-solutions"/>
         <xsl:apply-templates select="." mode="header-footer-toggles"/>
         <xsl:apply-templates select="." mode="highlight-workspace-toggle"/>
-    </details>
+        <!-- Back to the standard for everything above but the paper size, -->
+        <!-- which is a fact about the reader's printer, not a preference   -->
+        <div class="ptx-print-options-group">
+            <button type="button" class="ptx-print-options-reset-button button" id="ptx-print-options-reset-button">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'restart_alt'"/>
+                </xsl:call-template>
+                <span class="name">
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'reset-all'"/>
+                    </xsl:apply-templates>
+                </span>
+            </button>
+        </div>
+    </dialog>
+</xsl:template>
+
+<!-- Size of the type, space between lines and between letters,   -->
+<!-- and typeface of the printout.  Each menu's standard is the   -->
+<!-- empty value, meaning "leave as styled", so print-worksheet   -->
+<!-- .css alone says what the standard is.  Page breaks are       -->
+<!-- planned at the standard, so they do not depend on a reader's -->
+<!-- choices; the Javascript applies any other choice afterward,  -->
+<!-- spilling text that no longer fits onto extra pages.  Sizes   -->
+<!-- are in points and line spacing is a CSS line-height, while   -->
+<!-- print-worksheet.css maps a letter spacing or font value to   -->
+<!-- its spacing or typeface.                                     -->
+<!--                                                              -->
+<!-- The words below are literal English rather than localization -->
+<!-- string-ids.  xsl/localizations is for strings that reach     -->
+<!-- more than one output format, and this is an HTML-only        -->
+<!-- control surface; a Javascript-side translation layer will    -->
+<!-- eventually localize it.                                      -->
+<xsl:template match="*" mode="print-text-options">
+    <div class="print-option-row">
+        <label for="ptx-print-font-size">
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'format_size'"/>
+            </xsl:call-template>
+            <span>Font size</span>
+        </label>
+        <select id="ptx-print-font-size">
+            <option value="10">10 pt</option>
+            <option value="" selected="selected">11 pt (standard)</option>
+            <option value="12">12 pt</option>
+            <option value="14">14 pt</option>
+            <option value="16">16 pt</option>
+            <option value="18">18 pt</option>
+            <option value="20">20 pt</option>
+        </select>
+    </div>
+    <div class="print-option-row">
+        <label for="ptx-print-line-spacing">
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'format_line_spacing'"/>
+            </xsl:call-template>
+            <span>Line spacing</span>
+        </label>
+        <select id="ptx-print-line-spacing">
+            <option value="1.15">1.15</option>
+            <option value="" selected="selected">1.35 (standard)</option>
+            <option value="1.5">1.5</option>
+            <option value="1.75">1.75</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+        </select>
+    </div>
+    <div class="print-option-row">
+        <label for="ptx-print-letter-spacing">
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'format_letter_spacing'"/>
+            </xsl:call-template>
+            <span>Letter spacing</span>
+        </label>
+        <select id="ptx-print-letter-spacing">
+            <option value="" selected="selected">Standard</option>
+            <option value="wide">Wide</option>
+            <option value="wider">Wider</option>
+            <option value="widest">Widest</option>
+        </select>
+    </div>
+    <div class="print-option-row">
+        <label for="ptx-print-font">
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'font_download'"/>
+            </xsl:call-template>
+            <span>Font</span>
+        </label>
+        <select id="ptx-print-font">
+            <option value="" selected="selected">Serif (standard)</option>
+            <option value="sans-serif">Sans serif</option>
+            <option value="hyperlegible">Atkinson Hyperlegible</option>
+            <option value="lexend">Lexend</option>
+            <option value="andika">Andika</option>
+        </select>
+    </div>
 </xsl:template>
 
 <!-- We provide a checkboxes to hide hints, answers, and solution -->
 <!-- but only if the worksheet contains these elements.           -->
 <xsl:template match="*" mode="hide-solutions">
     <xsl:if test=".//solution or .//answer or .//hint">
-        <div class="hide-solutions-options">
+        <div class="ptx-print-options-group hide-solutions-options">
             <xsl:if test=".//hint">
                 <div class="hide-option">
                     <label for="hide-hint-checkbox">
-                        <xsl:apply-templates select="." mode="type-name">
-                            <xsl:with-param name="string-id" select="'hide-hints'"/>
-                        </xsl:apply-templates>
+                        <input type="checkbox" id="hide-hint-checkbox"/>
+                        <span>
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'hide-hints'"/>
+                            </xsl:apply-templates>
+                        </span>
                     </label>
-                    <input type="checkbox" id="hide-hint-checkbox"/>
                 </div>
             </xsl:if>
             <xsl:if test=".//answer">
                 <div class="hide-option">
                     <label for="hide-answer-checkbox">
-                        <xsl:apply-templates select="." mode="type-name">
-                            <xsl:with-param name="string-id" select="'hide-answers'"/>
-                        </xsl:apply-templates>
+                        <input type="checkbox" id="hide-answer-checkbox"/>
+                        <span>
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'hide-answers'"/>
+                            </xsl:apply-templates>
+                        </span>
                     </label>
-                    <input type="checkbox" id="hide-answer-checkbox"/>
                 </div>
             </xsl:if>
             <xsl:if test=".//solution">
                 <div class="hide-option">
                     <label for="hide-solution-checkbox">
-                        <xsl:apply-templates select="." mode="type-name">
-                            <xsl:with-param name="string-id" select="'hide-solutions'"/>
-                        </xsl:apply-templates>
+                        <input type="checkbox" id="hide-solution-checkbox"/>
+                        <span>
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'hide-solutions'"/>
+                            </xsl:apply-templates>
+                        </span>
                     </label>
-                    <input type="checkbox" id="hide-solution-checkbox"/>
                 </div>
             </xsl:if>
         </div>
@@ -13053,7 +13194,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="header-footer-toggles">
-    <div class="header-footer-options">
+    <div class="ptx-print-options-group header-footer-options">
         <div class="header-option">
             <span class="title">
                 <xsl:apply-templates select="." mode="type-name">
@@ -13061,16 +13202,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </span>
             <label>
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'first-page'"/>
-                </xsl:apply-templates>
                 <input type="checkbox" id="print-first-page-header-checkbox" checked="checked"/>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'first-page'"/>
+                    </xsl:apply-templates>
+                </span>
             </label>
             <label>
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'running'"/>
-                </xsl:apply-templates>
                 <input type="checkbox" id="print-running-header-checkbox" checked="checked"/>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'running'"/>
+                    </xsl:apply-templates>
+                </span>
             </label>
         </div>
         <div class="footer-option">
@@ -13080,29 +13225,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </span>
             <label>
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'first-page'"/>
-                </xsl:apply-templates>
                 <input type="checkbox" id="print-first-page-footer-checkbox" checked="checked"/>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'first-page'"/>
+                    </xsl:apply-templates>
+                </span>
             </label>
             <label>
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'running'"/>
-                </xsl:apply-templates>
                 <input type="checkbox" id="print-running-footer-checkbox" checked="checked"/>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'running'"/>
+                    </xsl:apply-templates>
+                </span>
             </label>
         </div>
     </div>
 </xsl:template>
 
 <xsl:template match="*" mode="highlight-workspace-toggle">
-    <div class="highlight-workspace-option">
+    <div class="ptx-print-options-group highlight-workspace-option">
         <label for="highlight-workspace-checkbox">
-            <xsl:apply-templates select="." mode="type-name">
-                <xsl:with-param name="string-id" select="'highlight-workspace'"/>
-            </xsl:apply-templates>
+            <input type="checkbox" id="highlight-workspace-checkbox"/>
+            <span>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'highlight-workspace'"/>
+                </xsl:apply-templates>
+            </span>
         </label>
-        <input type="checkbox" id="highlight-workspace-checkbox"/>
     </div>
 </xsl:template>
 
