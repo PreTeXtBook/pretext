@@ -254,7 +254,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Zurücksetzen</localization>
     <localization string-id='array'>Array</localization>
     <localization string-id="papersize">Papierformat</localization>
-    <localization string-id="printing-options">Weitere Druckeinstellungen</localization>
+    <localization string-id="printing-options">Druckeinstellungen</localization>
     <localization string-id="hide-hints">Hinweise verbergen</localization>
     <localization string-id="hide-answers">Antworten verbergen</localization>
     <localization string-id="hide-solutions">Lösungen verbergen</localization>
