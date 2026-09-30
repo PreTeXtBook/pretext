@@ -248,7 +248,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Réinitialiser</localization>
     <localization string-id='array'>Tableau</localization>
     <localization string-id="papersize">Format de papier</localization>
-    <localization string-id="printing-options">Options d'impression supplémentaires</localization>
+    <localization string-id="printing-options">Options d'impression</localization>
     <localization string-id="hide-hints">Masquer les indices</localization>
     <localization string-id="hide-answers">Masquer les réponses</localization>
     <localization string-id="hide-solutions">Masquer les solutions</localization>

@@ -252,7 +252,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Reset</localization>
     <localization string-id='array'>pole</localization>
     <localization string-id="papersize">Velikost papíru</localization>
-    <localization string-id="printing-options">Další možnosti tisku</localization>
+    <localization string-id="printing-options">Možnosti tisku</localization>
     <localization string-id="hide-hints">Zakrýt nápovědu</localization>
     <localization string-id="hide-answers">Zakrýt odpovědi</localization>
     <localization string-id="hide-solutions">Zakrýt řešení</localization>
