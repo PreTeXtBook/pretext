@@ -597,14 +597,17 @@ function createPrintoutPages(margins) {
             continue;
         }
         let totalWorkspaceHeight = 0;
+        let squeezableHeight = 0;
         if (workspaceDivsIn(row).length > 0) {
             // Workspace height is not just sum of workspace heights; we need to be careful with sidebyside and columns
             totalWorkspaceHeight = getElemWorkspaceHeight(row);
+            squeezableHeight = getElemSqueezableHeight(row);
         }
         blockList.push({
             elem: row,
             height: blockHeight,
             workspaceHeight: totalWorkspaceHeight,
+            squeezableHeight,
             // Set by flattenSolutionsIn() on the rows split out of a single
             // exercise or task, so findPageBreaks() can tell which rows want
             // to stay together on one page.  Undefined for rows that were
@@ -891,9 +894,18 @@ function addSpilloverPages(margins) {
       // nothing we can do about that specific row. But if there are other
       // rows after it, they shouldn't be trapped here too: move everything
       // after the oversized first row onto a fresh page. Forced, so taken
-      // unconditionally rather than run through isLegalSplit() below.
+      // unconditionally rather than run through isLegalSplit() below --
+      // except that the fresh page still must not open with blank writing
+      // space, so any that follows the row stays here with it, squeezed as far
+      // as it will go, as findPageBreaks() keeps it with an oversized row.
       if (contentChildren.length <= 1) continue; // truly nothing else to move
       overflowStartIndex = 1;
+      let opening = openingWorkspaceIndex(contentChildren, overflowStartIndex);
+      while (opening !== -1) {
+        overflowStartIndex = opening + 1;
+        opening = openingWorkspaceIndex(contentChildren, overflowStartIndex);
+      }
+      if (overflowStartIndex >= contentChildren.length) continue;
     } else {
       // This is the runtime counterpart of the rules findPageBreaks() applies
       // when it plans pages from scratch, and it has to enforce them too: a
@@ -1447,8 +1459,25 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
         if (extraHeight < -1) {
             squeezed = true;
         }
-        // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight
-        const workspaceAdjustmentFactor = (totalWorkspaceHeight + extraHeight) / totalWorkspaceHeight;
+        // Stretching is measured against the most writing space any column
+        // holds, so the page cannot outgrow the paper; squeezing against what
+        // the rows actually give back, so the page does not stay taller than
+        // it -- see getElemSqueezableHeight().
+        let scalableHeight = totalWorkspaceHeight;
+        if (extraHeight < 0) {
+            scalableHeight = 0;
+            for (const row of rows) {
+                scalableHeight += getElemSqueezableHeight(row);
+            }
+        }
+        // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight.
+        // Never below zero: a page that does not fit even with no writing
+        // space at all gets none.  A negative height would be ignored, leaving
+        // the writing space at full height to spill onto a sheet of its own
+        // when printed.
+        const workspaceAdjustmentFactor = scalableHeight > 0
+            ? Math.max(0, (scalableHeight + extraHeight) / scalableHeight)
+            : 1;
         console.log("Workspace adjustment factor for page:", workspaceAdjustmentFactor);
         // Now adjust each workspace in the page by this factor
         const pageWorkspaces = page.querySelectorAll('.workspace');
@@ -1524,20 +1553,49 @@ function getElemWorkspaceHeight(elem) {
     return totalHeight / columns; // Divide by columns if sidebyside to get average height per column
 }
 
+// How much shorter `elem` gets with all of its writing space squeezed away.
+// In a single column that is just its writing space, but side-by-side panels
+// and exercise group columns share rows, each as tall as the tallest cell in
+// it, and a tallest cell with little writing space holds a row up however much
+// the others give back.  getElemWorkspaceHeight() is the right bound for
+// stretching, which can make any cell the tallest, but taken as what squeezing
+// frees up it promises room that never appears, and the page overflows.  The
+// cells' own boxes cannot say which one holds a row up -- a grid stretches
+// them all to the row, and a side-by-side panel can have no box at all -- so
+// measure: empty the writing space, and see.  Not quite to nothing, though: a
+// workspace with no height at all lets the margins either side of it collapse
+// together, and so gives back room that no factor above zero ever would.
+function getElemSqueezableHeight(elem) {
+    if (!elem.classList.contains('sidebyside') && !elem.classList.contains('exercisegroup')) {
+        return getElemWorkspaceHeight(elem);
+    }
+    const workspaces = [...elem.querySelectorAll('.workspace')];
+    if (workspaces.length === 0) return 0;
+    const heights = workspaces.map(ws => ws.style.height);
+    const full = elem.offsetHeight;
+    workspaces.forEach(ws => { ws.style.height = "1px"; });
+    const emptied = elem.offsetHeight;
+    workspaces.forEach((ws, k) => { ws.style.height = heights[k]; });
+    return Math.max(0, full - emptied);
+}
+
 // Cost of one candidate page holding rows [i..j], in the same units as the
 // original objective: (px of wasted space)^2, so that the penalties below
 // trade off directly against blank space -- a penalty of P is "worth" about
 // sqrt(P) px of waste at the foot of a page.
 //
 //   naturalHeight   total height with every workspace at its authored size
-//   workspaceHeight how much of that is blank writing space, i.e. how much
-//                   can be given back by squeezing (adjustWorkspaceToFitPage()
-//                   scales workspaces by a factor below 1 when a page is over
-//                   budget, so a page may legitimately be planned as "fits
-//                   only once squeezed") -- and, on a page that fits, how much
-//                   of the leftover room will be soaked up rather than left
-//                   blank, since the same function stretches the workspaces on
-//                   an under-full page to fill it
+//   workspaceHeight how much of that is blank writing space, i.e. on a page
+//                   that fits, how much of the leftover room will be soaked up
+//                   rather than left blank, since adjustWorkspaceToFitPage()
+//                   stretches the workspaces on an under-full page to fill it
+//   squeezableHeight
+//                   how much of it can be given back by squeezing (the same
+//                   function scales workspaces by a factor below 1 when a page
+//                   is over budget, so a page may legitimately be planned as
+//                   "fits only once squeezed") -- no more than workspaceHeight,
+//                   and less where writing space shares a row with taller
+//                   content beside it (see getElemSqueezableHeight())
 //   splitsGroup     true when the break after row j separates a question from
 //                   its own solutions or workspace
 //   isLastPage      true when this page ends the printout, so the room left at
@@ -1605,7 +1663,7 @@ function deadSpaceCost(slack, pageHeight, isLastPage) {
     return pageHeight ** 2 * (slack / pageHeight) ** DEAD_SPACE_EXPONENT;
 }
 
-function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced, isLastPage }) {
+function pageCost({ pageHeight, naturalHeight, workspaceHeight, squeezableHeight, splitsGroup, allowSqueeze, squeezeIsForced, isLastPage }) {
     const groupPenalty = splitsGroup ? GROUP_BREAK_PENALTY_PAGES * pageHeight ** 2 : 0;
     if (naturalHeight <= pageHeight) {
         // Fits as authored.  What the room left over is worth depends on what
@@ -1641,7 +1699,7 @@ function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, all
         return Infinity;
     }
     const squeeze = naturalHeight - pageHeight;
-    if (squeeze > workspaceHeight) {
+    if (squeeze > squeezableHeight) {
         return Infinity; // no amount of squeezing saves this page
     }
     // Nothing is wasted (the page is exactly full), but squeezing writing
@@ -1688,12 +1746,14 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
     for (let i = rows.length - 1; i >= 0; i--) {
         let cumulativeHeight = 0;
         let cumulativeWorkspaceHeight = 0;
+        let cumulativeSqueezableHeight = 0;
         let cumulativeFootnoteHeight = 0;
         let tallestRow = 0;
         // Loop through the rows starting from i to find the best page break
         for (let j = i; j < rows.length; j++) {
             cumulativeHeight += rows[j].height;
             cumulativeWorkspaceHeight += rows[j].workspaceHeight;
+            cumulativeSqueezableHeight += rows[j].squeezableHeight;
             cumulativeFootnoteHeight += rows[j].footnoteHeight || 0;
             // The footnote block is only on the page if something on the page
             // referenced a footnote, and then it costs its own rule and padding
@@ -1716,6 +1776,7 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
                 pageHeight,
                 naturalHeight: cumulativeHeight + footnotesHeight,
                 workspaceHeight: cumulativeWorkspaceHeight,
+                squeezableHeight: cumulativeSqueezableHeight,
                 splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
                 allowSqueeze,
                 squeezeIsForced: tallestRow > pageHeight,
