@@ -606,15 +606,25 @@ form.papersize-select {
     .onepage {
       margin-top: 0;
       width: 100%;
-      height: var(--ws-content-height);
+      // Not a fixed height: `--ws-content-height` and the printable area
+      // Safari derives from `@page`'s margin can round to disagree by a
+      // sub-pixel, which Safari (unlike Chrome) paginates as a blank page
+      // after every page. Sizing to content -- already paginated to fit --
+      // sidesteps the mismatch instead of racing its rounding.
+      height: auto;
       overflow: hidden;
+      // `break-after`/`break-inside` are the modern Fragmentation-spec
+      // properties; `page-break-*` are the aliases older engines need.
       page-break-after: always;
       page-break-inside: avoid;
+      break-after: page;
+      break-inside: avoid;
     }
 
     // Avoid a blank page at the end if the last page fits on the previous page
     .onepage:last-of-type {
       page-break-after: avoid;
+      break-after: avoid;
     }
 
     .first-page-header, .running-header {

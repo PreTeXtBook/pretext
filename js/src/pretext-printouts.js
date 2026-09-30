@@ -795,6 +795,19 @@ function isPageFurnitureEl(el) {
          isPageTailEl(el);
 }
 
+// Whether a new page could legally start at `contentChildren[index]`: not
+// with blank writing space (see isVisibleWorkspaceRow()), and not splitting a
+// question from its own solutions/workspace. Shared by both directions
+// addSpilloverPages() searches, so they agree on what "legal" means.
+function isLegalSplit(contentChildren, index) {
+  const row = contentChildren[index];
+  const prev = contentChildren[index - 1];
+  const opensWithWorkspace = isVisibleWorkspaceRow(row);
+  const splitsGroup = !!(row.dataset.blockGroup &&
+                         row.dataset.blockGroup === prev.dataset.blockGroup);
+  return !opensWithWorkspace && !splitsGroup;
+}
+
 function addSpilloverPages(margins) {
   const printout = getPrintout();
   if (!printout) return;
@@ -843,25 +856,44 @@ function addSpilloverPages(margins) {
       // The very first row alone is already too tall to fit on any page —
       // nothing we can do about that specific row. But if there are other
       // rows after it, they shouldn't be trapped here too: move everything
-      // after the oversized first row onto a fresh page.
+      // after the oversized first row onto a fresh page. Forced, so taken
+      // unconditionally rather than run through isLegalSplit() below.
       if (contentChildren.length <= 1) continue; // truly nothing else to move
       overflowStartIndex = 1;
-    }
-    // This is the runtime counterpart of the rules findPageBreaks() applies
-    // when it plans pages from scratch, and it has to enforce them too: a
-    // reveal goes through here (applySolutionVisibility() repaginates with
-    // fullRecompute false), so without this a revealed solution can push its
-    // own workspace onto the next page and open that page with a slab of
-    // blank writing space, or tear a question away from its solutions.
-    // Both are fixed the same way -- retreat to an earlier, legal split.
-    while (overflowStartIndex > 1) {
-      const row = contentChildren[overflowStartIndex];
-      const prev = contentChildren[overflowStartIndex - 1];
-      const opensWithWorkspace = isVisibleWorkspaceRow(row);
-      const splitsGroup = !!(row.dataset.blockGroup &&
-                             row.dataset.blockGroup === prev.dataset.blockGroup);
-      if (!opensWithWorkspace && !splitsGroup) break;
-      overflowStartIndex--;
+    } else {
+      // This is the runtime counterpart of the rules findPageBreaks() applies
+      // when it plans pages from scratch, and it has to enforce them too: a
+      // reveal goes through here (applySolutionVisibility() repaginates with
+      // fullRecompute false), so without this a revealed solution can push
+      // its own workspace onto the next page and open that page with a slab
+      // of blank writing space, or tear a question away from its solutions.
+      //
+      // Retreat to the nearest legal split. Bounded at 0, not 1: a split
+      // right at index 1 is exactly as capable of being illegal as any
+      // other candidate, and has to be checked like every other one.
+      let candidate = overflowStartIndex;
+      while (candidate > 0 && !isLegalSplit(contentChildren, candidate)) {
+        candidate--;
+      }
+      if (candidate > 0) {
+        overflowStartIndex = candidate;
+      } else {
+        // No legal split before the overflow point -- likely an oversized
+        // group whose own solutions/workspace lie ahead, which retreating
+        // can never get past. Search forward instead for the next legal
+        // boundary, so at least what follows the group lands on a fresh
+        // page, and the group gets a page of its own to be squeezed onto.
+        candidate = overflowStartIndex + 1;
+        while (candidate < contentChildren.length && !isLegalSplit(contentChildren, candidate)) {
+          candidate++;
+        }
+        if (candidate >= contentChildren.length) {
+          // No legal split in either direction: one group, too tall for a
+          // page by itself, like the "row taller than a page" case above.
+          continue;
+        }
+        overflowStartIndex = candidate;
+      }
     }
 
     const overflowElems = contentChildren.slice(overflowStartIndex);
