@@ -124,6 +124,29 @@ function isVisibleWorkspaceRow(elem) {
     return isWorkspaceRow(elem) && !elem.classList.contains('hidden');
 }
 
+// If a page that began at rows[k] would open with blank writing space, the
+// index of that workspace row; otherwise -1.  What a page opens with is the
+// first row on it that shows anything.  A hidden hint/answer/solution shows
+// nothing, and sits between a question and its hoisted workspace (see
+// flattenSolutionsIn()), so it is looked past.  So is a workspace that
+// hideWidowedWorkspaces() has suppressed -- but only while something is
+// revealed, since that is the only time it suppresses anything: with nothing
+// revealed, a `hidden` still on a workspace is left over from before, and is
+// about to be cleared.
+function openingWorkspaceIndex(rows, k) {
+    const suppressing = anySolutionShown();
+    for (let i = k; i < rows.length; i++) {
+        const row = rows[i];
+        const hidden = row.classList.contains('hidden');
+        if (isWorkspaceRow(row)) {
+            if (hidden && suppressing) continue;
+            return i;
+        }
+        if (!hidden) return -1;
+    }
+    return -1;
+}
+
 function workspaceDivsIn(elem) {
     if (elem.classList.contains('workspace')) {
         return [elem];
@@ -593,6 +616,10 @@ function createPrintoutPages(margins) {
             // opens with -- see findPageBreaks().  Suppressed writing space
             // does not count; see isVisibleWorkspaceRow().
             isWorkspace: isVisibleWorkspaceRow(row),
+            // A currently-hidden hint/answer/solution (see above), which shows
+            // nothing, so a page cannot be said to open with it -- see
+            // findPageBreaks().
+            hidden: row.classList.contains('hidden'),
             // How much room this row's own footnotes will take at the foot of
             // whichever page it lands on.  Charged to the row rather than to
             // the page because that is what makes the cost move with the row:
@@ -796,13 +823,13 @@ function isPageFurnitureEl(el) {
 }
 
 // Whether a new page could legally start at `contentChildren[index]`: not
-// with blank writing space (see isVisibleWorkspaceRow()), and not splitting a
+// with blank writing space (see openingWorkspaceIndex()), and not splitting a
 // question from its own solutions/workspace. Shared by both directions
 // addSpilloverPages() searches, so they agree on what "legal" means.
 function isLegalSplit(contentChildren, index) {
   const row = contentChildren[index];
   const prev = contentChildren[index - 1];
-  const opensWithWorkspace = isVisibleWorkspaceRow(row);
+  const opensWithWorkspace = openingWorkspaceIndex(contentChildren, index) !== -1;
   const splitsGroup = !!(row.dataset.blockGroup &&
                          row.dataset.blockGroup === prev.dataset.blockGroup);
   return !opensWithWorkspace && !splitsGroup;
@@ -1615,6 +1642,22 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
     minCost[rows.length] = 0; // No cost for no rows
     // An array to keep track of the next row to start a new page after i in minCost.
     let nextPageBreak = Array(rows.length).fill(-1);
+    // Whether a page that started at row k would open with blank writing
+    // space, which it must never do: the first row there that shows anything
+    // is a workspace.  Every hint/answer/solution is hidden while pages are
+    // planned (see rewriteSolutions()), and a hidden one shows nothing -- so
+    // it is looked past, or it would let a question's workspace, hoisted out
+    // behind its solutions, open the next page.
+    const opensWithWorkspace = Array(rows.length + 1).fill(false);
+    for (let k = rows.length - 1; k >= 0; k--) {
+        opensWithWorkspace[k] = rows[k].hidden ? opensWithWorkspace[k + 1] : rows[k].isWorkspace;
+    }
+    // The first row after row i that a page may start with.
+    const nextLegalStart = i => {
+        let k = i + 1;
+        while (k < rows.length && opensWithWorkspace[k]) k++;
+        return k;
+    };
 
     // Now loop through the rows in reverse order to find the optimal page breaks.
     for (let i = rows.length - 1; i >= 0; i--) {
@@ -1657,19 +1700,20 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
                 // This page overflows even with all its writing space squeezed
                 // away, and every longer page would too, so stop extending it.
                 if (j === i) {
-                    // The page height is too big for a single row.  We make this row its own page and move on.
+                    // The page height is too big for a single row.  We make this row its own page and move on
+                    // -- along with any writing space that follows it, which must not open the next page.
                     console.log("Row", i, "exceeds page height by itself, setting as its own page.");
                     minCost[i] = 0; // No cost for a single row
-                    nextPageBreak[i] = i + 1; // The next page break is after this row
+                    nextPageBreak[i] = nextLegalStart(i);
                 }
                 break;
             }
             // A page must never open with blank writing space: a workspace
             // row belongs under the question it was authored for, so breaking
             // right before one is simply not a legal break.  (When the group
-            // genuinely cannot be held together, the workspace is suppressed
-            // later instead -- see hideWidowedWorkspaces().)
-            if (next && next.isWorkspace) continue;
+            // genuinely cannot be held together, the page ends after the
+            // workspace instead -- see the fallback below.)
+            if (opensWithWorkspace[j + 1]) continue;
 
             const cost = thisPage + minCost[j + 1]; // plus the cost of the following pages
             if (cost < minCost[i]) {
@@ -1677,13 +1721,18 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
                 nextPageBreak[i] = j + 1; // Set the next page break to be after row j
             }
         }
-        // Every candidate break was illegal (e.g. the only places to break
-        // were immediately before a workspace row).  Fall back to giving row i
-        // a page of its own so backtracking below always makes progress
-        // rather than looping on nextPageBreak === -1.
+        // Every candidate break was illegal: the only places to end the page
+        // before it overflowed would open the next one with writing space.
+        // Typically that is a question whose workspace, at its authored
+        // height, does not fit on the page with it.  End the page after that
+        // workspace instead, where adjustWorkspaceToFitPage() squeezes it into
+        // the room there is -- still under its question, which blank space at
+        // the top of the next page would not be.  This also keeps backtracking
+        // below making progress rather than looping on nextPageBreak === -1.
         if (nextPageBreak[i] === -1) {
-            nextPageBreak[i] = i + 1;
-            minCost[i] = minCost[i + 1];
+            const end = nextLegalStart(i);
+            nextPageBreak[i] = end;
+            minCost[i] = minCost[end];
         }
     }
     // Backtrack to find the actual page breaks based on nextPageBreak
