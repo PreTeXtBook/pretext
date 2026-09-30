@@ -6258,6 +6258,14 @@ def copy_html_js(work_dir):
     js_dest = os.path.join(work_dir, "_static", "pretext", "js")
     shutil.copytree(js_src, js_dest)
 
+    # The Material Symbols icon font, and its stylesheet, so
+    # icons do not depend on Google Fonts (see fonts/README.md)
+    fonts_src = os.path.join(common.get_ptx_path(), "fonts")
+    fonts_dest = os.path.join(work_dir, "_static", "pretext", "fonts")
+    os.makedirs(fonts_dest, exist_ok=True)
+    for fontfile in ["material-symbols-outlined.css", "material-symbols-outlined.woff2"]:
+        shutil.copy2(os.path.join(fonts_src, fontfile), fonts_dest)
+
 
 
 
