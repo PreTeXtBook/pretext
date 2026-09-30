@@ -2022,6 +2022,13 @@
   function isPageFurnitureEl(el2) {
     return el2.classList.contains("first-page-header") || el2.classList.contains("running-header") || isPageTailEl(el2);
   }
+  function isLegalSplit(contentChildren, index) {
+    const row = contentChildren[index];
+    const prev = contentChildren[index - 1];
+    const opensWithWorkspace = isVisibleWorkspaceRow(row);
+    const splitsGroup = !!(row.dataset.blockGroup && row.dataset.blockGroup === prev.dataset.blockGroup);
+    return !opensWithWorkspace && !splitsGroup;
+  }
   function addSpilloverPages(margins) {
     const printout = getPrintout();
     if (!printout) return;
@@ -2046,14 +2053,23 @@
       if (overflowStartIndex === 0) {
         if (contentChildren.length <= 1) continue;
         overflowStartIndex = 1;
-      }
-      while (overflowStartIndex > 1) {
-        const row = contentChildren[overflowStartIndex];
-        const prev = contentChildren[overflowStartIndex - 1];
-        const opensWithWorkspace = isVisibleWorkspaceRow(row);
-        const splitsGroup = !!(row.dataset.blockGroup && row.dataset.blockGroup === prev.dataset.blockGroup);
-        if (!opensWithWorkspace && !splitsGroup) break;
-        overflowStartIndex--;
+      } else {
+        let candidate = overflowStartIndex;
+        while (candidate > 0 && !isLegalSplit(contentChildren, candidate)) {
+          candidate--;
+        }
+        if (candidate > 0) {
+          overflowStartIndex = candidate;
+        } else {
+          candidate = overflowStartIndex + 1;
+          while (candidate < contentChildren.length && !isLegalSplit(contentChildren, candidate)) {
+            candidate++;
+          }
+          if (candidate >= contentChildren.length) {
+            continue;
+          }
+          overflowStartIndex = candidate;
+        }
       }
       const overflowElems = contentChildren.slice(overflowStartIndex);
       const newPage = document.createElement("section");
