@@ -14,6 +14,8 @@ description
 edit
 error
 expand_less
+font_download
+format_letter_spacing
 format_line_spacing
 format_size
 groups_3
