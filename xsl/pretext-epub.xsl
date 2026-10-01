@@ -1301,6 +1301,13 @@
                         </xsl:call-template>
                     </summary>
                     <div>
+                        <!-- 80% of the available width, however narrow  -->
+                        <!-- the image; in a "sidebyside" panel, the panel -->
+                        <xsl:if test="not(&SBS-LAYOUT-FILTER;)">
+                            <xsl:attribute name="style">
+                                <xsl:text>width: 80%; margin-left: 10%;</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="description"/>
                     </div>
                 </details>
