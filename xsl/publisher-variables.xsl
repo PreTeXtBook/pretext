@@ -275,7 +275,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!-- This is the minimum information to locate a     -->
-<!-- Citation Stylesheet Language (CSL) style file   -->
+<!-- Citation Style Language (CSL) style file        -->
 <!-- in the CSL repository.  It is not expected to   -->
 <!-- have the ".csl" suffix, but should have partial -->
 <!-- path names, such as "dependent/".  Employers    -->
@@ -284,7 +284,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="csl-style-file">
     <xsl:apply-templates select="$publisher-attribute-options/common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="set-pubfile-variable"/>
 </xsl:variable>
-<!-- global indication of if a publisher has opted in -->
+<!-- A journal named in the publication file supplies a default  -->
+<!-- style, as recorded in the list of supported journals, and a -->
+<!-- style named in the publication file still wins.  Journal    -->
+<!-- codes are matched regardless of case, as in the Python      -->
+<!-- get_journal_info() function.                                -->
+<xsl:template match="common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="get-default-pub-variable">
+    <xsl:variable name="journal-code" select="translate($journal-name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"/>
+    <xsl:if test="not($journal-code = '')">
+        <xsl:value-of select="document('../journals/journals.xml')/ptx-journals/journal[code = $journal-code]/citation-stylesheet-language/@style"/>
+    </xsl:if>
+</xsl:template>
+<!-- global indication of if a publisher has opted in, perhaps by way of a journal -->
 <xsl:variable name="b-using-csl-styles" select="not(normalize-space($csl-style-file) = '')"/>
 <!-- if using styles we form the filename of generated references and citations -->
 <xsl:variable name="csl-file">
@@ -3658,10 +3669,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </journal>
         <!-- The default CSL style file is empty so that this  -->
         <!-- feature can be "opt in", initially, and perhaps   -->
-        <!-- forever.  A good first choice for a CSL style is  -->
-        <!-- the "harvard1" style since it is copied into the  -->
-        <!-- right place in the citeproc-py distribution and   -->
-        <!-- should be present out-of-the-box.                 -->
+        <!-- forever.  Naming a journal is one way to opt in,  -->
+        <!-- when the journal has a style (see the template    -->
+        <!-- computing this default).  citeproc-py bundles a   -->
+        <!-- single style, while the "citeproc-py-styles"      -->
+        <!-- package supplies the CSL repository's thousands.  -->
         <citation-stylesheet-language>
             <pi:pub-attribute name="style" default="" freeform="yes"/>
         </citation-stylesheet-language>

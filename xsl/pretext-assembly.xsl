@@ -1163,35 +1163,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $b-using-csl-styles: a consequence of opting in via publisher file         -->
 <!-- $b-extracting-biblio: set here and overridden in the extraction stylesheet -->
 
+<!-- The generated file is only consulted in a conversion (extraction -->
+<!-- is making the file, not using it), with CSL styles in use, of a  -->
+<!-- document that has references to replace.  A stylesheet with no   -->
+<!-- use for the file (the publisher variable report) overrides this. -->
+<xsl:variable name="b-consulting-csl-file" select="$b-using-csl-styles and not($b-extracting-biblio) and boolean($original//backmatter/references[not(@source)])"/>
+
 <!-- two error conditions -->
-<!-- 2025-08-13: this variable is always false -->
+<!-- The generated file is made on request, so is often absent.  The -->
+<!-- xsltproc executable reads a missing file as an empty node-set,  -->
+<!-- while lxml would halt, so the Python xsltproc() (in common.py)  -->
+<!-- supplies a stand-in document for it instead.  Either way, no    -->
+<!-- "pi:csl-references" element is found.                           -->
 <xsl:variable name="missing-csl-file">
     <xsl:choose>
         <!-- can't be missing if we don't need it, and we   -->
         <!-- don't induce panic by looking for it, when it  -->
         <!-- isn't called for, and getting ominous warnings -->
-        <xsl:when test="not($b-using-csl-styles)">
+        <xsl:when test="not($b-consulting-csl-file)">
             <xsl:text>no</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
+        <!-- since we build the file, condition on the size of -->
+        <!-- this node-set:  one (good) or none (bad, missing) -->
+        <xsl:when test="count(document($csl-file, $original)/pi:csl-references) = 1">
             <xsl:text>no</xsl:text>
-            <!-- this is only a test, variable is local and not retained -->
-            <!-- <xsl:variable name="the-references" -->
-                <!-- select="document($csl-file, $original)/pi:csl-references"/> -->
-            <!-- since we build the file, condiition on the size of -->
-            <!-- this node-set:  one (good) or none (bad, missing)  -->
-            <!-- <xsl:choose> -->
-                <!-- file looks good -->
-                <!-- <xsl:when test="count($the-references) = 1"> -->
-                    <!-- <xsl:text>no</xsl:text> -->
-                <!-- </xsl:when> -->
-                <!-- nothing came of document() -->
-                <!-- <xsl:otherwise> -->
-                    <!-- <xsl:text>yes</xsl:text> -->
-                    <!-- and we take the opportunity to say so, just once, and early on -->
-                    <!-- <xsl:message>PTX:ERROR:     your publisher file indicates the use of a Citation Stylesheet Language (CSL) specification for references, but we have not located your file of generated references and citations at "<xsl:value-of select="$csl-file"/>".  We will fall back to default processing in order to proceed.</xsl:message> -->
-                <!-- </xsl:otherwise> -->
-            <!-- </xsl:choose> -->
+        </xsl:when>
+        <!-- nothing came of document() -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+            <!-- and we take the opportunity to say so, just once, and early on -->
+            <xsl:message>PTX:FALLBACK:  your publisher file indicates the use of a Citation Style Language (CSL) style for references ("<xsl:value-of select="$csl-style-file"/>"), perhaps by way of a journal, but we have not located your file of generated references and citations at "<xsl:value-of select="$csl-file"/>".  Generate the "references" assets to create it.  We will fall back to default processing in order to proceed.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -1206,7 +1207,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- we do not warning at the end of this template, -->
         <!-- just because the file itself does not exist    -->
-        <xsl:when test="not($b-using-csl-styles) or $missing-csl-file">
+        <xsl:when test="not($b-consulting-csl-file) or $b-missing-csl-file">
             <xsl:text>no</xsl:text>
         </xsl:when>
         <!-- now we are using CSL styles and we do have a file to interrogate -->
@@ -1225,7 +1226,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:otherwise>
                     <xsl:text>yes</xsl:text>
                     <!-- and we take the opportunity to say so, just once, and early on -->
-                    <xsl:message>PTX:WARNING:     your publisher file indicates the use of one Citation Stylesheet Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
+                    <xsl:message>PTX:WARNING:     your publisher file indicates the use of one Citation Style Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
@@ -1242,8 +1243,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="backmatter/references[not(@source)]" mode="assembly">
     <xsl:choose>
         <!-- duplicate for biblio extraction process or if using -->
-        <!-- default (simplistic) PreTeXt bibliography support   -->
-        <xsl:when test="$b-extracting-biblio or not($b-using-csl-styles)">
+        <!-- default (simplistic) PreTeXt bibliography support,  -->
+        <!-- or any other pass not consulting the generated file -->
+        <xsl:when test="not($b-consulting-csl-file)">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
@@ -1336,7 +1338,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Note: not using CSL styles immediately determines that    -->
         <!-- this "xrref" is not a "biblio target" and a copy is       -->
         <!-- made here, immediately as well                            -->
-        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio">
+        <!-- A missing or mismatched generated file is met the same    -->
+        <!-- way here as with the "references" division above: keep    -->
+        <!-- the author's "xref", so citations and bibliography both   -->
+        <!-- fall back to default processing, together                 -->
+        <xsl:when test="not($b-is-biblio-target) or not($b-consulting-csl-file) or $b-missing-csl-file or $b-style-file-mismatch">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="assembly"/>
             </xsl:copy>
@@ -1346,7 +1352,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="the-xref-id">
                 <xsl:value-of select="@pi:original-id"/>
             </xsl:variable>
-            <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
+            <!-- $csl-file is defined in the publisher-variables stylesheet -->
+            <xsl:variable name="matched-citation" select="document($csl-file, $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
             <xsl:copy-of select="$matched-citation"/>
             <!-- WARN ON UNMATCHED -->
         </xsl:otherwise>

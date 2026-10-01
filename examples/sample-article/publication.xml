@@ -42,14 +42,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <fillin textstyle="underline" mathstyle="shade"/>
         <qrcode image="misc/ptx-logo-square.png"/>
         <!-- This is the minimum information to locate a     -->
-        <!-- Citation Stylesheet Language (CSL) style file   -->
-        <!-- in the CSL repository.  It is not expected to   -->
-        <!-- have the ".csl" suffix.  Default is "harvard1". -->
-        <!-- Note: "harvard1" might be best first use.       -->
+        <!-- Citation Style Language (CSL) style in the      -->
+        <!-- CSL repository, without the ".csl" suffix.      -->
+        <!-- A journal named in the publication file may     -->
+        <!-- supply a default style.                         -->
         <!-- 2025-08-13: this is experimental and opt-in.    -->
-        <!--  -->
-        <!-- "harvard1" style available in CiteProcPy code?  -->
-        <!-- <citation-stylesheet-language style="harvard1"/> -->
         <!--  -->
         <!-- numeric style, ". " for suffix -->
         <!-- <citation-stylesheet-language style="vancouver-brackets"/> -->

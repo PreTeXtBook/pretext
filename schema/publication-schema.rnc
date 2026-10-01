@@ -61,6 +61,9 @@
                     element journal {
                         attribute name {text}
                     }? &
+                    element citation-stylesheet-language {
+                        attribute style {text}
+                    }? &
                     element worksheet {
                         attribute margin {text}?,
                         attribute top {text}?,

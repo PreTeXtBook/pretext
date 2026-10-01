@@ -1306,9 +1306,8 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Compute publisher variable report one time, collecting results
     pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
-    # style file name selected by the publisher, no path information
-    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
-    # so place by a given style file by hand right now
+    # style file name selected by the publisher, or else supplied by
+    # a journal named in the publication file, no path information
     # Call below does not need an extension, so we do not supply it
     csl_style = common.get_publisher_variable(pub_vars, 'csl-style-file')
     # XSL "value-of" for boolean reports strings "true" or "false"
@@ -1316,7 +1315,8 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     if using_csl_styles == "false":
         msg = " ".join(["requesting formatted references and citations is not possible",
-              "without a CSL style file specified in the publication file.",
+              "without a CSL style file specified in the publication file,",
+              "or supplied by a journal named there.",
               "No action is being taken."])
         log.error(msg)
         # bail out and do not do *anything*
@@ -1377,12 +1377,22 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     ### Initialize CSL Style File ###
     #
     # * Examine publisher file, get string for CSL file name
-    # * Needs to be moved manually to <cite-proc>/data/styles
-    # * Need to automate placing the style file
+    # * citeproc-py locates a style by its bare name, among the one
+    #   style it bundles and all of those in the "citeproc-py-styles"
+    #   package, if installed
     # * We interrogate the punctuation of citations
 
     # Initialize use of the chosen style
-    style = citeproc.CitationStylesStyle(csl_style, validate=False)
+    try:
+        style = citeproc.CitationStylesStyle(csl_style, validate=False)
+    except Exception as e:
+        # citeproc-py raises ValueError, saying where it looked, and
+        # recommending "citeproc-py-styles" when that is absent; with
+        # it installed, citeproc-py-styles raises its own
+        # StyleNotFoundError, which ValueError does not catch
+        msg = 'the CSL style "{}" could not be located: {}  No action is being taken.'
+        log.error(msg.format(csl_style, e))
+        return
 
     # The citepoc-py "CitationStylesStyle" object is derived ultimately
     # from an lxml Element Tree in a "xml" property of the object.  We
@@ -1668,7 +1678,7 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     except Exception as e:
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a references file: {}\n"
-        raise ValueError(msg.format(f) + root_cause)
+        raise ValueError(msg.format(bib_file) + root_cause)
 
 
 ##############################
@@ -6355,8 +6365,8 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
             # download the file if it is not already in the cache_dir
             log.debug("Downloading required file {} from {}".format(file.attrib["name"], file.attrib["href"]))
             url = file.attrib["href"]
-            # The url might be to the file, or to a compressed archive.  We do slightly different things in each case.  TODO: other archive formats.
-            if url.endswith(".zip"):
+            # The url might be to the file, or to a compressed archive, as said by @compression (a url need not end in ".zip").  We do slightly different things in each case.  TODO: other archive formats.
+            if file.get("compression") == "zip":
                 tmp_zip = os.path.join(cache_dir, "tmp.zip")
                 common.download_file(url, tmp_zip)
                 with zipfile.ZipFile(tmp_zip, 'r') as zip_ref:

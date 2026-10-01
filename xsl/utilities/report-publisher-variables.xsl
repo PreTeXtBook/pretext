@@ -55,6 +55,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for a text file -->
 <xsl:output method="text" encoding="UTF-8"/>
 
+<!-- A report has no use for generated references and citations, -->
+<!-- so need not look for them, nor say when they are missing    -->
+<xsl:variable name="b-consulting-csl-file" select="false()"/>
+
 <!-- IMPORTANT: to report the value of a (computed) publisher variable,   -->
 <!-- two related routines are involved.  For a variable not previously    -->
 <!-- supported, a developer must take action to implement a report. The   -->
