@@ -124,6 +124,29 @@ function isVisibleWorkspaceRow(elem) {
     return isWorkspaceRow(elem) && !elem.classList.contains('hidden');
 }
 
+// If a page that began at rows[k] would open with blank writing space, the
+// index of that workspace row; otherwise -1.  What a page opens with is the
+// first row on it that shows anything.  A hidden hint/answer/solution shows
+// nothing, and sits between a question and its hoisted workspace (see
+// flattenSolutionsIn()), so it is looked past.  So is a workspace that
+// hideWidowedWorkspaces() has suppressed -- but only while something is
+// revealed, since that is the only time it suppresses anything: with nothing
+// revealed, a `hidden` still on a workspace is left over from before, and is
+// about to be cleared.
+function openingWorkspaceIndex(rows, k) {
+    const suppressing = anySolutionShown();
+    for (let i = k; i < rows.length; i++) {
+        const row = rows[i];
+        const hidden = row.classList.contains('hidden');
+        if (isWorkspaceRow(row)) {
+            if (hidden && suppressing) continue;
+            return i;
+        }
+        if (!hidden) return -1;
+    }
+    return -1;
+}
+
 function workspaceDivsIn(elem) {
     if (elem.classList.contains('workspace')) {
         return [elem];
@@ -574,14 +597,17 @@ function createPrintoutPages(margins) {
             continue;
         }
         let totalWorkspaceHeight = 0;
+        let squeezableHeight = 0;
         if (workspaceDivsIn(row).length > 0) {
             // Workspace height is not just sum of workspace heights; we need to be careful with sidebyside and columns
             totalWorkspaceHeight = getElemWorkspaceHeight(row);
+            squeezableHeight = getElemSqueezableHeight(row);
         }
         blockList.push({
             elem: row,
             height: blockHeight,
             workspaceHeight: totalWorkspaceHeight,
+            squeezableHeight,
             // Set by flattenSolutionsIn() on the rows split out of a single
             // exercise or task, so findPageBreaks() can tell which rows want
             // to stay together on one page.  Undefined for rows that were
@@ -593,6 +619,10 @@ function createPrintoutPages(margins) {
             // opens with -- see findPageBreaks().  Suppressed writing space
             // does not count; see isVisibleWorkspaceRow().
             isWorkspace: isVisibleWorkspaceRow(row),
+            // A currently-hidden hint/answer/solution (see above), which shows
+            // nothing, so a page cannot be said to open with it -- see
+            // findPageBreaks().
+            hidden: row.classList.contains('hidden'),
             // How much room this row's own footnotes will take at the foot of
             // whichever page it lands on.  Charged to the row rather than to
             // the page because that is what makes the cost move with the row:
@@ -744,11 +774,18 @@ function hideWidowedWorkspaces() {
 }
 
 function adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute = false}) {
-    adjustWorkspaceToFitPage({paperSize, margins});
-    if (pageOverflows()) {
+    const squeezed = adjustWorkspaceToFitPage({paperSize, margins});
+    const squeezedTooFar = squeezed && holdsAuthoredWorkspace();
+    if (pageOverflows() || squeezedTooFar) {
         if (fullRecompute) {
             resetPrintoutPagination(margins);
         } else {
+            if (squeezedTooFar) {
+                // The squeeze made room that is not there at the authored
+                // heights, so put those back first: the rows that then no
+                // longer fit are the ones addSpilloverPages() moves on.
+                setInitialWorkspaceHeights();
+            }
             addSpilloverPages(margins);
         }
         adjustWorkspaceToFitPage({paperSize, margins});
@@ -796,13 +833,13 @@ function isPageFurnitureEl(el) {
 }
 
 // Whether a new page could legally start at `contentChildren[index]`: not
-// with blank writing space (see isVisibleWorkspaceRow()), and not splitting a
+// with blank writing space (see openingWorkspaceIndex()), and not splitting a
 // question from its own solutions/workspace. Shared by both directions
 // addSpilloverPages() searches, so they agree on what "legal" means.
 function isLegalSplit(contentChildren, index) {
   const row = contentChildren[index];
   const prev = contentChildren[index - 1];
-  const opensWithWorkspace = isVisibleWorkspaceRow(row);
+  const opensWithWorkspace = openingWorkspaceIndex(contentChildren, index) !== -1;
   const splitsGroup = !!(row.dataset.blockGroup &&
                          row.dataset.blockGroup === prev.dataset.blockGroup);
   return !opensWithWorkspace && !splitsGroup;
@@ -857,9 +894,18 @@ function addSpilloverPages(margins) {
       // nothing we can do about that specific row. But if there are other
       // rows after it, they shouldn't be trapped here too: move everything
       // after the oversized first row onto a fresh page. Forced, so taken
-      // unconditionally rather than run through isLegalSplit() below.
+      // unconditionally rather than run through isLegalSplit() below --
+      // except that the fresh page still must not open with blank writing
+      // space, so any that follows the row stays here with it, squeezed as far
+      // as it will go, as findPageBreaks() keeps it with an oversized row.
       if (contentChildren.length <= 1) continue; // truly nothing else to move
       overflowStartIndex = 1;
+      let opening = openingWorkspaceIndex(contentChildren, overflowStartIndex);
+      while (opening !== -1) {
+        overflowStartIndex = opening + 1;
+        opening = openingWorkspaceIndex(contentChildren, overflowStartIndex);
+      }
+      if (overflowStartIndex >= contentChildren.length) continue;
     } else {
       // This is the runtime counterpart of the rules findPageBreaks() applies
       // when it plans pages from scratch, and it has to enforce them too: a
@@ -1231,6 +1277,14 @@ function measureFootnotes(rows, measuringPage) {
     return {heights, chrome};
 }
 
+// Mark a header or footer box that has nothing in it, so the print stylesheet
+// can let it shrink away and give its room to the boxes beside it.  Judged by
+// what a reader would see rather than with :empty, since a box that has been
+// typed in and then cleared is usually left holding a stray <br>.
+function markBlankHeaderFooterBox(box) {
+    box.classList.toggle('blank', box.textContent.trim() === '' && !box.querySelector('img'));
+}
+
 // Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
 function addHeadersAndFootersToPrintout() {
     const printout = getPrintout();
@@ -1314,8 +1368,10 @@ function addHeadersAndFootersToPrintout() {
         };
         const elements = document.querySelectorAll(selectorMap[key]);
         elements.forEach(elem => {
+            markBlankHeaderFooterBox(elem);
             elem.addEventListener('input', () => {
                 localStorage.setItem(key, elem.innerHTML);
+                markBlankHeaderFooterBox(elem);
             });
         });
     });
@@ -1324,6 +1380,8 @@ function addHeadersAndFootersToPrintout() {
 
 // We look at each page and adjust the heights of the workspaces to fit it nicely into the page.
 // The width and height of the page will now depend on the letter or a4 setting.
+// Returns whether any page only fit by squeezing its writing space below the
+// authored heights (see holdsAuthoredWorkspace()).
 function adjustWorkspaceToFitPage({paperSize, margins}) {
     console.log("*** Adjusting workspace to fit page size:", paperSize, "with margins:", margins);
 
@@ -1356,6 +1414,7 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
         block.style.marginTop = "";
     });
 
+    let squeezed = false;
     const pages = document.querySelectorAll('.onepage');
     pages.forEach(page => {
         console.log("Adjusting workspace height for page:", page);
@@ -1396,8 +1455,29 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
         }
         const extraHeight = paperContentHeight - totalContentHeight;
         console.log("Extra height to distribute across workspaces:", extraHeight, "px.");
-        // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight
-        const workspaceAdjustmentFactor = (totalWorkspaceHeight + extraHeight) / totalWorkspaceHeight;
+        // A pixel of slack, so that rounding alone never counts as squeezing
+        if (extraHeight < -1) {
+            squeezed = true;
+        }
+        // Stretching is measured against the most writing space any column
+        // holds, so the page cannot outgrow the paper; squeezing against what
+        // the rows actually give back, so the page does not stay taller than
+        // it -- see getElemSqueezableHeight().
+        let scalableHeight = totalWorkspaceHeight;
+        if (extraHeight < 0) {
+            scalableHeight = 0;
+            for (const row of rows) {
+                scalableHeight += getElemSqueezableHeight(row);
+            }
+        }
+        // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight.
+        // Never below zero: a page that does not fit even with no writing
+        // space at all gets none.  A negative height would be ignored, leaving
+        // the writing space at full height to spill onto a sheet of its own
+        // when printed.
+        const workspaceAdjustmentFactor = scalableHeight > 0
+            ? Math.max(0, (scalableHeight + extraHeight) / scalableHeight)
+            : 1;
         console.log("Workspace adjustment factor for page:", workspaceAdjustmentFactor);
         // Now adjust each workspace in the page by this factor
         const pageWorkspaces = page.querySelectorAll('.workspace');
@@ -1415,6 +1495,7 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
     if (wasHighlighted) {
         toggleWorkspaceHighlight(true);
     }
+    return squeezed;
 }
 
 // Helper functions for calculating heights and workspace sizes
@@ -1472,20 +1553,49 @@ function getElemWorkspaceHeight(elem) {
     return totalHeight / columns; // Divide by columns if sidebyside to get average height per column
 }
 
+// How much shorter `elem` gets with all of its writing space squeezed away.
+// In a single column that is just its writing space, but side-by-side panels
+// and exercise group columns share rows, each as tall as the tallest cell in
+// it, and a tallest cell with little writing space holds a row up however much
+// the others give back.  getElemWorkspaceHeight() is the right bound for
+// stretching, which can make any cell the tallest, but taken as what squeezing
+// frees up it promises room that never appears, and the page overflows.  The
+// cells' own boxes cannot say which one holds a row up -- a grid stretches
+// them all to the row, and a side-by-side panel can have no box at all -- so
+// measure: empty the writing space, and see.  Not quite to nothing, though: a
+// workspace with no height at all lets the margins either side of it collapse
+// together, and so gives back room that no factor above zero ever would.
+function getElemSqueezableHeight(elem) {
+    if (!elem.classList.contains('sidebyside') && !elem.classList.contains('exercisegroup')) {
+        return getElemWorkspaceHeight(elem);
+    }
+    const workspaces = [...elem.querySelectorAll('.workspace')];
+    if (workspaces.length === 0) return 0;
+    const heights = workspaces.map(ws => ws.style.height);
+    const full = elem.offsetHeight;
+    workspaces.forEach(ws => { ws.style.height = "1px"; });
+    const emptied = elem.offsetHeight;
+    workspaces.forEach((ws, k) => { ws.style.height = heights[k]; });
+    return Math.max(0, full - emptied);
+}
+
 // Cost of one candidate page holding rows [i..j], in the same units as the
 // original objective: (px of wasted space)^2, so that the penalties below
 // trade off directly against blank space -- a penalty of P is "worth" about
 // sqrt(P) px of waste at the foot of a page.
 //
 //   naturalHeight   total height with every workspace at its authored size
-//   workspaceHeight how much of that is blank writing space, i.e. how much
-//                   can be given back by squeezing (adjustWorkspaceToFitPage()
-//                   scales workspaces by a factor below 1 when a page is over
-//                   budget, so a page may legitimately be planned as "fits
-//                   only once squeezed") -- and, on a page that fits, how much
-//                   of the leftover room will be soaked up rather than left
-//                   blank, since the same function stretches the workspaces on
-//                   an under-full page to fill it
+//   workspaceHeight how much of that is blank writing space, i.e. on a page
+//                   that fits, how much of the leftover room will be soaked up
+//                   rather than left blank, since adjustWorkspaceToFitPage()
+//                   stretches the workspaces on an under-full page to fill it
+//   squeezableHeight
+//                   how much of it can be given back by squeezing (the same
+//                   function scales workspaces by a factor below 1 when a page
+//                   is over budget, so a page may legitimately be planned as
+//                   "fits only once squeezed") -- no more than workspaceHeight,
+//                   and less where writing space shares a row with taller
+//                   content beside it (see getElemSqueezableHeight())
 //   splitsGroup     true when the break after row j separates a question from
 //                   its own solutions or workspace
 //   isLastPage      true when this page ends the printout, so the room left at
@@ -1553,7 +1663,7 @@ function deadSpaceCost(slack, pageHeight, isLastPage) {
     return pageHeight ** 2 * (slack / pageHeight) ** DEAD_SPACE_EXPONENT;
 }
 
-function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, allowSqueeze, squeezeIsForced, isLastPage }) {
+function pageCost({ pageHeight, naturalHeight, workspaceHeight, squeezableHeight, splitsGroup, allowSqueeze, squeezeIsForced, isLastPage }) {
     const groupPenalty = splitsGroup ? GROUP_BREAK_PENALTY_PAGES * pageHeight ** 2 : 0;
     if (naturalHeight <= pageHeight) {
         // Fits as authored.  What the room left over is worth depends on what
@@ -1589,7 +1699,7 @@ function pageCost({ pageHeight, naturalHeight, workspaceHeight, splitsGroup, all
         return Infinity;
     }
     const squeeze = naturalHeight - pageHeight;
-    if (squeeze > workspaceHeight) {
+    if (squeeze > squeezableHeight) {
         return Infinity; // no amount of squeezing saves this page
     }
     // Nothing is wasted (the page is exactly full), but squeezing writing
@@ -1615,17 +1725,35 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
     minCost[rows.length] = 0; // No cost for no rows
     // An array to keep track of the next row to start a new page after i in minCost.
     let nextPageBreak = Array(rows.length).fill(-1);
+    // Whether a page that started at row k would open with blank writing
+    // space, which it must never do: the first row there that shows anything
+    // is a workspace.  Every hint/answer/solution is hidden while pages are
+    // planned (see rewriteSolutions()), and a hidden one shows nothing -- so
+    // it is looked past, or it would let a question's workspace, hoisted out
+    // behind its solutions, open the next page.
+    const opensWithWorkspace = Array(rows.length + 1).fill(false);
+    for (let k = rows.length - 1; k >= 0; k--) {
+        opensWithWorkspace[k] = rows[k].hidden ? opensWithWorkspace[k + 1] : rows[k].isWorkspace;
+    }
+    // The first row after row i that a page may start with.
+    const nextLegalStart = i => {
+        let k = i + 1;
+        while (k < rows.length && opensWithWorkspace[k]) k++;
+        return k;
+    };
 
     // Now loop through the rows in reverse order to find the optimal page breaks.
     for (let i = rows.length - 1; i >= 0; i--) {
         let cumulativeHeight = 0;
         let cumulativeWorkspaceHeight = 0;
+        let cumulativeSqueezableHeight = 0;
         let cumulativeFootnoteHeight = 0;
         let tallestRow = 0;
         // Loop through the rows starting from i to find the best page break
         for (let j = i; j < rows.length; j++) {
             cumulativeHeight += rows[j].height;
             cumulativeWorkspaceHeight += rows[j].workspaceHeight;
+            cumulativeSqueezableHeight += rows[j].squeezableHeight;
             cumulativeFootnoteHeight += rows[j].footnoteHeight || 0;
             // The footnote block is only on the page if something on the page
             // referenced a footnote, and then it costs its own rule and padding
@@ -1648,6 +1776,7 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
                 pageHeight,
                 naturalHeight: cumulativeHeight + footnotesHeight,
                 workspaceHeight: cumulativeWorkspaceHeight,
+                squeezableHeight: cumulativeSqueezableHeight,
                 splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
                 allowSqueeze,
                 squeezeIsForced: tallestRow > pageHeight,
@@ -1657,19 +1786,20 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
                 // This page overflows even with all its writing space squeezed
                 // away, and every longer page would too, so stop extending it.
                 if (j === i) {
-                    // The page height is too big for a single row.  We make this row its own page and move on.
+                    // The page height is too big for a single row.  We make this row its own page and move on
+                    // -- along with any writing space that follows it, which must not open the next page.
                     console.log("Row", i, "exceeds page height by itself, setting as its own page.");
                     minCost[i] = 0; // No cost for a single row
-                    nextPageBreak[i] = i + 1; // The next page break is after this row
+                    nextPageBreak[i] = nextLegalStart(i);
                 }
                 break;
             }
             // A page must never open with blank writing space: a workspace
             // row belongs under the question it was authored for, so breaking
             // right before one is simply not a legal break.  (When the group
-            // genuinely cannot be held together, the workspace is suppressed
-            // later instead -- see hideWidowedWorkspaces().)
-            if (next && next.isWorkspace) continue;
+            // genuinely cannot be held together, the page ends after the
+            // workspace instead -- see the fallback below.)
+            if (opensWithWorkspace[j + 1]) continue;
 
             const cost = thisPage + minCost[j + 1]; // plus the cost of the following pages
             if (cost < minCost[i]) {
@@ -1677,13 +1807,18 @@ function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome
                 nextPageBreak[i] = j + 1; // Set the next page break to be after row j
             }
         }
-        // Every candidate break was illegal (e.g. the only places to break
-        // were immediately before a workspace row).  Fall back to giving row i
-        // a page of its own so backtracking below always makes progress
-        // rather than looping on nextPageBreak === -1.
+        // Every candidate break was illegal: the only places to end the page
+        // before it overflowed would open the next one with writing space.
+        // Typically that is a question whose workspace, at its authored
+        // height, does not fit on the page with it.  End the page after that
+        // workspace instead, where adjustWorkspaceToFitPage() squeezes it into
+        // the room there is -- still under its question, which blank space at
+        // the top of the next page would not be.  This also keeps backtracking
+        // below making progress rather than looping on nextPageBreak === -1.
         if (nextPageBreak[i] === -1) {
-            nextPageBreak[i] = i + 1;
-            minCost[i] = minCost[i + 1];
+            const end = nextLegalStart(i);
+            nextPageBreak[i] = end;
+            minCost[i] = minCost[end];
         }
     }
     // Backtrack to find the actual page breaks based on nextPageBreak
@@ -1953,18 +2088,23 @@ async function loadPrintout(printableSectionID) {
     ptxContent.appendChild(printableSection);
 }
 
+// Whether hint/answer/solution divs of `solutionType` start hidden when the
+// reader has not said otherwise: answers and solutions do, hints don't.
+// Single source of truth for that default so rewriteSolutions() (which needs
+// it immediately, before the checkbox that owns it has even been set up), the
+// checkbox setup loop below, and the dialog's reset button can't drift apart.
+function solutionTypeHiddenByDefault(solutionType) {
+    return solutionType === "answer" || solutionType === "solution";
+}
+
 // Whether hint/answer/solution divs of `solutionType` should be hidden: the
-// user's stored choice if there is one, otherwise the default (answers and
-// solutions start hidden, hints don't). Single source of truth for that
-// default so rewriteSolutions() (which needs it immediately, before the
-// checkbox that owns it has even been set up) and the checkbox setup loop
-// below can't drift apart.
+// user's stored choice if there is one, otherwise the default.
 function solutionTypeHidden(solutionType) {
     const stored = localStorage.getItem(`hide-${solutionType}`);
     if (stored !== null) {
         return stored === "true";
     }
-    return solutionType === "answer" || solutionType === "solution";
+    return solutionTypeHiddenByDefault(solutionType);
 }
 
 // Function to redo solutions details to divs with summary as title
@@ -2113,6 +2253,14 @@ async function applySolutionVisibility(solutionType, hidden, {paperSize, margins
                 adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
             });
         } else {
+            // Once the text has changed, a spillover page can be holding
+            // writing space rather than overflow (see holdsAuthoredWorkspace()),
+            // and a reveal lets writing space be squeezed again.  So fold back
+            // first, as hiding does, or those pages would outlive their reason
+            // and a reveal would no longer undo a hide.
+            if (printTextChanged()) {
+                collapseSpilloverPages(margins);
+            }
             adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
             await pollUntilSettled(() => {
                 if (pageOverflows()) {
@@ -2121,6 +2269,145 @@ async function applySolutionVisibility(solutionType, hidden, {paperSize, margins
                 }
             });
         }
+    });
+}
+
+// Text options //
+
+// The reader's choices of type size, line and letter spacing, and typeface for
+// the printout, made in the "Printing options" dialog: the menu each is chosen
+// from, and where the choice is kept between visits.  Every menu's standard is
+// the empty value (see the "print-text-options" template in the XSL).
+const PRINT_TEXT_OPTIONS = [
+    {name: 'fontSize',      selectId: 'ptx-print-font-size',      storageKey: 'print-font-size'},
+    {name: 'lineSpacing',   selectId: 'ptx-print-line-spacing',   storageKey: 'print-line-spacing'},
+    {name: 'letterSpacing', selectId: 'ptx-print-letter-spacing', storageKey: 'print-letter-spacing'},
+    {name: 'font',          selectId: 'ptx-print-font',           storageKey: 'print-font'},
+];
+
+// The choices currently made in the dialog, as {fontSize, lineSpacing,
+// letterSpacing, font}.
+function readPrintTextChoices() {
+    const choices = {};
+    for (const option of PRINT_TEXT_OPTIONS) {
+        const select = document.getElementById(option.selectId);
+        choices[option.name] = select ? select.value : '';
+    }
+    return choices;
+}
+
+// Put text choices on the printout, where print-worksheet.css acts on them.
+// An empty choice is the standard, and puts nothing there at all, so the
+// stylesheet's own values stand.  The two numeric choices go on as custom
+// properties; the named ones as attributes, which the stylesheet maps to the
+// spacing or typeface they stand for.
+function setPrintTextChoices(printout, {fontSize, lineSpacing, letterSpacing, font}) {
+    if (fontSize) {
+        printout.style.setProperty('--ptx-print-font-size', `${fontSize}pt`);
+    } else {
+        printout.style.removeProperty('--ptx-print-font-size');
+    }
+    if (lineSpacing) {
+        printout.style.setProperty('--ptx-print-line-height', lineSpacing);
+    } else {
+        printout.style.removeProperty('--ptx-print-line-height');
+    }
+    if (letterSpacing) {
+        printout.dataset.printLetterSpacing = letterSpacing;
+    } else {
+        delete printout.dataset.printLetterSpacing;
+    }
+    if (font) {
+        printout.dataset.printFont = font;
+    } else {
+        delete printout.dataset.printFont;
+    }
+}
+
+// The choices setPrintTextChoices() last put on the printout, in the same form
+// readPrintTextChoices() gives them.  The dialog can run ahead of these, since
+// its changes are queued behind any layout work in progress.
+function appliedPrintTextChoices(printout) {
+    return {
+        fontSize: printout.style.getPropertyValue('--ptx-print-font-size').replace(/pt$/, ''),
+        lineSpacing: printout.style.getPropertyValue('--ptx-print-line-height'),
+        letterSpacing: printout.dataset.printLetterSpacing || '',
+        font: printout.dataset.printFont || '',
+    };
+}
+
+// Whether the printout's text is set any differently from the standard its
+// page breaks were planned against.
+function printTextChanged() {
+    const printout = getPrintout();
+    if (!printout) return false;
+    return Object.values(appliedPrintTextChoices(printout)).some(choice => choice !== '');
+}
+
+// Whether blank writing space must keep its authored height, with rows that no
+// longer fit moved onto a spillover page instead.
+//
+// Pages are planned so that, with nothing revealed, every workspace gets at
+// least the room the author asked for (see pageCost()), and whatever is left
+// over on a page is added to it.  Larger text eats that surplus first, and
+// then -- since adjustWorkspaceToFitPage() makes any page fit that some
+// squeezing can -- the writing space itself, so that on a page with workspace
+// the text would never flow anywhere.  A reader who enlarged the text still
+// has to write their answers, so here the rule the planner follows is kept.
+//
+// Only once the text has changed, so that the layout at the standard -- and
+// in particular an author's own overfull <page>, which has always been
+// squeezed to fit -- is exactly as it was.  And not while anything is
+// revealed, for the same reason pageCost() allows squeezing then.
+function holdsAuthoredWorkspace() {
+    return printTextChanged() && !anySolutionShown();
+}
+
+// Wait for the printout's typeface to be ready to measure.  A face that no text
+// has used yet is only fetched once some text asks for it, and until it
+// arrives that text is set in a fallback with different metrics -- so measuring
+// straight away plans against letters the reader will never see.  Bold and
+// italic are separate files, and headings and emphasis need them.
+async function printFontsLoaded(printout) {
+    if (!document.fonts) return;
+    const style = getComputedStyle(printout);
+    try {
+        await Promise.all(['normal', 'bold', 'italic'].map(variant =>
+            document.fonts.load(`${variant} ${style.fontSize} ${style.fontFamily}`)));
+    } catch (err) {
+        console.warn("Could not load the printout's font; measuring with what is available:", err);
+    }
+    await document.fonts.ready;
+}
+
+// Apply the reader's text choices and repaginate to match.
+//
+// The page breaks are always planned at the standard, and a change of text is
+// then handled the way a revealed solution is: incrementally, on top of that
+// one base layout, with whatever no longer fits spilled onto extra pages.  Every
+// spillover page is folded back first and the overflow split off afresh (see
+// collapseSpilloverPages()), so however a reader arrives at a combination of
+// choices it comes out the same, and returning to the standard returns to the
+// base layout.
+async function applyPrintTextChoices(choices, {paperSize, margins}) {
+    const printout = getPrintout();
+    if (!printout) return;
+    // Choices can be queued faster than they are laid out.  Callers pass the
+    // dialog as it stands when their turn comes, so all but the first of a
+    // burst find nothing left to do.
+    const applied = appliedPrintTextChoices(printout);
+    if (PRINT_TEXT_OPTIONS.every(option => choices[option.name] === applied[option.name])) return;
+    setPrintTextChoices(printout, choices);
+    await printFontsLoaded(printout);
+    await withIframesDetached(async () => {
+        collapseSpilloverPages(margins);
+        adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        // Same as hiding a solution: a change in size can take a moment to
+        // settle, so keep folding back and re-splitting until it has.
+        await pollUntilSettled(() => {
+            collapseSpilloverPages(margins);
+            adjustWorkspaceOrRepaginate({paperSize, margins, fullRecompute: false});
+        });
     });
 }
 
@@ -2162,6 +2449,16 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             left: toPixels(marginList[3] || "0.75in")
         }
 
+        // Every control below lives in the "Printing options" dialog.  Set it
+        // up first, so the button works at once.
+        const printOptionsButton = document.getElementById("ptx-print-options-button");
+        const printOptionsPopup = document.getElementById("ptx-print-options-popup");
+        if (printOptionsButton && printOptionsPopup && window.PTXDialog) {
+            new window.PTXDialog(printOptionsPopup, printOptionsButton, {
+                closeButton: document.getElementById("ptx-print-options-close-button")
+            });
+        }
+
         // Transform all solutions details elements to divs with the summary as a title
         await rewriteSolutions();
 
@@ -2184,6 +2481,9 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         papersizeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 if (this.checked) {
+                    // The handlers below read this when they run, so it has to
+                    // follow the reader's choice.
+                    paperSize = this.value;
                     document.body.classList.remove("a4", "letter");
                     document.body.classList.add(this.value);
                     localStorage.setItem("papersize", this.value);
@@ -2234,6 +2534,19 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         const hideSolutionsOptions = document.querySelector('.hide-solutions-options');
         if (hideSolutionsOptions && !hideSolutionsOptions.querySelector('.hide-option:not(.hidden)')) {
             hideSolutionsOptions.classList.add('hidden');
+        }
+
+        // Show the reader's stored text choices in the dialog, but do not
+        // apply them yet: pages are planned at the standard, and the choices
+        // go on top of that afterward -- see applyPrintTextChoices() below.
+        for (const option of PRINT_TEXT_OPTIONS) {
+            const select = document.getElementById(option.selectId);
+            if (!select) continue;
+            select.value = localStorage.getItem(option.storageKey) || "";
+            // A stored choice the menu no longer offers selects nothing at all
+            if (select.selectedIndex === -1) {
+                select.value = "";
+            }
         }
 
         // Finally, with everything set up, we create or adjust the printout pages as needed.
@@ -2357,6 +2670,33 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             }
         });
 
+        // Last, lay the reader's text choices over that layout, and from here
+        // on follow the dialog.  Last so that it is exactly what changing the
+        // text on a finished page would do, and a stored choice comes out the
+        // same as one made live.  Each run reads the dialog when its turn in
+        // pendingSettle comes, so a change made while the page was still
+        // loading is picked up by the first, and a burst of changes costs one
+        // relayout rather than one each.
+        const applyTextChoices = () => {
+            const choices = readPrintTextChoices();
+            for (const option of PRINT_TEXT_OPTIONS) {
+                if (choices[option.name]) {
+                    localStorage.setItem(option.storageKey, choices[option.name]);
+                } else {
+                    localStorage.removeItem(option.storageKey);
+                }
+            }
+            return applyPrintTextChoices(choices, {paperSize, margins});
+        };
+        pendingSettle = pendingSettle.then(applyTextChoices);
+        for (const option of PRINT_TEXT_OPTIONS) {
+            const select = document.getElementById(option.selectId);
+            if (!select) continue;
+            select.addEventListener("change", () => {
+                pendingSettle = pendingSettle.then(applyTextChoices);
+            });
+        }
+
         // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
         // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
         const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
@@ -2378,6 +2718,47 @@ window.addEventListener("DOMContentLoaded", async function(event) {
                 // Initial toggle to apply the highlight class if checked
                 toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
             }
+        }
+
+        // The dialog's reset button: every option back to its standard but the
+        // paper size (see the XSL), as one link in pendingSettle so that the
+        // relayouts it sets off run one after another, and after anything
+        // already under way.  The checkboxes whose handlers do their work at
+        // once are reset through those handlers, first, so the relayouts that
+        // follow see them.  The hint/answer/solution ones repaginate
+        // asynchronously, and are applied directly: firing their change events
+        // would leave every handler waiting on this same link, and then running
+        // all at once.
+        const resetButton = document.getElementById("ptx-print-options-reset-button");
+        if (resetButton) {
+            resetButton.addEventListener("click", () => {
+                pendingSettle = pendingSettle.then(async () => {
+                    const offByDefault = ["first-page-header", "running-header", "first-page-footer", "running-footer"]
+                        .map(hf => document.getElementById(`print-${hf}-checkbox`))
+                        .concat(highlightWorkspaceCheckbox);
+                    for (const checkbox of offByDefault) {
+                        if (checkbox && checkbox.checked) {
+                            checkbox.checked = false;
+                            checkbox.dispatchEvent(new Event("change"));
+                        }
+                    }
+                    for (const option of PRINT_TEXT_OPTIONS) {
+                        const select = document.getElementById(option.selectId);
+                        if (select) select.value = "";
+                    }
+                    await applyTextChoices();
+                    for (const solutionType of ["hint", "answer", "solution"]) {
+                        const checkbox = document.getElementById(`hide-${solutionType}-checkbox`);
+                        if (!checkbox || !printout.querySelector(`.${solutionType}`)) continue;
+                        const hidden = solutionTypeHiddenByDefault(solutionType);
+                        localStorage.setItem(`hide-${solutionType}`, hidden);
+                        if (checkbox.checked !== hidden) {
+                            checkbox.checked = hidden;
+                            await applySolutionVisibility(solutionType, hidden, {paperSize, margins});
+                        }
+                    }
+                });
+            });
         }
 
         console.log("finished adjusting workspace");

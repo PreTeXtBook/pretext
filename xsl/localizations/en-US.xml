@@ -394,8 +394,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='array'>array</localization>
     <!-- "paper size" toggle title                                -->
     <localization string-id="papersize">Paper size</localization>
-    <!-- Additional printing options -->
-    <localization string-id="printing-options">Additional printing options</localization>
+    <!-- Printing options (a print preview's dialog) -->
+    <localization string-id="printing-options">Printing options</localization>
     <!-- "hide hint/answer/solutions" toggle title                         -->
     <localization string-id="hide-hints">Hide hints</localization>
     <localization string-id="hide-answers">Hide answers</localization>

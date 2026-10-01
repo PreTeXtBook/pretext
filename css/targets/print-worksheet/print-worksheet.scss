@@ -46,6 +46,9 @@
 // For the print button
 @use 'components/helpers/buttons-default' as buttons;
 
+// For the "Printing options" dialog
+@use 'components/helpers/dialogs' as dialogs;
+
 
 // Make sure we are including the root colors using simple black-and-white palette
 // Always use colors from the light mode palette, since the print preview and printed version will be light mode.
@@ -54,6 +57,12 @@
 @use 'colors/palette-single' as palette with (
   $primary-color: black,
 );
+
+// Typefaces offered in the "Printing options" dialog for readers who find them
+// easier to read (see the font rules for .printout below).  Importing them
+// only declares them: a browser fetches a font's files once a reader actually
+// chooses it.
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Lexend:wght@100..900&display=swap');
 
 $light-colors: map.merge(
   palette.$colors,
@@ -161,9 +170,78 @@ $runestone-light-colors: (
 // ".printout" is applied by the javascript to whatever element is being
 // previewed: a worksheet/handout section, or the article of a project-like
 // block that carries workspace outside of any worksheet or handout.
+//
+// A reader can change the size, line and letter spacing, and typeface in the
+// "Printing options" dialog.  The javascript records those choices on the
+// printout as the custom properties and attributes read below (see
+// setPrintTextChoices()), and each falls back to the standard the page breaks
+// are planned against.
 .printout {
-  font-size: 11pt;
-  font-family: var(--font-print);
+  font-size: var(--ptx-print-font-size, 11pt);
+  font-family: var(--ptx-print-font-family, var(--font-print));
+
+  // Line spacing belongs to the dialog above.  Without these, the reading
+  // view's own line height (readability-options.js sets it on the root) would
+  // reach a printout too: through the line-height inherited from .ptx-content,
+  // and through .para, which reads the property directly.
+  line-height: var(--ptx-print-line-height, normal);
+  --ptx-content-line-height: var(--ptx-print-line-height, 1.35);
+}
+
+// The typefaces behind the dialog's font choices, beyond the standard one.
+//   hyperlegible: the Braille Institute's face for low vision, which keeps
+//                 easily confused letters and figures (Il1, O0, bdpq) distinct
+//   lexend:       designed to reduce visual crowding
+//   andika:       SIL's face for beginning and struggling readers, with the
+//                 handwritten forms of a and g
+// Verdana is the fallback for each, being wide and open itself.
+.printout[data-print-font="sans-serif"] {
+  --ptx-print-font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.printout[data-print-font="hyperlegible"] {
+  --ptx-print-font-family: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', Verdana, sans-serif;
+}
+
+.printout[data-print-font="lexend"] {
+  --ptx-print-font-family: 'Lexend', Verdana, sans-serif;
+}
+
+.printout[data-print-font="andika"] {
+  --ptx-print-font-family: 'Andika', Verdana, sans-serif;
+}
+
+// The spacing behind the dialog's letter spacing choices.  Space between words
+// grows with the space between letters, in the same proportion, or the words
+// start to run together.  The widest is the British Dyslexia Association's
+// recommendation, about a third of an average letter's width; the one before
+// it is the spacing WCAG 2.2 (1.4.12, Text Spacing) asks a page to survive.
+.printout[data-print-letter-spacing="wide"] {
+  letter-spacing: 0.06em;
+  word-spacing: 0.08em;
+}
+
+.printout[data-print-letter-spacing="wider"] {
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+
+.printout[data-print-letter-spacing="widest"] {
+  letter-spacing: 0.18em;
+  word-spacing: 0.24em;
+}
+
+// Mathematics is typeset by MathJax, which places each glyph itself, so space
+// added between letters would only pull a formula apart.
+.printout[data-print-letter-spacing] mjx-container {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+
+// Headings are normally set in a face of their own, but a reader who picks a
+// typeface is choosing one for all of the text.
+.printout[data-print-font] {
+  --font-headings: var(--ptx-print-font-family);
 }
 
 // A project-like printout is an "article", so it arrives with the block
@@ -201,12 +279,22 @@ article.printout {
 .onepage .first-page-footer,
 .onepage .running-footer {
   display: flex;
-  justify-content: space-between;
   align-content: flex-start;
 
-  // Make divs have minimum width to make it easier to select them for editing
-  div {
+  // Each box sizes to its text and takes an equal share of any room left over,
+  // which puts the centre box's text exactly where space-between would.  A box
+  // with text keeps a minimum width, so it is easy to select for editing.  An
+  // empty one does not: it still takes its share of spare room, and so can be
+  // clicked into, but gives all of it up when its neighbours need the space --
+  // with nothing in the centre, the left and right text run inward rather than
+  // wrap.  The javascript marks the empty ones (see markBlankHeaderFooterBox()).
+  > div {
+    flex: 1 1 auto;
     min-width: 10em;
+  }
+
+  > div.blank {
+    min-width: 0;
   }
 
   .header-center, .footer-center {
@@ -477,10 +565,6 @@ section.worksheet > .heading + .para, section.handout > .heading + .para {
   }
 }
 
-form.papersize-select {
-  padding-bottom: 8px;
-}
-
 
 
 
@@ -542,46 +626,114 @@ form.papersize-select {
   @include buttons.ptx-button;
   }
 
-  .papersize-select {
-    z-index: 1;
-    .name::after {
-      content: ": ";
+  // The title, with the buttons at the far end of the same line
+  .print-preview-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em 1em;
+    padding-bottom: 1em;
+
+    .print-preview {
+      margin: 0;
     }
   }
 
   .print-controls {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-bottom: 1em;
+    gap: 0.5em;
+    margin-left: auto;
   }
 
   // Make labels and inputs for print options have pointer cursor
-  label, input {
+  label, input, select {
     cursor: pointer;
+  }
+
+  // The "Printing options" button and the dialog it opens, styled after the
+  // readability settings dialog of an ordinary page.  Those rules are scoped to
+  // the navbar (see _navbar.scss), which a print preview hides, so they are
+  // restated here rather than shared.
+  .ptx-print-options-button {
+    @include buttons.ptx-button;
+  }
+
+  .ptx-print-options-popup {
+    padding: 10px;
+    min-width: 16rem;
+    max-width: 500px;
+    width: 90%;
+
+    @include dialogs.ptx-dialog-modal;
+
+    .ptx-print-options-popup-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5em;
+      border-bottom: 1px solid var(--dialog-border-color);
+    }
+
+    .ptx-print-options-close-button {
+      @include buttons.ptx-button($border-width: 0);
+    }
+
+    .ptx-print-options-reset-button {
+      align-self: flex-start;
+      @include buttons.ptx-button;
+    }
+
+    .ptx-print-options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+      padding: 0.75em 0.25em;
+
+      & + .ptx-print-options-group {
+        border-top: 1px solid var(--dialog-border-color);
+      }
+    }
+
+    label, .print-option-label {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+    }
+
+    // Paper size and each text option: a label, then its choices, on one line
+    .print-option-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1em;
+    }
+
+    // Same width for every row's choices, so they line up
+    select, .papersize-choices {
+      min-width: 12em;
+    }
+
+    select {
+      font: inherit;
+    }
+
+    .papersize-choices {
+      display: flex;
+      gap: 1.5em;
+    }
   }
 
   // Add spacing for header/footer options
   .header-option, .footer-option {
     display: flex;
+    flex-wrap: wrap;
     gap: 1em;
     align-items: baseline;
 
     .title::after {
       content: ":";
-    }
-  }
-
-// Style the additional printing options the same as we do for knowls
-  .print-options {
-    summary {
-      cursor: pointer;
-      display: list-item inline;
-    }
-
-    .hide-option {
-      display: inline-block;
-      padding-right: 1em;
     }
   }
 }

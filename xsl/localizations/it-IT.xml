@@ -245,7 +245,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Azzera</localization>
     <localization string-id='array'>tabella</localization>
     <localization string-id="papersize">Formato carta</localization>
-    <localization string-id="printing-options">Opzioni di stampa addizionali</localization>
+    <localization string-id="printing-options">Opzioni di stampa</localization>
     <localization string-id="hide-hints">Nascondi suggerimenti</localization>
     <localization string-id="hide-answers">Nascondi risposte</localization>
     <localization string-id="hide-solutions">Nascondi soluzioni</localization>
