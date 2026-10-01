@@ -1047,6 +1047,8 @@
             </pre>
 
             <p>A <tag>task</tag> may itself contain tasks, nested up to three levels deep.  The limit reflects the nested list labels available in <latex/> output; deeper nesting is reported as an error.</p>
+
+            <p>A cross-reference to a <tag>task</tag> with one of the <c>hybrid</c> styles of text (<xref ref="topic-cross-referencing"/>) has a number that depends on the location of the <tag>xref</tag>.  From within the same <tag>exercise</tag> the number is that of the <tag>task</tag> alone, such as <c>b.ii</c>.  From elsewhere, the number of the <tag>exercise</tag> is shortened just as it would be for a <c>hybrid</c> cross-reference to the <tag>exercise</tag> itself, so from another exercise of the same worksheet the number is like <c>5.b.ii</c>.  The same rules apply to list items, see <xref ref="topic-cross-reference-list-item"/>.</p>
         </subsection>
 
         <subsection xml:id="exercise-inline-divisional">
@@ -1403,7 +1405,7 @@
                 </tabular>
             </table>
 
-            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortened, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
+            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortened, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  Otherwise, the number of the <tag>list</tag> is shortened just as it would be for a <c>hybrid</c> cross-reference to the <tag>list</tag> itself, and <c>phrase-hybrid</c> names the <tag>list</tag> with this same shortened number.  An ordered list inside an <tag>exercise</tag> behaves the same way, with the <tag>exercise</tag> in the role of the <tag>list</tag>, as does a <tag>task</tag> (<xref ref="exercise-tasks"/>).  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
 
             <list>
                 <title>Small test</title>
