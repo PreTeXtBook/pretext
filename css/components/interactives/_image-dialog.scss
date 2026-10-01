@@ -79,6 +79,13 @@
     margin: 0 !important;
   }
 
+  // a description stays with the enlarged image, rather than
+  // spanning the width computed for it in the page
+  .image-description > div {
+    width: auto !important;
+    margin-left: 0 !important;
+  }
+
   img {
     display: block;
     width: auto !important;
