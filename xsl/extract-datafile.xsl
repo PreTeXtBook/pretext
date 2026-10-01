@@ -68,4 +68,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- The "file" element replaces "datafile".  It names its kind with -->
+<!-- @format (binary, image, or pre) instead of a child element, and -->
+<!-- gives a path to an external file with @source.  A "file" with   -->
+<!-- only a "pre" child has no external file, so it needs no line    -->
+<!-- here (its content is used directly, like "datafile/pre" without -->
+<!-- @source).                                                       -->
+<xsl:template match="file[@source]" mode="extraction">
+    <!-- 1. identifier -->
+    <xsl:apply-templates select="." mode="assembly-id" />
+    <xsl:text> </xsl:text>
+    <!-- 2. Type from @format, defaulting to "pre" -->
+    <xsl:choose>
+        <xsl:when test="@format">
+            <xsl:value-of select="@format"/>
+        </xsl:when>
+        <xsl:otherwise>pre</xsl:otherwise>
+    </xsl:choose>
+    <xsl:text> </xsl:text>
+    <!-- 3. path relative to external directory -->
+    <xsl:value-of select="@source"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>
