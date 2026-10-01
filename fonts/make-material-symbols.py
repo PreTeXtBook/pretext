@@ -81,7 +81,10 @@ AXES = {"opsz": 24, "wght": 400, "FILL": 0, "GRAD": 0}
 # the class name: the user menu passes each icon's name to a
 # function.  Runestone's own icon font, embedded in its stylesheet
 # as "Runestone Material Symbols", has every icon Runestone draws.
-EXTRA = ["bug_report", "check_circle", "error", "groups_3", "home", "info", "newsstand", "settings"]
+# Runestone's stylesheet also asks for some icons by code point
+# (the marks on exercises), so this font keeps those too, and then
+# draws every Runestone icon itself.
+EXTRA = ["bug_report", "check_circle", "error", "groups_3", "home", "info", "list_alt_check", "newsstand", "settings", "x_circle"]
 
 
 def read(filename):

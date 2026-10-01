@@ -21,6 +21,7 @@ home
 info
 library_add_check
 light_mode
+list_alt_check
 match_case
 menu
 newsstand
@@ -41,3 +42,4 @@ speed
 text_to_speech
 tune
 unfold_more
+x_circle
