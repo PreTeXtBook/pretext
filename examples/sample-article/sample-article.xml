@@ -6442,7 +6442,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </ol>
                 </list>
 
-                <p>This is a paragraph just outside the preceding named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid"/>.</p>
+                <p>This is a paragraph just outside the preceding named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid"/>.  This paragraph is in the same section as the list, so the number of the list is shortened, just as it is for a hybrid cross-reference to the list itself:  <xref ref="list-to-reference" text="type-hybrid"/>.</p>
 
                 <p><idx><h>list</h></idx>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
                     <li>A one item ordered list.</li>
@@ -11017,6 +11017,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>Second color in rainbow list, but now as a local reference: <xref ref="rainbow-orange" text="type-local"/></p></li>
                 <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so a cross-reference by number would be ambiguous.  So we use a cross-reference which relies on custom text: <xref ref="target-no-number" text="custom">No Number List Item</xref></p></li>
                 <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global"/>.</p></li>
+                <li><p>Hybrid cross-references to tasks of exercises in a worksheet are shortened within the worksheet, as in the first and last exercises of <xref ref="worksheet-dot-products" text="type-global"/>.  From here, the same hybrid cross-references have full numbers: <xref ref="dot-products-residual-length" text="type-hybrid"/> and <xref ref="dot-products-best-approximation" text="phrase-hybrid"/>.</p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='custom'</c>: <xref ref="assemblage-basics" text="custom">text to xref an assemblage</xref></p></li>
                 <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="cpu-definition" text="title"/>.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
                 <li><p>A very similar cross-reference to the previous one, but testing how final punctuation of titles is handled: <xref ref="bus-definition" text="title"/>.</p></li>
@@ -16394,7 +16395,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </worksheet>
 
-            <worksheet label="worksheet-dot-products" courseid="MAT-150" series="Activity" seriescode="13">
+            <worksheet xml:id="worksheet-dot-products" label="worksheet-dot-products" courseid="MAT-150" series="Activity" seriescode="13">
               <title>Dot products and projection</title>
                 <sidebyside width="45%" margins="0%">
                     <exercise>
@@ -16406,10 +16407,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <m>{\vec v}_4 = (-2,1,0)</m>.
                             Find the values of the following expressions:</p>
                         </introduction>
-                        <task workspace="1in">
+                        <task xml:id="dot-products-planar-vectors" workspace="1in">
                           <p><m>{\vec v}_1 \cdot {\vec v}_2 = <fillin/></m></p>
                         </task>
-                        <task workspace="1.0in">
+                        <task xml:id="dot-products-spatial-vectors" workspace="1.0in">
                           <p><m>{\vec v}_3 \cdot {\vec v}_4 = <fillin/></m></p>
                         </task>
                         <task workspace="1in">
@@ -16419,7 +16420,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                           <p><m>\lVert{\vec v}_4\rVert = <fillin/></m></p>
                         </task>
                         <task workspace="1in">
-                          <p>Are any of these vectors perpendicular to each other? <fillin/></p>
+                          <p>Based on <xref ref="dot-products-planar-vectors" text="type-hybrid"/> and <xref ref="dot-products-spatial-vectors" text="type-hybrid"/>, are any of these vectors perpendicular to each other? <fillin/></p>
                       </task>
                     </exercise>
 
@@ -16472,7 +16473,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
                         </task>
 
-                        <task>
+                        <task xml:id="dot-products-best-approximation">
                             <p>Use projection to find the best approximation <m>\hat m</m>.</p>
                         </task>
 
@@ -16484,7 +16485,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <p>Compute the residual vector.</p>
                         </task>
 
-                        <task>
+                        <task xml:id="dot-products-residual-length">
                             <p>Compute the length of the residual vector and explain what it means.</p>
                         </task>
                     </exercise>
@@ -16501,10 +16502,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <p>Write the system in vector form.<fn>Another footnote</fn></p>
                         </task>
                         <task workspace="3.9in">
-                            <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection.</p>
+                            <p>Find the best estimate, <m>\hat t</m>, of <m>t</m> using projection, as in <xref ref="dot-products-best-approximation" text="phrase-hybrid"/>.</p>
                         </task>
                         <task workspace="2in">
-                            <p>Compute the length of the residual vector.</p>
+                            <p>Compute the length of the residual vector, and compare with <xref ref="dot-products-residual-length" text="type-hybrid"/>.</p>
                         </task>
                     </exercise>
                 </sidebyside>
