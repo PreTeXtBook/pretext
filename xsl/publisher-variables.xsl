@@ -1418,8 +1418,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- on a local http.server process. The summary of all             -->
 <!-- are recorded in the dynamic-substitutions-file.                -->
 <xsl:variable name="dynamic-substitutions-file">
-    <!-- Only relevant if there are dynamic exercises present.      -->
-    <xsl:if test="$original//exercise//setup">
+    <!-- Only relevant if there are dynamic exercises present.       -->
+    <!-- The test here covers exactly the cases that need this file. -->
+    <xsl:if test="$original//fillin[@ansobj] or $original//eval[@obj]">
         <!-- the generated directory, declared or defaulted -->
         <xsl:value-of select="str:replace(concat($generated-directory-source, 'dynamic_subs/dynamic_substitutions.xml'), '&#x20;', '%20')"/>
     </xsl:if>
