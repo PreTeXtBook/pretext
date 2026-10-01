@@ -9489,8 +9489,8 @@ Book (with parts), "section" at level 3
     <!-- This "choose" largely matches above, and so maybe  -->
     <!-- could be consolidated into a parameterized template -->
     <xsl:choose>
-        <!-- phrase styles may need remainder of phrase -->
-        <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
+        <!-- phrase-global always names the list, phrase-hybrid only from outside it -->
+        <xsl:when test="($text-style='phrase-global') or (($text-style='phrase-hybrid') and ($requires-global = 'true'))">
             <!-- connector, internationalize -->
             <xsl:text> of </xsl:text>
             <xsl:apply-templates select="$targets-list" mode="type-name" />
