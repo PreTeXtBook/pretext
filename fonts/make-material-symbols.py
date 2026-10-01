@@ -77,8 +77,14 @@ AXES = {"opsz": 24, "wght": 400, "FILL": 0, "GRAD": 0}
 # Icons asked for by name in code PreTeXt loads but does not keep.
 # The Runestone Components: search the Runestone Services bundle
 # in the "_static" directory of an HTML build for the class
-# "material-symbols-outlined" to find these.
-EXTRA = ["check_circle", "error", "home", "info"]
+# "material-symbols-outlined" to find these.  Some are not beside
+# the class name: the user menu passes each icon's name to a
+# function.  Runestone's own icon font, embedded in its stylesheet
+# as "Runestone Material Symbols", has every icon Runestone draws.
+# Runestone's stylesheet also asks for some icons by code point
+# (the marks on exercises), so this font keeps those too, and then
+# draws every Runestone icon itself.
+EXTRA = ["bug_report", "check_circle", "error", "groups_3", "home", "info", "list_alt_check", "newsstand", "settings", "x_circle"]
 
 
 def read(filename):

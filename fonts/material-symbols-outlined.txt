@@ -1,5 +1,6 @@
 add
 brightness_auto
+bug_report
 calculate
 check
 check_circle
@@ -15,12 +16,15 @@ error
 expand_less
 format_line_spacing
 format_size
+groups_3
 home
 info
 library_add_check
 light_mode
+list_alt_check
 match_case
 menu
+newsstand
 open_in_full
 open_in_new
 pause
@@ -31,9 +35,11 @@ record_voice_over
 remove
 restart_alt
 search
+settings
 skip_next
 skip_previous
 speed
 text_to_speech
 tune
 unfold_more
+x_circle

@@ -250,7 +250,7 @@ still loads the font from Google Fonts.
 - **Size.**  Google's font has about 3,500 icons, in many styles, and is
   4 MB.  PreTeXt uses a few dozen icons, in one style — optical size 24,
   weight 400, not filled, grade 0, just what it requested from Google
-  Fonts — so the bundled font has only those, and is about 5 KB.  The
+  Fonts — so the bundled font has only those, and is about 6 KB.  The
   icons it has are listed in `material-symbols-outlined.txt`.
 
 - **Which icons.**  An icon is asked for by its code point (the
