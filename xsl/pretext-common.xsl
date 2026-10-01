@@ -9421,7 +9421,7 @@ Book (with parts), "section" at level 3
                         <xsl:with-param name="name" select="'nbsp'"/>
                     </xsl:call-template>
                     <xsl:apply-templates select="$highest-match" mode="xref-number">
-                        <xsl:with-param name="xref" select="." />
+                        <xsl:with-param name="xref" select="$xref" />
                     </xsl:apply-templates>
                 </xsl:when>
                 <!-- hybrid styles need number for remainder -->
@@ -9429,7 +9429,7 @@ Book (with parts), "section" at level 3
                     <xsl:choose>
                         <xsl:when test="$requires-global = 'true'">
                             <xsl:apply-templates select="$target" mode="xref-number">
-                                <xsl:with-param name="xref" select="." />
+                                <xsl:with-param name="xref" select="$xref" />
                             </xsl:apply-templates>
                         </xsl:when>
                         <xsl:otherwise>
