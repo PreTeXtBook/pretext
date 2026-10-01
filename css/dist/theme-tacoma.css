@@ -2951,6 +2951,10 @@ iframe {
     padding: 0;
     margin: 0;
   }
+  .ptx-main > .ptx-content {
+    font-size: var(--ptx-content-font-size, inherit) !important;
+    line-height: var(--ptx-content-line-height, normal) !important;
+  }
   .ptx-sagecell,
   .tabular,
   .table-like,

@@ -2,6 +2,7 @@
 @import "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400..700;1,400..700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inconsolata:ital,wght@0,400..700;1,400..700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Lexend:wght@100..900&display=swap";
 
 /* ../../css/targets/print-worksheet/print-worksheet.scss */
 .aside-like > .knowl__link {
@@ -1859,6 +1860,15 @@ iframe {
     Times,
     serif;
 }
+:root {
+  --dialog-border-color: var(--page-border-color);
+  --dialog-background: var(--navbar-background);
+  --dialog-shadow-color: var(--primary-color-gray-80);
+  --dialog-text-color: var(--button-text-color);
+}
+:root.dark-mode {
+  --dialog-shadow-color: var(--primary-color-black-80);
+}
 :root,
 :root.dark-mode {
   color-scheme: light;
@@ -2086,8 +2096,56 @@ body.pretext > a.assistive,
   display: none;
 }
 .printout {
-  font-size: 11pt;
-  font-family: var(--font-print);
+  font-size: var(--ptx-print-font-size, 11pt);
+  font-family: var(--ptx-print-font-family, var(--font-print));
+  line-height: var(--ptx-print-line-height, normal);
+  --ptx-content-line-height: var(--ptx-print-line-height, 1.35);
+}
+.printout[data-print-font=sans-serif] {
+  --ptx-print-font-family:
+    "Open Sans",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+.printout[data-print-font=hyperlegible] {
+  --ptx-print-font-family:
+    "Atkinson Hyperlegible Next",
+    "Atkinson Hyperlegible",
+    Verdana,
+    sans-serif;
+}
+.printout[data-print-font=lexend] {
+  --ptx-print-font-family:
+    "Lexend",
+    Verdana,
+    sans-serif;
+}
+.printout[data-print-font=andika] {
+  --ptx-print-font-family:
+    "Andika",
+    Verdana,
+    sans-serif;
+}
+.printout[data-print-letter-spacing=wide] {
+  letter-spacing: 0.06em;
+  word-spacing: 0.08em;
+}
+.printout[data-print-letter-spacing=wider] {
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+.printout[data-print-letter-spacing=widest] {
+  letter-spacing: 0.18em;
+  word-spacing: 0.24em;
+}
+.printout[data-print-letter-spacing] mjx-container {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+.printout[data-print-font] {
+  --font-headings: var(--ptx-print-font-family);
 }
 article.printout {
   border: none;
@@ -2115,14 +2173,20 @@ article.printout::after {
 .onepage .first-page-footer,
 .onepage .running-footer {
   display: flex;
-  justify-content: space-between;
   align-content: flex-start;
 }
-.onepage .first-page-header div,
-.onepage .running-header div,
-.onepage .first-page-footer div,
-.onepage .running-footer div {
+.onepage .first-page-header > div,
+.onepage .running-header > div,
+.onepage .first-page-footer > div,
+.onepage .running-footer > div {
+  flex: 1 1 auto;
   min-width: 10em;
+}
+.onepage .first-page-header > div.blank,
+.onepage .running-header > div.blank,
+.onepage .first-page-footer > div.blank,
+.onepage .running-footer > div.blank {
+  min-width: 0;
 }
 .onepage .first-page-header .header-center,
 .onepage .first-page-header .footer-center,
@@ -2301,9 +2365,6 @@ section.handout > .heading + .para {
 .conclusion > .heading + .para {
   margin-top: 0.5em;
 }
-form.papersize-select {
-  padding-bottom: 8px;
-}
 @media screen {
   .ptx-main {
     max-width: var(--ws-width);
@@ -2383,39 +2444,257 @@ form.papersize-select {
     color: var(--button-hover-text-color);
     background-color: var(--button-hover-background);
   }
-  .papersize-select {
-    z-index: 1;
+  .print-preview-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em 1em;
+    padding-bottom: 1em;
   }
-  .papersize-select .name::after {
-    content: ": ";
+  .print-preview-header .print-preview {
+    margin: 0;
   }
   .print-controls {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-bottom: 1em;
+    gap: 0.5em;
+    margin-left: auto;
   }
   label,
-  input {
+  input,
+  select {
     cursor: pointer;
+  }
+  .ptx-print-options-button {
+    font: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    gap: 10px;
+    min-height: 34px;
+    color: var(--button-text-color);
+    background-color: var(--button-background);
+    border-width: 1px;
+    border-color: var(--button-border-color);
+    border-style: solid;
+    border-radius: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ptx-print-options-button:hover:not(.disabled) {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-button:focus-visible {
+    outline: 2px solid var(--button-text-color);
+    outline-offset: -2px;
+  }
+  .ptx-print-options-button.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ptx-print-options-button.hidden {
+    display: none;
+  }
+  .ptx-print-options-button.open {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup {
+    padding: 10px;
+    min-width: 16rem;
+    max-width: 500px;
+    width: 90%;
+    border: 1px solid var(--dialog-border-color);
+    border-radius: 0;
+    background: var(--dialog-background);
+    box-shadow: 0 0 5px var(--dialog-shadow-color);
+    color: var(--dialog-text-color);
+  }
+  .ptx-print-options-popup .ptx-dialog-close-button {
+    font: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    gap: 10px;
+    min-height: 34px;
+    color: var(--button-text-color);
+    background-color: var(--button-background);
+    border-width: 0;
+    border-color: var(--button-border-color);
+    border-style: solid;
+    border-radius: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ptx-print-options-popup .ptx-dialog-close-button:hover:not(.disabled) {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup .ptx-dialog-close-button:focus-visible {
+    outline: 2px solid var(--button-text-color);
+    outline-offset: -2px;
+  }
+  .ptx-print-options-popup .ptx-dialog-close-button.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ptx-print-options-popup .ptx-dialog-close-button.hidden {
+    display: none;
+  }
+  .ptx-print-options-popup .ptx-dialog-close-button.open {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup .ptx-dialog-topbar {
+    min-height: 15px;
+    user-select: none;
+  }
+  .ptx-print-options-popup .heading:is(h2) {
+    font-size: 1.5em;
+    margin: 0.5em 0;
+  }
+  .ptx-print-options-popup::backdrop {
+    background: var(--dialog-background);
+    opacity: 0.6;
+  }
+  .ptx-print-options-popup .ptx-print-options-popup-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid var(--dialog-border-color);
+  }
+  .ptx-print-options-popup .ptx-print-options-close-button {
+    font: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    gap: 10px;
+    min-height: 34px;
+    color: var(--button-text-color);
+    background-color: var(--button-background);
+    border-width: 0;
+    border-color: var(--button-border-color);
+    border-style: solid;
+    border-radius: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ptx-print-options-popup .ptx-print-options-close-button:hover:not(.disabled) {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup .ptx-print-options-close-button:focus-visible {
+    outline: 2px solid var(--button-text-color);
+    outline-offset: -2px;
+  }
+  .ptx-print-options-popup .ptx-print-options-close-button.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ptx-print-options-popup .ptx-print-options-close-button.hidden {
+    display: none;
+  }
+  .ptx-print-options-popup .ptx-print-options-close-button.open {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup .ptx-print-options-reset-button {
+    align-self: flex-start;
+    font: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    gap: 10px;
+    min-height: 34px;
+    color: var(--button-text-color);
+    background-color: var(--button-background);
+    border-width: 1px;
+    border-color: var(--button-border-color);
+    border-style: solid;
+    border-radius: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ptx-print-options-popup .ptx-print-options-reset-button:hover:not(.disabled) {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup .ptx-print-options-reset-button:focus-visible {
+    outline: 2px solid var(--button-text-color);
+    outline-offset: -2px;
+  }
+  .ptx-print-options-popup .ptx-print-options-reset-button.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .ptx-print-options-popup .ptx-print-options-reset-button.hidden {
+    display: none;
+  }
+  .ptx-print-options-popup .ptx-print-options-reset-button.open {
+    color: var(--button-hover-text-color);
+    background-color: var(--button-hover-background);
+  }
+  .ptx-print-options-popup .ptx-print-options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.75em 0.25em;
+  }
+  .ptx-print-options-popup .ptx-print-options-group + .ptx-print-options-group {
+    border-top: 1px solid var(--dialog-border-color);
+  }
+  .ptx-print-options-popup label,
+  .ptx-print-options-popup .print-option-label {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+  }
+  .ptx-print-options-popup .print-option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+  }
+  .ptx-print-options-popup select,
+  .ptx-print-options-popup .papersize-choices {
+    min-width: 12em;
+  }
+  .ptx-print-options-popup select {
+    font: inherit;
+  }
+  .ptx-print-options-popup .papersize-choices {
+    display: flex;
+    gap: 1.5em;
   }
   .header-option,
   .footer-option {
     display: flex;
+    flex-wrap: wrap;
     gap: 1em;
     align-items: baseline;
   }
   .header-option .title::after,
   .footer-option .title::after {
     content: ":";
-  }
-  .print-options summary {
-    cursor: pointer;
-    display: list-item inline;
-  }
-  .print-options .hide-option {
-    display: inline-block;
-    padding-right: 1em;
   }
 }
 @media print {
