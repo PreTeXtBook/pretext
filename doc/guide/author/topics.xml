@@ -1405,7 +1405,7 @@
                 </tabular>
             </table>
 
-            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortened, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  Otherwise, the number of the <tag>list</tag> is shortened just as it would be for a <c>hybrid</c> cross-reference to the <tag>list</tag> itself, and <c>phrase-hybrid</c> names the <tag>list</tag> with this same shortened number.  An ordered list inside an <tag>exercise</tag> behaves the same way, with the <tag>exercise</tag> in the role of the <tag>list</tag>, as does a <tag>task</tag> (<xref ref="exercise-tasks"/>).  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
+            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortened, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  Otherwise, the number of the <tag>list</tag> is shortened just as it would be for a <c>hybrid</c> cross-reference to the <tag>list</tag> itself, and <c>phrase-hybrid</c> names the <tag>list</tag> with this same shortened number.  A <tag>task</tag> behaves the same way, with its <tag>exercise</tag> or project in the role of the <tag>list</tag> (<xref ref="exercise-tasks"/>).  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
 
             <list>
                 <title>Small test</title>
@@ -2100,7 +2100,7 @@
 
             <p>A <term>description</term> list has items that have <em>short</em> pieces of text as their markers.  We borrow from <init>HTML</init>, and use the <tag>dl</tag> tag to construct a description list. However, unlike the <init>HTML</init> <tag>dl</tag>, the items in a description list are tagged with <tag>li</tag>. A <tag>title</tag> element within each <tag>li</tag> provides the term to be described (the <tag>dt</tag> in <init>HTML</init> terms) and the remaining elemens of the <tag>li</tag> provides the description (the <tag>dd</tag> in <init>HTML</init>.)</p>
 
-            <p>Ordered lists are used as part of <tag>objectives</tag> (<xref provisional="topic-objectives" />) and exercises (<xref ref="topic-exercises-solutions" />).  Any of the three lists may occur inside the <tag>list</tag> element (below, <xref ref="topic-named-list" />).  Otherwise, a list must occur within a paragraph, <tag>p</tag>.  This means that to place a list within a list item of another list, the list item must contain a paragraph.</p>
+            <p>Ordered lists are used as part of <tag>objectives</tag> (<xref provisional="topic-objectives" />).  Any of the three lists may occur inside the <tag>list</tag> element (below, <xref ref="topic-named-list" />).  Otherwise, a list must occur within a paragraph, <tag>p</tag>.  This means that to place a list within a list item of another list, the list item must contain a paragraph.</p>
         </subsection>
 
         <subsection>
@@ -2191,7 +2191,7 @@
         <subsection>
             <title>Exceptional Lists</title>
 
-            <p>We use the tags for lists in a few situations outside of anonymous lists inside paragraphs and named lists.  These include the items within an objectives, subparts of an exercise, and within panels of a side-by-side.  See those topics to learn about subtle differences in use.</p>
+            <p>We use the tags for lists in a few situations outside of anonymous lists inside paragraphs and named lists.  These include the items within an objectives, and within panels of a side-by-side.  See those topics to learn about subtle differences in use.</p>
         </subsection>
 
         <subsection>
