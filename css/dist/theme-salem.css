@@ -4102,16 +4102,16 @@ label.incorrect .feedback {
   min-height: 0;
 }
 .ptx-image-dialog .ptx-dialog-close-button {
-  opacity: 0;
-}
-.ptx-image-dialog .ptx-dialog-close-button:hover,
-.ptx-image-dialog .ptx-dialog-close-button:focus {
   opacity: 0.8;
 }
 .ptx-image-dialog figure,
 .ptx-image-dialog .image-box {
   width: auto !important;
   margin: 0 !important;
+}
+.ptx-image-dialog .image-description > div {
+  width: auto !important;
+  margin-left: 0 !important;
 }
 .ptx-image-dialog img {
   display: block;
