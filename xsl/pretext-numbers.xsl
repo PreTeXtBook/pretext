@@ -771,8 +771,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Structure Numbers: Lists -->
-<!-- Lists occur in paragraphs (anonymously), in "list"      -->
-<!-- blocks (numbered), and within exercises (numbered).     -->
+<!-- Lists occur in paragraphs (anonymously) and in "list"   -->
+<!-- blocks (numbered).  A list anywhere else, inside an     -->
+<!-- exercise or a task, say, is anonymous: an item takes    -->
+<!-- its number from the nesting of its lists alone.         -->
 <!-- Typically we are interested in list items (only),       -->
 <!-- since that is where there is content.  And then we      -->
 <!-- are only interested in the list items within an ordered -->
@@ -783,10 +785,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="list//li" mode="structure-number">
     <xsl:apply-templates select="ancestor::list" mode="number" />
-</xsl:template>
-
-<xsl:template match="exercise//li" mode="structure-number">
-    <xsl:apply-templates select="ancestor::exercise" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Tasks (in projects) -->

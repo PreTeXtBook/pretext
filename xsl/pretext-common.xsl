@@ -9153,7 +9153,7 @@ Book (with parts), "section" at level 3
         <!-- special case for phrase options and list items of anonymous lists        -->
         <!-- catch this first and provide no text at all (could provide busted text?) -->
         <!-- anonymous lists live in "p", but this is an unreliable indication        -->
-        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes or $target/ancestor::exercise))">
+        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes))">
             <xsl:message>PTX:ERROR:   a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
         </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
@@ -9465,27 +9465,27 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- Tasks, and the list items of ordered lists within exercises or named   -->
-<!-- lists, are numbered by their container (a block such as an exercise or -->
-<!-- a project, or a named list) followed by their position within it.  A   -->
-<!-- hybrid number drops the container's number when the "xref" lies inside -->
-<!-- the container.  Otherwise, the container's number is shortened exactly -->
-<!-- as a hybrid cross-reference to the container would shorten it, so a    -->
-<!-- task of a worksheet exercise, referenced from another exercise of the  -->
-<!-- same worksheet, reads like "5.b.ii".  The phrase styles name the       -->
-<!-- container, with its full number for "phrase-global", and with its      -->
-<!-- hybrid number for "phrase-hybrid" when outside the container.  $target -->
-<!-- is context, allowing a match.                                          -->
+<!-- Tasks, and the list items of ordered lists within named lists, are     -->
+<!-- numbered by their container (a block such as an exercise or a project, -->
+<!-- or the named list) followed by their position within it.  A hybrid     -->
+<!-- number drops the container's number when the "xref" lies inside the    -->
+<!-- container.  Otherwise, the container's number is shortened exactly as  -->
+<!-- a hybrid cross-reference to the container would shorten it, so a task  -->
+<!-- of a worksheet exercise, referenced from another exercise of the same  -->
+<!-- worksheet, reads like "5.b.ii".  The phrase styles name the container, -->
+<!-- with its full number for "phrase-global", and with its hybrid number   -->
+<!-- for "phrase-hybrid" when outside the container.  $target is context,   -->
+<!-- allowing a match.                                                      -->
 
-<xsl:template match="task|exercise//li|list//li" mode="smart-xref-text">
+<xsl:template match="task|list//li" mode="smart-xref-text">
     <xsl:param name="text-style" />
     <xsl:param name="xref" />
     <xsl:param name="target" />
 
-    <!-- The container provides the structure number of the target: the      -->
-    <!-- nearest ancestor of a task that is not a task, and for a list item, -->
-    <!-- an exercise in preference to a named list, as for structure numbers -->
-    <xsl:variable name="container" select="self::task/ancestor::*[not(self::task)][1]|self::li/ancestor::exercise|self::li[not(ancestor::exercise)]/ancestor::list" />
+    <!-- The container provides the structure number of the target: the   -->
+    <!-- nearest ancestor of a task that is not a task, or the named list -->
+    <!-- of a list item                                                   -->
+    <xsl:variable name="container" select="self::task/ancestor::*[not(self::task)][1]|self::li/ancestor::list" />
     <xsl:variable name="b-xref-inside-container" select="boolean($xref/ancestor::*[count(.|$container) = 1])" />
 
     <xsl:choose>
