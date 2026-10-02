@@ -6913,11 +6913,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="describedby-id"/>
                 </xsl:attribute>
+                <xsl:apply-templates select="." mode="description-style"/>
                 <xsl:apply-templates select="description"/>
             </div>
         </details>
     </xsl:if>
 </xsl:template>
+
+<!-- A revealed description spans 80% of the width available where  -->
+<!-- its image sits, however narrow the image.  An image's div is   -->
+<!-- only as wide as the image, and percentages for the description -->
+<!-- are relative to that width, so we compute them here from the   -->
+<!-- image's layout (all percentages of the available width).  The  -->
+<!-- description is centered on the image, but kept within the      -->
+<!-- available width, so an image placed off-center by @margins     -->
+<!-- does not push its description out of the text.                 -->
+<xsl:template match="image[not(&SBS-LAYOUT-FILTER;)]" mode="description-style">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters"/>
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)"/>
+    <xsl:variable name="width" select="number($layout/width)"/>
+    <xsl:variable name="left" select="number($layout/left-margin)"/>
+    <!-- left edge of the description, centered on the image -->
+    <xsl:variable name="centered" select="$left + $width div 2 - 40"/>
+    <!-- clamped to the range 0..20, so it ends within the available width -->
+    <xsl:variable name="start">
+        <xsl:choose>
+            <xsl:when test="$centered &lt; 0">
+                <xsl:value-of select="0"/>
+            </xsl:when>
+            <xsl:when test="$centered &gt; 20">
+                <xsl:value-of select="20"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$centered"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$width &gt; 0">
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="format-number(8000 div $width, '0.##')"/>
+            <xsl:text>%; margin-left: </xsl:text>
+            <xsl:value-of select="format-number(($start - $left) * 100 div $width, '0.##')"/>
+            <xsl:text>%;</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
+<!-- An interactive is centered in a container that spans the -->
+<!-- available width, so its description is simply centered   -->
+<xsl:template match="interactive[not(&SBS-LAYOUT-FILTER;)]" mode="description-style">
+    <xsl:attribute name="style">
+        <xsl:text>width: 80%; margin-left: 10%;</xsl:text>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- In a panel of a "sidebyside" a description fills the panel -->
+<xsl:template match="image|interactive" mode="description-style"/>
 
 <!-- Utility template so "aria-describedby" values are consistent -->
 <xsl:template match="image|interactive[@platform|@desmos|@calcplot3d|@circuitjs|@iframe]" mode="describedby-id">
