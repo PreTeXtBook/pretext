@@ -8664,8 +8664,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and a serial number from the enumitem package on the lists -->
 <!-- We compose the two LaTeX \ref{}                            -->
 <xsl:template match="task" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+
     <!-- ancestors, strip tasks, get number of next enclosure -->
-    <xsl:apply-templates select="ancestor::*[not(self::task)][1]" mode="xref-number" />
+    <xsl:apply-templates select="ancestor::*[not(self::task)][1]" mode="xref-number">
+        <xsl:with-param name="xref" select="$xref" />
+    </xsl:apply-templates>
     <xsl:text>.</xsl:text>
     <!-- task always gets a number, but we have to avoid recursion -->
     <!-- that would result by just getting a \ref from xref-number -->

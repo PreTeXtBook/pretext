@@ -840,9 +840,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Now trivial, the container structure plus the serial.  -->
 <!-- We condition on empty serial number in order to create -->
-<!-- empty full numbers.  This is where we add separator,   -->
-<!-- normally a period, but for a list item within a named  -->
-<!-- list, we use a colon (a double period?).               -->
+<!-- empty full numbers.  The separator between the two is  -->
+<!-- supplied by the next template.                         -->
 <xsl:template match="*" mode="number">
     <xsl:variable name="serial">
         <xsl:apply-templates select="." mode="serial-number" />
@@ -855,23 +854,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:if test="not($structure='')">
                 <xsl:value-of select="$structure" />
-                <xsl:choose>
-                    <xsl:when test="self::li and ancestor::list">
-                        <xsl:text>:</xsl:text>
-                    </xsl:when>
-                    <!-- A figure-like inside a sidebyside (or       -->
-                    <!-- sbsgroup) inside a figure, or a figure in   -->
-                    <!-- a stack inside a figure, is subnumbered     -->
-                    <!-- with a letter like "(a)", so the serial     -->
-                    <!-- number already carries its own delimiter    -->
-                    <!-- and no period separator is needed.          -->
-                    <xsl:when test="(&FIGURE-FILTER;) and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure or self::figure[parent::stack/parent::figure])"/>
-                    <xsl:otherwise>
-                        <xsl:text>.</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="structure-serial-separator" />
             </xsl:if>
             <xsl:value-of select="$serial" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The separator between a structure number and a serial    -->
+<!-- number is normally a period, but for a list item within  -->
+<!-- a named list, we use a colon (a double period?).  A      -->
+<!-- cross-reference that shortens a full number employs this -->
+<!-- same separator, so the shorter number is always the      -->
+<!-- final portion of the full number.                        -->
+<xsl:template match="*" mode="structure-serial-separator">
+    <xsl:choose>
+        <xsl:when test="self::li and ancestor::list">
+            <xsl:text>:</xsl:text>
+        </xsl:when>
+        <!-- A figure-like inside a sidebyside (or       -->
+        <!-- sbsgroup) inside a figure, or a figure in   -->
+        <!-- a stack inside a figure, is subnumbered     -->
+        <!-- with a letter like "(a)", so the serial     -->
+        <!-- number already carries its own delimiter    -->
+        <!-- and no period separator is needed.          -->
+        <xsl:when test="(&FIGURE-FILTER;) and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure or self::figure[parent::stack/parent::figure])"/>
+        <xsl:otherwise>
+            <xsl:text>.</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

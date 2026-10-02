@@ -9409,7 +9409,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <!-- now know local/global, write trailing portion of text -->
             <!-- here based on the style and the global requirement    -->
-            <!-- NB: the "choose" is mirrored in the more specific template, next -->
+            <!-- NB: the template following adapts this "choose" to a container   -->
             <!-- Question:  why does "phrase-global" come through here?           -->
             <xsl:choose>
                 <!-- phrase styles may need remainder of phrase -->
@@ -9421,7 +9421,7 @@ Book (with parts), "section" at level 3
                         <xsl:with-param name="name" select="'nbsp'"/>
                     </xsl:call-template>
                     <xsl:apply-templates select="$highest-match" mode="xref-number">
-                        <xsl:with-param name="xref" select="." />
+                        <xsl:with-param name="xref" select="$xref" />
                     </xsl:apply-templates>
                 </xsl:when>
                 <!-- hybrid styles need number for remainder -->
@@ -9429,7 +9429,7 @@ Book (with parts), "section" at level 3
                     <xsl:choose>
                         <xsl:when test="$requires-global = 'true'">
                             <xsl:apply-templates select="$target" mode="xref-number">
-                                <xsl:with-param name="xref" select="." />
+                                <xsl:with-param name="xref" select="$xref" />
                             </xsl:apply-templates>
                         </xsl:when>
                         <xsl:otherwise>
@@ -9467,53 +9467,104 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- A hybrid scheme for a list item is only for list items         -->
-<!-- of an ordered list, we drop the list number (structure number) -->
-<!-- when xref and target are both inside the same list.            -->
-<!-- No need to recurse.  $target is context, allowing a match.     -->
+<!-- Tasks, and the list items of ordered lists within exercises or named   -->
+<!-- lists, are numbered by their container (a block such as an exercise or -->
+<!-- a project, or a named list) followed by their position within it.  A   -->
+<!-- hybrid number drops the container's number when the "xref" lies inside -->
+<!-- the container.  Otherwise, the container's number is shortened exactly -->
+<!-- as a hybrid cross-reference to the container would shorten it, so a    -->
+<!-- task of a worksheet exercise, referenced from another exercise of the  -->
+<!-- same worksheet, reads like "5.b.ii".  The phrase styles name the       -->
+<!-- container, with its full number for "phrase-global", and with its      -->
+<!-- hybrid number for "phrase-hybrid" when outside the container.  $target -->
+<!-- is context, allowing a match.                                          -->
 
-<xsl:template match="list//li" mode="smart-xref-text">
+<xsl:template match="task|exercise//li|list//li" mode="smart-xref-text">
     <xsl:param name="text-style" />
     <xsl:param name="xref" />
     <xsl:param name="target" />
 
-    <xsl:variable name="targets-list" select="$target/ancestor::list" />
-    <xsl:variable name="xrefs-list"   select="$xref/ancestor::list" />
+    <!-- The container provides the structure number of the target: the      -->
+    <!-- nearest ancestor of a task that is not a task, and for a list item, -->
+    <!-- an exercise in preference to a named list, as for structure numbers -->
+    <xsl:variable name="container" select="self::task/ancestor::*[not(self::task)][1]|self::li/ancestor::exercise|self::li[not(ancestor::exercise)]/ancestor::list" />
+    <xsl:variable name="b-xref-inside-container" select="boolean($xref/ancestor::*[count(.|$container) = 1])" />
 
-    <!-- To be a local xref, the "xref" must live in some "list", and -->
-    <!-- it must be the same "list" as the "li" (which is in a list   -->
-    <!-- due to the match).  We use the negation to keep the logic    -->
-    <!-- the same as in the more general template, above              -->
-    <xsl:variable name="requires-global" select="not((count($xrefs-list) = 1) and (count($targets-list|$xrefs-list) = 1))" />
-
-    <!-- This "choose" largely matches above, and so maybe  -->
-    <!-- could be consolidated into a parameterized template -->
     <xsl:choose>
-        <!-- phrase styles may need remainder of phrase -->
-        <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
+        <!-- phrase-global always names the container, with its full number -->
+        <xsl:when test="$text-style = 'phrase-global'">
             <!-- connector, internationalize -->
             <xsl:text> of </xsl:text>
-            <xsl:apply-templates select="$targets-list" mode="type-name" />
+            <xsl:apply-templates select="$container" mode="type-name" />
             <xsl:call-template name="character">
                 <xsl:with-param name="name" select="'nbsp'"/>
             </xsl:call-template>
-            <xsl:apply-templates select="$targets-list" mode="xref-number">
-                <xsl:with-param name="xref" select="." />
+            <xsl:apply-templates select="$container" mode="xref-number">
+                <xsl:with-param name="xref" select="$xref" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- hybrid styles need number for remainder -->
-        <xsl:when test="($text-style='hybrid') or ($text-style='type-hybrid')">
+        <!-- inside: phrase-hybrid adds nothing, hybrid styles add the position -->
+        <xsl:when test="$b-xref-inside-container">
+            <xsl:if test="($text-style = 'hybrid') or ($text-style = 'type-hybrid')">
+                <xsl:apply-templates select="$target" mode="serial-number" />
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="container-serial">
+                <xsl:apply-templates select="$container" mode="serial-number" />
+            </xsl:variable>
+            <xsl:variable name="container-hybrid">
+                <xsl:apply-templates select="$container" mode="smart-xref-text">
+                    <xsl:with-param name="text-style" select="'hybrid'" />
+                    <xsl:with-param name="xref" select="$xref" />
+                    <xsl:with-param name="target" select="$container" />
+                    <xsl:with-param name="highest-match" select="/.." />
+                    <xsl:with-param name="target-structure-number">
+                        <xsl:apply-templates select="$container" mode="structure-number" />
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:variable>
+            <!-- A hybrid cross-reference to the container is its serial number  -->
+            <!-- when the "xref" is close enough, otherwise its full number.  So -->
+            <!-- equality means the container's number may be shortened (or has  -->
+            <!-- nothing to shorten).                                            -->
+            <xsl:variable name="b-container-shortened" select="$container-hybrid = $container-serial" />
+            <xsl:variable name="target-serial">
+                <xsl:apply-templates select="$target" mode="serial-number" />
+            </xsl:variable>
             <xsl:choose>
-                <xsl:when test="$requires-global = 'true'">
-                    <xsl:apply-templates select="$target" mode="xref-number">
-                        <xsl:with-param name="xref" select="." />
-                    </xsl:apply-templates>
+                <xsl:when test="$text-style = 'phrase-hybrid'">
+                    <!-- connector, internationalize -->
+                    <xsl:text> of </xsl:text>
+                    <xsl:apply-templates select="$container" mode="type-name" />
+                    <xsl:call-template name="character">
+                        <xsl:with-param name="name" select="'nbsp'"/>
+                    </xsl:call-template>
+                    <xsl:choose>
+                        <xsl:when test="$b-container-shortened">
+                            <xsl:value-of select="$container-serial" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="$container" mode="xref-number">
+                                <xsl:with-param name="xref" select="$xref" />
+                            </xsl:apply-templates>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
+                <!-- serial numbers, when the container's number is shortened -->
+                <xsl:when test="$b-container-shortened and not($target-serial = '')">
+                    <xsl:value-of select="$container-serial" />
+                    <xsl:apply-templates select="$target" mode="structure-serial-separator" />
+                    <xsl:value-of select="$target-serial" />
+                </xsl:when>
+                <!-- full number, as a conversion makes it (LaTeX employs \ref) -->
                 <xsl:otherwise>
-                    <xsl:apply-templates select="$target" mode="serial-number" />
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="$xref" />
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:when>
+        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
