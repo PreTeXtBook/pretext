@@ -6537,16 +6537,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Exercises (with lists)</title>
 
                 <exercise>
-                    <statement>
-                        <p>This exercise should have several parts, and labels should follow the defaults for second-level lists (since the exercise is numbered according to the top-level default).<ol>
-                            <li><p>Exercise 1, first part.</p></li>
-                            <li><p>Exercise 1, second part.<ol>
-                                    <li xml:id="exercise-one-two-one"><p>Exercise 1, second part, first refinement.</p></li>
-                                </ol></p>
-                            </li>
-                            <li xml:id="exercise-one-three"><p>Exercise 1, third part.</p></li>
+                    <introduction>
+                        <p>This exercise has several parts, each a <tag>task</tag>, so the parts are labeled with letters, and a part within a part with Roman numerals.  An ordered list inside a part is an anonymous list, with labels following the defaults for a top-level list, and with no number from the exercise.</p>
+                    </introduction>
+                    <task>
+                        <p>Exercise 1, first part, with a list.<ol>
+                            <li><p>First item of the list.</p></li>
+                            <li><p>Second item of the list.</p></li>
                         </ol></p>
-                    </statement>
+                    </task>
+                    <task>
+                        <introduction>
+                            <p>Exercise 1, second part.</p>
+                        </introduction>
+                        <task xml:id="exercise-one-two-one">
+                            <p>Exercise 1, second part, first refinement.</p>
+                        </task>
+                    </task>
+                    <task xml:id="exercise-one-three">
+                        <p>Exercise 1, third part.</p>
+                    </task>
                 </exercise>
 
                 <exercise>
@@ -6580,7 +6590,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
                 <conclusion>
-                    <p>A small test of cross-references to subsidiary parts of exercises.  Exercise 1, third part: <xref ref="exercise-one-three" text="global"/>.  Exercise 1, second part, first refinement: <xref ref="exercise-one-two-one" text="global"/>.</p>
+                    <p>A small test of cross-references to the tasks of an exercise.  Exercise 1, third part: <xref ref="exercise-one-three" text="global"/>.  Exercise 1, second part, first refinement: <xref ref="exercise-one-two-one" text="global"/>.</p>
                 </conclusion>
 
             </exercises>
@@ -11038,7 +11048,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global"/></p></li>
                 <li><p>Solution: A portion of an exercise, with its type name: <xref ref="solution-antiderivative" text="type-global"/></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global"/> <xref ref="exercise-complicated-first-answer" text="type-global"/></p></li>
-                <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" text="global"/></p></li>
+                <li><p>A task within a task of a divisional exercise: <xref ref="exercise-one-two-one" text="global"/></p></li>
                 <li><p>
                        <idx><h>knowl</h><h>nested</h></idx>
                    Three cross-references to individual exercises, but due to their location, they should have different <q>type names</q> in the cross-reference: in an <tag>exercises</tag> division, <xref ref="duplicate-divisional"  text="type-global"/>; in the narrative, <xref ref="exercise-essay"  text="type-global"/>; and in a <tag>worksheet</tag>, <xref ref="exercise-vector-addition"  text="type-global"/>.</p></li>
