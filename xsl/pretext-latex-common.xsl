@@ -8829,6 +8829,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- A number the common routines compute as text (a serial number, or -->
+<!-- a full number shortened by a hybrid style) gets the same font as  -->
+<!-- the numbers made just above, so a style that redefines \xreffont  -->
+<!-- reaches every number in a cross-reference.  An empty number stays -->
+<!-- empty, since callers test for one.                                -->
+<xsl:template name="xref-number-text">
+    <xsl:param name="number"/>
+
+    <xsl:if test="not($number = '')">
+        <xsl:text>{\xreffont </xsl:text>
+        <xsl:value-of select="$number"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- This template actually manufactures the link.  When the link lives in  -->
 <!-- a title, the link text is just reproduced.  If the number is hard-     -->
 <!-- coded, fine.  If the number is obtained by a \ref, we use the starred  -->
