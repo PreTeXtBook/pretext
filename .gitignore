@@ -24,3 +24,6 @@ css/dist/*.map
 
 # jsbuilder output
 js/dist/**/*.map
+
+# per-checkout agent instructions
+CLAUDE.local.md
