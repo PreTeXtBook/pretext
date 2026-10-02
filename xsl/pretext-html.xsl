@@ -6412,6 +6412,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%;</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="image-inclusion"/>
+        <!-- possibly give a long description -->
+        <xsl:apply-templates select="." mode="description">
+            <xsl:with-param name="layout" select="$layout"/>
+        </xsl:apply-templates>
     </div>
 </xsl:template>
 
@@ -6429,6 +6433,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image[&SBS-LAYOUT-FILTER;]">
     <div class="image-box">
         <xsl:apply-templates select="." mode="image-inclusion" />
+        <!-- possibly give a long description -->
+        <xsl:apply-templates select="." mode="description"/>
     </div>
 </xsl:template>
 
@@ -6480,8 +6486,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="archive">
                 <xsl:with-param name="base-pathname" select="$location"/>
             </xsl:apply-templates>
-            <!-- possibly give a long description -->
-            <xsl:apply-templates select="." mode="description"/>
         </xsl:when>
         <!-- with extension, just include it -->
         <xsl:otherwise>
@@ -6530,8 +6534,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:with-param>
             </xsl:apply-templates>
-            <!-- possibly give a long description -->
-            <xsl:apply-templates select="." mode="description"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -6599,8 +6601,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
     </xsl:apply-templates>
-    <!-- possibly give a long description -->
-    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <xsl:template match="image[sageplot]" mode="image-inclusion">
@@ -6634,8 +6634,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
     </xsl:apply-templates>
-    <!-- possibly give a long description -->
-    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- Asymptote graphics language -->
@@ -6737,8 +6735,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <a href="{$image-html-url}">Link to full-sized image</a>
       </div>
     </xsl:if>
-    <!-- possibly give a long description -->
-    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- The infrastructure for an SVG or PNG image      -->
@@ -6900,7 +6896,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- The "layout" parameter is the node-set of layout parameters an -->
+<!-- "image" template has already computed, passed along so that it -->
+<!-- is computed only once.  An "interactive" has no need of it.    -->
 <xsl:template match="image|interactive[@platform|@desmos|@calcplot3d|@circuitjs|@iframe]" mode="description">
+    <xsl:param name="layout" select="/.."/>
+
     <xsl:if test="description">
         <!-- @aria-live means screenreaders will make announcements -->
         <details class="image-description" aria-live="polite">
@@ -6913,26 +6914,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="describedby-id"/>
                 </xsl:attribute>
-                <xsl:apply-templates select="." mode="description-style"/>
+                <xsl:apply-templates select="." mode="description-style">
+                    <xsl:with-param name="layout" select="$layout"/>
+                </xsl:apply-templates>
                 <xsl:apply-templates select="description"/>
             </div>
         </details>
     </xsl:if>
 </xsl:template>
 
-<!-- A revealed description spans 80% of the width available where  -->
-<!-- its image sits, however narrow the image.  An image's div is   -->
-<!-- only as wide as the image, and percentages for the description -->
-<!-- are relative to that width, so we compute them here from the   -->
-<!-- image's layout (all percentages of the available width).  The  -->
-<!-- description is centered on the image, but kept within the      -->
-<!-- available width, so an image placed off-center by @margins     -->
-<!-- does not push its description out of the text.                 -->
+<!-- A revealed description spans 80% of the width available where   -->
+<!-- its image sits, however narrow the image.  An image's div is    -->
+<!-- only as wide as the image, and percentages for the description  -->
+<!-- are relative to that width, so we compute them here from the    -->
+<!-- image's layout (all percentages of the available width), which  -->
+<!-- arrives as the "layout" parameter.  The description is centered -->
+<!-- on the image, but kept within the available width, so an image  -->
+<!-- placed off-center by @margins does not push its description out -->
+<!-- of the text.                                                    -->
 <xsl:template match="image[not(&SBS-LAYOUT-FILTER;)]" mode="description-style">
-    <xsl:variable name="rtf-layout">
-        <xsl:apply-templates select="." mode="layout-parameters"/>
-    </xsl:variable>
-    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)"/>
+    <xsl:param name="layout" select="/.."/>
+
     <xsl:variable name="width" select="number($layout/width)"/>
     <xsl:variable name="left" select="number($layout/left-margin)"/>
     <!-- left edge of the description, centered on the image -->
