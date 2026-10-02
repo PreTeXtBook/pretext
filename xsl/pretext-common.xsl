@@ -9031,7 +9031,11 @@ Book (with parts), "section" at level 3
                 <xsl:copy-of select="$custom-text" />
                 <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
-            <xsl:apply-templates select="$target" mode="serial-number" />
+            <xsl:call-template name="xref-number-text">
+                <xsl:with-param name="number">
+                    <xsl:apply-templates select="$target" mode="serial-number" />
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:when>
         <xsl:when test="$text-style = 'type-global'">
             <xsl:choose>
@@ -9082,16 +9086,20 @@ Book (with parts), "section" at level 3
                     </xsl:if>
                     <!-- a task's local serial reads as its rendered  -->
                     <!-- label: "Task (a)", not "Task a"              -->
-                    <xsl:choose>
-                        <xsl:when test="$target/self::task">
-                            <xsl:text>(</xsl:text>
-                            <xsl:copy-of select="$the-number"/>
-                            <xsl:text>)</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:copy-of select="$the-number"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:call-template name="xref-number-text">
+                        <xsl:with-param name="number">
+                            <xsl:choose>
+                                <xsl:when test="$target/self::task">
+                                    <xsl:text>(</xsl:text>
+                                    <xsl:copy-of select="$the-number"/>
+                                    <xsl:text>)</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:copy-of select="$the-number"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
@@ -9106,16 +9114,20 @@ Book (with parts), "section" at level 3
                     </xsl:if>
                     <!-- a task's local serial reads as its rendered  -->
                     <!-- label: "Task (a)", not "Task a"              -->
-                    <xsl:choose>
-                        <xsl:when test="$target/self::task">
-                            <xsl:text>(</xsl:text>
-                            <xsl:copy-of select="$the-number"/>
-                            <xsl:text>)</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:copy-of select="$the-number"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:call-template name="xref-number-text">
+                        <xsl:with-param name="number">
+                            <xsl:choose>
+                                <xsl:when test="$target/self::task">
+                                    <xsl:text>(</xsl:text>
+                                    <xsl:copy-of select="$the-number"/>
+                                    <xsl:text>)</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:copy-of select="$the-number"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -9139,7 +9151,11 @@ Book (with parts), "section" at level 3
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:when test="$text-style = 'type-local-title'">
-                        <xsl:apply-templates select="$target" mode="serial-number"/>
+                        <xsl:call-template name="xref-number-text">
+                            <xsl:with-param name="number">
+                                <xsl:apply-templates select="$target" mode="serial-number"/>
+                            </xsl:with-param>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise/>
                 </xsl:choose>
@@ -9177,7 +9193,11 @@ Book (with parts), "section" at level 3
             <!-- for each of the two phrase styles   -->
             <xsl:apply-templates select="$target" mode="type-name" />
             <xsl:apply-templates select="." mode="xref-text-separator"/>
-            <xsl:apply-templates select="$target" mode="serial-number" />
+            <xsl:call-template name="xref-number-text">
+                <xsl:with-param name="number">
+                    <xsl:apply-templates select="$target" mode="serial-number" />
+                </xsl:with-param>
+            </xsl:call-template>
             <!-- climb up tree to find highest matching structure numbers -->
             <!-- we pass through the two styles so reaction can occur     -->
             <!-- For example for the target Theorem 37.8 of an article,   -->
@@ -9433,7 +9453,11 @@ Book (with parts), "section" at level 3
                             </xsl:apply-templates>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:apply-templates select="$target" mode="serial-number" />
+                            <xsl:call-template name="xref-number-text">
+                                <xsl:with-param name="number">
+                                    <xsl:apply-templates select="$target" mode="serial-number" />
+                                </xsl:with-param>
+                            </xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -9506,12 +9530,21 @@ Book (with parts), "section" at level 3
         <!-- inside: phrase-hybrid adds nothing, hybrid styles add the position -->
         <xsl:when test="$b-xref-inside-container">
             <xsl:if test="($text-style = 'hybrid') or ($text-style = 'type-hybrid')">
-                <xsl:apply-templates select="$target" mode="serial-number" />
+                <xsl:call-template name="xref-number-text">
+                    <xsl:with-param name="number">
+                        <xsl:apply-templates select="$target" mode="serial-number" />
+                    </xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
         </xsl:when>
         <xsl:otherwise>
             <xsl:variable name="container-serial">
                 <xsl:apply-templates select="$container" mode="serial-number" />
+            </xsl:variable>
+            <xsl:variable name="container-serial-text">
+                <xsl:call-template name="xref-number-text">
+                    <xsl:with-param name="number" select="$container-serial" />
+                </xsl:call-template>
             </xsl:variable>
             <xsl:variable name="container-hybrid">
                 <xsl:apply-templates select="$container" mode="smart-xref-text">
@@ -9527,8 +9560,10 @@ Book (with parts), "section" at level 3
             <!-- A hybrid cross-reference to the container is its serial number  -->
             <!-- when the "xref" is close enough, otherwise its full number.  So -->
             <!-- equality means the container's number may be shortened (or has  -->
-            <!-- nothing to shorten).                                            -->
-            <xsl:variable name="b-container-shortened" select="$container-hybrid = $container-serial" />
+            <!-- nothing to shorten).  The serial number is compared in the form -->
+            <!-- a conversion gives it as text, which is the form the hybrid     -->
+            <!-- cross-reference takes when it is shortened.                     -->
+            <xsl:variable name="b-container-shortened" select="$container-hybrid = $container-serial-text" />
             <xsl:variable name="target-serial">
                 <xsl:apply-templates select="$target" mode="serial-number" />
             </xsl:variable>
@@ -9542,7 +9577,7 @@ Book (with parts), "section" at level 3
                     </xsl:call-template>
                     <xsl:choose>
                         <xsl:when test="$b-container-shortened">
-                            <xsl:value-of select="$container-serial" />
+                            <xsl:copy-of select="$container-serial-text" />
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:apply-templates select="$container" mode="xref-number">
@@ -9553,9 +9588,13 @@ Book (with parts), "section" at level 3
                 </xsl:when>
                 <!-- serial numbers, when the container's number is shortened -->
                 <xsl:when test="$b-container-shortened and not($target-serial = '')">
-                    <xsl:value-of select="$container-serial" />
-                    <xsl:apply-templates select="$target" mode="structure-serial-separator" />
-                    <xsl:value-of select="$target-serial" />
+                    <xsl:call-template name="xref-number-text">
+                        <xsl:with-param name="number">
+                            <xsl:value-of select="$container-serial" />
+                            <xsl:apply-templates select="$target" mode="structure-serial-separator" />
+                            <xsl:value-of select="$target-serial" />
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </xsl:when>
                 <!-- full number, as a conversion makes it (LaTeX employs \ref) -->
                 <xsl:otherwise>
@@ -9588,6 +9627,18 @@ Book (with parts), "section" at level 3
 <!-- \ref and \label mechanism                   -->
 <xsl:template match="*" mode="xref-number">
     <xsl:text>[XREFNUM]</xsl:text>
+</xsl:template>
+
+<!-- A number computed here as text for a cross-reference (a serial  -->
+<!-- number, or a full number shortened by a hybrid style) passes    -->
+<!-- through this template on its way into the text.  By default it  -->
+<!-- is the number itself.  A conversion may dress it to match the   -->
+<!-- numbers made by its "xref-number" template, as the LaTeX        -->
+<!-- conversion does with a font command.  An empty number stays     -->
+<!-- empty, since callers test for one.                              -->
+<xsl:template name="xref-number-text">
+    <xsl:param name="number"/>
+    <xsl:value-of select="$number"/>
 </xsl:template>
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="target" />
