@@ -853,8 +853,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="archive">
                 <xsl:with-param name="base-pathname" select="$base-pathname"/>
             </xsl:apply-templates>
-            <!-- possibly give a long description -->
-            <xsl:apply-templates select="." mode="description"/>
         </xsl:when>
         <!-- online: the diagcess embedding, inherited -->
         <xsl:otherwise>
