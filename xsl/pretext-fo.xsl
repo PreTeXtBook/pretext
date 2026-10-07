@@ -2397,10 +2397,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
-<!-- The width allowed for one character of a table cell, in points. -->
-<!-- A formula, measured in points, converts to characters at the    -->
-<!-- same rate, so the two measures of a cell's content add up.      -->
-<xsl:variable name="tabular-points-per-character" select="7"/>
+<!-- The width allowed for one character of a table cell, in points: -->
+<!-- seven tenths of the point size of the document, so seven points -->
+<!-- at the default size of ten.  A formula, measured in points,     -->
+<!-- converts to characters at the same rate, so the two measures of -->
+<!-- a cell's content add up.                                        -->
+<xsl:variable name="tabular-points-per-character" select="0.7 * number(substring-before($font-size, 'pt'))"/>
 
 <!-- An estimated width, in points, for each of a tabular's columns, -->
 <!-- emitted as a "w" element apiece.  A column whose cells hold     -->
@@ -2409,10 +2411,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- converter, which a paragraph needs a settled width to wrap in). -->
 <!-- Every other column is measured from its widest piece of content -->
 <!-- among the rows that span no columns: the longest "line", the    -->
-<!-- longest line-free cell, or the longest visual URL.  Seven points -->
-<!-- per character plus padding is a deliberately generous estimate  -->
-<!-- (a capital or digit in the serif font runs near that wide), so  -->
-<!-- content is unlikely to overflow its column.                     -->
+<!-- longest line-free cell, or the longest visual URL.  The width   -->
+<!-- allowed per character, plus padding, is a deliberately generous -->
+<!-- estimate (a capital or digit in the serif font runs near that   -->
+<!-- wide), so content is unlikely to overflow its column.           -->
 <xsl:template name="tabular-column-widths">
     <xsl:param name="count"/>
     <xsl:param name="index" select="1"/>
