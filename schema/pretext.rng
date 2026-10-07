@@ -3656,7 +3656,16 @@
             <ref name="BibContainerTitle"/>
           </optional>
           <optional>
+            <ref name="BibContainerTitleShort"/>
+          </optional>
+          <optional>
             <ref name="BibCollectionTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibCollectionNumber"/>
+          </optional>
+          <optional>
+            <ref name="BibEvent"/>
           </optional>
           <optional>
             <ref name="BibGenre"/>
@@ -3665,13 +3674,22 @@
             <ref name="Edition"/>
           </optional>
           <optional>
+            <ref name="BibVersion"/>
+          </optional>
+          <optional>
             <ref name="BibVolume"/>
+          </optional>
+          <optional>
+            <ref name="BibNumberOfVolumes"/>
           </optional>
           <optional>
             <ref name="BibNumber"/>
           </optional>
           <optional>
             <ref name="BibIssue"/>
+          </optional>
+          <optional>
+            <ref name="BibChapterNumber"/>
           </optional>
           <optional>
             <ref name="BibIssued"/>
@@ -3693,6 +3711,15 @@
           </optional>
           <optional>
             <ref name="BibPublisherPlace"/>
+          </optional>
+          <optional>
+            <ref name="BibArchive"/>
+          </optional>
+          <optional>
+            <ref name="BibArchiveLocation"/>
+          </optional>
+          <optional>
+            <ref name="BibStatus"/>
           </optional>
           <optional>
             <ref name="BibDOI"/>
@@ -3899,8 +3926,33 @@
       <ref name="TextBib"/>
     </element>
   </define>
+  <!--
+    An abbreviated form of the container's title, such as the
+    customary abbreviation of a journal's name
+  -->
+  <define name="BibContainerTitleShort">
+    <element name="container-title-short">
+      <ref name="TextBib"/>
+    </element>
+  </define>
   <define name="BibCollectionTitle">
     <element name="collection-title">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <!-- The number of the item within its collection (a series) -->
+  <define name="BibCollectionNumber">
+    <element name="collection-number">
+      <text/>
+    </element>
+  </define>
+  <!--
+    The conference, or other occasion, of a paper or a speech.  The
+    element name is shared with the "event" of a document's own
+    bibliographic information; the two never meet in one parent.
+  -->
+  <define name="BibEvent">
+    <element name="event">
       <ref name="TextBib"/>
     </element>
   </define>
@@ -3910,8 +3962,24 @@
       <text/>
     </element>
   </define>
+  <!-- The version of an item that has one, such as software -->
+  <define name="BibVersion">
+    <element name="version">
+      <text/>
+    </element>
+  </define>
+  <define name="BibNumberOfVolumes">
+    <element name="number-of-volumes">
+      <text/>
+    </element>
+  </define>
   <define name="BibIssue">
     <element name="issue">
+      <text/>
+    </element>
+  </define>
+  <define name="BibChapterNumber">
+    <element name="chapter-number">
       <text/>
     </element>
   </define>
@@ -3932,6 +4000,31 @@
   </define>
   <define name="BibPublisherPlace">
     <element name="publisher-place">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <!--
+    An archive holding the item (a preprint server, a library's
+    collection) and the item's location, or identifier, within it.
+    The underscore in the second name is the spelling of CSL-JSON.
+  -->
+  <define name="BibArchive">
+    <element name="archive">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <define name="BibArchiveLocation">
+    <element name="archive_location">
+      <text/>
+    </element>
+  </define>
+  <!--
+    The state of publication of the item, such as "in press".  The
+    element name is shared with the "status" of an open problem;
+    the two never meet in one parent.
+  -->
+  <define name="BibStatus">
+    <element name="status">
       <ref name="TextBib"/>
     </element>
   </define>

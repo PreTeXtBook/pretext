@@ -3149,12 +3149,18 @@
                         CSLTranslator?,
                         BibTitle?,
                         BibContainerTitle?,
+                        BibContainerTitleShort?,
                         BibCollectionTitle?,
+                        BibCollectionNumber?,
+                        BibEvent?,
                         BibGenre?,
                         Edition?,
+                        BibVersion?,
                         BibVolume?,
+                        BibNumberOfVolumes?,
                         BibNumber?,
                         BibIssue?,
+                        BibChapterNumber?,
                         BibIssued?,
                         BibAccessed?,
                         BibPage?,
@@ -3162,6 +3168,9 @@
                         BibNumberOfPages?,
                         BibPublisher?,
                         BibPublisherPlace?,
+                        BibArchive?,
+                        BibArchiveLocation?,
+                        BibStatus?,
                         BibDOI?,
                         BibISBN?,
                         BibISSN?,
@@ -3241,14 +3250,36 @@
             BibLiteral = element literal {text}
             # CSL standard (string) fields
             BibContainerTitle = element container-title {TextBib}
+            # An abbreviated form of the container's title, such as the
+            # customary abbreviation of a journal's name
+            BibContainerTitleShort = element container-title-short {TextBib}
             BibCollectionTitle = element collection-title {TextBib}
+            # The number of the item within its collection (a series)
+            BibCollectionNumber = element collection-number {text}
+            # The conference, or other occasion, of a paper or a speech.  The
+            # element name is shared with the "event" of a document's own
+            # bibliographic information; the two never meet in one parent.
+            BibEvent = element event {TextBib}
             # A CSL "genre" gives a sub-type, e.g. "Ph.D. thesis"
             BibGenre = element genre {text}
+            # The version of an item that has one, such as software
+            BibVersion = element version {text}
+            BibNumberOfVolumes = element number-of-volumes {text}
             BibIssue = element issue {text}
+            BibChapterNumber = element chapter-number {text}
             BibPage = element page {text}
             BibPageFirst = element page-first {text}
             BibNumberOfPages = element number-of-pages {text}
             BibPublisherPlace = element publisher-place {TextBib}
+            # An archive holding the item (a preprint server, a library's
+            # collection) and the item's location, or identifier, within it.
+            # The underscore in the second name is the spelling of CSL-JSON.
+            BibArchive = element archive {TextBib}
+            BibArchiveLocation = element archive_location {text}
+            # The state of publication of the item, such as "in press".  The
+            # element name is shared with the "status" of an open problem;
+            # the two never meet in one parent.
+            BibStatus = element status {TextBib}
             BibDOI = element DOI {text}
             BibISBN = element ISBN {text}
             BibISSN = element ISSN {text}
