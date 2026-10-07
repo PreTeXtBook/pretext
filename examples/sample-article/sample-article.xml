@@ -17999,6 +17999,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </author>
                     <title>Subspaces and Echelon Forms</title>
                     <container-title>The College Mathematics Journal</container-title>
+                    <container-title-short>College Math. J.</container-title-short>
                     <volume>24</volume>
                     <number>1</number>
                     <issued>
@@ -18020,6 +18021,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </author>
                     <title>Mean values of <m>L</m>-functions and symmetry</title>
                     <container-title>International Mathematics Research Notices</container-title>
+                    <container-title-short>Internat. Math. Res. Notices</container-title-short>
                     <volume>17</volume>
                     <issued>
                         <date year="2000"/>
@@ -18075,6 +18077,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </editor>
                     <title>Finite Fields and Their Applications</title>
                     <container-title>Topics in Modern Algebra</container-title>
+                    <collection-title>Lectures on Algebra</collection-title>
+                    <collection-number>12</collection-number>
+                    <volume>1</volume>
+                    <number-of-volumes>2</number-of-volumes>
+                    <chapter-number>3</chapter-number>
                     <issued>
                         <date year="2010"/>
                     </issued>
@@ -18100,10 +18107,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </author>
                     <title>A Fast Algorithm for Matrix Factorization</title>
                     <container-title>Proceedings of the International Congress of Mathematicians</container-title>
+                    <event>International Congress of Mathematicians</event>
                     <issued>
                         <date year="2018"/>
                     </issued>
                     <page>1123-1140</page>
+                    <archive>Institutional Repository</archive>
+                    <archive_location>item 4471</archive_location>
+                    <status>accepted manuscript</status>
                 </biblio>
 
                 <biblio xml:id="csl-tao" type="thesis">
@@ -18127,7 +18138,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <literal>The Sage Developers</literal>
                         </name>
                     </author>
-                    <title>SageMath, the Sage Mathematics Software System (Version 10.3)</title>
+                    <title>SageMath, the Sage Mathematics Software System</title>
+                    <version>10.3</version>
                     <issued>
                         <date year="2024"/>
                     </issued>
