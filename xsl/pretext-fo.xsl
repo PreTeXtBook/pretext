@@ -1102,15 +1102,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- prepends it ("statement" forwards the parameter through).    -->
 <!-- When the content does not lead with a paragraph, the heading -->
 <!-- falls back to a standalone block.  The context node is the   -->
-<!-- block whose children are the content; "title" is metadata,   -->
-<!-- consumed by the heading, and so not content.                 -->
+<!-- block whose children are the content; "title", "creator" and -->
+<!-- "origins" are metadata, consumed by the heading, and so not  -->
+<!-- content.                                                     -->
 <xsl:template name="heading-then-content">
     <xsl:param name="heading"/>
     <!-- "idx" and "notation" are invisible markers, not content;     -->
     <!-- render them for their side effects, but do not let them take  -->
     <!-- the heading or block its run-in into a leading paragraph.     -->
     <xsl:apply-templates select="idx | notation"/>
-    <xsl:variable name="content" select="*[not(self::title) and not(self::idx) and not(self::notation)]"/>
+    <xsl:variable name="content" select="*[not(self::title) and not(self::creator) and not(self::origins) and not(self::idx) and not(self::notation)]"/>
     <xsl:choose>
         <xsl:when test="$content[1][self::p] or $content[1][self::statement and *[1][self::p]]">
             <xsl:apply-templates select="$content[1]">
@@ -1277,7 +1278,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- or blocking the heading's run-in (a "definition" often leads  -->
     <!-- with them).                                                   -->
     <xsl:apply-templates select="idx | notation"/>
-    <xsl:variable name="content" select="*[not(self::title) and not(self::idx) and not(self::notation)]"/>
+    <!-- "title", "creator" and "origins" are consumed by the heading -->
+    <xsl:variable name="content" select="*[not(self::title) and not(self::creator) and not(self::origins) and not(self::idx) and not(self::notation)]"/>
     <xsl:variable name="last" select="$content[last()]"/>
     <!-- The mark rides the paragraph that closes the block (directly,   -->
     <!-- or by closing a "statement") only when that paragraph holds     -->
