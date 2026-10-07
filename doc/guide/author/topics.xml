@@ -4366,7 +4366,7 @@
 
             <p>Inside of a <tag>datafile</tag> place an <tag>image</tag> element with a <attr>source</attr> attribute.  As usual, this attribute should be the name of an external file you provide.  Most common formats are supported, but it is important to use standard extensions, so the format can be discerned.  Now this file may be explored programmatically by opening the file using the name provided in <attr>filename</attr>.</p>
 
-            <p>Keep the size of the image small, say 300<ndash/>400 pixels in each direction.  You may also supply the usual layout controls, such as <attr>width</attr>, and these will be consulted in the formation of output formats.  Ideally, you should use a width that scales the image to look something like its <q>native</q> resolution, since part of an image-processing exercise may depend on this aspect of the input.  <init>HTML</init> output uses a 600 pixel overall width, so a percentage can be computed based on this parameter.</p>
+            <p>Keep the size of the image small, say 300<ndash/>400 pixels in each direction.  You may also supply the usual layout controls, such as <attr>width</attr>, and these will be consulted in the formation of output formats.  Ideally, you should use a width that scales the image to look something like its <q>native</q> resolution, since part of an image-processing exercise may depend on this aspect of the input.  <init>HTML</init> output generally uses a 600 pixel overall width for the main content (725 in the case of Salem), so a percentage can be computed based on this parameter.</p>
         </paragraphs>
 
         <paragraphs>
