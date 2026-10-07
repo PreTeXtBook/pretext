@@ -2300,7 +2300,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- hN, type name, serial number, title (if exists) -->
-<!-- exercise (divisional, xref-content)      -->
+<!-- exercise (divisional, xref-content)             -->
+<!-- DISCUSSION-LIKE (when born)                     -->
 <xsl:template match="*" mode="heading-divisional-exercise-typed">
     <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
@@ -4634,10 +4635,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> discussion-like</xsl:text>
 </xsl:template>
 
-<!-- When born use this heading -->
+<!-- When born use this heading: the position alone, among the -->
+<!-- appendages of the parent, as in the LaTeX conversion, and -->
+<!-- as a SOLUTION-LIKE is headed.  A cross-reference, and the -->
+<!-- knowl it opens, carry the full number.                    -->
 <xsl:template match="&DISCUSSION-LIKE;" mode="heading-birth">
     <xsl:param name="heading-level"/>
-    <xsl:apply-templates select="." mode="heading-full">
+    <xsl:apply-templates select="." mode="heading-divisional-exercise-typed">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
