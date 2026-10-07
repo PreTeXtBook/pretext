@@ -553,9 +553,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- Now recurse into sections, appendix  -->
                     <!-- with a faux chapter, using "article" -->
                     <chapter>
-                        <id>
-                            <xsl:apply-templates select="." mode="html-id"/>
-                        </id>
+                        <xsl:apply-templates select="." mode="runestone-manifest-id"/>
                         <title>
                             <xsl:apply-templates select="." mode="title-full"/>
                         </title>
@@ -575,9 +573,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="chapter" mode="runestone-manifest">
     <chapter>
-        <id>
-            <xsl:apply-templates select="." mode="html-id"/>
-        </id>
+        <xsl:apply-templates select="." mode="runestone-manifest-id"/>
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
@@ -641,9 +637,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Properties to report for each division -->
 <xsl:template match="*" mode="runestone-division-properties">
-    <id>
-        <xsl:apply-templates select="." mode="html-id"/>
-    </id>
+    <xsl:apply-templates select="." mode="runestone-manifest-id"/>
     <title>
         <xsl:apply-templates select="." mode="title-full"/>
     </title>
@@ -654,6 +648,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <division>
         <xsl:value-of select="local-name()"/>
     </division>
+</xsl:template>
+
+<!-- Runestone stores chapter and subchapter IDs across editions.  An ID     -->
+<!-- built from ancestor IDs and sibling positions can change with edits.    -->
+<xsl:template match="*" mode="runestone-manifest-id">
+    <xsl:variable name="manifest-id">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <xsl:if test="not(@xml:id or @pi:authored-label)">
+        <xsl:message>PTX:WARNING:  the ID "<xsl:value-of select="$manifest-id"/>" for this <xsl:value-of select="local-name()"/> was generated from the document structure and may change when the document is edited.  Runestone depends on this ID remaining stable throughout the life of a version of a book. If this is an established book, you should add a label attribute to this element with the value "<xsl:value-of select="$manifest-id"/>" to prevent it from changing. If this is a new book, or for future editions, you should add a meaningful label attribute.</xsl:message>
+        <xsl:apply-templates select="." mode="location-report"/>
+    </xsl:if>
+    <id>
+        <xsl:value-of select="$manifest-id"/>
+    </id>
 </xsl:template>
 
 <!-- A Runestone exercise needs to identify itself when an instructor wants   -->
