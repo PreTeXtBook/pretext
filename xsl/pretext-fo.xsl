@@ -4242,6 +4242,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "text-align-last" repeats the choice because a         -->
         <!-- justified paragraph passes its own down to this lone   -->
         <!-- line, which would otherwise justify (left-pin) the SVG -->
+        <!-- A zero "text-indent" refuses the first-line indent an  -->
+        <!-- indented paragraph passes down, which would move the   -->
+        <!-- display, and any number it carries, to the right       -->
         <xsl:when test="$svg">
             <!-- a display wider than the measure cannot be placed well;  -->
             <!-- warn the author, by number when there is one, and report -->
@@ -4258,7 +4261,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:if>
-            <fo:block text-align="{$display-align}" text-align-last="{$display-align}" space-before="0.5em" space-after="0.5em">
+            <fo:block text-align="{$display-align}" text-align-last="{$display-align}" text-indent="0" space-before="0.5em" space-after="0.5em">
                 <!-- an over-wide numbered display is a centered body in a -->
                 <!-- "min-width" SVG, so its body sits one number-width in -->
                 <!-- from the left.  At the full measure (inherited        -->
@@ -4375,13 +4378,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- value carried the source indentation), and glue the clause-      -->
 <!-- ending punctuation absorbed by the display to the final row      -->
 <!-- rather than leaving it stranded after that indentation.          -->
+<!-- As for a rendered display, the first-line indent of the          -->
+<!-- paragraph is refused.                                            -->
 <xsl:template match="md" mode="math-placeholder">
     <fo:block font-family="{$font-family-monospace}"
               border="solid 0.5pt #888888"
               padding="2pt"
               space-before="0.5em"
               space-after="0.5em"
-              text-align="center">
+              text-align="center"
+              text-indent="0">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:for-each select="mrow">
             <fo:block>
