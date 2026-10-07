@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<exercises xml:id="exercises-sets">
+<exercises xml:id="exercises-sets" label="exercises-sets">
     <title>Exercises</title>
 
     <subexercises>

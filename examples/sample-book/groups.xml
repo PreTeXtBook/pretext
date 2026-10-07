@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<chapter xml:id="groups" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="groups" label="groups" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Groups</title>
     <author><xref ref="dfarmer"/></author>
 
@@ -38,7 +38,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     </introduction>
 
-    <section xml:id="section-mod-n-sym">
+    <section xml:id="section-mod-n-sym" label="section-mod-n-sym">
         <title>Integer Equivalence Classes and Symmetries</title>
         <author>Carl Friedrich Gauß</author>
         <author>Leonhard Euler</author>
@@ -351,7 +351,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
-    <section xml:id="section-groups-define">
+    <section xml:id="section-groups-define" label="section-groups-define">
         <title>Definitions and Examples</title>
 
         <!-- % TWJ, 2010/03/31 -->
@@ -599,7 +599,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     </section>
 
-    <section xml:id="section-subgroups">
+    <section xml:id="section-subgroups" label="section-subgroups">
         <title>Subgroups</title>
 
         <subsection>
@@ -723,7 +723,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <xi:include href="./exercises/groups.xml" />
 
-    <exercises>
+    <exercises xml:id="detecting-errors-exercises" label="detecting-errors-exercises">
         <title>Additional Exercises: Detecting Errors</title>
 
 <!--EXERCISE GROUP

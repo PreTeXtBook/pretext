@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<exercises xml:id="cyclic-sage-exercises">
+<exercises xml:id="cyclic-sage-exercises" label="cyclic-sage-exercises">
     <title>Sage Exercises</title>
 
     <introduction>

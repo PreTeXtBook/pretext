@@ -36,7 +36,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- of a printed version.  Keep it simple.                          -->
     <blurb shelf="Author/Instructor Help">This is a book written in PreTeXt, in order to provide testing for a variety of purposes, not least a conversion to Runestone Academy.</blurb>
 
-    <document-id edition="2">PTXSB</document-id>
+    <document-id edition="3">PTXSB</document-id>
 
     <!-- Prefix to enhance Sage notebook contents -->
     <initialism>SB</initialism>

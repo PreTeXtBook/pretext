@@ -25,14 +25,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<chapter xml:id="integers" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="integers" label="integers" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>The Integers</title>
 
     <introduction>
         <p>The integers are the building blocks of mathematics. In this chapter we will investigate  the fundamental properties of the integers, including mathematical induction, the division algorithm, and the Fundamental Theorem of Arithmetic.</p>
     </introduction>
 
-    <section xml:id="section-math-induction">
+    <section xml:id="section-math-induction" label="section-math-induction">
         <title>Mathematical Induction and Math in a Title <m>A\notsubset B</m></title>
 
         <p>Suppose we wish to show that
@@ -159,7 +159,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>Every good mathematician or computer scientist knows that looking at problems recursively, as opposed to explicitly, often results in better understanding of complex issues.</p>
     </section>
 
-    <section xml:id="section-division-algorithm">
+    <section xml:id="section-division-algorithm" label="section-division-algorithm">
         <title>The Division Algorithm</title>
 
         <introduction>
@@ -350,7 +350,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <xi:include href="./exercises/integers.xml" />
 
-    <exercises>
+    <exercises xml:id="integers-programming-exercises" label="integers-programming-exercises">
         <title>Programming Exercises</title>
 
         <exercise xml:id="sieve-primes">

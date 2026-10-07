@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<chapter xml:id="sets" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="sets" label="sets" xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <!-- % TWJ, 2010/03/31 -->
 <!-- % Chapters now begin with Chapter 1 -->
@@ -39,7 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>It helps when testing to know when this sample document was generated: <today />, <timeofday />.</p>
     </introduction>
 
-    <section xml:id="section-note-on-proofs">
+    <section xml:id="section-note-on-proofs" label="section-note-on-proofs">
         <title>A Short Note on Proofs</title>
 
         <introduction>
@@ -92,7 +92,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     </section>
 
-    <section xml:id="section-sets-and-equivalence-relations">
+    <section xml:id="section-sets-and-equivalence-relations" label="section-sets-and-equivalence-relations">
         <title>Sets and Equivalence Relations</title>
 
         <subsection>
