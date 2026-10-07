@@ -3851,10 +3851,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$the-mark"/>
         </fo:inline>
         <fo:footnote-body>
-            <!-- "text-align-last" keeps the final line ragged: inside a -->
+            <!-- "text-align-last" keeps the final line ragged: inside a  -->
             <!-- "footnote-body" FOP justifies even the last line, which  -->
-            <!-- stretches a one-line note across the whole measure       -->
-            <fo:block font-size="80%" text-align="{$text-alignment}" text-align-last="start" space-before="0.25em">
+            <!-- stretches a one-line note across the whole measure.  A   -->
+            <!-- zero "text-indent" starts every note at the left edge:   -->
+            <!-- the body is a descendant of the paragraph calling the    -->
+            <!-- note, and would inherit a first-line indent from it.     -->
+            <fo:block font-size="80%" text-align="{$text-alignment}" text-align-last="start" text-indent="0" space-before="0.25em">
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <fo:inline baseline-shift="35%" font-size="70%">
                     <xsl:value-of select="$the-mark"/>
