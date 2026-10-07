@@ -103,12 +103,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message>PTX:BUG: PreTeXt "biblio" markup using a "<xsl:value-of select="local-name()"/>" element is not implemented</xsl:message>
 </xsl:template>
 
-<!-- Gross JSON array structure, duplicate an ID for the division -->
+<!-- Gross JSON array structure -->
 <xsl:template match="backmatter/references" mode="biblio-to-json">
     <xsl:element name="biblio-csl" namespace="http://pretextbook.org/2020/pretext/internal">
-        <xsl:attribute name="biblio-id">
-            <xsl:apply-templates select="." mode="assembly-id"/>
-        </xsl:attribute>
         <xsl:text>[&#xa;</xsl:text>
         <xsl:apply-templates select="biblio" mode="biblio-to-json"/>
         <xsl:text>&#xa;]</xsl:text>
