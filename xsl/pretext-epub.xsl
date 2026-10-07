@@ -157,6 +157,9 @@
     </xsl:choose>
 </xsl:variable>
 
+<!-- HTML sets based on theme. EPUB should always use 600 -->
+<xsl:variable name="design-width" select="'600'" />
+
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
 <xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical)"/>
 
