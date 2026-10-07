@@ -186,12 +186,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<!-- Simple string fields to key/value pair -->
-<!-- NB: in the order presented in CSL-JSON schema, except as noted.                  -->
-<!-- NB: simple fields for parts of a name are later, and grouped together.           -->
-<!-- NB: simple fields for alternate date model are at the end, and grouped together. -->
-<!-- TODO: many more, from "abstract" to "year-suffix", plus for names and dates.     -->
-<xsl:template match="publisher|publisher-place|page|volume|title|collection-title|page-first|number-of-pages|URL|name/family|name/given|name/static-ordering|season|circa" mode="biblio-to-json">
+<!-- Simple string fields to key/value pair                                       -->
+<!-- NB: in the order presented in CSL-JSON schema, except as noted.              -->
+<!-- NB: simple fields for parts of a name are later, and grouped together.       -->
+<!-- TODO: many more, from "abstract" to "year-suffix", plus for names and dates. -->
+<xsl:template match="archive|archive_location|chapter-number|collection-number|collection-title|container-title|container-title-short|DOI|edition|event|genre|ISBN|ISSN|issue|number|number-of-pages|number-of-volumes|page|page-first|publisher|publisher-place|status|title|URL|version|volume|name/family|name/given|name/dropping-particle|name/non-dropping-particle|name/suffix|name/static-ordering|name/literal" mode="biblio-to-json">
     <xsl:text>"</xsl:text>
     <xsl:value-of select="local-name()"/>
     <xsl:text>"</xsl:text>
@@ -216,7 +215,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structured name variables. -->
 <!-- TODO: see  "$ref": "#/definitions/name-variable"  in CSL-JSON -->
 <!-- schema to identify many more.  "author" through "translator". -->
-<xsl:template match="biblio/author|biblio/editor" mode="biblio-to-json">
+<xsl:template match="biblio/author|biblio/editor|biblio/translator" mode="biblio-to-json">
     <xsl:text>"</xsl:text>
     <xsl:value-of select="local-name()"/>
     <xsl:text>"</xsl:text>
@@ -250,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structured date variables. -->
 <!-- TODO: see  "$ref": "#/definitions/date-variable"  in CSL-JSON -->
 <!-- schema to identify many more. "accessed" through "submitted". -->
-<xsl:template match="submitted|issued" mode="biblio-to-json">
+<xsl:template match="accessed|issued" mode="biblio-to-json">
     <xsl:text>"</xsl:text>
     <xsl:value-of select="local-name()"/>
     <xsl:text>"</xsl:text>
