@@ -4711,6 +4711,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         self::q or self::sq or self::dblbrackets or self::angles or
         self::c or self::cline or self::tag or self::tage or self::attr or self::today or self::timeofday or self::pi:localize or
         self::sharp or self::flat or self::natural or self::doublesharp or self::doubleflat or
+        self::origins or
         self::xref or self::index-list or self::notation-list or self::list-of)]">
     <xsl:message>PTX:FO-TODO: <xsl:value-of select="local-name()"/> (child of "<xsl:value-of select="local-name(parent::*)"/>")</xsl:message>
     <xsl:apply-templates select="*"/>
