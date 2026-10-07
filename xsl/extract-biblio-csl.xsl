@@ -19,9 +19,10 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates video/@youtube elements and -->
-<!-- prepares a Python dictionary necessary to extract a -->
-<!-- thumbnail for each video from the YouTube servers   -->
+<!-- This stylesheet locates the "biblio" of a back matter     -->
+<!-- "references", and the "xref" that cite them, and writes   -->
+<!-- the first as CSL-JSON and the second as lists of targets, -->
+<!-- which a CSL processor needs to format both                -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:xml="http://www.w3.org/XML/1998/namespace"
