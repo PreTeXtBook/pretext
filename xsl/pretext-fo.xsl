@@ -2281,7 +2281,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the text width, centering the result.  A table whose content   -->
 <!-- needs the whole text width (or more) falls back to the full    -->
 <!-- width.  The estimates also serve as the proportional column    -->
-<!-- widths, so the columns keep their relative sizes.  Header rows, -->
+<!-- widths, so the columns keep their relative sizes.  But when    -->
+<!-- the estimates sum to more than the text width, while the       -->
+<!-- longest words of the columns would fit, each column gives up   -->
+<!-- the same share of what it can spare (its estimate less its     -->
+<!-- longest word), so text wraps at a space and no word is         -->
+<!-- squeezed out of its column.  Header rows,                      -->
 <!-- horizontal or vertical (rotated), land in an fo:table-header,  -->
 <!-- which FOP tags as "TH" cells in the PDF structure tree, as     -->
 <!-- PDF/UA requires.  The @row-headers request bolds the leading   -->
@@ -2298,6 +2303,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="widths" select="exsl:node-set($widths-rtf)/w"/>
     <xsl:variable name="natural-width" select="sum($widths)"/>
+    <xsl:variable name="floor-width" select="sum($widths/@floor)"/>
     <!-- the natural width as a percentage of the text width, but    -->
     <!-- never wider than the full text width.  A table in a          -->
     <!-- "sidebyside" panel fills the panel: the panel width, not the -->
@@ -2371,7 +2377,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- -common (cell, then row/col, then whole-tabular), so no      -->
         <!-- table-wide border is placed here.                           -->
         <xsl:for-each select="$widths">
-            <fo:table-column column-width="proportional-column-width({.})"/>
+            <xsl:variable name="column-width">
+                <xsl:choose>
+                    <!-- too wide for the text, though the longest words would fit:   -->
+                    <!-- each column takes its longest word, and the width left over  -->
+                    <!-- is shared out in proportion to what remains of each estimate -->
+                    <xsl:when test="($natural-width &gt; $text-width-points) and ($floor-width &lt; $text-width-points)">
+                        <xsl:value-of select="format-number(@floor + (. - @floor) * ($text-width-points - $floor-width) div ($natural-width - $floor-width), '0.##')"/>
+                    </xsl:when>
+                    <!-- the estimates fit, or else no sharing out keeps every word -->
+                    <!-- whole: the estimates stand, to be scaled alike if need be  -->
+                    <xsl:otherwise>
+                        <xsl:value-of select="."/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <fo:table-column column-width="proportional-column-width({$column-width})"/>
         </xsl:for-each>
         <xsl:if test="row[(@header = 'yes') or (@header = 'vertical')]">
             <fo:table-header>
@@ -2414,7 +2435,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- longest line-free cell, or the longest visual URL.  The width   -->
 <!-- allowed per character, plus padding, is a deliberately generous -->
 <!-- estimate (a capital or digit in the serif font runs near that   -->
-<!-- wide), so content is unlikely to overflow its column.           -->
+<!-- wide), so content is unlikely to overflow its column.  Each "w" -->
+<!-- carries a "@floor", the same estimate made for the longest word -->
+<!-- of the column: the least width that holds its text when lines   -->
+<!-- break only at spaces.                                           -->
 <xsl:template name="tabular-column-widths">
     <xsl:param name="count"/>
     <xsl:param name="index" select="1"/>
@@ -2428,7 +2452,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- empty column is left with nothing.                          -->
         <xsl:variable name="full-row-cells" select="row[(count(cell) = $count) and not(cell/@colspan)]/cell[$index]"/>
         <xsl:variable name="column-cells" select="$full-row-cells | row[not($full-row-cells) and not(cell/@colspan)]/cell[$index]"/>
-        <w>
+        <!-- Each piece of content the column must hold: a "line", a       -->
+        <!-- line-free cell, or a visual URL.  The character count of its  -->
+        <!-- displayed text (see "width-text") is recorded, and that of    -->
+        <!-- each of its words, since a line breaks only at a space.  A    -->
+        <!-- footnote's text is set elsewhere, not in the cell, so it does -->
+        <!-- not count.  The counts are gathered so the largest can be     -->
+        <!-- taken; a template call cannot live in a sort key.             -->
+        <xsl:variable name="measures-rtf">
+            <xsl:for-each select="$column-cells/line | $column-cells[not(line)] | $column-cells//url/@visual">
+                <xsl:variable name="displayed">
+                    <xsl:apply-templates select="." mode="width-text"/>
+                </xsl:variable>
+                <length>
+                    <xsl:value-of select="string-length(normalize-space($displayed))"/>
+                </length>
+                <xsl:for-each select="str:tokenize(normalize-space($displayed), ' ')">
+                    <word>
+                        <xsl:value-of select="string-length(.)"/>
+                    </word>
+                </xsl:for-each>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="measures" select="exsl:node-set($measures-rtf)"/>
+        <xsl:variable name="longest">
+            <xsl:call-template name="largest-number">
+                <xsl:with-param name="numbers" select="$measures/length"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="longest-word">
+            <xsl:call-template name="largest-number">
+                <xsl:with-param name="numbers" select="$measures/word"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="estimate">
             <xsl:choose>
                 <!-- a paragraph column: a fraction of the text width -->
                 <xsl:when test="$column-cells/p">
@@ -2444,52 +2501,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:variable>
                     <xsl:value-of select="round($fraction * $text-width-points)"/>
                 </xsl:when>
-                <!-- a natural column: measured from its widest content; -->
-                <!-- a footnote's text is set elsewhere, not in the cell, -->
-                <!-- so it does not count toward the column's width       -->
+                <!-- a genuinely empty column (no cell of any row sits   -->
+                <!-- here, e.g. a "col" beyond the cells a row supplies) -->
+                <!-- takes only the padding, so a table-wide top or      -->
+                <!-- bottom rule does not trail past the real content;   -->
+                <!-- the value is the formula below at zero length.      -->
+                <xsl:when test="$longest = ''">
+                    <xsl:value-of select="8"/>
+                </xsl:when>
+                <!-- a natural column: measured from its widest content -->
                 <xsl:otherwise>
-                    <!-- the character count of each candidate's displayed  -->
-                    <!-- text (see "width-text"), gathered so the widest can -->
-                    <!-- be taken; a template call cannot live in a sort key -->
-                    <xsl:variable name="lengths-rtf">
-                        <xsl:for-each select="$column-cells/line | $column-cells[not(line)] | $column-cells//url/@visual">
-                            <xsl:variable name="displayed">
-                                <xsl:apply-templates select="." mode="width-text"/>
-                            </xsl:variable>
-                            <length>
-                                <xsl:value-of select="string-length(normalize-space($displayed))"/>
-                            </length>
-                        </xsl:for-each>
-                    </xsl:variable>
-                    <xsl:variable name="longest">
-                        <xsl:for-each select="exsl:node-set($lengths-rtf)/length">
-                            <xsl:sort select="number(.)" data-type="number" order="descending"/>
-                            <xsl:if test="position() = 1">
-                                <xsl:value-of select="."/>
-                            </xsl:if>
-                        </xsl:for-each>
-                    </xsl:variable>
-                    <xsl:choose>
-                        <!-- a genuinely empty column (no cell of any row sits  -->
-                        <!-- here, e.g. a "col" beyond the cells a row supplies) -->
-                        <!-- takes only the padding, so a table-wide top or      -->
-                        <!-- bottom rule does not trail past the real content;    -->
-                        <!-- the value is the formula below at zero length.       -->
-                        <xsl:when test="$longest = ''">
-                            <xsl:value-of select="8"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$tabular-points-per-character * $longest + 8"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:value-of select="$tabular-points-per-character * $longest + 8"/>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="longest-word-width">
+            <xsl:choose>
+                <xsl:when test="$longest-word = ''">
+                    <xsl:value-of select="8"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$tabular-points-per-character * $longest-word + 8"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <w>
+            <!-- a paragraph column given less width than one of its -->
+            <!-- words needs is held to the width it was given, so a -->
+            <!-- floor is never more than the estimate               -->
+            <xsl:attribute name="floor">
+                <xsl:choose>
+                    <xsl:when test="$longest-word-width &lt; $estimate">
+                        <xsl:value-of select="$longest-word-width"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$estimate"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:value-of select="$estimate"/>
         </w>
         <xsl:call-template name="tabular-column-widths">
             <xsl:with-param name="count" select="$count"/>
             <xsl:with-param name="index" select="$index + 1"/>
         </xsl:call-template>
     </xsl:if>
+</xsl:template>
+
+<!-- The largest of the numbers held by the nodes of "numbers", and -->
+<!-- nothing at all when there are no nodes.                        -->
+<xsl:template name="largest-number">
+    <xsl:param name="numbers"/>
+    <xsl:for-each select="$numbers">
+        <xsl:sort select="number(.)" data-type="number" order="descending"/>
+        <xsl:if test="position() = 1">
+            <xsl:value-of select="."/>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- The text a table column is sized from.  By default this      -->
