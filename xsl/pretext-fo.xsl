@@ -1993,6 +1993,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The provisional label width is fixed, and generous; deep or  -->
 <!-- wide markers (e.g. "xviii.") may eventually warrant a width  -->
 <!-- computed from the actual labels.                             -->
+<!-- A list is usually the child of a paragraph, and an indented  -->
+<!-- paragraph hands its first-line indent down to every block    -->
+<!-- within ("text-indent" is inherited), so a list zeroes it.    -->
 <xsl:template match="ol|ul">
     <xsl:choose>
         <!-- A "cols" request (2 to 6) lays the items out in that many    -->
@@ -2016,7 +2019,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:for-each select="$row-items">
                                 <fo:table-cell padding-right="6pt">
                                     <fo:list-block provisional-distance-between-starts="2em"
-                                                   provisional-label-separation="0.25em">
+                                                   provisional-label-separation="0.25em"
+                                                   text-indent="0">
                                         <xsl:apply-templates select="."/>
                                     </fo:list-block>
                                 </fo:table-cell>
@@ -2032,6 +2036,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <fo:list-block provisional-distance-between-starts="2em"
                            provisional-label-separation="0.25em"
+                           text-indent="0"
                            space-before="0.5em"
                            space-after="0.5em">
                 <xsl:apply-templates select="li"/>
@@ -2119,6 +2124,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- bold title in a label column, then its content.  The        -->
 <!-- "@width" hint sizes that label column; a narrow one         -->
 <!-- flush-lefts its title, the others flush-right.              -->
+<!-- As for the other lists, the first-line indent of a          -->
+<!-- paragraph holding the list is not inherited.                -->
 <xsl:template match="dl">
     <xsl:variable name="label-width">
         <xsl:choose>
@@ -2130,6 +2137,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <fo:list-block provisional-distance-between-starts="{$label-width}"
                    provisional-label-separation="1em"
+                   text-indent="0"
                    space-before="0.5em"
                    space-after="0.5em">
         <xsl:apply-templates select="li"/>
