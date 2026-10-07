@@ -116,10 +116,10 @@
 
         </frontmatter>
 
-        <chapter>
+        <chapter label="sample-ww-chapter-4">
             <title>Instructive Examples</title>
 
-            <section>
+            <section label="sample-ww-chapter-4-2">
                 <title>Arithmetic</title>
 
                 <p>Some questions with quantitative answers.</p>
@@ -413,7 +413,7 @@ ENDDOCUMENT();
                 </exploration>
             </section>
 
-            <section xml:id="section-the-quadratic-formula">
+            <section xml:id="section-the-quadratic-formula" label="section-the-quadratic-formula">
                 <title>The Quadratic Formula</title>
 
                 <p>In the previous section, we saw relatively simple <webwork /> questions. This section demonstrates how even very complicated <webwork /> problems can still behave well.</p>
@@ -665,7 +665,7 @@ ENDDOCUMENT();
                 </exercise>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-4-4">
                 <title>Open Problem Library</title>
 
 
@@ -704,7 +704,7 @@ ENDDOCUMENT();
                 </warning>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-4-5">
                 <title>Antidifferentiation</title>
 
                 <subsection>
@@ -878,7 +878,7 @@ ENDDOCUMENT();
                 </exercises>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-4-6">
                 <title>Math Content</title>
 
                 <p>
@@ -972,7 +972,7 @@ ENDDOCUMENT();
                 </exercise>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-4-7">
                 <title>Multiple Choice</title>
 
                 <p>While free-response questions are generally preferred, sometimes the nature of a question lends itself to multiple choice.</p>
@@ -1137,7 +1137,7 @@ ENDDOCUMENT();
                 </exercise>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-4-8">
                 <title>Tables</title>
 
                 <p>Although a <webwork /> problem written in <pretext /> source can't have a <q>table</q> (which would be captioned and cause trouble with free-standing PG output), they can have a <q>tabular</q>. Tabulars can be made using the existing syntax and options that PTX offers for table-making, with some exceptions. As of summer 2017, the exceptions are that individual cells cannot have <c>bottom</c> border attributes and individual columns cannot have <c>top</c> border attributes. Also, while PTX table borders are generally <c>minor</c>, <c>medium</c>, or <c>major</c>, when these borders are used in a <webwork /> problem that is rendered as a hard copy problem from within <webwork />, the only thickness option corresponds to <c>minor</c>. Several more features (like rules in general) do not carry through to static output (print or HTML-preview). However we hope this is only temporary.</p>
@@ -1206,7 +1206,7 @@ ENDDOCUMENT();
 
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-4-9">
                 <title>Graphics in Exercises</title>
                 <p>
                     It is natural for exercises to have graphics.
@@ -1492,7 +1492,7 @@ ENDDOCUMENT();
 
             </section>
 
-            <section xml:id="section-answer-formats">
+            <section xml:id="section-answer-formats" label="section-answer-formats">
                 <title>Answer Formats and Extra Macros</title>
 
                 <p>Each answer blank may carry a <attr>category</attr>, which decorates the blank with a link to WeBWorK's help for entering an answer of that flavor.  The gallery below exercises the categories whose answers need only the standard contexts; a second exercise loads extra macro files, with a <tag>pg-macros</tag> element, for the three categories that need them.</p>
@@ -1559,10 +1559,10 @@ ENDDOCUMENT();
 
         </chapter>
 
-        <chapter>
+        <chapter label="sample-ww-chapter-5">
             <title>Technical Examples</title>
 
-            <section>
+            <section label="sample-ww-chapter-5-2">
                 <title>PGML Formatting and Verbatim Calisthenics</title>
 
                 <p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
@@ -1715,7 +1715,7 @@ ENDDOCUMENT();
                 </exercise>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-5-3">
                 <title>Subject Area Templates</title>
 
                 <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="https://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
@@ -1943,7 +1943,7 @@ ENDDOCUMENT();
                 </exercise>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-5-4">
                 <title>Stress Tests</title>
 
                 <exercise label="pretext-source-with-server-images">
@@ -2400,7 +2400,7 @@ ENDDOCUMENT();
                 </exercise>
             </section>
 
-            <section>
+            <section label="sample-ww-chapter-5-5">
                 <title>Layout Configuration Testing</title>
 
                 <introduction>
@@ -2674,7 +2674,7 @@ ENDDOCUMENT();
                 </exercises>
             </section>
 
-            <section xml:id="section-runestone-testing">
+            <section xml:id="section-runestone-testing" label="section-runestone-testing">
                 <title>Runestone Assignment Testing</title>
                 <p>
                     This section is specifically for testing when exercises are migrated to a
@@ -2725,7 +2725,7 @@ ENDDOCUMENT();
                 </exercises>
             </section>
 
-            <section xml:id="section-deprecations">
+            <section xml:id="section-deprecations" label="section-deprecations">
                 <title>Deprecations</title>
 
                 <p>

@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 2010-2026  Robert A. Beezer     -->
 
-<exercises xml:id="groups-sage-exercises">
+<exercises xml:id="groups-sage-exercises" label="groups-sage-exercises">
     <title>Sage Exercises</title>
 
     <introduction>

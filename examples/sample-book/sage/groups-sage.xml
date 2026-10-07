@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 2010-2026  Robert A. Beezer     -->
 
-<section xml:id="groups-sage" xmlns:xi="http://www.w3.org/2001/XInclude">
+<section xml:id="groups-sage" label="groups-sage" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Sage</title>
 
     <introduction>

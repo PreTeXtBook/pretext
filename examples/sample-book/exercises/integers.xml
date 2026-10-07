@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Abstract Algebra: Theory and Applications   -->
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
-<exercises xml:id="exercises-integers">
+<exercises xml:id="exercises-integers" label="exercises-integers">
     <title>Exercises</title>
 
     <exercise>

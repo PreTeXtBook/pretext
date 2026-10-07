@@ -324,6 +324,113 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- When hosted on Runestone, an interactive exercise is tracked in a    -->
+<!-- database across courses ("base course") and semesters ("time").      -->
+<!-- And the HTML representation of an interactive exercise, when powered -->
+<!-- by Runestone services, needs an HTML id.  But the PreTeXt "exercise" -->
+<!-- that wraps it has its own HTML id necessary for targets of           -->
+<!-- cross-reference (in-context) URLs.  We will prefer @label for the    -->
+<!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
+<!-- from an author, which we will dress up here.  Notice that this can   -->
+<!-- change when an author declares a new edition.                        -->
+<!-- The "runestone-division-id" template, nearby, is the companion of    -->
+<!-- this one, for a chapter or subchapter recorded in the manifest.  An  -->
+<!-- author meets the two as a single requirement: a @label wherever a    -->
+<!-- Runestone server needs a lasting identifier.  So the conditions      -->
+<!-- tested, and the severity and advice of each message, agree between   -->
+<!-- the two.  Change one, then examine the other.                        -->
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']|interactive[@iframe]" mode="runestone-id">
+    <!-- With no @xml:id and no @label we realize the author has not given       -->
+    <!-- any thought to a (semi-)peersistent identifire for the Runestone        -->
+    <!-- database.  So we call that out as an error.  And we do not even         -->
+    <!-- attempt to fallback to an automatically generated string, which         -->
+    <!-- would be malleable over time and editing.                               -->
+    <!-- As part of backwards-compatibility, we copy old @xml:id values into     -->
+    <!-- fresh @label.  But have an internal  @pi:authored-label attribute whose -->
+    <!-- absence alerts us to the copying, which is now not best practice.       -->
+    <!-- These messages were disabled 2024-02-20 as unreliable.  The cause       -->
+    <!-- was a pointer to another component resolving against the authored       -->
+    <!-- source, where the @pi:authored-label stamp does not exist; that is      -->
+    <!-- repaired, so the messages return.  A plain static code listing is       -->
+    <!-- the one element reaching here that legitimately has no database         -->
+    <!-- identity and needs none, so it is exempt.                               -->
+    <xsl:choose>
+        <xsl:when test="self::program and not(@interactive = 'activecode' or @interactive = 'codelens')"/>
+        <xsl:when test="$b-host-runestone and not(@xml:id) and not(@pi:authored-label)">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>" element&#xa;</xsl:text>
+                <xsl:text>has been encountered without a @label attribute and without a @xml:id attribute.&#xa;</xsl:text>
+                <xsl:text>This will cause this Runestone component to fail to perform and there will be no&#xa;</xsl:text>
+                <xsl:text>identification of this component in the Runestone database.  You must add a&#xa;</xsl:text>
+                <xsl:text>@label attribute with a unique value.  (It is not necessary to add a @xml:id, &#xa;</xsl:text>
+                <xsl:text>it is consulted as part of a backward-compatibility arrangement you do not need).&#xa;</xsl:text>
+                <xsl:text>[You may get more than one message about this instance.]&#xa;</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+        <xsl:when test="$b-host-runestone and not(@pi:authored-label)">
+            <xsl:message>
+                <xsl:text>PTX:FALLBACK:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>" element&#xa;</xsl:text>
+                <xsl:text>has been encountered without a @label attribute.  For reasons of backward-compatibility &#xa;</xsl:text>
+                <xsl:text>we have used the value of an @xml:id.  This may not be what you want, and as of 2024-02-15 &#xa;</xsl:text>
+                <xsl:text>is no longer best practice.  You can copy the @xml:id value exactly into a new @label &#xa;</xsl:text>
+                <xsl:text>attribute and this message will stop AND your project's entries in any Runestone database &#xa;</xsl:text>
+                <xsl:text>will be preserved and function exactly as before.&#xa;</xsl:text>
+                <xsl:text>[You may get more than one message about this instance.]&#xa;</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+    </xsl:choose>
+    <!-- We require a @label attribute, but allow it to be -->
+    <!-- the result of an automatic copy from an @xml:id.  -->
+    <xsl:variable name="label">
+        <xsl:value-of select="@label"/>
+    </xsl:variable>
+    <xsl:if test="$label != ''">
+        <xsl:call-template name="runestone-label-prefix"/>
+        <xsl:value-of select="$label"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Special handling for programs in exercise-like elements.              -->
+<!-- We want to associate those programs with the label on their container -->
+<!-- and NOT with an auto-generated label on the program itself that might -->
+<!-- come from an @xml:id.                                                 -->
+<!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync  -->
+<xsl:template match="exercise/program|task/program|project/program|activity/program|exploration/program|investigation/program" mode="runestone-id">
+    <xsl:variable name="label">
+        <xsl:value-of select="../@label"/>
+    </xsl:variable>
+    <xsl:if test="$label != ''">
+        <xsl:call-template name="runestone-label-prefix"/>
+        <xsl:value-of select="$label"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Prefix just for RS-server builds, in order that the database -->
+<!-- of exercises gets a globally unique identifier.              -->
+<!-- And for a non-RS-server build, we add a prefix in order to   -->
+<!-- differentiate from nearby (wrappers) uses of @label for      -->
+<!-- PreTeXt functions.                                           -->
+<xsl:template name="runestone-label-prefix">
+    <xsl:choose>
+        <xsl:when test="$b-host-runestone">
+            <!-- global variables defined in the -common stylesheet -->
+            <xsl:value-of select="$document-id"/>
+            <xsl:text>_</xsl:text>
+            <xsl:value-of select="$edition"/>
+            <xsl:text>_</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>rs-</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- A convenience for attaching a Runestone id -->
 <!-- NB: we attempt to only use this template in this stylesheet. -->
 <!-- To enforce this, we *could* make a no-op, plus warning,      -->
@@ -338,6 +445,55 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               <xsl:value-of select="$id"/>
         </xsl:attribute>
     </xsl:if>
+</xsl:template>
+
+<!-- Runestone stores chapter and subchapter IDs for each edition.  An ID    -->
+<!-- built from ancestor IDs and sibling positions can change with edits.    -->
+<!-- The "runestone-id" template, nearby, is the companion of this one, for  -->
+<!-- a component.  An author meets the two as a single requirement: a        -->
+<!-- @label wherever a Runestone server needs a lasting identifier.  So the  -->
+<!-- conditions tested, and the severity and advice of each message, agree   -->
+<!-- between the two: an error with neither a @label nor an @xml:id, and a   -->
+<!-- fallback when an @xml:id stands in for a @label.  Change one, then      -->
+<!-- examine the other.  The manifest is built only for a Runestone server,  -->
+<!-- so the host is not tested again here.                                   -->
+<xsl:template match="*" mode="runestone-division-id">
+    <xsl:variable name="manifest-id">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not(@xml:id) and not(@pi:authored-label)">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>" element&#xa;</xsl:text>
+                <xsl:text>has been encountered without a @label attribute and without a @xml:id attribute.&#xa;</xsl:text>
+                <xsl:text>Runestone records this division as a chapter or subchapter, under an ID that must&#xa;</xsl:text>
+                <xsl:text>not change during the life of an edition.  The ID in use now, "</xsl:text>
+                <xsl:value-of select="$manifest-id"/>
+                <xsl:text>", was generated&#xa;</xsl:text>
+                <xsl:text>from the document structure and may change when the document is edited.  For an&#xa;</xsl:text>
+                <xsl:text>established book, add a @label attribute with this value to keep the present ID.&#xa;</xsl:text>
+                <xsl:text>For a new book, or a new edition, add a meaningful @label attribute.&#xa;</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+        <xsl:when test="not(@pi:authored-label)">
+            <xsl:message>
+                <xsl:text>PTX:FALLBACK:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>" element&#xa;</xsl:text>
+                <xsl:text>has been encountered without a @label attribute.  Runestone records this division&#xa;</xsl:text>
+                <xsl:text>as a chapter or subchapter, and we have used the value of an @xml:id as its ID.&#xa;</xsl:text>
+                <xsl:text>You can copy the @xml:id value exactly into a new @label attribute and this message&#xa;</xsl:text>
+                <xsl:text>will stop, with the ID unchanged.&#xa;</xsl:text>
+            </xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:when>
+    </xsl:choose>
+    <id>
+        <xsl:value-of select="$manifest-id"/>
+    </id>
 </xsl:template>
 
 <!-- ############### -->
@@ -553,9 +709,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- Now recurse into sections, appendix  -->
                     <!-- with a faux chapter, using "article" -->
                     <chapter>
-                        <id>
-                            <xsl:apply-templates select="." mode="html-id"/>
-                        </id>
+                        <xsl:apply-templates select="." mode="runestone-division-id"/>
                         <title>
                             <xsl:apply-templates select="." mode="title-full"/>
                         </title>
@@ -575,9 +729,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="chapter" mode="runestone-manifest">
     <chapter>
-        <id>
-            <xsl:apply-templates select="." mode="html-id"/>
-        </id>
+        <xsl:apply-templates select="." mode="runestone-division-id"/>
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
@@ -641,9 +793,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Properties to report for each division -->
 <xsl:template match="*" mode="runestone-division-properties">
-    <id>
-        <xsl:apply-templates select="." mode="html-id"/>
-    </id>
+    <xsl:apply-templates select="." mode="runestone-division-id"/>
     <title>
         <xsl:apply-templates select="." mode="title-full"/>
     </title>

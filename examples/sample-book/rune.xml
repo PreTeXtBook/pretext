@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Abstract Algebra: Theory and Applications   -->
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
-<chapter xml:id="rune">
+<chapter xml:id="rune" label="rune">
     <title>Runestone Testing</title>
 
     <introduction>
@@ -32,7 +32,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>Some of these samples only function if hosted on a Runestone server. To see those in action, visit the copy of the <url href="https://runestone.academy/ns/books/published/PTXSB/sample-book.html">Sample Book hosted on Runestone</url></p>
     </introduction>
 
-    <section xml:id="inactive-code">
+    <section xml:id="inactive-code" label="inactive-code">
         <title>Programs</title>
 
         <p>First, some samples of programs that are not interactive. They will be syntax highlighted if a valid <attr>language</attr> is specified. Optionally, lines can be numbered and selected lines highlighted.</p>
@@ -89,7 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     </section>
 
-    <section xml:id="activecode">
+    <section xml:id="activecode" label="activecode">
         <title>ActiveCode</title>
 
         <p>Programs in supported languages are made interactive in HTML when <attr>interactive</attr> is set to <c>activecode</c>. Some languages can be made interactive on any server, while others require being served from Runestone servers. See <url href="https://pretextbook.org/doc/guide/html/topic-program-console.html#interactive-program-capabilities">Interactive Programs Capabilities in the PreTeXt Guide</url> for a list of what languages are supported in which environs.</p>
@@ -676,7 +676,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
 
-    <section xml:id="code-lens">
+    <section xml:id="code-lens" label="code-lens">
         <title>Code Lens</title>
 
         <p>CodeLens is an interactive tool for following program execution, much like a debugger, without the ability to influence flow control or variable values.  For use without a server, traces must be computed beforehand.  First, we have some trivial programs, to provide minimal testing.</p>
@@ -866,7 +866,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
     </section>
 
-    <section xml:id="coding-exercises">
+    <section xml:id="coding-exercises" label="coding-exercises">
         <title>Coding Exercises</title>
 
         <p>Program listings can be more that just live demonstrations, they can be exercises.  The first two also occur in the sample article where they just get a static rendering, if at all.</p>
@@ -1182,7 +1182,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </section>
 
-    <section xml:id="data-files">
+    <section xml:id="data-files" label="data-files">
         <title>Data Files</title>
 
         <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
@@ -2856,7 +2856,7 @@ TEST_CASE( "Test the add function" ) {
         </program>
     </section>
 
-    <section xml:id="videos-in-runestone">
+    <section xml:id="videos-in-runestone" label="videos-in-runestone">
         <title>YouTube Videos</title>
 
         <p>Runestone uses a YouTube API that broadcasts events when a reader interacts with a video.  In this way, Runestone can record video-watching as an activity.  As <pretext/> output we concede better behavior on small screens (<q>responsiveness</q>) to enable this feature in a Runestone version.  A <attr>label</attr> attribute is necessary for persistence in the Runestone database.  Various <pretext/> features, such as playlists, are not yet supported<mdash/>make a request.</p>
@@ -2868,7 +2868,7 @@ TEST_CASE( "Test the add function" ) {
         <p>The margins here are asymmetric just as a test.  And this text is here to see where the video ends.</p>
     </section>
 
-    <section xml:id="rune-nested-divisions">
+    <section xml:id="rune-nested-divisions" label="rune-nested-divisions">
         <title>Deeper</title>
 
         <introduction>
@@ -2942,7 +2942,7 @@ TEST_CASE( "Test the add function" ) {
         </subsection>
     </section>
 
-    <exercises xml:id="true-false-exercises">
+    <exercises xml:id="true-false-exercises" label="true-false-exercises">
         <title>True/False Exercises</title>
 
         <exercise xml:id="true-false-one" label="vector-space-dimension">
@@ -3350,7 +3350,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="parsons-exercises">
+    <exercises xml:id="parsons-exercises" label="parsons-exercises">
         <title>Parsons Exercises</title>
 
         <exercise label="number-theory-proof" adaptive="yes">
@@ -3688,7 +3688,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="horizontal-parsons-exercises">
+    <exercises xml:id="horizontal-parsons-exercises" label="horizontal-parsons-exercises">
         <title>Horizontal Parsons Exercises</title>
 
         <exercise label="horizontal-parson-sql-statement-simple" language="sql">
@@ -3815,7 +3815,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="matching-exercises">
+    <exercises xml:id="matching-exercises" label="matching-exercises">
         <title>Matching Exercises</title>
 
         <introduction>
@@ -4121,7 +4121,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="clickable-area-exercises">
+    <exercises xml:id="clickable-area-exercises" label="clickable-area-exercises">
         <title>Clickable Area Exercises</title>
 
         <exercise label="clickable-text">
@@ -4210,7 +4210,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="select-exercises">
+    <exercises xml:id="select-exercises" label="select-exercises">
         <title>Select Exercises</title>
 
         <introduction>
@@ -4243,7 +4243,7 @@ TEST_CASE( "Test the add function" ) {
 
     </exercises>
 
-    <exercises xml:id="short-answer-exercises">
+    <exercises xml:id="short-answer-exercises" label="short-answer-exercises">
         <title>Short Answer Exercises</title>
 
         <exercise label="short-answer-question">
@@ -4336,7 +4336,7 @@ TEST_CASE( "Test the add function" ) {
         </query>
     </section>
 
-    <section xml:id="doenet">
+    <section xml:id="doenet" label="doenet">
         <title>DoenetML</title>
 
         <p>This preliminary DoenetML example is for testing use on a Runestone server, where it will use the SPLICE protocol to report out events.  To the reader, it should <em>behave</em> identically when not on a Runestone server.</p>
@@ -4398,7 +4398,7 @@ TEST_CASE( "Test the add function" ) {
         </interactive>
     </section>
 
-    <exercises xml:id="fill-in-exercises-old">
+    <exercises xml:id="fill-in-exercises-old" label="fill-in-exercises-old">
         <title>Fill-In Exercises (Old Style)</title>
 
         <introduction>
@@ -4510,7 +4510,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="fill-in-exercises">
+    <exercises xml:id="fill-in-exercises" label="fill-in-exercises">
         <title>Fill-In Exercises</title>
 
         <introduction>
@@ -4877,7 +4877,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="fill-in-literal-exercises">
+    <exercises xml:id="fill-in-literal-exercises" label="fill-in-literal-exercises">
         <title>Fill-In, Literal String Answers</title>
 
         <introduction>
@@ -5011,7 +5011,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises xml:id="runestone-hodgepodge">
+    <exercises xml:id="runestone-hodgepodge" label="runestone-hodgepodge">
         <title>Hodgepodge</title>
 
         <exercise label="multifile-program-2">
@@ -5080,7 +5080,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <section xml:id="exercises-timed">
+    <section xml:id="exercises-timed" label="exercises-timed">
         <title>Exercises that are Timed</title>
 
         <p>This is a section that merely explains and holds an <tag>exercises</tag> division, which will be at the level of a <tag>subsection</tag>.  There is a <attr>time-limit</attr> attribute on <tag>exercises</tag>, set to the value <c>10</c>, which implies (a) the collection of (two) exercises is a <q>timed exam</q> when hosted on Runestone, and (b) a student will have 10 minutes to complete the collection.</p>
@@ -5161,7 +5161,7 @@ TEST_CASE( "Test the add function" ) {
         </exercises>
     </section>
 
-    <section xml:id="interactive-projects">
+    <section xml:id="interactive-projects" label="interactive-projects">
         <title>Projects and Friends</title>
 
         <p><q>PROJECT-LIKE</q> refers to the elements/blocks <tag>project</tag>, <tag>activity</tag>, <tag>activity</tag>, and <tag>exploration</tag>.  They are very similar to <tag>exercise</tag>, and here we stress that they can be interactive in all the same ways an <tag>exercise</tag> can.  Key differences are that they are blocks, and so are peers of other blocks like paragraphs and examples, and are children of divisions.  By default they have their own numbering scheme, though we expect this to convert to an elective behavior.</p>
@@ -5532,7 +5532,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </section>
 
-    <reading-questions>
+    <reading-questions xml:id="rune-reading-questions" label="rune-reading-questions">
 
         <exercise label="simple-reading-question">
             <statement>
@@ -5553,7 +5553,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </reading-questions>
 
-    <section xml:id="atomic-video">
+    <section xml:id="atomic-video" label="atomic-video">
         <title>YouTube Video Embedding</title>
 
         <p>An <tag>video</tag> can be placed in five different ways:<ol>
@@ -5596,7 +5596,7 @@ TEST_CASE( "Test the add function" ) {
 
     </section>
 
-    <section xml:id="section-runestone-assignment-testing">
+    <section xml:id="section-runestone-assignment-testing" label="section-runestone-assignment-testing">
         <title>Runestone Assignment Testing</title>
         <p>
             This is a section that is specifically for testing when exercises are migrated to a
@@ -5831,7 +5831,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <section xml:id="splice-integration">
+    <section xml:id="splice-integration" label="splice-integration">
         <title>SPLICE Integration</title>
 
         <p><url href="https://cssplice.org/" visual="cssplice.org">SPLICE</url> is a project to supply documentation and infrastructure to help with adopting shared standards, protocols, and tools for web-based learning tools. The project has designed a <url href="https://cssplice.org/slcp/index.html" visual="cssplice.org/slcp">protocol</url> for an embedded iframe to communicate with its host page.</p>
