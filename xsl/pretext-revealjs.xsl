@@ -103,6 +103,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
+<!-- HTML sets based on theme. Reveal.js should always use the same value -->
+<xsl:variable name="design-width" select="'600'" />
+
 <!-- Publisher Switches -->
 <!-- Various configuration options are set in the publisher file,  -->
 <!-- which is analyzed by its own stylesheet, which is imported in -->
