@@ -10674,8 +10674,77 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
+<!-- The abbreviated container title stands in for the full one -->
+<!-- when that is absent, and is otherwise silent               -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/container-title-short">
+    <xsl:if test="not(../container-title)">
+        <xsl:text>, </xsl:text>
+        <xsl:apply-templates/>
+        <xsl:apply-templates select="." mode="plain-biblio-period"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Number within a collection, presumes it follows the -->
+<!-- collection title                                    -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/collection-number">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- The event of a conference paper or a speech -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/event">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Version, as for software, with the word spelled out -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/version">
+    <xsl:text>, version </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Count of volumes, for a work in several -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/number-of-volumes">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text> volumes</xsl:text>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Chapter number, with the word spelled out -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/chapter-number">
+    <xsl:text>, chapter </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- An archive, and then the location within it, which presumes -->
+<!-- it follows the archive                                      -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/archive">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/archive_location">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Status of publication, such as "in press" -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/status">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- The period follows the last field that prints, which is not a -->
+<!-- "container-title-short" beside the full "container-title"     -->
 <xsl:template match="*" mode="plain-biblio-period">
-    <xsl:if test="not(following-sibling::*)">
+    <xsl:if test="not(following-sibling::*[not(self::container-title-short and ../container-title)])">
         <xsl:text>.</xsl:text>
     </xsl:if>
 </xsl:template>

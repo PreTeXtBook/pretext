@@ -183,9 +183,11 @@
 <!ENTITY SOLUTION-LIKE "hint|answer|solution">
 <!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">
 
-<!-- appendages of OPENPROBLEM-LIKE -->
-<!ENTITY DISCUSSION-LIKE "context|discussion|opinion|status|suggestion">
-<!ENTITY DISCUSSION-FILTER "self::context or self::discussion or self::opinion or self::status or self::suggestion">
+<!-- appendages of OPENPROBLEM-LIKE                                    -->
+<!-- A "status" is also a field of a bibliographic entry, so this one  -->
+<!-- is recognized by its parent: an OPENPROBLEM-LIKE, or one's "task" -->
+<!ENTITY DISCUSSION-LIKE "context|discussion|opinion|status[parent::*[&OPENPROBLEM-FILTER;] or parent::task]|suggestion">
+<!ENTITY DISCUSSION-FILTER "self::context or self::discussion or self::opinion or (self::status and (parent::*[&OPENPROBLEM-FILTER;] or parent::task)) or self::suggestion">
 
 <!-- Elements the schema gives text-only content: no PreTeXt markup is   -->
 <!-- permitted inside them, whether because they are verbatim (code, a   -->
