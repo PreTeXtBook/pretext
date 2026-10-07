@@ -4032,17 +4032,6 @@ section.solutions section > h6.heading {
 .discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
   display: none;
 }
-.discussion-like > .heading ::after {
-  content: "\2009";
-}
-.discussion-like > .heading .space,
-.discussion-like > .heading .codenumber,
-.discussion-like > .heading .period {
-  display: none;
-}
-.discussion-like > .heading .type::after {
-  content: ". ";
-}
 .source-view__link,
 .knowl__link {
   cursor: pointer;
