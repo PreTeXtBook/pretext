@@ -1516,6 +1516,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-has-answer" select="true()"/>
             <xsl:with-param name="b-has-solution" select="true()"/>
         </xsl:apply-templates>
+        <!-- a task of an OPENPROBLEM-LIKE may have DISCUSSION-LIKE -->
+        <xsl:apply-templates select="&DISCUSSION-LIKE;"/>
         <!-- writing space below a terminal task, in a printout -->
         <xsl:apply-templates select="." mode="workspace"/>
     </fo:block>

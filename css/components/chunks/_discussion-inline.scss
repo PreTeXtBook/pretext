@@ -19,21 +19,8 @@
 
 @use './helpers/inline-heading-mixin';
 
+// The heading runs in to the text that follows it, with the type name,
+// the number and the period all displayed: "Status 1."
 .discussion-like {
   @include inline-heading-mixin.heading;
-  & > .heading {
-    ::after {
-      content: "\2009";
-    }
-
-    .space,
-    .codenumber,
-    .period {
-      display: none;
-    }
-
-    .type::after {
-      content: ". ";
-    }
-  }
 }
