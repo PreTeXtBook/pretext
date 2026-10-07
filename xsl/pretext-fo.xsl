@@ -2397,6 +2397,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<!-- The width allowed for one character of a table cell, in points. -->
+<!-- A formula, measured in points, converts to characters at the    -->
+<!-- same rate, so the two measures of a cell's content add up.      -->
+<xsl:variable name="tabular-points-per-character" select="7"/>
+
 <!-- An estimated width, in points, for each of a tabular's columns, -->
 <!-- emitted as a "w" element apiece.  A column whose cells hold     -->
 <!-- paragraphs takes a fraction of the text width: its authored     -->
@@ -2472,7 +2477,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="8"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="7 * $longest + 8"/>
+                            <xsl:value-of select="$tabular-points-per-character * $longest + 8"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:otherwise>
@@ -2486,18 +2491,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- The text a table column is sized from.  By default this      -->
-<!-- copy recurses, so wrapper elements, and the source text of   -->
-<!-- an "m" (a fair proxy for the rendered math), are measured,   -->
-<!-- while a footnote is dropped (its text is set outside the     -->
-<!-- cell).  A generator, though, makes text the source lacks,    -->
-<!-- so it is rendered to that text and the result measured: an   -->
-<!-- "xref" (its reference text), the TeX-family and              -->
+<!-- copy recurses, so a wrapper element is measured by its       -->
+<!-- content, while a footnote is dropped (its text is set        -->
+<!-- outside the cell).  A generator, though, makes text the      -->
+<!-- source lacks, so it is rendered to that text and the result  -->
+<!-- measured: an "xref" (its reference text), the TeX-family and -->
 <!-- PreTeXt/WeBWorK logos, the date and time, the Latin          -->
 <!-- abbreviations, a "url" (whose text may be an attribute),     -->
 <!-- the tag-syntax elements, and the punctuation and symbol      -->
 <!-- characters.  A "fillin" contributes its blank's character    -->
-<!-- count.  Text and attribute nodes fall to the built-in        -->
-<!-- rules, which copy their string value through.                -->
+<!-- count, and an "m" as many characters as its rendering is     -->
+<!-- wide.  Text and attribute nodes fall to the built-in rules,  -->
+<!-- which copy their string value through.                       -->
 <xsl:template match="*" mode="width-text">
     <xsl:apply-templates select="node()" mode="width-text"/>
 </xsl:template>
@@ -2550,6 +2555,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:value-of select="str:padding(number($characters), '0')"/>
+</xsl:template>
+
+<!-- Inline mathematics is measured by its rendering, since the     -->
+<!-- length of the LaTeX says little about the width of the result: -->
+<!-- delimiter sizing, spacing commands and macros lengthen the     -->
+<!-- source of a short formula, and a macro shortens the source of  -->
+<!-- a long one.  MathJax records the width of the SVG, which is    -->
+<!-- converted to points as for the "m" itself, and then to a run   -->
+<!-- of that many characters.  Without a rendering to consult, the  -->
+<!-- source is measured.                                            -->
+<xsl:template match="m" mode="width-text">
+    <xsl:variable name="id">
+        <xsl:apply-templates select="." mode="unique-id"/>
+    </xsl:variable>
+    <xsl:variable name="svg-width" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg/@width"/>
+    <xsl:choose>
+        <xsl:when test="contains($svg-width, 'ex')">
+            <xsl:variable name="width-points" select="number(substring-before($svg-width, 'ex')) * $math-points-per-ex"/>
+            <xsl:value-of select="str:padding(ceiling($width-points div $tabular-points-per-character), '0')"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="node()" mode="width-text"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="equal-table-columns">
