@@ -64,6 +64,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Disable clipboardable -->
 <xsl:template name="insert-clipboardable-class"/>
 
+<!-- HTML sets based on theme. Reveal.js should always use the same value -->
+<xsl:variable name="design-width" select="'600'" />
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
