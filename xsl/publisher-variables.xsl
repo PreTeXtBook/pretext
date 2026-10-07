@@ -1820,7 +1820,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='design-width']" mode="set-pubfile-variable"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="'600'"/>
+            <xsl:choose>
+                <!-- Select the default design width based on the theme        -->
+                <!-- Should match the content-width of the corresponding theme -->
+                <xsl:when test="$html-theme-name = 'salem'">
+                    <xsl:text>725</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>600</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>

@@ -7444,9 +7444,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- we compute pixels in the parameter value, which become   -->
                 <!-- YT-specific attributes, so we can't use general template -->
                 <!-- providing standard attributes                            -->
+                <xsl:variable name="local-design-width">
+                    <xsl:apply-templates select="." mode="get-design-width"/>
+                </xsl:variable>
                 <xsl:apply-templates select="." mode="runestone-youtube-embed">
-                    <xsl:with-param name="width" select="($layout/width * $design-width) div 100"/>
-                    <xsl:with-param name="height" select="($layout/height * $design-width) div 100"/>
+                    <xsl:with-param name="width" select="($layout/width * $local-design-width) div 100"/>
+                    <xsl:with-param name="height" select="($layout/height * $local-design-width) div 100"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
@@ -8522,6 +8525,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="p">
+            <xsl:variable name="local-design-width">
+                <xsl:apply-templates select="." mode="get-design-width"/>
+            </xsl:variable>
             <xsl:attribute name="style">
                 <xsl:text>max-width:</xsl:text>
                 <xsl:choose>
@@ -8531,14 +8537,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:with-param name="percentage" select="$left-col/@width" />
                             </xsl:call-template>
                         </xsl:variable>
-                        <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
+                        <xsl:value-of select="$local-design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
                         <xsl:text>px;</xsl:text>
                     </xsl:when>
                     <!-- If there is no $left-col/@width, silently use 20% as default -->
                     <!-- We get some ill-formed WW exercises here, so a less-precise  -->
                     <!-- warning is given on the author's source.                     -->
                     <xsl:otherwise>
-                        <xsl:value-of select="$design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
+                        <xsl:value-of select="$local-design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
@@ -11297,8 +11303,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:variable>
     <!-- these are now standardized templates -->
-    <xsl:variable name="width"  select="$design-width * $width-fraction" />
-    <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
+    <xsl:variable name="local-design-width">
+        <xsl:apply-templates select="." mode="get-design-width" />
+    </xsl:variable>
+    <xsl:variable name="width"  select="$local-design-width * $width-fraction" />
+    <xsl:variable name="height" select="$local-design-width * $width-fraction div $aspect-ratio" />
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
@@ -11575,7 +11584,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build the iframe -->
     <!-- mimicking Mike Gage's blog post -->
-    <iframe name="{concat(@assembly-id, '-ww-inner')}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
+    <xsl:variable name="local-design-width">
+        <xsl:apply-templates select="." mode="get-design-width"/>
+    </xsl:variable>
+    <iframe name="{concat(@assembly-id, '-ww-inner')}" width="{$local-design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />

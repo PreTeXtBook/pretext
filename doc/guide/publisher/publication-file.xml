@@ -1091,7 +1091,7 @@
                 <cd>
                     <cline>/publication/html</cline>
                 </cd>
-                element can have an attribute <attr>design-width</attr> with an integer value. This will be used as the base value for converting the percentage based widths of an interactive into a pixel values when that is required. The default value is <c>600</c> (100% width is 600px).
+                element can have an attribute <attr>design-width</attr> with an integer value. This will be used as the base value for converting the percentage based widths of an interactive into a pixel values when that is required. The default value is <c>600</c> (100% width is 600px) for all themes except for <c>salem</c> which has a default of <c>725</c>.
             </p>
 
            <p>
