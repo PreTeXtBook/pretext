@@ -27,8 +27,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:xml="http://www.w3.org/XML/1998/namespace"
                 xmlns:pi="http://pretextbook.org/2020/pretext/internal"
+                xmlns:exsl="http://exslt.org/common"
                 xmlns:str="http://exslt.org/strings"
-                exclude-result-prefixes="str"
+                exclude-result-prefixes="exsl str"
 >
 <!-- exclude-result-prefixes="pi" -->
 
@@ -117,14 +118,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: refine "select" to only match to-level possibilities -->
 <xsl:template match="biblio" mode="biblio-to-json">
     <xsl:text>{&#xa;</xsl:text>
-    <xsl:apply-templates select="@xml:id|@type" mode="biblio-to-json"/>
-    <xsl:apply-templates select="*" mode="biblio-to-json"/>
-     <xsl:text>&#xa;}</xsl:text>
+    <xsl:call-template name="json-members">
+        <xsl:with-param name="nodes" select="@xml:id|@type|*"/>
+        <xsl:with-param name="separator" select="',&#xa;'"/>
+    </xsl:call-template>
+    <xsl:text>&#xa;}</xsl:text>
     <xsl:if test="following-sibling::biblio">
         <xsl:text>,&#xa;</xsl:text>
         <!-- intra-biblio visual formatting help -->
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- The members of a JSON object are the conversions of "nodes", with  -->
+<!-- "separator" between one member and the next.  A node that converts -->
+<!-- to nothing (markup not implemented, caught above) is no member, so -->
+<!-- the separators are right whichever nodes those are.  Each template -->
+<!-- for a member writes the member alone, and nothing after it.        -->
+<!-- TODO: "xml-to-json.xsl" converts a description of JSON, made of    -->
+<!-- elements, and supplies the separators and the quoting; built on    -->
+<!-- it, this template and the quoting in each template could go.       -->
+<xsl:template name="json-members">
+    <xsl:param name="nodes"/>
+    <xsl:param name="separator"/>
+    <xsl:variable name="members-rtf">
+        <xsl:for-each select="$nodes">
+            <xsl:variable name="json">
+                <xsl:apply-templates select="." mode="biblio-to-json"/>
+            </xsl:variable>
+            <xsl:if test="not($json = '')">
+                <member>
+                    <xsl:value-of select="$json"/>
+                </member>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:for-each select="exsl:node-set($members-rtf)/member">
+        <xsl:value-of select="."/>
+        <xsl:if test="not(position() = last())">
+            <xsl:value-of select="$separator"/>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Attributes -->
@@ -149,7 +183,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="."/>
         </xsl:with-param>
     </xsl:call-template>
-    <xsl:text>",&#xa;</xsl:text>
+    <xsl:text>"</xsl:text>
 </xsl:template>
 
 <!-- Simple string fields to key/value pair -->
@@ -173,18 +207,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>"</xsl:text>
-    <xsl:if test="following-sibling::*">
-        <xsl:text>,</xsl:text>
-        <xsl:choose>
-            <!-- top-label get a newline, else a space -->
-            <xsl:when test="parent::biblio">
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text> </xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
 </xsl:template>
 
 <!-- ############### -->
@@ -202,9 +224,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[</xsl:text>
     <xsl:apply-templates select="name" mode="biblio-to-json"/>
     <xsl:text>]</xsl:text>
-    <xsl:if test="following-sibling::*">
-        <xsl:text>,&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- Name structure -->
@@ -214,7 +233,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--     family, given, suffix, etc.                -->
     <!-- They will use the simple template above, where -->
     <!-- fields are qualified with the "name" parent    -->
-    <xsl:apply-templates select="*" mode="biblio-to-json"/>
+    <xsl:call-template name="json-members">
+        <xsl:with-param name="nodes" select="*"/>
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:call-template>
     <xsl:text>}</xsl:text>
     <xsl:if test="following-sibling::name">
         <xsl:text>, </xsl:text>
@@ -242,18 +264,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;}</xsl:text>
-    <xsl:if test="following-sibling::*">
-        <xsl:text>,</xsl:text>
-        <xsl:choose>
-            <!-- likely always first test? -->
-            <xsl:when test="parent::biblio">
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text> </xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
 </xsl:template>
 
 <!-- An array of length 1 to 3, with spaces after commas -->
