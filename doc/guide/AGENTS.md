@@ -19,7 +19,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 # The PreTeXt Guide
 
-- Follow [README.md](README.md) for the `tag`, `tage`, and `attr` markup used when writing about syntax. Build the Guide with the command in the root [Verification section](../../AGENTS.md), with `doc/guide/guide.xml` as the source file and `doc/guide/publication.xml` as the publication file.
+- Follow [README.md](README.md) for the `tag`, `tage`, and `attr` markup used when writing about syntax. Its build steps use the PreTeXt command-line interface (CLI) and are general advice for a reader who wants a copy of the Guide. When developing, build the Guide with the command in the root [Verification section](../../AGENTS.md), with `doc/guide/guide.xml` as the source file and `doc/guide/publication.xml` as the publication file.
 - Describe the language as it is now; an account of how a feature once behaved does not belong in the Guide. Source follows the conventions in the root [PreTeXt source section](../../AGENTS.md).
 - Follow the [developer documentation contract](developer/coding.xml). Mention a new element briefly in Overview, describe it fully in Topics, and cross-link both locations. Put elaborate examples in the Showcase Article, `examples/showcase`, not in the Guide.
 - Give a new publisher option a terse entry in `publisher/publication-file.xml`, ordered lexicographically by its XPath expression. Add the fuller explanation to the relevant Publisher chapter and cross-link the two locations.

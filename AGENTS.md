@@ -79,6 +79,7 @@ These apply wherever PreTeXt source is written, the examples and the Guide inclu
 
       python3 pretext/pretext -c doc -f html -p examples/minimal/publication/publication.ptx -d /tmp/minimal-html examples/minimal/source/main.ptx
 
+- Development here uses the `pretext/pretext` script, as above, and not the PreTeXt command-line interface (CLI): an installed CLI bundles a frozen copy of the script, stylesheets, CSS, and JavaScript, so it does not run the changes in your checkout. Advice written for a general reader, such as the build steps in the [Guide's README](doc/guide/README.md), does use the CLI; when developing, follow the commands here instead.
 - Regenerate the schema products and compare them with the committed files as described in [schema/AGENTS.md](schema/AGENTS.md).
 - Rebuild generated web assets locally to check source changes:
 
