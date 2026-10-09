@@ -132,6 +132,36 @@ $center-content: true !default;
     @include dialogs.ptx-dialog-modal;
   }
 
+  .ptx-code-cells-popup {
+    padding: 10px;
+    margin-top: $nav-height;
+    min-width: 16rem;
+    max-width: 600px;
+    margin-bottom: 0.5em;
+    width: 90%;
+
+    @include dialogs.ptx-dialog-modal;
+
+    .ptx-code-cells-popup-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1em;
+        border-bottom: 1px solid var(--dialog-border-color);
+    }
+
+    .ptx-code-cells-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .ptx-code-cells-status {
+        margin-top: 1em;
+        min-height: 1.2em;
+    }
+  }
+
   .ptx-readability-options-popup-controls {
     display: flex;
     gap: 10px;
@@ -200,7 +230,7 @@ $center-content: true !default;
     display: none;
   }
 
-  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button, .ptx-read-aloud-button) .name {
+  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button, .ptx-read-aloud-button, .ptx-code-cells-button) .name {
     @include accessibility.sr-only;
   }
 
@@ -290,6 +320,13 @@ $center-content: true !default;
       bottom: $nav-height;
     }
 
+    .ptx-code-cells-popup {
+      margin-top: unset;
+      margin-bottom: 0;
+      top: auto;
+      bottom: $nav-height;
+    }
+
     .ptx-dropdown-content {
       top: unset;
       bottom: $nav-height;
@@ -299,7 +336,7 @@ $center-content: true !default;
       display: none;
     }
 
-    :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button, .ptx-readability-options-button) .name {
+    :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button, .ptx-readability-options-button, .ptx-code-cells-button) .name {
       display: none;
     }
   }
