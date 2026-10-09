@@ -45,6 +45,7 @@ PreTeXt is an authoring and publishing system for textbooks, research articles, 
 - Keep one logical change per commit and do not squash your own; maintainers may combine or redistribute commits when merging, as [CONTRIBUTING.md](CONTRIBUTING.md) says.
 - Follow [CONTRIBUTING.md](CONTRIBUTING.md) and the [Git chapter](doc/guide/developer/git.xml): keep one topic per branch, rebase onto the default `master` branch, never merge `master` into a topic, and stop pushing while a PR is under review unless asked.
 - Isolate formatting-only changes and add their commit hashes to `.git-blame-ignore-revs`.
+- An `AGENTS.md` added in a new directory is also added to the imports in [CLAUDE.md](CLAUDE.md), which is how Claude Code comes to read these files.
 - New files use the standard copyright header. Record any different holder or notice treatment in [the copyright registry](legal/copyright-holders.md).
 - Write for the current state. Guide prose, schema documentation, the narration of a sample document, and commit subjects say what is, never what was; git carries the history. A code comment mentions the past only where the code exists because of it, such as a repair template or the text of a deprecation message. A pull request description, or the discussion on it, is the place to explain what changed and why.
 - Spell words out: no new abbreviations in identifiers, comments, file names, `@xml:id` or `@label` values, or commit subjects. An abbreviation already in use nearby is not a reason to coin another.
