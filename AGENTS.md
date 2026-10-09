@@ -66,7 +66,7 @@ These apply wherever PreTeXt source is written, the examples and the Guide inclu
 - A division (`chapter`, `section`, `subsection`, and so on) carries both `@xml:id` and `@label`, with the same value.
 - Write `<mdash/>` tight against the words on either side: `word<mdash/>word`.
 - Display mathematics is an `md`, with `@number` where a number is wanted; `me`, `men`, and `mdn` are deprecated.
-- Place an `idx` right after the `title` of the structure it indexes. When the precision of a paragraph is needed, place it between sentences, on a line of its own.
+- Place an `idx` right after the `title` of the structure it indexes. An `idx` inside a `p` is a very rare occurrence, for an entry that needs the precision of a single paragraph; it then goes between sentences, on a line of its own.
 - Indent the content of a Sage cell to match the surrounding XML.
 
 ## Verification
