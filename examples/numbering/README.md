@@ -46,7 +46,7 @@ for human eyes:
 - Its purpose is **automated**: regression diffs, level sweeps, and
   scope/pooling checks, not reading or pedagogy.
 
-Treat it as a numbering test fixture, not as sample authoring.
+Treat it as a numbering test document, not as sample authoring.
 
 ## A no-parts variant, on demand
 

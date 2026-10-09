@@ -40,20 +40,34 @@ PreTeXt is an authoring and publishing system for textbooks, research articles, 
 
 - Before adding a configurable feature, decide whether its switch belongs in `docinfo` or the publication file by the principles in the [coding chapter](doc/guide/developer/coding.xml).
 - [Careful documentation accompanies every new feature](doc/guide/developer/coding.xml).
-- Commit subjects use `Area: lowercase description`, omit a trailing period, stay on one line, and stay within roughly 60 to 70 characters, per the [Git chapter](doc/guide/developer/git.xml). Put XML names in double quotes, such as `"@font-size"`. Bodies are rare.
+- Commit subjects use `Area: lowercase description`, omit a trailing period, stay on one line, and stay within roughly 60 to 70 characters, per the [Git chapter](doc/guide/developer/git.xml). Put XML names in double quotes, such as `"@font-size"`. Write a body only if explicitly requested; maintainers delete anything beyond the subject line.
 - Current areas include Schema, Publication schema, Publisher variables, HTML, LaTeX, CSS, JavaScript, Guide, Sample article, Sample book, Assembly, Common, Validation, and Deprecate.
 - Keep one logical change per commit and do not squash your own; maintainers may combine or redistribute commits when merging, as [CONTRIBUTING.md](CONTRIBUTING.md) says.
 - Follow [CONTRIBUTING.md](CONTRIBUTING.md) and the [Git chapter](doc/guide/developer/git.xml): keep one topic per branch, rebase onto the default `master` branch, never merge `master` into a topic, and stop pushing while a PR is under review unless asked.
 - Isolate formatting-only changes and add their commit hashes to `.git-blame-ignore-revs`.
+- An `AGENTS.md` added in a new directory is also added to the imports in [CLAUDE.md](CLAUDE.md), which is how Claude Code comes to read these files.
 - New files use the standard copyright header. Record any different holder or notice treatment in [the copyright registry](legal/copyright-holders.md).
+- Write for the current state. Guide prose, schema documentation, the narration of a sample document, and commit subjects say what is, never what was; git carries the history. A code comment mentions the past only where the code exists because of it, such as a repair template or the text of a deprecation message. A pull request description, or the discussion on it, is the place to explain what changed and why.
+- Spell words out: no new abbreviations in identifiers, comments, file names, `@xml:id` or `@label` values, or commit subjects. An abbreviation already in use nearby is not a reason to coin another.
+- In XML and XPath a child is always immediate, so write "child" or "descendant", never "direct child".
 
 ## Generated files
 
 - Edit `schema/pretext.xml` and `schema/publication-schema.xml`, not the generated RELAX NG (Regular Language for XML Next Generation) compact `.rnc` or `.rng` files. Regenerate those products and commit them with the schema change.
 - Edit CSS and JavaScript sources. Rebuild `css/dist/` and `js/dist/` locally to check your work; maintainers regenerate these directories when merging, so do not commit their changes.
-- Treat `doc/guide/generated/` as build output.
+- `doc/guide/generated/` and each example's generated directory hold assets that are tracked, unlike most projects. Regenerate them with `pretext/pretext` components and commit them with the change that needs them, as [examples/AGENTS.md](examples/AGENTS.md) describes; do not edit them by hand.
 - Copy `pretext/pretext.cfg` to `user/pretext.cfg` for local executable settings; never edit the distributed file.
 - Rules for `script/`, `journals/`, and `fonts/` live in their own READMEs: [script](script/README.md), [journals](journals/README.md), [fonts](fonts/README.md).
+
+## PreTeXt source
+
+These apply wherever PreTeXt source is written, the examples and the Guide included.
+
+- A division (`chapter`, `section`, `subsection`, and so on) carries both `@xml:id` and `@label`, with the same value.
+- Write `<mdash/>` tight against the words on either side: `word<mdash/>word`.
+- Display mathematics is an `md`, with `@number` where a number is wanted; `me`, `men`, and `mdn` are deprecated.
+- Place an `idx` right after the `title` of the structure it indexes. When the precision of a paragraph is needed, place it between sentences, on a line of its own.
+- Indent the content of a Sage cell to match the surrounding XML.
 
 ## Verification
 

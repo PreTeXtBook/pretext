@@ -1,4 +1,12 @@
 @AGENTS.md
+@xsl/AGENTS.md
+@schema/AGENTS.md
+@pretext/AGENTS.md
+@css/AGENTS.md
+@js/AGENTS.md
+@examples/AGENTS.md
+@doc/guide/AGENTS.md
+<!-- When a CLAUDE.md is present, Claude Code reads it and not the AGENTS.md files, so every one of them is imported here. -->
 <!-- Personal, per-checkout additions go in CLAUDE.local.md, which is gitignored. -->
 <!--********************************************************************
 Copyright (C) 2026  Robert A. Beezer
