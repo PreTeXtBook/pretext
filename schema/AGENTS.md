@@ -23,6 +23,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 - `build.sh` contains a hard-coded PreTeXt root variable, `PTX`. Copy it and adapt that path, rather than running the committed script as-is.
 - Keep `pretext-dev.rnc`, generated from `pretext.xml`, purely additive over the production schema: a bare include, new named patterns, and choice additions only.
 - Put context-dependent checks that RELAX NG cannot express in `pretext-validation-plus.xsl`, whose header and sections describe this role.
+- Deprecating a construct removes it from the schema in the same change: the schema never admits a deprecated form. The construct keeps working through code, and whoever still uses it learns so from a deprecation message.
 - A new element or attribute usually pairs with a stylesheet change, a sample-article example, and documentation in the Guide as [doc/guide/AGENTS.md](../doc/guide/AGENTS.md) describes.
 - From the checkout root, regenerate all schema products in a temporary copy and compare every resulting `.rnc` and `.rng` file with the committed version:
 
