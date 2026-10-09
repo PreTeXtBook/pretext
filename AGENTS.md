@@ -41,7 +41,8 @@ PreTeXt is an authoring and publishing system for textbooks, research articles, 
 - Before adding a configurable feature, decide whether its switch belongs in `docinfo` or the publication file by the principles in the [coding chapter](doc/guide/developer/coding.xml).
 - [Careful documentation accompanies every new feature](doc/guide/developer/coding.xml).
 - Commit subjects use `Area: lowercase description`, omit a trailing period, stay on one line, and stay within roughly 60 to 70 characters, per the [Git chapter](doc/guide/developer/git.xml). Put XML names in double quotes, such as `"@font-size"`. Write a body only if explicitly requested; maintainers delete anything beyond the subject line.
-- Current areas include Schema, Publication schema, Publisher variables, HTML, LaTeX, CSS, JavaScript, Guide, Sample article, Sample book, Assembly, Common, Validation, and Deprecate.
+- Current areas include Schema, Publication schema, Publisher variables, HTML, LaTeX, XSL-FO, CSS, JavaScript, Guide, Sample article, Sample book, Assembly, Common, Validation, and Deprecate.
+- Take an area from the history, never from a file name, since file names carry abbreviations: `git log --format=%s | grep '^Sample article: '` shows one in use. Write `XSL-FO`, never `FO`. `Schema` is the schema for documents; a change to the schema for publication files takes `Publication schema`. A change to one example takes the name of that example, such as `Sample article`, `Sample book`, or `PDF-FO development article`; `Examples` is for one change made across several.
 - Keep one logical change per commit and do not squash your own; maintainers may combine or redistribute commits when merging, as [CONTRIBUTING.md](CONTRIBUTING.md) says.
 - Follow [CONTRIBUTING.md](CONTRIBUTING.md) and the [Git chapter](doc/guide/developer/git.xml): keep one topic per branch, rebase onto the default `master` branch, never merge `master` into a topic, and stop pushing while a PR is under review unless asked.
 - Isolate formatting-only changes and add their commit hashes to `.git-blame-ignore-revs`.
@@ -66,7 +67,7 @@ These apply wherever PreTeXt source is written, the examples and the Guide inclu
 - A division (`chapter`, `section`, `subsection`, and so on) carries both `@xml:id` and `@label`, with the same value.
 - Write `<mdash/>` tight against the words on either side: `word<mdash/>word`.
 - Display mathematics is an `md`, with `@number` where a number is wanted; `me`, `men`, and `mdn` are deprecated.
-- Place an `idx` right after the `title` of the structure it indexes. When the precision of a paragraph is needed, place it between sentences, on a line of its own.
+- Place an `idx` right after the `title` of the structure it indexes. An `idx` inside a `p` is a very rare occurrence, for an entry that needs the precision of a single paragraph; it then goes between sentences, on a line of its own.
 - Indent the content of a Sage cell to match the surrounding XML.
 
 ## Verification
@@ -79,6 +80,7 @@ These apply wherever PreTeXt source is written, the examples and the Guide inclu
 
       python3 pretext/pretext -c doc -f html -p examples/minimal/publication/publication.ptx -d /tmp/minimal-html examples/minimal/source/main.ptx
 
+- Development here uses the `pretext/pretext` script, as above, and not the PreTeXt command-line interface (CLI): an installed CLI bundles a frozen copy of the script, stylesheets, CSS, and JavaScript, so it does not run the changes in your checkout. Advice written for a general reader, such as the build steps in the [Guide's README](doc/guide/README.md), does use the CLI; when developing, follow the commands here instead.
 - Regenerate the schema products and compare them with the committed files as described in [schema/AGENTS.md](schema/AGENTS.md).
 - Rebuild generated web assets locally to check source changes:
 
