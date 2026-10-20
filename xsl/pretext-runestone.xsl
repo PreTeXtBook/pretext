@@ -165,6 +165,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- no .proxyuri_runs -->
                 <!-- no .proxyuri_files -->
                 <!-- no .enable_chatcodes -->
+
+                <!-- Inject a marker that RS will use to place eBookConfig values -->
+                <xsl:value-of select="$rso"/><xsl:text> ebook_config_override | safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
             </script>
             <xsl:text>&#xa;</xsl:text>
 
