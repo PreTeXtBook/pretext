@@ -119,6 +119,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </journal>
 
   <journal>
+    <code>math-mag</code>
+    <name>Mathematics Magazine</name>
+    <publisher>Mathematical Association of America</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-national-library-of-medicine"/>
+  </journal>
+
+  <journal>
     <code>quart-appl-math</code>
     <name>Quarterly of Applied Mathematics</name>
     <publisher>American Mathematical Society</publisher>
