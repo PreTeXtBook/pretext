@@ -8804,6 +8804,16 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- For a cross-reference to an unnumbered division, in place of -->
+<!-- its number: a separator, then the division's title, quoted.  -->
+<xsl:template match="xref" mode="numberless-division-title">
+    <xsl:param name="target"/>
+    <xsl:apply-templates select="." mode="xref-text-separator"/>
+    <xsl:apply-templates select="." mode="lq-character"/>
+    <xsl:apply-templates select="$target" mode="title-xref"/>
+    <xsl:apply-templates select="." mode="rq-character"/>
+</xsl:template>
+
 <!-- The text that will be visible and clickable    -->
 <!-- Bibliography items return a naked number,      -->
 <!-- caller is responsible for adjusting text with  -->
@@ -8821,6 +8831,23 @@ Book (with parts), "section" at level 3
     <xsl:variable name="b-is-contributor-target" select="boolean($target/self::contributor)"/>
     <!-- recognize content s potential override -->
     <xsl:variable name="b-has-content" select="not($custom-text = '')" />
+    <!-- A division is unnumbered when the publisher's numbering stops -->
+    <!-- above it, as for a journal whose sections have no numbers.    -->
+    <!-- A cross-reference that would use its number uses its title,   -->
+    <!-- as in: Section "A motivating question".  So the same source   -->
+    <!-- serves styles with numbered and unnumbered sections.          -->
+    <xsl:variable name="b-is-numberless-division">
+        <xsl:if test="$target[&STRUCTURAL-FILTER;] and $target/title">
+            <xsl:variable name="division-number">
+                <xsl:apply-templates select="$target" mode="xref-number">
+                    <xsl:with-param name="xref" select="." />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:if test="$division-number = ''">
+                <xsl:text>true</xsl:text>
+            </xsl:if>
+        </xsl:if>
+    </xsl:variable>
     <!-- check some situations that would lead to ineffective -->
     <!-- cross-references due to empty text                   -->
     <xsl:choose>
@@ -8860,7 +8887,7 @@ Book (with parts), "section" at level 3
                     <xsl:with-param name="xref" select="." />
                 </xsl:apply-templates>
             </xsl:variable>
-            <xsl:if test="($the-number = '') and not($b-is-contributor-target)">
+            <xsl:if test="($the-number = '') and not($b-is-contributor-target) and not($b-is-numberless-division = 'true')">
                 <xsl:message>
                     <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to build text using a number to identify the target, but the target (which has @xml:id "</xsl:text>
@@ -8967,6 +8994,11 @@ Book (with parts), "section" at level 3
                         <xsl:apply-templates select="." mode="xref-text-separator"/>
                     </xsl:if>
                     <xsl:copy-of select="$the-number"/>
+                    <xsl:if test="$b-is-numberless-division = 'true'">
+                        <xsl:apply-templates select="." mode="numberless-division-title">
+                            <xsl:with-param name="target" select="$target"/>
+                        </xsl:apply-templates>
+                    </xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -9001,6 +9033,11 @@ Book (with parts), "section" at level 3
                     <xsl:call-template name="xref-number-text">
                         <xsl:with-param name="number" select="$the-number"/>
                     </xsl:call-template>
+                    <xsl:if test="$b-is-numberless-division = 'true'">
+                        <xsl:apply-templates select="." mode="numberless-division-title">
+                            <xsl:with-param name="target" select="$target"/>
+                        </xsl:apply-templates>
+                    </xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
