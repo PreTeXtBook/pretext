@@ -741,6 +741,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- The first appendix starts the appendices, as the texstyle file   -->
+<!-- says.  Inside an environment (@env), such as that of the         -->
+<!-- "appendix" package, nothing more is needed.  Otherwise a command -->
+<!-- (@cmd, without its backslash), by default LaTeX's \appendix,     -->
+<!-- which takes no argument.                                         -->
+<xsl:template name="appendices-start">
+    <xsl:variable name="ts-appendices" select="$texstyle-root/texstyle/appendices"/>
+    <xsl:choose>
+        <xsl:when test="$ts-appendices/@env"/>
+        <xsl:when test="$ts-appendices/@cmd">
+            <xsl:text>\</xsl:text>
+            <xsl:value-of select="$ts-appendices/@cmd"/>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\appendix&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Optional text before each appendix title, such as "Appendix: ", -->
+<!-- for journals whose sections, and so appendices, are unnumbered. -->
+<xsl:template name="appendix-title-prefix">
+    <xsl:value-of select="$texstyle-root/texstyle/appendices/@title-prefix"/>
+</xsl:template>
+
 <xsl:template match="texstyle/appendices">
     <xsl:if test="$document-root//appendix">
         <xsl:text>%&#xa;</xsl:text>
