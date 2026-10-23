@@ -235,6 +235,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="late-preamble-adjustments"/>
 </xsl:template>
 
+<!-- A journal's class or package may set the text font, as            -->
+<!-- "mathmag.sty", for Mathematics Magazine, does with Times.         -->
+<!-- Then the texstyle file says                                       -->
+<!--     <ptx-preamble main-font="journal">                            -->
+<!-- and for pdflatex the T1 font encoding stays, but the Latin Modern -->
+<!-- fonts, which would replace the journal's font, are not loaded.    -->
+<!-- This overrides the template of the same name in -latex-common.    -->
+<xsl:template name="font-pdflatex-main">
+    <xsl:choose>
+        <xsl:when test="$texstyle-root/texstyle/ptx-preamble/@main-font = 'journal'">
+            <xsl:text>%% Text font is set by the journal's class or package&#xa;</xsl:text>
+            <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
+            <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- A list of all the elements that could need \newtheorem environments -->
 <xsl:variable name="numbered-theorem-envs" select="
         ($document-root//lemma)[1]|
