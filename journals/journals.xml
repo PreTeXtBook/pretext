@@ -79,6 +79,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </journal>
 
   <journal>
+    <code>college-math-j</code>
+    <name>The College Mathematics Journal</name>
+    <publisher>Mathematical Association of America</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-national-library-of-medicine"/>
+  </journal>
+
+  <journal>
     <code>conform-geom-dyn</code>
     <name>Conformal Geometry and Dynamics</name>
     <publisher>American Mathematical Society</publisher>
