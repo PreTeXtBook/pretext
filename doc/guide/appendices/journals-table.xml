@@ -52,9 +52,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <cell>elsevier-with-titles</cell>
     </row>
     <row bottom="minor">
+      <cell>The American Mathematical Monthly</cell>
+      <cell>amer-math-monthly</cell>
+      <cell>taylor-and-francis-national-library-of-medicine</cell>
+    </row>
+    <row bottom="minor">
       <cell>Bulletin (New Series) of the American Mathematical Society</cell>
       <cell>bull-amer-math-soc</cell>
       <cell>american-mathematical-society-numeric</cell>
+    </row>
+    <row bottom="minor">
+      <cell>The College Mathematics Journal</cell>
+      <cell>college-math-j</cell>
+      <cell>taylor-and-francis-national-library-of-medicine</cell>
     </row>
     <row bottom="minor">
       <cell>Conformal Geometry and Dynamics</cell>
@@ -85,6 +95,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <cell>Mathematics of Computation</cell>
       <cell>math-comp</cell>
       <cell>american-mathematical-society-numeric</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Mathematics Magazine</cell>
+      <cell>math-mag</cell>
+      <cell>taylor-and-francis-national-library-of-medicine</cell>
     </row>
     <row bottom="minor">
       <cell>Quarterly of Applied Mathematics</cell>
