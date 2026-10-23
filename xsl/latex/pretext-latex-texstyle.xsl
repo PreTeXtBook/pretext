@@ -287,7 +287,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(preceding-sibling::theoremstyle) and not(@define-counter='no')">
         <xsl:text>\newtheorem{theorem}{</xsl:text>
         <xsl:apply-templates select="($document-root//theorem)[1]" mode="type-name"/>
-        <xsl:text>}[section]&#xa;</xsl:text>
+        <xsl:text>}</xsl:text>
+        <xsl:call-template name="theorem-counter-within"/>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- Read in all the names of theorems in the @environments attribute -->
     <xsl:variable name="thm-envs" select="str:tokenize(@environments, ', ')"/>
