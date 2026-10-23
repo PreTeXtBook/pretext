@@ -642,7 +642,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Divisions -->
 
-<xsl:template match="section|subsection|subsubsection|appendix">
+<xsl:template match="section|subsection|subsubsection">
     <xsl:apply-templates select="." mode="console-typeout"/>
     <xsl:text>\</xsl:text>
     <xsl:value-of select="local-name(.)"/>
@@ -658,6 +658,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
+<!-- An article's appendix is a LaTeX \section, after the \appendix  -->
+<!-- command (which takes no argument) switches section numbering to -->
+<!-- letters, so the first appendix also starts the appendices.  Two -->
+<!-- named templates let a journal style (texstyle) say how the      -->
+<!-- appendices start, and give a prefix for each appendix title.    -->
+<xsl:template match="appendix">
+    <xsl:if test="not(preceding-sibling::appendix)">
+        <xsl:call-template name="appendices-start"/>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="console-typeout"/>
+    <xsl:text>\section{</xsl:text>
+    <xsl:call-template name="appendix-title-prefix"/>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}\label{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id" />
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+    <xsl:text>% end of appendix: </xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="appendices-start">
+    <xsl:text>\appendix&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="appendix-title-prefix"/>
 
 <xsl:template match="subsubsubsection">
     <xsl:apply-templates select="." mode="console-typeout"/>
