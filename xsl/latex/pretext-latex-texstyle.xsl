@@ -122,8 +122,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Catch-all for elements not yet implemented, to be overridden below -->
-<xsl:template match="texstyle/*">
+<!-- Catch-all for elements not yet implemented, to be overridden below. -->
+<!-- A "text" child is raw LaTeX, written by the "text" template below.  -->
+<xsl:template match="texstyle/*[not(self::text)]">
     <xsl:message>PTX:WARNING: Unhandled texstyle element: <xsl:value-of select="name()"/></xsl:message>
 </xsl:template>
 
