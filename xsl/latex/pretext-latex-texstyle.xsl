@@ -183,7 +183,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="." />
     </xsl:call-template>
-    <xsl:text>% End TexStyle preamble addioions.</xsl:text>
+    <!-- The text of the element need not end with a newline, so one  -->
+    <!-- precedes the closing comment and another follows it, keeping -->
+    <!-- the next line of the preamble out of the comment.            -->
+    <xsl:text>&#xa;% End TexStyle preamble additions.&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Here we build the "standard" (classic) latex preamble,       -->
