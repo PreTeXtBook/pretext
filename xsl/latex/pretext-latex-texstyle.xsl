@@ -612,6 +612,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$ptx-node/date"/>
 </xsl:template>
 
+<!-- Author biographies, which some journals set at the end of the  -->
+<!-- article, as with the "biog" environment of the Mathematical    -->
+<!-- Association of America.  Only authors having a "biography" are -->
+<!-- listed, and nothing is written if no author has one.  The      -->
+<!-- children of the texstyle element are                           -->
+<!-- applied once for each such author, as with an "author-list",   -->
+<!-- so a texstyle file says, for example,                          -->
+<!--     <biographies env="biog">                                   -->
+<!--         <text>\item[</text><ptx-personname/><text>] </text>    -->
+<!--         <ptx-biography/>                                       -->
+<!--     </biographies>                                             -->
+<xsl:template match="texstyle/biographies">
+    <xsl:if test="$bibinfo/author/biography">
+        <xsl:text>%&#xa;% Author biographies&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@env">
+                <xsl:text>\begin{</xsl:text>
+                <xsl:value-of select="@env"/>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@heading">
+                <xsl:value-of select="@heading"/>
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:apply-templates select="$bibinfo/author[biography]" mode="author-list">
+            <xsl:with-param name="ts-node" select="."/>
+        </xsl:apply-templates>
+        <xsl:if test="@env">
+            <xsl:text>\end{</xsl:text>
+            <xsl:value-of select="@env"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<!-- The paragraphs of one author's biography, without any title -->
+<xsl:template match="ptx-biography">
+    <xsl:param name="ptx-node"/>
+    <xsl:apply-templates select="$ptx-node/biography/*[not(self::title)]"/>
+</xsl:template>
+
 <!-- End of author information -->
 
 
