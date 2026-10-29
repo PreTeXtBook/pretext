@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright (C) 2026  Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*****************************************************************-->
+
+<!-- The College Mathematics Journal, of the Mathematical Association         -->
+<!-- of America, published by Taylor & Francis.  Modeled on the               -->
+<!-- journal's template, "CMJ-template.tex" (2024), which uses the            -->
+<!-- article class with the association's "college-math-j.sty".  That package -->
+<!-- sets Times as the text font, leaves sections unnumbered, and             -->
+<!-- runs in subsection titles.                                               -->
+<!--                                                                          -->
+<!-- As in the template, the authors' biographies (with each email)           -->
+<!-- follow the title, once a paper is accepted.  The journal's               -->
+<!-- author photographs have no counterpart in PreTeXt, and are left          -->
+<!-- out.  At the end come the acknowledgment (from the article's             -->
+<!-- support statement), the Summary (the abstract), and the                  -->
+<!-- references.                                                              -->
+<!--                                                                          -->
+<!-- Reviewing is double-anonymous, so the first submission omits the         -->
+<!-- authors, and their biographies, from the bibinfo.                        -->
+<!--                                                                          -->
+<!-- A publication file should number divisions at level 0, since             -->
+<!-- "college-math-j.sty" sets no section numbers, so that                    -->
+<!-- cross-references agree with the printed page.                            -->
+<texstyle>
+    <metadata>
+        <code>college-math-j</code>
+        <name>The College Mathematics Journal</name>
+        <publisher>Mathematical Association of America (Taylor &amp; Francis)</publisher>
+        <latex-engine command="pdflatex"/>
+        <required-files>
+            <file name="college-math-j.sty" href="https://maa.org/wp-content/uploads/2024/10/CMJ-Templates.zip" compression="zip" path="Style File/college-math-j.sty"/>
+        </required-files>
+        <style-author>David W. Farmer</style-author>
+        <date>2026-10-22</date>
+    </metadata>
+
+    <documentclass name="article"/>
+
+    <packages>
+    \usepackage{college-math-j}
+    </packages>
+
+    <!-- college-math-j.sty sets Times, so PreTeXt does not load Latin -->
+    <!-- Modern; theorems use the amsthm styles, as in the template    -->
+    <ptx-preamble main-font="journal"/>
+
+    <title cmd="title">
+        <arg><ptx-title/></arg>
+    </title>
+
+    <author cmd="author">
+        <arg>
+            <author-list sep=" and ">
+                <ptx-personname/>
+            </author-list>
+        </arg>
+    </author>
+
+    <begin-document/>
+
+    <maketitle/>
+
+    <biographies env="biog">
+        <text>\item[</text>
+        <ptx-personname/>
+        <text>] (</text>
+        <ptx-email/>
+        <text>) </text>
+        <ptx-biography/>
+    </biographies>
+
+    <mainmatter/>
+
+    <!-- Sections are unnumbered, so an appendix is labeled in its title -->
+    <appendices title-prefix="Appendix: "/>
+
+    <!-- The article's "support" statement (funding) is the acknowledgment -->
+    <support env="acknowledgment">
+        <ptx-bibinfo-support/>
+    </support>
+
+    <!-- college-math-j.sty sets the "abstract" environment as the Summary -->
+    <abstract env="abstract">
+        <ptx-abstract/>
+    </abstract>
+
+    <bibliography/>
+
+    <end-document/>
+</texstyle>
