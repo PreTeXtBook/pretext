@@ -9313,13 +9313,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             fGraph = functiongraph(function(x) {
                               return a.Value()*x^2 + b.Value()*x + c.Value();
                             });
-                            P = glider(1,0, fGraph);
-                            Q = point(2,2)
-                                &lt;&lt; name:"P" &gt;&gt;;
-                            secant = line(P,Q)
+                            A = glider(1,0, fGraph);
+                            P = point(2,2);
+                            secant = line(A,P)
                               &lt;&lt; color: (function() {
-                                      m = (Q.Y() - P.Y())/(Q.X() - P.X());
-                                      dydx = 2*a.Value()*P.X() + b.Value();
+                                      m = (P.Y() - A.Y())/(P.X() - A.X());
+                                      dydx = 2*a.Value()*A.X() + b.Value();
                                       cVal = "red";
                                       if (abs(m-dydx) &lt; 0.001) {
                                           cVal = "blue";
@@ -9328,12 +9327,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                   })
                               &gt;&gt;;
                             dydxValue = text(-4, 1.5, function() {
-                                    m = 2*a.Value()*P.X() + b.Value();
+                                    m = 2*a.Value()*A.X() + b.Value();
                                     return ("dy/dx = " + trunc(m,3));
                                 })
                                 &lt;&lt; frozen: true &gt;&gt;;
                             mValue = text(-4, 1, function() {
-                                  m = (Q.Y() - P.Y())/(Q.X() - P.X());
+                                  m = (P.Y() - A.Y())/(P.X() - A.X());
                                   return ("m = " + trunc(m,3));
                               })
                               &lt;&lt; frozen: true &gt;&gt;;
