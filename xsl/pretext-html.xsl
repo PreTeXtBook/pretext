@@ -10470,8 +10470,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- JSXGraph header libraries -->
 <xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/1.8.0/jsxgraph.css" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/1.8.0/jsxgraphcore.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/1.14.0/jsxgraph.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/1.14.0/jsxgraphcore.js"></script>
 </xsl:template>
 
 <!-- D3.js header libraries -->
