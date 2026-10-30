@@ -26,9 +26,12 @@
 @use 'components/chunks/sidebyside';
 @use 'components/chunks/discussion-inline';
 
-// TODO... needed???
-// @use 'colors/legacy/all_colors.scss';
-// @use 'colors/legacy/setcolors.css';
+// eBooks only need a limited subset of the color variables and do not
+// support publisher overrides. So don't import _color-vars.scss and
+// just define needed variable here.
+:root {
+    --ptx-image-bg: white;
+}
 
 // Note: Not sure if .ptx-content.epub selectors need to be different than the
 // .ptx-content selectors below. They were different in source files this
@@ -37,6 +40,14 @@
 .ptx-content.epub {
     img {
         display: block;
+
+        // images don't get image-box in epub, so apply background here
+        background: var(--ptx-image-bg);
+    }
+
+    // images don't get image-box in epub, so apply background here
+    svg {
+        background: var(--ptx-image-bg);
     }
 
     .solutions {
