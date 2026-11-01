@@ -5048,6 +5048,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     returns is saved in a file of representations named by this id.    -->
 <!--     The "representations" pass reads that file back in, which happens  -->
 <!--     before we construct unique-id.                                     -->
+<!--                                                                        -->
+<!-- xref                                                                   -->
+<!--     A citation is formatted for a Citation Style Language (CSL) style  -->
+<!--     outside of this stylesheet, and the result is labeled by this id.  -->
+<!--     The "assembly" pass reads the formatted citations back in, which   -->
+<!--     happens before we construct unique-id.                             -->
 
 <!-- NB: we believe the @pi:assembly-id will equal the @pi:unique-id -->
 <!-- ("unique-id" template) for objects at the level of blocks,      -->
@@ -5074,10 +5080,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Every element carrying an "@pi:assembly-id" stamp reports it    -->
 <!-- through this single template.  The match list is deliberately   -->
 <!-- explicit — media and images, data files, WeBWorK and STACK      -->
-<!-- problems, and the fill-in dynamic-substitution owners (the      -->
-<!-- exercise-like elements, or a "task" they contain, whichever     -->
-<!-- holds "setup") — so the BUG fallback below can catch an         -->
-<!-- unexpected application.                                         -->
+<!-- problems, cross-references for citations, and the fill-in       -->
+<!-- dynamic-substitution owners (the exercise-like elements, or a   -->
+<!-- "task" they contain, whichever holds "setup") — so the BUG      -->
+<!-- fallback below can catch an unexpected application.             -->
 <!--                                                                 -->
 <!-- The stamp belongs to the assembly, laid down partway through    -->
 <!-- the phases so that the later ones can coordinate on it.  It is  -->
@@ -5094,6 +5100,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | activity[@pi:exercise-interactive='webwork']
                    | exploration[@pi:exercise-interactive='webwork']
                    | investigation[@pi:exercise-interactive='webwork']
+                   | xref
                    | exercise[@pi:exercise-interactive='fillin' and setup]
                    | project[@pi:exercise-interactive='fillin' and setup]
                    | activity[@pi:exercise-interactive='fillin' and setup]
