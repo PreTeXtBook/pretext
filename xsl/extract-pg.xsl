@@ -175,7 +175,7 @@
 
 <xsl:template match="webwork[@source|statement|task|text()]" mode="extraction">
     <xsl:variable name="problem">
-        <xsl:value-of select="../@pi:assembly-id"/>
+        <xsl:apply-templates select=".." mode="assembly-id"/>
     </xsl:variable>
     <problem>
         <xsl:attribute name="id">
@@ -198,7 +198,7 @@
         <!-- the Python routines, which know it as "copied-from".                  -->
         <xsl:if test="@pi:copied-from">
             <xsl:attribute name="copied-from">
-                <xsl:value-of select="id(@pi:copied-from)/../@pi:assembly-id"/>
+                <xsl:apply-templates select="id(@pi:copied-from)/.." mode="assembly-id"/>
             </xsl:attribute>
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->

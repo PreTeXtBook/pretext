@@ -2093,8 +2093,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- Load the per-exercise representation file for this    -->
             <!-- exercise, identified by its @pi:assembly-id.          -->
+            <xsl:variable name="the-id">
+                <xsl:apply-templates select="." mode="assembly-id"/>
+            </xsl:variable>
             <xsl:variable name="webwork-rep-uri"
-                select="concat($webwork-representations-dir, @pi:assembly-id, '.xml')"/>
+                select="concat($webwork-representations-dir, $the-id, '.xml')"/>
             <xsl:variable name="the-webwork-rep"
                 select="document($webwork-rep-uri, $original)/webwork-reps"/>
             <xsl:choose>
@@ -2106,14 +2109,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>" will be empty.</xsl:message>
+                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @pi:assembly-id "<xsl:value-of select="$the-id"/>" will be empty.</xsl:message>
                 </xsl:when>
                 <!-- This should only fail if the file is missing or stale.  Repeatedly. -->
                 <xsl:when test="not($the-webwork-rep)">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
+                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @pi:assembly-id "<xsl:value-of select="$the-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- The representation file may record a server failure   -->
@@ -2123,7 +2126,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- but warn the author so the failure does not go        -->
                     <!-- unnoticed in later builds.                            -->
                     <xsl:if test="$the-webwork-rep/static/@failure">
-                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @pi:assembly-id "<xsl:value-of select="@pi:assembly-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
+                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @pi:assembly-id "<xsl:value-of select="$the-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
                     </xsl:if>
                     <!-- Build a temporary exercise with "webwork-reps" from the  -->
                     <!-- representations file substituted in place of "webwork".   -->
@@ -5039,6 +5042,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     interrogate the file manufactured in the generated directory in    -->
 <!--     order to make a sample of its content.  This happens before we     -->
 <!--     construct unique-id.                                               -->
+<!--                                                                        -->
+<!-- exercise and the project-like elements, when holding a "webwork"       -->
+<!--     A WeBWorK problem goes to a WeBWorK server, and what the server    -->
+<!--     returns is saved in a file of representations named by this id.    -->
+<!--     The "representations" pass reads that file back in, which happens  -->
+<!--     before we construct unique-id.                                     -->
 
 <!-- NB: we believe the @pi:assembly-id will equal the @pi:unique-id -->
 <!-- ("unique-id" template) for objects at the level of blocks,      -->
@@ -5064,11 +5073,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Every element carrying an "@pi:assembly-id" stamp reports it    -->
 <!-- through this single template.  The match list is deliberately   -->
-<!-- explicit — media and images, data files, STACK problems, and    -->
-<!-- the fill-in dynamic-substitution owners (the exercise-like      -->
-<!-- elements, or a "task" they contain, whichever holds "setup")    -->
-<!-- — so the BUG fallback below can catch an unexpected             -->
-<!-- application.                                                    -->
+<!-- explicit — media and images, data files, WeBWorK and STACK      -->
+<!-- problems, and the fill-in dynamic-substitution owners (the      -->
+<!-- exercise-like elements, or a "task" they contain, whichever     -->
+<!-- holds "setup") — so the BUG fallback below can catch an         -->
+<!-- unexpected application.                                         -->
 <!--                                                                 -->
 <!-- The stamp belongs to the assembly, laid down partway through    -->
 <!-- the phases so that the later ones can coordinate on it.  It is  -->
@@ -5080,6 +5089,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="audio|video|interactive|image
                    | datafile
                    | exercise/stack
+                   | exercise[@pi:exercise-interactive='webwork']
+                   | project[@pi:exercise-interactive='webwork']
+                   | activity[@pi:exercise-interactive='webwork']
+                   | exploration[@pi:exercise-interactive='webwork']
+                   | investigation[@pi:exercise-interactive='webwork']
                    | exercise[@pi:exercise-interactive='fillin' and setup]
                    | project[@pi:exercise-interactive='fillin' and setup]
                    | activity[@pi:exercise-interactive='fillin' and setup]
