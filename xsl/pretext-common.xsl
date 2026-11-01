@@ -3856,10 +3856,10 @@ Book (with parts), "section" at level 3
         <!-- If part of exercise-like, use that label, otherwise own                -->
         <!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync   -->
         <xsl:when test="parent::exercise|parent::task|parent::project|parent::activity|parent::exploration|parent::investigation">
-            <xsl:value-of select="../@pi:unique-id"/>
+            <xsl:apply-templates select=".." mode="unique-id"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="@pi:unique-id"/>
+            <xsl:apply-templates select="." mode="unique-id"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>.js</xsl:text>
