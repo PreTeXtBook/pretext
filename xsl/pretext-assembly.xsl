@@ -2557,8 +2557,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
             <!-- Read pre-computed URLs from sidecar file -->
             <!-- But not if doing an extraction           -->
+            <xsl:variable name="the-id">
+                <xsl:apply-templates select="." mode="assembly-id"/>
+            </xsl:variable>
             <xsl:variable name="url-file"
-                select="document(concat($generated-directory-source, 'qrcode/', @pi:assembly-id, '-url.xml'), $original)"/>
+                select="document(concat($generated-directory-source, 'qrcode/', $the-id, '-url.xml'), $original)"/>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <!-- copy over @xml:id, which may be in use by -->
@@ -3925,7 +3928,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- id, and the derived name keeps it stable and             -->
             <!-- collision-free.                                          -->
             <xsl:attribute name="xml:id">
-                <xsl:value-of select="@pi:assembly-id"/>
+                <xsl:apply-templates select="." mode="assembly-id"/>
                 <xsl:text>-ggb-slate</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="surface">
