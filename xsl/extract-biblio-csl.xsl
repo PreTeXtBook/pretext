@@ -326,7 +326,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:element name="xref-csl" namespace="http://pretextbook.org/2020/pretext/internal">
             <!-- namespacing the attribute is sort of ugly -->
             <xsl:attribute name="id">
-                <xsl:value-of select="@pi:assembly-id"/>
+                <xsl:apply-templates select="." mode="assembly-id"/>
             </xsl:attribute>
             <xsl:value-of select="$citation-item-list"/>
         </xsl:element>

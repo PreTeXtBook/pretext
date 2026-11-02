@@ -6866,7 +6866,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="latex-image">
                 <xsl:apply-templates select="$image-svg-xml/svg:svg/*" mode="svg-unique-ids">
                     <xsl:with-param name="svg-unique-id">
-                        <xsl:value-of select="@pi:unique-id"/>
+                        <xsl:apply-templates select="." mode="unique-id"/>
                     </xsl:with-param>
                 </xsl:apply-templates>
             </xsl:when>
@@ -13565,7 +13565,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <!-- copy id of this li for use in customization pass -->
             <xsl:attribute name="uid">
-                <xsl:value-of select="@pi:unique-id"/>
+                <xsl:apply-templates select="." mode="unique-id"/>
             </xsl:attribute>
             <div class="toc-title-box">
                 <a href="{$the-url}" class="internal">
@@ -13599,7 +13599,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
     <!-- copy id of this li for use in customization pass, will remove there -->
     <xsl:attribute name="uid">
-        <xsl:value-of select="@pi:unique-id"/>
+        <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:attribute>
     <div class="toc-title-box">
         <a href="{$the-url}" class="internal">
@@ -13628,7 +13628,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="toc-contents" select="exsl:node-set($toc-contents-rtf)"/>
 
     <!-- get the unique id of the current page -->
-    <xsl:variable name="uid" select="@pi:unique-id"/>
+    <xsl:variable name="uid">
+        <xsl:apply-templates select="." mode="unique-id"/>
+    </xsl:variable>
     <!-- use that to find the ToC node for that page -->
     <xsl:variable name="this-page-node" select="$toc-contents//*[@uid = $uid]"/>
     <!-- ancestor list will allow us to identify when we are in the path to the page -->
