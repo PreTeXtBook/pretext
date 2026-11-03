@@ -6936,7 +6936,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- on the image, but kept within the available width, so an image  -->
 <!-- placed off-center by @margins does not push its description out -->
 <!-- of the text.                                                    -->
-<xsl:template match="image[not(&SBS-LAYOUT-FILTER;)]" mode="description-style">
+<xsl:template match="image[not(&SBS-LAYOUT-FILTER;) and not(parent::datafile)]" mode="description-style">
     <xsl:param name="layout" select="/.."/>
 
     <xsl:variable name="width" select="number($layout/width)"/>
@@ -6968,9 +6968,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- An interactive is centered in a container that spans the -->
-<!-- available width, so its description is simply centered   -->
-<xsl:template match="interactive[not(&SBS-LAYOUT-FILTER;)]" mode="description-style">
+<!-- An interactive, or the image of a data file, is centered -->
+<!-- in a container that spans the available width, so its    -->
+<!-- description is simply centered                           -->
+<xsl:template match="interactive[not(&SBS-LAYOUT-FILTER;)]|datafile/image" mode="description-style">
     <xsl:attribute name="style">
         <xsl:text>width: 80%; margin-left: 10%;</xsl:text>
     </xsl:attribute>

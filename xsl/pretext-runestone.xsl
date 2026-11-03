@@ -3104,7 +3104,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>;base64,</xsl:text>
                         <xsl:value-of select="$image-b64-elt/@pi:base64"/>
                     </xsl:attribute>
+                    <!-- Alternative text as for other images, except that a -->
+                    <!-- data file is never decorative: an image without any -->
+                    <!-- description is named by its file instead            -->
+                    <xsl:choose>
+                        <xsl:when test="not(string(image/shortdescription) = '')">
+                            <xsl:attribute name="alt">
+                                <xsl:apply-templates select="image/shortdescription"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="image/description">
+                            <xsl:attribute name="alt">
+                                <xsl:text>described in detail following the image</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="aria-describedby">
+                                <xsl:apply-templates select="image" mode="describedby-id"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="alt">
+                                <xsl:text>Image file: </xsl:text>
+                                <xsl:value-of select="@filename"/>
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </img>
+                <!-- possibly give a long description -->
+                <xsl:apply-templates select="image" mode="description"/>
             </xsl:when>
             <!-- text, an authored toy example, or a serious external file -->
             <xsl:when test="pre">
