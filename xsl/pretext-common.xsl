@@ -1621,8 +1621,8 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Console Session, prompt on input line-->
-<!-- An interactive command-line session with pairs of input and output -->
+<!-- Console Session, prompt on input line                              -->
+<!-- An interactive command-line session, input and output in any order -->
 <!-- Determining the prompt is a bit complicated, but always the same   -->
 <!-- and always a pure textual result.  It becomes a part of the input  -->
 <!-- line, so this modal template has an "input" as its context.        -->
