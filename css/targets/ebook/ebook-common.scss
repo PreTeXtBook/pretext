@@ -28,9 +28,27 @@
 
 // eBooks only need a limited subset of the color variables and do not
 // support publisher overrides. So don't import _color-vars.scss and
-// just define needed variable here.
+// just define needed variables here.
 :root {
+    --body-text-color: black;
     --ptx-image-bg: white;
+    --code-background: #f5f5f5;
+    --code-inline-background: #f5f5f5;
+
+    // specialized colors to distinguish input/output in non-interactive environs
+    --code-inline-input-background: #f0f0ff;
+    --code-inline-output-background: #f0fff0;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --body-text-color: white;
+        --code-background: #2a2a2a;
+        --code-inline-background: #2a2a2a;
+
+        // specialized colors to distinguish input/output in non-interactive environs
+        --code-inline-input-background: #00003a;
+        --code-inline-output-background: #003a00;
+    }
 }
 
 // Note: Not sure if .ptx-content.epub selectors need to be different than the
@@ -83,21 +101,24 @@
 } // .ptx-content.epub
 
 .ptx-content {
-    // sage cell code goes in a pre.  What else goes there? 
     pre {
         font-size: 95%;
         padding-top: 0.3em;
         padding-bottom: 0.5em;
         padding-left: 0.5em;
-        background: #f0f0f0;
+        background: var(--code-background);
+        color: var(--body-text-color);
     }
 
+    // epub of sage cell input/output has traditionally been colored to
+    // distinguish input from output in non-interactive environments
     pre.code.input {
-        background: #f0f0ff;
+        background: var(--code-inline-input-background);
+        color: var(--body-text-color);
     }
-
     pre.code.output {
-        background: #f0fff0;
+        background: var(--code-inline-output-background);
+        color: var(--body-text-color);
     }
 
     // Placeholder template to use for section headings, will be extended
