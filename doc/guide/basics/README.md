@@ -36,6 +36,7 @@ goes into greater detail` is the preferred style of making an `xref` out of the 
 
 * Unless demonstrating something such as inline math or a cross reference that must live within a `p`, you are expected to put your code snippet in a separate file with extension `.ptx`.
 * Follow the model done in existing sections to use `xi:include` twice, once with `@parse="text"` (always within a listing) and once without setting `@parse`. This allows the reader to see how the code is rendered by the PreTeXt converters.
+* Note that the separate files should *not* contain the standard PreTeXt copyright header, since the entire contents of the file will be transposed inside the `listing` element.
 
 ## Index entries
 
