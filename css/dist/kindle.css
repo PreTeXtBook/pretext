@@ -1633,8 +1633,12 @@ section.solutions section > h6.heading {
 .discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction):nth-child(2) > .para.logical:first-child > .para:first-child > .autopermalink {
   display: none;
 }
+:root {
+  --ptx-image-bg: white;
+}
 .ptx-content.epub img {
   display: block;
+  background: var(--ptx-image-bg);
 }
 .ptx-content.epub .solutions {
   margin-top: 1em;
