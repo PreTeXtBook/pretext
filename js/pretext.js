@@ -107,6 +107,9 @@ function samePageLink(a) {
 
 window.addEventListener("DOMContentLoaded",function(event) {
     let tocButton = document.getElementById("ptx-toc-toggle");
+    if (!tocButton) {
+        return; // a standalone page has no table of contents to toggle
+    }
 
     tocButton.addEventListener("click", (e) => {
         toggletoc();
