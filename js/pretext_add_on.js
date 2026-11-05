@@ -98,61 +98,6 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 
-window.addEventListener("load",function(event) {
-
-    /* add ids to p that have none */
-    p_no_id = document.querySelectorAll('.main p:not([id])');
-    for (var n=p_no_id.length - 1; n >= 0; --n) {
-        e = p_no_id[n];
-        if (e.hasAttribute('id')) {
-/*
-            console.log(e, "was id'd in a previous round");
-*/
-            continue
-        }
-/*
-console.log("this is e", e);
-*/
-        if (e.classList.contains('watermark')) {
-            console.log(e, "skipping the watermark");
-            continue
-        }
-/*
-        console.log("\n                    XXXXXXXXX  p with no id", e);
-*/
-        prev_p = $(e).prevAll("p");
-        console.log("prev_p", prev_p, "xx");
-        if(prev_p.length == 0) {
-            console.log("   PPP   problem: prev_p has no length:", prev_p);
-            continue
-        }
-        console.log("which has id", prev_p[0].id);
-        var parts_found = 1;
-        var parts_to_id = [e];
-        for (var i=0; i < prev_p.length; ++i) {
-            this_previous = prev_p[i];
-            console.log("i", i, "this_previous", this_previous, "id", this_previous.id, "???", this_previous.hasAttribute('id'))
-            if (!this_previous.hasAttribute('id')) {
-                parts_to_id.unshift(this_previous)
-            }
-            else {
-                base_id = this_previous.id;
-                console.log("base_id", base_id);
-                console.log("ready to add id to", parts_to_id);
-                for (var j=0; j < parts_to_id.length; ++j) {
-                    ++parts_found;
-                    var next_id = base_id + "-part" + parts_found.toString();
-                    console.log("parts_found", parts_found, "next_id", next_id);
-                    parts_to_id[j].setAttribute("id", next_id);
-                }
-                break // because we found the id that is the base for the missing ids
-            }
-        }
-    }
-
-},
-false);
-
 /* for the random WW problems */
 
 function updateURLParameter(url, param, paramVal){
