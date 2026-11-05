@@ -1186,6 +1186,9 @@
   }
   window.addEventListener("DOMContentLoaded", function(event2) {
     let tocButton = document.getElementById("ptx-toc-toggle");
+    if (!tocButton) {
+      return;
+    }
     tocButton.addEventListener("click", (e) => {
       toggletoc();
       e.stopPropagation();
