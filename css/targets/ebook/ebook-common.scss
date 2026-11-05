@@ -124,6 +124,15 @@
         color: var(--body-text-color);
     }
 
+    // upside down L doesn't reliably layout well
+    .code-block::before {
+        content: "";
+        display: none;
+    }
+    .code-block {
+        border-left-width: 0;
+    }
+
     // Placeholder template to use for section headings, will be extended
     //  here and in other files
     // The "break-(before/after) might not actually do anything
