@@ -195,11 +195,10 @@ window.addEventListener("load",function(event) {
         {
             case 13:  //CR
                  just_hit_escape = false;
-                 if ($(document.activeElement).hasClass("workspace")) {
+                 if (document.activeElement.classList.contains("workspace")) {
                     process_workspace()
                  }
             case 27: //esc
-         //       var parent_sage_cell = $(this).closest(".sagecell_editor");
                 var parent_sage_cell = document.activeElement.closest(".sagecell_editor");
                 if (parent_sage_cell && !just_hit_escape) {
                     console.log("staying in the sage cell", parent_sage_cell, document.activeElement)
@@ -232,7 +231,6 @@ window.addEventListener("load",function(event) {
          var contained_knowl = the_anchor.querySelector("a[data-knowl]");
          if (contained_knowl && contained_knowl.parentElement == the_anchor) {
            console.log("found a knowl", contained_knowl);
-       //    knowl_click_handler($(contained_knowl))
            contained_knowl.click()
          }
        } else if (the_anchor.hasAttribute("data-knowl")) {
