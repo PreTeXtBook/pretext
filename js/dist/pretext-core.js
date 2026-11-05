@@ -63,7 +63,7 @@
           this.animation = null;
           this.animationState = _SlideRevealer.STATE.INACTIVE;
           this.animatedElementInlineStyle = null;
-          this.triggerElement.addEventListener("click", (e2) => this.onClick(e2));
+          this.triggerElement.addEventListener("click", (e) => this.onClick(e));
         }
         isBusy() {
           return this.animationState !== _SlideRevealer.STATE.INACTIVE || this.animatedElementInlineStyle !== null;
@@ -85,8 +85,8 @@
           this.animatedElement.style.paddingBottom = this.animatedElementInlineStyle.paddingBottom;
           this.animatedElementInlineStyle = null;
         }
-        onClick(e2) {
-          if (e2) e2.preventDefault();
+        onClick(e) {
+          if (e) e.preventDefault();
           if (this.isBusy()) return;
           this.storeAnimatedElementInlineStyle();
           this.animatedElement.style.overflow = "hidden";
@@ -286,13 +286,13 @@
                 this.toggle();
               }, 100);
               const runestoneElements = tempContainer.querySelectorAll(".ptx-runestone-container");
-              [...runestoneElements].forEach((e2) => {
-                const rsId = e2.querySelector("[data-component]")?.id;
+              [...runestoneElements].forEach((e) => {
+                const rsId = e.querySelector("[data-component]")?.id;
                 const onPage = document.getElementById(rsId);
                 if (onPage) {
-                  e2.innerHTML = `<div class="para">The interactive that belongs here is already on the page and cannot appear multiple times. <a href="#${rsId}">Scroll to interactive.</a>`;
+                  e.innerHTML = `<div class="para">The interactive that belongs here is already on the page and cannot appear multiple times. <a href="#${rsId}">Scroll to interactive.</a>`;
                 } else {
-                  window.runestoneComponents.renderOneComponent(e2);
+                  window.runestoneComponents.renderOneComponent(e);
                 }
               });
               const children = [...tempContainer.children];
@@ -432,28 +432,28 @@
         let isDragging = false;
         let offsetX = 0;
         let offsetY = 0;
-        topBar.addEventListener("pointerover", (e2) => {
+        topBar.addEventListener("pointerover", (e) => {
           topBar.style.cursor = "move";
         });
-        topBar.addEventListener("pointerdown", (e2) => {
+        topBar.addEventListener("pointerdown", (e) => {
           isDragging = true;
           const dialogRect = this.dialog.getBoundingClientRect();
-          offsetX = e2.clientX - dialogRect.left;
-          offsetY = e2.clientY - dialogRect.top;
-          topBar.setPointerCapture(e2.pointerId);
+          offsetX = e.clientX - dialogRect.left;
+          offsetY = e.clientY - dialogRect.top;
+          topBar.setPointerCapture(e.pointerId);
         });
-        topBar.addEventListener("pointermove", (e2) => {
+        topBar.addEventListener("pointermove", (e) => {
           if (!isDragging) return;
-          const newX = e2.clientX - offsetX;
-          const newY = e2.clientY - offsetY;
+          const newX = e.clientX - offsetX;
+          const newY = e.clientY - offsetY;
           this.dialog.style.left = `${newX}px`;
           this.dialog.style.top = `${newY}px`;
           this.dialog.style.bottom = "auto";
           this.dialog.style.right = "auto";
         });
-        topBar.addEventListener("pointerup", (e2) => {
+        topBar.addEventListener("pointerup", (e) => {
           isDragging = false;
-          topBar.releasePointerCapture(e2.pointerId);
+          topBar.releasePointerCapture(e.pointerId);
         });
         window.addEventListener("resize", (event2) => {
           this.dialog.style.left = "";
@@ -1121,9 +1121,9 @@
   window.setDarkMode = setDarkMode;
 
   // ../../js/pretext.js
-  function getOffsetTop(e2) {
-    if (!e2) return 0;
-    return getOffsetTop(e2.offsetParent) + e2.offsetTop;
+  function getOffsetTop(e) {
+    if (!e) return 0;
+    return getOffsetTop(e.offsetParent) + e.offsetTop;
   }
   function scrollTocToActive() {
     let fileNameWHash = window.location.href.split("/").pop();
@@ -1180,15 +1180,15 @@
       const currentUrl = new URL(window.location.href);
       const sameDocument = linkUrl.origin === currentUrl.origin && linkUrl.pathname === currentUrl.pathname && linkUrl.search === currentUrl.search;
       return sameDocument && !!linkUrl.hash;
-    } catch (e2) {
+    } catch (e) {
       return false;
     }
   }
   window.addEventListener("DOMContentLoaded", function(event2) {
     let tocButton = document.getElementById("ptx-toc-toggle");
-    tocButton.addEventListener("click", (e2) => {
+    tocButton.addEventListener("click", (e) => {
       toggletoc();
-      e2.stopPropagation();
+      e.stopPropagation();
     });
     let ptxSidebar = document.getElementById("ptx-sidebar");
     let sideBarIsHidden = ptxSidebar.classList.contains("hidden") || !ptxSidebar.classList.contains("visible") && ptxSidebar.offsetParent === null;
@@ -1207,8 +1207,8 @@
           toggletoc();
         }
       });
-      window.addEventListener("pageshow", (e2) => {
-        if (e2.persisted) {
+      window.addEventListener("pageshow", (e) => {
+        if (e.persisted) {
           ptxSidebar.classList.remove("visible");
           ptxSidebar.classList.add("hidden");
           tocButton.setAttribute("aria-expanded", "false");
@@ -1291,8 +1291,8 @@
         expander.setAttribute("aria-controls", subList.id);
         expander.setAttribute("aria-expanded", "false");
         tocItem.querySelector(".toc-title-box").append(expander);
-        expander.addEventListener("click", (e2) => {
-          toggleTOCItem(expander, e2);
+        expander.addEventListener("click", (e) => {
+          toggleTOCItem(expander, e);
         });
         let isActive = tocItem.classList.contains("contains-active") || tocItem.classList.contains("active");
         let preExpanded = isActive || depth < preexpandedLevels;
@@ -1392,108 +1392,6 @@
       });
     });
   });
-  window.addEventListener(
-    "load",
-    function(event2) {
-      p_no_id = document.querySelectorAll(".main p:not([id])");
-      for (var n = p_no_id.length - 1; n >= 0; --n) {
-        e = p_no_id[n];
-        if (e.hasAttribute("id")) {
-          continue;
-        }
-        if (e.classList.contains("watermark")) {
-          console.log(e, "skipping the watermark");
-          continue;
-        }
-        prev_p = $(e).prevAll("p");
-        console.log("prev_p", prev_p, "xx");
-        if (prev_p.length == 0) {
-          console.log("   PPP   problem: prev_p has no length:", prev_p);
-          continue;
-        }
-        console.log("which has id", prev_p[0].id);
-        var parts_found = 1;
-        var parts_to_id = [e];
-        for (var i = 0; i < prev_p.length; ++i) {
-          this_previous = prev_p[i];
-          console.log("i", i, "this_previous", this_previous, "id", this_previous.id, "???", this_previous.hasAttribute("id"));
-          if (!this_previous.hasAttribute("id")) {
-            parts_to_id.unshift(this_previous);
-          } else {
-            base_id = this_previous.id;
-            console.log("base_id", base_id);
-            console.log("ready to add id to", parts_to_id);
-            for (var j = 0; j < parts_to_id.length; ++j) {
-              ++parts_found;
-              var next_id = base_id + "-part" + parts_found.toString();
-              console.log("parts_found", parts_found, "next_id", next_id);
-              parts_to_id[j].setAttribute("id", next_id);
-            }
-            break;
-          }
-        }
-      }
-      console.log("adding video popouts");
-      all_iframes = document.querySelectorAll("body iframeXXXX");
-      for (var i = 0; i < all_iframes.length; i++) {
-        this_item = all_iframes[i];
-        this_item_src = this_item.src;
-        if (this_item_src.includes("youtube")) {
-          this_item_id = this_item.id;
-          this_item_width = this_item.width;
-          this_item_height = this_item.height;
-          if (this_item_height < 150) {
-            continue;
-          }
-          console.log("found a youtube video on", this_item_id);
-          var empty_div = document.createElement("div");
-          var this_videomag_container = document.createElement("div");
-          parent_tag = this_item.parentElement.tagName;
-          if (parent_tag == "FIGURE") {
-            this_videomag_container.setAttribute("class", "videobig");
-          } else {
-            this_videomag_container.setAttribute("class", "videobig nofigure");
-          }
-          this_videomag_container.setAttribute("video-id", this_item_id);
-          this_videomag_container.setAttribute("data-width", this_item_width);
-          this_videomag_container.setAttribute("data-height", this_item_height);
-          this_videomag_container.innerHTML = "fit width";
-          this_item.insertAdjacentElement("beforebegin", empty_div);
-          this_item.insertAdjacentElement("beforebegin", this_videomag_container);
-          this_item.insertAdjacentElement("beforebegin", empty_div);
-        }
-      }
-      $(".videobig").click(function() {
-        parent_video_id = this.getAttribute("video-id");
-        console.log("clicked videobig for", parent_video_id);
-        this_video = document.getElementById(parent_video_id);
-        console.log("make big: ", this_video);
-        original_width = this.getAttribute("data-width");
-        original_height = this.getAttribute("data-height");
-        browser_width = $(window).width();
-        width_ratio = browser_width / original_width;
-        console.log("the browser is wider by a factor of", width_ratio);
-        this_video.setAttribute("width", width_ratio * original_width);
-        this_video.setAttribute("height", width_ratio * original_height);
-        this_video.setAttribute("style", "position:relative; left:-260px; z-index:1000");
-        this.setAttribute("class", "videosmall");
-        this.innerHTML = "make small";
-        $(".videosmall").click(function() {
-          console.log("clicked videosmall");
-          parent_video_id = this.getAttribute("video-id");
-          this_video = document.getElementById(parent_video_id);
-          original_width = this.getAttribute("data-width");
-          original_height = this.getAttribute("data-height");
-          this_video.removeAttribute("style");
-          this_video.setAttribute("width", original_width);
-          this_video.setAttribute("height", original_height);
-          this.setAttribute("class", "videobig");
-          this.innerHTML = "fit width";
-        });
-      });
-    },
-    false
-  );
   function process_workspace() {
     console.log("processing workspace");
     MathJax.typesetPromise();
@@ -1557,11 +1455,11 @@
     "load",
     function(event2) {
       document.onkeyup = function(event3) {
-        var e2 = !event3 ? window.event : event3;
-        switch (e2.keyCode) {
+        var e = !event3 ? window.event : event3;
+        switch (e.keyCode) {
           case 13:
             just_hit_escape = false;
-            if ($(document.activeElement).hasClass("workspace")) {
+            if (document.activeElement.classList.contains("workspace")) {
               process_workspace();
             }
           case 27:
@@ -2666,7 +2564,7 @@
         }).catch((err) => {
           throw err;
         });
-      } catch (e2) {
+      } catch (e) {
         const radio = document.querySelector(`input[name="papersize"][value="letter"]`);
         if (radio) radio.checked = true;
       }
