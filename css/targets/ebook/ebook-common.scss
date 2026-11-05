@@ -38,6 +38,9 @@
     // specialized colors to distinguish input/output in non-interactive environs
     --code-inline-input-background: #f0f0ff;
     --code-inline-output-background: #f0fff0;
+
+    // make sure codeblocks use a monospace font - this is the default stack in web
+    --font-monospace: Inconsolata, Consolas, Monaco, monospace;
 }
 @media (prefers-color-scheme: dark) {
     :root {
