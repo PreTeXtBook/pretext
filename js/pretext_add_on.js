@@ -98,130 +98,6 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 
-window.addEventListener("load",function(event) {
-
-    /* add ids to p that have none */
-    p_no_id = document.querySelectorAll('.main p:not([id])');
-    for (var n=p_no_id.length - 1; n >= 0; --n) {
-        e = p_no_id[n];
-        if (e.hasAttribute('id')) {
-/*
-            console.log(e, "was id'd in a previous round");
-*/
-            continue
-        }
-/*
-console.log("this is e", e);
-*/
-        if (e.classList.contains('watermark')) {
-            console.log(e, "skipping the watermark");
-            continue
-        }
-/*
-        console.log("\n                    XXXXXXXXX  p with no id", e);
-*/
-        prev_p = $(e).prevAll("p");
-        console.log("prev_p", prev_p, "xx");
-        if(prev_p.length == 0) {
-            console.log("   PPP   problem: prev_p has no length:", prev_p);
-            continue
-        }
-        console.log("which has id", prev_p[0].id);
-        var parts_found = 1;
-        var parts_to_id = [e];
-        for (var i=0; i < prev_p.length; ++i) {
-            this_previous = prev_p[i];
-            console.log("i", i, "this_previous", this_previous, "id", this_previous.id, "???", this_previous.hasAttribute('id'))
-            if (!this_previous.hasAttribute('id')) {
-                parts_to_id.unshift(this_previous)
-            }
-            else {
-                base_id = this_previous.id;
-                console.log("base_id", base_id);
-                console.log("ready to add id to", parts_to_id);
-                for (var j=0; j < parts_to_id.length; ++j) {
-                    ++parts_found;
-                    var next_id = base_id + "-part" + parts_found.toString();
-                    console.log("parts_found", parts_found, "next_id", next_id);
-                    parts_to_id[j].setAttribute("id", next_id);
-                }
-                break // because we found the id that is the base for the missing ids
-            }
-        }
-    }
-
-    console.log("adding video popouts");
-    all_iframes = document.querySelectorAll('body iframeXXXX');
-    // for now, we just want the iframes that hace youtube in the src
-    for (var i = 0; i < all_iframes.length; i++) {
-      this_item = all_iframes[i];
-      this_item_src = this_item.src;
- //     console.log("this_item_src", this_item_src);
-      if(this_item_src.includes("youtube")) {
-        this_item_id = this_item.id;
-        this_item_width = this_item.width;
-        this_item_height = this_item.height;
-        if(this_item_height < 150) { continue }
-        console.log("found a youtube video on", this_item_id);
-        var empty_div = document.createElement('div');
-        var this_videomag_container = document.createElement('div');
-       parent_tag = this_item.parentElement.tagName;
-       if(parent_tag == "FIGURE") {
-         this_videomag_container.setAttribute("class", "videobig");
-       } else {
-         this_videomag_container.setAttribute("class", "videobig nofigure");
-       }
-/*
-        this_videomag_container.setAttribute('class', 'videobig');
-*/
-        this_videomag_container.setAttribute('video-id', this_item_id);
-        this_videomag_container.setAttribute('data-width', this_item_width);
-        this_videomag_container.setAttribute('data-height', this_item_height);
-        this_videomag_container.innerHTML = 'fit width';
-
-/* replace this with a surrounding div, for placement, containing a inline-block so the background looks right */
-        this_item.insertAdjacentElement("beforebegin", empty_div); // because of hard-coded permalinks being inline-block */
-        this_item.insertAdjacentElement("beforebegin", this_videomag_container);
-        this_item.insertAdjacentElement("beforebegin", empty_div); // because of hard-coded permalinks being inline-block */
-      }
-    }
-
-/* replace this with a single class fo rthe button, with supplementary classes that say to shrink or grow */
-    $(".videobig").click(function(){
-       parent_video_id = this.getAttribute("video-id");
-       console.log("clicked videobig for", parent_video_id);
-       this_video = document.getElementById(parent_video_id);
-       console.log("make big: ", this_video);
-       original_width =  this.getAttribute("data-width");
-       original_height =  this.getAttribute("data-height");
-
-       browser_width = $(window).width();
-       width_ratio = browser_width/original_width;
-       console.log("the browser is wider by a factor of",width_ratio);
-       this_video.setAttribute("width", width_ratio*original_width);
-       this_video.setAttribute("height", width_ratio*original_height);
-       this_video.setAttribute("style", "position:relative; left:-260px; z-index:1000");
-
-       this.setAttribute("class", "videosmall");
-       this.innerHTML = "make small";
-      $(".videosmall").click(function(){
-         console.log("clicked videosmall");
-         parent_video_id = this.getAttribute("video-id");
-         this_video = document.getElementById(parent_video_id);
-         original_width =  this.getAttribute("data-width");
-         original_height =  this.getAttribute("data-height");
-
-         this_video.removeAttribute("style");
-         this_video.setAttribute("width", original_width);
-         this_video.setAttribute("height", original_height);
-         this.setAttribute("class", "videobig");
-         this.innerHTML = "fit width";
-      });
-    });
-
-},
-false);
-
 /* for the random WW problems */
 
 function updateURLParameter(url, param, paramVal){
@@ -319,11 +195,10 @@ window.addEventListener("load",function(event) {
         {
             case 13:  //CR
                  just_hit_escape = false;
-                 if ($(document.activeElement).hasClass("workspace")) {
+                 if (document.activeElement.classList.contains("workspace")) {
                     process_workspace()
                  }
             case 27: //esc
-         //       var parent_sage_cell = $(this).closest(".sagecell_editor");
                 var parent_sage_cell = document.activeElement.closest(".sagecell_editor");
                 if (parent_sage_cell && !just_hit_escape) {
                     console.log("staying in the sage cell", parent_sage_cell, document.activeElement)
@@ -356,7 +231,6 @@ window.addEventListener("load",function(event) {
          var contained_knowl = the_anchor.querySelector("a[data-knowl]");
          if (contained_knowl && contained_knowl.parentElement == the_anchor) {
            console.log("found a knowl", contained_knowl);
-       //    knowl_click_handler($(contained_knowl))
            contained_knowl.click()
          }
        } else if (the_anchor.hasAttribute("data-knowl")) {
