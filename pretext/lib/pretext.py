@@ -1881,7 +1881,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     failed_thumbnails = []
     for thumb in thumbs:
         thumb_pair = thumb.split(",")
-        url = "http://i.ytimg.com/vi/{}/default.jpg".format(thumb_pair[0])
+        url = "https://i.ytimg.com/vi/{}/default.jpg".format(thumb_pair[0])
         path = os.path.join(dest_dir, thumb_pair[1] + ".jpg")
         log.info("downloading {} as {}...".format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
