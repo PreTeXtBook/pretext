@@ -64,11 +64,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </journal>
 
   <journal>
+    <code>amer-math-monthly</code>
+    <name>The American Mathematical Monthly</name>
+    <publisher>Mathematical Association of America</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-national-library-of-medicine"/>
+  </journal>
+
+  <journal>
     <code>bull-amer-math-soc</code>
     <name>Bulletin (New Series) of the American Mathematical Society</name>
     <publisher>American Mathematical Society</publisher>
     <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
+  </journal>
+
+  <journal>
+    <code>college-math-j</code>
+    <name>The College Mathematics Journal</name>
+    <publisher>Mathematical Association of America</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-national-library-of-medicine"/>
   </journal>
 
   <journal>
@@ -116,6 +130,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <publisher>American Mathematical Society</publisher>
     <citation-stylesheet-language style="american-mathematical-society-numeric"/>
     <method dependent="yes"/>
+  </journal>
+
+  <journal>
+    <code>math-mag</code>
+    <name>Mathematics Magazine</name>
+    <publisher>Mathematical Association of America</publisher>
+    <citation-stylesheet-language style="taylor-and-francis-national-library-of-medicine"/>
   </journal>
 
   <journal>

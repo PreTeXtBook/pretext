@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright (C) 2026  Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*****************************************************************-->
+
+<!-- Mathematics Magazine, of the Mathematical Association of America,     -->
+<!-- published by Taylor & Francis.  Modeled on the journal's              -->
+<!-- template, "Math_Mag_Template.tex", which uses the article class       -->
+<!-- with the association's "mathmag.sty".  That package sets Times as the -->
+<!-- text font, leaves sections unnumbered, runs in subsection titles,     -->
+<!-- and sets the abstract as a "Summary" placed at the end, after the     -->
+<!-- acknowledgment and the references.  Authors' biographies follow       -->
+<!-- (in a "biog" list), once a paper is accepted.                         -->
+<!--                                                                       -->
+<!-- Reviewing is double-anonymous, so the first submission omits the      -->
+<!-- authors, and their biographies, from the bibinfo.                     -->
+<!--                                                                       -->
+<!-- A publication file should number divisions at level 0, since          -->
+<!-- "mathmag.sty" sets no section numbers, so that cross-references       -->
+<!-- agree with the printed page.                                          -->
+<texstyle>
+    <metadata>
+        <code>math-mag</code>
+        <name>Mathematics Magazine</name>
+        <publisher>Mathematical Association of America (Taylor &amp; Francis)</publisher>
+        <latex-engine command="pdflatex"/>
+        <required-files>
+            <file name="mathmag.sty" href="https://maa.org/wp-content/uploads/2025/12/MathMagTemplate_9_24-1.zip" compression="zip" path="mathmag.sty"/>
+            <file name="qedequation.sty" href="https://maa.org/wp-content/uploads/2025/12/MathMagTemplate_9_24-1.zip" compression="zip" path="qedequation.sty"/>
+        </required-files>
+        <style-author>David W. Farmer</style-author>
+        <date>2026-10-22</date>
+    </metadata>
+
+    <documentclass name="article"/>
+
+    <packages>
+    \usepackage{mathmag}
+    </packages>
+
+    <!-- mathmag.sty sets Times, so PreTeXt does not load Latin Modern; -->
+    <!-- theorems use the amsthm styles, as in the journal's template   -->
+    <ptx-preamble main-font="journal"/>
+
+    <title cmd="title">
+        <arg><ptx-title/></arg>
+    </title>
+
+    <!-- As in the template: each name, then smaller affiliation lines -->
+    <!-- and email; mathmag.sty sets the block flush right.            -->
+    <author cmd="author">
+        <arg>
+            <author-list sep="\\&#xa;\medskip&#xa;\normalsize">
+                <ptx-personname/>
+                <text>\\&#xa;\scriptsize </text>
+                <ptx-affiliation sep="\\&#xa;" after="\\"/>
+                <ptx-email/>
+            </author-list>
+        </arg>
+    </author>
+
+    <begin-document/>
+
+    <maketitle/>
+
+    <mainmatter/>
+
+    <!-- Sections are unnumbered, so an appendix is labeled in its title -->
+    <appendices title-prefix="Appendix: "/>
+
+    <!-- The article's "support" statement (funding) is the acknowledgment -->
+    <support env="acknowledgment">
+        <ptx-bibinfo-support/>
+    </support>
+
+    <bibliography/>
+
+    <!-- mathmag.sty sets the "abstract" environment as the Summary -->
+    <abstract env="abstract">
+        <ptx-abstract/>
+    </abstract>
+
+    <biographies env="biog">
+        <text>\item[</text>
+        <ptx-personname/>
+        <text>] </text>
+        <ptx-biography/>
+    </biographies>
+
+    <end-document/>
+</texstyle>

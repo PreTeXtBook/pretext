@@ -192,6 +192,14 @@
                 citations, in every output format.  See <xref ref="topic-references"/> for what that
                 requires, and <xref ref="common-csl"/> for choosing a style yourself instead.
             </p>
+
+            <p>
+                The numbering in your publication file (<xref ref="publication-file-numbering"/>) decides the
+                numbers <pretext/> gives to divisions, blocks, and equations, so set it to agree with
+                the journal.  For example, the journals of the Mathematical Association of America do
+                not number sections, so a publication file for one of them should number divisions at
+                level <c>0</c>.
+            </p>
         </subsection>
 
         <subsection xml:id="common-csl">
