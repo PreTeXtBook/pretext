@@ -774,6 +774,7 @@ def main():
             args.abort,
             None,
             dest_dir,
+            None,
         )
     elif args.component == "stack":
         ptx.stack_extraction(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
