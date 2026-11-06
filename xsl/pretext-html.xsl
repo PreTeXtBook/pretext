@@ -10725,8 +10725,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- period below is Javascript syntax for methods -->
                 <xsl:with-param name="pad" select="concat($applet-onload-argument,'.')" />
             </xsl:call-template>
-            <!-- call a function named 'listeners()' in attached .js file to communicate with other divs -->
-            <xsl:text>listeners(</xsl:text><xsl:value-of select='$applet-onload-argument'/><xsl:text>)</xsl:text>
+            <!-- A script attached by the "source" attribute of the "interactive"    -->
+            <!-- may define a function named "listeners".  It receives the applet    -->
+            <!-- once the commands above have run, so that event listeners can tie   -->
+            <!-- the applet to the HTML of the interactive, which they cannot do     -->
+            <!-- before the applet exists.  Most interactives attach no such script, -->
+            <!-- so the call is made only when the function is defined.              -->
+            <xsl:text>if (typeof listeners === "function") { listeners(</xsl:text>
+            <xsl:value-of select="$applet-onload-argument"/>
+            <xsl:text>); }&#xa;</xsl:text>
             <xsl:text>};&#xa;</xsl:text>
         </xsl:if>
         <!-- Parameter reference:                                              -->
