@@ -215,17 +215,28 @@ def webwork_to_xml(
             outputformat='raw'
         )
         render_rpc_response = requests.get(url=webwork2_render_rpc, params=params_for_version_determination)
-        if render_rpc_response.status_code == 200:
-            version_determination_json = render_rpc_response.json()
-            if "ww_version" in version_determination_json:
-                webwork2_version = version_determination_json["ww_version"]
-                webwork2_version_match = re.search(
-                    r"((\d+)\.(\d+)(\+develop)?)", webwork2_version, re.I
-                )
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
         raise ValueError(msg.format(webwork2_domain_webwork2) + root_cause)
+
+    if render_rpc_response.status_code == 200:
+        # A server that refuses the credentials still answers 200, with a
+        # line of text in place of the JSON of a rendered problem.  Every
+        # JSON decoding error that "requests" raises is a ValueError.
+        try:
+            version_determination_json = render_rpc_response.json()
+        except ValueError:
+            server_reply = " ".join(render_rpc_response.text.split())[:200]
+            msg = ("The WeBWorK server at {} answered, but did not accept the course \"{}\",\n" +
+                  "              the user \"{}\", and the password given in the \"webwork\" element\n" +
+                  "              of the publication file.  The server replied: {}")
+            log.fatal(msg.format(webwork2_domain, courseID, user, server_reply))
+        if "ww_version" in version_determination_json:
+            webwork2_version = version_determination_json["ww_version"]
+            webwork2_version_match = re.search(
+                r"((\d+)\.(\d+)(\+develop)?)", webwork2_version, re.I
+            )
 
     # Now if that failed, try to infer the version from what is printed on the landing page.
     if webwork2_version == None:
