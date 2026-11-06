@@ -29,8 +29,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:str="http://exslt.org/strings"
+    xmlns:exsl="http://exslt.org/common"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
-    extension-element-prefixes="str"
+    extension-element-prefixes="str exsl"
     exclude-result-prefixes="pi"
 >
 
@@ -63,6 +64,13 @@
 <!-- (named by @pi:assembly-id). The script must be re-run whenever the    -->
 <!-- author source for a webwork exercise, a .pg file, or some             -->
 <!-- configuration changes.                                                -->
+
+<!-- Alongside the ephemeral tree, this stylesheet writes one file per     -->
+<!-- exercise into the output directory, also named by @pi:assembly-id:    -->
+<!-- the same tree, restricted to that one exercise.  Everything that      -->
+<!-- determines the exercise's representations is in that file, so a       -->
+<!-- consumer such as the PreTeXt CLI can hash it to recognize an exercise -->
+<!-- whose representations it has already built.                           -->
 
 <!-- Then other translation sheets' assembly phase will read the per-      -->
 <!-- exercise representation file for each webwork exercise.               -->
@@ -127,53 +135,79 @@
 <!-- Initialize empty dictionaries, then define key-value pairs             -->
 <xsl:template match="*" mode="extraction-wrapper">
     <ww-extraction>
-        <xsl:attribute name="numbered-title-filesafe">
-            <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe"/>
-        </xsl:attribute>
-        <xsl:attribute name="localization">
-            <xsl:value-of select="$document-language"/>
-        </xsl:attribute>
-        <!-- Record certain publisher variables for ease of access by pretext.py -->
-        <server-params-pub>
-            <xsl:attribute name="webwork2-server">
-                <xsl:value-of select="$webwork-server"/>
-            </xsl:attribute>
-            <xsl:attribute name="course-id">
-                <xsl:value-of select="$webwork-course"/>
-            </xsl:attribute>
-            <xsl:attribute name="user-id">
-                <xsl:value-of select="$webwork-user"/>
-            </xsl:attribute>
-            <xsl:attribute name="password">
-                <xsl:value-of select="$webwork-password"/>
-            </xsl:attribute>
-        </server-params-pub>
-        <!-- Settings for how PG is processed -->
-        <processing>
-            <xsl:attribute name="static">
-                <xsl:value-of select="$webwork-static-processing"/>
-            </xsl:attribute>
-            <xsl:attribute name="pg-location">
-                <xsl:value-of select="$webwork-pg-location"/>
-            </xsl:attribute>
-        </processing>
-        <!-- Will need to know the folder names for generated and external. -->
-        <!-- These are almost certainly "generated" and "external", but     -->
-        <!-- rather than hardcode them where we need them, we get them from -->
-        <!-- variables defined in publisher-variables.xsl                   -->
-        <directories>
-            <xsl:attribute name="generated-directory">
-                <xsl:value-of select="$generated-directory"/>
-            </xsl:attribute>
-            <xsl:attribute name="external-directory">
-                <xsl:value-of select="$external-directory"/>
-            </xsl:attribute>
-        </directories>
+        <xsl:call-template name="ww-extraction-settings"/>
         <xsl:apply-imports/>
     </ww-extraction>
 </xsl:template>
 
+<!-- The global attributes and children of the "ww-extraction" element,   -->
+<!-- for the ephemeral tree and for each per-exercise file                 -->
+<xsl:template name="ww-extraction-settings">
+    <xsl:attribute name="numbered-title-filesafe">
+        <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe"/>
+    </xsl:attribute>
+    <xsl:attribute name="localization">
+        <xsl:value-of select="$document-language"/>
+    </xsl:attribute>
+    <!-- Record certain publisher variables for ease of access by pretext.py -->
+    <server-params-pub>
+        <xsl:attribute name="webwork2-server">
+            <xsl:value-of select="$webwork-server"/>
+        </xsl:attribute>
+        <xsl:attribute name="course-id">
+            <xsl:value-of select="$webwork-course"/>
+        </xsl:attribute>
+        <xsl:attribute name="user-id">
+            <xsl:value-of select="$webwork-user"/>
+        </xsl:attribute>
+        <xsl:attribute name="password">
+            <xsl:value-of select="$webwork-password"/>
+        </xsl:attribute>
+    </server-params-pub>
+    <!-- Settings for how PG is processed -->
+    <processing>
+        <xsl:attribute name="static">
+            <xsl:value-of select="$webwork-static-processing"/>
+        </xsl:attribute>
+        <xsl:attribute name="pg-location">
+            <xsl:value-of select="$webwork-pg-location"/>
+        </xsl:attribute>
+    </processing>
+    <!-- Will need to know the folder names for generated and external. -->
+    <!-- These are almost certainly "generated" and "external", but     -->
+    <!-- rather than hardcode them where we need them, we get them from -->
+    <!-- variables defined in publisher-variables.xsl                   -->
+    <directories>
+        <xsl:attribute name="generated-directory">
+            <xsl:value-of select="$generated-directory"/>
+        </xsl:attribute>
+        <xsl:attribute name="external-directory">
+            <xsl:value-of select="$external-directory"/>
+        </xsl:attribute>
+    </directories>
+</xsl:template>
+
 <xsl:template match="webwork[@source|statement|task|text()]" mode="extraction">
+    <xsl:variable name="problem">
+        <xsl:apply-templates select=".." mode="assembly-id"/>
+    </xsl:variable>
+    <xsl:variable name="problem-tree">
+        <xsl:apply-templates select="." mode="problem"/>
+    </xsl:variable>
+    <!-- into the ephemeral tree -->
+    <xsl:copy-of select="$problem-tree"/>
+    <!-- and into a file of its own, with the settings it is built under -->
+    <!-- Do not use directories here, as Windows paths will get mangled  -->
+    <!-- Instead, set working directory before applying stylesheet       -->
+    <exsl:document href="{$problem}.xml" method="xml" encoding="UTF-8">
+        <ww-extraction>
+            <xsl:call-template name="ww-extraction-settings"/>
+            <xsl:copy-of select="$problem-tree"/>
+        </ww-extraction>
+    </exsl:document>
+</xsl:template>
+
+<xsl:template match="webwork[@source|statement|task|text()]" mode="problem">
     <xsl:variable name="problem">
         <xsl:apply-templates select=".." mode="assembly-id"/>
     </xsl:variable>
@@ -196,9 +230,14 @@
         <!-- The source is the tree stamp, in the internal namespace; the copy is  -->
         <!-- a plain attribute, since this file is an interchange format read by   -->
         <!-- the Python routines, which know it as "copied-from".                  -->
+        <!-- The original's file path is recorded too, since a copy's     -->
+        <!-- representations are rendered live from the original's file.  -->
         <xsl:if test="@pi:copied-from">
             <xsl:attribute name="copied-from">
                 <xsl:apply-templates select="id(@pi:copied-from)/.." mode="assembly-id"/>
+            </xsl:attribute>
+            <xsl:attribute name="copied-from-path">
+                <xsl:apply-templates select="id(@pi:copied-from)" mode="filename"/>
             </xsl:attribute>
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->

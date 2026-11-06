@@ -6466,6 +6466,7 @@ xsltproc = common.xsltproc
 
 # Re-export webwork routines so the public ptx.NAME interface is unchanged.
 webwork_to_xml = webwork.webwork_to_xml
+individual_webwork_conversion = webwork.individual_webwork_conversion
 webwork_sets = webwork.webwork_sets
 pg_macros = webwork.pg_macros
 
