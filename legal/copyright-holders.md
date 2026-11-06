@@ -74,6 +74,7 @@ These notices are not altered at all, years included.
 
 | Files | Location | Note |
 |---|---|---|
+| 31 | `doc/guide/basics/*.ptx` | Left deliberately: the Basics Reference shows each file in full as a listing. `basics-part.xml`, which includes them, carries the notice. |
 | 1 | `xsl/support/play-button/README.md` | Left deliberately: it states that its content does not meet the threshold of originality for copyright protection. |
 
 ## Permissions
