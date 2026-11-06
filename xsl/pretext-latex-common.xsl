@@ -2204,7 +2204,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newcommand{\ptxfillintext}[1]{%&#xa;</xsl:text>
     <xsl:text>\setlength{\ptxfillinmaxwidth}{#1\ptxcharmaxwidth}%&#xa;</xsl:text>
     <xsl:text>\setlength{\ptxfillincontract}{#1\ptxcharminwidth}%&#xa;</xsl:text>
-    <xsl:text>\setlength{\ptxfillinheight}{\baselineskip}\addtolength{\ptxfillinheight}{1.2pt}%&#xa;</xsl:text>
+    <!-- The height of the box and shade styles comes from the strut box, -->
+    <!-- which is one line high everywhere, while a "tabular" sets        -->
+    <!-- \baselineskip to zero inside its cells                           -->
+    <xsl:text>\setlength{\ptxfillinheight}{\dimexpr\ht\strutbox+\dp\strutbox+1.2pt\relax}%&#xa;</xsl:text>
     <xsl:choose>
         <xsl:when test="$fillin-text-style = 'underline'">
             <xsl:text>\strut\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\ptxfillinmaxwidth minus \ptxfillincontract\nobreak\strut%&#xa;</xsl:text>
