@@ -4783,7 +4783,30 @@
     <section xml:id="topic-interactive">
         <title>Interactives</title>
 
-        <p>TODO: until then examine copious examples in the sample article.</p>
+        <introduction>
+            <p>TODO: until then examine copious examples in the sample article.</p>
+        </introduction>
+
+        <subsection xml:id="topic-interactive-geogebra-scripts" label="topic-interactive-geogebra-scripts">
+            <title>GeoGebra Applets and Attached Scripts</title>
+            <idx><h>GeoGebra</h><h>attached script</h></idx>
+            <idx><h>listeners function</h><h>GeoGebra</h></idx>
+
+            <p>A GeoGebra applet is a <tag>slate</tag> whose <attr>surface</attr> is <c>geogebra</c>, inside an <tag>interactive</tag> whose <attr>platform</attr> is <c>geogebra</c>.  The text of the <tag>slate</tag> may be a list of commands from the <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">GeoGebra Apps API</url>, one per line, such as <c>setCoordSystem(0, 20, 0, 10);</c>.  Each command is a method of the applet, written without the applet in front of it, since <pretext/> supplies that.  The commands run once the applet has loaded.</p>
+
+            <p>An <tag>interactive</tag> may also attach JavaScript files, listed in its <attr>source</attr> attribute, and a script there can connect the applet to the rest of the interactive: a button in another <tag>slate</tag> may change the applet, or a table may change as a reader drags a point.  These connections are made by event listeners, which cannot be attached until the applet exists.  So once the commands of the <tag>slate</tag> have run, <pretext/> calls a function named <c>listeners</c>, if a script has defined one, and passes it the applet as its only argument.  A script that sets the view of the applet when a reader clicks a button would contain the following.</p>
+
+            <pre>
+            var listeners = function(applet) {
+                const button = document.getElementById('view-button');
+                button.addEventListener('click', function() {
+                    applet.setCoordSystem(0, 20, 0, 10);
+                });
+            };
+            </pre>
+
+            <p>The call is made by the same code that runs the commands, so the <tag>slate</tag> must hold at least one command for <c>listeners</c> to be called.  Most interactives have no need of the function and define none.  The sample article has a complete example, where a three-dimensional applet communicates with a table and with two buttons.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-sidebyside">
