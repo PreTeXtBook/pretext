@@ -168,6 +168,14 @@ def webwork_to_xml(
         user            = server_params_pub["user"]
         passwd          = server_params_pub["passwd"]
 
+    # The password goes into the representations file and from there into
+    # the HTML of every exercise, so readers can see it once published
+    if passwd != "anonymous":
+        log.warning("WeBWorK password is not \"anonymous\".\n" +
+              "              It is written into the generated representations file and into the HTML\n" +
+              "              of every WeBWorK exercise, where any reader can see it.\n" +
+              "              Use only credentials you are willing to make public.")
+
     webwork2_domain_webwork2 = webwork2_domain + "/webwork2/"
     webwork2_render_rpc = webwork2_domain_webwork2 + "render_rpc"
 
