@@ -1485,7 +1485,11 @@
                 <cd>
                     <cline>/publication/webwork/@password</cline>
                 </cd>
-                The default value is <c>anonymous</c>. See <xref ref="webwork-representations"/>.
+                The default value is <c>anonymous</c>. The value is written into the
+                representations file and into the HTML of every <webwork/> exercise, so once a
+                project is published any reader can see it; processing warns when the value is
+                not <c>anonymous</c>. See <xref ref="webwork-representations"/> and
+                <xref ref="webwork-course-configuration"/>.
             </p>
         </subsection>
 

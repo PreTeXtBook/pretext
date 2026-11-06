@@ -361,6 +361,13 @@
         server, you must correctly specify the protocol (<c>http</c> versus <c>https</c>). And it
         must be version 2.19 or later. Do not include a trailing slash.
       </p>
+      <p>
+        The password you specify is written into the representations file and into the HTML of
+        every exercise, where any reader can see it. So the host user must be one whose
+        credentials you are willing to make public, as described in
+        <xref ref="webwork-course-configuration"/>. Processing warns when the password is not
+        <c>anonymous</c>.
+      </p>
     </subsection>
 
     <subsection xml:id="webwork-html-output">
