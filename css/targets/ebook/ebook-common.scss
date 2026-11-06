@@ -133,6 +133,15 @@
         border-left-width: 0;
     }
 
+    // a reading app sets the text color for its color scheme, light or
+    // dark, so table borders drawn in that color show against any page
+    table.tabular {
+        td,
+        th {
+            border-color: currentColor;
+        }
+    }
+
     // Placeholder template to use for section headings, will be extended
     //  here and in other files
     // The "break-(before/after) might not actually do anything
