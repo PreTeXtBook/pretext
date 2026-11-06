@@ -2190,7 +2190,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fill-in-the-blank in text content -->
 <xsl:template name="fillin-text">
     <xsl:text>%% Used for fillin answer blank in text&#xa;</xsl:text>
-    <xsl:text>%% Relies on calc package, loaded via tcolorbox&#xa;</xsl:text>
+    <xsl:text>%% Box style sizes its sides with \dimexpr, no package needed#xa;</xsl:text>
     <xsl:text>%% Argument is intended number of characters of blank&#xa;</xsl:text>
     <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
     <xsl:text>\newlength{\ptxfillinmaxwidth}&#xa;</xsl:text>
@@ -2210,7 +2210,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\strut\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\ptxfillinmaxwidth minus \ptxfillincontract\nobreak\strut%&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="$fillin-text-style = 'box'">
-            <xsl:text>\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}\nobreak\hspace{-0.3pt}\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip \ptxfillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\ptxfillinmaxwidth minus \ptxfillincontract\nobreak\hspace{-0.3pt}\rule[-1.2pt]{0.3pt}{\heightof{\strut}+1.8pt}%&#xa;</xsl:text>
+            <xsl:text>\rule[-1.2pt]{0.3pt}{\dimexpr\ptxfillinheight+0.6pt\relax}\nobreak\hspace{-0.3pt}\nobreak\leaders\vbox{\hrule width 0.3pt height 0.3pt \vskip \ptxfillinheight \hrule width 0.3pt height 0.3pt \vskip -1.2pt}\hskip 1\ptxfillinmaxwidth minus \ptxfillincontract\nobreak\hspace{-0.3pt}\rule[-1.2pt]{0.3pt}{\dimexpr\ptxfillinheight+0.6pt\relax}%&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="$fillin-text-style = 'shade'">
             <xsl:text>{\color{fillintextshade}\strut\nobreak\leaders\vbox{\hrule width 0.3pt height \ptxfillinheight \vskip -1.2pt}\hskip 1\ptxfillinmaxwidth minus \ptxfillincontract}%&#xa;</xsl:text>
