@@ -109,64 +109,16 @@ def webwork_to_xml(
     webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False, False)
     pg_macros(xml_source, pub_file, stringparams, ww_macros_dir)
 
-    no_publication_file = False
-    if webwork2_server is not None:
-        server_params_pub = {
-            "webwork2_domain": webwork2_server,
-            "courseID": extracted_pg_xml.find("server-params-pub").get("course-id"),
-            "user": extracted_pg_xml.find("server-params-pub").get("user-id"),
-            "passwd": extracted_pg_xml.find("server-params-pub").get("password"),
-            "disableCookies": '1',
-        }
-        static_processing = extracted_pg_xml.find("processing").attrib["static"]
-        pg_location = extracted_pg_xml.find("processing").attrib["pg-location"]
-    else:
-        no_publication_file = True
-        server_params_pub = {
-            "webwork2_domain": "https://webwork-ptx.aimath.org",
-            "courseID": "anonymous",
-            "user": "anonymous",
-            "passwd": "anonymous",
-            "disableCookies": '1',
-        }
-        static_processing = 'webwork2'
-        pg_location = '/opt/webwork/pg'
-
-    # ideally, pub_file is in use, in which case server_params_pub is nonempty.
-    # if no pub_file in use, rely on server_params argument.
-    # if both present, use server_params_pub and give warning
-    # if neither in use give warning and fail
-    if no_publication_file and server_params is None:
-        raise ValueError("Either use a publication file or pass a --server argument")
-    elif no_publication_file:
-        # We rely on the argument server_params
-        # This is deprecated in favor of using a publication file
-        log.warning("WeBWorK server declared using -s argument.\n" +
-              "              Please consider using a publication file with publication/webwork instead.")
-        server_params = server_params.strip()
-        if (server_params.startswith("(") and server_params.endswith(")")):
-            server_params = server_params.strip("()")
-            split_server_params = server_params.split(",")
-            webwork2_domain = common.sanitize_url(split_server_params[0])
-            courseID = common.sanitize_alpha_num_underscore(split_server_params[1])
-            user = common.sanitize_alpha_num_underscore(split_server_params[2])
-            passwd = common.sanitize_alpha_num_underscore(split_server_params[3])
-        else:
-            webwork2_domain = common.sanitize_url(server_params)
-            courseID        = "anonymous"
-            user            = "anonymous"
-            passwd          = "anonymous"
-    else:
-        # Now we know we had a publication file
-        # Use it, and warn if server_params argument is also present
-        if server_params is not None:
-            log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
-                  + "              -s argument will be ignored.\n"
-                  + "              Using publication/webwork values (or defaults) instead.")
-        webwork2_domain = common.sanitize_url(server_params_pub["webwork2_domain"])
-        courseID        = server_params_pub["courseID"]
-        user            = server_params_pub["user"]
-        passwd          = server_params_pub["passwd"]
+    # The extracted problems always carry the server and its credentials,
+    # from the "webwork" element of a publication file or from the defaults
+    # for that element.  The "server_params" argument is not read; it stays
+    # in the signature because the PreTeXt command-line interface passes it.
+    webwork2_domain = common.sanitize_url(webwork2_server)
+    courseID        = extracted_pg_xml.find("server-params-pub").get("course-id")
+    user            = extracted_pg_xml.find("server-params-pub").get("user-id")
+    passwd          = extracted_pg_xml.find("server-params-pub").get("password")
+    static_processing = extracted_pg_xml.find("processing").attrib["static"]
+    pg_location = extracted_pg_xml.find("processing").attrib["pg-location"]
 
     # The password goes into the representations file and from there into
     # the HTML of every exercise, so readers can see it once published

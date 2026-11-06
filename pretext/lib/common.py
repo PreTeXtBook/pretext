@@ -649,21 +649,6 @@ def sanitize_url(url):
     return url
 
 
-def sanitize_alpha_num_underscore(param):
-    """Verify parameter is a string containing only alphanumeric and undescores"""
-    import string
-
-    allowed = set(string.ascii_letters + string.digits + "_")
-    log.info("verifying parameter: {}".format(param))
-    if not (set(param) <= allowed):
-        raise ValueError(
-            "PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ ".format(
-                param
-            )
-        )
-    return param
-
-
 def get_temporary_directory():
     """Create, record, and return a scratch directory"""
     import tempfile  #  mkdtemp()

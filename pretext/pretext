@@ -490,10 +490,11 @@ def get_cli_arguments():
         dest="xmlid",
         default="",
     )
+    # recognize this switch, but only halt later and say it is being ignored
     parser.add_argument(
         "-s",
         "--server",
-        help="base URL for server (webwork only)",
+        help="WeBWorK server, deprecated 2026-11-06, IGNORED",
         action="store",
         dest="server",
     )
@@ -600,6 +601,14 @@ def main():
             ]
         )
         raise ValueError(msg)
+    if args.server:
+        msg = "\n".join(
+            [
+                "the '-s/--server' switch is deprecated and ignored, as of 2026-11-06.",
+                '              Set the WeBWorK server, course, user, and password with the "webwork" element of a publication file.',
+            ]
+        )
+        log.fatal(msg)
 
     # Report Python version in debugging output
     log.debug(
@@ -763,7 +772,7 @@ def main():
             stringparams,
             args.xmlid,
             args.abort,
-            args.server,
+            None,
             dest_dir,
         )
     elif args.component == "stack":
