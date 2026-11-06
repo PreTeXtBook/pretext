@@ -1024,7 +1024,7 @@ pre[class*=language-] {
 }
 code[class*=language-],
 pre[class*=language-] {
-  color: black;
+  color: var(--body-text-color);
   background: var(--code-background);
   text-shadow: none;
   font-family: var(--font-monospace);
@@ -1634,7 +1634,26 @@ section.solutions section > h6.heading {
   display: none;
 }
 :root {
+  --body-text-color: black;
   --ptx-image-bg: white;
+  --code-background: #f5f5f5;
+  --code-inline-background: #f5f5f5;
+  --code-inline-input-background: #f0f0ff;
+  --code-inline-output-background: #f0fff0;
+  --font-monospace:
+    Inconsolata,
+    Consolas,
+    Monaco,
+    monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-text-color: white;
+    --code-background: #2a2a2a;
+    --code-inline-background: #2a2a2a;
+    --code-inline-input-background: #00003a;
+    --code-inline-output-background: #003a00;
+  }
 }
 .ptx-content.epub img {
   display: block;
@@ -1678,13 +1697,27 @@ section.solutions section > h6.heading {
   padding-top: 0.3em;
   padding-bottom: 0.5em;
   padding-left: 0.5em;
-  background: #f0f0f0;
+  background: var(--code-background);
+  color: var(--body-text-color);
 }
 .ptx-content pre.code.input {
-  background: #f0f0ff;
+  background: var(--code-inline-input-background);
+  color: var(--body-text-color);
 }
 .ptx-content pre.code.output {
-  background: #f0fff0;
+  background: var(--code-inline-output-background);
+  color: var(--body-text-color);
+}
+.ptx-content .code-block::before {
+  content: "";
+  display: none;
+}
+.ptx-content .code-block {
+  border-left-width: 0;
+}
+.ptx-content table.tabular td,
+.ptx-content table.tabular th {
+  border-color: currentColor;
 }
 .ptx-content section article > .heading,
 .ptx-content section > .heading {
