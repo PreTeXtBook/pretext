@@ -3802,7 +3802,9 @@ def _runestone_services(stringparams, ext_rs_methods):
 
     # Now services_xml should be meaningful since we haven't raised an exception.
 
-    services = ET.fromstring(services_xml)
+    # The services file begins with a declaration of its encoding, which
+    # lxml accepts only from bytes, so parse the UTF-8 the text came from
+    services = ET.fromstring(services_xml.encode("utf-8"))
     # Interrogate the services XML
     rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
 
@@ -3863,7 +3865,9 @@ def _cdn_runestone_services(stringparams, ext_rs_methods):
         raise Exception(e)
 
     # Now services_xml should be meaningful since we haven't raised an exception.
-    services = ET.fromstring(services_xml)
+    # The services file begins with a declaration of its encoding, which
+    # lxml accepts only from bytes, so parse the UTF-8 the text came from
+    services = ET.fromstring(services_xml.encode("utf-8"))
     # Interrogate the services XML
     rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
 
@@ -3918,7 +3922,10 @@ def query_runestone_services(services_url):
         log.debug(msg)
         # fatal error here, a URL is not doing the job
         raise Exception(msg)
-    # Return the XML from the services response
+    # Return the XML from the services response.  The file declares
+    # UTF-8, but the server names no charset, so "requests" would
+    # decode the text as ISO-8859-1 without this.
+    services_response.encoding = "utf-8"
     return services_response.text
 
 
