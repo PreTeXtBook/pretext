@@ -45,7 +45,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <exercise-project answer="yes"/>
         <!-- fillin styles are "underline" (the default for text),  -->
         <!-- "box", and "shade" (the default for math)              -->
-        <fillin textstyle="underline" mathstyle="shade"/>
+        <fillin textstyle="box" mathstyle="shade"/>
         <qrcode image="misc/ptx-logo-square.png"/>
         <!-- This is the minimum information to locate a     -->
         <!-- Citation Style Language (CSL) style in the      -->
