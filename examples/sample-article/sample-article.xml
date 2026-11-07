@@ -6824,6 +6824,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
+            <p>The last row of the next table gives each cell a bottom rule of a different width, so in <latex/> output it tests three partial rules side by side.</p>
+
             <table>
                 <title>Progressively Thicker Rules Example</title>
                 <tabular top="minor" left="minor" halign="center">
