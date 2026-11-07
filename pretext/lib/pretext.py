@@ -98,6 +98,9 @@ import time
 # cleanup multiline strings used as source code
 import textwrap
 
+# SHA-256 digests, to check a downloaded archive
+import hashlib
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -3929,6 +3932,73 @@ def query_runestone_services(services_url):
     return services_response.text
 
 
+def _runestone_services_checksum(services_path, services_file_name, rs_version):
+    """Compare a Runestone Services archive with the SHA-256 digest GitHub records for it.  Returns an outcome, "match", "mismatch", or "unavailable", and a message describing it."""
+
+    # services_path - the archive as downloaded, not yet extracted
+    # services_file_name - its file name, which is also the name of
+    #                      the archive's asset in the GitHub release
+    # rs_version - the version of Runestone Services, which is also
+    #              the tag of the GitHub release
+    #
+    # Each Runestone release on GitHub carries, as an asset, the archive
+    # that Runestone placed on its CDN, and GitHub computes the SHA-256
+    # digest of every asset.  Runestone's release script confirms that
+    # digest equals its own hash of the archive before publishing, and
+    # states the same hash in the text of the release.  So the digest
+    # is a record of the archive kept apart from the CDN it comes from.
+    # It is read from GitHub's description of the release, not from the
+    # text, where a change of wording would end the check unnoticed.
+
+    release_url = 'https://api.github.com/repos/RunestoneInteractive/rs/releases/tags/{}'.format(rs_version)
+    unchecked = 'Runestone Services archive "{}" was not checked against GitHub: {}'
+
+    try:
+        import requests  # get()
+    except ImportError:
+        raise ImportError(__module_warning.format("requests"))
+
+    try:
+        release_response = requests.get(release_url, headers={"Accept": "application/vnd.github+json"}, timeout=(1,10)) # 1 second connect, 10 second read
+    except requests.exceptions.RequestException as e:
+        reason = 'there was a network problem retrieving "{}": {}'.format(release_url, e)
+        return ("unavailable", unchecked.format(services_file_name, reason))
+    # Code 404 means no release has this tag, while 403 or 429 means
+    # GitHub's limit on requests without credentials is used up
+    if release_response.status_code != 200:
+        reason = 'GitHub answered "{}" with response code {}'.format(release_url, release_response.status_code)
+        return ("unavailable", unchecked.format(services_file_name, reason))
+
+    try:
+        release = release_response.json()
+    except ValueError:
+        reason = 'GitHub did not describe release {} in JSON'.format(rs_version)
+        return ("unavailable", unchecked.format(services_file_name, reason))
+
+    # GitHub writes a digest as "sha256:" followed by 64 hexadecimal digits
+    recorded = None
+    for asset in release.get("assets", []):
+        digest = asset.get("digest") or ""
+        if asset.get("name") == services_file_name and digest.startswith("sha256:"):
+            recorded = digest[len("sha256:"):].lower()
+    if recorded is None:
+        reason = 'release {} has no SHA-256 digest for an asset of that name'.format(rs_version)
+        return ("unavailable", unchecked.format(services_file_name, reason))
+
+    with open(services_path, "rb") as archive:
+        computed = hashlib.sha256(archive.read()).hexdigest()
+
+    if computed == recorded:
+        msg = 'Runestone Services archive "{}" matches the SHA-256 digest GitHub records for release {}'
+        return ("match", msg.format(services_file_name, rs_version))
+    else:
+        msg = '\n'.join(['Runestone Services archive "{}" does not match the SHA-256 digest GitHub records for release {}',
+                         'recorded by GitHub: {}',
+                         'of the download:    {}'
+                         ])
+        return ("mismatch", msg.format(services_file_name, rs_version, recorded, computed))
+
+
 def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
     '''Obtain Runestone Services and place in _static directory of build'''
 
@@ -3970,6 +4040,30 @@ def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
                 ext_rs_methods(url=rs_cdn_url + services_file_name, out_path=services_build_path, format="tgz")
             else:
                 common.download_file(rs_cdn_url + services_file_name, services_build_path)
+            # Compare the archive with the digest GitHub records for
+            # this release, before anything is extracted from it
+            checksum_outcome, checksum_msg = _runestone_services_checksum(services_build_path, services_file_name, rs_version)
+            # For now every outcome is only reported, at the debug level.
+            #
+            # For a future, stricter check:
+            # * A "mismatch" is the outcome to make fatal: remove the
+            #   archive and extract nothing.  The "except" below catches
+            #   every exception, PreTeXtFatal from log.fatal() included,
+            #   and the build then goes on without Runestone Services, so
+            #   raise outside this "try", or let that "except" pass
+            #   PreTeXtFatal through.
+            # * The CLI copies the archive here from its own cache and
+            #   downloads it only once, so a damaged copy there fails
+            #   every build until it is removed, which a message about a
+            #   mismatch should say.
+            # * "unavailable" follows from no network, GitHub's limit of
+            #   60 requests an hour from one address without credentials,
+            #   or a release without the archive.  Keep it a report, or a
+            #   warning, unless every HTML build is to require GitHub.
+            # * A release can be made immutable, so that its assets can
+            #   never be replaced; the "immutable" key in GitHub's
+            #   description of the release says whether it is.
+            log.debug(checksum_msg)
             log.info("Extracting Runestone Services from archive file")
             import tarfile
             services_file = tarfile.open(services_build_path)
