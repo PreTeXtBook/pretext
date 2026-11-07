@@ -339,9 +339,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% this is a necessity for isolating styling and behavior&#xa;</xsl:text>
     <xsl:text>%% The tcolorbox library of the same name loads the base library&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{xparse}&#xa;</xsl:text>
-    <xsl:text>%% The tcolorbox library loads TikZ, its calc package is generally useful,&#xa;</xsl:text>
-    <xsl:text>%% and is necessary for some smaller documents that use partial tcolor boxes&#xa;</xsl:text>
-    <xsl:text>%% See:  https://github.com/PreTeXtBook/pretext/issues/1624&#xa;</xsl:text>
+    <xsl:text>%% The tcolorbox package loads TikZ.  The TikZ calc library, for coordinate&#xa;</xsl:text>
+    <xsl:text>%% arithmetic, is not used by PreTeXt's own LaTeX; it is loaded because&#xa;</xsl:text>
+    <xsl:text>%% TikZ code provided by an author may rely on it&#xa;</xsl:text>
     <xsl:text>\usetikzlibrary{calc}&#xa;</xsl:text>
     <xsl:text>%% We use some more exotic tcolorbox keys to restore indentation to parboxes&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{hooks}&#xa;</xsl:text>
