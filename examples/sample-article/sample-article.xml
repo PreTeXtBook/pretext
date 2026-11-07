@@ -53,10 +53,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <math-package latex-name="cancel" mathjax-name="cancel"/>
         <!-- Superior bevelled/slanted fractions in LaTeX output (only) -->
         <math-package latex-name="xfrac" mathjax-name=""/>
-        <!-- 2026-03-04: once we tested the "extpfeil" package but it     -->
-        <!-- is a bad actor in LaTeX files, loading "amssymb" and using   -->
-        <!-- "calc" with a redefined \setlength (or something like that). -->
-        <!-- We tested this device here with an "\xmapsto" macro in math. -->
+        <!-- 2026-03-04: once we tested the "extpfeil" package but it      -->
+        <!-- is a bad actor in LaTeX files, loading "amssymb", and loading -->
+        <!-- "mathtools", which loads "calc" with a redefined \setlength.  -->
+        <!-- We tested this device here with an "\xmapsto" macro in math.  -->
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
@@ -6823,6 +6823,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- A comment -->
                 </tabular>
             </table>
+
+            <p>The last row of the next table gives each cell a bottom rule of a different width, so in <latex/> output it tests three partial rules side by side.</p>
 
             <table>
                 <title>Progressively Thicker Rules Example</title>
