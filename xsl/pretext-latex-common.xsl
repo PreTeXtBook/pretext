@@ -1021,26 +1021,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\ptxhrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxhrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
         <!-- http://tex.stackexchange.com/questions/24549/horizontal-rule-with-adjustable-height-behaving-like-clinen-m -->
-        <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular -->
-        <!-- But we'll get cleaner source with this built into macros        -->
-        <!-- Could condition \setlength debacle on the use of extpfeil       -->
-        <!-- arrows (see discussion below)                                   -->
-        <xsl:text>%% We preserve a copy of the \setlength package before other&#xa;</xsl:text>
-        <xsl:text>%% packages (extpfeil) get a chance to load packages that redefine it&#xa;</xsl:text>
-        <xsl:text>\let\ptxoldsetlength\setlength&#xa;</xsl:text>
+        <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular    -->
+        <!-- But we'll get cleaner source with this built into macros           -->
+        <!-- The widths are plain TeX assignments, not \setlength: a package    -->
+        <!-- such as "calc" (loaded by "pdfpages", "musicography", "mathtools") -->
+        <!-- redefines \setlength, and a \global in front of its version has    -->
+        <!-- no lasting effect, so a partial rule would keep the default width  -->
         <xsl:text>\newlength{\ptxOldarrayrulewidth}&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxcrulethin}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxOldarrayrulewidth=\arrayrulewidth}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\arrayrulewidth=0.04em}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\arrayrulewidth=\ptxOldarrayrulewidth}}%&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxcrulemedium}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxOldarrayrulewidth=\arrayrulewidth}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\arrayrulewidth=0.07em}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\arrayrulewidth=\ptxOldarrayrulewidth}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxcrulethick}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxOldarrayrulewidth=\arrayrulewidth}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\arrayrulewidth=0.11em}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\arrayrulewidth=\ptxOldarrayrulewidth}}&#xa;</xsl:text>
         <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
         <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
         <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
@@ -2135,9 +2134,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% You have elected to load the LaTeX "extpfeil" package&#xa;</xsl:text>
         <xsl:text>%% for certain extensible arrows, and it should appear just below.&#xa;</xsl:text>
         <xsl:text>%% This package has numerous shortcomings leading to conflicts with&#xa;</xsl:text>
-        <xsl:text>%% packages like "stmaryrd" and our manipulations of lengths to support&#xa;</xsl:text>
-        <xsl:text>%% variable thickness of rules in tables.  It should appear late&#xa;</xsl:text>
-        <xsl:text>%% in the preamble in an effort to mitigate these shortcomings.&#xa;</xsl:text>
+        <xsl:text>%% packages like "stmaryrd".  It should appear late in the preamble&#xa;</xsl:text>
+        <xsl:text>%% in an effort to mitigate these shortcomings.&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="not($latex-packages = '')">
         <xsl:text>%% Begin: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
