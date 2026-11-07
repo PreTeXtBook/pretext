@@ -1406,6 +1406,19 @@ a.mjx-svg-href  {
     background-color: #eee;
     height: 1.3em;
 }
+/* Space for writing in a printout; the height is given inline. */
+/* Ruled lines and shading are backgrounds, which must print.   */
+.ptx-content .fillin.fillin-workspace {
+    vertical-align: top;
+    margin-top: 4pt;
+    margin-bottom: 4pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+.ptx-content .fillin.fillin-workspace.underline {
+    border-bottom-style: none;
+    background-image: repeating-linear-gradient(to bottom, transparent 0 calc(0.3in - 1px), black calc(0.3in - 1px) 0.3in);
+}
 
 
 /*

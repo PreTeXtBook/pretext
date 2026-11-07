@@ -790,6 +790,8 @@
 
         <p>A <c>fillin</c> blank is not really a character, but maybe a really long, low dash?  The <c>characters</c> attribute controls the length.  It is atomic, indivisible, and content-less, like all the other characters.  <c>fillin</c> is also unusual due to its allowed use within mathematics.</p>
 
+        <p>Outside of mathematics, a <c>fillin</c> may carry a <attr>workspace</attr> attribute, a height in inches or centimeters, just like the <attr>workspace</attr> attribute of an exercise.  Within a printout, and within an <tag>exercise</tag>, a project-like, or a <tag>task</tag>, the blank becomes space for writing, as wide as <attr>characters</attr> asks and as tall as the workspace, which suits the cell of a <tag>tabular</tag> that students complete.  It takes the publisher's style for blanks: ruled lines, a box, or a shaded box.  Elsewhere the attribute is ignored and the blank is an ordinary one, which the validation-plus stylesheet points out.</p>
+
         <fragment xml:id="fillin-character">
             <title>Fill-in blank character</title>
             <code>
@@ -798,6 +800,7 @@
                     attribute characters {xsd:integer}?,
                     attribute rows {xsd:integer}?,
                     attribute cols {xsd:integer}?,
+                    attribute workspace {text}?,
                     empty
                 }
             Generator |=

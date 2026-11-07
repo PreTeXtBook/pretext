@@ -9141,18 +9141,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <span class="fillin {$fillin-text-style}" role="img">
+            <!-- Workspace, space for writing, has a fixed height.  It does -->
+            <!-- not carry the "workspace" class, since the printout script -->
+            <!-- stretches each of those to fill a page, measured as if     -->
+            <!-- stacked, while several blanks may share a table row.       -->
+            <xsl:variable name="workspace">
+                <xsl:apply-templates select="." mode="fillin-workspace"/>
+            </xsl:variable>
+            <span role="img">
+                <xsl:attribute name="class">
+                    <xsl:text>fillin </xsl:text>
+                    <xsl:value-of select="$fillin-text-style"/>
+                    <xsl:if test="not($workspace = '')">
+                        <xsl:text> fillin-workspace</xsl:text>
+                    </xsl:if>
+                </xsl:attribute>
                 <xsl:attribute name="aria-label">
                     <xsl:value-of select="$characters" />
                     <xsl:text>-character blank</xsl:text>
+                    <xsl:if test="not($workspace = '')">
+                        <xsl:text>, </xsl:text>
+                        <xsl:value-of select="$workspace" />
+                        <xsl:text> high</xsl:text>
+                    </xsl:if>
                 </xsl:attribute>
                 <xsl:attribute name="style">
                     <xsl:text>width: </xsl:text>
                     <xsl:value-of select="5 * $characters div 11" />
                     <xsl:text>em;</xsl:text>
+                    <xsl:if test="not($workspace = '')">
+                        <xsl:text> height: </xsl:text>
+                        <xsl:value-of select="$workspace" />
+                        <xsl:text>;</xsl:text>
+                    </xsl:if>
                 </xsl:attribute>
             </span>
-            <xsl:if test="@rows or @cols">
+            <xsl:if test="(@rows or @cols) and ($workspace = '')">
                 <xsl:apply-templates select="." mode="fillin-array"/>
             </xsl:if>
         </xsl:otherwise>
