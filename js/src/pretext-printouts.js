@@ -476,10 +476,12 @@ function adjustPrintoutPages(margins) {
         // Nothing here re-plans the page breaks -- the author fixed those --
         // so the gain is that addSpilloverPages() can push part of an
         // over-long list onto a spillover page instead of being handed one
-        // unsplittable row and giving up on it.
+        // unsplittable row and giving up on it.  The same goes for an
+        // over-long solution, cut between its blocks once the lists are done.
         flattenOversizedListsIn(page, contentHeight);
+        flattenOversizedBlocksIn(page, contentHeight);
     });
-    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists for independent repagination.");
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists and blocks for independent repagination.");
 }
 
 // This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
@@ -558,10 +560,13 @@ function createPrintoutPages(margins) {
     rows.forEach(row => measuringPage.appendChild(row));
     // A row that is taller than a page cannot be placed whole, and gets clipped
     // rather than broken.  Now that the rows are parked where their real
-    // rendered heights can be read, cut up the lists inside any such row so
-    // there is something for a page break to fall between -- and re-read the
-    // rows, since doing so replaces one of them with several.
-    if (flattenOversizedListsIn(measuringPage, conservativeContentHeight)) {
+    // rendered heights can be read, cut up the lists inside any such row, and
+    // then the blocks of any row still too tall, so there is something for a
+    // page break to fall between -- and re-read the rows, since doing so
+    // replaces one of them with several.  Both run, whatever the first returns.
+    const listsSplit = flattenOversizedListsIn(measuringPage, conservativeContentHeight);
+    const blocksSplit = flattenOversizedBlocksIn(measuringPage, conservativeContentHeight);
+    if (listsSplit || blocksSplit) {
         rows = [...measuringPage.children];
     }
     // Measure the footnote block here too, while the rows are parked in the
@@ -1133,8 +1138,9 @@ function hoistListOut(container, child, list) {
 // Such a row cannot be placed whole however the breaks fall: findPageBreaks()
 // hands it a page of its own and addSpilloverPages() declines to touch it, and
 // then `overflow: hidden` on the page box silently cuts off everything past the
-// bottom of the sheet.  A list is the one part of such a row that can be broken
-// up without loss, so it is, and only then.
+// bottom of the sheet.  A list can be broken up with the least loss, so it is
+// tried first; whatever is still too tall afterward is cut between its blocks
+// by flattenOversizedBlocksIn().
 //
 // Returns whether anything moved, since the caller has to re-read its rows and
 // measure again if so.
@@ -1151,6 +1157,281 @@ function flattenOversizedListsIn(container, pageHeight) {
         for (let i = lists.length - 1; i >= 0; i--) {
             hoistListOut(container, child, lists[i]);
         }
+        split = true;
+    }
+    return split;
+}
+
+// Blocks //
+
+// A row that is still taller than a page once its lists are cut up is most
+// often a long hint, answer, or solution: a run of paragraphs and displayed
+// mathematics with no list in it at all, and so nothing for the list splitting
+// above to take hold of.  The same remedy applies one level up.  The row is cut
+// between its blocks into one row per block, each wrapped in a copy of the
+// elements that held it, so that pagination can break between any two of them.
+//
+// A copy is shallow, so it carries every class of the element it copies.  That
+// is what lets a piece go on being treated as the hint, answer, or solution it
+// came out of: applySolutionVisibility() finds every piece by the type's class
+// and hides or reveals them together, the print stylesheet sets each in the
+// same type and with the same indent, and the same class-scoped rules the
+// original obeys -- such as `.knowl__content .para` -- reach the content inside.
+
+// The elements a cut may be made inside of: blocks that are nothing more than a
+// stack of other blocks, so that cutting between two of them loses nothing but
+// the decoration around the whole.  `.born-hidden-knowl > div` is the plain
+// wrapper rewriteSolutions() puts around a knowl's body.  A list may be cut
+// between its items, as hoistListOut() cuts it, but an item may not be cut
+// inside, since its continuation would be drawn with a marker of its own.
+// Anything not named here -- a table, a figure, a side-by-side, a display of
+// mathematics -- is moved whole or not at all.
+const SPLITTABLE_BLOCK_SELECTOR = 'article, .born-hidden-knowl, .born-hidden-knowl > div, .solution-like, .knowl__content, .para.logical, ol, ul';
+
+// Whether a cut may be made inside `element`.  Excluded for the same reasons
+// as in splittableListsIn(): a side-by-side panel is laid out against the
+// others, and a list in columns would lose them.  An element holding text of
+// its own, outside any child, cannot be cut either: its children could move,
+// but the text could not move with them, and would end up out of order.
+function isSplittableBlock(element) {
+    return element.matches(SPLITTABLE_BLOCK_SELECTOR) &&
+        !element.closest('.sidebyside') &&
+        ![...element.classList].some(className => /^cols\d+$/.test(className)) &&
+        ![...element.childNodes].some(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '');
+}
+
+// How tall `element` is with all of its writing space squeezed away, which is
+// the least room it can ever be given.  A row that fits on a page this way is
+// left whole: findPageBreaks() squeezes it to fit, and cutting it instead would
+// let a page break fall inside an exercise whose only excess is writing space.
+function getUnsqueezableHeight(element) {
+    return getElementTotalHeight(element) - getElemSqueezableHeight(element);
+}
+
+// Run `measure` with `row` shown, if it is a hint, answer, or solution that is
+// hidden at the moment, and hand back what it returns.
+//
+// Pages are planned with every hint, answer, and solution hidden (see
+// rewriteSolutions()), and a hidden row measures nothing at all, so it would
+// never be found too tall -- yet that row is exactly what overflows the page
+// once the reader reveals it.  So such a row is measured as it will be when
+// shown, and cut then if need be, with its pieces hidden along with it.  A
+// reveal then only has to choose between rows that already exist, which is
+// what addSpilloverPages() does.
+//
+// The row is not the only element that may be carrying `hidden`: once the
+// reader has hidden a type, applySolutionVisibility() has put the class on
+// every `div` of that type, the `.knowl__content` inside the row included.
+// Every one of them in the row is shown for the measurement, or the row would
+// measure as its heading alone.
+function measureAsShown(row, measure) {
+    const solutionTypes = '.hint, .answer, .solution';
+    const hidden = row.matches(solutionTypes)
+        ? [row, ...row.querySelectorAll(solutionTypes)].filter(element => element.classList.contains('hidden'))
+        : [];
+    hidden.forEach(element => element.classList.remove('hidden'));
+    try {
+        return measure();
+    } finally {
+        hidden.forEach(element => element.classList.add('hidden'));
+    }
+}
+
+// The blocks `element` is to be cut between, in document order: each of its
+// children, except that one which is itself too tall for a page is cut between
+// its own children in turn, as far down as isSplittableBlock() allows.  Must be
+// called with `element` shown, since it measures.
+function blockUnitsIn(element, pageHeight) {
+    const units = [];
+    for (const child of element.children) {
+        if (getUnsqueezableHeight(child) > pageHeight && isSplittableBlock(child)) {
+            units.push(...blockUnitsIn(child, pageHeight));
+        } else {
+            units.push(child);
+        }
+    }
+    return units;
+}
+
+// Whether `element` is a heading, which must never be the last thing on a page.
+function isHeading(element) {
+    return /^H[1-6]$/.test(element.tagName) || element.classList.contains('heading');
+}
+
+// Gather `units` into the pieces a row is cut into, each an array of the units
+// that must stay together on a page.  A heading goes with the block after it,
+// as does anything invisible ahead of the first block.  Anything invisible after
+// that, such as an autopermalink, goes with the block before it, where it would
+// otherwise make a piece of its own that shows nothing; so does writing space,
+// which belongs under the block it was authored for.  Must be called with the
+// units shown, since it measures.
+function blockPiecesFrom(units) {
+    const pieces = [];
+    let leading = [];
+    for (const unit of units) {
+        const invisible = unit.offsetHeight === 0;
+        if (isHeading(unit) || (invisible && (pieces.length === 0 || leading.length > 0))) {
+            leading.push(unit);
+        } else if ((invisible || isWorkspaceRow(unit)) && pieces.length > 0 && leading.length === 0) {
+            pieces[pieces.length - 1].push(unit);
+        } else {
+            pieces.push([...leading, unit]);
+            leading = [];
+        }
+    }
+    if (leading.length > 0) {
+        if (pieces.length > 0) {
+            pieces[pieces.length - 1].push(...leading);
+        } else {
+            pieces.push(leading);
+        }
+    }
+    return pieces;
+}
+
+// A copy of `element` to hold part of what it held.  The copy gives up the
+// identification value, which belongs to `element` alone, and the
+// `data-block-group` stamp: a piece after the first is free to start a page,
+// which flattenSolutionsIn() would forbid between two rows of one group.
+function partialCopyOf(element) {
+    const copy = element.cloneNode(false);
+    copy.removeAttribute('id');
+    delete copy.dataset.blockGroup;
+    return copy;
+}
+
+// Cut `row` into `pieces` (see blockPiecesFrom()) and set the pieces after the
+// first in `container` immediately after it, as rows of their own.  The first
+// piece is left in `row`, as hoistListOut() leaves the first piece of a list,
+// so that the row keeps its place, its heading, and its group, and with them a
+// question keeps the start of its solution.
+//
+// Each later piece is a copy of `row`, marked `split-continuation`, holding a
+// copy of every element between `row` and the piece's own units, so that a
+// unit cut out from deep inside -- a paragraph from inside a knowl's content --
+// sits at the same depth and under the same classes as before.  An ordered
+// list among those copies carries `start`, so its numbering runs on.
+//
+// An element that is cut gives up its vertical margins where it is cut: the
+// part before the cut its bottom margin, and the part after it its top margin.
+// Those margins belong to the start and the end of the whole element, and
+// whole it had only one of each; kept on every part, they would open a gap at
+// every cut -- a knowl's content, cut between every item of a long list in it,
+// put three times the room between each two items that the list did.  This
+// leaves the space at a cut to the margins of the units on either side of it,
+// as it was before.  They are set inline, since only this knows which parts
+// are cut, and since a rule in the stylesheet would have to outweigh whatever
+// rule gives each such element its margin.
+//
+// `row` and its copies are marked `split-block`, for the reason hoistListOut()
+// gives: a decoration drawn around one piece would read as though the block
+// ended there.
+function hoistBlockPiecesOut(container, row, pieces) {
+    row.classList.add('split-block');
+    // Read before anything moves, as hoistListOut() reads its own numbering.
+    const itemNumbers = new Map();
+    const orderedLists = [...row.querySelectorAll('ol')];
+    if (row.tagName === 'OL') {
+        orderedLists.push(row);
+    }
+    for (const list of orderedLists) {
+        let itemNumber = parseInt(list.getAttribute('start'), 10) || 1;
+        for (const item of list.children) {
+            if (item.tagName === 'LI') {
+                itemNumbers.set(item, itemNumber++);
+            }
+        }
+    }
+    // Every element a unit was taken out of, so that any left empty can be
+    // removed from `row` afterward rather than left behind as a stray box.
+    const emptied = new Set();
+    // For each element cut so far, its part in the latest piece to hold any of
+    // it, which is the part that gives up its bottom margin when the element is
+    // cut again; and its part in the first piece after the original, which
+    // takes the top margin back should the original turn out to be emptied.
+    //
+    // Each part is copied from the part before it, and before that part gives
+    // up its bottom margin, so that the bottom margin the element had to begin
+    // with is carried along to whichever part turns out to be the last.
+    const lastPartOf = new Map();
+    const firstCopyOf = new Map();
+    const continuationOf = element => {
+        const previousPart = lastPartOf.get(element) || element;
+        const copy = partialCopyOf(previousPart);
+        previousPart.style.marginBottom = '0';
+        copy.style.marginTop = '0';
+        lastPartOf.set(element, copy);
+        if (!firstCopyOf.has(element)) {
+            firstCopyOf.set(element, copy);
+        }
+        return copy;
+    };
+    let anchor = row;
+    for (const piece of pieces.slice(1)) {
+        // Each element between `row` and the units, mapped to its copy in this
+        // piece.  A copy is made the first time a unit needs it, and attached
+        // to the copy of its own parent, so that the copies come out nested,
+        // and in order, exactly as the elements they copy were.
+        const copies = new Map();
+        const continuation = continuationOf(row);
+        continuation.classList.add('split-continuation');
+        copies.set(row, continuation);
+        const copyOf = element => {
+            if (!copies.has(element)) {
+                const copy = continuationOf(element);
+                copyOf(element.parentElement).appendChild(copy);
+                copies.set(element, copy);
+            }
+            return copies.get(element);
+        };
+        for (const unit of piece) {
+            const parent = unit.parentElement;
+            copyOf(parent).appendChild(unit);
+            emptied.add(parent);
+        }
+        for (const copy of copies.values()) {
+            const firstItem = copy.firstElementChild;
+            if (copy.tagName === 'OL' && firstItem && itemNumbers.has(firstItem)) {
+                copy.setAttribute('start', String(itemNumbers.get(firstItem)));
+            }
+        }
+        container.insertBefore(continuation, anchor.nextSibling);
+        anchor = continuation;
+    }
+    // An element emptied this way was never cut at all: everything it held went
+    // on into later pieces, so its first copy is where it really starts, and
+    // gets back the top margin that was given up above -- whatever the element
+    // itself had, which is nothing inline unless an earlier cut put it there.
+    for (const element of emptied) {
+        let node = element;
+        while (node && node !== row && node.parentElement && node.children.length === 0 && node.textContent.trim() === '') {
+            const parent = node.parentElement;
+            node.remove();
+            if (firstCopyOf.has(node)) {
+                firstCopyOf.get(node).style.marginTop = node.style.marginTop;
+            }
+            node = parent;
+        }
+    }
+}
+
+// Cut up any row of `container` that is still taller than a page once its
+// lists are cut up (see flattenOversizedListsIn(), which has to run first), so
+// that pagination has somewhere to break inside it.  Hidden hints, answers,
+// and solutions are measured as they will be when shown (see measureAsShown()).
+//
+// Returns whether anything moved, since the caller has to re-read its rows and
+// measure again if so.
+function flattenOversizedBlocksIn(container, pageHeight) {
+    let split = false;
+    for (const child of [...container.children]) {
+        if (!isSplittableBlock(child)) continue;
+        const pieces = measureAsShown(child, () => {
+            if (getUnsqueezableHeight(child) <= pageHeight) return [];
+            return blockPiecesFrom(blockUnitsIn(child, pageHeight));
+        });
+        if (pieces.length < 2) continue;
+        hoistBlockPiecesOut(container, child, pieces);
         split = true;
     }
     return split;

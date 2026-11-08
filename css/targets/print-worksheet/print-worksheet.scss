@@ -328,22 +328,30 @@ article.printout {
     font-size: 1em;
   }
 
-  > div {
-    display: inline;
-  }
-
   .knowl__content {
-    display: inline;
     border: none;
     background-color: unset;
     padding: 0;
 
-    >:first-child {
+    .para {
+      margin-top: 0.5em;
+    }
+  }
+
+  // Run the heading in with the first block of the content.  A continuation
+  // (see `.split-continuation` below) has no heading to run in with, so its
+  // first block stays a block.
+  &:not(.split-continuation) {
+    > div {
       display: inline;
     }
 
-    .para {
-      margin-top: 0.5em;
+    .knowl__content {
+      display: inline;
+
+      >:first-child {
+        display: inline;
+      }
     }
   }
 }
@@ -386,6 +394,8 @@ article.printout {
 // rest being rows outside it.  Any panel decoration it carries would then frame
 // one item out of many, reading as though the list stopped there, so drop it
 // and let the block's heading simply introduce the run of items that follows.
+// A block cut between its own blocks (see flattenOversizedBlocksIn()) is in the
+// same position, and so is each continuation copied from it.
 .onepage .split-block {
   border: none;
   background: none;
@@ -394,6 +404,20 @@ article.printout {
   &::after {
     all: unset;
   }
+}
+
+// A block too tall to fit on one page is cut between its blocks, and every
+// piece after the first is a row of its own: a copy of the block, holding
+// copies of whatever held that piece (see flattenOversizedBlocksIn()).  The
+// copies give up the margins they have where they are cut, which leaves the
+// gap above a continuation to the margin of the first thing it holds, as it
+// was before the cut.
+//
+// That margin must stay inside the continuation, for the reason given for
+// `.split-list` above: one that collapsed out through the top edge would go
+// uncounted by the measurement of the row.  A flow root keeps it in.
+.onepage > .split-continuation {
+  display: flow-root;
 }
 
 // Footnotes
