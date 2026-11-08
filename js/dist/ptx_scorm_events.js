@@ -455,7 +455,7 @@
     installRestoreHook(restoreMap);
     requestParentResize();
     installWeBWorKSrcdocIntercept();
-    installWeBWorKAjaxIntercept();
+    installWeBWorKFetchIntercept();
     addSubmitButton();
     Object.keys(_state.answers).forEach(function(divId) {
       var container = document.getElementById(divId);
@@ -736,8 +736,7 @@
     });
     console.log("[PTX-SCORM] WeBWorK srcdoc intercept installed.");
   }
-  function handleWeBWorKAjaxResponse(xhr) {
-    var responseText = xhr && xhr.responseText;
+  function handleWeBWorKResponse(responseText) {
     if (!responseText) return;
     var data;
     try {
@@ -775,7 +774,7 @@
     });
     var answerObj = { answers: answerValues, mqAnswers: mqAnswerValues };
     var actString = "check:actual:" + numCorrect + ":expected:" + keys.length + ":correct:" + numCorrect + ":count:" + keys.length + ":pct:" + percent.toFixed(4);
-    console.log('[PTX-SCORM] WeBWorK AJAX response intercepted \u2014 div_id: "' + divId + '", score: ' + (percent * 100).toFixed(0) + "%");
+    console.log('[PTX-SCORM] WeBWorK response intercepted \u2014 div_id: "' + divId + '", score: ' + (percent * 100).toFixed(0) + "%");
     try {
       recordInteraction({
         event: "webwork",
@@ -788,63 +787,58 @@
       console.error("[PTX-SCORM] Error recording WeBWorK event:", err);
     }
   }
-  function installWeBWorKAjaxIntercept() {
-    var _pendingChecks = [];
-    function doInstall() {
-      if (!window.jQuery) return false;
-      var runestoneLoggedIn = typeof eBookConfig !== "undefined" && eBookConfig.username !== "";
-      if (runestoneLoggedIn) {
-        console.log("[PTX-SCORM] Runestone login detected \u2014 WeBWorK AJAX intercept skipped.");
-        return true;
-      }
-      jQuery(document).on("ajaxSend", function(event, xhr, settings) {
-        try {
-          var urlData = settings.data;
-          if (typeof urlData !== "string") return;
-          var params = new URLSearchParams(urlData);
+  function installWeBWorKFetchIntercept() {
+    if (typeof window.fetch !== "function") return;
+    var originalFetch = window.fetch;
+    function seedSavedAnswers(params) {
+      var problemUUID = params.get("problemUUID");
+      var divId = problemUUID.replace(/-ww-rs$/, "");
+      var saved = _state.answers[divId] || _state.answers[problemUUID];
+      if (!saved || !saved.answer) return null;
+      var ansObj = JSON.parse(saved.answer);
+      if (!ansObj || !ansObj.answers) return null;
+      var ansKeys = Object.keys(ansObj.answers);
+      if (ansKeys.length === 0) return null;
+      ansKeys.forEach(function(k) {
+        params.set(k, String(ansObj.answers[k]));
+      });
+      console.log('[PTX-SCORM] WeBWorK init: pre-seeded form for "' + divId + '" \u2014 keys: ' + ansKeys.join(", "));
+      return params.toString();
+    }
+    window.fetch = function(resource, init) {
+      var isCheck = false;
+      try {
+        var runestoneLoggedIn = typeof eBookConfig !== "undefined" && eBookConfig.username !== "";
+        if (!runestoneLoggedIn && init && typeof init.body === "string") {
+          var params = new URLSearchParams(init.body);
           if (params.get("answersSubmitted") === "1" && !params.get("WWcorrectAnsOnly")) {
-            _pendingChecks.push(xhr);
+            isCheck = true;
           } else if (params.get("answersSubmitted") === "0" && params.get("problemUUID")) {
-            var problemUUID = params.get("problemUUID");
-            var divId = problemUUID.replace(/-ww-rs$/, "");
-            var saved = _state.answers[divId] || _state.answers[problemUUID];
-            if (saved && saved.answer) {
-              try {
-                var ansObj = JSON.parse(saved.answer);
-                if (ansObj && ansObj.answers) {
-                  var ansKeys = Object.keys(ansObj.answers);
-                  if (ansKeys.length > 0) {
-                    ansKeys.forEach(function(k) {
-                      params.set(k, String(ansObj.answers[k]));
-                    });
-                    settings.data = params.toString();
-                    console.log('[PTX-SCORM] WeBWorK init: pre-seeded form for "' + divId + '" \u2014 keys: ' + ansKeys.join(", "));
-                  }
-                }
-              } catch (e) {
-              }
+            var seededBody = seedSavedAnswers(params);
+            if (seededBody !== null) {
+              init = Object.assign({}, init, { body: seededBody });
             }
           }
-        } catch (e) {
         }
-      });
-      jQuery(document).on("ajaxComplete", function(event, xhr) {
-        var checkIdx = _pendingChecks.indexOf(xhr);
-        if (checkIdx !== -1) {
-          _pendingChecks.splice(checkIdx, 1);
-          try {
-            handleWeBWorKAjaxResponse(xhr);
-          } catch (err) {
-            console.error("[PTX-SCORM] Error in WeBWorK AJAX handler:", err);
-          }
+      } catch (e) {
+      }
+      var result = originalFetch.call(window, resource, init);
+      if (!isCheck) return result;
+      return result.then(function(response) {
+        if (response.ok) {
+          response.clone().text().then(function(text) {
+            try {
+              handleWeBWorKResponse(text);
+            } catch (err) {
+              console.error("[PTX-SCORM] Error in WeBWorK response handler:", err);
+            }
+          }).catch(function() {
+          });
         }
+        return response;
       });
-      console.log("[PTX-SCORM] WeBWorK AJAX intercept registered (check-action only).");
-      return true;
-    }
-    if (!doInstall()) {
-      window.addEventListener("load", doInstall);
-    }
+    };
+    console.log("[PTX-SCORM] WeBWorK fetch intercept registered (check-action only).");
   }
   function loadRestoreData() {
     if (!_api) return {};
