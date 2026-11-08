@@ -46,15 +46,15 @@ img.contained {
 
 // ---------------------------------------------
 // images
-.image-box img, .image-box svg {
-  // for body images in dark mode, we want to be able to force a light colored background
-  // as most transparent images will assume that the background is white
+// for body images in dark mode, we want to be able to force a light colored background
+// as most transparent images will assume that the background is white.
+// Inline SVGs get this only when they stand in for an image: those a portable
+// build embeds in place of an "img", and annotated PreFigure diagrams, which
+// diagcess inserts inline.  Other inline SVGs (MathJax, Mermaid) are left alone.
+.image-box img,
+.image-box svg.ptx-embedded-svg,
+.image-box .ChemAccess-element svg {
   background: var(--ptx-image-bg);
-}
-// but mermaid svg should always have a transparent background
-.image-box .mermaid > svg,
-.image-box .ptx-mermaid-dialog > svg {
-  background: none;
 }
 
 .image-description {
