@@ -64,8 +64,8 @@ async function handleWW(ww_id, action) {
     generatedPG = `/ns/books/published/${ww_baseCourse}/${generatedPG}`;
   }
   if (action == "check" || action == "reveal") {
-    const iframe2 = ww_container.querySelector(".problem-iframe");
-    formData = new FormData(iframe2.contentDocument.getElementById(ww_id + "-form"));
+    const iframe3 = ww_container.querySelector(".problem-iframe");
+    formData = new FormData(iframe3.contentDocument.getElementById(ww_id + "-form"));
     formData.set("answersSubmitted", "1");
     formData.set("WWsubmit", "1");
     if (action == "reveal" && ww_container.dataset.hasAnswer == "true") {
@@ -114,284 +114,292 @@ async function handleWW(ww_id, action) {
     }
   }
   const formString = new URLSearchParams(formData).toString();
-  $.post(url, formString + checkboxesString, (data) => {
-    const form = document.createElement("form");
-    form.id = ww_id + "-form";
-    form.dataset.iframeHeight = 1;
-    const body_div = document.createElement("div");
-    body_div.id = ww_id + "-body";
-    body_div.classList.add("exercise", "exercise-like");
-    body_div.lang = data.lang;
-    body_div.dir = data.dir;
-    body_div.innerHTML = data.rh_result.text;
-    if ("showPartialCorrectAnswers" in data.rh_result.flags && data.rh_result.flags.showPartialCorrectAnswers == 0) {
-      if ("score" in data.rh_result.problem_result && data.rh_result.problem_result.score >= 1) {
-        body_div.querySelectorAll("button.ww-feedback-btn").forEach(
-          function(button) {
-            button.classList.remove("btn-info");
-            button.classList.add("btn-success");
-            button.setAttribute("aria-label", "Correct");
-            button.dataset.bsCustomClass = button.dataset.bsCustomClass + " correct";
-            button.dataset.bsTitle = button.dataset.bsTitle.replace("Answer Preview", "Correct");
-            button.firstChild.classList.add("correct");
-          }
-        );
-      } else {
-        body_div.querySelectorAll("button.ww-feedback-btn").forEach(
-          function(button) {
-            button.setAttribute("aria-label", "One or more answers incorrect");
-            button.dataset.bsTitle = button.dataset.bsTitle.replace("Answer Preview", "One or more answers incorrect");
-          }
-        );
-      }
-    }
-    for (const tag_name of ["h6", "h5", "h4", "h3", "h2", "h1"]) {
-      const headings = body_div.getElementsByTagName(tag_name);
-      for (heading of headings) {
-        const new_heading = document.createElement("h6");
-        new_heading.innerHTML = heading.innerHTML;
-        cloneAttributes(new_heading, heading);
-        new_heading.classList.add("webwork-part");
-        heading.replaceWith(new_heading);
-      }
-    }
-    var textareas = body_div.getElementsByTagName("textarea");
-    for (var i = 0, max = textareas.length; i < max; i++) {
-      textareas[i].style.display = "none";
-      textareas[i].className = "";
-    }
-    var textareabuttons = body_div.querySelectorAll(".latexentry-preview");
-    for (var i = 0, max = textareabuttons.length; i < max; i++) {
-      textareabuttons[i].remove();
-    }
-    adjustSrcHrefs(body_div, ww_domain);
-    translateHintSol(
-      ww_id,
-      body_div,
-      ww_domain,
-      ww_container.dataset.hasHint == "true",
-      ww_container.dataset.hasSolution == "true",
-      ww_container.dataset.hintLabelText,
-      ww_container.dataset.solutionLabelText
-    );
-    if (runestone_logged_in) {
-      const answersObject = wwList[ww_id.replace(/-ww-rs$/, "")].answers ? wwList[ww_id.replace(/-ww-rs$/, "")].answers : { "answers": [], "mqAnswers": [] };
-      const mqAnswers = answersObject.mqAnswers;
-      for (const mqAnswer in mqAnswers) {
-        const mqInput = body_div.querySelector("input[id=" + mqAnswer + "]");
-        if (mqInput && mqInput.value == "") {
-          mqInput.setAttribute("value", mqAnswers[mqAnswer]);
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+    body: formString + checkboxesString
+  });
+  if (!response.ok) {
+    loader.remove();
+    console.error(`WeBWorK request for ${ww_id} failed: ${response.status} ${response.statusText}`);
+    return;
+  }
+  const data = await response.json();
+  const form = document.createElement("form");
+  form.id = ww_id + "-form";
+  form.dataset.iframeHeight = 1;
+  const body_div = document.createElement("div");
+  body_div.id = ww_id + "-body";
+  body_div.classList.add("exercise", "exercise-like");
+  body_div.lang = data.lang;
+  body_div.dir = data.dir;
+  body_div.innerHTML = data.rh_result.text;
+  if ("showPartialCorrectAnswers" in data.rh_result.flags && data.rh_result.flags.showPartialCorrectAnswers == 0) {
+    if ("score" in data.rh_result.problem_result && data.rh_result.problem_result.score >= 1) {
+      body_div.querySelectorAll("button.ww-feedback-btn").forEach(
+        function(button) {
+          button.classList.remove("btn-info");
+          button.classList.add("btn-success");
+          button.setAttribute("aria-label", "Correct");
+          button.dataset.bsCustomClass = button.dataset.bsCustomClass + " correct";
+          button.dataset.bsTitle = button.dataset.bsTitle.replace("Answer Preview", "Correct");
+          button.firstChild.classList.add("correct");
         }
-      }
-      const answers = answersObject.answers;
-      for (const answer in answers) {
-        const input = body_div.querySelector("input[id=" + answer + "]");
-        if (input && input.value == "") {
-          input.setAttribute("value", answers[answer]);
-        }
-      }
-    }
-    form.appendChild(body_div);
-    const wwInputs = {
-      problemSeed: data.inputs_ref.problemSeed,
-      problemUUID: data.inputs_ref.problemUUID,
-      psvn: data.inputs_ref.psvn,
-      courseName: ww_course_id,
-      courseID: ww_course_id,
-      user: ww_user_id,
-      passwd: ww_passwd,
-      displayMode: "MathJax",
-      session_key: data.rh_result.session_key,
-      outputformat: "raw",
-      language: data.formLanguage,
-      showSummary: data.showSummary,
-      disableCookies: "1",
-      // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
-      showSolutions: ww_container.dataset.hasSolution == "true" ? "1" : "0",
-      showHints: ww_container.dataset.hasHint == "true" ? "1" : "0",
-      forcePortNumber: data.forcePortNumber
-    };
-    if (ww_sourceFilePath) wwInputs.sourceFilePath = ww_sourceFilePath;
-    else if (ww_problemSource && ww_origin == "webwork2") wwInputs.problemSource = ww_problemSource;
-    for (const wwInputName of Object.keys(wwInputs)) {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = wwInputName;
-      input.value = wwInputs[wwInputName];
-      form.appendChild(input);
-    }
-    let buttonContainer = ww_container.querySelector(".problem-buttons.webwork");
-    if (!buttonContainer) {
-      ww_container.querySelector(".problem-buttons").classList.add("hidden-content", "hidden");
-      buttonContainer = document.createElement("div");
-      buttonContainer.classList.add("problem-buttons", "webwork");
-      if (activate_button != null) {
-        activate_button.after(buttonContainer);
-      } else {
-        ww_container.prepend(buttonContainer);
-      }
-      const check = document.createElement("button");
-      check.type = "button";
-      check.id = ww_id + "-check";
-      check.style.marginRight = "0.25rem";
-      check.classList.add("webwork-button");
-      check.textContent = runestone_logged_in ? localize_submit : localize_check_responses;
-      check.addEventListener("click", () => handleWW(ww_id, "check"));
-      buttonContainer.appendChild(check);
-      if (ww_container.dataset.hasAnswer == "true") {
-        const correct = document.createElement("button");
-        correct.classList.add("show-correct", "webwork-button");
-        correct.type = "button";
-        correct.style.marginRight = "0.25rem";
-        correct.textContent = localize_reveal;
-        correct.addEventListener("click", () => handleWW(ww_id, "reveal"));
-        buttonContainer.appendChild(correct);
-      }
-      const randomize = document.createElement("button");
-      randomize.type = "button";
-      randomize.classList.add("webwork-button");
-      randomize.style.marginRight = "0.25rem";
-      randomize.textContent = localize_randomize;
-      randomize.addEventListener("click", () => handleWW(ww_id, "randomize"));
-      buttonContainer.appendChild(randomize);
-      const reset = document.createElement("button");
-      reset.type = "button";
-      reset.classList.add("webwork-button");
-      reset.textContent = localize_reset;
-      reset.addEventListener("click", () => resetWW(ww_id));
-      buttonContainer.appendChild(reset);
-    }
-    if (runestone_logged_in && action == "check") {
-      $("body").trigger("runestone_ww_check", data);
-    }
-    let courseUrlBase = "";
-    if (runestone_logged_in) {
-      courseUrlBase = "/ns/books/published/" + eBookConfig.basecourse + "/";
-    }
-    let iframeContents = '<!DOCTYPE html><head><script src="' + ww_domain + `/webwork2_files/node_modules/jquery/dist/jquery.min.js"><\/script><script>
-                window.MathJax = {
-                    tex: { packages: { '[+]': ['noerrors'] } },
-                    loader: { load: ['input/asciimath', '[tex]/noerrors'] },
-                    startup: {
-                        ready() {
-                            const AM = MathJax.InputJax.AsciiMath.AM;
-
-                            // Modify existing AsciiMath triggers.
-                            AM.symbols[AM.names.indexOf('**')] = {
-                                input: '**',
-                                tag: 'msup',
-                                output: '^',
-                                tex: null,
-                                ttype: AM.TOKEN.INFIX
-                            };
-
-                            const i = AM.names.indexOf('infty');
-                            AM.names[i] = 'infinity';
-                            AM.symbols[i] = { input: 'infinity', tag: 'mo', output: '\u221E', tex: 'infty', ttype: AM.TOKEN.CONST };
-
-                            return MathJax.startup.defaultReady();
-                        }
-                    },
-                    options: {
-                        processHtmlClass: "process-math",
-                        renderActions: {
-                            findScript: [
-                                10,
-                                (doc) => {
-                                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
-                                        const math = new doc.options.MathItem(
-                                            node.textContent,
-                                            doc.inputJax[0],
-                                            !!node.type.match(/; *mode=display/)
-                                        );
-                                        const text = document.createTextNode('');
-                                        node.parentNode.replaceChild(text, node);
-                                        math.start = { node: text, delim: '', n: 0 };
-                                        math.end = { node: text, delim: '', n: 0 };
-                                        doc.math.push(math);
-                                    }
-                                },
-                                ''
-                            ]
-                        },
-                        ignoreHtmlClass: 'tex2jax_ignore'
-                    }
-                };
-            <\/script><script src="` + ww_domain + `/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer><\/script><script src="${courseUrlBase}_static/pretext/js/dist/knowl.js" defer><\/script><link rel="stylesheet" href="` + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/><script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer><\/script>';
-    const extra_css_files = [];
-    const extra_js_files = [];
-    if (data.extra_css_files) data.extra_css_files.unshift(...extra_css_files);
-    else data.extra_css_files = extra_css_files;
-    for (const cssFile of data.extra_css_files) {
-      iframeContents += '<link rel="stylesheet" href="' + (cssFile.external !== "1" ? ww_domain : "") + cssFile.file + '"/>';
-    }
-    if (data.extra_js_files) data.extra_js_files.unshift(...extra_js_files);
-    else data.extra_js_files = extra_js_files;
-    for (const jsFile of data.extra_js_files) {
-      iframeContents += '<script src="' + (jsFile.external !== "1" ? ww_domain : "") + jsFile.file + '" ' + Object.keys(jsFile.attributes || {}).reduce((ret, key) => {
-        ret += key + '="' + jsFile.attributes[key] + '" ';
-        return ret;
-      }, "") + "><\/script>";
-    }
-    iframeContents += `<link rel="stylesheet" href="${courseUrlBase}_static/pretext/css/theme.css"/><script src="` + ww_domain + `/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"><\/script><style>
-                html { overflow-y: hidden; }
-                html body { background:unset; margin: 0; }
-                body { font-size: initial; line-height: initial; padding:2px; }
-                .hidden-content { display: none; }
-                span.nobreak { white-space: nowrap; }
-                div.PGML img.image-view-elt { max-width:100%; }
-                .graphtool-answer-container .graphtool-graph { margin: 0; width: 300px; height: 300px; }
-                .graphtool-answer-container .graphtool-number-line { height: 57px; }
-                .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
-            </style></head><body><main class="pretext-content problem-content" data-iframe-height="1">` + (typeof window.PTX_MACROS !== "undefined" ? `<span class="process-math" style="display:none;">${window.PTX_MACROS}</span>` : "") + form.outerHTML + "</main></body></html>";
-    let iframe2;
-    if (!action) {
-      iframe2 = document.createElement("iframe");
-      iframe2.style.width = "1px";
-      iframe2.style.minWidth = "100%";
-      iframe2.classList.add("problem-iframe");
-      ww_container.querySelector(".problem-contents").classList.add("hidden-content", "hidden");
-      if (activate_button != null) {
-        activate_button.after(iframe2);
-      } else {
-        ww_container.prepend(iframe2);
-      }
-      iFrameResize({ checkOrigin: false, scrolling: "omit", heightCalculationMethod: "taggedElement" }, iframe2);
-      iframe2.addEventListener("load", () => {
-        const iframeForm = iframe2.contentDocument.getElementById(ww_id + "-form");
-        iframeForm.addEventListener("submit", (e) => {
-          handleWW(ww_id, "check");
-          e.preventDefault();
-        });
-        iframe2.contentDocument.querySelectorAll(".collapse.in").forEach((collapse) => collapse.classList.add("expanded"));
-        iframe2.contentWindow.jQuery(".collapse").on("shown", function(e) {
-          if (e.target != this) return;
-          this.classList.add("expanded");
-        });
-        iframe2.contentWindow.jQuery(".collapse").on("hide", function(e) {
-          if (e.target != this) return;
-          this.classList.remove("expanded");
-        });
-        iframe2.contentWindow.MathJax.startup.promise.then(() => iframe2.contentWindow.MathJax.typesetPromise([".popover", ".popover-content"]));
-      });
+      );
     } else {
-      iframe2 = ww_container.querySelector(".problem-iframe");
+      body_div.querySelectorAll("button.ww-feedback-btn").forEach(
+        function(button) {
+          button.setAttribute("aria-label", "One or more answers incorrect");
+          button.dataset.bsTitle = button.dataset.bsTitle.replace("Answer Preview", "One or more answers incorrect");
+        }
+      );
     }
-    iframe2.srcdoc = iframeContents;
+  }
+  for (const tag_name of ["h6", "h5", "h4", "h3", "h2", "h1"]) {
+    const headings = body_div.getElementsByTagName(tag_name);
+    for (heading of headings) {
+      const new_heading = document.createElement("h6");
+      new_heading.innerHTML = heading.innerHTML;
+      cloneAttributes(new_heading, heading);
+      new_heading.classList.add("webwork-part");
+      heading.replaceWith(new_heading);
+    }
+  }
+  var textareas = body_div.getElementsByTagName("textarea");
+  for (var i = 0, max = textareas.length; i < max; i++) {
+    textareas[i].style.display = "none";
+    textareas[i].className = "";
+  }
+  var textareabuttons = body_div.querySelectorAll(".latexentry-preview");
+  for (var i = 0, max = textareabuttons.length; i < max; i++) {
+    textareabuttons[i].remove();
+  }
+  adjustSrcHrefs(body_div, ww_domain);
+  translateHintSol(
+    ww_id,
+    body_div,
+    ww_domain,
+    ww_container.dataset.hasHint == "true",
+    ww_container.dataset.hasSolution == "true",
+    ww_container.dataset.hintLabelText,
+    ww_container.dataset.solutionLabelText
+  );
+  if (runestone_logged_in) {
+    const answersObject = wwList[ww_id.replace(/-ww-rs$/, "")].answers ? wwList[ww_id.replace(/-ww-rs$/, "")].answers : { "answers": [], "mqAnswers": [] };
+    const mqAnswers = answersObject.mqAnswers;
+    for (const mqAnswer in mqAnswers) {
+      const mqInput = body_div.querySelector("input[id=" + mqAnswer + "]");
+      if (mqInput && mqInput.value == "") {
+        mqInput.setAttribute("value", mqAnswers[mqAnswer]);
+      }
+    }
+    const answers = answersObject.answers;
+    for (const answer in answers) {
+      const input = body_div.querySelector("input[id=" + answer + "]");
+      if (input && input.value == "") {
+        input.setAttribute("value", answers[answer]);
+      }
+    }
+  }
+  form.appendChild(body_div);
+  const wwInputs = {
+    problemSeed: data.inputs_ref.problemSeed,
+    problemUUID: data.inputs_ref.problemUUID,
+    psvn: data.inputs_ref.psvn,
+    courseName: ww_course_id,
+    courseID: ww_course_id,
+    user: ww_user_id,
+    passwd: ww_passwd,
+    displayMode: "MathJax",
+    session_key: data.rh_result.session_key,
+    outputformat: "raw",
+    language: data.formLanguage,
+    showSummary: data.showSummary,
+    disableCookies: "1",
+    // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
+    showSolutions: ww_container.dataset.hasSolution == "true" ? "1" : "0",
+    showHints: ww_container.dataset.hasHint == "true" ? "1" : "0",
+    forcePortNumber: data.forcePortNumber
+  };
+  if (ww_sourceFilePath) wwInputs.sourceFilePath = ww_sourceFilePath;
+  else if (ww_problemSource && ww_origin == "webwork2") wwInputs.problemSource = ww_problemSource;
+  for (const wwInputName of Object.keys(wwInputs)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = wwInputName;
+    input.value = wwInputs[wwInputName];
+    form.appendChild(input);
+  }
+  let buttonContainer = ww_container.querySelector(".problem-buttons.webwork");
+  if (!buttonContainer) {
+    ww_container.querySelector(".problem-buttons").classList.add("hidden-content", "hidden");
+    buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("problem-buttons", "webwork");
+    if (activate_button != null) {
+      activate_button.after(buttonContainer);
+    } else {
+      ww_container.prepend(buttonContainer);
+    }
+    const check = document.createElement("button");
+    check.type = "button";
+    check.id = ww_id + "-check";
+    check.style.marginRight = "0.25rem";
+    check.classList.add("webwork-button");
+    check.textContent = runestone_logged_in ? localize_submit : localize_check_responses;
+    check.addEventListener("click", () => handleWW(ww_id, "check"));
+    buttonContainer.appendChild(check);
+    if (ww_container.dataset.hasAnswer == "true") {
+      const correct = document.createElement("button");
+      correct.classList.add("show-correct", "webwork-button");
+      correct.type = "button";
+      correct.style.marginRight = "0.25rem";
+      correct.textContent = localize_reveal;
+      correct.addEventListener("click", () => handleWW(ww_id, "reveal"));
+      buttonContainer.appendChild(correct);
+    }
+    const randomize = document.createElement("button");
+    randomize.type = "button";
+    randomize.classList.add("webwork-button");
+    randomize.style.marginRight = "0.25rem";
+    randomize.textContent = localize_randomize;
+    randomize.addEventListener("click", () => handleWW(ww_id, "randomize"));
+    buttonContainer.appendChild(randomize);
+    const reset = document.createElement("button");
+    reset.type = "button";
+    reset.classList.add("webwork-button");
+    reset.textContent = localize_reset;
+    reset.addEventListener("click", () => resetWW(ww_id));
+    buttonContainer.appendChild(reset);
+  }
+  if (runestone_logged_in && action == "check") {
+    document.body.dispatchEvent(new CustomEvent("runestone_ww_check", { detail: data }));
+  }
+  let courseUrlBase = "";
+  if (runestone_logged_in) {
+    courseUrlBase = "/ns/books/published/" + eBookConfig.basecourse + "/";
+  }
+  let iframeContents = '<!DOCTYPE html><head><script src="' + ww_domain + `/webwork2_files/node_modules/jquery/dist/jquery.min.js"><\/script><script>
+            window.MathJax = {
+                tex: { packages: { '[+]': ['noerrors'] } },
+                loader: { load: ['input/asciimath', '[tex]/noerrors'] },
+                startup: {
+                    ready() {
+                        const AM = MathJax.InputJax.AsciiMath.AM;
+
+                        // Modify existing AsciiMath triggers.
+                        AM.symbols[AM.names.indexOf('**')] = {
+                            input: '**',
+                            tag: 'msup',
+                            output: '^',
+                            tex: null,
+                            ttype: AM.TOKEN.INFIX
+                        };
+
+                        const i = AM.names.indexOf('infty');
+                        AM.names[i] = 'infinity';
+                        AM.symbols[i] = { input: 'infinity', tag: 'mo', output: '\u221E', tex: 'infty', ttype: AM.TOKEN.CONST };
+
+                        return MathJax.startup.defaultReady();
+                    }
+                },
+                options: {
+                    processHtmlClass: "process-math",
+                    renderActions: {
+                        findScript: [
+                            10,
+                            (doc) => {
+                                for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                                    const math = new doc.options.MathItem(
+                                        node.textContent,
+                                        doc.inputJax[0],
+                                        !!node.type.match(/; *mode=display/)
+                                    );
+                                    const text = document.createTextNode('');
+                                    node.parentNode.replaceChild(text, node);
+                                    math.start = { node: text, delim: '', n: 0 };
+                                    math.end = { node: text, delim: '', n: 0 };
+                                    doc.math.push(math);
+                                }
+                            },
+                            ''
+                        ]
+                    },
+                    ignoreHtmlClass: 'tex2jax_ignore'
+                }
+            };
+        <\/script><script src="` + ww_domain + `/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer><\/script><script src="${courseUrlBase}_static/pretext/js/dist/knowl.js" defer><\/script><link rel="stylesheet" href="` + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/><script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer><\/script>';
+  const extra_css_files = [];
+  const extra_js_files = [];
+  if (data.extra_css_files) data.extra_css_files.unshift(...extra_css_files);
+  else data.extra_css_files = extra_css_files;
+  for (const cssFile of data.extra_css_files) {
+    iframeContents += '<link rel="stylesheet" href="' + (cssFile.external !== "1" ? ww_domain : "") + cssFile.file + '"/>';
+  }
+  if (data.extra_js_files) data.extra_js_files.unshift(...extra_js_files);
+  else data.extra_js_files = extra_js_files;
+  for (const jsFile of data.extra_js_files) {
+    iframeContents += '<script src="' + (jsFile.external !== "1" ? ww_domain : "") + jsFile.file + '" ' + Object.keys(jsFile.attributes || {}).reduce((ret, key) => {
+      ret += key + '="' + jsFile.attributes[key] + '" ';
+      return ret;
+    }, "") + "><\/script>";
+  }
+  iframeContents += `<link rel="stylesheet" href="${courseUrlBase}_static/pretext/css/theme.css"/><script src="` + ww_domain + `/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"><\/script><style>
+            html { overflow-y: hidden; }
+            html body { background:unset; margin: 0; }
+            body { font-size: initial; line-height: initial; padding:2px; }
+            .hidden-content { display: none; }
+            span.nobreak { white-space: nowrap; }
+            div.PGML img.image-view-elt { max-width:100%; }
+            .graphtool-answer-container .graphtool-graph { margin: 0; width: 300px; height: 300px; }
+            .graphtool-answer-container .graphtool-number-line { height: 57px; }
+            .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
+        </style></head><body><main class="pretext-content problem-content" data-iframe-height="1">` + (typeof window.PTX_MACROS !== "undefined" ? `<span class="process-math" style="display:none;">${window.PTX_MACROS}</span>` : "") + form.outerHTML + "</main></body></html>";
+  let iframe2;
+  if (!action) {
+    iframe2 = document.createElement("iframe");
+    iframe2.style.width = "1px";
+    iframe2.style.minWidth = "100%";
+    iframe2.classList.add("problem-iframe");
+    ww_container.querySelector(".problem-contents").classList.add("hidden-content", "hidden");
+    if (activate_button != null) {
+      activate_button.after(iframe2);
+    } else {
+      ww_container.prepend(iframe2);
+    }
+    iFrameResize({ checkOrigin: false, scrolling: "omit", heightCalculationMethod: "taggedElement" }, iframe2);
     iframe2.addEventListener("load", () => {
-      loader.remove();
-    }, { once: true });
-    ww_container.focus();
-  }, "json");
+      const iframeForm = iframe2.contentDocument.getElementById(ww_id + "-form");
+      iframeForm.addEventListener("submit", (e) => {
+        handleWW(ww_id, "check");
+        e.preventDefault();
+      });
+      iframe2.contentDocument.querySelectorAll(".collapse.in").forEach((collapse) => collapse.classList.add("expanded"));
+      iframe2.contentDocument.querySelectorAll(".collapse").forEach((collapse) => {
+        collapse.addEventListener("shown.bs.collapse", (e) => {
+          if (e.target == collapse) collapse.classList.add("expanded");
+        });
+        collapse.addEventListener("hide.bs.collapse", (e) => {
+          if (e.target == collapse) collapse.classList.remove("expanded");
+        });
+      });
+      iframe2.contentWindow.MathJax.startup.promise.then(() => iframe2.contentWindow.MathJax.typesetPromise([".popover", ".popover-content"]));
+    });
+  } else {
+    iframe2 = ww_container.querySelector(".problem-iframe");
+  }
+  iframe2.srcdoc = iframeContents;
+  iframe2.addEventListener("load", () => {
+    loader.remove();
+  }, { once: true });
+  ww_container.focus();
 }
 function WWshowCorrect(ww_id, answers) {
   const ww_container = document.getElementById(ww_id);
   const iframe2 = ww_container.querySelector(".problem-iframe");
   const body = iframe2.contentDocument.getElementById(ww_id + "-body");
-  $("body").trigger("runestone_show_correct", {
-    "ww_id": ww_id,
-    "answers": answers
-  });
+  document.body.dispatchEvent(new CustomEvent("runestone_show_correct", {
+    detail: { "ww_id": ww_id, "answers": answers }
+  }));
   let inputs = body.querySelectorAll("input:not([type=hidden])");
   for (const input of inputs) {
     const name = input.name;
@@ -443,7 +451,7 @@ function WWshowCorrect(ww_id, answers) {
       input.parentElement.insertBefore(correct_ans_div, graphtoolContainer);
       graphtoolContainer.style.display = "none";
       input.value = answers[name].correct_ans;
-      iframe2.contentWindow.jQuery(correct_ans_div).html(answers[name].correct_ans_latex_string);
+      correct_ans_div.innerHTML = answers[name].correct_ans_latex_string;
       const script = iframe2.contentDocument.createElement("script");
       script.textContent = correct_ans_div.querySelector("script").textContent.replace('\nwindow.addEventListener("DOMContentLoaded",', "(").replace(/;\n$/, "();");
       iframe2.contentDocument.body.appendChild(script);
