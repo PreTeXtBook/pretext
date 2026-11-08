@@ -65,9 +65,8 @@ The builder gives us:
 
 **Not included:** `js/jquery.min.js`.  jQuery is loaded separately by the XSL
 from `$html.js.root` (the `js/` root, not `js/dist/`), because it is a
-third-party library rather than a built artifact.  The WeBWorK integration
-scripts call `$("body").trigger(...)` on the page, and the Runestone runtime
-also requires jQuery to be present globally.
+third-party library rather than a built artifact.  The Runestone runtime
+requires jQuery to be present globally.
 
 ---
 
