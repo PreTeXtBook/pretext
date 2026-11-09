@@ -1516,6 +1516,20 @@ Book (with parts), "section" at level 3
     </xsl:if>
 </xsl:template>
 
+<!-- A "fillin" (not in math) with @workspace is space for writing, as     -->
+<!-- wide as @characters asks and as tall as the workspace, such as in     -->
+<!-- the cell of a "tabular" that students complete.  This returns that    -->
+<!-- height, or an empty string when the blank is an ordinary one: outside -->
+<!-- a printout ("sanitize-workspace" decides, so a conversion's override  -->
+<!-- of that template applies here too), outside an "exercise", a          -->
+<!-- PROJECT-LIKE, or a "task", within a SOLUTION-LIKE, or in an           -->
+<!-- interactive fill-in exercise, whose blanks are answer fields.         -->
+<xsl:template match="fillin" mode="fillin-workspace">
+    <xsl:if test="@workspace and (ancestor::exercise or ancestor::*[&PROJECT-FILTER;] or ancestor::task) and not(ancestor::*[&SOLUTION-FILTER;]) and not(ancestor::*[@pi:exercise-interactive = 'fillin'])">
+        <xsl:apply-templates select="." mode="sanitize-workspace"/>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Sage Cells -->
 <!-- Contents are text manipulations (below)     -->
