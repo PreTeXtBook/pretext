@@ -25,6 +25,88 @@ function getPrintout() {
     return document.querySelector('.printout');
 }
 
+// On screen the printout is laid out at the full width of the paper and then
+// scaled down to fit a window narrower than that (see fitPrintoutToWindow()),
+// so the text wraps exactly as it will on the sheet whatever the window.  The
+// scaling is a transform, which leaves the layout alone: offsetHeight and
+// computed styles still report the paper's own pixels.  A bounding rectangle
+// does not -- it reports the box as drawn -- so its numbers cannot be compared
+// with those, nor written back as a length.
+//
+// This is how much the printout is drawn scaled by: 1 at full size and in
+// print.  Read off the printout itself, as drawn width over laid out width, so
+// it holds however the scaling came about.
+function printoutScale() {
+    const printout = getPrintout();
+    if (!printout || !printout.offsetWidth) {
+        return 1;
+    }
+    return printout.getBoundingClientRect().width / printout.offsetWidth || 1;
+}
+
+// The bounding rectangle of an element inside the printout, in the pixels the
+// printout is laid out in rather than those it is drawn in.  Use this in place
+// of getBoundingClientRect() for anything measured against offset heights or
+// lengths from the stylesheet.  The printout scales about its top left corner,
+// so that corner is the fixed point the rectangle is scaled back from.
+function layoutRect(element) {
+    const rect = element.getBoundingClientRect();
+    const scale = printoutScale();
+    if (scale === 1) {
+        return rect;
+    }
+    const origin = getPrintout().getBoundingClientRect();
+    return new DOMRect(
+        origin.left + (rect.left - origin.left) / scale,
+        origin.top + (rect.top - origin.top) / scale,
+        rect.width / scale,
+        rect.height / scale
+    );
+}
+
+// The room kept clear on each side of the sheet in a window too narrow for it,
+// in pixels: enough for the drop shadow the stylesheet gives a page.
+const PRINTOUT_GUTTER = 36;
+
+// Scale the printout to fit the window.  The stylesheet does the scaling, from
+// two custom properties set here on the root element: the scale, and the
+// height the scaled printout no longer fills, which a transform leaves behind
+// as blank space below it.  Never more than 1, so a wide window shows the sheet
+// at its true size.
+function fitPrintoutToWindow() {
+    const printout = getPrintout();
+    if (!printout || !printout.offsetWidth) {
+        return;
+    }
+    const root = document.documentElement;
+    const available = root.clientWidth - 2 * PRINTOUT_GUTTER;
+    const scale = Math.max(0.1, Math.min(1, available / printout.offsetWidth));
+    const properties = {
+        '--ptx-printout-scale': String(scale),
+        '--ptx-printout-slack': `${(scale - 1) * printout.offsetHeight}px`,
+    };
+    // Written only when changed: what these set resizes the very elements
+    // watchPrintoutFit() observes.
+    for (const [name, value] of Object.entries(properties)) {
+        if (root.style.getPropertyValue(name) !== value) {
+            root.style.setProperty(name, value);
+        }
+    }
+}
+
+// Keep the printout fitted as the window is resized, and as the printout
+// itself changes size: a different paper size, pages added or removed.
+function watchPrintoutFit() {
+    fitPrintoutToWindow();
+    if (typeof ResizeObserver === "undefined") {
+        window.addEventListener('resize', fitPrintoutToWindow);
+        return;
+    }
+    const observer = new ResizeObserver(fitPrintoutToWindow);
+    observer.observe(document.documentElement);
+    observer.observe(getPrintout());
+}
+
 // Unwrap section.paragraphs containers so their children flow directly
 // into the parent, enabling CSS page breaks between the inner elements.
 function flattenParagraphsSections(printout) {
@@ -74,7 +156,7 @@ async function withIframesDetached(fn) {
     const parked = [];
     if (printout) {
         printout.querySelectorAll('iframe').forEach(iframe => {
-            const rect = iframe.getBoundingClientRect();
+            const rect = layoutRect(iframe);
             const placeholder = document.createElement('div');
             placeholder.className = 'iframe-placeholder';
             placeholder.style.width = rect.width + 'px';
@@ -828,7 +910,7 @@ function getPageContentBottom(page) {
     // area still fits within the page's outer box, but real printing
     // respects the margin strictly and will push it to the next page.
     // So overflow must be measured against the content area, not the raw box.
-    const pRect = page.getBoundingClientRect();
+    const pRect = layoutRect(page);
     const paddingBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
     return pRect.bottom - paddingBottom;
 }
@@ -837,7 +919,7 @@ function pageOverflows() {
     const pages = document.querySelectorAll('.onepage');
     for (const page of pages) {
         for (const child of page.children) {
-            const r = child.getBoundingClientRect();
+            const r = layoutRect(child);
             if (r.bottom > getPageContentBottom(page) + 1) {
                 return true;
             }
@@ -1018,7 +1100,7 @@ function addSpilloverPages(margins) {
 
     let overflowStartIndex = -1;
     for (let j = 0; j < contentChildren.length; j++) {
-      const r = contentChildren[j].getBoundingClientRect();
+      const r = layoutRect(contentChildren[j]);
       if (r.bottom > contentBottom + 1) {
         overflowStartIndex = j;
         break;
@@ -1883,7 +1965,7 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
                 // itself, the push can only ever close a gap that is really
                 // there, so no error in that accounting can drive the block
                 // off the foot of the sheet.
-                const gap = getPageContentBottom(page) - footnotes.getBoundingClientRect().bottom - 1;
+                const gap = getPageContentBottom(page) - layoutRect(footnotes).bottom - 1;
                 if (gap > 0) {
                     const baseMargin = parseFloat(getComputedStyle(footnotes).marginTop) || 0;
                     footnotes.style.marginTop = (baseMargin + gap) + "px";
@@ -2734,7 +2816,7 @@ function toPixels(value) {
 // an image, a browser reflow after a class toggle, etc).
 function pageLayoutSignature() {
     return [...document.querySelectorAll('.onepage')]
-        .map(page => Math.round(page.getBoundingClientRect().height))
+        .map(page => Math.round(layoutRect(page).height))
         .join(',');
 }
 
@@ -2982,6 +3064,11 @@ window.addEventListener("DOMContentLoaded", async function(event) {
             console.warn("Nothing to preview for printpreview=" + printableSectionID + "; leaving the page as it is.");
             return;
         }
+
+        // Fit the sheet to the window from here on.  Nothing below waits on
+        // this: every measurement is in the printout's own pixels, which the
+        // scaling does not change (see layoutRect()).
+        watchPrintoutFit();
 
         // If the printout has authored pages, there will be at least one .onepage
         // element. That's purely a property of the source HTML, so it's safe to
