@@ -484,27 +484,31 @@ function adjustPrintoutPages(margins) {
     console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists and blocks for independent repagination.");
 }
 
-// This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
-function createPrintoutPages(margins) {
-    console.log("*** Creating printout pages with margins:", margins);
-
+// The paper a plan is made against: A4's width and Letter's height, the
+// narrower and the shorter of the two, so that a plan made here holds on
+// either.  The content height is what is left of that once the print margins
+// are taken off.
+function conservativePageBox(margins) {
     // Assumptions: needs to work for both letter (8.5in x 11in) and a4 (210mm x 297mm) paper sizes.  We will work in pixels (96/in): those are 816px x 1056px and 794px x 1122.5px respectively (1 inch = 96 px, 1 cm = 37.8 px).  We assume that the printing interface of the browser will do the right thing with these.
 
     // For purposes of finding page breaks, we will use 794 as our width and 1056 as our height (so A4 width and letter height).  Then we will rescale workspace on each page to fit the actual paper size selected.
+    return {
+        paperWidth: 794,   // A4 is narrower than Letter's 816
+        contentHeight: 1056 - (margins.top + margins.bottom), // in pixels
+    };
+}
 
-    // The paper a plan is made against: A4's width and Letter's height, the
-    // narrower and the shorter of the two, so that a plan made here holds on
-    // either.  The content box is what is left of that once the print margins
-    // are taken off.
-    const conservativePaperWidth = 794;   // A4 is narrower than Letter's 816
-    const conservativeContentHeight = 1056 - (margins.top + margins.bottom); // in pixels
-    const conservativeContentWidth = conservativePaperWidth - (margins.left + margins.right); // in pixels
-
-    const printout = getPrintout();
-    if (!printout) {
-        console.warn("No printout found, exiting createPrintoutPages.");
-        return;
-    }
+// Measure `rows` as findPageBreaks() needs them: each row's height, how much of
+// that is writing space, and what its footnotes will take.  The rows are the
+// rows of a whole printout (see createPrintoutPages()).
+//
+// Returns the list of measured rows, which leaves out any row that shows
+// nothing and never will, along with the fixed overhead of a footnote block.
+// The rows come back detached from the document, for the caller to place on
+// the pages it builds from them (see buildPages()); a row left off the list is
+// simply never placed.
+function measureRows(printout, rows, margins) {
+    const { paperWidth: conservativePaperWidth, contentHeight: conservativeContentHeight } = conservativePageBox(margins);
     // Narrow the printout to our conservative paper width while we measure row
     // heights below, so text wraps at least as much as it will once placed in
     // the real .onepage box -- otherwise rows measure shorter than their
@@ -524,16 +528,6 @@ function createPrintoutPages(margins) {
     printout.style.width = conservativePaperWidth + 'px';
     // Set the height of each workspace based on its data-space attribute
     setInitialWorkspaceHeights(printout);
-
-    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children (e.g. tasks inside an exercise).  Split those out into their own top-level blocks first (see flattenTasksIn), then every block we care about is simply a direct child of the printout.
-    // Skipping separate treatment of exercisegroups for now.
-    flattenTasksIn(printout);
-    // Same treatment for introductions (see flattenIntroductionsIn) and for
-    // task solutions (see flattenSolutionsIn); both must run after
-    // flattenTasksIn so reading order comes out right.
-    flattenIntroductionsIn(printout);
-    flattenSolutionsIn(printout);
-    let rows = [...printout.children];
     // Measure the rows in the context they will actually be rendered in.
     //
     // The print stylesheet scopes a good deal to `.onepage` -- most sharply
@@ -580,9 +574,8 @@ function createPrintoutPages(margins) {
         // A currently-hidden hint/answer/solution row also measures zero
         // height, but unlike an autopermalink it's meaningful content that
         // may be revealed later -- it still needs a page to call home. Rows
-        // never added to blockList never get moved into a .onepage below,
-        // and then get deleted outright by the "remove old content not in a
-        // page" cleanup at the end of this function, which is correct for a
+        // never added to blockList never get placed on a page by the caller,
+        // and so are dropped from the printout, which is correct for a
         // genuinely-empty row but was silently destroying hidden solution
         // content (and, since printout.children is a live collection there,
         // corrupting the position of whatever survived that by accident).
@@ -637,44 +630,78 @@ function createPrintoutPages(margins) {
         });
     }
 
-    // Done measuring: return the rows to the printout and drop the scaffold,
-    // so the page-building loop below distributes them as it always has.
-    rows.forEach(row => printout.appendChild(row));
+
+    // Done measuring: drop the scaffold, which takes the rows out of the
+    // document with it, and let the printout go back to its normal width so
+    // the .onepage sections built from these rows render at their real size.
     measuringPage.remove();
-
-    // Now find pageBreaks so that extra workspace is as uniform as possible.
-    // Squeezing blank writing space below its authored height is only on the
-    // table once something is revealed that needs the room (see pageCost()).
-    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight, {
-        allowSqueeze: anySolutionShown(),
-        footnoteChrome: footnoteMetrics.chrome,
-    });
-
-    // Done measuring; let the printout go back to its normal width so the
-    // .onepage sections built below render at their real page size.
     printout.style.width = "";
 
-    // Create page divs and insert rows into them
+    return { blockList, footnoteChrome: footnoteMetrics.chrome };
+}
+
+// Build the pages of a plan: one `.onepage` section for each entry of
+// `pageBreaks` (see findPageBreaks()), holding the rows of `blockList` that
+// the plan puts there.  The pages are returned in order, not yet in the
+// document.
+function buildPages(blockList, pageBreaks) {
+    const pages = [];
     for (let i = 0; i < pageBreaks.length; i++) {
         const pageDiv = document.createElement('section');
         pageDiv.classList.add('onepage');
-        if (i === 0) {
-            pageDiv.classList.add('firstpage');
-        }
-        // A single page will be both first and last
-        if (i === pageBreaks.length - 1) {
-            pageDiv.classList.add('lastpage');
-        }
         // The pageBreaks array gives the indices of blocks that should start a page.
         // So we will want to look for go through the blocks selecting those starting with the previous index (or 0) up to but not including the current index.
         const start = pageBreaks[i-1] || 0;
         const end = pageBreaks[i];
         for (let j = start; j < end; j++) {
-            const row = blockList[j].elem;
-            pageDiv.appendChild(row);
+            pageDiv.appendChild(blockList[j].elem);
+        }
+        pages.push(pageDiv);
+    }
+    return pages;
+}
+
+// This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
+function createPrintoutPages(margins) {
+    console.log("*** Creating printout pages with margins:", margins);
+
+    const printout = getPrintout();
+    if (!printout) {
+        console.warn("No printout found, exiting createPrintoutPages.");
+        return;
+    }
+
+    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children (e.g. tasks inside an exercise).  Split those out into their own top-level blocks first (see flattenTasksIn), then every block we care about is simply a direct child of the printout.
+    // Skipping separate treatment of exercisegroups for now.
+    flattenTasksIn(printout);
+    // Same treatment for introductions (see flattenIntroductionsIn) and for
+    // task solutions (see flattenSolutionsIn); both must run after
+    // flattenTasksIn so reading order comes out right.
+    flattenIntroductionsIn(printout);
+    flattenSolutionsIn(printout);
+
+    const { blockList, footnoteChrome } = measureRows(printout, [...printout.children], margins);
+
+    // Now find pageBreaks so that extra workspace is as uniform as possible.
+    // Squeezing blank writing space below its authored height is only on the
+    // table once something is revealed that needs the room (see pageCost()).
+    const pageBreaks = findPageBreaks(blockList, conservativePageBox(margins).contentHeight, {
+        allowSqueeze: anySolutionShown(),
+        footnoteChrome,
+    });
+
+    // Create the pages and put them in the printout
+    const pages = buildPages(blockList, pageBreaks);
+    pages.forEach((pageDiv, i) => {
+        if (i === 0) {
+            pageDiv.classList.add('firstpage');
+        }
+        // A single page will be both first and last
+        if (i === pages.length - 1) {
+            pageDiv.classList.add('lastpage');
         }
         printout.appendChild(pageDiv);
-    }
+    });
 
     // remove any old content that is not in a page
     // Snapshot the children first: `printout.children` is a live collection,
