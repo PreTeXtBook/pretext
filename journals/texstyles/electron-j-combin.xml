@@ -14,6 +14,18 @@
         <date>2025-03-23</date>
     </metadata>
 
+    <!-- The journal's package, e-jc.sty, defines the theorem-like        -->
+    <!-- environments itself, on one counter that runs through an article -->
+    <!-- ("\newtheorem{theorem}{Theorem}"), so blocks are numbered at     -->
+    <!-- level 0.  Figures and tables cannot share that counter, so they  -->
+    <!-- have their own, which the article class also runs through an     -->
+    <!-- article.  The package leaves divisions and equations alone, so   -->
+    <!-- their numbering stays with the publication file.                 -->
+    <numbering>
+        <blocks level="0"/>
+        <figures level="0" distinct="yes"/>
+    </numbering>
+
 <documentclass name="article"/>
 
 <packages>
