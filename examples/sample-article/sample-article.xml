@@ -16750,6 +16750,218 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </worksheet>
 
+            <worksheet label="worksheet-long-blocks">
+                <title>Blocks Taller Than a Page</title>
+                <introduction>
+                    <p>This is a mock worksheet for testing the print preview when a single block is taller than a page.  Such a block is cut between the paragraphs, displays, and list items it holds, and the pieces go onto as many pages as they need.  Nothing here should run off the foot of a page, with the hints, answers, and solutions shown or hidden.</p>
+                </introduction>
+
+                <exercise workspace="2in">
+                    <statement>
+                        <p>Show that the sum of the first <m>n</m> odd positive integers is <m>n^2</m>.  The solution is far longer than it needs to be.</p>
+                    </statement>
+                    <hint>
+                        <p>Induction.</p>
+                    </hint>
+                    <solution>
+                        <p>We argue by induction on <m>n</m>, after a great deal of preparation.  Write <m>S(n)</m> for the sum, so that<md>S(n)=\sum_{k=1}^{n}(2k-1)=1+3+5+\cdots+(2n-1)</md> and the claim is that <m>S(n)=n^2</m>.</p>
+
+                        <p>Paragraph 1 of 9 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 2 of 9 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 3 of 9 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 4 of 9 in this solution.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 5 of 9 in this solution.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 6 of 9 in this solution.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 7 of 9 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 8 of 9 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 9 of 9 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>The first cases can be checked by hand.<ol>
+                            <li><p><m>S(1)=1=1^2</m>.</p></li>
+                            <li><p><m>S(2)=1+3=4=2^2</m>.</p></li>
+                            <li><p><m>S(3)=1+3+5=9=3^2</m>.</p></li>
+                            <li><p><m>S(4)=1+3+5+7=16=4^2</m>.</p></li>
+                            <li><p><m>S(5)=1+3+5+7+9=25=5^2</m>.</p></li>
+                            <li><p><m>S(6)=1+3+5+7+9+11=36=6^2</m>.</p></li>
+                        </ol></p>
+
+                        <p>Now suppose <m>S(n)=n^2</m>.  Then<md>S(n+1)=S(n)+\bigl(2(n+1)-1\bigr)=n^2+2n+1=(n+1)^2</md> which is the claim for <m>n+1</m>.</p>
+
+                        <p>Paragraph 1 of 9 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 2 of 9 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 3 of 9 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 4 of 9 in this solution.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 5 of 9 in this solution.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 6 of 9 in this solution.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 7 of 9 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 8 of 9 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 9 of 9 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+                    </solution>
+                </exercise>
+
+                <remark>
+                    <title>A Long Remark</title>
+                    <p>A block that is not a hint, answer, or solution is cut the same way when it is taller than a page.  The paragraphs of this remark should be spaced on every page as they are on the first.</p>
+
+                    <p>Paragraph 1 of 16 in this remark.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 2 of 16 in this remark.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 3 of 16 in this remark.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 4 of 16 in this remark.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 5 of 16 in this remark.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 6 of 16 in this remark.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 7 of 16 in this remark.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 8 of 16 in this remark.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 9 of 16 in this remark.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 10 of 16 in this remark.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 11 of 16 in this remark.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 12 of 16 in this remark.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 13 of 16 in this remark.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 14 of 16 in this remark.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 15 of 16 in this remark.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                    <p>Paragraph 16 of 16 in this remark.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+                </remark>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Name the parts of a printout.  The hint is a long description list, which is cut ahead of a term and never between a term and its description.</p>
+                    </statement>
+                    <hint>
+                        <p>Some terms.<dl>
+                            <li>
+                                <title>Row</title>
+                                <p>A block that pagination places whole.  This is term 1 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Page</title>
+                                <p>A sheet of paper, less its margins.  This is term 2 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Workspace</title>
+                                <p>Blank room left for writing.  This is term 3 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Spillover</title>
+                                <p>A page added for what no longer fits.  This is term 4 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Header</title>
+                                <p>A band across the top of a page.  This is term 5 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Footer</title>
+                                <p>A band across the foot of a page.  This is term 6 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Footnote</title>
+                                <p>A note set at the foot of the page that refers to it.  This is term 7 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Hint</title>
+                                <p>A nudge toward an answer.  This is term 8 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Answer</title>
+                                <p>A final result, without the reasoning.  This is term 9 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Solution</title>
+                                <p>A full account of the reasoning.  This is term 10 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Margin</title>
+                                <p>The room between the paper's edge and the text.  This is term 11 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Piece</title>
+                                <p>A part of a block that was cut.  This is term 12 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Continuation</title>
+                                <p>A piece after the first.  This is term 13 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                            <li>
+                                <title>Group</title>
+                                <p>A question with its solutions and workspace.  This is term 14 of 14, and its description stays on the page where the term is.  A description needs a few lines of text before enough of them, one after another, are taller than a page.</p>
+                            </li>
+                        </dl></p>
+                    </hint>
+                </exercise>
+
+                <exercise>
+                    <statement>
+                        <p>This exercise has no workspace, and it closes the worksheet with a long solution.  With the solution hidden, no blank page should follow this one.</p>
+                    </statement>
+                    <solution>
+                        <p>Paragraph 1 of 18 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 2 of 18 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 3 of 18 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 4 of 18 in this solution.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 5 of 18 in this solution.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 6 of 18 in this solution.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 7 of 18 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 8 of 18 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 9 of 18 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 10 of 18 in this solution.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 11 of 18 in this solution.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 12 of 18 in this solution.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 13 of 18 in this solution.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 14 of 18 in this solution.  A block taller than the page has nowhere to break, so it is cut between the blocks it holds.  Each piece after the first is a row of its own, and may open a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 15 of 18 in this solution.  Each piece after the first is a row of its own, and may open a page.  The space between two pieces should be the space the two blocks had before the cut.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 16 of 18 in this solution.  The space between two pieces should be the space the two blocks had before the cut.  A heading stays with the block that follows it, so it never closes a page.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 17 of 18 in this solution.  A heading stays with the block that follows it, so it never closes a page.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+
+                        <p>Paragraph 18 of 18 in this solution.  Reveal and hide the hints, answers, and solutions, and the pieces come and go together.  The page breaks of a printout fall between rows, and a row is ordinarily a whole block.  Look for a page break that falls before or after this paragraph, and never through it.</p>
+                    </solution>
+                </exercise>
+            </worksheet>
+
             <worksheet>
                 <title>Worksheet with an exercise with tasks and subtasks</title>
                 <introduction>
