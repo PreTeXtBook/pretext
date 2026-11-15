@@ -5361,6 +5361,9 @@
           <data type="integer"/>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <empty/>
     </element>
   </define>
