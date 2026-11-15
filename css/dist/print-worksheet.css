@@ -2216,20 +2216,22 @@ article.printout::after {
   display: inline;
   font-size: 1em;
 }
-.solution-like.born-hidden-knowl > div {
-  display: inline;
-}
 .solution-like.born-hidden-knowl .knowl__content {
-  display: inline;
   border: none;
   background-color: unset;
   padding: 0;
 }
-.solution-like.born-hidden-knowl .knowl__content > :first-child {
-  display: inline;
-}
 .solution-like.born-hidden-knowl .knowl__content .para {
   margin-top: 0.5em;
+}
+.solution-like.born-hidden-knowl:not(.split-continuation) > div {
+  display: inline;
+}
+.solution-like.born-hidden-knowl:not(.split-continuation) .knowl__content {
+  display: inline;
+}
+.solution-like.born-hidden-knowl:not(.split-continuation) .knowl__content > :first-child {
+  display: inline;
 }
 .onepage > .split-list {
   margin-top: 0.5em;
@@ -2245,6 +2247,9 @@ article.printout::after {
 .onepage .split-block::before,
 .onepage .split-block::after {
   all: unset;
+}
+.onepage > .split-continuation {
+  display: flow-root;
 }
 .printout .ptx-footnote,
 .printout .ptx-footnote[open] {
