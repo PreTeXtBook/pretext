@@ -192,6 +192,15 @@
                 citations, in every output format.  See <xref ref="topic-references"/> for what that
                 requires, and <xref ref="common-csl"/> for choosing a style yourself instead.
             </p>
+
+            <p>
+                Some journals fix how divisions, theorems, or equations are numbered.  For
+                such a journal <pretext/> uses the journal's numbering in every output format,
+                in place of the corresponding numbering in your publication file
+                (<xref ref="publication-file-numbering"/>), so that the numbers and
+                cross-references of your article agree with the journal's pages.  You will
+                see a warning when a level you have set is replaced by a different one.
+            </p>
         </subsection>
 
         <subsection xml:id="common-csl">
