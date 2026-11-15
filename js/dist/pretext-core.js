@@ -1771,8 +1771,9 @@
       flattenIntroductionsIn(page);
       flattenSolutionsIn(page);
       flattenOversizedListsIn(page, contentHeight);
+      flattenOversizedBlocksIn(page, contentHeight);
     });
-    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists for independent repagination.");
+    console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists and blocks for independent repagination.");
   }
   function createPrintoutPages(margins) {
     console.log("*** Creating printout pages with margins:", margins);
@@ -1796,7 +1797,9 @@
     measuringPage.style.height = "auto";
     printout.appendChild(measuringPage);
     rows.forEach((row) => measuringPage.appendChild(row));
-    if (flattenOversizedListsIn(measuringPage, conservativeContentHeight)) {
+    const listsSplit = flattenOversizedListsIn(measuringPage, conservativeContentHeight);
+    const blocksSplit = flattenOversizedBlocksIn(measuringPage, conservativeContentHeight);
+    if (listsSplit || blocksSplit) {
       rows = [...measuringPage.children];
     }
     const footnoteMetrics = measureFootnotes(rows, measuringPage);
@@ -2104,6 +2107,166 @@
       for (let i = lists.length - 1; i >= 0; i--) {
         hoistListOut(container, child, lists[i]);
       }
+      split = true;
+    }
+    return split;
+  }
+  var SPLITTABLE_BLOCK_SELECTOR = "article, .born-hidden-knowl, .born-hidden-knowl > div, .solution-like, .knowl__content, .para.logical, ol, ul, dl";
+  function isSplittableBlock(element) {
+    return element.matches(SPLITTABLE_BLOCK_SELECTOR) && !element.closest(".sidebyside") && ![...element.classList].some((className) => /^cols\d+$/.test(className)) && ![...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== "");
+  }
+  function getUnsqueezableHeight(element) {
+    return getElementTotalHeight(element) - getElemSqueezableHeight(element);
+  }
+  function measureAsShown(row, measure) {
+    const solutionTypes = ".hint, .answer, .solution";
+    const hidden = row.matches(solutionTypes) ? [row, ...row.querySelectorAll(solutionTypes)].filter((element) => element.classList.contains("hidden")) : [];
+    hidden.forEach((element) => element.classList.remove("hidden"));
+    try {
+      return measure();
+    } finally {
+      hidden.forEach((element) => element.classList.add("hidden"));
+    }
+  }
+  function blockUnitsIn(element, pageHeight) {
+    const units = [];
+    for (const child of element.children) {
+      if (getUnsqueezableHeight(child) > pageHeight && isSplittableBlock(child)) {
+        units.push(...blockUnitsIn(child, pageHeight));
+      } else {
+        units.push(child);
+      }
+    }
+    return units;
+  }
+  function isHeading(element) {
+    return /^H[1-6]$/.test(element.tagName) || element.classList.contains("heading");
+  }
+  function blockPiecesFrom(units) {
+    const pieces = [];
+    let leading = [];
+    for (const unit of units) {
+      const invisible = unit.offsetHeight === 0;
+      if (isHeading(unit) || invisible && (pieces.length === 0 || leading.length > 0)) {
+        leading.push(unit);
+      } else if ((invisible || isWorkspaceRow(unit) || unit.tagName === "DD") && pieces.length > 0 && leading.length === 0) {
+        pieces[pieces.length - 1].push(unit);
+      } else {
+        pieces.push([...leading, unit]);
+        leading = [];
+      }
+    }
+    if (leading.length > 0) {
+      if (pieces.length > 0) {
+        pieces[pieces.length - 1].push(...leading);
+      } else {
+        pieces.push(leading);
+      }
+    }
+    return pieces;
+  }
+  function partialCopyOf(element) {
+    const copy = element.cloneNode(false);
+    copy.removeAttribute("id");
+    delete copy.dataset.blockGroup;
+    return copy;
+  }
+  function hoistBlockPiecesOut(container, row, pieces) {
+    row.classList.add("split-block");
+    const itemNumbers = /* @__PURE__ */ new Map();
+    const orderedLists = [...row.querySelectorAll("ol")];
+    if (row.tagName === "OL") {
+      orderedLists.push(row);
+    }
+    for (const list of orderedLists) {
+      let itemNumber = parseInt(list.getAttribute("start"), 10) || 1;
+      for (const item of list.children) {
+        if (item.tagName === "LI") {
+          itemNumbers.set(item, itemNumber++);
+        }
+      }
+    }
+    const authoredMargins = /* @__PURE__ */ new Map();
+    for (const unit of pieces.flat()) {
+      const style = getComputedStyle(unit);
+      authoredMargins.set(unit, { top: style.marginTop, bottom: style.marginBottom });
+    }
+    const emptied = /* @__PURE__ */ new Set();
+    const lastPartOf = /* @__PURE__ */ new Map();
+    const firstCopyOf = /* @__PURE__ */ new Map();
+    const continuationOf = (element) => {
+      const previousPart = lastPartOf.get(element) || element;
+      const copy = partialCopyOf(previousPart);
+      previousPart.style.marginBottom = "0";
+      previousPart.style.paddingBottom = "0";
+      copy.style.marginTop = "0";
+      copy.style.paddingTop = "0";
+      lastPartOf.set(element, copy);
+      if (!firstCopyOf.has(element)) {
+        firstCopyOf.set(element, copy);
+      }
+      return copy;
+    };
+    let anchor = row;
+    for (const piece of pieces.slice(1)) {
+      const copies = /* @__PURE__ */ new Map();
+      const continuation = continuationOf(row);
+      continuation.classList.add("split-continuation");
+      copies.set(row, continuation);
+      const copyOf = (element) => {
+        if (!copies.has(element)) {
+          const copy = continuationOf(element);
+          copyOf(element.parentElement).appendChild(copy);
+          copies.set(element, copy);
+        }
+        return copies.get(element);
+      };
+      for (const unit of piece) {
+        const parent = unit.parentElement;
+        copyOf(parent).appendChild(unit);
+        emptied.add(parent);
+      }
+      for (const copy of copies.values()) {
+        const firstItem = copy.firstElementChild;
+        if (copy.tagName === "OL" && firstItem && itemNumbers.has(firstItem)) {
+          copy.setAttribute("start", String(itemNumbers.get(firstItem)));
+        }
+      }
+      container.insertBefore(continuation, anchor.nextSibling);
+      anchor = continuation;
+    }
+    for (const element of emptied) {
+      let node = element;
+      while (node && node !== row && node.parentElement && node.children.length === 0 && node.textContent.trim() === "") {
+        const parent = node.parentElement;
+        node.remove();
+        if (firstCopyOf.has(node)) {
+          firstCopyOf.get(node).style.marginTop = node.style.marginTop;
+          firstCopyOf.get(node).style.paddingTop = node.style.paddingTop;
+        }
+        node = parent;
+      }
+    }
+    for (const [unit, authored] of authoredMargins) {
+      const style = getComputedStyle(unit);
+      if (style.marginTop !== authored.top) {
+        unit.style.marginTop = authored.top;
+      }
+      if (style.marginBottom !== authored.bottom) {
+        unit.style.marginBottom = authored.bottom;
+      }
+    }
+  }
+  function flattenOversizedBlocksIn(container, pageHeight) {
+    let split = false;
+    for (const child of [...container.children]) {
+      if (!isSplittableBlock(child)) continue;
+      const pieces = measureAsShown(child, () => {
+        if (getUnsqueezableHeight(child) <= pageHeight) return [];
+        return blockPiecesFrom(blockUnitsIn(child, pageHeight));
+      });
+      if (pieces.length < 2) continue;
+      hoistBlockPiecesOut(container, child, pieces);
       split = true;
     }
     return split;
@@ -2425,9 +2588,14 @@
     for (let k = rows.length - 1; k >= 0; k--) {
       opensWithWorkspace[k] = rows[k].hidden ? opensWithWorkspace[k + 1] : rows[k].isWorkspace;
     }
+    const opensWithNothing = Array(rows.length + 1).fill(false);
+    for (let k = rows.length - 1; k >= 0; k--) {
+      opensWithNothing[k] = rows[k].hidden && (k === rows.length - 1 || opensWithNothing[k + 1]);
+    }
+    const illegalStart = (k) => opensWithWorkspace[k] || opensWithNothing[k];
     const nextLegalStart = (i) => {
       let k = i + 1;
-      while (k < rows.length && opensWithWorkspace[k]) k++;
+      while (k < rows.length && illegalStart(k)) k++;
       return k;
     };
     for (let i = rows.length - 1; i >= 0; i--) {
@@ -2463,7 +2631,7 @@
           }
           break;
         }
-        if (opensWithWorkspace[j + 1]) continue;
+        if (illegalStart(j + 1)) continue;
         const cost = thisPage + minCost[j + 1];
         if (cost < minCost[i]) {
           minCost[i] = cost;
