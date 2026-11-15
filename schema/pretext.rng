@@ -1332,9 +1332,21 @@
       <ref name="Paragraphs"/>
     </choice>
   </define>
-  <!-- Page can contain a printout block or be empty -->
+  <!--
+    Page can contain a printout block or be empty
+    A page is one sheet, unless it asks for a number of them,
+    or for however many its content and workspace need
+  -->
   <define name="Page">
     <element name="page">
+      <optional>
+        <attribute name="pages">
+          <choice>
+            <data type="positiveInteger"/>
+            <value>multiple</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <oneOrMore>
           <ref name="PrintoutBlock"/>

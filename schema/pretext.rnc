@@ -469,9 +469,12 @@
                 BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
+            # A page is one sheet, unless it asks for a number of them,
+            # or for however many its content and workspace need
             Page =
                 element page {
-                    PrintoutBlock+ | empty
+                    attribute pages { xsd:positiveInteger | "multiple" }?,
+                    (PrintoutBlock+ | empty)
                 }
             # Main worksheet definition
             Worksheet =

@@ -464,6 +464,8 @@
 
         <p>The contents of a printout can include the same blocks as a division, namely BlockDivision, plus the <tag>paragraphs</tag> division.</p>
 
+        <p>A <tag>page</tag> is a single sheet of paper.  When its content, with the workspace requested, belongs on more than one sheet<mdash/>a project with many tasks, say<mdash/>the <attr>pages</attr> attribute gives the number of sheets the page is laid out on.  The value <c>multiple</c> asks instead for however many sheets the content and its workspace need.</p>
+
         <p>A <tag>handout</tag> is very similar to a <tag>worksheet</tag>, differing only in the absence of the course-identification attributes.  Many of the blocks a printout may contain (theorems, definitions, examples, projects, exercises, tasks, proofs) accept a <attr>workspace</attr> attribute.  It is treated as a hint: respected inside a printout, and ignored elsewhere (which the validation-plus stylesheet will point out).</p>
 
         <p>A structured division may hold any number of printouts, in any order, interleaved with one another and with the traditional divisions<mdash/>which is how a <q>workbook</q> of printouts is authored.  An unstructured division admits at most one of each, so <c>Worksheet</c> and <c>Handout</c> appear separately there rather than through <c>Printout</c>.</p>
@@ -481,9 +483,12 @@
                 BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
+            # A page is one sheet, unless it asks for a number of them,
+            # or for however many its content and workspace need
             Page =
                 element page {
-                    PrintoutBlock+ | empty
+                    attribute pages { xsd:positiveInteger | "multiple" }?,
+                    (PrintoutBlock+ | empty)
                 }
             # Main worksheet definition
             Worksheet =
