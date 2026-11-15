@@ -29,6 +29,11 @@ For several of these, sample output (PDF, HTML) is produced routinely and is ava
 The kitchen sink, this attempts to have one of everything.  Look around for something you need, experiment, or read the interspersed commentary on how things work.  (2016-02-20)
 
 
+### Sample Research Article (`sample-research-article/`)
+
+A short article, a subset of the sample article with the parts a research article is likely to have, and a publication file for each of several journals.  Use this to test a journal's style, or to see how a journal's own numbering replaces the numbering of a publication file.  (2026-11-15)
+
+
 ### Sample Book (`sample-book/`)
 
 A forked version of the first three chapters of Tom Judson's "Abstract Algebra" textbook.  Use this to get ideas about how to create a book --- both how to organize the content and how to organize your files. (2016-02-20)

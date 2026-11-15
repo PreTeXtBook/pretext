@@ -21,6 +21,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 - Use the [examples index](README.md) to choose the right example. Source follows the conventions in the root [PreTeXt source section](../AGENTS.md).
 - `sample-article` is the kitchen sink and gains an example for each new feature. `showcase` demonstrates features, authoring practices, and documentation for authors who learn from examples; elaborate examples belong there (see [its README](showcase/README.md)), while `sample-article` exercises everything. `sample-book` demonstrates book structure. Preserve its content notices exactly as recorded in [the copyright registry](../legal/copyright-holders.md).
+- [`sample-research-article`](sample-research-article/README.md) is a short article with a publication file for each of several journals, for testing the journal styles in `journals/`; it gains a publication file with each new journal style.
 - `minimal` isolates bugs and stays small; [CONTRIBUTING.md](../CONTRIBUTING.md) asks bug reports to add a focused case there. `hello-world` is the bare minimum.
 - [`custom-theming`](custom-theming/README.md) is the CSS smoke test. [`numbering`](numbering/README.md) is a synthetic test document for the numbering system, built for comparing output and not as a model of authoring.
 - `webwork` uses its `Makefile` plus a local `Makefile.paths`; `pug` uses the Node package manager (npm); `sample-book/gdpractice` contains Godot assets and source. Respect each toolchain when changing those examples.
