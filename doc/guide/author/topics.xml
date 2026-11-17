@@ -895,7 +895,7 @@
                     <li>
                         <title>FIGURE-LIKE</title>
                         <p><tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag></p>
-                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  But each is slightly different in what it can contain and how it is rendered.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag> and <tag>console</tag>.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.  These are not designed with the expectation that they can be renamed.</p>
+                        <p>An object that is a container for other atomic objects, which are typically somewhat rigid (not reflowable) or two-dimensional.  Typically with a number, and provided with a title or caption.  But each is slightly different in what it can contain and how it is rendered.  A <tag>table</tag> can only hold a <tag>tabular</tag>, while a <tag>listing</tag> is meant for <tag>program</tag>, <tag>console</tag>, and a <tag>datafile</tag> of text.  A <tag>list</tag> is not the list itself, but a container for one of the three possible lists (see <xref ref="topic-lists"/> and especially <xref ref="topic-named-list"/>).  A <tag>figure</tag> is the most liberal, allowing a wide variety of contents, with <tag>image</tag> being the prototypical example.  These are not designed with the expectation that they can be renamed.</p>
                     </li>
 
                     <li>
@@ -1239,7 +1239,7 @@
                 </tabular>
             </table>
 
-            <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  There are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).  Finally, if desired, the text can be customized with any text you like.</p>
+            <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  There are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).  Finally, if desired, the text can be customized with any text you like.  A data file has no number and no title, so a cross-reference to one uses its filename instead (see <xref ref="topic-datafile-xref" text="title"/>).</p>
 
             <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number or a replacement of a type.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.  Recognize that this extra content will not benefit from automatic internationalization.</p>
 
@@ -4363,12 +4363,26 @@
             <p>Such a text file may be declared editable by the reader, presumably to allow them to witness the resulting behavior of a some employing program.  The <attr>rows</attr> and <attr>cols</attr> attributes describe the viewport into the file provided in the <init>HTML</init> output.  Typically scrollbars will allow the reader to survey all of a large file.  In static outputs, the first few lines are shown, given by the value of <attr>rows</attr>, and lines are truncated according to the value of <attr>cols</attr>.</p>
         </paragraphs>
 
+        <paragraphs xml:id="topic-datafile-listing" label="topic-datafile-listing">
+            <title>Text Data Files in a Listing</title>
+
+            <p>A <tag>datafile</tag> that holds text, in a <tag>pre</tag>, may be the content of a <tag>listing</tag> (see <xref ref="topic-listing"/>), just as a <tag>program</tag> may be.  The <tag>listing</tag> supplies a number and a title, and is then the natural target of a cross-reference to the file.  The <tag>datafile</tag> keeps its <attr>xml:id</attr>, so programs still name it in <attr>add-files</attr>, and it displays just as it does outside a <tag>listing</tag>, in every output format.  A <tag>datafile</tag> that holds an <tag>image</tag> may not be the content of a <tag>listing</tag>, nor may a <tag>datafile</tag> with a <attr>hide</attr> attribute.</p>
+        </paragraphs>
+
         <paragraphs>
             <title>Images as Data Files</title>
 
             <p>Inside of a <tag>datafile</tag> place an <tag>image</tag> element with a <attr>source</attr> attribute.  As usual, this attribute should be the name of an external file you provide.  Most common formats are supported, but it is important to use standard extensions, so the format can be discerned.  Now this file may be explored programmatically by opening the file using the name provided in <attr>filename</attr>.</p>
 
             <p>Keep the size of the image small, say 300<ndash/>400 pixels in each direction.  You may also supply the usual layout controls, such as <attr>width</attr>, and these will be consulted in the formation of output formats.  Ideally, you should use a width that scales the image to look something like its <q>native</q> resolution, since part of an image-processing exercise may depend on this aspect of the input.  <init>HTML</init> output generally uses a 600 pixel overall width for the main content (725 in the case of Salem), so a percentage can be computed based on this parameter.</p>
+        </paragraphs>
+
+        <paragraphs xml:id="topic-datafile-xref" label="topic-datafile-xref">
+            <title>Cross-References to Data Files</title>
+
+            <p>A <tag>datafile</tag> with an <attr>xml:id</attr> is a target of a cross-reference, whether it holds text or an image.  It has no number and no title, so in every style the text of the cross-reference is the filename, such as <c>poem.txt</c>.  Content of the <tag>xref</tag> goes before the filename, except with the <c>custom</c> style, where the content alone replaces the filename (see <xref ref="topic-cross-referencing"/>).</p>
+
+            <p>In <init>HTML</init> output the cross-reference is a knowl, or a link, that displays the file.  The copy in a knowl cannot be edited, and programs do not read it, so it does not interfere with the original.  In static outputs, such as <init>PDF</init> and <init>EPUB</init>, the cross-reference links to the place where the file is displayed.  A <tag>datafile</tag> that starts hidden, with <attr>hide</attr> set to <c>yes</c>, is meant for programs and not for the reader, so it should not be a target, and validation warns of a cross-reference to one.  To give a file a number and a title, place it in a <tag>listing</tag> (see <xref ref="topic-datafile-listing" text="title"/>).</p>
         </paragraphs>
 
         <paragraphs>
@@ -4733,7 +4747,7 @@
 
     <section xml:id="topic-listing">
         <title>Program Listings</title>
-        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  It has an optional <tag>title</tag> which is rendered above the listing.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program"/> and <xref ref="topic-console"/>).</p>
+        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  It has an optional <tag>title</tag> which is rendered above the listing.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program"/> and <xref ref="topic-console"/>), or a <tag>datafile</tag> that holds text (see <xref ref="topic-datafile-listing" text="title"/>).</p>
     </section>
 
     <section xml:id="topic-named-list">
