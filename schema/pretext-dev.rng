@@ -1728,6 +1728,54 @@
     <ref name="Datafile"/>
   </define>
   <!--
+    a "listing" may hold a "datafile" of text, but
+    not an image, and not one that starts hidden
+  -->
+  <define name="FigureListing" combine="choice">
+    <element name="listing">
+      <ref name="MetaDataAltTitle"/>
+      <optional>
+        <ref name="Landscape"/>
+      </optional>
+      <element name="datafile">
+        <optional>
+          <ref name="UniqueID"/>
+        </optional>
+        <optional>
+          <ref name="LabelID"/>
+        </optional>
+        <optional>
+          <ref name="Component"/>
+        </optional>
+        <attribute name="filename"/>
+        <optional>
+          <attribute name="rows">
+            <data type="integer"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="cols">
+            <data type="integer"/>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="editable">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <element name="pre">
+          <optional>
+            <attribute name="source"/>
+          </optional>
+          <text/>
+        </element>
+      </element>
+    </element>
+  </define>
+  <!--
     Query (poll/survey) element; results are private to the
     instructor unless @visibility says otherwise
   -->
