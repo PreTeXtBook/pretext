@@ -159,6 +159,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A "datafile" marked to start hidden is meant to be read by a  -->
+<!-- program, not by the reader, so it is not a target of an xref. -->
+<xsl:template match="xref">
+    <xsl:if test="id(@ref)/self::datafile[@hide = 'yes']">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'xref-hidden-datafile'"/>
+            <xsl:with-param name="message">
+                <xsl:text>An &lt;xref&gt; points to a &lt;datafile&gt; that starts hidden,&#xa;</xsl:text>
+                <xsl:text>so the cross-reference shows the reader a file that the&#xa;</xsl:text>
+                <xsl:text>&lt;datafile&gt; itself does not.  Remove @hide, or point elsewhere.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- Docinfo should have at most one latex-image-preamble -->
 <!-- of each value for @syntax (including no @syntax)     -->
 <xsl:template match="latex-image-preamble[not(@syntax)][1]">
