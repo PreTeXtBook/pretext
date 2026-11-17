@@ -8635,7 +8635,10 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|md|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
+<!-- A static conversion replaces a "datafile", and the    -->
+<!-- replacement carries @pi:datafile-filename to remain   -->
+<!-- a target.                                             -->
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|md|mrow|biblio|interactive/instructions|case|contributor|gi|datafile|*[@pi:datafile-filename]" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
@@ -8819,11 +8822,17 @@ Book (with parts), "section" at level 3
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
     <!-- a contributor target is exceptional -->
     <xsl:variable name="b-is-contributor-target" select="boolean($target/self::contributor)"/>
+    <!-- a data file target is exceptional, it is identified by its -->
+    <!-- filename, carried on a static replacement by an attribute  -->
+    <xsl:variable name="datafile-filename" select="$target/self::datafile/@filename|$target/@pi:datafile-filename"/>
+    <xsl:variable name="b-is-datafile-target" select="boolean($datafile-filename)"/>
     <!-- recognize content s potential override -->
     <xsl:variable name="b-has-content" select="not($custom-text = '')" />
     <!-- check some situations that would lead to ineffective -->
     <!-- cross-references due to empty text                   -->
     <xsl:choose>
+        <!-- a filename always identifies a data file -->
+        <xsl:when test="$b-is-datafile-target and not($text-style = 'custom')"/>
         <xsl:when test="$text-style = 'title'">
             <xsl:variable name="the-title">
                 <xsl:apply-templates select="$target" mode="title-xref"/>
@@ -8875,6 +8884,25 @@ Book (with parts), "section" at level 3
     <xsl:choose>
         <xsl:when test="$b-is-contributor-target">
             <xsl:apply-templates select="$target/personname" />
+        </xsl:when>
+        <!-- A data file has no number and no title, so its filename -->
+        <!-- serves as both, in every style but "custom".  Content   -->
+        <!-- is a prefix, as it is for a number.                     -->
+        <xsl:when test="$b-is-datafile-target">
+            <xsl:choose>
+                <xsl:when test="$text-style = 'custom'">
+                    <xsl:copy-of select="$custom-text"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="$b-has-content">
+                        <xsl:copy-of select="$custom-text"/>
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:call-template name="code-wrapper">
+                        <xsl:with-param name="content" select="string($datafile-filename)"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- equations are different -->
         <!-- custom or full number   -->
