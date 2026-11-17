@@ -3381,8 +3381,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
             </xsl:if>
+            <!-- a static conversion replaces a "datafile" by a "sidebyside" -->
             <div class="listing__contents">
-                <xsl:apply-templates select="program|console">
+                <xsl:apply-templates select="program|console|datafile|sidebyside">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
