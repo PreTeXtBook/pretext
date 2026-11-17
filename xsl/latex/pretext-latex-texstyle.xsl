@@ -122,8 +122,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Catch-all for elements not yet implemented, to be overridden below -->
-<xsl:template match="texstyle/*">
+<!-- Catch-all for elements not yet implemented, to be overridden below. -->
+<!-- A "text" child is raw LaTeX, written by the "text" template below.  -->
+<xsl:template match="texstyle/*[not(self::text)]">
     <xsl:message>PTX:WARNING: Unhandled texstyle element: <xsl:value-of select="name()"/></xsl:message>
 </xsl:template>
 
@@ -183,7 +184,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="." />
     </xsl:call-template>
-    <xsl:text>% End TexStyle preamble addioions.</xsl:text>
+    <!-- The text of the element need not end with a newline, so one  -->
+    <!-- precedes the closing comment and another follows it, keeping -->
+    <!-- the next line of the preamble out of the comment.            -->
+    <xsl:text>&#xa;% End TexStyle preamble additions.&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Here we build the "standard" (classic) latex preamble,       -->
@@ -230,6 +234,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sidebyside-environment"/>
     <xsl:call-template name="kbd-keys"/>
     <xsl:call-template name="late-preamble-adjustments"/>
+</xsl:template>
+
+<!-- A journal's class or package may set the text font, as            -->
+<!-- "mathmag.sty", for Mathematics Magazine, does with Times.         -->
+<!-- Then the texstyle file says                                       -->
+<!--     <ptx-preamble main-font="journal">                            -->
+<!-- and for pdflatex the T1 font encoding stays, but the Latin Modern -->
+<!-- fonts, which would replace the journal's font, are not loaded.    -->
+<!-- This overrides the template of the same name in -latex-common.    -->
+<xsl:template name="font-pdflatex-main">
+    <xsl:choose>
+        <xsl:when test="$texstyle-root/texstyle/ptx-preamble/@main-font = 'journal'">
+            <xsl:text>%% Text font is set by the journal's class or package&#xa;</xsl:text>
+            <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
+            <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A list of all the elements that could need \newtheorem environments -->
@@ -284,7 +308,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(preceding-sibling::theoremstyle) and not(@define-counter='no')">
         <xsl:text>\newtheorem{theorem}{</xsl:text>
         <xsl:apply-templates select="($document-root//theorem)[1]" mode="type-name"/>
-        <xsl:text>}[section]&#xa;</xsl:text>
+        <xsl:text>}</xsl:text>
+        <xsl:call-template name="theorem-counter-within"/>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- Read in all the names of theorems in the @environments attribute -->
     <xsl:variable name="thm-envs" select="str:tokenize(@environments, ', ')"/>
@@ -587,6 +613,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$ptx-node/date"/>
 </xsl:template>
 
+<!-- Author biographies, which some journals set at the end of the  -->
+<!-- article, as with the "biog" environment of the Mathematical    -->
+<!-- Association of America.  Only authors having a "biography" are -->
+<!-- listed, and nothing is written if no author has one.  The      -->
+<!-- children of the texstyle element are                           -->
+<!-- applied once for each such author, as with an "author-list",   -->
+<!-- so a texstyle file says, for example,                          -->
+<!--     <biographies env="biog">                                   -->
+<!--         <text>\item[</text><ptx-personname/><text>] </text>    -->
+<!--         <ptx-biography/>                                       -->
+<!--     </biographies>                                             -->
+<xsl:template match="texstyle/biographies">
+    <xsl:if test="$bibinfo/author/biography">
+        <xsl:text>%&#xa;% Author biographies&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@env">
+                <xsl:text>\begin{</xsl:text>
+                <xsl:value-of select="@env"/>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@heading">
+                <xsl:value-of select="@heading"/>
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:apply-templates select="$bibinfo/author[biography]" mode="author-list">
+            <xsl:with-param name="ts-node" select="."/>
+        </xsl:apply-templates>
+        <xsl:if test="@env">
+            <xsl:text>\end{</xsl:text>
+            <xsl:value-of select="@env"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<!-- The paragraphs of one author's biography, without any title -->
+<xsl:template match="ptx-biography">
+    <xsl:param name="ptx-node"/>
+    <xsl:apply-templates select="$ptx-node/biography/*[not(self::title)]"/>
+</xsl:template>
+
 <!-- End of author information -->
 
 
@@ -735,6 +803,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+
+<!-- The first appendix starts the appendices, as the texstyle file   -->
+<!-- says.  Inside an environment (@env), such as that of the         -->
+<!-- "appendix" package, nothing more is needed.  Otherwise a command -->
+<!-- (@cmd, without its backslash), by default LaTeX's \appendix,     -->
+<!-- which takes no argument.                                         -->
+<xsl:template name="appendices-start">
+    <xsl:variable name="ts-appendices" select="$texstyle-root/texstyle/appendices"/>
+    <xsl:choose>
+        <xsl:when test="$ts-appendices/@env"/>
+        <xsl:when test="$ts-appendices/@cmd">
+            <xsl:text>\</xsl:text>
+            <xsl:value-of select="$ts-appendices/@cmd"/>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\appendix&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Optional text before each appendix title, such as "Appendix: ", -->
+<!-- for journals whose sections, and so appendices, are unnumbered. -->
+<xsl:template name="appendix-title-prefix">
+    <xsl:value-of select="$texstyle-root/texstyle/appendices/@title-prefix"/>
+</xsl:template>
 
 <xsl:template match="texstyle/appendices">
     <xsl:if test="$document-root//appendix">

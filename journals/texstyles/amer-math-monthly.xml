@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright (C) 2026  Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*****************************************************************-->
+
+<!-- The American Mathematical Monthly, of the Mathematical Association         -->
+<!-- of America, published by Taylor & Francis.  Modeled on the                 -->
+<!-- journal's template, "monthly-template.tex" (2025), which uses the          -->
+<!-- article class with the association's "maa-monthly.sty".  That package sets -->
+<!-- Times as the text font, numbers sections but not subsections, and          -->
+<!-- runs in both headings, sections in capitals.                               -->
+<!--                                                                            -->
+<!-- As in the template, the article begins with a title page for the           -->
+<!-- submission, giving the title and each author's name, affiliation,          -->
+<!-- and email.  The abstract and keywords follow the title; at the end         -->
+<!-- come the acknowledgment (from the article's support statement),            -->
+<!-- the references, and the authors' biographies with their addresses.         -->
+<!--                                                                            -->
+<!-- Reviewing is double-anonymous, so the anonymous manuscript omits           -->
+<!-- the authors, the support statement, and the biographies from the           -->
+<!-- bibinfo.                                                                   -->
+<!--                                                                            -->
+<!-- A publication file should number divisions at level 1, since               -->
+<!-- "maa-monthly.sty" numbers sections only, so that cross-references          -->
+<!-- agree with the printed page.                                               -->
+<texstyle>
+    <metadata>
+        <code>amer-math-monthly</code>
+        <name>The American Mathematical Monthly</name>
+        <publisher>Mathematical Association of America (Taylor &amp; Francis)</publisher>
+        <latex-engine command="pdflatex"/>
+        <required-files>
+            <file name="maa-monthly.sty" href="https://maa.org/wp-content/uploads/2025/08/American_Math_Monthly_Templates.zip" compression="zip" path="Style File/maa-monthly.sty"/>
+        </required-files>
+        <style-author>David W. Farmer</style-author>
+        <date>2026-10-22</date>
+    </metadata>
+
+    <documentclass name="article"/>
+
+    <!-- The template ends each run-in heading with a period, typed by    -->
+    <!-- the author.  PreTeXt titles have no such period, so add it where -->
+    <!-- maa-monthly.sty sets a run-in heading.  This must precede the    -->
+    <!-- hyperref package, which wraps the command patched here.          -->
+    <packages>
+    \usepackage{maa-monthly}
+    \usepackage{etoolbox}
+    \makeatletter
+    \patchcmd{\@sect}
+      {\MakeUppercase{#8}\else#8\fi\csname #1mark\endcsname}
+      {\MakeUppercase{#8.}\else#8.\fi\csname #1mark\endcsname}
+      {}{\PackageWarning{pretext}{Could not add periods to run-in headings}}
+    \makeatother
+    </packages>
+
+    <!-- maa-monthly.sty sets Times, so PreTeXt does not load Latin Modern; -->
+    <!-- theorems use the amsthm styles, as in the journal's template       -->
+    <ptx-preamble main-font="journal"/>
+
+    <!-- The keywords line follows the template's formatting -->
+    <preamble-addition>
+    \newcommand{\ptxmonthlykeywords}[1]{\par\vspace{10pt}\noindent\textbf{Keywords:} #1\par\vspace{10pt}}
+    </preamble-addition>
+
+    <begin-document/>
+
+    <!-- The title page for the submission, as in the template -->
+    <title heading="\begin{center}&#xa;{\LARGE Title Page for \textit{The American Mathematical Monthly}}&#xa;\end{center}&#xa;\vspace{150px}&#xa;\begin{center}&#xa;\textbf{">
+        <ptx-title/>
+        <text>}\\[25px]</text>
+    </title>
+    <author-list>
+        <ptx-personname/>
+        <text>\\&#xa;</text>
+        <ptx-affiliation sep="\\&#xa;" after="\\"/>
+        <ptx-email/>
+        <text>\\[15px]&#xa;</text>
+    </author-list>
+    <text>\end{center}&#xa;\pagebreak&#xa;</text>
+
+    <title cmd="title">
+        <arg><ptx-title/></arg>
+    </title>
+
+    <!-- The running head -->
+    <title cmd="markright">
+        <arg><ptx-short-title/></arg>
+    </title>
+
+    <author cmd="author">
+        <arg>
+            <author-list sep=" and ">
+                <ptx-personname/>
+            </author-list>
+        </arg>
+    </author>
+
+    <maketitle/>
+
+    <abstract env="abstract">
+        <ptx-abstract/>
+    </abstract>
+
+    <keywords authority="author" cmd="ptxmonthlykeywords" sep=", "/>
+
+    <mainmatter/>
+
+    <appendices/>
+
+    <!-- The article's "support" statement (funding) is the acknowledgment -->
+    <support env="acknowledgment">
+        <arg><text>Acknowledgment.</text></arg>
+        <ptx-bibinfo-support/>
+    </support>
+
+    <bibliography/>
+
+    <biographies env="biog">
+        <text>\item[</text>
+        <ptx-personname/>
+        <text>] </text>
+        <ptx-biography/>
+        <text>&#xa;\begin{affil}&#xa;</text>
+        <ptx-affiliation sep=", " after="\\"/>
+        <ptx-email/>
+        <text>&#xa;\end{affil}&#xa;</text>
+    </biographies>
+
+    <end-document/>
+</texstyle>
