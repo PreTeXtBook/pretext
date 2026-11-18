@@ -7330,6 +7330,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>sidebyside</xsl:text>
         </xsl:attribute>
+        <!-- the static replacement of a "datafile" is a target of an "xref" -->
+        <xsl:if test="@pi:datafile-filename">
+            <xsl:apply-templates select="." mode="html-id-attribute"/>
+        </xsl:if>
         <xsl:if test="$sbsdebug">
             <xsl:attribute name="style">
                 <xsl:text>box-sizing: border-box;</xsl:text>
@@ -10008,6 +10012,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
     <xsl:text>: </xsl:text>
     <xsl:value-of select="@filename"/>
+</xsl:template>
+
+<!-- A static conversion replaces a "datafile" by a marked "sidebyside" -->
+<xsl:template match="sidebyside[@pi:datafile-filename]" mode="tooltip-text">
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'data'"/>
+    </xsl:apply-templates>
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="@pi:datafile-filename"/>
 </xsl:template>
 
 <!-- Queries -->
