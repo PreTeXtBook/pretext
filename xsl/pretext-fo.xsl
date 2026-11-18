@@ -3276,6 +3276,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- for a "tabular", the finite strength lets FOP break one too -->
     <!-- tall for a page instead of clipping it; tune it if needed.  -->
     <fo:table table-layout="fixed" width="100%" space-before="0.5em" space-after="0.5em" keep-together.within-page="5">
+        <!-- the static replacement of a "datafile" is a target of an "xref" -->
+        <xsl:if test="@pi:datafile-filename">
+            <xsl:apply-templates select="." mode="link-id-attribute"/>
+        </xsl:if>
         <xsl:if test="$has-left-margin">
             <fo:table-column column-width="proportional-column-width({substring-before($layout/left-margin, '%')})"/>
         </xsl:if>
