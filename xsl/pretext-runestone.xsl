@@ -1467,7 +1467,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> #tag:</xsl:text>
                 <xsl:value-of select="@name"/>
                 <xsl:text>; depends:</xsl:text>
-                <xsl:value-of select="str:replace(@depends, ' ', ',')"/>
+                <!-- an author may separate names with any whitespace, and -->
+                <!-- Runestone splits the list at every comma              -->
+                <xsl:value-of select="str:replace(normalize-space(@depends), ' ', ',')"/>
                 <xsl:text>;</xsl:text>
             </xsl:when>
         </xsl:choose>
