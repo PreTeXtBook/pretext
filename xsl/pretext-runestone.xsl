@@ -3058,9 +3058,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Data Files -->
+<!-- A duplicate ($b-original false), such as the content of a  -->
+<!-- knowl for a cross-reference, displays the file, but is not -->
+<!-- a Runestone component: it has no identification, no       -->
+<!-- editing, and is never hidden.                              -->
 <xsl:template match="datafile" mode="runestone-to-interactive">
+    <xsl:param name="b-original" select="true()"/>
+
     <!-- Possibly annotate with the source                     -->
-    <xsl:apply-templates select="." mode="view-source-widget"/>
+    <xsl:if test="$b-original">
+        <xsl:apply-templates select="." mode="view-source-widget"/>
+    </xsl:if>
     <!-- Some templates and variables are defined in -common for consistency -->
 
     <!-- If there is a child "pre" element, then we build an un-editable  -->
@@ -3071,6 +3079,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <!-- only a clear "yes" will yield editable, -->
             <!-- default is "no" (or anything but "yes") -->
+            <xsl:when test="pre and not($b-original)">
+                <xsl:text>pre</xsl:text>
+            </xsl:when>
             <xsl:when test="pre and not(@editable = 'yes')">
                 <xsl:text>pre</xsl:text>
             </xsl:when>
@@ -3084,8 +3095,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="b-is-editable" select="$pre-element = 'textarea'"/>
 
-    <!-- The HTML that Runestone expects -->
+    <!-- The HTML that Runestone expects, plus an HTML id that -->
+    <!-- makes the original a target of a cross-reference      -->
     <div class="runestone datafile">
+        <xsl:if test="$b-original">
+            <xsl:apply-templates select="." mode="html-id-attribute"/>
+        </xsl:if>
         <div class="datafile_caption">
             <code class="code-inline tex2jax_ignore">
                 <!-- Internationalize?  See comments in static conversion -->
@@ -3100,8 +3115,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="."  mode="datafile-filename"/>
                 </xsl:variable>
                 <xsl:variable name="image-b64-elt" select="document($data-filename, $original)/pi:image-b64"/>
-                <img data-component="datafile" data-isimage="true">
-                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <img data-isimage="true">
+                    <xsl:if test="$b-original">
+                        <xsl:attribute name="data-component">
+                            <xsl:text>datafile</xsl:text>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                    </xsl:if>
                     <xsl:attribute name="data-filename">
                         <xsl:value-of select="@filename"/>
                     </xsl:attribute>
@@ -3142,10 +3162,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- text, an authored toy example, or a serious external file -->
             <xsl:when test="pre">
                 <xsl:element name="{$pre-element}">
-                    <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                    <xsl:attribute name="data-component">
-                        <xsl:text>datafile</xsl:text>
-                    </xsl:attribute>
+                    <xsl:if test="$b-original">
+                        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                        <xsl:attribute name="data-component">
+                            <xsl:text>datafile</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:attribute name="data-filename">
                         <xsl:value-of select="@filename"/>
                     </xsl:attribute>
@@ -3154,7 +3176,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$b-is-editable"/>
                     </xsl:attribute>
                     <!-- Runestone can only hide non-editable text -->
-                    <xsl:if test="(not(@editable = 'yes')) and (@hide = 'yes')">
+                    <xsl:if test="$b-original and (not(@editable = 'yes')) and (@hide = 'yes')">
                         <xsl:attribute name="data-hidden"/>
                     </xsl:if>
                     <xsl:attribute name="data-rows">

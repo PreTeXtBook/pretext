@@ -681,6 +681,26 @@
                     )
                 }
             BlockStatement |= Datafile
+            # a "listing" may hold a "datafile" of text, but
+            # not an image, and not one that starts hidden
+            FigureListing |=
+                element listing {
+                    MetaDataAltTitle,
+                    Landscape?,
+                    element datafile {
+                        UniqueID?,
+                        LabelID?,
+                        Component?,
+                        attribute filename {text},
+                        attribute rows {xsd:integer}?,
+                        attribute cols {xsd:integer}?,
+                        attribute editable {"yes"|"no"}?,
+                        element pre {
+                            attribute source {text}?,
+                            text
+                        }
+                    }
+                }
 
             # Query (poll/survey) element; results are private to the
             # instructor unless @visibility says otherwise

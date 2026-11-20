@@ -1742,7 +1742,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is not a cross-reference target (it originates  -->
 <!-- in PG-code), and an error results when the heading in -->
 <!-- the knowl content tries to compute a number           -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|md[@pi:authored-one-line]|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|md[@pi:authored-one-line]|mrow|li[not(parent::var)]|contributor|fragment|datafile" mode="xref-as-knowl">
     <xsl:param name="link" select="/.." />
     <xsl:choose>
         <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never' or $b-portable-html">
@@ -3381,8 +3381,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
             </xsl:if>
+            <!-- a static conversion replaces a "datafile" by a "sidebyside" -->
             <div class="listing__contents">
-                <xsl:apply-templates select="program|console">
+                <xsl:apply-templates select="program|console|datafile|sidebyside">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
@@ -7330,6 +7331,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>sidebyside</xsl:text>
         </xsl:attribute>
+        <!-- the static replacement of a "datafile" is a target of an "xref" -->
+        <xsl:if test="@pi:datafile-filename">
+            <xsl:apply-templates select="." mode="html-id-attribute"/>
+        </xsl:if>
         <xsl:if test="$sbsdebug">
             <xsl:attribute name="style">
                 <xsl:text>box-sizing: border-box;</xsl:text>
@@ -9984,7 +9989,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Data Files -->
 
 <xsl:template match="datafile">
-    <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+    <xsl:param name="b-original" select="true()"/>
+
+    <xsl:apply-templates select="." mode="runestone-to-interactive">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- The content of a knowl for a cross-reference is a duplicate, -->
+<!-- which displays the file without being a Runestone component. -->
+<!-- The enclosing "div" satisfies the knowl's need for a single  -->
+<!-- element around the content.                                  -->
+<xsl:template match="datafile" mode="body">
+    <xsl:apply-templates select="." mode="runestone-to-interactive">
+        <xsl:with-param name="b-original" select="false()"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- A data file has no number or title, its filename identifies it -->
+<xsl:template match="datafile" mode="tooltip-text">
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'data'"/>
+    </xsl:apply-templates>
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="@filename"/>
+</xsl:template>
+
+<!-- A static conversion replaces a "datafile" by a marked "sidebyside" -->
+<xsl:template match="sidebyside[@pi:datafile-filename]" mode="tooltip-text">
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'data'"/>
+    </xsl:apply-templates>
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="@pi:datafile-filename"/>
 </xsl:template>
 
 <!-- Queries -->
