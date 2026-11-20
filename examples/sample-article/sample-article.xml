@@ -16962,6 +16962,175 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </worksheet>
 
+            <worksheet label="worksheet-multiple-sheet-pages">
+                <title>Pages on Several Sheets</title>
+                <introduction>
+                    <p>This is a mock worksheet for testing a <tag>page</tag> that is laid out on more than one sheet of paper.  A project with many tasks cannot be divided between two <tag>page</tag> elements, so its <tag>page</tag> carries a <attr>pages</attr> attribute.  In the print preview each sheet should be full, with the workspace requested and then some, and no task should be parted from its workspace.</p>
+                </introduction>
+
+                <page pages="2">
+                    <p>This page asks for two sheets.  The eight tasks of the project should be shared between them, with the workspace of each stretched to fill its sheet.</p>
+
+                    <project>
+                        <title>Sums of Odd Integers</title>
+                        <introduction>
+                            <p>Work through the tasks in order.</p>
+                        </introduction>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Write the first five terms of the sequence <m>a_n=2n-1</m>.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 1.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Compute the first five partial sums of the sequence.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 2.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Make a conjecture for a formula for the <m>n</m>th partial sum.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 3.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>State what must be shown in the base case of a proof by induction.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 4.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Carry out the inductive step.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 5.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Draw a picture that explains the formula without any algebra.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 6.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Explain how the picture and the inductive step say the same thing.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 7.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="1in">
+                            <statement>
+                                <p>Find a similar formula for the sum of the first <m>n</m> even positive integers.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 8.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+                    </project>
+                </page>
+
+                <page pages="multiple">
+                    <p>This page asks for as many sheets as its content and workspace need.  Each of the four tasks wants three inches, which is more than one sheet holds and should come out as two.</p>
+
+                    <exploration>
+                        <title>Sums of Odd Integers, Again</title>
+                        <introduction>
+                            <p>Work through the tasks in order.</p>
+                        </introduction>
+
+                        <task workspace="3in">
+                            <statement>
+                                <p>Write the first five terms of the sequence <m>a_n=2n-1</m>.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 1.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="3in">
+                            <statement>
+                                <p>Compute the first five partial sums of the sequence.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 2.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="3in">
+                            <statement>
+                                <p>Make a conjecture for a formula for the <m>n</m>th partial sum.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 3.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+
+                        <task workspace="3in">
+                            <statement>
+                                <p>State what must be shown in the base case of a proof by induction.</p>
+                            </statement>
+                            <solution>
+                                <p>Solution to task 4.  It is a single sentence, so that revealing it moves little.</p>
+                            </solution>
+                        </task>
+                    </exploration>
+                </page>
+
+                <page>
+                    <p>This page is an ordinary one, a single sheet.</p>
+
+                    <exercise workspace="2in">
+                        <statement>
+                            <p>Which of the pages before this one was the most work?</p>
+                        </statement>
+                    </exercise>
+                </page>
+
+                <page pages="3">
+                    <p>This page asks for three sheets, though its content would fit on one.  There should be three all the same, each with an exercise and a great deal of workspace.</p>
+
+                    <exercise workspace="1in">
+                        <statement>
+                            <p>Sketch the graph of a function that is continuous but not differentiable.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="1in">
+                        <statement>
+                            <p>Sketch the graph of a function that is differentiable but whose derivative is not continuous.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="1in">
+                        <statement>
+                            <p>Sketch the graph of a function that is nowhere continuous, as best you can.</p>
+                        </statement>
+                    </exercise>
+                </page>
+            </worksheet>
+
             <worksheet>
                 <title>Worksheet with an exercise with tasks and subtasks</title>
                 <introduction>
