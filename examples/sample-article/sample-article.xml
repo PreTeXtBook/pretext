@@ -18484,7 +18484,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <cline>def double(x):</cline>
                         <cline>    return 2 * x</cline>
                     </block>
-                    <block order="1" name="input" depends="define">
+                    <block order="1" name="input">
                         <choice correct="yes">
                             <cline>n = int(input())</cline>
                         </choice>
@@ -18492,7 +18492,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <cline>n = input()</cline>
                         </choice>
                     </block>
-                    <block order="2" depends="input">
+                    <block order="2" depends="define input">
                         <cline>print(double(n))</cline>
                     </block>
                     <block order="4" correct="no">
