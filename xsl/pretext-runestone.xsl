@@ -1461,9 +1461,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="blocks/block" mode="vertical-blocks">
     <xsl:param name="b-natural"/>
+    <!-- Runestone gives a block without a tag the name of the block       -->
+    <!-- before it, and that name can then satisfy a dependency.  So once  -->
+    <!-- any block has "@depends", every correct block gets a tag, and an  -->
+    <!-- empty name becomes a unique one of Runestone's making.  Runestone -->
+    <!-- never reads the tag of a distractor, so a distractor gets none.   -->
     <xsl:variable name="name">
         <xsl:choose>
-            <xsl:when test="@name|@depends">
+            <xsl:when test="not(@correct = 'no') and (@name or ../block/@depends)">
                 <xsl:text> #tag:</xsl:text>
                 <xsl:value-of select="@name"/>
                 <xsl:text>; depends:</xsl:text>
