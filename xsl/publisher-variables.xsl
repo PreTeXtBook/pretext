@@ -274,6 +274,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/journal/pi:pub-attribute[@name='name']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Journal codes are matched regardless of case, as in the -->
+<!-- Python get_journal_info() function.                     -->
+<xsl:variable name="journal-code" select="translate($journal-name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"/>
+
+<!-- A journal may number divisions, blocks, or equations in its   -->
+<!-- own way, which its class or package enforces.  The journal's  -->
+<!-- style (texstyle) file records what is enforced in a           -->
+<!-- "numbering" element, with children and attributes from the    -->
+<!-- "numbering" element of a publication file.  A style file that -->
+<!-- extends another inherits the element of its base, unless it   -->
+<!-- has its own.  The location of the style file is found as in   -->
+<!-- the Python get_journal_info() function.  No file is read      -->
+<!-- unless the publication file names a journal.                  -->
+<xsl:variable name="journal-numbering-rtf">
+    <xsl:if test="not($journal-code = '')">
+        <xsl:variable name="journal" select="document('../journals/journals.xml')/ptx-journals/journal[code = $journal-code]"/>
+        <xsl:if test="$journal and (not($journal/method/@latex-style) or ($journal/method/@latex-style = 'texstyle'))">
+            <xsl:variable name="texstyle-file">
+                <xsl:if test="$journal/method/@dependent = 'yes'">
+                    <xsl:text>dependents/</xsl:text>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$journal/method/@texstyle">
+                        <xsl:value-of select="$journal/method/@texstyle"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$journal/code"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>.xml</xsl:text>
+            </xsl:variable>
+            <xsl:variable name="texstyle" select="document(concat('../journals/texstyles/', $texstyle-file))/texstyle"/>
+            <xsl:choose>
+                <xsl:when test="$texstyle/numbering">
+                    <xsl:copy-of select="$texstyle/numbering"/>
+                </xsl:when>
+                <xsl:when test="$texstyle/metadata/extends">
+                    <xsl:copy-of select="document(concat('../journals/texstyles/', $texstyle/metadata/extends, '.xml'))/texstyle/numbering"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:if>
+</xsl:variable>
+<xsl:variable name="journal-numbering" select="exsl:node-set($journal-numbering-rtf)/numbering"/>
+
 <!-- This is the minimum information to locate a     -->
 <!-- Citation Style Language (CSL) style file        -->
 <!-- in the CSL repository.  It is not expected to   -->
@@ -290,7 +335,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- codes are matched regardless of case, as in the Python      -->
 <!-- get_journal_info() function.                                -->
 <xsl:template match="common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="get-default-pub-variable">
-    <xsl:variable name="journal-code" select="translate($journal-name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"/>
     <xsl:if test="not($journal-code = '')">
         <xsl:value-of select="document('../journals/journals.xml')/ptx-journals/journal[code = $journal-code]/citation-stylesheet-language/@style"/>
     </xsl:if>
@@ -1522,6 +1566,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   book:              c.s.ss.sss => 4          -->
 <!--   book/part:         p.c.s.ss.sss => 5        -->
 <!--   slideshow/section: s.n => 1                 -->
+<!-- The numbering in force, as a "numbering" element with a child -->
+<!-- for each family.  An attribute a journal records replaces the -->
+<!-- same attribute of the publication file, for every conversion, -->
+<!-- so that numbers and cross-references agree with the journal's -->
+<!-- pages.  What a journal does not record is left to the         -->
+<!-- publication file.  (An attribute copied second replaces one   -->
+<!-- of the same name copied first.)                               -->
+<xsl:variable name="numbering-source-rtf">
+    <xsl:element name="numbering">
+        <xsl:for-each select="str:tokenize('divisions blocks projects equations footnotes figures exercises openproblems', ' ')">
+            <xsl:variable name="family" select="string(.)"/>
+            <xsl:variable name="in-publication" select="$publication/numbering/*[local-name() = $family]"/>
+            <xsl:variable name="in-journal" select="$journal-numbering/*[local-name() = $family]"/>
+            <xsl:element name="{$family}">
+                <xsl:copy-of select="$in-publication/@level | $in-publication/@distinct"/>
+                <xsl:copy-of select="$in-journal/@level | $in-journal/@distinct"/>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:element>
+</xsl:variable>
+<xsl:variable name="numbering-source" select="exsl:node-set($numbering-source-rtf)/numbering"/>
+
+<!-- A journal's level for a family replaces a level given in the -->
+<!-- publication file.  An author is told only when the two       -->
+<!-- differ, so a publication file that agrees with the journal,  -->
+<!-- or is silent, provokes nothing.                              -->
+<xsl:template name="journal-numbering-warning">
+    <xsl:param name="family"/>
+    <xsl:param name="journal-level"/>
+    <xsl:param name="publication-level"/>
+    <xsl:param name="level"/>
+    <xsl:if test="$journal-level and $publication-level and not(number($publication-level) = number($level))">
+        <xsl:message>PTX:WARNING: the journal "<xsl:value-of select="$journal-name"/>" has its own numbering, so <xsl:value-of select="$family"/> are numbered at level <xsl:value-of select="$level"/>, and the level given in the publication file ("<xsl:value-of select="$publication-level"/>") is not used</xsl:message>
+    </xsl:if>
+</xsl:template>
+
 <xsl:variable name="numbering-maxlevel-entered">
     <!-- these are the maximum possible for a given document type, -->
     <!-- an error-check upper-limit, and usually the default       -->
@@ -1553,8 +1633,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="candidate-maxlevel">
         <xsl:choose>
             <!-- go with publisher file, check for numerical value -->
-            <xsl:when test="$publication/numbering/divisions/@level">
-                <xsl:variable name="the-number" select="$publication/numbering/divisions/@level"/>
+            <xsl:when test="$numbering-source/divisions/@level">
+                <xsl:variable name="the-number" select="$numbering-source/divisions/@level"/>
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
@@ -1562,7 +1642,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$default-level"/>
                         </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="$publication/numbering/divisions/@level"/>
+                        <xsl:value-of select="$numbering-source/divisions/@level"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
@@ -1577,15 +1657,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- check $candidate against upper bound, $max-feasible -->
-    <xsl:choose>
-        <xsl:when test="$candidate-maxlevel > $max-feasible">
-            <xsl:message>PTX:FALLBACK:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
-            <xsl:value-of select="$default-level"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate-maxlevel"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="maxlevel">
+        <xsl:choose>
+            <xsl:when test="$candidate-maxlevel > $max-feasible">
+                <xsl:message>PTX:FALLBACK:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
+                <xsl:value-of select="$default-level"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$candidate-maxlevel"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="journal-numbering-warning">
+        <xsl:with-param name="family" select="'divisions'"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/divisions/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/divisions/@level"/>
+        <xsl:with-param name="level" select="$maxlevel"/>
+    </xsl:call-template>
+    <xsl:value-of select="$maxlevel"/>
 </xsl:variable>
 <xsl:variable name="numbering-maxlevel" select="number($numbering-maxlevel-entered)"/>
 
@@ -1625,16 +1714,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Resolve one family's numbering level: the publisher file's  -->
-<!-- entry, else a legacy analog (a string parameter, or in some -->
-<!-- cases a "docinfo" attribute), else the shared default.  An  -->
-<!-- authored value must be numeric, non-negative, and no more   -->
-<!-- than $numbering-maxlevel; the default conforms by           -->
-<!-- construction, so only an authored value can provoke a       -->
-<!-- message.                                                    -->
+<!-- Resolve one family's numbering level: the entry of the       -->
+<!-- numbering in force (a journal's, else the publisher file's), -->
+<!-- else a legacy analog (a string parameter, or in some cases   -->
+<!-- a "docinfo" attribute), else the shared default.  An         -->
+<!-- authored value must be numeric, non-negative, and no more    -->
+<!-- than $numbering-maxlevel; the default conforms by            -->
+<!-- construction, so only an authored value can provoke a        -->
+<!-- message.  The entries of the journal and of the publisher    -->
+<!-- file are passed as well, to warn when the first has replaced -->
+<!-- the second.                                                  -->
 <xsl:template name="numbering-level">
     <xsl:param name="family"/>
     <xsl:param name="entered"/>
+    <xsl:param name="journal-level"/>
+    <xsl:param name="publication-level"/>
     <xsl:param name="legacy" select="''"/>
     <xsl:variable name="candidate">
         <xsl:choose>
@@ -1662,21 +1756,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- an authored candidate may exceed the upper bound, $numbering-maxlevel -->
-    <xsl:choose>
-        <xsl:when test="$candidate > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for <xsl:value-of select="$family"/> ("<xsl:value-of select="$candidate"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value ("<xsl:value-of select="$default-numbering-level"/>") will be used instead</xsl:message>
-            <xsl:value-of select="$default-numbering-level"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$candidate"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="level">
+        <xsl:choose>
+            <xsl:when test="$candidate > $numbering-maxlevel">
+                <xsl:message>PTX:FALLBACK:   numbering level set for <xsl:value-of select="$family"/> ("<xsl:value-of select="$candidate"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value ("<xsl:value-of select="$default-numbering-level"/>") will be used instead</xsl:message>
+                <xsl:value-of select="$default-numbering-level"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$candidate"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="journal-numbering-warning">
+        <xsl:with-param name="family" select="$family"/>
+        <xsl:with-param name="journal-level" select="$journal-level"/>
+        <xsl:with-param name="publication-level" select="$publication-level"/>
+        <xsl:with-param name="level" select="$level"/>
+    </xsl:call-template>
+    <xsl:value-of select="$level"/>
 </xsl:template>
 
 <xsl:variable name="numbering-blocks-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'blocks'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/blocks/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/blocks/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/blocks/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/blocks/@level"/>
         <xsl:with-param name="legacy" select="$numbering.theorems.level"/>
     </xsl:call-template>
 </xsl:variable>
@@ -1685,7 +1790,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-projects-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'projects'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/projects/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/projects/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/projects/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/projects/@level"/>
         <xsl:with-param name="legacy" select="$numbering.projects.level"/>
     </xsl:call-template>
 </xsl:variable>
@@ -1694,7 +1801,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-equations-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'equations'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/equations/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/equations/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/equations/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/equations/@level"/>
         <xsl:with-param name="legacy" select="$numbering.equations.level"/>
     </xsl:call-template>
 </xsl:variable>
@@ -1703,7 +1812,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-footnotes-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'footnotes'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/footnotes/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/footnotes/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/footnotes/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/footnotes/@level"/>
         <xsl:with-param name="legacy" select="$numbering.footnotes.level"/>
     </xsl:call-template>
 </xsl:variable>
@@ -1712,7 +1823,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-figures-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'figures'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/figures/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/figures/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/figures/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/figures/@level"/>
     </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-figures" select="number($numbering-figures-entered)"/>
@@ -1720,7 +1833,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-exercises-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'inline exercises'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/exercises/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/exercises/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/exercises/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/exercises/@level"/>
     </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-exercises" select="number($numbering-exercises-entered)"/>
@@ -1728,7 +1843,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="numbering-openproblems-entered">
     <xsl:call-template name="numbering-level">
         <xsl:with-param name="family" select="'open problems'"/>
-        <xsl:with-param name="entered" select="$publication/numbering/openproblems/@level"/>
+        <xsl:with-param name="entered" select="$numbering-source/openproblems/@level"/>
+        <xsl:with-param name="journal-level" select="$journal-numbering/openproblems/@level"/>
+        <xsl:with-param name="publication-level" select="$publication/numbering/openproblems/@level"/>
     </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="numbering-openproblems" select="number($numbering-openproblems-entered)"/>
@@ -1738,10 +1855,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- figures and inline exercises, and the deprecated              -->
 <!-- debug.project.number parameter, are ignored; warnings live    -->
 <!-- with the other deprecations.                                  -->
-<xsl:variable name="b-number-figure-distinct"      select="$publication/numbering/figures/@distinct = 'yes'"/>
-<xsl:variable name="b-number-project-distinct"     select="$publication/numbering/projects/@distinct = 'yes'"/>
-<xsl:variable name="b-number-exercise-distinct"    select="$publication/numbering/exercises/@distinct = 'yes'"/>
-<xsl:variable name="b-number-openproblem-distinct" select="$publication/numbering/openproblems/@distinct = 'yes'"/>
+<xsl:variable name="b-number-figure-distinct"      select="$numbering-source/figures/@distinct = 'yes'"/>
+<xsl:variable name="b-number-project-distinct"     select="$numbering-source/projects/@distinct = 'yes'"/>
+<xsl:variable name="b-number-exercise-distinct"    select="$numbering-source/exercises/@distinct = 'yes'"/>
+<xsl:variable name="b-number-openproblem-distinct" select="$numbering-source/openproblems/@distinct = 'yes'"/>
 
 <xsl:variable name="chapter-start-entered">
     <xsl:choose>

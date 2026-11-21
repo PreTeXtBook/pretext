@@ -149,6 +149,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- The numbering a journal enforces is read with the publisher -->
+<!-- variables, where it replaces what a publication file gives, -->
+<!-- for every conversion, so nothing is written here.           -->
+<xsl:template match="texstyle/numbering"/>
+
+
 <!-- - - - - - - - - -->
 <!-- Preamble stuff  -->
 <!-- - - - - - - - - -->
