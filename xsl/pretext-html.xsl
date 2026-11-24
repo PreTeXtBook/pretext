@@ -15491,10 +15491,21 @@ TODO:
 <!-- into an HTML section.onepage.  Note that an "introduction" and    -->
 <!-- "objectives" can precede the first "page" as HTML output, and the -->
 <!-- final "page" may be followed by a "conclusion" and "outcomes"     -->
+<!-- A "page" that is to be laid out on more than one sheet says so    -->
+<!-- with a "data-pages" attribute, a number or "multiple", which the  -->
+<!-- print preview JavaScript reads once it can measure the content    -->
 <xsl:template match="worksheet/page|handout/page">
     <xsl:param name="heading-level"/>
+    <xsl:variable name="page-count">
+        <xsl:apply-templates select="." mode="sanitize-page-count"/>
+    </xsl:variable>
     <section class="onepage">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:if test="not($page-count = '')">
+            <xsl:attribute name="data-pages">
+                <xsl:value-of select="$page-count"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="*">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>

@@ -5569,6 +5569,32 @@ Book (with parts), "section" at level 3
 <!-- A no-op, just remove to enable, but will need testing             -->
 <xsl:template match="webwork-reps/static|webwork-reps/static/stage|exercisegroup|&SOLUTION-LIKE;" mode="sanitize-workspace"/>
 
+<!-- A "page" of a printout is one sheet of paper, unless a "@pages"   -->
+<!-- attribute asks for a whole number of sheets, or with "multiple"   -->
+<!-- for however many the content and its workspace need.  The result  -->
+<!-- here is empty for a single sheet, which is the usual case, and    -->
+<!-- otherwise is the number or the word.  A conversion that paginates -->
+<!-- by measuring, such as the HTML print preview, is the consumer.    -->
+<xsl:template match="worksheet/page|handout/page" mode="sanitize-page-count">
+    <xsl:variable name="raw-pages" select="normalize-space(@pages)"/>
+    <xsl:choose>
+        <!-- not authored, or authored as the default -->
+        <xsl:when test="($raw-pages = '') or ($raw-pages = '1')"/>
+        <xsl:when test="$raw-pages = 'multiple'">
+            <xsl:value-of select="$raw-pages"/>
+        </xsl:when>
+        <!-- digits only, and not zero, is a positive whole number -->
+        <xsl:when test="(translate($raw-pages, '0123456789', '') = '') and (number($raw-pages) &gt; 0)">
+            <!-- drops any leading zeros -->
+            <xsl:value-of select="number($raw-pages)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the "pages" attribute of a "page" should be a positive whole number or "multiple", not "<xsl:value-of select="@pages"/>".  The page will be laid out on a single sheet.</xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- Get an RTF element containing information about what components of an exercise -->
 <!-- should be rendered based on its type and publisher settings                    -->
