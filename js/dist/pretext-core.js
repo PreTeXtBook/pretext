@@ -1774,23 +1774,79 @@
       flattenOversizedBlocksIn(page, contentHeight);
     });
     console.log("Moved all content before the first page and after the last page into the respective pages, and split nested tasks, introductions, solutions, and oversized lists and blocks for independent repagination.");
+    planPageGroups(margins);
   }
-  function createPrintoutPages(margins) {
-    console.log("*** Creating printout pages with margins:", margins);
-    const conservativePaperWidth = 794;
-    const conservativeContentHeight = 1056 - (margins.top + margins.bottom);
-    const conservativeContentWidth = conservativePaperWidth - (margins.left + margins.right);
+  function hasPageGroups() {
     const printout = getPrintout();
-    if (!printout) {
-      console.warn("No printout found, exiting createPrintoutPages.");
-      return;
+    return !!(printout && printout.querySelector(":scope > .onepage[data-pages]"));
+  }
+  function planPageGroups(margins) {
+    const printout = getPrintout();
+    if (!printout) return;
+    const contentHeight = conservativePageBox(margins).contentHeight;
+    const authoredPages = [...printout.querySelectorAll(":scope > .onepage[data-pages]")];
+    authoredPages.forEach((page) => {
+      const requested = page.dataset.pages;
+      const pageCount = requested === "multiple" ? void 0 : parseInt(requested, 10);
+      if (requested !== "multiple" && !(pageCount > 1)) {
+        return;
+      }
+      [...page.children].filter(isPageFurnitureEl).forEach((el2) => el2.remove());
+      const { blockList, footnoteChrome } = measureRows(printout, [...page.children], margins);
+      const pageBreaks = findPageBreaks(blockList, contentHeight, {
+        allowSqueeze: anySolutionShown(),
+        footnoteChrome,
+        pageCount
+      });
+      const groupPages = buildPages(blockList, pageBreaks);
+      if (groupPages.length === 0) {
+        return;
+      }
+      groupPages.forEach((groupPage, i) => {
+        if (i === 0) {
+          if (page.id) groupPage.id = page.id;
+          groupPage.dataset.pages = requested;
+        } else {
+          groupPage.classList.add("page-continuation");
+        }
+      });
+      page.replaceWith(...groupPages);
+      console.log("Laid out an authored page on", groupPages.length, "sheets; requested:", requested);
+    });
+  }
+  function foldPageGroups(margins) {
+    const printout = getPrintout();
+    if (!printout) return;
+    collapseSpilloverPages(margins);
+    const pages = [...printout.querySelectorAll(":scope > .onepage")];
+    for (let i = pages.length - 1; i >= 1; i--) {
+      const page = pages[i];
+      if (!page.classList.contains("page-continuation")) continue;
+      const contentChildren = [...page.children].filter((c) => !isPageFurnitureEl(c));
+      appendPageContent(pages[i - 1], contentChildren);
+      page.remove();
     }
+  }
+  function replanPageGroups(margins) {
+    foldPageGroups(margins);
+    planPageGroups(margins);
+    getPrintout().querySelectorAll(":scope > .onepage").forEach((page) => {
+      [...page.children].filter(isPageFurnitureEl).forEach((el2) => el2.remove());
+    });
+    addHeadersAndFootersToPrintout();
+  }
+  function conservativePageBox(margins) {
+    return {
+      paperWidth: 794,
+      // A4 is narrower than Letter's 816
+      contentHeight: 1056 - (margins.top + margins.bottom)
+      // in pixels
+    };
+  }
+  function measureRows(printout, rows, margins) {
+    const { paperWidth: conservativePaperWidth, contentHeight: conservativeContentHeight } = conservativePageBox(margins);
     printout.style.width = conservativePaperWidth + "px";
     setInitialWorkspaceHeights(printout);
-    flattenTasksIn(printout);
-    flattenIntroductionsIn(printout);
-    flattenSolutionsIn(printout);
-    let rows = [...printout.children];
     const measuringPage = document.createElement("section");
     measuringPage.classList.add("onepage");
     measuringPage.style.width = conservativePaperWidth + "px";
@@ -1844,30 +1900,49 @@
         footnoteHeight: footnoteMetrics.heights.get(row) || 0
       });
     }
-    rows.forEach((row) => printout.appendChild(row));
     measuringPage.remove();
-    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight, {
-      allowSqueeze: anySolutionShown(),
-      footnoteChrome: footnoteMetrics.chrome
-    });
     printout.style.width = "";
+    return { blockList, footnoteChrome: footnoteMetrics.chrome };
+  }
+  function buildPages(blockList, pageBreaks) {
+    const pages = [];
     for (let i = 0; i < pageBreaks.length; i++) {
       const pageDiv = document.createElement("section");
       pageDiv.classList.add("onepage");
-      if (i === 0) {
-        pageDiv.classList.add("firstpage");
-      }
-      if (i === pageBreaks.length - 1) {
-        pageDiv.classList.add("lastpage");
-      }
       const start = pageBreaks[i - 1] || 0;
       const end = pageBreaks[i];
       for (let j = start; j < end; j++) {
-        const row = blockList[j].elem;
-        pageDiv.appendChild(row);
+        pageDiv.appendChild(blockList[j].elem);
+      }
+      pages.push(pageDiv);
+    }
+    return pages;
+  }
+  function createPrintoutPages(margins) {
+    console.log("*** Creating printout pages with margins:", margins);
+    const printout = getPrintout();
+    if (!printout) {
+      console.warn("No printout found, exiting createPrintoutPages.");
+      return;
+    }
+    flattenTasksIn(printout);
+    flattenIntroductionsIn(printout);
+    flattenSolutionsIn(printout);
+    const { blockList, footnoteChrome } = measureRows(printout, [...printout.children], margins);
+    const pageBreaks = findPageBreaks(blockList, conservativePageBox(margins).contentHeight, {
+      allowSqueeze: anySolutionShown(),
+      footnoteChrome
+    });
+    const pages = buildPages(blockList, pageBreaks);
+    pages.forEach((pageDiv, i) => {
+      if (i === 0) {
+        pageDiv.classList.add("firstpage");
+      }
+      if (i === pages.length - 1) {
+        pageDiv.classList.add("lastpage");
       }
       printout.appendChild(pageDiv);
-    }
+    });
     for (const child of [...printout.children]) {
       if (!child.classList.contains("onepage")) {
         console.log("Removing old child not in a page:", child);
@@ -2578,12 +2653,43 @@
     }
     return SQUEEZE_COST_SCALE * squeeze ** 2 + groupPenalty;
   }
-  function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome = 0 } = {}) {
+  function findPageBreaks(rows, pageHeight, { allowSqueeze = false, footnoteChrome = 0, pageCount } = {}) {
     console.log("*** Finding page breaks for", rows.length, "rows with page height:", pageHeight);
+    const options = { allowSqueeze, footnoteChrome };
+    if (!pageCount) {
+      return planPages(rows, pageHeight, options).pageBreaks;
+    }
+    if (pageCount <= rows.length) {
+      const exact = planPages(rows, pageHeight, { ...options, pageCount });
+      if (exact.feasible) {
+        return exact.pageBreaks;
+      }
+    }
+    return fixedPageCountFallback(rows, pageHeight, pageCount, options);
+  }
+  function fixedPageCountFallback(rows, pageHeight, pageCount, options) {
+    const squeezed = { ...options, allowSqueeze: true };
+    let plan = { feasible: false };
+    for (let count = Math.min(pageCount, rows.length); !plan.feasible && count >= 1; count--) {
+      if (count < pageCount) {
+        plan = planPages(rows, pageHeight, { ...options, pageCount: count });
+      }
+      if (!plan.feasible) {
+        plan = planPages(rows, pageHeight, { ...squeezed, pageCount: count });
+      }
+    }
+    if (!plan.feasible) {
+      plan = planPages(rows, pageHeight, options);
+    }
+    if (plan.pageBreaks.length === pageCount) {
+      console.log("A page only fits on", pageCount, "sheets with its writing space squeezed.");
+    } else {
+      console.warn("A page cannot be laid out on exactly", pageCount, "sheets; using", plan.pageBreaks.length, "instead.");
+    }
+    return plan.pageBreaks;
+  }
+  function planPages(rows, pageHeight, { allowSqueeze = false, footnoteChrome = 0, pageCount } = {}) {
     let pageBreaks = [];
-    let minCost = Array(rows.length + 1).fill(Infinity);
-    minCost[rows.length] = 0;
-    let nextPageBreak = Array(rows.length).fill(-1);
     const opensWithWorkspace = Array(rows.length + 1).fill(false);
     for (let k = rows.length - 1; k >= 0; k--) {
       opensWithWorkspace[k] = rows[k].hidden ? opensWithWorkspace[k + 1] : rows[k].isWorkspace;
@@ -2598,58 +2704,84 @@
       while (k < rows.length && illegalStart(k)) k++;
       return k;
     };
-    for (let i = rows.length - 1; i >= 0; i--) {
-      let cumulativeHeight = 0;
-      let cumulativeWorkspaceHeight = 0;
-      let cumulativeSqueezableHeight = 0;
-      let cumulativeFootnoteHeight = 0;
-      let tallestRow = 0;
-      for (let j = i; j < rows.length; j++) {
-        cumulativeHeight += rows[j].height;
-        cumulativeWorkspaceHeight += rows[j].workspaceHeight;
-        cumulativeSqueezableHeight += rows[j].squeezableHeight;
-        cumulativeFootnoteHeight += rows[j].footnoteHeight || 0;
-        const footnotesHeight = cumulativeFootnoteHeight > 0 ? cumulativeFootnoteHeight + footnoteChrome : 0;
-        const rowWithNotes = rows[j].footnoteHeight ? rows[j].height + rows[j].footnoteHeight + footnoteChrome : rows[j].height;
-        tallestRow = Math.max(tallestRow, rowWithNotes);
-        const next = rows[j + 1];
-        const thisPage = pageCost({
-          pageHeight,
-          naturalHeight: cumulativeHeight + footnotesHeight,
-          workspaceHeight: cumulativeWorkspaceHeight,
-          squeezableHeight: cumulativeSqueezableHeight,
-          splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
-          allowSqueeze,
-          squeezeIsForced: tallestRow > pageHeight,
-          isLastPage: j === rows.length - 1
-        });
-        if (thisPage === Infinity) {
-          if (j === i) {
-            console.log("Row", i, "exceeds page height by itself, setting as its own page.");
-            minCost[i] = 0;
-            nextPageBreak[i] = nextLegalStart(i);
+    const fillLayer = (minCost2, nextPageBreak2, restCost) => {
+      for (let i = rows.length - 1; i >= 0; i--) {
+        let cumulativeHeight = 0;
+        let cumulativeWorkspaceHeight = 0;
+        let cumulativeSqueezableHeight = 0;
+        let cumulativeFootnoteHeight = 0;
+        let tallestRow = 0;
+        for (let j = i; j < rows.length; j++) {
+          cumulativeHeight += rows[j].height;
+          cumulativeWorkspaceHeight += rows[j].workspaceHeight;
+          cumulativeSqueezableHeight += rows[j].squeezableHeight;
+          cumulativeFootnoteHeight += rows[j].footnoteHeight || 0;
+          const footnotesHeight = cumulativeFootnoteHeight > 0 ? cumulativeFootnoteHeight + footnoteChrome : 0;
+          const rowWithNotes = rows[j].footnoteHeight ? rows[j].height + rows[j].footnoteHeight + footnoteChrome : rows[j].height;
+          tallestRow = Math.max(tallestRow, rowWithNotes);
+          const next = rows[j + 1];
+          const thisPage = pageCost({
+            pageHeight,
+            naturalHeight: cumulativeHeight + footnotesHeight,
+            workspaceHeight: cumulativeWorkspaceHeight,
+            squeezableHeight: cumulativeSqueezableHeight,
+            splitsGroup: !!(next && rows[j].group && rows[j].group === next.group),
+            allowSqueeze,
+            squeezeIsForced: tallestRow > pageHeight,
+            isLastPage: j === rows.length - 1
+          });
+          if (thisPage === Infinity) {
+            if (j === i) {
+              console.log("Row", i, "exceeds page height by itself, setting as its own page.");
+              nextPageBreak2[i] = nextLegalStart(i);
+              minCost2[i] = pageCount ? restCost[nextPageBreak2[i]] : 0;
+            }
+            break;
           }
-          break;
+          if (illegalStart(j + 1)) continue;
+          const cost = thisPage + restCost[j + 1];
+          if (cost < minCost2[i]) {
+            minCost2[i] = cost;
+            nextPageBreak2[i] = j + 1;
+          }
         }
-        if (illegalStart(j + 1)) continue;
-        const cost = thisPage + minCost[j + 1];
-        if (cost < minCost[i]) {
-          minCost[i] = cost;
-          nextPageBreak[i] = j + 1;
+        if (nextPageBreak2[i] === -1) {
+          const end = nextLegalStart(i);
+          nextPageBreak2[i] = end;
+          minCost2[i] = restCost[end];
         }
       }
-      if (nextPageBreak[i] === -1) {
-        const end = nextLegalStart(i);
-        nextPageBreak[i] = end;
-        minCost[i] = minCost[end];
+    };
+    if (pageCount) {
+      const noPages = Array(rows.length + 1).fill(Infinity);
+      noPages[rows.length] = 0;
+      const costs = [noPages];
+      const breaks = [null];
+      for (let p = 1; p <= pageCount; p++) {
+        costs.push(Array(rows.length + 1).fill(Infinity));
+        breaks.push(Array(rows.length).fill(-1));
+        fillLayer(costs[p], breaks[p], costs[p - 1]);
       }
+      if (rows.length === 0 || costs[pageCount][0] === Infinity) {
+        return { pageBreaks, feasible: false };
+      }
+      let nextPage2 = 0;
+      for (let p = pageCount; p >= 1; p--) {
+        nextPage2 = breaks[p][nextPage2];
+        pageBreaks.push(nextPage2);
+      }
+      return { pageBreaks, feasible: true };
     }
+    let minCost = Array(rows.length + 1).fill(Infinity);
+    minCost[rows.length] = 0;
+    let nextPageBreak = Array(rows.length).fill(-1);
+    fillLayer(minCost, nextPageBreak, minCost);
     let nextPage = 0;
     while (nextPage < rows.length) {
       pageBreaks.push(nextPageBreak[nextPage]);
       nextPage = nextPageBreak[nextPage];
     }
-    return pageBreaks;
+    return { pageBreaks, feasible: true };
   }
   function setPageGeometryCSS({ paperSize, margins }) {
     console.log("*** Setting page geometry CSS for paper size:", paperSize, "with margins:", margins);
@@ -3073,6 +3205,13 @@
       }
       if (hasAuthoredPages) {
         adjustPrintoutPages(margins);
+        if (hasPageGroups()) {
+          pendingSettle = (async () => {
+            await new Promise((r) => setTimeout(r, 300));
+            replanPageGroups(margins);
+            adjustWorkspaceOrRepaginate({ paperSize, margins, fullRecompute: false });
+          })();
+        }
       } else {
         createPrintoutPages(margins);
         pendingSettle = (async () => {
