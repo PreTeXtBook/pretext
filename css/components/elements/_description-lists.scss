@@ -137,18 +137,20 @@ dl.description-list dl dd {
 }
 
 
+// Stacked on phone screens, except in a printout, which is laid out at the
+// width of the paper in any window
 @media screen and (max-width: 480px) {
-  dl.description-list dt,
-  dl.description-list.narrow dt {
+  dl.description-list:not(:where(.printout *)) dt,
+  dl.description-list.narrow:not(:where(.printout *)) dt {
     float: none;
     margin-left: 0;
     text-align: left;
     width: $wide-dt-width;
   }
 
-  dl.description-list dd,
-  dl.description-list.narrow dd,
-  dl.description-list.wide dd {
+  dl.description-list:not(:where(.printout *)) dd,
+  dl.description-list.narrow:not(:where(.printout *)) dd,
+  dl.description-list.wide:not(:where(.printout *)) dd {
     margin-top: 0.5em;
     margin-left: 3em;
     max-width: calc(100% - 3em);
