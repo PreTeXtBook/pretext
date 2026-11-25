@@ -596,7 +596,7 @@ section.worksheet > .heading + .para, section.handout > .heading + .para {
 @media screen {
   // The printout is always laid out at the full width of the paper, so its
   // text wraps as it will on the sheet, and in a window narrower than that it
-  // is scaled down to fit.  The javascript supplies the scale and the slack
+  // is scaled down to fit.  The JavaScript supplies the scale and the slack
   // (see fitPrintoutToWindow()); without them the sheet is shown at full size.
   //
   // The scaling is a transform, which changes how the printout is drawn and
@@ -604,6 +604,17 @@ section.worksheet > .heading + .para, section.handout > .heading + .para {
   // come out the same in any window.  A transform also leaves the printout
   // taking up its full size in the layout around it, so negative margins hand
   // back the width and the height it no longer fills.
+  //
+  // The scale is taken from the width of the window inside its scrollbar, and
+  // the slack changes the height of the page, which decides whether there is a
+  // scrollbar.  Where a scrollbar takes up room, that width would then depend
+  // on the scale, and at some window heights each new scale would bring back
+  // the last one.  Keeping room for the scrollbar whether or not it is shown
+  // holds the width still.
+  html:has(.printout) {
+    scrollbar-gutter: stable;
+  }
+
   .ptx-main {
     // The scaled width of the sheet, so the heading and the buttons above the
     // printout line up with its edges.
