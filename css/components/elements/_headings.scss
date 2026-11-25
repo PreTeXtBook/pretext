@@ -91,18 +91,19 @@ article > .heading {
   @include accessibility.sr-only;
 }
 
-// smaller headings on phone screens
+// smaller headings on phone screens, except in a printout, which is laid out
+// at the width of the paper in any window
 @media screen and (max-width: 480px) {
-  section > .heading {
+  section:not(:where(.printout, .printout *)) > .heading {
       font-size: 1.5em;
       line-height: 1.33em;
       margin-top: 1em;
   }
-  section section > .heading {
+  section section:not(:where(.printout, .printout *)) > .heading {
       font-size: 1.3em;
       line-height: 1.15em;
   }
-  section section section > .heading {
+  section section section:not(:where(.printout, .printout *)) > .heading {
       font-size: 1.15em;
       line-height: 1em;
   }
