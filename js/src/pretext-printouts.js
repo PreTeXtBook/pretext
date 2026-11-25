@@ -79,14 +79,20 @@ function fitPrintoutToWindow() {
         return;
     }
     const root = document.documentElement;
-    const available = root.clientWidth - 2 * PRINTOUT_GUTTER;
+    // The width the page is laid out in, which does not change when a reader
+    // zooms in on a phone, where window.innerWidth may.  The stylesheet keeps
+    // room for a scrollbar whether or not one is shown, and the root element's
+    // box leaves that room out, so this does not change with the height the
+    // slack below gives the page.  (root.clientWidth would: it leaves out only
+    // a scrollbar that is shown.)
+    const available = root.getBoundingClientRect().width - 2 * PRINTOUT_GUTTER;
     const scale = Math.max(0.1, Math.min(1, available / printout.offsetWidth));
     const properties = {
         '--ptx-printout-scale': String(scale),
         '--ptx-printout-slack': `${(scale - 1) * printout.offsetHeight}px`,
     };
-    // Written only when changed: what these set resizes the very elements
-    // watchPrintoutFit() observes.
+    // Written only when changed, since every write restyles the whole page and
+    // a window being resized calls this on every frame.
     for (const [name, value] of Object.entries(properties)) {
         if (root.style.getPropertyValue(name) !== value) {
             root.style.setProperty(name, value);
@@ -95,16 +101,16 @@ function fitPrintoutToWindow() {
 }
 
 // Keep the printout fitted as the window is resized, and as the printout
-// itself changes size: a different paper size, pages added or removed.
+// itself changes size: a different paper size, pages added or removed.  Only
+// the printout is observed.  Its laid out size is the paper's, which the scale
+// and the slack do not change, so fitting it never sets off another
+// observation; the page around it changes height with every new scale.
 function watchPrintoutFit() {
     fitPrintoutToWindow();
-    if (typeof ResizeObserver === "undefined") {
-        window.addEventListener('resize', fitPrintoutToWindow);
-        return;
+    window.addEventListener('resize', fitPrintoutToWindow);
+    if (typeof ResizeObserver !== "undefined") {
+        new ResizeObserver(fitPrintoutToWindow).observe(getPrintout());
     }
-    const observer = new ResizeObserver(fitPrintoutToWindow);
-    observer.observe(document.documentElement);
-    observer.observe(getPrintout());
 }
 
 // Unwrap section.paragraphs containers so their children flow directly
