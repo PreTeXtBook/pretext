@@ -238,6 +238,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- A reader works a notebook in its cells, not on paper, so a "fillin" -->
+<!-- with @workspace is an ordinary blank, which an empty result from    -->
+<!-- the template in pretext-common.xsl signals.                         -->
+<xsl:template match="fillin" mode="fillin-workspace"/>
+
 
 <!-- ############## -->
 <!-- File Structure -->

@@ -2218,6 +2218,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
+    <!-- Only a printout makes a blank into workspace, but the conditions -->
+    <!-- are many, so the macro is available whenever it might be needed  -->
+    <xsl:if test="$document-root//fillin[@workspace][not(parent::m or parent::mrow)]">
+        <xsl:text>%% Fillin blank as workspace, space for writing in a printout&#xa;</xsl:text>
+        <xsl:text>%% #1: placement against its line, t(op), c(enter), b(ottom)&#xa;</xsl:text>
+        <xsl:text>%% #2: intended number of characters of width, #3: height&#xa;</xsl:text>
+        <xsl:text>%% A strut keeps a separation above and below, off any rule of a table&#xa;</xsl:text>
+        <xsl:text>\newlength{\ptxfillinworkspacewidth}&#xa;</xsl:text>
+        <xsl:text>\newlength{\ptxfillinworkspaceraise}&#xa;</xsl:text>
+        <xsl:text>\newlength{\ptxfillinworkspacesep}\setlength{\ptxfillinworkspacesep}{4pt}&#xa;</xsl:text>
+        <xsl:if test="$fillin-text-style = 'underline'">
+            <xsl:text>%% Ruled lines, spaced for handwriting; the leaders get 0.5pt more&#xa;</xsl:text>
+            <xsl:text>%% room than the height, then give it back, so rounding never&#xa;</xsl:text>
+            <xsl:text>%% loses the last line when the height is a multiple of the spacing&#xa;</xsl:text>
+            <xsl:text>\newlength{\ptxfillinworkspaceruleskip}\setlength{\ptxfillinworkspaceruleskip}{0.3in}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>\newcommand{\ptxfillinworkspace}[3]{%&#xa;</xsl:text>
+        <xsl:text>\setlength{\ptxfillinworkspacewidth}{#2\ptxcharmaxwidth}%&#xa;</xsl:text>
+        <xsl:text>\if t#1\setlength{\ptxfillinworkspaceraise}{\dimexpr\ht\strutbox-#3\relax}%&#xa;</xsl:text>
+        <xsl:text>\else\if b#1\setlength{\ptxfillinworkspaceraise}{\dimexpr-\dp\strutbox\relax}%&#xa;</xsl:text>
+        <xsl:text>\else\setlength{\ptxfillinworkspaceraise}{\dimexpr(\ht\strutbox-\dp\strutbox-#3)/2\relax}\fi\fi%&#xa;</xsl:text>
+        <xsl:text>\raisebox{\ptxfillinworkspaceraise}{\rule[-\ptxfillinworkspacesep]{0pt}{\dimexpr#3+2\ptxfillinworkspacesep\relax}</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$fillin-text-style = 'underline'">
+                <xsl:text>\vbox to #3{\hrule width \ptxfillinworkspacewidth height 0pt\leaders\vbox to \ptxfillinworkspaceruleskip{\vfil\hrule width \ptxfillinworkspacewidth height 0.3pt}\vskip\dimexpr#3+0.5pt\relax\vskip-0.5pt}</xsl:text>
+            </xsl:when>
+            <xsl:when test="$fillin-text-style = 'box'">
+                <xsl:text>{\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.3pt}\fbox{\rule{0pt}{#3}\rule{\ptxfillinworkspacewidth}{0pt}}}</xsl:text>
+            </xsl:when>
+            <xsl:when test="$fillin-text-style = 'shade'">
+                <xsl:text>{\color{fillintextshade}\rule{\ptxfillinworkspacewidth}{#3}}</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Vertical workspace for worksheets, handouts, and PROJECT-LIKE with workspace -->
@@ -6585,6 +6621,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fill-in blank -->
 <!-- \ptxfillintext{} defined in preamble as semantic macro   -->
 <!-- Argument is intended number of characters             -->
+<!-- As workspace, \ptxfillinworkspace{}{}{} is the macro, -->
+<!-- placed to agree with the vertical alignment of a      -->
+<!-- table cell, and otherwise hanging from the top of its -->
+<!-- line, as other workspace hangs below its exercise     -->
 <xsl:template match="fillin[not(parent::m or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
@@ -6596,12 +6636,54 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>\ptxfillintext{</xsl:text>
-    <xsl:value-of select="$characters" />
-    <xsl:text>}</xsl:text>
-    <xsl:if test="@rows or @cols">
-        <xsl:apply-templates select="." mode="fillin-array"/>
-    </xsl:if>
+    <xsl:variable name="workspace">
+        <xsl:apply-templates select="." mode="fillin-workspace"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($workspace = '')">
+            <xsl:variable name="valign">
+                <xsl:choose>
+                    <xsl:when test="ancestor::cell">
+                        <xsl:apply-templates select="ancestor::cell[1]" mode="effective-valign"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>top</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:text>\ptxfillinworkspace{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$valign = 'top'">
+                    <xsl:text>t</xsl:text>
+                </xsl:when>
+                <xsl:when test="$valign = 'bottom'">
+                    <xsl:text>b</xsl:text>
+                </xsl:when>
+                <!-- A cell of paragraphs is an "m" column, which centers -->
+                <!-- a box resting on the baseline, but not one centered  -->
+                <!-- on its line, as the box then hangs below the line    -->
+                <xsl:when test="ancestor::cell[1]/p">
+                    <xsl:text>b</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>c</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}{</xsl:text>
+            <xsl:value-of select="$characters" />
+            <xsl:text>}{</xsl:text>
+            <xsl:value-of select="$workspace" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\ptxfillintext{</xsl:text>
+            <xsl:value-of select="$characters" />
+            <xsl:text>}</xsl:text>
+            <xsl:if test="@rows or @cols">
+                <xsl:apply-templates select="." mode="fillin-array"/>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Implication Symbols -->

@@ -180,17 +180,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- @workspace is only relevant on exercises and tasks that -->
 <!-- are within a worksheet or a handout, see the template  -->
 <!-- "sanitize-workspace" in pretext-common.xsl             -->
+<!-- On a "fillin" it also needs an "exercise", a           -->
+<!-- PROJECT-LIKE, or a "task" around it, and not a         -->
+<!-- SOLUTION-LIKE, see the template "fillin-workspace" in  -->
+<!-- pretext-common.xsl                                     -->
 <xsl:template match="*[@workspace]">
-    <xsl:if test="not(ancestor::worksheet) and not(ancestor::handout)">
-        <xsl:apply-templates select="." mode="messaging">
-            <xsl:with-param name="severity" select="'warn'"/>
-            <xsl:with-param name="message-id" select="'workspace-attribute-ignored'"/>
-            <xsl:with-param name="message">
-                <xsl:text>The @workspace attribute is only respected within a worksheet&#xa;</xsl:text>
-                <xsl:text>or a handout, and will be ignored here</xsl:text>
-            </xsl:with-param>
-        </xsl:apply-templates>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="not(ancestor::worksheet) and not(ancestor::handout)">
+            <xsl:apply-templates select="." mode="messaging">
+                <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'workspace-attribute-ignored'"/>
+                <xsl:with-param name="message">
+                    <xsl:text>The @workspace attribute is only respected within a worksheet&#xa;</xsl:text>
+                    <xsl:text>or a handout, and will be ignored here</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:when test="self::fillin and (not(ancestor::exercise or ancestor::*[&PROJECT-FILTER;] or ancestor::task) or ancestor::*[&SOLUTION-FILTER;])">
+            <xsl:apply-templates select="." mode="messaging">
+                <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'fillin-workspace-ignored'"/>
+                <xsl:with-param name="message">
+                    <xsl:text>The @workspace attribute of a "fillin" is only respected within an&#xa;</xsl:text>
+                    <xsl:text>"exercise", a project-like, or a "task", outside of any hint,&#xa;</xsl:text>
+                    <xsl:text>answer, or solution, and will be ignored here</xsl:text>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+    </xsl:choose>
     <!-- recurse further -->
     <xsl:apply-templates/>
 </xsl:template>

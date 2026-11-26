@@ -202,6 +202,11 @@
 <!-- meaningless in EPUB.                                                  -->
 <xsl:template match="&PRINTOUT;|&PROJECT-LIKE;" mode="standalone-printout-links"/>
 
+<!-- An EPUB is read, not printed, so workspace below an exercise takes no -->
+<!-- room.  A "fillin" with @workspace agrees, as an ordinary blank, which -->
+<!-- an empty result from the template in pretext-common.xsl signals.      -->
+<xsl:template match="fillin" mode="fillin-workspace"/>
+
 
 <!-- ############## -->
 <!-- Entry Template -->

@@ -2068,6 +2068,7 @@
                     attribute characters {xsd:integer}?,
                     attribute rows {xsd:integer}?,
                     attribute cols {xsd:integer}?,
+                    attribute workspace {text}?,
                     empty
                 }
             Generator |=
