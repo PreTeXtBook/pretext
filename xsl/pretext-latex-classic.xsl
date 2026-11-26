@@ -162,6 +162,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="late-preamble-adjustments"/>
 </xsl:template>
 
+<!-- The "theorem" counter, which all theorem-like environments share,    -->
+<!-- resets at the division given by the publisher's numbering of blocks. -->
+<!-- Level 0 numbers through the whole article, so the counter is never   -->
+<!-- reset and the optional argument is omitted.                          -->
+<xsl:template name="theorem-counter-within">
+    <xsl:if test="not($numbering-blocks = 0)">
+        <xsl:text>[</xsl:text>
+        <xsl:call-template name="level-to-name">
+            <xsl:with-param name="level" select="$numbering-blocks" />
+        </xsl:call-template>
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- No journal-packages by default; can be overridden by importing xsl -->
 <xsl:template name="journal-packages"/>
 
@@ -416,7 +430,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- what it is called, so we can still use this and it will just have a blank name.  -->
     <xsl:text>\newtheorem{theorem}{</xsl:text>
     <xsl:apply-templates select="($document-root//theorem)[1]" mode="type-name"/>
-    <xsl:text>}[section]&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="theorem-counter-within"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- Now continue with the remaining elements, checking to see if they are present -->
     <xsl:variable name="theoremstyle-plain" select="
         ($document-root//lemma)[1]|
@@ -626,7 +642,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Divisions -->
 
-<xsl:template match="section|subsection|subsubsection|appendix">
+<xsl:template match="section|subsection|subsubsection">
     <xsl:apply-templates select="." mode="console-typeout"/>
     <xsl:text>\</xsl:text>
     <xsl:value-of select="local-name(.)"/>
@@ -642,6 +658,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
+<!-- An article's appendix is a LaTeX \section, after the \appendix  -->
+<!-- command (which takes no argument) switches section numbering to -->
+<!-- letters, so the first appendix also starts the appendices.  Two -->
+<!-- named templates let a journal style (texstyle) say how the      -->
+<!-- appendices start, and give a prefix for each appendix title.    -->
+<xsl:template match="appendix">
+    <xsl:if test="not(preceding-sibling::appendix)">
+        <xsl:call-template name="appendices-start"/>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="console-typeout"/>
+    <xsl:text>\section{</xsl:text>
+    <xsl:call-template name="appendix-title-prefix"/>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}\label{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id" />
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+    <xsl:text>% end of appendix: </xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="appendices-start">
+    <xsl:text>\appendix&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="appendix-title-prefix"/>
 
 <xsl:template match="subsubsubsection">
     <xsl:apply-templates select="." mode="console-typeout"/>
