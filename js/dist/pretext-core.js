@@ -1551,6 +1551,53 @@
   function getPrintout() {
     return document.querySelector(".printout");
   }
+  function printoutScale() {
+    const printout = getPrintout();
+    if (!printout || !printout.offsetWidth) {
+      return 1;
+    }
+    return printout.getBoundingClientRect().width / printout.offsetWidth || 1;
+  }
+  function layoutRect(element) {
+    const rect = element.getBoundingClientRect();
+    const scale = printoutScale();
+    if (scale === 1) {
+      return rect;
+    }
+    const origin = getPrintout().getBoundingClientRect();
+    return new DOMRect(
+      origin.left + (rect.left - origin.left) / scale,
+      origin.top + (rect.top - origin.top) / scale,
+      rect.width / scale,
+      rect.height / scale
+    );
+  }
+  var PRINTOUT_GUTTER = 36;
+  function fitPrintoutToWindow() {
+    const printout = getPrintout();
+    if (!printout || !printout.offsetWidth) {
+      return;
+    }
+    const root = document.documentElement;
+    const available = root.getBoundingClientRect().width - 2 * PRINTOUT_GUTTER;
+    const scale = Math.max(0.1, Math.min(1, available / printout.offsetWidth));
+    const properties = {
+      "--ptx-printout-scale": String(scale),
+      "--ptx-printout-slack": `${(scale - 1) * printout.offsetHeight}px`
+    };
+    for (const [name, value] of Object.entries(properties)) {
+      if (root.style.getPropertyValue(name) !== value) {
+        root.style.setProperty(name, value);
+      }
+    }
+  }
+  function watchPrintoutFit() {
+    fitPrintoutToWindow();
+    window.addEventListener("resize", fitPrintoutToWindow);
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(fitPrintoutToWindow).observe(getPrintout());
+    }
+  }
   function flattenParagraphsSections(printout) {
     const paragraphsSections = printout.querySelectorAll("section.paragraphs");
     paragraphsSections.forEach((section) => {
@@ -1583,7 +1630,7 @@
     const parked = [];
     if (printout) {
       printout.querySelectorAll("iframe").forEach((iframe) => {
-        const rect = iframe.getBoundingClientRect();
+        const rect = layoutRect(iframe);
         const placeholder = document.createElement("div");
         placeholder.className = "iframe-placeholder";
         placeholder.style.width = rect.width + "px";
@@ -1951,7 +1998,7 @@
     }
   }
   function getPageContentBottom(page) {
-    const pRect = page.getBoundingClientRect();
+    const pRect = layoutRect(page);
     const paddingBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
     return pRect.bottom - paddingBottom;
   }
@@ -1959,7 +2006,7 @@
     const pages = document.querySelectorAll(".onepage");
     for (const page of pages) {
       for (const child of page.children) {
-        const r = child.getBoundingClientRect();
+        const r = layoutRect(child);
         if (r.bottom > getPageContentBottom(page) + 1) {
           return true;
         }
@@ -2046,7 +2093,7 @@
       const contentBottom = getPageContentBottom(page) - (footnotes ? getElementTotalHeight(footnotes) : 0);
       let overflowStartIndex = -1;
       for (let j = 0; j < contentChildren.length; j++) {
-        const r = contentChildren[j].getBoundingClientRect();
+        const r = layoutRect(contentChildren[j]);
         if (r.bottom > contentBottom + 1) {
           overflowStartIndex = j;
           break;
@@ -2522,7 +2569,7 @@
       if (totalWorkspaceHeight === 0) {
         const footnotes = [...page.children].find((c) => c.classList.contains("footnotes"));
         if (footnotes) {
-          const gap = getPageContentBottom(page) - footnotes.getBoundingClientRect().bottom - 1;
+          const gap = getPageContentBottom(page) - layoutRect(footnotes).bottom - 1;
           if (gap > 0) {
             const baseMargin = parseFloat(getComputedStyle(footnotes).marginTop) || 0;
             footnotes.style.marginTop = baseMargin + gap + "px";
@@ -2983,7 +3030,7 @@
     }
   }
   function pageLayoutSignature() {
-    return [...document.querySelectorAll(".onepage")].map((page) => Math.round(page.getBoundingClientRect().height)).join(",");
+    return [...document.querySelectorAll(".onepage")].map((page) => Math.round(layoutRect(page).height)).join(",");
   }
   async function pollUntilSettled(settle, { timeoutMs = 2e3, intervalMs = 100, stableTicks = 3 } = {}) {
     const deadline = Date.now() + timeoutMs;
@@ -3120,6 +3167,7 @@
         console.warn("Nothing to preview for printpreview=" + printableSectionID + "; leaving the page as it is.");
         return;
       }
+      watchPrintoutFit();
       const hasAuthoredPages = document.querySelectorAll(".onepage").length > 0;
       const marginList = (printout.getAttribute("data-margins") || "").split(" ");
       const margins = {
