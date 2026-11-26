@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright (C) 2026  Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- A short article, with the parts a research article is likely to   -->
+<!-- have: authors and their affiliations, an abstract, keywords,      -->
+<!-- sections and subsections, theorems with proofs, numbered          -->
+<!-- equations, a figure, a table, footnotes, an appendix, and a list  -->
+<!-- of references.  The content is taken from the sample article,     -->
+<!-- "examples/sample-article".  The publication files beside this one -->
+<!-- each name a different journal, and one names none, so the article -->
+<!-- is a test of the journal styles.                                  -->
+<pretext xml:lang="en-US">
+
+    <docinfo>
+        <macros>
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
+        </macros>
+        <document-id>pretext-sample-research-article</document-id>
+        <!-- the figure's image is in the "media" directory -->
+        <directories external="media"/>
+    </docinfo>
+
+    <article xml:id="derivatives" label="derivatives">
+        <title>Derivatives and Integrals</title>
+
+        <frontmatter xml:id="frontmatter" label="frontmatter">
+
+            <bibinfo>
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <department>Department of Mathematics and Computer Science</department>
+                    <institution>
+                        <line>University of Puget Sound</line>
+                        <line>Tacoma, Washington, USA</line>
+                    </institution>
+                    <email>beezer@pugetsound.edu</email>
+                    <support>Statement about support received by the first author.</support>
+                </author>
+
+                <author>
+                    <personname>A. Second Author</personname>
+                    <affiliation>
+                        <department>Department of Mathematics</department>
+                        <institution>University of Somewhere</institution>
+                        <location>Anytown, USA</location>
+                    </affiliation>
+                    <email>asauthor@example.edu</email>
+                    <support>Statement about support received by the second author.</support>
+                </author>
+
+                <!-- A fixed date, so that output can be compared from one build to the next -->
+                <date>November 15, 2026</date>
+                <keywords>
+                    <keyword>samples</keyword><keyword>PreTeXt</keyword><keyword>testing document</keyword>
+                </keywords>
+                <keywords authority="msc" variant="2010">
+                    <keyword primary="yes">00-01</keyword>
+                    <keyword>00-02</keyword>
+                    <keyword primary="no">00A99</keyword>
+                </keywords>
+                <support>This is an example of a statement describing funding support for the current document.</support>
+            </bibinfo>
+
+            <titlepage>
+                <titlepage-items/>
+            </titlepage>
+
+            <abstract>
+                <p>This is a sample of the things a research article is likely to need from <pretext/>.  Sometimes the math makes sense, sometimes it seems to be written in the first person, sort of like this Abstract.</p>
+            </abstract>
+        </frontmatter>
+
+        <section xml:id="section-introduction" label="section-introduction">
+            <title>Introduction</title>
+
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <md>\definiteintegral{0}{2}{\sin^2(x)}{x}</md>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.</p>
+
+            <p>The main result is in <xref ref="section-fundamental-theorem"/>, and <xref ref="section-interesting-corollary"/> has a consequence, which <xref ref="subsection-second-ftc"/> states and <xref ref="subsection-equivalent-claim"/> restates.  A figure and a table are in <xref ref="section-facts-figures"/>, and one more computation is in <xref ref="appendix-computation"/>.</p>
+        </section>
+
+        <section xml:id="section-fundamental-theorem" label="section-fundamental-theorem">
+            <title>The Fundamental Theorem</title>
+
+            <p>There is a remarkable theorem:<fn xml:id="footnote-fermat">And fortunately we do not need to try to write it in the margin!</fn></p>
+
+            <theorem xml:id="theorem-FTC">
+                <title>The Fundamental Theorem of Calculus</title>
+
+                <statement>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <md>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</md></p>
+                </statement>
+                <proof>
+                    <p>Left to the reader.<fn>This is a footnote in a <tag>proof</tag> that is inside a <tag>theorem</tag>.</fn></p>
+                </proof>
+            </theorem>
+
+            <p>You will find almost nothing about all this in the article <xref ref="biblio-lay-article"/>, nor in the book <xref ref="biblio-judson-aata"/>, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+
+            <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
+
+            <definition xml:id="definition-indefinite-integral">
+                <statement>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <md>\int\,f(x)\,dx=F(x)</md>.</p>
+                </statement>
+            </definition>
+        </section>
+
+        <section xml:id="section-interesting-corollary" label="section-interesting-corollary">
+            <title>An Interesting Corollary</title>
+
+            <introduction>
+                <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
+            </introduction>
+
+            <subsection xml:id="subsection-second-ftc" label="subsection-second-ftc">
+                <title>Second Version of <acro>FTC</acro></title>
+
+                <corollary xml:id="corollary-FTC-derivative">
+                    <creator>Leibniz, Newton</creator>
+                    <statement>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <md number="yes" xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</md>.</p>
+                    </statement>
+                    <proof xml:id="proof-FTC-corollary">
+                        <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC" text="global"/><md number="yes">
+                            <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                            <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                            <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
+                        </md>.</p>
+                    </proof>
+                </corollary>
+
+                <p>The alternative version of the Fundamental Theorem (<acro>FTC</acro>) in <xref ref="equation-alternate-FTC" text="global"/> is a compact way to express the result.</p>
+
+                <example xml:id="example-mysterious">
+                    <title>A Mysterious Derivative!</title>
+
+                    <p>So if we define a function with its variable employed as a limit of integration, like so <md>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</md> then we get the derivative of that function so easily it seems like a mystery, <md>\frac{d}{dz}K(z)=z^4\sin(z^2)</md>. That's it.</p>
+                </example>
+            </subsection>
+
+            <subsection xml:id="subsection-equivalent-claim" label="subsection-equivalent-claim">
+                <title>An Equivalence</title>
+
+                <p>We cross-reference the example just prior, <xref ref="example-mysterious"/>, and then make a claim.</p>
+
+                <claim xml:id="claim-with-cases">
+                    <title>An Equivalent Claim</title>
+
+                    <statement>
+                        <p>This claim is an equivalence: it is true if and only if it is correct.</p>
+                    </statement>
+                    <proof>
+                        <p>Our purpose here is to show how you can structure a proof with cases, such as an equivalence structured with the arrows typically used to demonstrate the two <q>directions</q> involved in the proof, by using the <attr>direction</attr> attribute on a <tag>case</tag> element.</p>
+
+                        <case direction="forward">
+                            <p>Nulla non lectus suscipit, bibendum leo quis, dignissim justo. In urna turpis, tincidunt id elementum id, faucibus ac tellus.</p>
+                        </case>
+                        <case direction="backward">
+                            <p>Quisque auctor ligula turpis, ut aliquam urna consectetur hendrerit. Aenean porta dolor et justo facilisis feugiat in sed sapien. Nullam porta ex et commodo semper.</p>
+                        </case>
+                    </proof>
+                </claim>
+
+                <lemma xml:id="lemma-minimal">
+                    <title>A title</title>
+
+                    <p>A minimal <tag>lemma</tag>.</p>
+                </lemma>
+
+                <proposition xml:id="proposition-minimal">
+                    <title>A title</title>
+
+                    <p>A minimal <tag>proposition</tag>.</p>
+                </proposition>
+            </subsection>
+        </section>
+
+        <section xml:id="section-facts-figures" label="section-facts-figures">
+            <title>Some Facts and Figures</title>
+
+            <p>Because of the Fundamental Theorem<fn>First test footnote</fn>, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus<fn>Second test footnote</fn>, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
+                <li>
+                    <p>Derivatives<ol marker="(a)">
+                        <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
+                        <li><m>\frac{d}{dx}e^x = e^x</m></li>
+                        <li><m>\frac{d}{dx}\cos(x) = -\sin(x)</m></li>
+                    </ol></p>
+                </li>
+                <li>
+                    <p>Antiderivatives<ol marker="i)">
+                        <li><m>\indefiniteintegral{x^n}{x} = \displaystyle\frac{x^{n-1}}{n+1}\text{ if }n\neq -1</m></li>
+                        <li><m>\indefiniteintegral{e^x}{x} = e^x</m></li>
+                        <li><m>\indefiniteintegral{\sin(x)}{x} = -\cos(x)</m></li>
+                    </ol></p>
+                </li>
+            </ul></p>
+
+            <remark xml:id="remark-graphs">
+                <p>You can gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash/>antiderivative relationship in <xref ref="figure-function-derivative"/>?</p>
+            </remark>
+
+            <figure xml:id="figure-function-derivative">
+                <caption>A function and its derivative</caption>
+                <image width="50%" source="images/cubic-function.png">
+                    <shortdescription>a cubic polynomial and its derivative, plotted on the same axes</shortdescription>
+                </image>
+            </figure>
+
+            <p>Numerical work is recorded in a table, such as <xref ref="table-euler1"/>.</p>
+
+            <table xml:id="table-euler1">
+                <title>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></title>
+                <tabular top="major" halign="center">
+                    <row bottom="minor">
+                        <cell><m>i</m></cell>
+                        <cell><m>t_i</m></cell>
+                        <cell><m>x_i</m></cell>
+                        <cell><m>y_i</m></cell>
+                    </row>
+                    <row><cell>0</cell><cell>0.00</cell><cell>0.0000</cell><cell>0.5000</cell></row>
+                    <row><cell>1</cell><cell>0.20</cell><cell>0.1000</cell><cell>0.4800</cell></row>
+                    <row><cell>2</cell><cell>0.40</cell><cell>0.1960</cell><cell>0.4560</cell></row>
+                    <row><cell>3</cell><cell>0.60</cell><cell>0.2872</cell><cell>0.4295</cell></row>
+                    <row><cell>4</cell><cell>0.80</cell><cell>0.3731</cell><cell>0.4027</cell></row>
+                    <row bottom="medium"><cell>5</cell><cell>1.00</cell><cell>0.4536</cell><cell>0.3783</cell></row>
+                </tabular>
+            </table>
+        </section>
+
+        <backmatter xml:id="backmatter" label="backmatter">
+
+            <appendix xml:id="appendix-computation" label="appendix-computation">
+                <title>One More Computation</title>
+
+                <p>An appendix holds material that would interrupt the article.  Here the second version of the Fundamental Theorem, <xref ref="corollary-FTC-derivative"/>, is applied once more, to give a numbered equation and a numbered result in an appendix.<md number="yes" xml:id="equation-appendix">\frac{d}{dx}\definiteintegral{0}{x}{e^{t}}{t}=e^x</md></p>
+
+                <corollary xml:id="corollary-appendix">
+                    <statement>
+                        <p>The function <m>e^x</m> is an antiderivative of itself.</p>
+                    </statement>
+                </corollary>
+            </appendix>
+
+            <references xml:id="references-backmatter" label="references-backmatter">
+                <title>References</title>
+
+                <biblio xml:id="biblio-judson-aata" type="book">
+                    <author>
+                        <name>
+                            <given>Thomas</given>
+                            <family>Judson</family>
+                        </name>
+                    </author>
+                    <title>Abstract Algebra: Theory and Applications</title>
+                </biblio>
+
+                <biblio xml:id="biblio-lay-article" type="article">
+                    <author>
+                        <name>
+                            <given>David C.</given>
+                            <family>Lay</family>
+                        </name>
+                    </author>
+                    <title>Subspaces and Echelon Forms</title>
+                    <container-title>The College Mathematics Journal</container-title>
+                    <volume>24</volume>
+                    <number>1</number>
+                    <issued>
+                        <date year="1993" month="1"/>
+                    </issued>
+                    <page>57-62</page>
+                </biblio>
+
+                <biblio xml:id="conrey-farmer" type="article-journal">
+                    <author>
+                        <name>
+                            <family>Conrey</family>
+                            <given>J. B.</given>
+                        </name>
+                        <name>
+                            <family>Farmer</family>
+                            <given>D. W.</given>
+                        </name>
+                    </author>
+                    <title>Mean values of <m>L</m>-functions and symmetry</title>
+                    <container-title>Internat. Math. Res. Notices</container-title>
+                    <volume>17</volume>
+                    <issued>
+                        <date year="2000"/>
+                    </issued>
+                    <page>883-908</page>
+                </biblio>
+            </references>
+        </backmatter>
+    </article>
+</pretext>
