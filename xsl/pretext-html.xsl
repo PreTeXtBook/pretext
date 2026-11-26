@@ -6830,8 +6830,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="role">
             <xsl:text>img</xsl:text>
         </xsl:attribute>
+        <!-- "ptx-embedded-svg" lets CSS give this image the same -->
+        <!-- treatment as an "img" (e.g. a light background in   -->
+        <!-- dark mode) without touching other inline SVGs, such -->
+        <!-- as MathJax output or Mermaid diagrams               -->
         <xsl:attribute name="class">
-            <xsl:text>contained</xsl:text>
+            <xsl:text>contained ptx-embedded-svg</xsl:text>
         </xsl:attribute>
         <xsl:choose>
             <xsl:when test="@decorative = 'yes'">
