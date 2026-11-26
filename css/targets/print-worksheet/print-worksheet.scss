@@ -594,14 +594,49 @@ section.worksheet > .heading + .para, section.handout > .heading + .para {
 
 // Screen specific styles (mostly for showing the border around a worksheet with it's "margins" and for the print controls)
 @media screen {
+  // The printout is always laid out at the full width of the paper, so its
+  // text wraps as it will on the sheet, and in a window narrower than that it
+  // is scaled down to fit.  The JavaScript supplies the scale and the slack
+  // (see fitPrintoutToWindow()); without them the sheet is shown at full size.
+  //
+  // The scaling is a transform, which changes how the printout is drawn and
+  // nothing about how it is laid out, so the page breaks and the workspace
+  // come out the same in any window.  A transform also leaves the printout
+  // taking up its full size in the layout around it, so negative margins hand
+  // back the width and the height it no longer fills.
+  //
+  // The scale is taken from the width of the window inside its scrollbar, and
+  // the slack changes the height of the page, which decides whether there is a
+  // scrollbar.  Where a scrollbar takes up room, that width would then depend
+  // on the scale, and at some window heights each new scale would bring back
+  // the last one.  Keeping room for the scrollbar whether or not it is shown
+  // holds the width still.
+  html:has(.printout) {
+    scrollbar-gutter: stable;
+  }
+
   .ptx-main {
-    max-width: var(--ws-width);
+    // The scaled width of the sheet, so the heading and the buttons above the
+    // printout line up with its edges.
+    max-width: calc(var(--ws-width) * var(--ptx-printout-scale, 1));
     margin: 50px auto;
   }
 
-  .printout {
-    max-width: var(--ws-width);
-    margin: 0 auto;
+  // The parent of the printout is a block formatting context of its own, so
+  // that the negative margin below the printout shortens it; otherwise that
+  // margin collapses through, and the unscaled height is left to scroll past.
+  .ptx-content:has(> .printout) {
+    display: flow-root;
+  }
+
+  // Named a second time as an article to outrank the margin reset a
+  // project-like printout is given above.
+  .printout,
+  article.printout {
+    width: var(--ws-width);
+    transform: scale(var(--ptx-printout-scale, 1));
+    transform-origin: 0 0;
+    margin: 0 calc(var(--ws-width) * (var(--ptx-printout-scale, 1) - 1)) var(--ptx-printout-slack, 0px) 0;
   }
 
   .onepage {
@@ -665,6 +700,10 @@ section.worksheet > .heading + .para, section.handout > .heading + .para {
 
   .print-controls {
     display: flex;
+    // A sheet scaled down to a narrow window is narrower than the buttons
+    // side by side.
+    flex-wrap: wrap;
+    justify-content: flex-end;
     align-items: center;
     gap: 0.5em;
     margin-left: auto;
