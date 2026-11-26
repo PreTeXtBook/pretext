@@ -7304,6 +7304,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- The static replacement of a "datafile" is a target of an    -->
+    <!-- "xref", anchored inside its first panel, so that a page     -->
+    <!-- break never separates the anchor from the display.          -->
+    <xsl:if test="parent::sidebyside[@pi:datafile-filename] and not(preceding-sibling::*)">
+        <xsl:apply-templates select="parent::sidebyside" mode="label"/>
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
     <!-- Realize each panel's object -->
     <xsl:apply-templates select="."/>
     <xsl:text>\end{sbspanel}%&#xa;</xsl:text>
@@ -8569,6 +8576,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|subexercises|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article|introduction|conclusion" mode="xref-as-ref">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- A static conversion replaces a "datafile" by a "sidebyside", -->
+<!-- marked with @pi:datafile-filename, which is then the target  -->
+<!-- of a cross-reference, with no number.                        -->
+<xsl:template match="sidebyside[@pi:datafile-filename]" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 

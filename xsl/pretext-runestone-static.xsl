@@ -1464,7 +1464,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- To accomplish an overall element that won't disrupt    -->
     <!-- subsequent automatic ids, we do a bit of a hack: a     -->
     <!-- "sidebyside" as the overall element with a "stack".    -->
+    <!-- The "sidebyside" takes the identification, so it can   -->
+    <!-- be the target of a cross-reference, which is built     -->
+    <!-- from the filename.                                     -->
     <sidebyside>
+        <xsl:copy-of select="@xml:id|@label"/>
+        <xsl:attribute name="pi:datafile-filename">
+            <xsl:value-of select="@filename"/>
+        </xsl:attribute>
         <stack>
             <!-- faux title -->
             <p>
