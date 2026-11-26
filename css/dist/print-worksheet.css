@@ -603,16 +603,16 @@ dl.description-list dl dd {
   margin-left: 12ex;
 }
 @media screen and (max-width: 480px) {
-  dl.description-list dt,
-  dl.description-list.narrow dt {
+  dl.description-list:not(:where(.printout *)) dt,
+  dl.description-list.narrow:not(:where(.printout *)) dt {
     float: none;
     margin-left: 0;
     text-align: left;
     width: 25ex;
   }
-  dl.description-list dd,
-  dl.description-list.narrow dd,
-  dl.description-list.wide dd {
+  dl.description-list:not(:where(.printout *)) dd,
+  dl.description-list.narrow:not(:where(.printout *)) dd,
+  dl.description-list.wide:not(:where(.printout *)) dd {
     margin-top: 0.5em;
     margin-left: 3em;
     max-width: calc(100% - 3em);
@@ -738,16 +738,16 @@ article > .heading + * {
   position: absolute;
 }
 @media screen and (max-width: 480px) {
-  section > .heading {
+  section:not(:where(.printout, .printout *)) > .heading {
     font-size: 1.5em;
     line-height: 1.33em;
     margin-top: 1em;
   }
-  section section > .heading {
+  section section:not(:where(.printout, .printout *)) > .heading {
     font-size: 1.3em;
     line-height: 1.15em;
   }
-  section section section > .heading {
+  section section section:not(:where(.printout, .printout *)) > .heading {
     font-size: 1.15em;
     line-height: 1em;
   }
@@ -2360,13 +2360,22 @@ section.handout > .heading + .para {
   margin-top: 0.5em;
 }
 @media screen {
+  html:has(.printout) {
+    scrollbar-gutter: stable;
+  }
   .ptx-main {
-    max-width: var(--ws-width);
+    max-width: calc(var(--ws-width) * var(--ptx-printout-scale, 1));
     margin: 50px auto;
   }
-  .printout {
-    max-width: var(--ws-width);
-    margin: 0 auto;
+  .ptx-content:has(> .printout) {
+    display: flow-root;
+  }
+  .printout,
+  article.printout {
+    width: var(--ws-width);
+    transform: scale(var(--ptx-printout-scale, 1));
+    transform-origin: 0 0;
+    margin: 0 calc(var(--ws-width) * (var(--ptx-printout-scale, 1) - 1)) var(--ptx-printout-slack, 0px) 0;
   }
   .onepage {
     width: 100%;
@@ -2450,6 +2459,8 @@ section.handout > .heading + .para {
   }
   .print-controls {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     align-items: center;
     gap: 0.5em;
     margin-left: auto;

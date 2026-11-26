@@ -121,16 +121,16 @@ dl.description-list dl dd {
   margin-left: 12ex;
 }
 @media screen and (max-width: 480px) {
-  dl.description-list dt,
-  dl.description-list.narrow dt {
+  dl.description-list:not(:where(.printout *)) dt,
+  dl.description-list.narrow:not(:where(.printout *)) dt {
     float: none;
     margin-left: 0;
     text-align: left;
     width: 25ex;
   }
-  dl.description-list dd,
-  dl.description-list.narrow dd,
-  dl.description-list.wide dd {
+  dl.description-list:not(:where(.printout *)) dd,
+  dl.description-list.narrow:not(:where(.printout *)) dd,
+  dl.description-list.wide:not(:where(.printout *)) dd {
     margin-top: 0.5em;
     margin-left: 3em;
     max-width: calc(100% - 3em);
@@ -261,16 +261,16 @@ article > .heading + * {
   position: absolute;
 }
 @media screen and (max-width: 480px) {
-  section > .heading {
+  section:not(:where(.printout, .printout *)) > .heading {
     font-size: 1.5em;
     line-height: 1.33em;
     margin-top: 1em;
   }
-  section section > .heading {
+  section section:not(:where(.printout, .printout *)) > .heading {
     font-size: 1.3em;
     line-height: 1.15em;
   }
-  section section section > .heading {
+  section section section:not(:where(.printout, .printout *)) > .heading {
     font-size: 1.15em;
     line-height: 1em;
   }
