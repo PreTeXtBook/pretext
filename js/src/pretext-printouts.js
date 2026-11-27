@@ -2030,6 +2030,14 @@ function adjustWorkspaceToFitPage({paperSize, margins}) {
 // Helper functions for calculating heights and workspace sizes
 function getElementTotalHeight(elem) {
     // Calculate the total height of the element, including padding, border, and top margin.
+    // An element that generates no box -- display: none on it or on an
+    // ancestor, as for a hidden hint/answer/solution row or a header/footer
+    // band that is switched off -- takes up no room at all.  Its margins still
+    // read as nonzero in getComputedStyle(), though, so without this check
+    // they get counted, and every page they sit on is planned short.
+    if (elem.getClientRects().length === 0) {
+        return 0;
+    }
     const style = getComputedStyle(elem);
     const marginTop = parseFloat(style.marginTop);
     const marginBottom = parseFloat(style.marginBottom);
